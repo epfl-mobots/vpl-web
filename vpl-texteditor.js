@@ -1,0 +1,140 @@
+/*
+	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Miniature Mobile Robots group, Switzerland
+	Author: Yves Piguet
+	For internal use only
+*/
+
+/** Text editor in a textarea HTML element with line numbers and
+	widgets for breakpoints and current execution position
+	@constructor
+	@param {string} textareaId id of textarea element, which should be
+	enclosed in a div and follow a pre
+	@param {string} preId id of pre element for line numbers (element before textarea)
+	@param {number=} topMargin
+	@param {number=} leftMargin
+*/
+epfl.mobots.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
+	this.textarea = document.getElementById(textareaId);
+	this.textarea.value = "";
+
+	this.div = this.textarea.parentElement;
+    this.pre = document.getElementById(preId);
+
+    // style
+	this.topMargin = topMargin || 0;
+	this.leftMargin = leftMargin || 0;
+    var width = window.innerWidth - this.leftMargin;
+	var height = window.innerHeight - this.topMargin;
+    var taStyle = window.getComputedStyle(this.textarea);
+	var taWidth = width - this.pre.getBoundingClientRect().width - 10 -
+		parseInt(taStyle.paddingLeft, 10) - parseInt(taStyle.paddingRight, 10);
+
+    this.textarea.style.width = taWidth + "px";
+    this.textarea.style["float"] = "right";
+    this.textarea.style.border = "0px";
+    this.textarea.style.outline = "none";
+    this.textarea.style.resize = "none";
+    this.textarea.style.whiteSpace = "pre";
+    this.textarea.style.overflowX = "hidden";    // scrollbar would break sync with pre
+    this.textarea.setAttribute("wrap", "off");    // required in WebKit
+
+    this.pre.style.height = height + "px";
+    this.pre.style.fontFamily = taStyle.fontFamily;
+    this.pre.style.fontSize = taStyle.fontSize;
+    this.pre.style.height = taStyle.height;
+    this.pre.style.maxHeight = taStyle.height;
+
+	var self = this;
+    this.textarea.addEventListener("scroll", function (e) {
+        self.pre.scrollTop = this.scrollTop;
+    }, false);
+    this.textarea.addEventListener("input", function (e) {
+        self.updateLineNumbers();
+    }, false);
+	window.addEventListener("resize", function (e) {
+		self.resize();
+	}, true);
+
+	/** @type {Array.<number>} */
+	this.breakpoints = [];
+	this.currentLine = -1;
+
+	this.updateLineNumbers();
+};
+
+/** Clear all breakpoints
+	@return {void}
+*/
+epfl.mobots.vpl.TextEditor.prototype.clearBreakpoints = function () {
+	this.breakpoints = [];
+	this.updateLineNumbers();
+};
+
+/** Toggle breakpoint
+	@param {number} line
+	@return {void}
+*/
+epfl.mobots.vpl.TextEditor.prototype.toggleBreakpoint = function (line) {
+	if (this.breakpoints.indexOf(line) >= 0) {
+		this.breakpoints.splice(this.breakpoints.indexOf(line), 1);
+	} else {
+		this.breakpoints.push(line);
+	}
+	this.updateLineNumbers();
+};
+
+/** Resize elements
+	@return {void}
+*/
+epfl.mobots.vpl.TextEditor.prototype.resize = function () {
+    // style
+    var width = window.innerWidth - this.leftMargin;
+	var height = window.innerHeight - this.topMargin;
+    var taStyle = window.getComputedStyle(this.textarea);
+	var taWidth = width - this.pre.getBoundingClientRect().width - 10 -
+		parseInt(taStyle.paddingLeft, 10) - parseInt(taStyle.paddingRight, 10);
+
+    this.textarea.style.width = taWidth + "px";
+    this.pre.style.height = height + "px";
+};
+
+/** Update the line number text in the pre element
+    @return {void}
+*/
+epfl.mobots.vpl.TextEditor.prototype.updateLineNumbers = function () {
+    var lineCount = this.textarea.value.split("\n").length;
+    var preLineCount = this.pre.textContent.split("\n").length;
+	/** @type {Array.<string>} */
+    var txt = [];
+    for (var i = 0; i < lineCount; i++) {
+		txt.push((i + 1 === this.currentLine ? "\u25b6 "
+			: this.breakpoints.indexOf(i + 1) >= 0 ? "\u25ce " : "  ") +
+				(i + 1).toString(10));
+    }
+	while (this.pre.firstElementChild) {
+		this.pre.removeChild(this.pre.firstElementChild);
+	}
+	var self = this;
+    txt.forEach(function (t, i) {
+		var el = document.createElement("span");
+		el.textContent = t + "\n";
+		el.addEventListener("click", function () {
+			self.toggleBreakpoint(i + 1);
+		});
+		this.pre.appendChild(el);
+	}, this);
+}
+
+/** Change text editor content
+	@param {string} text
+	@return {void}
+*/
+epfl.mobots.vpl.TextEditor.prototype.setContent = function (text) {
+	this.textarea.value = text;
+    var height = this.div.clientHeight;
+    var taStyle = window.getComputedStyle(this.textarea);
+    this.pre.style.height = taStyle.height;
+    this.pre.style.maxHeight = taStyle.height;
+    this.updateLineNumbers();
+}

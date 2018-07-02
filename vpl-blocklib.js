@@ -1,0 +1,1755 @@
+/*
+	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Miniature Mobile Robots group, Switzerland
+	Author: Yves Piguet
+	For internal use only
+*/
+
+/** @const */
+epfl.mobots.vpl.BlockTemplate.initOutputs =
+	"# reset outputs\n" +
+	"call sound.system(-1)\n" +
+	"call leds.top(0, 0, 0)\n" +
+	"call leds.bottom.left(0, 0, 0)\n" +
+	"call leds.bottom.right(0, 0, 0)\n" +
+	"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n";
+
+/** @const */
+epfl.mobots.vpl.BlockTemplate.initStatesDecl =
+	"var state[4]\n";
+
+/** @const */
+epfl.mobots.vpl.BlockTemplate.initStatesInit =
+	"state = [0, 0, 0, 0]\n";
+
+/** @const */
+epfl.mobots.vpl.BlockTemplate.initCounterDecl =
+	"var counter\n";
+
+/** @const */
+epfl.mobots.vpl.BlockTemplate.initCounterInit =
+	"counter = 0\n";
+
+/** @const */
+epfl.mobots.vpl.BlockTemplate.initTopColorDecl =
+	"# RGB color of the top led\n" +
+	"var topColor[3]\n";
+
+/** @const */
+epfl.mobots.vpl.BlockTemplate.initTopColorInit =
+	"topColor = [0, 0, 0]\n";
+
+/** @const */
+epfl.mobots.vpl.BlockTemplate.dispStates =
+	"sub display_state\n" +
+	"call leds.circle(0,state[1]*32,0,state[3]*32,0,state[2]*32,0,state[0]*32)\n";
+
+/** @const */
+epfl.mobots.vpl.BlockTemplate.dispCounter =
+	"sub display_counter\n" +
+	"call leds.circle((counter&1)<<5,(counter&2)<<4,(counter&4)<<3,(counter&8)<<2,(counter&16)<<1,counter&32,(counter&64)>>1,(counter&128)>>2)\n";
+
+/** @const */
+epfl.mobots.vpl.BlockTemplate.resetTimer =
+	"# stop timer 0\n" +
+	"timer.period[0] = 0\n";
+
+/**
+	@const
+	@type {Array.<epfl.mobots.vpl.BlockTemplate>}
+*/
+epfl.mobots.vpl.BlockTemplate.lib =	[
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "c", x: 0, y: 0, r: 0},
+			{sh: "t", x: 0, y: 0.3, r: 0},
+			{sh: "t", x: 0, y: -0.3, r: Math.PI},
+			{sh: "t", x: 0.3, y: 0, r: Math.PI / 2},
+			{sh: "t", x: -0.3, y: 0, r: -Math.PI / 2},
+		];
+		return {
+			name: "button",
+			type: epfl.mobots.vpl.blockType.event,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [false, false, false, false, false]; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop();
+				canvas.buttons(buttons, block.param);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					block.param[i] = !block.param[i];
+				}
+				return i;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.validateFun} */
+			validate: function (block) {
+				for (var i = 0; i < 5; i++) {
+					if (block.param[i]) {
+						return null;
+					}
+				}
+				return new epfl.mobots.vpl.Error("No button specified");
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				var cond = "";
+				for (var i = 0; i < 5; i++) {
+					if (block.param[i]) {
+						cond += (cond.length === 0 ? "" : " and ") +
+							"button." + ["center", "forward", "backward", "right", "left"][i] +
+							" == 1";
+					}
+				}
+				if (cond === "") {
+					cond = "button.center == 1 or button.forward == 1 or button.backward == 1 or button.right == 1 or button.left == 1";
+				}
+				return {
+					sectionBegin: "onevent buttons\n",
+					sectionPriority: 10,
+					clause: cond
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "r", x: 0, y: 0.4, r: 0, str: "2"},
+			{sh: "r", x: -0.22, y: 0.35, r: -0.45, str: "1"},
+			{sh: "r", x: 0.22, y: 0.35, r: 0.45, str: "3"},
+			{sh: "r", x: -0.4, y: 0.22, r: -0.8, str: "0"},
+			{sh: "r", x: 0.4, y: 0.22, r: 0.8, str: "4"},
+			{sh: "r", x: -0.2, y: -0.4, str: "5"},
+			{sh: "r", x: 0.2, y: -0.4, str: "6"},
+		];
+		return {
+			name: "horiz prox",
+			modes: [epfl.mobots.vpl.mode.basic],
+			type: epfl.mobots.vpl.blockType.event,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0, 0, 0, 0, 0, 0]; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop();
+				canvas.buttons(buttons, block.param);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					block.param[i] = (block.param[i] + 2) % 3 - 1;
+				}
+				return i;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.validateFun} */
+			validate: function (block) {
+				for (var i = 0; i < 7; i++) {
+					if (block.param[i]) {
+						return null;
+					}
+				}
+				return new epfl.mobots.vpl.Error("No proximity sensor specified");
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+			changeMode: function (block, mode) {
+				switch (mode) {
+				case epfl.mobots.vpl.mode.advanced:
+					var newBlock = new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("horiz prox adv"),
+						null, null);
+					newBlock.param = block.param.concat(newBlock.param.slice(7));
+					return newBlock;
+				default:
+					return block;
+				}
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				var cond = "";
+				for (var i = 0; i < 7; i++) {
+					if (block.param[i]) {
+						cond += (cond.length === 0 ? "" : " and ") +
+							"prox.horizontal[" + buttons[i].str + "] " +
+							(block.param[i] > 0 ? ">= 2" : "<= 1") + "000";
+					}
+				}
+				if (cond === "") {
+					for (var i = 1; i < 7; i++) {
+						cond += " or prox.horizontal[" + buttons[i] + "] >= 2000";
+					}
+					cond = cond.slice(4);	// crop initial " or "
+				}
+				return {
+					sectionBegin: "onevent prox\n",
+					sectionPriority: 1,
+					clause: cond
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "r", x: 0, y: 0.4, r: 0, str: "2"},
+			{sh: "r", x: -0.22, y: 0.35, r: -0.45, str: "1"},
+			{sh: "r", x: 0.22, y: 0.35, r: 0.45, str: "3"},
+			{sh: "r", x: -0.4, y: 0.22, r: -0.8, str: "0"},
+			{sh: "r", x: 0.4, y: 0.22, r: 0.8, str: "4"},
+			{sh: "r", x: -0.2, y: -0.4, str: "5"},
+			{sh: "r", x: 0.2, y: -0.4, str: "6"},
+		];
+		return {
+			name: "horiz prox adv",
+			modes: [epfl.mobots.vpl.mode.advanced],
+			type: epfl.mobots.vpl.blockType.event,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () {
+				return [
+					0, 0, 0, 0, 0, 0, 0,	// sensor modes
+					0.4, 0.1	// levels (700+0.4*3300=2000, 700+0.1*3300=1000)
+				];
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop();
+				canvas.buttons(buttons, block.param);
+				canvas.slider(/** @type {number} */(block.param[7]), 0.02, false,
+					"red", epfl.mobots.vpl.draw.levelType.high);
+				canvas.slider(/** @type {number} */(block.param[8]), -0.2, false,
+					"black", epfl.mobots.vpl.draw.levelType.low);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				// sensor click
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					block.param[i] = (block.param[i] + 2) % 3 - 1;
+					return i;
+				}
+				// slider drag
+				if (canvas.sliderCheck(0.02, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 7;
+				}
+				if (canvas.sliderCheck(-0.2, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 8;
+				}
+				return null;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+				if (dragIndex >= 7) {
+					var val = canvas.sliderDrag(false, width, height, left, top, ev);
+					block.param[dragIndex] = Math.max(0, Math.min(1, val));
+				}
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.validateFun} */
+			validate: function (block) {
+				for (var i = 0; i < 7; i++) {
+					if (block.param[i]) {
+						return null;
+					}
+				}
+				return new epfl.mobots.vpl.Error("No sensor specified");
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+			changeMode: function (block, mode) {
+				switch (mode) {
+				case epfl.mobots.vpl.mode.basic:
+					var defParam = block.blockTemplate.defaultParam();
+					if (block.param[7] === defParam[7] && block.param[8] === defParam[8]) {
+						var newBlock = new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("horiz prox"),
+							null, null);
+						newBlock.param = block.param.slice(0, 7);
+						return newBlock;
+					}
+					// fallthrough
+				default:
+					return block;
+				}
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				var cond = "";
+				for (var i = 0; i < 7; i++) {
+					if (block.param[i]) {
+						cond += (cond.length === 0 ? "" : " and ") +
+							"prox.horizontal[" + buttons[i].str + "] " +
+							(block.param[i] > 0
+								? ">= " + Math.round(7 + 33 * block.param[7])
+								: "<= " + Math.round(7 + 33 * block.param[8])) +
+							"00";
+					}
+				}
+				if (cond === "") {
+					for (var i = 1; i < 7; i++) {
+						cond += " or prox.horizontal[" + buttons[i].str + "] >= 2000";
+					}
+					cond = cond.slice(5);	// crop initial " or "
+				}
+				return {
+					sectionBegin: "onevent prox\n",
+					sectionPriority: 1,
+					clause: cond
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "r", x: -0.15, y: 0.35, str: "0"},
+			{sh: "r", x: 0.15, y: 0.35, str: "1"},
+		];
+		return {
+			name: "ground",
+			modes: [epfl.mobots.vpl.mode.basic],
+			type: epfl.mobots.vpl.blockType.event,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0]; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop(true);
+				canvas.buttons(buttons, block.param);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					block.param[i] = (block.param[i] + 2) % 3 - 1;
+				}
+				return i;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.validateFun} */
+			validate: function (block) {
+				if (block.param[0] || block.param[1]) {
+					return null;
+				}
+				return new epfl.mobots.vpl.Error("No ground sensor specified");
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+			changeMode: function (block, mode) {
+				switch (mode) {
+				case epfl.mobots.vpl.mode.advanced:
+					var newBlock = new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("ground adv"),
+						null, null);
+					newBlock.param = block.param.concat(newBlock.param.slice(2));
+					return newBlock;
+				default:
+					return block;
+				}
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				var cond = "";
+				for (var i = 0; i < 2; i++) {
+					if (block.param[i]) {
+						cond += (cond.length === 0 ? "" : " and ") +
+							"prox.ground.delta[" + buttons[i].str + "] " +
+							(block.param[i] > 0 ? ">= 450" : "<= 400");
+					}
+				}
+				if (cond === "") {
+					for (var i = 1; i < 2; i++) {
+						cond += " or prox.ground.delta[" + buttons[i] + "] >= 450";
+					}
+					cond = cond.slice(4);	// crop initial " or "
+				}
+				return {
+					sectionBegin: "onevent prox\n",
+					sectionPriority: 1,
+					clause: cond
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "r", x: -0.15, y: 0.35, str: "0"},
+			{sh: "r", x: 0.15, y: 0.35, str: "1"},
+		];
+		return {
+			name: "ground adv",
+			modes: [epfl.mobots.vpl.mode.advanced],
+			type: epfl.mobots.vpl.blockType.event,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () {
+				return [
+					0, 0,	// sensor modes
+					0.6, 0.4	// levels (0.6*1000=600, 0.4*1000=400)
+				];
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop(true);
+				canvas.buttons(buttons, block.param);
+				canvas.slider(/** @type {number} */(block.param[2]), 0.02, false,
+					"red", epfl.mobots.vpl.draw.levelType.high);
+				canvas.slider(/** @type {number} */(block.param[3]), -0.2, false,
+					"black", epfl.mobots.vpl.draw.levelType.low);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				// sensor click
+				if (i !== null) {
+					block.prepareChange();
+					block.param[i] = (block.param[i] + 2) % 3 - 1;
+					return i;
+				}
+				// slider drag
+				if (canvas.sliderCheck(0.02, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 2;
+				}
+				if (canvas.sliderCheck(-0.2, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 3;
+				}
+				return null;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+				if (dragIndex >= 2) {
+					var val = canvas.sliderDrag(false, width, height, left, top, ev);
+					block.param[dragIndex] = Math.max(0, Math.min(1, val));
+				}
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.validateFun} */
+			validate: function (block) {
+				if (block.param[0] || block.param[1]) {
+					return null;
+				}
+				return new epfl.mobots.vpl.Error("No ground sensor specified");
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+			changeMode: function (block, mode) {
+				switch (mode) {
+				case epfl.mobots.vpl.mode.basic:
+					var defParam = block.blockTemplate.defaultParam();
+					if (block.param[2] === defParam[2] && block.param[3] === defParam[3]) {
+						var newBlock = new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("ground"),
+							null, null);
+						newBlock.param = block.param.slice(0, 2);
+						return newBlock;
+					}
+					// fallthrough
+				default:
+					return block;
+				}
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				var cond = "";
+				for (var i = 0; i < 2; i++) {
+					if (block.param[i]) {
+						cond += (cond.length === 0 ? "" : " and ") +
+							"prox.ground.delta[" + buttons[i].str + "] " +
+							(block.param[i] > 0
+								? ">= " + 25 * Math.round(40 * block.param[2])
+								: "<= " + 25 * Math.round(40 * block.param[3]));
+					}
+				}
+				if (cond === "") {
+					for (var i = 1; i < 2; i++) {
+						cond += " or prox.ground.delta[" + buttons[i] + "] >= 450";
+					}
+					cond = cond.slice(4);	// crop initial " or "
+				}
+				return {
+					sectionBegin: "onevent prox\n",
+					sectionPriority: 1,
+					clause: cond
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate({
+		name: "tap",
+		modes: [epfl.mobots.vpl.mode.basic],
+		type: epfl.mobots.vpl.blockType.event,
+		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.robotSide(0.7);
+			canvas.tap(0.7);
+			canvas.text("tap", {y: 0.2 * canvas.dims.blockSize});
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+		changeMode: function (block, mode) {
+			switch (mode) {
+			case epfl.mobots.vpl.mode.advanced:
+				return new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("accelerometer"),
+					null, null);
+			default:
+				return block;
+			}
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			return {
+				sectionBegin: "onevent tap\n",
+				sectionPriority: 1000
+			};
+		}
+	}),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "c", x: -0.33, y: -0.3, r: 0},
+			{sh: "c", x: 0, y: -0.3, r: 0},
+			{sh: "c", x: 0.33, y: -0.3, r: 0}
+		];
+		return {
+			name: "accelerometer",
+			modes: [epfl.mobots.vpl.mode.advanced],
+			type: epfl.mobots.vpl.blockType.event,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () {
+				return [
+					0,	// 0 for tap, 2 for roll, 1 for pitch
+					0 // integer from -6 to 6
+				];
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				/** @type {number} */
+				var dir = /** @type {number} */(block.param[0]);
+				/** @type {number} */
+				var a = /** @type {number} */(block.param[1]);
+				if (dir === 0) {
+					canvas.ctx.save();
+					canvas.ctx.translate(0.08 * canvas.dims.blockSize,
+						-0.15 * canvas.dims.blockSize);
+					canvas.robotSide(0.7);
+					canvas.tap(0.7);
+					canvas.text("tap", {y: 0.2 * canvas.dims.blockSize});
+					canvas.ctx.restore();
+				} else {
+					canvas.robotAccelerometer(dir === 2, a);
+				}
+				canvas.buttons(buttons, [dir===0, dir===1, dir===2]);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				if (block.param[0] !== 0 && canvas.accelerometerCheck(width, height, left, top, ev)) {
+					block.prepareChange();
+					return 1;
+				}
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					block.param[0] = i;
+					return 2;
+				}
+				return null;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+				if (dragIndex === 1) {
+					var angle = canvas.accelerometerDrag(width, height, left, top, ev);
+					block.param[1] = angle;
+				}
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+			changeMode: function (block, mode) {
+				switch (mode) {
+				case epfl.mobots.vpl.mode.basic:
+					if (block.param[0] === 0) {
+						return new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("tap"),
+							null, null);
+					}
+					// fallthrough
+				default:
+					return block;
+				}
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				var dir = /** @type {number} */(block.param[0]);
+				if (dir === 0) {
+					// tap
+					return {
+						sectionBegin: "onevent tap\n",
+						sectionPriority: 1000
+					};
+				} else {
+					/** @type {number} */
+					var a = (dir === 2 ? -1 : 1) * /** @type {number} */(block.param[1]);
+					var name = dir === 1 ? "roll" : "pitch";
+					/** @type {string} */
+					var cond;
+					if (a <= -6) {
+						cond = name + "Angle < " + Math.round(2730.67 * a + 1365.33);
+					} else if (a >= 6) {
+						cond = name + "Angle >= " + Math.round(2730.67 * a - 1365.33);
+					} else {
+						cond = name + "Angle >= " + Math.round(2730.67 * a - 1365.33) +
+							" and " + name + "Angle < " + Math.round(2730.67 * a + 1365.33);
+					}
+					return {
+						initVarDecl: [
+							"# " + name + " angle from accelerometer\nvar " + name + "Angle\n"
+						],
+						sectionBegin: "onevent acc\n",
+						sectionPriority: 1,
+						clauseInit:
+							"call math.atan2(" + name + "Angle, acc[" + (dir === 2 ? "1" : "0") + "], acc[2])\n",
+						clause: cond
+					};
+				}
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate({
+		name: "clap",
+		type: epfl.mobots.vpl.blockType.event,
+		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.microphone();
+			canvas.text("clap", {y: 0.32 * canvas.dims.blockSize, rot: 0.3});
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			return {
+				initCodeExec: [
+					"# setup threshold for detecting claps\n" +
+					"mic.threshold = 250\n"
+				],
+				sectionBegin: "onevent mic\n",
+				sectionPriority: 1,
+				clause: "mic.intensity > mic.threshold",
+				clauseOptional: true
+			};
+		}
+	}),
+	new epfl.mobots.vpl.BlockTemplate({
+		name: "init",
+		modes: [epfl.mobots.vpl.mode.advanced],
+		type: epfl.mobots.vpl.blockType.event,
+		noState: true,
+		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			return {
+				sectionBegin: "# initialization\n",
+				sectionPriority: 10000
+			};
+		}
+	}),
+	new epfl.mobots.vpl.BlockTemplate({
+		name: "timer",
+		modes: [epfl.mobots.vpl.mode.advanced],
+		type: epfl.mobots.vpl.blockType.event,
+		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.drawTimer(0, true, false);
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			return {
+				initCodeExec: [
+					epfl.mobots.vpl.BlockTemplate.resetTimer
+				],
+				sectionBegin: "onevent timer0\n",
+				sectionPriority: 1000
+			};
+		}
+	}),
+	new epfl.mobots.vpl.BlockTemplate({
+		name: "state",
+		modes: [epfl.mobots.vpl.mode.advanced],
+		type: epfl.mobots.vpl.blockType.state,
+		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () { return [0, 0, 0, 0]; },
+		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.robotTop();
+			canvas.drawState(block.param);
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			var i = canvas.stateClick(width, height, left, top, ev);
+			if (i !== null) {
+				block.prepareChange();
+				block.param[i] = (block.param[i] + 2) % 3 - 1;
+			}
+			return i;
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+		changeMode: function (block, mode) {
+			if (mode === epfl.mobots.vpl.mode.basic
+				&& block.param[0] === 0
+				&& block.param[1] === 0
+				&& block.param[2] === 0
+				&& block.param[3] === 0) {
+				// no state block in basic mode if empty
+				return null;
+			}
+			return block;
+		},
+		sectionPriority: function () { return 1; },
+		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			var cond = "";
+			for (var i = 0; i < 4; i++) {
+				if (block.param[i]) {
+					cond += (cond.length === 0 ? "" : " and ") +
+						"state[" + i + "] == " + (block.param[i] > 0 ? "1" : "0");
+				}
+			}
+			return {
+				initVarDecl: [
+					epfl.mobots.vpl.BlockTemplate.initStatesDecl
+				],
+				initCodeExec: [
+					epfl.mobots.vpl.BlockTemplate.initStatesInit
+				],
+				clause: cond
+			};
+		}
+	}),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "t", x: -0.3, y: 0.3, r: 0},
+			{sh: "t", x: -0.3, y: -0.3, r: Math.PI},
+			{sh: "t", x: 0.1, y: 0.3, r: 0},
+			{sh: "t", x: 0.1, y: -0.3, r: Math.PI},
+			{sh: "c", x: 0.35, y: -0.3, r: 0}
+		];
+		return {
+			name: "counter comparison",
+			modes: [epfl.mobots.vpl.mode.advanced],
+			type: epfl.mobots.vpl.blockType.state,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0]; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.text(block.param[0] === 0 ? "=" : block.param[0] > 0 ? "≥" : "≤",
+					{x: -0.3 * canvas.dims.blockSize, fillStyle: "black"});
+				canvas.text(block.param[1].toString(10),
+					{x: 0.1 * canvas.dims.blockSize, fillStyle: "black"});
+				canvas.buttons(buttons, [
+					block.param[0] < 1 ? -2 : 0,
+					block.param[0] > -1 ? -2 : 0,
+					block.param[1] < 255 ? -2 : 0,
+					block.param[1] > 0 ? -2 : 0,
+					block.param[1] !== 0 ? -2 : 0
+				]);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					switch (i) {
+					case 0:
+						block.param[0] = Math.min(1, block.param[0] + 1);
+						break;
+					case 1:
+						block.param[0] = Math.max(-1, block.param[0] - 1);
+						break;
+					case 2:
+						block.param[1] = Math.min(255, block.param[1] + 1);
+						break;
+					case 3:
+						block.param[1] = Math.max(0, block.param[1] - 1);
+						break;
+					case 4:
+						block.param[1] = 0;
+						break;
+					}
+				}
+				return i;
+			},
+			sectionPriority: function () { return 1; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				var cond = "counter " +
+					(block.param[0] === 0 ? "==" : block.param[0] > 0 ? ">=" : "<=") +
+					" " + block.param[1];
+				return {
+					initVarDecl: [
+						epfl.mobots.vpl.BlockTemplate.initCounterDecl
+					],
+					initCodeExec: [
+						epfl.mobots.vpl.BlockTemplate.initCounterInit
+					],
+					clause: cond
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate({
+		name: "color state",
+		modes: [epfl.mobots.vpl.mode.advanced],
+		type: epfl.mobots.vpl.blockType.state,
+		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () { return [0, 0, 0]; },
+		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.robotTop(false, null, null, null, block.param);
+			canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
+			canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
+			canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
+				block.prepareChange();
+				return 0;
+			}
+			if (canvas.sliderCheck(0, false, width, height, left, top, ev)) {
+				block.prepareChange();
+				return 1;
+			}
+			if (canvas.sliderCheck(-0.3, false, width, height, left, top, ev)) {
+				block.prepareChange();
+				return 2;
+			}
+			return null;
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+			var val = canvas.sliderDrag(false, width, height, left, top, ev);
+			block.param[dragIndex] = Math.max(0, Math.min(1, Math.round(val)));
+		},
+		sectionPriority: function () { return 1; },
+		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			var cond = block.param
+				.map(function (p, i) {
+					return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
+				})
+				.join(" and ");
+			return {
+				initVarDecl: [
+					epfl.mobots.vpl.BlockTemplate.initTopColorDecl
+				],
+				initCodeExec: [
+					epfl.mobots.vpl.BlockTemplate.initTopColorInit
+				],
+				clause: cond
+			};
+		}
+	}),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		var sz = 1.4;
+		var buttons = [
+			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
+			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
+			{sh: "r", x: -0.3, y: 0, size: sz, str: "red", fillStyle: "red", strokeStyle: "white"},
+			{sh: "r", x: 0, y: 0, size: sz, str: "green", fillStyle: "#0c0", strokeStyle: "@0c0"},
+			{sh: "r", x: 0.3, y: 0, size: sz, str: "yellow", fillStyle: "yellow", strokeStyle: "silver"},
+			{sh: "r", x: -0.3, y: -0.3, size: sz, str: "blue", fillStyle: "blue", strokeStyle: "white"},
+			{sh: "r", x: 0, y: -0.3, size: sz, str: "magenta", fillStyle: "magenta", strokeStyle: "white"},
+			{sh: "r", x: 0.3, y: -0.3, size: sz, str: "cyan", fillStyle: "cyan", strokeStyle: "white"},
+		];
+		return {
+			name: "color state 8",
+			modes: [epfl.mobots.vpl.mode.custom],
+			type: epfl.mobots.vpl.blockType.state,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0, 0]; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop(false, null, null, null, block.param);
+				canvas.buttons(buttons, [
+					block.param[0] < 1 ? -2 : 0,
+					block.param[0] > -1 ? -2 : 0
+				]);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					switch (i) {
+					case 0:
+						block.param = [0, 0, 0];
+						break;
+					case 1:
+						block.param = [1, 1, 1];
+						break;
+					case 2:
+						block.param = [1, 0, 0];
+						break;
+					case 3:
+						block.param = [0, 1, 0];
+						break;
+					case 4:
+						block.param = [1, 1, 0];
+						break;
+					case 5:
+						block.param = [0, 0, 1];
+						break;
+					case 6:
+						block.param = [1, 0, 1];
+						break;
+					case 7:
+						block.param = [0, 1, 1];
+						break;
+					}
+				}
+				return i;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				var cond = block.param
+					.map(function (p, i) {
+						return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
+					})
+					.join(" and ");
+				return {
+					initVarDecl: [
+						epfl.mobots.vpl.BlockTemplate.initTopColorDecl
+					],
+					initCodeExec: [
+						epfl.mobots.vpl.BlockTemplate.initTopColorInit
+					],
+					clause: cond
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate({
+		name: "motor",
+		type: epfl.mobots.vpl.blockType.action,
+		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () { return [0, 0]; },
+		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			var tr = canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
+			canvas.robotTop(true, 0.45,
+				tr.phi,
+				[
+					tr.x + 0.13 * canvas.dims.blockSize * Math.sin(tr.phi),
+					tr.y + 0.13 * canvas.dims.blockSize * Math.cos(tr.phi)
+				]);
+			canvas.ctx.save();
+			canvas.ctx.globalAlpha = 0.2;
+			canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
+			canvas.ctx.restore();
+			canvas.slider(0.5 + 0.5 * /** @type {number} */(block.param[0]), -0.4, true,
+				block.param[0] === 0 ? "white" : block.param[0] === block.param[1] ? "#0c0" : "#fd0");
+			canvas.slider(0.5 + 0.5 * /** @type {number} */(block.param[1]), 0.4, true,
+				block.param[1] === 0 ? "white" : block.param[0] === block.param[1] ? "#0c0" : "#fd0");
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			if (canvas.sliderCheck(-0.4, true, width, height, left, top, ev)) {
+				block.prepareChange();
+				return 0;
+			}
+			if (canvas.sliderCheck(0.4, true, width, height, left, top, ev)) {
+				block.prepareChange();
+				return 1;
+			}
+			if (canvas.robotTopCheck(width, height, left, top,
+					0.5 * block.param[0], 0.5 * block.param[1], 0.21,
+					ev)) {
+				block.prepareChange();
+				return 2;
+			}
+			return null;
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+			if (dragIndex < 2) {
+				// slider
+				var val = 2 * canvas.sliderDrag(true, width, height, left, top, ev) - 1;
+				var val2 = block.param[1 - dragIndex];
+				if (Math.abs(val) < 0.1) {
+					val = 0;
+				} else if (Math.abs(val - val2) < 0.1) {
+					val = val2;
+				}
+				block.param[dragIndex] = Math.max(-1, Math.min(1, val));
+			} else {
+				// robot (move forward)
+				var val = 2 * canvas.sliderDrag(true, width, height, left, top, ev) - 1;
+				if (Math.abs(val) < 0.1) {
+					val = 0;
+				} else {
+					val = Math.max(-1, Math.min(1, val));
+				}
+				if (Math.abs(block.param[0] - block.param[1]) < 0.05) {
+					block.param[0] = val;
+					block.param[1] = val;
+				} else if (Math.abs(block.param[0]) > Math.abs(block.param[1])) {
+					block.param[1] *= val / block.param[0];
+					block.param[0] = val;
+				} else {
+					block.param[0] *= val / block.param[1];
+					block.param[1] = val;
+				}
+			}
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			return {
+				initCodeExec: [
+					epfl.mobots.vpl.BlockTemplate.initOutputs
+				],
+				statement:
+					"motor.left.target = " + Math.round(500 * block.param[0]) + "\n" +
+					"motor.right.target = " + Math.round(500 * block.param[1]) + "\n"
+			};
+		}
+	}),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "c", x: 0, y: 0, r: 0},	// stop
+			{sh: "t", x: 0, y: 0.35, r: 0},	// forward
+			{sh: "t", x: 0, y: -0.35, r: Math.PI},	// backward
+			{sh: "t", x: -0.3, y: 0.32, r: -0.4},	// left
+			{sh: "t", x: 0.3, y: 0.32, r: 0.4},	// right
+			{sh: "t", x: -0.35, y: 0.05, r: -Math.PI / 2},	// rotate left
+			{sh: "t", x: 0.35, y: 0.05, r: Math.PI / 2}	// rotate right
+		];
+		/** @const */
+		var sp = 100;
+		/** @const */
+		var spt = 25;
+
+		return {
+			name: "move",
+			modes: [epfl.mobots.vpl.mode.custom],
+			type: epfl.mobots.vpl.blockType.action,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0]; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop(true, 0.45);
+				canvas.buttons(buttons, [
+					block.param[0] === 0 ? 1 : -2,
+					block.param[0] === 1 ? 1 : -2,
+					block.param[0] === 2 ? 1 : -2,
+					block.param[0] === 3 ? 1 : -2,
+					block.param[0] === 4 ? 1 : -2,
+					block.param[0] === 5 ? 1 : -2,
+					block.param[0] === 6 ? 1 : -2
+				]);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					block.param[0] = i;
+				}
+				return i;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				return {
+					initCodeExec: [
+						epfl.mobots.vpl.BlockTemplate.initOutputs
+					],
+					statement:
+						"motor.left.target = " +
+							[0, sp, -sp, sp-spt, sp+spt, -sp, sp][block.param[0]] + "\n" +
+						"motor.right.target = " +
+							[0, sp, -sp, sp+spt, sp-spt, sp, -sp][block.param[0]] + "\n"
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		return {
+			name: "top color",
+			type: epfl.mobots.vpl.blockType.action,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0, 0]; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop(false, null, null, null, block.param);
+				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
+				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
+				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 0;
+				}
+				if (canvas.sliderCheck(0, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 1;
+				}
+				if (canvas.sliderCheck(-0.3, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 2;
+				}
+				return null;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+				var val = canvas.sliderDrag(false, width, height, left, top, ev);
+				block.param[dragIndex] = Math.max(0, Math.min(1, val));
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				return {
+					initVarDecl: [
+						epfl.mobots.vpl.BlockTemplate.initTopColorDecl
+					],
+					initCodeExec: [
+						epfl.mobots.vpl.BlockTemplate.initTopColorInit,
+						epfl.mobots.vpl.BlockTemplate.initOutputs
+					],
+					statement:
+						"call leds.top(" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						")\n" +
+						"topColor = [" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						"]\n",
+					statementWithoutInit:
+						"call leds.top(" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						")\n"
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		var sz = 1.4;
+		var buttons = [
+			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
+			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
+			{sh: "r", x: -0.3, y: 0, size: sz, str: "red", fillStyle: "red", strokeStyle: "white"},
+			{sh: "r", x: 0, y: 0, size: sz, str: "green", fillStyle: "#0c0", strokeStyle: "@0c0"},
+			{sh: "r", x: 0.3, y: 0, size: sz, str: "yellow", fillStyle: "yellow", strokeStyle: "silver"},
+			{sh: "r", x: -0.3, y: -0.3, size: sz, str: "blue", fillStyle: "blue", strokeStyle: "white"},
+			{sh: "r", x: 0, y: -0.3, size: sz, str: "magenta", fillStyle: "magenta", strokeStyle: "white"},
+			{sh: "r", x: 0.3, y: -0.3, size: sz, str: "cyan", fillStyle: "cyan", strokeStyle: "white"},
+		];
+		return {
+			name: "top color 8",
+			modes: [epfl.mobots.vpl.mode.custom],
+			type: epfl.mobots.vpl.blockType.action,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0, 0]; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop(false, null, null, null, block.param);
+				canvas.buttons(buttons, [
+					block.param[0] < 1 ? -2 : 0,
+					block.param[0] > -1 ? -2 : 0
+				]);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					switch (i) {
+					case 0:
+						block.param = [0, 0, 0];
+						break;
+					case 1:
+						block.param = [1, 1, 1];
+						break;
+					case 2:
+						block.param = [1, 0, 0];
+						break;
+					case 3:
+						block.param = [0, 1, 0];
+						break;
+					case 4:
+						block.param = [1, 1, 0];
+						break;
+					case 5:
+						block.param = [0, 0, 1];
+						break;
+					case 6:
+						block.param = [1, 0, 1];
+						break;
+					case 7:
+						block.param = [0, 1, 1];
+						break;
+					}
+				}
+				return i;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				return {
+					initVarDecl: [
+						epfl.mobots.vpl.BlockTemplate.initTopColorDecl
+					],
+					initCodeExec: [
+						epfl.mobots.vpl.BlockTemplate.initTopColorInit,
+						epfl.mobots.vpl.BlockTemplate.initOutputs
+					],
+					statement:
+						"call leds.top(" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						")\n" +
+						"topColor = [" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						"]\n",
+					statementWithoutInit:
+						"call leds.top(" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						")\n"
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		return {
+			name: "bottom color",
+			type: epfl.mobots.vpl.blockType.action,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0, 0]; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop(true, null, null, null, block.param);
+				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
+				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
+				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 0;
+				}
+				if (canvas.sliderCheck(0, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 1;
+				}
+				if (canvas.sliderCheck(-0.3, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 2;
+				}
+				return null;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+				var val = canvas.sliderDrag(false, width, height, left, top, ev);
+				block.param[dragIndex] = Math.max(0, Math.min(1, val));
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				return {
+					initCodeExec: [
+						epfl.mobots.vpl.BlockTemplate.initOutputs
+					],
+					statement:
+						"call leds.bottom.left(" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						")\n" +
+						"call leds.bottom.right(" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						")\n"
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		var sz = 1.4;
+		var buttons = [
+			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
+			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
+			{sh: "r", x: -0.3, y: 0, size: sz, str: "red", fillStyle: "red", strokeStyle: "white"},
+			{sh: "r", x: 0, y: 0, size: sz, str: "green", fillStyle: "#0c0", strokeStyle: "@0c0"},
+			{sh: "r", x: 0.3, y: 0, size: sz, str: "yellow", fillStyle: "yellow", strokeStyle: "silver"},
+			{sh: "r", x: -0.3, y: -0.3, size: sz, str: "blue", fillStyle: "blue", strokeStyle: "white"},
+			{sh: "r", x: 0, y: -0.3, size: sz, str: "magenta", fillStyle: "magenta", strokeStyle: "white"},
+			{sh: "r", x: 0.3, y: -0.3, size: sz, str: "cyan", fillStyle: "cyan", strokeStyle: "white"},
+		];
+		return {
+			name: "bottom color 8",
+			modes: [epfl.mobots.vpl.mode.custom],
+			type: epfl.mobots.vpl.blockType.action,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0, 0]; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop(true, null, null, null, block.param);
+				canvas.buttons(buttons, [
+					block.param[0] < 1 ? -2 : 0,
+					block.param[0] > -1 ? -2 : 0
+				]);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					switch (i) {
+					case 0:
+						block.param = [0, 0, 0];
+						break;
+					case 1:
+						block.param = [1, 1, 1];
+						break;
+					case 2:
+						block.param = [1, 0, 0];
+						break;
+					case 3:
+						block.param = [0, 1, 0];
+						break;
+					case 4:
+						block.param = [1, 1, 0];
+						break;
+					case 5:
+						block.param = [0, 0, 1];
+						break;
+					case 6:
+						block.param = [1, 0, 1];
+						break;
+					case 7:
+						block.param = [0, 1, 1];
+						break;
+					}
+				}
+				return i;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				return {
+					initCodeExec: [
+						epfl.mobots.vpl.BlockTemplate.initOutputs
+					],
+					statement:
+						"call leds.bottom.left(" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						")\n" +
+						"call leds.bottom.right(" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						")\n"
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate({
+		name: "notes",
+		type: epfl.mobots.vpl.blockType.action,
+		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () { return [0, 1, 1, 1, 2, 1, 0, 1, 2, 1, 4, 2]; },
+		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.notes(block.param);
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			var note = canvas.noteClick(block.param, width, height, left, top, ev);
+			if (note) {
+				block.prepareChange();
+				if (block.param[2 * note.index] === note.tone) {
+					block.param[2 * note.index + 1] = (block.param[2 * note.index + 1] + 1) % 3;
+				} else {
+					block.param[2 * note.index] = note.tone;
+					block.param[2 * note.index + 1] = 1;
+				}
+				return 0;
+			}
+			return null;
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			/** @type {Array.<number>} */
+			var notes = [];
+			/** @type {Array.<number>} */
+			var durations = [];
+			for (var i = 0; i < 6; i++) {
+				if (block.param[2 * i + 1] > 0) {
+					notes.push([262, 311, 370, 440, 524, 370][/** @type {number} */(block.param[2 * i])]);
+					durations.push(7 * block.param[2 * i + 1]);
+				} else {
+					notes.push(0);
+					durations.push(28);
+				}
+			}
+			return {
+				initVarDecl: [
+					"# variables for notes\n" +
+					"var notes[6]\n" +
+					"var durations[6]\n" +
+					"var note_index\n" +
+					"var note_count\n" +
+					"var wave[142]\n" +
+					"var i\n" +
+					"var wave_phase\n" +
+					"var wave_intensity\n",
+				],
+				initCodeExec: [
+					"# init. variables for notes\n" +
+					"note_index = 6\n" +
+					"note_count = 6\n",
+					"# compute a sinus wave for sound\n" +
+					"for i in 0 : 141 do\n" +
+					"wave_phase = (i - 70) * 468\n" +
+					"call math.cos(wave_intensity, wave_phase)\n" +
+					"wave[i] = wave_intensity / 256\n" +
+					"end\n" +
+					"call sound.wave(wave)\n",
+					epfl.mobots.vpl.BlockTemplate.initOutputs
+				],
+				initCodeDecl: [
+					"# when a note is finished, play the next one\n" +
+					"onevent sound.finished\n" +
+					"if note_index != note_count then\n" +
+					"call sound.freq(notes[note_index], durations[note_index])\n" +
+					"note_index++\n" +
+					"end\n"
+				],
+				statement:
+					"notes = [" + notes.join(", ") + "]\n" +
+					"durations = [" + durations.join(", ") + "]\n" +
+					"note_index = 1\n" +
+					"note_count = 6\n" +
+					"call sound.freq(notes[0], durations[0])\n"
+			};
+		}
+	}),
+	new epfl.mobots.vpl.BlockTemplate({
+		name: "set state",
+		modes: [epfl.mobots.vpl.mode.advanced],
+		type: epfl.mobots.vpl.blockType.action,
+		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () { return [0, 0, 0, 0]; },
+		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.robotTop();
+			canvas.drawState(block.param);
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			var i = canvas.stateClick(width, height, left, top, ev);
+			if (i !== null) {
+				block.prepareChange();
+				block.param[i] = (block.param[i] + 2) % 3 - 1;
+			}
+			return i;
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			var code = "";
+			for (var i = 0; i < 4; i++) {
+				if (block.param[i]) {
+					code += "state[" + i + "] = " + (block.param[i] > 0 ? "1" : "0") + "\n";
+				}
+			}
+			return {
+				initVarDecl: [
+					epfl.mobots.vpl.BlockTemplate.initStatesDecl
+				],
+				init: [
+					epfl.mobots.vpl.BlockTemplate.initStatesInit
+				],
+				initCodeDecl: [
+					epfl.mobots.vpl.BlockTemplate.dispStates
+				],
+				statement: code.length > 0
+					? code + "callsub display_state\n"
+					: "",
+				statementWithoutInit:
+					"call leds.circle(0," + (block.param[1] ? "32" : "0") +
+						",0," + (block.param[3] ? "32" : "0") +
+						",0," + (block.param[2] ? "32" : "0") +
+						",0," + (block.param[0] ? "32" : "0") + ")\n"
+			};
+		}
+	}),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "t", x: 0, y: 0.3, r: 0},
+			{sh: "t", x: 0, y: -0.3, r: Math.PI}
+		];
+		return {
+			name: "set counter",
+			modes: [epfl.mobots.vpl.mode.advanced],
+			type: epfl.mobots.vpl.blockType.action,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0]; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.text(block.param[0] === 0 ? "= 0" : block.param[0] > 0 ? "+1" : "−1");
+				canvas.buttons(buttons, [
+					block.param[0] < 1 ? -2 : 0,
+					block.param[0] > -1 ? -2 : 0
+				]);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					switch (i) {
+					case 0:
+						block.param[0] = Math.min(1, block.param[0] + 1);
+						break;
+					case 1:
+						block.param[0] = Math.max(-1, block.param[0] - 1);
+						break;
+					}
+				}
+				return i;
+			},
+			sectionPriority: function () { return 1; },
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				return {
+					initVarDecl: [
+						epfl.mobots.vpl.BlockTemplate.initCounterDecl,
+					],
+					initCodeExec: [
+						epfl.mobots.vpl.BlockTemplate.initCounterInit
+					],
+					initCodeDecl: [
+						epfl.mobots.vpl.BlockTemplate.dispCounter
+					],
+					statement:
+						(block.param[0] === 0 ? "counter = 0" :
+							block.param[0] > 0 ? "if counter < 255 then\ncounter++\nend" :
+							"if counter > 0 then\ncounter--\nend") +
+						"\n" +
+						"callsub display_counter\n",
+					statementWithoutInit:
+						"call leds.circle(" + (block.param[0] > 0 ? "1" : "0") + ",0,0,0,0,0,0,0)\n"
+				};
+			}
+		};
+	})()),
+	new epfl.mobots.vpl.BlockTemplate({
+		name: "set timer",
+		modes: [epfl.mobots.vpl.mode.advanced],
+		type: epfl.mobots.vpl.blockType.action,
+		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () { return [1]; },
+		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.drawTimer(/** @type {number} */(block.param[0]), false, false);
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			if (canvas.timerCheck(width, height, left, top, ev)) {
+				block.prepareChange();
+				return 1;
+			}
+			return null;
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+			var t = canvas.timerDrag(width, height, left, top, false, ev);
+			block.param[0] = t;
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			return {
+				initCodeExec: [
+					epfl.mobots.vpl.BlockTemplate.resetTimer
+				],
+				statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + "\n"
+			};
+		}
+	}),
+	new epfl.mobots.vpl.BlockTemplate({
+		name: "set timer log",
+		modes: [epfl.mobots.vpl.mode.custom],
+		type: epfl.mobots.vpl.blockType.action,
+		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () { return [1]; },
+		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.drawTimer(/** @type {number} */(block.param[0]), false, true);
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			if (canvas.timerCheck(width, height, left, top, ev)) {
+				block.prepareChange();
+				return 1;
+			}
+			return null;
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+			var t = canvas.timerDrag(width, height, left, top, true, ev);
+			block.param[0] = t;
+		},
+		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			return {
+				initCodeExec: [
+					epfl.mobots.vpl.BlockTemplate.resetTimer
+				],
+				statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + "\n"
+			};
+		}
+	}),
+	new epfl.mobots.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "c", x: -0.33, y: -0.3, r: 0}
+		];
+
+		/** Update image in block
+			@param {epfl.mobots.vpl.Block} block
+			@param {function():void=} loadedFun called once done
+			@return {void}
+		*/
+		function updateImage(block, loadedFun) {
+			if (block.param[1]) {
+				// block.param[1] contains a url: load it into a new Image
+				var im = new Image();
+				im.src = block.param[1];
+				im.addEventListener("load", function () {
+					// once loaded, store the image and redraw everything
+					block.param[2] = im;
+					loadedFun && loadedFun();
+				}, false);
+			}
+		}
+
+		return {
+			name: "picture comment",
+			modes: [epfl.mobots.vpl.mode.advanced],
+			type: epfl.mobots.vpl.blockType.comment,
+			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () {
+				return [
+					false,	// true for live preview
+					"",	// url ("data:" png)
+					null	// image
+				];
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.exportParam} */
+			exportParam: function (block) {
+				return block.param.length >= 2 ? [false, block.param[1]] : [false, ""];
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.importParam} */
+			importParam: function (block, param, readyFun) {
+				block.param = param.length >= 2 ? [false, param[1]] : [false, ""];
+				updateImage(block, readyFun);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				if (block.param[2]) {
+					canvas.ctx.drawImage(block.param[2],
+						0, 0, 240, 240,
+						0, 0, canvas.dims.blockSize, canvas.dims.blockSize);
+				}
+				canvas.buttons(buttons,  [block.param[0]]);
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons,
+					width, height, left, top, ev);
+				if (i === 0) {
+					if (block.param[0]) {
+						// live preview: stop
+						if (epfl.mobots.webcamVideo) {
+							epfl.mobots.webcamVideo["pause"] && epfl.mobots.webcamVideo["pause"]();
+							epfl.mobots.webcamStream.getTracks().forEach(function(track) {
+								track["stop"]();
+							});
+							epfl.mobots.webcamVideo = null;
+						}
+					} else {
+						// start preview
+						block.prepareChange();
+						navigator.mediaDevices
+							.getUserMedia({"audio": false, "video": {"width": 320, "height": 240}})
+							.then(function (stream) {
+								epfl.mobots.webcamStream = stream;
+								epfl.mobots.webcamVideo = document.createElement("video");
+								epfl.mobots.webcamVideo["srcObject"] = stream;
+								epfl.mobots.webcamVideo.addEventListener("loadedmetadata", function (e) {
+									var id;
+									function grab() {
+										if (!epfl.mobots.webcamVideo) {
+											clearInterval(id);
+										} else {
+											if (!epfl.mobots.webcamCanvas) {
+												epfl.mobots.webcamCanvas = document.createElement("canvas");
+												epfl.mobots.webcamCanvas.width = 240;
+												epfl.mobots.webcamCanvas.height = 240;
+											}
+											epfl.mobots.webcamCanvas.getContext("2d")
+												.drawImage(epfl.mobots.webcamVideo,
+													0, 0, 240, 240, 0, 0, 240, 240);
+											block.param[1] = epfl.mobots.webcamCanvas.toDataURL("image/png");
+											updateImage(block,
+												function () {
+													// redraw once the image has been loaded
+													canvas.onUpdate && canvas.onUpdate();
+													canvas.redraw();
+												});
+										}
+									}
+									epfl.mobots.webcamVideo["play"]();
+									id = setInterval(grab, 100);
+								}, false);
+							});
+					}
+					block.param[0] = !block.param[0];
+				}
+				return i;
+			},
+			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				return {};
+			}
+		};
+	})())
+];
+
+/** Find a block template specified by name
+	@param {string} name
+	@return {epfl.mobots.vpl.BlockTemplate}
+*/
+epfl.mobots.vpl.BlockTemplate.findByName = function (name) {
+	for (var i = 0; i < epfl.mobots.vpl.BlockTemplate.lib.length; i++) {
+		if (epfl.mobots.vpl.BlockTemplate.lib[i].name === name) {
+			return epfl.mobots.vpl.BlockTemplate.lib[i];
+		}
+	}
+	return null;
+};
