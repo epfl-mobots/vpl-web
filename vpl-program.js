@@ -8,20 +8,20 @@
 /**
 	@constructor
 	@struct
-	@param {epfl.mobots.vpl.mode=} mode
+	@param {A3a.vpl.mode=} mode
 */
-epfl.mobots.vpl.Program = function (mode) {
-	/** @type {epfl.mobots.vpl.mode} */
-	this.mode = mode || epfl.mobots.vpl.mode.basic;
+A3a.vpl.Program = function (mode) {
+	/** @type {A3a.vpl.mode} */
+	this.mode = mode || A3a.vpl.mode.basic;
 	this.noVpl = false;	// true for source code editor without vpl counterpart
 	this.teacherRole = true;
-	/** @type {Array.<epfl.mobots.vpl.EventHandler>} */
+	/** @type {Array.<A3a.vpl.EventHandler>} */
 	this.program = [];
 	this.uploaded = false;
 	/** @type {?function():void} */
 	this.onUpdate = null;
 
-	this.undoState = new epfl.mobots.vpl.Undo();
+	this.undoState = new A3a.vpl.Undo();
 	/** @type {?string} */
 	this.code = null;
 
@@ -33,8 +33,8 @@ epfl.mobots.vpl.Program = function (mode) {
 /** Clear program
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.new = function () {
-	this.mode = epfl.mobots.vpl.mode.basic;
+A3a.vpl.Program.prototype.new = function () {
+	this.mode = A3a.vpl.mode.basic;
 	this.disabledBlocks = [];
 	this.program = [];
 	this.undoState.reset();
@@ -44,7 +44,7 @@ epfl.mobots.vpl.Program.prototype.new = function () {
 /** Check if empty (no non-empty event handler)
 	@return {boolean}
 */
-epfl.mobots.vpl.Program.prototype.isEmpty = function () {
+A3a.vpl.Program.prototype.isEmpty = function () {
 	for (var i = 0; i < this.program.length; i++) {
 		if (!this.program[i].isEmpty()) {
 			return false;
@@ -57,14 +57,14 @@ epfl.mobots.vpl.Program.prototype.isEmpty = function () {
 	one event per event handler, no state block)
 	@return {boolean}
 */
-epfl.mobots.vpl.Program.prototype.displaySingleEvent = function () {
-	if (this.mode !== epfl.mobots.vpl.mode.basic) {
+A3a.vpl.Program.prototype.displaySingleEvent = function () {
+	if (this.mode !== A3a.vpl.mode.basic) {
 		return false;
 	}
 	for (var i = 0; i < this.program.length; i++) {
 		if (this.program[i].events.length > 1 ||
 			(this.program[i].events.length > 0 &&
-				this.program[i].events[0].blockTemplate.type === epfl.mobots.vpl.blockType.state)) {
+				this.program[i].events[0].blockTemplate.type === A3a.vpl.blockType.state)) {
 			return false;
 		}
 	}
@@ -74,14 +74,14 @@ epfl.mobots.vpl.Program.prototype.displaySingleEvent = function () {
 /** Make code invalid so that it's generated again when needed
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.invalidateCode = function () {
+A3a.vpl.Program.prototype.invalidateCode = function () {
 	this.code = null;
 };
 
 /** Save current state before modifying it
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.saveStateBeforeChange = function () {
+A3a.vpl.Program.prototype.saveStateBeforeChange = function () {
 	this.undoState.saveStateBeforeChange(this.exportToObject(), this.uploaded);
 	this.code = null;
 	this.uploaded = false;
@@ -92,7 +92,7 @@ epfl.mobots.vpl.Program.prototype.saveStateBeforeChange = function () {
 	asynchrounous loading if necessary
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.undo = function (updateFun) {
+A3a.vpl.Program.prototype.undo = function (updateFun) {
 	if (this.undoState.canUndo()) {
 		var markedState = this.undoState.undo(this.exportToObject(), this.uploaded);
 		this.importFromObject(/** @type {Object} */(markedState.state), updateFun);
@@ -106,7 +106,7 @@ epfl.mobots.vpl.Program.prototype.undo = function (updateFun) {
 	asynchrounous loading if necessary
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.redo = function (updateFun) {
+A3a.vpl.Program.prototype.redo = function (updateFun) {
 	if (this.undoState.canRedo()) {
 		var markedState = this.undoState.redo(this.exportToObject(), this.uploaded);
 		this.importFromObject(/** @type {Object} */(markedState.state), updateFun);
@@ -116,10 +116,10 @@ epfl.mobots.vpl.Program.prototype.redo = function (updateFun) {
 };
 
 /** Change mode
-	@param {epfl.mobots.vpl.mode} mode
+	@param {A3a.vpl.mode} mode
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.setMode = function (mode) {
+A3a.vpl.Program.prototype.setMode = function (mode) {
 	if (mode !== this.mode) {
 		this.saveStateBeforeChange();
 		this.mode = mode;
@@ -127,17 +127,17 @@ epfl.mobots.vpl.Program.prototype.setMode = function (mode) {
 		// convert blocks
 		this.program.forEach(function (eventHandler) {
 			/** Convert block
-				@param {epfl.mobots.vpl.Block} block
+				@param {A3a.vpl.Block} block
 				@param {boolean=} isState
-				@return {epfl.mobots.vpl.Block}
+				@return {A3a.vpl.Block}
 			*/
 
 			function convertBlock(block, isState) {
 /*
 				if (block === null) {
-					if (isState && eventHandler.event && mode === epfl.mobots.vpl.mode.advanced) {
+					if (isState && eventHandler.event && mode === A3a.vpl.mode.advanced) {
 						// new state block
-						block = new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.stateBlock,
+						block = new A3a.vpl.Block(A3a.vpl.BlockTemplate.stateBlock,
 							eventHandler, null);
 						block.onPrepareChange = eventHandler.event.onPrepareChange;
 						return block;
@@ -170,7 +170,7 @@ epfl.mobots.vpl.Program.prototype.setMode = function (mode) {
 	@param {boolean} b
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.setTeacherRole = function (b) {
+A3a.vpl.Program.prototype.setTeacherRole = function (b) {
 	this.teacherRole = b;
 };
 
@@ -178,15 +178,15 @@ epfl.mobots.vpl.Program.prototype.setTeacherRole = function (b) {
 	@param {boolean=} withState
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.addEventHandler = function (withState) {
-	this.program.push(new epfl.mobots.vpl.EventHandler());
+A3a.vpl.Program.prototype.addEventHandler = function (withState) {
+	this.program.push(new A3a.vpl.EventHandler());
 };
 
 /** If there is no trailing event handler, add one; if there are more than one,
 	remove superfluous ones to kee just one
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.enforceSingleTrailingEmptyEventHandler = function () {
+A3a.vpl.Program.prototype.enforceSingleTrailingEmptyEventHandler = function () {
 	if (this.program.length === 0 || !this.program[this.program.length - 1].isEmpty()) {
 		this.addEventHandler();
 	} else {
@@ -197,11 +197,11 @@ epfl.mobots.vpl.Program.prototype.enforceSingleTrailingEmptyEventHandler = funct
 };
 
 /** Generate code for the whole program
-	@param {Array.<epfl.mobots.vpl.Block>=} runBlocks if defined, override the initialization
+	@param {Array.<A3a.vpl.Block>=} runBlocks if defined, override the initialization
 	code
 	@return {string}
 */
-epfl.mobots.vpl.Program.prototype.generateCode = function (runBlocks) {
+A3a.vpl.Program.prototype.generateCode = function (runBlocks) {
 	var c = this.program.map(function (eh) { return eh.generateCode(); });
 	/** @type {Array.<string>} */
 	var initVarDecl = [];
@@ -257,8 +257,8 @@ epfl.mobots.vpl.Program.prototype.generateCode = function (runBlocks) {
 	// compile runBlocks
 	var runBlocksCodeStatement = "";
 	if (runBlocks) {
-		var eh = new epfl.mobots.vpl.EventHandler();
-		var initBlock = new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("init"), null, null);
+		var eh = new A3a.vpl.EventHandler();
+		var initBlock = new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("init"), null, null);
 		eh.setBlock(initBlock, null, null);
 		runBlocks.forEach(function (block) {
 			eh.setBlock(block, null, null);
@@ -367,7 +367,7 @@ epfl.mobots.vpl.Program.prototype.generateCode = function (runBlocks) {
 /** Get code for the whole program, generating it if it's stale
 	@return {string}
 */
-epfl.mobots.vpl.Program.prototype.getCode = function () {
+A3a.vpl.Program.prototype.getCode = function () {
 	if (this.code === null) {
 		this.code = this.generateCode();
 	}
@@ -375,25 +375,25 @@ epfl.mobots.vpl.Program.prototype.getCode = function () {
 };
 
 /** Generate code for the actions of an event handler
-	@param {epfl.mobots.vpl.EventHandler} eventHandler
+	@param {A3a.vpl.EventHandler} eventHandler
 	@return {string}
 */
-epfl.mobots.vpl.Program.prototype.codeForActions = function (eventHandler) {
+A3a.vpl.Program.prototype.codeForActions = function (eventHandler) {
 	return this.generateCode(eventHandler.actions);
 };
 
 /** Generate code for the actions of an event handler
-	@param {epfl.mobots.vpl.Block} block
+	@param {A3a.vpl.Block} block
 	@return {string}
 */
-epfl.mobots.vpl.Program.prototype.codeForBlock = function (block) {
+A3a.vpl.Program.prototype.codeForBlock = function (block) {
 	return this.generateCode([block]);
 };
 
 /** Export program to a plain object which can be serialized
 	@return {Object}
 */
-epfl.mobots.vpl.Program.prototype.exportToObject = function () {
+A3a.vpl.Program.prototype.exportToObject = function () {
 	/** @type {Array.<Array.<Object>>} */
 	var p = this.program.map(function (eventHandler) {
 		/** @type {Array.<Object>} */
@@ -419,7 +419,7 @@ epfl.mobots.vpl.Program.prototype.exportToObject = function () {
 	});
 
 	return {
-		"advanced": this.mode === epfl.mobots.vpl.mode.advanced,
+		"advanced": this.mode === A3a.vpl.mode.advanced,
 		"hidden": this.disabledBlocks,
 		"program": p
 	};
@@ -428,7 +428,7 @@ epfl.mobots.vpl.Program.prototype.exportToObject = function () {
 /** Export program to JSON
 	@return {string}
 */
-epfl.mobots.vpl.Program.prototype.exportToJSON = function () {
+A3a.vpl.Program.prototype.exportToJSON = function () {
 	return JSON.stringify(this.exportToObject());
 };
 
@@ -438,21 +438,21 @@ epfl.mobots.vpl.Program.prototype.exportToJSON = function () {
 	asynchrounous loading if necessary
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
+A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 	var self = this;
 	var importFinished = false;
 	try {
 		if (obj) {
 			this.mode = obj["advanced"]
-				? epfl.mobots.vpl.mode.advanced
-				: epfl.mobots.vpl.mode.basic;
+				? A3a.vpl.mode.advanced
+				: A3a.vpl.mode.basic;
 			this.disabledBlocks = obj["hidden"] || [];
 			this.program = obj["program"].map(function (eventHandler) {
-				var eh = new epfl.mobots.vpl.EventHandler();
+				var eh = new A3a.vpl.EventHandler();
 				eventHandler.forEach(function (block) {
-					var bt = epfl.mobots.vpl.BlockTemplate.findByName(block["name"]);
+					var bt = A3a.vpl.BlockTemplate.findByName(block["name"]);
 					if (bt) {
-						var b = new epfl.mobots.vpl.Block(bt, null, null);
+						var b = new A3a.vpl.Block(bt, null, null);
 						if (bt.importParam) {
 							bt.importParam(b, block["param"],
 								function () {
@@ -484,7 +484,7 @@ epfl.mobots.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 	asynchrounous loading if necessary
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.importFromJSON = function (json, updateFun) {
+A3a.vpl.Program.prototype.importFromJSON = function (json, updateFun) {
 	try {
 		var obj = JSON.parse(json);
 		this.importFromObject(/** @type {Object} */(obj), updateFun);

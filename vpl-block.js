@@ -8,15 +8,15 @@
 /**
 	@constructor
 	@struct
-	@param {epfl.mobots.vpl.BlockTemplate} blockTemplate
-	@param {epfl.mobots.vpl.EventHandler} eventHandlerContainer
-	@param {?epfl.mobots.vpl.positionInContainer} positionInContainer
+	@param {A3a.vpl.BlockTemplate} blockTemplate
+	@param {A3a.vpl.EventHandler} eventHandlerContainer
+	@param {?A3a.vpl.positionInContainer} positionInContainer
 */
-epfl.mobots.vpl.Block = function (blockTemplate, eventHandlerContainer, positionInContainer) {
+A3a.vpl.Block = function (blockTemplate, eventHandlerContainer, positionInContainer) {
 	this.blockTemplate = blockTemplate;
 	this.eventHandlerContainer = eventHandlerContainer;
 	this.positionInContainer = positionInContainer;
-	/** @type {epfl.mobots.vpl.BlockTemplate.param} */
+	/** @type {A3a.vpl.BlockTemplate.param} */
 	this.param = blockTemplate.defaultParam ? blockTemplate.defaultParam() : null;
 	/** @type {?function():void} */
 	this.onPrepareChange = null;
@@ -30,16 +30,16 @@ epfl.mobots.vpl.Block = function (blockTemplate, eventHandlerContainer, position
 		index: number
 	}}
 */
-epfl.mobots.vpl.positionInContainer;
+A3a.vpl.positionInContainer;
 
 /** Make a copy of this
-	@param {epfl.mobots.vpl.EventHandler} eventHandlerContainer
-	@param {?epfl.mobots.vpl.positionInContainer} positionInContainer
+	@param {A3a.vpl.EventHandler} eventHandlerContainer
+	@param {?A3a.vpl.positionInContainer} positionInContainer
 	@param {?function():void} onPrepareChange
-	@return {epfl.mobots.vpl.Block}
+	@return {A3a.vpl.Block}
 */
-epfl.mobots.vpl.Block.prototype.copy = function (eventHandlerContainer, positionInContainer, onPrepareChange) {
-	var newBlock = new epfl.mobots.vpl.Block(this.blockTemplate,
+A3a.vpl.Block.prototype.copy = function (eventHandlerContainer, positionInContainer, onPrepareChange) {
+	var newBlock = new A3a.vpl.Block(this.blockTemplate,
 		eventHandlerContainer, positionInContainer);
 	newBlock.onPrepareChange = onPrepareChange;
 	if (this.param) {
@@ -54,7 +54,7 @@ epfl.mobots.vpl.Block.prototype.copy = function (eventHandlerContainer, position
 /** Call onPrepareChange callback if it exists
 	@return {void}
 */
-epfl.mobots.vpl.Block.prototype.prepareChange = function () {
+A3a.vpl.Block.prototype.prepareChange = function () {
 	this.onPrepareChange && this.onPrepareChange();
 };
 
@@ -70,14 +70,14 @@ epfl.mobots.vpl.Block.prototype.prepareChange = function () {
 		clause: (string|undefined),
 		clauseOptional: (boolean|undefined),
 		statement: (string|undefined),
-		error: (epfl.mobots.vpl.Error|undefined)
+		error: (A3a.vpl.Error|undefined)
 	}}
 */
-epfl.mobots.vpl.compiledCode;
+A3a.vpl.compiledCode;
 
 /** Generate code
-	@return {epfl.mobots.vpl.compiledCode}
+	@return {A3a.vpl.compiledCode}
 */
-epfl.mobots.vpl.Block.prototype.generateCode = function () {
+A3a.vpl.Block.prototype.generateCode = function () {
 	return this.blockTemplate.genCode(this);
 };

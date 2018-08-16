@@ -14,7 +14,7 @@
 	@param {number=} topMargin
 	@param {number=} leftMargin
 */
-epfl.mobots.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
+A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
 	this.textarea = document.getElementById(textareaId);
 	this.textarea.value = "";
 
@@ -60,34 +60,42 @@ epfl.mobots.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin)
 	this.breakpoints = [];
 	this.currentLine = -1;
 
+	/** @type {?A3a.vpl.TextEditor.OnBreakpointChanged} */
+	this.onBreakpointChanged = null;
+
 	this.updateLineNumbers();
 };
+
+/** @typedef {function(Array.<number>):void} */
+A3a.vpl.TextEditor.OnBreakpointChanged;
 
 /** Clear all breakpoints
 	@return {void}
 */
-epfl.mobots.vpl.TextEditor.prototype.clearBreakpoints = function () {
+A3a.vpl.TextEditor.prototype.clearBreakpoints = function () {
 	this.breakpoints = [];
 	this.updateLineNumbers();
+	this.onBreakpointChanged && this.onBreakpointChanged(this.breakpoints);
 };
 
 /** Toggle breakpoint
 	@param {number} line
 	@return {void}
 */
-epfl.mobots.vpl.TextEditor.prototype.toggleBreakpoint = function (line) {
+A3a.vpl.TextEditor.prototype.toggleBreakpoint = function (line) {
 	if (this.breakpoints.indexOf(line) >= 0) {
 		this.breakpoints.splice(this.breakpoints.indexOf(line), 1);
 	} else {
 		this.breakpoints.push(line);
 	}
 	this.updateLineNumbers();
+	this.onBreakpointChanged && this.onBreakpointChanged(this.breakpoints);
 };
 
 /** Resize elements
 	@return {void}
 */
-epfl.mobots.vpl.TextEditor.prototype.resize = function () {
+A3a.vpl.TextEditor.prototype.resize = function () {
     // style
     var width = window.innerWidth - this.leftMargin;
 	var height = window.innerHeight - this.topMargin;
@@ -102,7 +110,7 @@ epfl.mobots.vpl.TextEditor.prototype.resize = function () {
 /** Update the line number text in the pre element
     @return {void}
 */
-epfl.mobots.vpl.TextEditor.prototype.updateLineNumbers = function () {
+A3a.vpl.TextEditor.prototype.updateLineNumbers = function () {
     var lineCount = this.textarea.value.split("\n").length;
     var preLineCount = this.pre.textContent.split("\n").length;
 	/** @type {Array.<string>} */
@@ -130,7 +138,7 @@ epfl.mobots.vpl.TextEditor.prototype.updateLineNumbers = function () {
 	@param {string} text
 	@return {void}
 */
-epfl.mobots.vpl.TextEditor.prototype.setContent = function (text) {
+A3a.vpl.TextEditor.prototype.setContent = function (text) {
 	this.textarea.value = text;
     var height = this.div.clientHeight;
     var taStyle = window.getComputedStyle(this.textarea);

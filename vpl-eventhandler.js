@@ -9,27 +9,27 @@
 	@constructor
 	@struct
 */
-epfl.mobots.vpl.EventHandler = function () {
-	/** @type {Array.<epfl.mobots.vpl.Block>} */
+A3a.vpl.EventHandler = function () {
+	/** @type {Array.<A3a.vpl.Block>} */
 	this.events = [];
-	/** @type {Array.<epfl.mobots.vpl.Block>} */
+	/** @type {Array.<A3a.vpl.Block>} */
 	this.actions = [];
-	/** @type {epfl.mobots.vpl.Error} */
+	/** @type {A3a.vpl.Error} */
 	this.error = null;
 };
 
 /** Check if empty (no event, no actions)
 	@return {boolean}
 */
-epfl.mobots.vpl.EventHandler.prototype.isEmpty = function () {
+A3a.vpl.EventHandler.prototype.isEmpty = function () {
 	return this.events.length === 0 && this.actions.length === 0;
 };
 
 /** Check if contains at least one block of the specified type
-	@param {epfl.mobots.vpl.blockType} type
+	@param {A3a.vpl.blockType} type
 	@return {boolean}
 */
-epfl.mobots.vpl.EventHandler.prototype.hasBlockOfType = function (type) {
+A3a.vpl.EventHandler.prototype.hasBlockOfType = function (type) {
 	for (var i = 0; i < this.events.length; i++) {
 		if (this.events[i].blockTemplate.type === type) {
 			return true;
@@ -45,9 +45,9 @@ epfl.mobots.vpl.EventHandler.prototype.hasBlockOfType = function (type) {
 
 /** Get event block by template name
 	@param {string} name
-	@return {?epfl.mobots.vpl.Block}
+	@return {?A3a.vpl.Block}
 */
-epfl.mobots.vpl.EventHandler.prototype.getEventBlockByType = function (name) {
+A3a.vpl.EventHandler.prototype.getEventBlockByType = function (name) {
 	for (var i = 0; i < this.events.length; i++) {
 		if (this.events[i].blockTemplate.name === name) {
 			return this.events[i];
@@ -57,18 +57,18 @@ epfl.mobots.vpl.EventHandler.prototype.getEventBlockByType = function (name) {
 };
 
 /** Set block (event or action depending on its type)
-	@param {epfl.mobots.vpl.Block} block
-	@param {?epfl.mobots.vpl.positionInContainer} posInEventHandler
+	@param {A3a.vpl.Block} block
+	@param {?A3a.vpl.positionInContainer} posInEventHandler
 	@param {?function():void} onPrepareChange
 	@param {boolean=} noCopy true to use block itself instead of a copy (default: false)
 	@return {void}
 */
-epfl.mobots.vpl.EventHandler.prototype.setBlock = function (block, posInEventHandler, onPrepareChange, noCopy) {
+A3a.vpl.EventHandler.prototype.setBlock = function (block, posInEventHandler, onPrepareChange, noCopy) {
 	if (block) {
 		// replace
 		switch (block.blockTemplate.type) {
-		case epfl.mobots.vpl.blockType.event:
-		case epfl.mobots.vpl.blockType.state:
+		case A3a.vpl.blockType.event:
+		case A3a.vpl.blockType.state:
 			if (block.eventHandlerContainer === this) {
 				// reorder events in the same event handler
 				if (posInEventHandler) {
@@ -99,12 +99,12 @@ epfl.mobots.vpl.EventHandler.prototype.setBlock = function (block, posInEventHan
 				this.events.push(block);
 			}
 			break;
-		case epfl.mobots.vpl.blockType.action:
-		case epfl.mobots.vpl.blockType.comment:
+		case A3a.vpl.blockType.action:
+		case A3a.vpl.blockType.comment:
 			if (block.eventHandlerContainer === this) {
 				// reorder actions in the same event handler
 				if (posInEventHandler) {
-					this.removeBlock(/** @type {epfl.mobots.vpl.positionInContainer} */(block.positionInContainer));
+					this.removeBlock(/** @type {A3a.vpl.positionInContainer} */(block.positionInContainer));
 					if (noCopy) {
 						block.onPrepareChange = onPrepareChange;
 					} else {
@@ -137,10 +137,10 @@ epfl.mobots.vpl.EventHandler.prototype.setBlock = function (block, posInEventHan
 };
 
 /** Remove block
-	@param {epfl.mobots.vpl.positionInContainer} posInEventHandler
+	@param {A3a.vpl.positionInContainer} posInEventHandler
 	@return {void}
 */
-epfl.mobots.vpl.EventHandler.prototype.removeBlock = function (posInEventHandler) {
+A3a.vpl.EventHandler.prototype.removeBlock = function (posInEventHandler) {
 	if (posInEventHandler.eventSide) {
 		if (this.events[posInEventHandler.index]) {
 			this.events.splice(posInEventHandler.index, 1);
@@ -156,7 +156,7 @@ epfl.mobots.vpl.EventHandler.prototype.removeBlock = function (posInEventHandler
 	and positionInContainer
 	@return {void}
 */
-epfl.mobots.vpl.EventHandler.prototype.fixBlockContainerRefs = function () {
+A3a.vpl.EventHandler.prototype.fixBlockContainerRefs = function () {
 	this.events.forEach(function (event, i) {
 		event.eventHandlerContainer = this;
 		event.positionInContainer = {
@@ -175,9 +175,9 @@ epfl.mobots.vpl.EventHandler.prototype.fixBlockContainerRefs = function () {
 
 /** Generate code
 	@param {string=} andOp operator for "and" (default: "and")
-	@return {epfl.mobots.vpl.compiledCode}
+	@return {A3a.vpl.compiledCode}
 */
-epfl.mobots.vpl.EventHandler.prototype.generateCode = function (andOp) {
+A3a.vpl.EventHandler.prototype.generateCode = function (andOp) {
 	if (this.isEmpty()) {
 		return {};
 	}
@@ -186,7 +186,7 @@ epfl.mobots.vpl.EventHandler.prototype.generateCode = function (andOp) {
 	this.error = null;
 	var hasEvent = false;
 	for (var i = 0; i < this.events.length; i++) {
-		if (this.events[i].blockTemplate.type === epfl.mobots.vpl.blockType.event) {
+		if (this.events[i].blockTemplate.type === A3a.vpl.blockType.event) {
 			hasEvent = true;
 			if (this.events[i].blockTemplate.validate) {
 				var err = this.events[i].blockTemplate.validate(this.events[i]);
@@ -199,29 +199,29 @@ epfl.mobots.vpl.EventHandler.prototype.generateCode = function (andOp) {
 		}
 	}
 	if (!hasEvent) {
-		var err = new epfl.mobots.vpl.Error("Missing event block");
+		var err = new A3a.vpl.Error("Missing event block");
 		err.addEventError([]);
 		this.error = err;
 		return {error: err};
 	}
 	var hasAction = false;
 	for (var i = 0; i < this.actions.length; i++) {
-		if (this.actions[i].blockTemplate.type === epfl.mobots.vpl.blockType.action) {
+		if (this.actions[i].blockTemplate.type === A3a.vpl.blockType.action) {
 			hasAction = true;
 			break;
 		}
 	}
 	if (!hasAction) {
-		var err = new epfl.mobots.vpl.Error("Missing action block");
+		var err = new A3a.vpl.Error("Missing action block");
 		err.addActionError(0);
 		this.error = err;
 		return {error: err};
 	} else {
 		for (var i = 0; i < this.actions.length; i++) {
 			for (var j = i + 1; j < this.actions.length; j++) {
-				if (this.actions[j].blockTemplate.type === epfl.mobots.vpl.blockType.action &&
+				if (this.actions[j].blockTemplate.type === A3a.vpl.blockType.action &&
 					this.actions[j].blockTemplate === this.actions[i].blockTemplate) {
-					var err = new epfl.mobots.vpl.Error("Duplicate action blocks");
+					var err = new A3a.vpl.Error("Duplicate action blocks");
 					err.addActionError(i);
 					err.addActionError(j);
 					this.error = err;
@@ -273,7 +273,7 @@ epfl.mobots.vpl.EventHandler.prototype.generateCode = function (andOp) {
 		}
 	});
 	if (clauseless.length > 1) {
-		var err = new epfl.mobots.vpl.Error("Incompatible events in the same rule");
+		var err = new A3a.vpl.Error("Incompatible events in the same rule");
 		err.addEventError(clauseless);
 		this.error = err;
 		return {error: err};
@@ -329,10 +329,10 @@ epfl.mobots.vpl.EventHandler.prototype.generateCode = function (andOp) {
 	one
 	@return {boolean} true if there is a conflict
 */
-epfl.mobots.vpl.EventHandler.prototype.checkConflicts = function (otherEventHandler) {
+A3a.vpl.EventHandler.prototype.checkConflicts = function (otherEventHandler) {
 	/** Compare function for sorting events
-		@param {epfl.mobots.vpl.Block} a
-		@param {epfl.mobots.vpl.Block} b
+		@param {A3a.vpl.Block} a
+		@param {A3a.vpl.Block} b
 		@return {number}
 	*/
 	function compareEvents(a, b) {
@@ -342,8 +342,8 @@ epfl.mobots.vpl.EventHandler.prototype.checkConflicts = function (otherEventHand
 	}
 
 	/** Check if parameters of two blocks are equal
-		@param {epfl.mobots.vpl.Block} block1
-		@param {epfl.mobots.vpl.Block} block2
+		@param {A3a.vpl.Block} block1
+		@param {A3a.vpl.Block} block2
 		@return {boolean}
 	*/
 	function areParamEqual(block1, block2) {
@@ -378,10 +378,10 @@ epfl.mobots.vpl.EventHandler.prototype.checkConflicts = function (otherEventHand
 	}
 
 	// else error
-	var err = new epfl.mobots.vpl.Error("Duplicate event");
+	var err = new A3a.vpl.Error("Duplicate event");
 	err.addEventConflictError(otherEventHandler);
 	this.error = this.error || err;
-	err = new epfl.mobots.vpl.Error("Duplicate event");
+	err = new A3a.vpl.Error("Duplicate event");
 	err.addEventConflictError(this);
 	otherEventHandler.error = otherEventHandler.error || err;
 	return true;

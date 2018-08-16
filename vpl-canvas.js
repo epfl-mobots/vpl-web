@@ -13,23 +13,23 @@
 	@param {number} height
 	@param {number} x
 	@param {number} y
-	@param {?epfl.mobots.vpl.CanvasItem.draw} draw
+	@param {?A3a.vpl.CanvasItem.draw} draw
 	@param {?{
-		mousedown:(epfl.mobots.vpl.CanvasItem.mousedown|null|undefined),
-		mousedrag:(epfl.mobots.vpl.CanvasItem.mousedrag|null|undefined)
+		mousedown:(A3a.vpl.CanvasItem.mousedown|null|undefined),
+		mousedrag:(A3a.vpl.CanvasItem.mousedrag|null|undefined)
 	}=} interactiveCB
-	@param {?epfl.mobots.vpl.CanvasItem.doDrop=} doDrop
-	@param {?epfl.mobots.vpl.CanvasItem.canDrop=} canDrop
+	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
+	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 */
-epfl.mobots.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, doDrop, canDrop) {
+A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, doDrop, canDrop) {
 	this.data = data;
 	this.width = width;
 	this.height = height;
 	this.x = x;
 	this.y = y;
-	/** @type {?epfl.mobots.vpl.Canvas.ClippingRect} */
+	/** @type {?A3a.vpl.Canvas.ClippingRect} */
 	this.clippingRect = null;
-	/** @type {Array.<epfl.mobots.vpl.CanvasItem>} */
+	/** @type {Array.<A3a.vpl.CanvasItem>} */
 	this.attachedItems = [];
 	this.drawContent = draw;
 	this.clicable = true;
@@ -37,7 +37,7 @@ epfl.mobots.vpl.CanvasItem = function (data, width, height, x, y, draw, interact
 	this.interactiveCB = interactiveCB || null;
 	this.doDrop = doDrop || null;
 	this.canDrop = canDrop || null;
-	/** @type {?function(epfl.mobots.vpl.CanvasItem):epfl.mobots.vpl.CanvasItem} */
+	/** @type {?function(A3a.vpl.CanvasItem):A3a.vpl.CanvasItem} */
 	this.zoomOnLongPress = null;
 	/** @type {?function():void} */
 	this.onUpdate = null;
@@ -46,18 +46,18 @@ epfl.mobots.vpl.CanvasItem = function (data, width, height, x, y, draw, interact
 };
 
 /** Attach another item which will follow this during a drag
-	@param {epfl.mobots.vpl.CanvasItem} item
+	@param {A3a.vpl.CanvasItem} item
 	@return {void}
 */
-epfl.mobots.vpl.CanvasItem.prototype.attachItem = function (item) {
+A3a.vpl.CanvasItem.prototype.attachItem = function (item) {
 	this.attachedItems.push(item);
 };
 
 /** Make a clone of this
-	@return {epfl.mobots.vpl.CanvasItem}
+	@return {A3a.vpl.CanvasItem}
 */
-epfl.mobots.vpl.CanvasItem.prototype.clone = function () {
-	var c = new epfl.mobots.vpl.CanvasItem(this.data,
+A3a.vpl.CanvasItem.prototype.clone = function () {
+	var c = new A3a.vpl.CanvasItem(this.data,
 		this.width, this.height,
 		this.x, this.y,
 		this.drawContent,
@@ -74,7 +74,7 @@ epfl.mobots.vpl.CanvasItem.prototype.clone = function () {
 	@param {number=} dy vertical offset wrt original position
 	@return {void}
 */
-epfl.mobots.vpl.CanvasItem.prototype.draw = function (ctx, dx, dy) {
+A3a.vpl.CanvasItem.prototype.draw = function (ctx, dx, dy) {
 	if (dx === undefined && this.clippingRect) {
 		ctx.save();
 		ctx.beginPath();
@@ -92,7 +92,7 @@ epfl.mobots.vpl.CanvasItem.prototype.draw = function (ctx, dx, dy) {
 	@param {CanvasRenderingContext2D} ctx
 	@return {void}
 */
-epfl.mobots.vpl.CanvasItem.prototype.applyClipping = function (ctx) {
+A3a.vpl.CanvasItem.prototype.applyClipping = function (ctx) {
 	if (this.clippingRect) {
 		ctx.beginPath();
 		ctx.rect(this.clippingRect.x, this.clippingRect.y,
@@ -102,37 +102,37 @@ epfl.mobots.vpl.CanvasItem.prototype.applyClipping = function (ctx) {
 };
 
 /**
-	@typedef {function(CanvasRenderingContext2D,epfl.mobots.vpl.CanvasItem,number,number):void}
+	@typedef {function(CanvasRenderingContext2D,A3a.vpl.CanvasItem,number,number):void}
 */
-epfl.mobots.vpl.CanvasItem.draw;
+A3a.vpl.CanvasItem.draw;
 
 /**
-	@typedef {function(epfl.mobots.vpl.Canvas,*,number,number,number,number,Event):?number}
+	@typedef {function(A3a.vpl.Canvas,*,number,number,number,number,Event):?number}
 */
-epfl.mobots.vpl.CanvasItem.mousedown;
+A3a.vpl.CanvasItem.mousedown;
 
 /**
-	@typedef {function(epfl.mobots.vpl.Canvas,*,number,number,number,number,number,Event):void}
+	@typedef {function(A3a.vpl.Canvas,*,number,number,number,number,number,Event):void}
 */
-epfl.mobots.vpl.CanvasItem.mousedrag;
+A3a.vpl.CanvasItem.mousedrag;
 
 /**
-	@typedef {function(epfl.mobots.vpl.CanvasItem,epfl.mobots.vpl.CanvasItem):void}
+	@typedef {function(A3a.vpl.CanvasItem,A3a.vpl.CanvasItem):void}
 	(arguments: target item, dropped item)
 */
-epfl.mobots.vpl.CanvasItem.doDrop;
+A3a.vpl.CanvasItem.doDrop;
 
 /**
 	@typedef {function(*,*):boolean} (arguments: target, dropped data)
 */
-epfl.mobots.vpl.CanvasItem.canDrop;
+A3a.vpl.CanvasItem.canDrop;
 
 /** Check if position is inside the clipping rect
 	@param {number} x
 	@param {number} y
 	@return {boolean}
 */
-epfl.mobots.vpl.CanvasItem.prototype.isInClip = function (x, y) {
+A3a.vpl.CanvasItem.prototype.isInClip = function (x, y) {
 	return !this.clippingRect
 		|| (x >= this.clippingRect.x && x < this.clippingRect.x + this.clippingRect.w
 			&& y >= this.clippingRect.y && y < this.clippingRect.y + this.clippingRect.h);
@@ -143,7 +143,7 @@ epfl.mobots.vpl.CanvasItem.prototype.isInClip = function (x, y) {
 	@struct
 	@param {Element} canvas
 */
-epfl.mobots.vpl.Canvas = function (canvas) {
+A3a.vpl.Canvas = function (canvas) {
 	var backingScale = "devicePixelRatio" in window ? window["devicePixelRatio"] : 1;
 	this.canvas = canvas;
 	this.width = canvas.width / backingScale;
@@ -157,11 +157,11 @@ epfl.mobots.vpl.Canvas = function (canvas) {
 
 	this.clickTimestamp = 0;
 	this.zoomedItemIndex = -1;
-	/** @type {epfl.mobots.vpl.CanvasItem} */
+	/** @type {A3a.vpl.CanvasItem} */
 	this.zoomedItemProxy = null;
 
-	/** @type {epfl.mobots.vpl.Canvas.dims} */
-	this.dims = /** @type {epfl.mobots.vpl.Canvas.dims} */(null);
+	/** @type {A3a.vpl.Canvas.dims} */
+	this.dims = /** @type {A3a.vpl.Canvas.dims} */(null);
 	this.resize(this.width, this.height);	// force set this.dims
 
 	var self = this;
@@ -185,7 +185,7 @@ epfl.mobots.vpl.Canvas = function (canvas) {
 						downEvent);
 				self.onUpdate && self.onUpdate();
 				// continue with window-level handler
-				epfl.mobots.vpl.dragFun = item.interactiveCB.mousedrag
+				A3a.vpl.dragFun = item.interactiveCB.mousedrag
 					? function (e, isUp) {
 						if (!isUp) {
 							item.interactiveCB.mousedrag(self, item.data,
@@ -236,11 +236,11 @@ epfl.mobots.vpl.Canvas = function (canvas) {
 			}
 			if (item.draggable) {
 				// drag item itself
-				/** @type {epfl.mobots.vpl.CanvasItem} */
+				/** @type {A3a.vpl.CanvasItem} */
 				var dropTarget = null;
 				var x0 = downEvent.clientX;
 				var y0 = downEvent.clientY;
-				epfl.mobots.vpl.dragFun = function (dragEvent, isUp) {
+				A3a.vpl.dragFun = function (dragEvent, isUp) {
 					if (isUp) {
 						if (item.zoomOnLongPress && item === self.items[self.clickedItemIndex(dragEvent, false)[0]]
 							&& Date.now() - self.clickTimestamp > 500) {
@@ -296,7 +296,7 @@ epfl.mobots.vpl.Canvas = function (canvas) {
 		if (touches.length === 1) {
 			ev.preventDefault();
 			mousedown(touches[0]);
-			epfl.mobots.vpl.lastTouch = touches[0];
+			A3a.vpl.lastTouch = touches[0];
 		}
 	}, false);
 
@@ -313,9 +313,9 @@ epfl.mobots.vpl.Canvas = function (canvas) {
 		}
 	}, false);
 
-	/** @type {Array.<epfl.mobots.vpl.CanvasItem>} */
+	/** @type {Array.<A3a.vpl.CanvasItem>} */
 	this.items = [];
-	/** @type {Array.<epfl.mobots.vpl.Canvas.ClippingRect>} */
+	/** @type {Array.<A3a.vpl.Canvas.ClippingRect>} */
 	this.clipStack = [];
 	/** @type {?function():void} */
 	this.onUpdate = null;
@@ -324,7 +324,7 @@ epfl.mobots.vpl.Canvas = function (canvas) {
 /** Update
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype["update"] = function () {
+A3a.vpl.Canvas.prototype["update"] = function () {
 	this.onUpdate && this.onUpdate();
 };
 
@@ -347,14 +347,14 @@ epfl.mobots.vpl.Canvas.prototype["update"] = function () {
 		stripVertMargin: number
 	}}
 */
-epfl.mobots.vpl.Canvas.dims;
+A3a.vpl.Canvas.dims;
 
 /** Calculate optimal dims
 	@param {number} blockSize size of VPL blocks
 	@param {number} controlSize size of controls
-	@return {epfl.mobots.vpl.Canvas.dims}
+	@return {A3a.vpl.Canvas.dims}
 */
-epfl.mobots.vpl.Canvas.calcDims = function (blockSize, controlSize) {
+A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 	return {
 		blockSize: blockSize,
 		blockLineWidth: Math.max(1, Math.min(3, blockSize / 40)),
@@ -379,7 +379,7 @@ epfl.mobots.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 	@param {number} height new height
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.resize = function (width, height) {
+A3a.vpl.Canvas.prototype.resize = function (width, height) {
 	this.width = width;
 	this.height = height;
 	var backingScale = "devicePixelRatio" in window ? window["devicePixelRatio"] : 1;
@@ -393,17 +393,17 @@ epfl.mobots.vpl.Canvas.prototype.resize = function (width, height) {
 	var cw = Math.min(width, height);
 	var blockSize = Math.min(Math.round(width / 12), 90);
 	var controlSize = Math.min(Math.max(Math.round(blockSize / 1.3), 32), 60);
-	this.dims = epfl.mobots.vpl.Canvas.calcDims(blockSize, controlSize);
+	this.dims = A3a.vpl.Canvas.calcDims(blockSize, controlSize);
 };
 
 /** @typedef {{x:number,y:number,w:number,h:number}} */
-epfl.mobots.vpl.Canvas.ClippingRect;
+A3a.vpl.Canvas.ClippingRect;
 
 /** Get the index of the item specified by its data
 	@param {*} data
 	@return {number} index, or -1 if not found
 */
-epfl.mobots.vpl.Canvas.prototype.itemIndex = function (data) {
+A3a.vpl.Canvas.prototype.itemIndex = function (data) {
 	for (var i = 0; i < this.items.length; i++) {
 		if (this.items[i].data === data) {
 			return i;
@@ -417,7 +417,7 @@ epfl.mobots.vpl.Canvas.prototype.itemIndex = function (data) {
 	@param {boolean} clicableOnly
 	@return {Array.<number>} indices from top-most (last) element, or empty if none found
 */
-epfl.mobots.vpl.Canvas.prototype.clickedItemIndex = function (ev, clicableOnly) {
+A3a.vpl.Canvas.prototype.clickedItemIndex = function (ev, clicableOnly) {
 	var canvasBndRect = this.canvas.getBoundingClientRect();
 	var x = ev.clientX - canvasBndRect.left;
 	var y = ev.clientY - canvasBndRect.top;
@@ -435,10 +435,10 @@ epfl.mobots.vpl.Canvas.prototype.clickedItemIndex = function (ev, clicableOnly) 
 };
 
 /** Make a zoomed clone of an item
-	@param {epfl.mobots.vpl.CanvasItem} item
-	@return {epfl.mobots.vpl.CanvasItem}
+	@param {A3a.vpl.CanvasItem} item
+	@return {A3a.vpl.CanvasItem}
 */
-epfl.mobots.vpl.Canvas.prototype.makeZoomedClone = function (item) {
+A3a.vpl.Canvas.prototype.makeZoomedClone = function (item) {
 	var c = item.clone();
 	var canvasSize = this.getSize();
 	var sc = Math.min(canvasSize.width, canvasSize.height) / 1.5 / c.width;
@@ -446,13 +446,14 @@ epfl.mobots.vpl.Canvas.prototype.makeZoomedClone = function (item) {
 	c.height *= sc;
 	c.x = (canvasSize.width - c.width) / 2;
 	c.y = (canvasSize.height - c.height) / 2;
+	c.zoomOnLongPress = null;
 	var self = this;
 	c.drawContent = function (ctx, item1, dx, dy) {
 		ctx.save();
 		ctx.translate(item1.x, item1.y);
 		ctx.scale(sc, sc);
 		ctx.translate(-item1.x, -item1.y);
-		item.drawContent(ctx, item, item1.x - item.x, item1.y - item.y);
+		item.drawContent(ctx, c, item1.x - c.x, item1.y - c.y);
 		ctx.restore();
 	};
 	return c;
@@ -462,7 +463,7 @@ epfl.mobots.vpl.Canvas.prototype.makeZoomedClone = function (item) {
 	@param {Event} ev
 	@return {boolean}
 */
-epfl.mobots.vpl.Canvas.prototype.isZoomedItemProxyClicked = function (ev) {
+A3a.vpl.Canvas.prototype.isZoomedItemProxyClicked = function (ev) {
 	if (this.zoomedItemProxy == null) {
 		return false;
 	}
@@ -476,7 +477,7 @@ epfl.mobots.vpl.Canvas.prototype.isZoomedItemProxyClicked = function (ev) {
 /** Get the canvas size
 	@return {{width:number,height:number}}
 */
-epfl.mobots.vpl.Canvas.prototype.getSize = function () {
+A3a.vpl.Canvas.prototype.getSize = function () {
 	return {
 		width: this.width,
 		height: this.height
@@ -486,14 +487,14 @@ epfl.mobots.vpl.Canvas.prototype.getSize = function () {
 /** Clear items
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.clearItems = function () {
+A3a.vpl.Canvas.prototype.clearItems = function () {
 	this.items = [];
 };
 
 /** Clear canvas
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.erase = function () {
+A3a.vpl.Canvas.prototype.erase = function () {
 	this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 };
 
@@ -504,7 +505,7 @@ epfl.mobots.vpl.Canvas.prototype.erase = function () {
 	@param {number} height
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.beginClip = function (x, y, width, height) {
+A3a.vpl.Canvas.prototype.beginClip = function (x, y, width, height) {
 	if (this.clipStack.length > 0) {
 		// intersect with previous clip
 		var c0 = this.clipStack[this.clipStack.length - 1];
@@ -529,16 +530,16 @@ epfl.mobots.vpl.Canvas.prototype.beginClip = function (x, y, width, height) {
 /** End clipping rect (should match beginClip)
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.endClip = function () {
+A3a.vpl.Canvas.prototype.endClip = function () {
 	this.clipStack.pop();
 };
 
 /** Set or append item
-	@param {epfl.mobots.vpl.CanvasItem} item
+	@param {A3a.vpl.CanvasItem} item
 	@param {number=} index index of item to replace, or -1 to append (default)
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.setItem = function (item, index) {
+A3a.vpl.Canvas.prototype.setItem = function (item, index) {
 	if (this.clipStack.length > 0) {
 		item.clippingRect = this.clipStack[this.clipStack.length - 1];
 	}
@@ -553,8 +554,8 @@ epfl.mobots.vpl.Canvas.prototype.setItem = function (item, index) {
 	@param {function(CanvasRenderingContext2D):void} fun drawing function
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.addDecoration = function (fun) {
-	var item = new epfl.mobots.vpl.CanvasItem(null,
+A3a.vpl.Canvas.prototype.addDecoration = function (fun) {
+	var item = new A3a.vpl.CanvasItem(null,
 		-1, -1, 0, 0,
 		function(ctx) {
 			ctx.save();
@@ -569,14 +570,14 @@ epfl.mobots.vpl.Canvas.prototype.addDecoration = function (fun) {
 	@param {number} y
 	@param {number} width
 	@param {number} height
-	@param {epfl.mobots.vpl.CanvasItem.draw} draw
-	@param {?epfl.mobots.vpl.CanvasItem.mousedown=} mousedown
-	@param {?epfl.mobots.vpl.CanvasItem.doDrop=} doDrop
-	@param {?epfl.mobots.vpl.CanvasItem.canDrop=} canDrop
+	@param {A3a.vpl.CanvasItem.draw} draw
+	@param {?A3a.vpl.CanvasItem.mousedown=} mousedown
+	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
+	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.addControl = function (x, y, width, height, draw, mousedown, doDrop, canDrop) {
-	var item = new epfl.mobots.vpl.CanvasItem(null,
+A3a.vpl.Canvas.prototype.addControl = function (x, y, width, height, draw, mousedown, doDrop, canDrop) {
+	var item = new A3a.vpl.CanvasItem(null,
 		width, height, x, y,
 		draw,
 		mousedown ? {mousedown: mousedown} : null,
@@ -589,7 +590,7 @@ epfl.mobots.vpl.Canvas.prototype.addControl = function (x, y, width, height, dra
 /** Redraw the underlying canvas with all the items
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.redraw = function () {
+A3a.vpl.Canvas.prototype.redraw = function () {
 	this.erase();
 	this.items.forEach(function (item) {
 		item.draw(this.ctx);

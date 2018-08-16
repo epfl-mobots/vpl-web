@@ -5,43 +5,43 @@
 	For internal use only
 */
 
-epfl.mobots.vpl.dragPayload = null;
+A3a.vpl.dragPayload = null;
 
 /** @dict */
-epfl.mobots.vpl.blockLib = {};
+A3a.vpl.blockLib = {};
 
 // window-level drag
 /** @type {?function(Event,boolean):void} */
-epfl.mobots.vpl.dragFun = null;
+A3a.vpl.dragFun = null;
 document.addEventListener("mousemove", function (e) {
-	if (epfl.mobots.vpl.dragFun !== null) {
-		epfl.mobots.vpl.dragFun(e, false);
+	if (A3a.vpl.dragFun !== null) {
+		A3a.vpl.dragFun(e, false);
 		e.preventDefault();
 	}
 }, false);
 document.addEventListener("mouseup", function (e) {
-	if (epfl.mobots.vpl.dragFun !== null) {
-		epfl.mobots.vpl.dragFun(e, true);
-		epfl.mobots.vpl.dragFun = null;
+	if (A3a.vpl.dragFun !== null) {
+		A3a.vpl.dragFun(e, true);
+		A3a.vpl.dragFun = null;
 		e.preventDefault();
 	}
 }, false);
 
 // window-level touch drag
-epfl.mobots.vpl.lastTouch = null;
+A3a.vpl.lastTouch = null;
 document.addEventListener("touchmove", function (e) {
 	e.preventDefault();
-	if (epfl.mobots.vpl.dragFun !== null) {
+	if (A3a.vpl.dragFun !== null) {
 		var touches = e.targetTouches;
-		epfl.mobots.vpl.lastTouch = touches[0];
-		epfl.mobots.vpl.dragFun(epfl.mobots.vpl.lastTouch, false);
+		A3a.vpl.lastTouch = touches[0];
+		A3a.vpl.dragFun(A3a.vpl.lastTouch, false);
 	}
 	return false;
 }, {"capture": false, "passive": false});
 document.addEventListener("touchend", function (e) {
-	if (epfl.mobots.vpl.dragFun !== null) {
-		epfl.mobots.vpl.dragFun(epfl.mobots.vpl.lastTouch, true);
-		epfl.mobots.vpl.dragFun = null;
+	if (A3a.vpl.dragFun !== null) {
+		A3a.vpl.dragFun(A3a.vpl.lastTouch, true);
+		A3a.vpl.dragFun = null;
 		e.preventDefault();
 	}
 	return false;
@@ -50,15 +50,18 @@ document.addEventListener("touchend", function (e) {
 var textEditor;
 
 window.addEventListener("load", function () {
-	textEditor = new epfl.mobots.vpl.TextEditor("editor", "editor-lines");
-	window["vplProgram"] = new epfl.mobots.vpl.Program();
+	textEditor = new A3a.vpl.TextEditor("editor", "editor-lines");
+	textEditor.onBreakpointChanged = function (bp) {
+		window["vplBreakpointsFunction"] && window["vplBreakpointsFunction"](bp);
+	};
+	window["vplProgram"] = new A3a.vpl.Program();
 	var canvas = document.getElementById("programCanvas");
-	window["vplCanvas"] = new epfl.mobots.vpl.Canvas(canvas);
+	window["vplCanvas"] = new A3a.vpl.Canvas(canvas);
 	window["vplCanvas"].wheel = function (dx, dy) {
 		window["vplProgram"].scrollCanvas(window["vplCanvas"], dy);
 		window["vplCanvas"].onUpdate();
 	};
-	window["vplCanvas"].state = new epfl.mobots.vpl.Program.CanvasRenderingState();
+	window["vplCanvas"].state = new A3a.vpl.Program.CanvasRenderingState();
 	window["vplCanvas"].onUpdate = function () {
 		window["vplProgram"].invalidateCode();
 		window["vplProgram"].enforceSingleTrailingEmptyEventHandler();
@@ -68,7 +71,7 @@ window.addEventListener("load", function () {
 	window["vplProgram"].addEventHandler(true);
 
 	canvas = document.getElementById("editorTBCanvas");
-	window["srcTBCanvas"] = new epfl.mobots.vpl.Canvas(canvas);
+	window["srcTBCanvas"] = new A3a.vpl.Canvas(canvas);
 
 	// accept dropped aesl files
 	document.getElementsByTagName("body")[0].addEventListener('dragover', function(e) {
@@ -172,7 +175,7 @@ window.addEventListener("load", function () {
 	}
 
 	if (getQueryOption("compiler") === "l2") {
-		epfl.mobots.vpl.patchL2();
+		A3a.vpl.patchL2();
 	}
 	if (getQueryOption("view") === "text") {
 		window["vplProgram"].setView("src", true);
@@ -193,7 +196,7 @@ function srcToolbarHeight(canvas) {
 };
 
 /** Render toolbar for source code editor
-	@param {epfl.mobots.vpl.Canvas} canvas
+	@param {A3a.vpl.Canvas} canvas
 	@param {boolean=} noVpl
 	@return {void}
 */
@@ -294,8 +297,8 @@ function srcToolbarRender(canvas, noVpl) {
 		function (data, x, y, ev) {
 			if (!isEditorEmpty) {
 				var src = document.getElementById("editor").value;
-				var aesl = epfl.mobots.vpl.Program.toAESLFile(src);
-				epfl.mobots.vpl.Program.downloadXML(aesl, "code.aesl");
+				var aesl = A3a.vpl.Program.toAESLFile(src);
+				A3a.vpl.Program.downloadXML(aesl, "code.aesl");
 			}
 			return 0;
 		},

@@ -6,7 +6,7 @@
 */
 
 /** @enum {string} */
-epfl.mobots.vpl.blockType = {
+A3a.vpl.blockType = {
 	event: "e",
 	action: "a",
 	state: "s",
@@ -14,7 +14,7 @@ epfl.mobots.vpl.blockType = {
 };
 
 /** @enum {string} */
-epfl.mobots.vpl.mode = {
+A3a.vpl.mode = {
 	basic: "b",
 	advanced: "a",
 	custom: "c"
@@ -23,21 +23,21 @@ epfl.mobots.vpl.mode = {
 /**
 	@constructor
 	@struct
-	@param {epfl.mobots.vpl.BlockTemplate.params} blockParams
+	@param {A3a.vpl.BlockTemplate.params} blockParams
 */
-epfl.mobots.vpl.BlockTemplate = function (blockParams) {
+A3a.vpl.BlockTemplate = function (blockParams) {
 	this.name = blockParams.name;
 	this.type = blockParams.type;
 	this.modes = blockParams.modes
-		|| [epfl.mobots.vpl.mode.basic, epfl.mobots.vpl.mode.advanced];
+		|| [A3a.vpl.mode.basic, A3a.vpl.mode.advanced];
 	this.noState = blockParams.noState || false;
 	this.defaultParam = blockParams.defaultParam || null;
 	this.exportParam = blockParams.exportParam || null;
 	this.importParam = blockParams.importParam || null;
 	this.validate = blockParams.validate || null;
-	/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+	/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 	this.genCode = blockParams.genCode
-		|| (this.type === epfl.mobots.vpl.blockType.event
+		|| (this.type === A3a.vpl.blockType.event
 			? function (block) {
 				return {
 					begin: "# onevent " + block.blockTemplate.name + "\n"
@@ -48,103 +48,105 @@ epfl.mobots.vpl.BlockTemplate = function (blockParams) {
 					statement: "# " + block.blockTemplate.name + "\n"
 				};
 			});
-	/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+	/** @type {A3a.vpl.BlockTemplate.drawFun} */
 	this.draw = blockParams.draw || function (canvas, block) {
 		canvas.text(block.blockTemplate.name);
 	};
-	/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun|null} */
+	/** @type {A3a.vpl.BlockTemplate.mousedownFun|null} */
 	this.mousedown = blockParams.mousedown || null;
-	/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun|null} */
+	/** @type {A3a.vpl.BlockTemplate.mousedragFun|null} */
 	this.mousedrag = blockParams.mousedrag || null;
-	/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun|null} */
+	/** @type {A3a.vpl.BlockTemplate.changeModeFun|null} */
 	this.changeMode = blockParams.changeMode || null;
 };
 
 /**
 	@typedef {(Array|null)}
 */
-epfl.mobots.vpl.BlockTemplate.param;
+A3a.vpl.BlockTemplate.param;
 
 /**
-	@typedef {function():epfl.mobots.vpl.BlockTemplate.param}
+	@typedef {function():A3a.vpl.BlockTemplate.param}
 */
-epfl.mobots.vpl.BlockTemplate.defaultParam;
+A3a.vpl.BlockTemplate.defaultParam;
 
 /**
-	@typedef {function(epfl.mobots.vpl.Block):epfl.mobots.vpl.BlockTemplate.param}
+	@typedef {function(A3a.vpl.Block):A3a.vpl.BlockTemplate.param}
 */
-epfl.mobots.vpl.BlockTemplate.exportParam;
+A3a.vpl.BlockTemplate.exportParam;
 
 /**
-	@typedef {function(epfl.mobots.vpl.Block,epfl.mobots.vpl.BlockTemplate.param,function():void=):void}
+	@typedef {function(A3a.vpl.Block,A3a.vpl.BlockTemplate.param,function():void=):void}
 */
-epfl.mobots.vpl.BlockTemplate.importParam;
+A3a.vpl.BlockTemplate.importParam;
 
 /**
-	@typedef {function(epfl.mobots.vpl.Block):?epfl.mobots.vpl.Error}
+	@typedef {function(A3a.vpl.Block):?A3a.vpl.Error}
 */
-epfl.mobots.vpl.BlockTemplate.validateFun;
+A3a.vpl.BlockTemplate.validateFun;
 
 /**
-	@typedef {function(epfl.mobots.vpl.Block):epfl.mobots.vpl.compiledCode}
+	@typedef {function(A3a.vpl.Block):A3a.vpl.compiledCode}
 */
-epfl.mobots.vpl.BlockTemplate.genCodeFun;
+A3a.vpl.BlockTemplate.genCodeFun;
 
 /**
-	@typedef {function(epfl.mobots.vpl.Canvas,epfl.mobots.vpl.Block):void}
+	@typedef {function(A3a.vpl.Canvas,A3a.vpl.Block):void}
 */
-epfl.mobots.vpl.BlockTemplate.drawFun;
+A3a.vpl.BlockTemplate.drawFun;
 
 /**
-	@typedef {function(epfl.mobots.vpl.Canvas,epfl.mobots.vpl.Block,number,number,number,number,Event):?number}
+	@typedef {function(A3a.vpl.Canvas,A3a.vpl.Block,number,number,number,number,Event):?number}
 */
-epfl.mobots.vpl.BlockTemplate.mousedownFun;
+A3a.vpl.BlockTemplate.mousedownFun;
 
 /**
-	@typedef {function(epfl.mobots.vpl.Canvas,epfl.mobots.vpl.Block,number,number,number,number,number,Event):void}
+	@typedef {function(A3a.vpl.Canvas,A3a.vpl.Block,number,number,number,number,number,Event):void}
 */
-epfl.mobots.vpl.BlockTemplate.mousedragFun;
+A3a.vpl.BlockTemplate.mousedragFun;
 
 /**
-	@typedef {function(epfl.mobots.vpl.Block,epfl.mobots.vpl.mode):epfl.mobots.vpl.Block}
+	@typedef {function(A3a.vpl.Block,A3a.vpl.mode):A3a.vpl.Block}
 */
-epfl.mobots.vpl.BlockTemplate.changeModeFun;
+A3a.vpl.BlockTemplate.changeModeFun;
 
 /**
-	@typedef {function(epfl.mobots.vpl.Block):number}
+	@typedef {function(A3a.vpl.Block):number}
 */
-epfl.mobots.vpl.BlockTemplate.sectionPriFun;
+A3a.vpl.BlockTemplate.sectionPriFun;
 
 /**
 	@typedef {{
 		name: string,
-		type: epfl.mobots.vpl.blockType,
-		modes: (Array.<epfl.mobots.vpl.mode>|undefined),
+		type: A3a.vpl.blockType,
+		modes: (Array.<A3a.vpl.mode>|undefined),
 		noState: (boolean|undefined),
-		defaultParam: (epfl.mobots.vpl.BlockTemplate.defaultParam|undefined),
-		exportParam: (epfl.mobots.vpl.BlockTemplate.exportParam|undefined),
-		validate: (epfl.mobots.vpl.BlockTemplate.validateFun|undefined),
-		genCode: (epfl.mobots.vpl.BlockTemplate.genCodeFun|undefined),
-		draw: (epfl.mobots.vpl.BlockTemplate.drawFun|undefined),
-		mousedown: (epfl.mobots.vpl.BlockTemplate.mousedownFun|undefined),
-		mousedrag: (epfl.mobots.vpl.BlockTemplate.mousedragFun|undefined),
-		changeMode: (epfl.mobots.vpl.BlockTemplate.changeModeFun|undefined),
-		sectionPriority: (epfl.mobots.vpl.BlockTemplate.sectionPriFun|undefined)
+		defaultParam: (A3a.vpl.BlockTemplate.defaultParam|undefined),
+		exportParam: (A3a.vpl.BlockTemplate.exportParam|undefined),
+		validate: (A3a.vpl.BlockTemplate.validateFun|undefined),
+		genCode: (A3a.vpl.BlockTemplate.genCodeFun|undefined),
+		draw: (A3a.vpl.BlockTemplate.drawFun|undefined),
+		mousedown: (A3a.vpl.BlockTemplate.mousedownFun|undefined),
+		mousedrag: (A3a.vpl.BlockTemplate.mousedragFun|undefined),
+		changeMode: (A3a.vpl.BlockTemplate.changeModeFun|undefined),
+		sectionPriority: (A3a.vpl.BlockTemplate.sectionPriFun|undefined)
 	}}
 */
-epfl.mobots.vpl.BlockTemplate.params;
+A3a.vpl.BlockTemplate.params;
 
 /** Render block on a canvas
-	@param {epfl.mobots.vpl.Canvas} canvas
-	@param {epfl.mobots.vpl.Block} block
+	@param {A3a.vpl.Canvas} canvas
+	@param {A3a.vpl.Block} block
 	@param {number} x0 position of left side
 	@param {number} y0 position of top side
+	@param {boolean} doesZoomOnLongPress true to display hint that a long
+	press is needed to zoom the block before control widgets can be manipulated
 	@return {void}
 */
-epfl.mobots.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, x0, y0) {
+A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, x0, y0, doesZoomOnLongPress) {
 	canvas.ctx.save();
 	canvas.ctx.translate(x0, y0);
-	canvas.blockBackground(this.type);
+	canvas.blockBackground(this.type, doesZoomOnLongPress);
 	this.draw(canvas, block);
 	canvas.ctx.restore();
 };

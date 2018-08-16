@@ -10,7 +10,7 @@
 	@param {string=} vplProgramXML
 	@return {string}
 */
-epfl.mobots.vpl.Program.toAESLFile = function (code, vplProgramXML) {
+A3a.vpl.Program.toAESLFile = function (code, vplProgramXML) {
 	return [
 		'<!DOCTYPE aesl-source>',
 		'<network>',
@@ -28,8 +28,8 @@ epfl.mobots.vpl.Program.toAESLFile = function (code, vplProgramXML) {
 /** Export program as toolsPlugins ThymioVisualProgramming nodes
 	@return {string}
 */
-epfl.mobots.vpl.Program.prototype.toXML = function () {
-	var advanced = this.mode === epfl.mobots.vpl.mode.advanced;
+A3a.vpl.Program.prototype.toXML = function () {
+	var advanced = this.mode === A3a.vpl.mode.advanced;
 	return [
 		'<toolsPlugins>',
 		'<ThymioVisualProgramming>',
@@ -49,8 +49,8 @@ epfl.mobots.vpl.Program.prototype.toXML = function () {
 /** Export program as AESL file
 	@return {string} content of the AESL file (xml)
 */
-epfl.mobots.vpl.Program.prototype.exportAsAESLFile = function () {
-	return epfl.mobots.vpl.Program.toAESLFile(this.getCode(),
+A3a.vpl.Program.prototype.exportAsAESLFile = function () {
+	return A3a.vpl.Program.toAESLFile(this.getCode(),
 		this.toXML());
 };
 
@@ -58,7 +58,7 @@ epfl.mobots.vpl.Program.prototype.exportAsAESLFile = function () {
 	@param {string} xml content of the AESL file (xml)
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.importFromAESLFile = function (xml) {
+A3a.vpl.Program.prototype.importFromAESLFile = function (xml) {
 	var self = this;
 	var domParser = new DOMParser();
 	var dom = domParser.parseFromString(xml, "text/xml");
@@ -73,9 +73,9 @@ epfl.mobots.vpl.Program.prototype.importFromAESLFile = function (xml) {
 	var advanced = el[0].getAttribute("advanced_mode") !== "0";
 	el = el[0].getElementsByTagName("set");
 	this.new();
-	this.mode = advanced ? epfl.mobots.vpl.mode.advanced : epfl.mobots.vpl.mode.basic;
+	this.mode = advanced ? A3a.vpl.mode.advanced : A3a.vpl.mode.basic;
 	for (var i = 0; i < el.length; i++) {
-		var eventHandler = epfl.mobots.vpl.EventHandler.parseFromAESLSetElement(el[i],
+		var eventHandler = A3a.vpl.EventHandler.parseFromAESLSetElement(el[i],
 			advanced,
 			function () {
 				self.saveStateBeforeChange();
@@ -87,7 +87,7 @@ epfl.mobots.vpl.Program.prototype.importFromAESLFile = function (xml) {
 /** Roundtrip export to/import from xml file (for tests)
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.exportImportAESLFile = function () {
+A3a.vpl.Program.prototype.exportImportAESLFile = function () {
 	var xml = this.exportAsAESLFile();
 	this.importFromAESLFile(xml);
 };
@@ -96,13 +96,13 @@ epfl.mobots.vpl.Program.prototype.exportImportAESLFile = function () {
 	@param {Element} setElement
 	@param {boolean} advanced
 	@param {?function():void} onPrepareChange
-	@return {epfl.mobots.vpl.EventHandler}
+	@return {A3a.vpl.EventHandler}
 */
-epfl.mobots.vpl.EventHandler.parseFromAESLSetElement = function (setElement, advanced, onPrepareChange) {
+A3a.vpl.EventHandler.parseFromAESLSetElement = function (setElement, advanced, onPrepareChange) {
 	var blocks = setElement.getElementsByTagName("block");
-	var eventHandler = new epfl.mobots.vpl.EventHandler();
+	var eventHandler = new A3a.vpl.EventHandler();
 	for (var i = 0; i < blocks.length; i++) {
-		var block = epfl.mobots.vpl.Block.parseFromAESLBlockElement(blocks[i], advanced);
+		var block = A3a.vpl.Block.parseFromAESLBlockElement(blocks[i], advanced);
 		eventHandler.setBlock(block, null, onPrepareChange, true);
 	}
 	return eventHandler;
@@ -111,18 +111,18 @@ epfl.mobots.vpl.EventHandler.parseFromAESLSetElement = function (setElement, adv
 /** Parse AESL "block" element
 	@param {Element} blockElement
 	@param {boolean} advanced
-	@return {epfl.mobots.vpl.Block}
+	@return {A3a.vpl.Block}
 */
-epfl.mobots.vpl.Block.parseFromAESLBlockElement = function (blockElement, advanced) {
+A3a.vpl.Block.parseFromAESLBlockElement = function (blockElement, advanced) {
 	var type = {
-		"event": epfl.mobots.vpl.blockType.event,
-		"action": epfl.mobots.vpl.blockType.action,
-		"state": epfl.mobots.vpl.blockType.state,
-		"comment": epfl.mobots.vpl.blockType.comment
-	}[blockElement.getAttribute("type")] || epfl.mobots.vpl.blockType.action;
+		"event": A3a.vpl.blockType.event,
+		"action": A3a.vpl.blockType.action,
+		"state": A3a.vpl.blockType.state,
+		"comment": A3a.vpl.blockType.comment
+	}[blockElement.getAttribute("type")] || A3a.vpl.blockType.action;
 	var aeslName = blockElement.getAttribute("name");
-	var vplName = epfl.mobots.vpl.EventHandler.aesl2vpl[aeslName];
-	var descr = epfl.mobots.vpl.EventHandler.vpl2aesl[vplName];
+	var vplName = A3a.vpl.EventHandler.aesl2vpl[aeslName];
+	var descr = A3a.vpl.EventHandler.vpl2aesl[vplName];
 	if (descr === undefined) {
 		throw "unknown AESL block " + aeslName;
 	}
@@ -137,10 +137,10 @@ epfl.mobots.vpl.Block.parseFromAESLBlockElement = function (blockElement, advanc
 	}
 	if (advanced && descr.adv) {
 		vplName = descr.adv;
-		descr = epfl.mobots.vpl.EventHandler.vpl2aesl[vplName];
+		descr = A3a.vpl.EventHandler.vpl2aesl[vplName];
 	}
-	var blockTemplate = epfl.mobots.vpl.BlockTemplate.findByName(vplName);
-	var block = new epfl.mobots.vpl.Block(blockTemplate, null, null);
+	var blockTemplate = A3a.vpl.BlockTemplate.findByName(vplName);
+	var block = new A3a.vpl.Block(blockTemplate, null, null);
 	var param = descr.valuesToParam ? descr.valuesToParam(val) : val;
 	if (blockTemplate.importParam) {
 		blockTemplate.importParam(block, param);
@@ -156,7 +156,7 @@ epfl.mobots.vpl.Block.parseFromAESLBlockElement = function (blockElement, advanc
 	@param {string=} filename filename of downloaded file (default: "untitled.xml")
 	@return {void}
 */
-epfl.mobots.vpl.Program.setAnchorXMLDownload = function (anchor, xml, filename) {
+A3a.vpl.Program.setAnchorXMLDownload = function (anchor, xml, filename) {
 	/** @type {string} */
 	var url;
 	if (typeof window.Blob === "function" && window.URL) {
@@ -176,7 +176,7 @@ epfl.mobots.vpl.Program.setAnchorXMLDownload = function (anchor, xml, filename) 
 	@param {string=} filename filename of downloaded file (default: "untitled.xml")
 	@return {void}
 */
-epfl.mobots.vpl.Program.downloadXML = (function () {
+A3a.vpl.Program.downloadXML = (function () {
 	// add a hidden anchor to document, which will be reused
 	/** @type {Element} */
 	var anchor = null;
@@ -198,7 +198,7 @@ epfl.mobots.vpl.Program.downloadXML = (function () {
 			// data URL
 			url = "data:application/xml;base64," + window["btoa"](xml);
 		}
-		epfl.mobots.vpl.Program.setAnchorXMLDownload(anchor, xml, filename);
+		A3a.vpl.Program.setAnchorXMLDownload(anchor, xml, filename);
 		anchor.click();
 		if (typeof url !== "string") {
 			window.URL.revokeObjectURL(url);
@@ -210,7 +210,7 @@ epfl.mobots.vpl.Program.downloadXML = (function () {
 	@param {boolean} advanced
 	@return {string}
 */
-epfl.mobots.vpl.EventHandler.prototype.toAESLXML = function (advanced) {
+A3a.vpl.EventHandler.prototype.toAESLXML = function (advanced) {
 	if (this.isEmpty()) {
 		return "";
 	}
@@ -224,16 +224,16 @@ epfl.mobots.vpl.EventHandler.prototype.toAESLXML = function (advanced) {
 	return "<set>\n" + str + "</set>";
 };
 
-epfl.mobots.vpl.EventHandler.functionEmpty = function () {
+A3a.vpl.EventHandler.functionEmpty = function () {
 	return [];
 };
 
-epfl.mobots.vpl.EventHandler.functionNop = function (v) {
+A3a.vpl.EventHandler.functionNop = function (v) {
 	return v;
 };
 
 /** @const */
-epfl.mobots.vpl.EventHandler.vpl2aesl = {
+A3a.vpl.EventHandler.vpl2aesl = {
 	"accelerometer": {
 		name: "acc",
 		paramToValues: function (param) {
@@ -272,8 +272,8 @@ epfl.mobots.vpl.EventHandler.vpl2aesl = {
 	},
 	"clap": {
 		name: "clap",
-		paramToValues: epfl.mobots.vpl.EventHandler.functionEmpty,
-		valuesToParam: epfl.mobots.vpl.EventHandler.functionEmpty
+		paramToValues: A3a.vpl.EventHandler.functionEmpty,
+		valuesToParam: A3a.vpl.EventHandler.functionEmpty
 	},
 	"color state": {
 		name: "colorstate",
@@ -364,8 +364,8 @@ epfl.mobots.vpl.EventHandler.vpl2aesl = {
 	"init": {
 		name: "init",
 		incompatible: true,
-		paramToValues: epfl.mobots.vpl.EventHandler.functionEmpty,
-		valuesToParam: epfl.mobots.vpl.EventHandler.functionEmpty
+		paramToValues: A3a.vpl.EventHandler.functionEmpty,
+		valuesToParam: A3a.vpl.EventHandler.functionEmpty
 	},
 	"motor": {
 		name: "move",
@@ -463,12 +463,12 @@ epfl.mobots.vpl.EventHandler.vpl2aesl = {
 		paramToValues: function () {
 			return [0, 0];
 		},
-		valuesToParam: epfl.mobots.vpl.EventHandler.functionEmpty
+		valuesToParam: A3a.vpl.EventHandler.functionEmpty
 	},
 	"timer": {
 		name: "timeout",
-		paramToValues: epfl.mobots.vpl.EventHandler.functionEmpty,
-		valuesToParam: epfl.mobots.vpl.EventHandler.functionEmpty
+		paramToValues: A3a.vpl.EventHandler.functionEmpty,
+		valuesToParam: A3a.vpl.EventHandler.functionEmpty
 	},
 	"picture comment": {
 		name: "commentpict",
@@ -484,14 +484,14 @@ epfl.mobots.vpl.EventHandler.vpl2aesl = {
 };
 
 /** @const */
-epfl.mobots.vpl.EventHandler.aesl2vpl = (function () {
+A3a.vpl.EventHandler.aesl2vpl = (function () {
 	var dict = {};
-	for (var entry in epfl.mobots.vpl.EventHandler.vpl2aesl) {
-		if (epfl.mobots.vpl.EventHandler.vpl2aesl.hasOwnProperty(entry)) {
-			var aeslName = epfl.mobots.vpl.EventHandler.vpl2aesl[entry].name;
+	for (var entry in A3a.vpl.EventHandler.vpl2aesl) {
+		if (A3a.vpl.EventHandler.vpl2aesl.hasOwnProperty(entry)) {
+			var aeslName = A3a.vpl.EventHandler.vpl2aesl[entry].name;
 			// keep variant with adv property if it exists
 			if (!dict[aeslName]
-				|| !epfl.mobots.vpl.EventHandler.vpl2aesl[dict[aeslName]].adv) {
+				|| !A3a.vpl.EventHandler.vpl2aesl[dict[aeslName]].adv) {
 				dict[aeslName] = entry;
 			}
 		}
@@ -502,8 +502,8 @@ epfl.mobots.vpl.EventHandler.aesl2vpl = (function () {
 /** Convert block to AESL (xml)
 	@return {string}
 */
-epfl.mobots.vpl.Block.prototype.toAESLXML = function () {
-	var m = epfl.mobots.vpl.EventHandler.vpl2aesl[this.blockTemplate.name];
+A3a.vpl.Block.prototype.toAESLXML = function () {
+	var m = A3a.vpl.EventHandler.vpl2aesl[this.blockTemplate.name];
 	return '<block type="' +
 		{"e": "event", "a": "action", "s": "state"}[this.blockTemplate.type] +
 		'" name="' + (m.name || this.blockTemplate.name) +

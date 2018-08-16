@@ -6,11 +6,6 @@
 */
 
 /** @const */
-var epfl = epfl || {};
-
+A3a.vpl = {};
 /** @const */
-epfl.mobots = {};
-/** @const */
-epfl.mobots.vpl = {};
-/** @const */
-epfl.mobots.vpl.draw = {};
+A3a.vpl.draw = {};

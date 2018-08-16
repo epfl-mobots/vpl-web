@@ -9,14 +9,14 @@
 	@constructor
 	@struct
 */
-epfl.mobots.vpl.Program.CanvasRenderingState = function () {
+A3a.vpl.Program.CanvasRenderingState = function () {
 	this.vertScroll = 0;	// scroll up
 	this.y0 = 0;	// mousedown vertical position, to calculate vertical movements
 };
 
 /** Add a block to a canvas
-	@param {epfl.mobots.vpl.Canvas} canvas
-	@param {epfl.mobots.vpl.Block} block
+	@param {A3a.vpl.Canvas} canvas
+	@param {A3a.vpl.Block} block
 	@param {number} x
 	@param {number} y
 	@param {{
@@ -27,19 +27,19 @@ epfl.mobots.vpl.Program.CanvasRenderingState = function () {
 		scale:(number|undefined),
 		dimmed: (boolean|undefined)
 	}=} opts
-	@return {epfl.mobots.vpl.CanvasItem}
+	@return {A3a.vpl.CanvasItem}
 */
-epfl.mobots.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x, y, opts) {
+A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x, y, opts) {
 	/** Check if block type is for blocks on the action side (right)
-		@param {epfl.mobots.vpl.blockType} type
+		@param {A3a.vpl.blockType} type
 		@return {boolean}
 	*/
 	function isActionSide(type) {
-		return type === epfl.mobots.vpl.blockType.action ||
-			type === epfl.mobots.vpl.blockType.comment;
+		return type === A3a.vpl.blockType.action ||
+			type === A3a.vpl.blockType.comment;
 	}
 	var self = this;
-	var item = new epfl.mobots.vpl.CanvasItem(block,
+	var item = new A3a.vpl.CanvasItem(block,
 		canvas.dims.blockSize,
 		canvas.dims.blockSize,
 		x, y,
@@ -51,15 +51,17 @@ epfl.mobots.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x,
 			}
 			if (opts && opts.scale) {
 				var dims0 = canvas.dims;
-				canvas.dims = epfl.mobots.vpl.Canvas.calcDims(canvas.dims.blockSize * opts.scale, canvas.dims.controlSize * opts.scale);
+				canvas.dims = A3a.vpl.Canvas.calcDims(canvas.dims.blockSize * opts.scale, canvas.dims.controlSize * opts.scale);
 				block.blockTemplate.renderToCanvas(canvas,
-					/** @type {epfl.mobots.vpl.Block} */(item.data),
-					item.x + dx, item.y + dy);
+					/** @type {A3a.vpl.Block} */(item.data),
+					item.x + dx, item.y + dy,
+					item.zoomOnLongPress != null);
 				canvas.dims = dims0;
 			} else {
 				block.blockTemplate.renderToCanvas(canvas,
-					/** @type {epfl.mobots.vpl.Block} */(item.data),
-					item.x + dx, item.y + dy);
+					/** @type {A3a.vpl.Block} */(item.data),
+					item.x + dx, item.y + dy,
+					item.zoomOnLongPress != null);
 			}
 			canvas.ctx.restore();
 		},
@@ -71,8 +73,8 @@ epfl.mobots.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x,
 				}
 				: null
 			: {
-				mousedown: /** @type {?epfl.mobots.vpl.CanvasItem.mousedown} */(block.blockTemplate.mousedown),
-				mousedrag: /** @type {?epfl.mobots.vpl.CanvasItem.mousedrag} */(block.blockTemplate.mousedrag)
+				mousedown: /** @type {?A3a.vpl.CanvasItem.mousedown} */(block.blockTemplate.mousedown),
+				mousedrag: /** @type {?A3a.vpl.CanvasItem.mousedrag} */(block.blockTemplate.mousedrag)
 			},
 		// doDrop: for block in event handler, be replaced by dropped block
 		opts && opts.notDropTarget ? null : function (targetBlockItem, newBlockItem) {
@@ -88,10 +90,10 @@ epfl.mobots.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x,
 		},
 		// canDrop
 		opts && opts.notDropTarget ? null : function (targetItem, droppedItem) {
-			return droppedItem.data instanceof epfl.mobots.vpl.Block &&
+			return droppedItem.data instanceof A3a.vpl.Block &&
 				(isActionSide(targetItem.data.blockTemplate.type) ===
 					isActionSide(droppedItem.data.blockTemplate.type)
- 					|| droppedItem.data.blockTemplate.type === epfl.mobots.vpl.blockType.comment) &&
+ 					|| droppedItem.data.blockTemplate.type === A3a.vpl.blockType.comment) &&
 				targetItem.data !== droppedItem.data;
 		}
 	);
@@ -110,14 +112,14 @@ epfl.mobots.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x,
 };
 
 /** Add a block template on a canvas
-	@param {epfl.mobots.vpl.Canvas} canvas
-	@param {epfl.mobots.vpl.BlockTemplate} blockTemplate
+	@param {A3a.vpl.Canvas} canvas
+	@param {A3a.vpl.BlockTemplate} blockTemplate
 	@param {number} x
 	@param {number} y
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemplate, x, y) {
-	var block = new epfl.mobots.vpl.Block(blockTemplate, null, null);
+A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemplate, x, y) {
+	var block = new A3a.vpl.Block(blockTemplate, null, null);
 	var disabled = this.disabledBlocks.indexOf(blockTemplate.name) >= 0;
 	var self = this;
 	this.addBlockToCanvas(canvas, block, x, y,
@@ -140,8 +142,8 @@ epfl.mobots.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, b
 };
 
 /** Add an event handler to a canvas
-	@param {epfl.mobots.vpl.Canvas} canvas
-	@param {epfl.mobots.vpl.EventHandler} eventHandler
+	@param {A3a.vpl.Canvas} canvas
+	@param {A3a.vpl.EventHandler} eventHandler
 	@param {boolean} displaySingleEvent
 	@param {number} eventX0
 	@param {number} actionX0
@@ -149,14 +151,14 @@ epfl.mobots.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, b
 	@param {number} y
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.addEventHandlerToCanvas =
+A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	function (canvas, eventHandler, displaySingleEvent, eventX0, actionX0, width, y) {
 	var canvasSize = canvas.getSize();
 	var x = eventX0;
 	var step = canvas.dims.blockSize + canvas.dims.interBlockSpace;
 
 	var self = this;
-	var item = new epfl.mobots.vpl.CanvasItem(eventHandler,
+	var item = new A3a.vpl.CanvasItem(eventHandler,
 		width + 2 * canvas.dims.stripVertMargin,
 		canvas.dims.blockSize + 2 * canvas.dims.stripVertMargin,
 		x - canvas.dims.stripHorMargin,
@@ -183,15 +185,15 @@ epfl.mobots.vpl.Program.prototype.addEventHandlerToCanvas =
 		null,
 		// doDrop: reorder event handler or add dropped block
 		function (targetItem, droppedItem) {
-			if (droppedItem.data instanceof epfl.mobots.vpl.EventHandler) {
-				var targetIndex = self.program.indexOf(/** @type {epfl.mobots.vpl.EventHandler} */(targetItem.data));
+			if (droppedItem.data instanceof A3a.vpl.EventHandler) {
+				var targetIndex = self.program.indexOf(/** @type {A3a.vpl.EventHandler} */(targetItem.data));
 				var droppedIndex = self.program.indexOf(droppedItem.data);
 				if (targetIndex >= 0 && droppedIndex >= 0) {
 					self.saveStateBeforeChange();
 					self.program.splice(droppedIndex, 1);
 					self.program.splice(targetIndex, 0, droppedItem.data);
 				}
-			} else if (droppedItem.data instanceof epfl.mobots.vpl.Block) {
+			} else if (droppedItem.data instanceof A3a.vpl.Block) {
 				self.saveStateBeforeChange();
 				targetItem.data.setBlock(droppedItem.data,
 					null,
@@ -205,17 +207,17 @@ epfl.mobots.vpl.Program.prototype.addEventHandlerToCanvas =
 		function (targetItem, droppedItem) {
 			// not event handler on itself, or child block, or event block in basic mode
 			return droppedItem.data !== targetItem.data &&
-				(!(droppedItem.data instanceof epfl.mobots.vpl.Block) ||
+				(!(droppedItem.data instanceof A3a.vpl.Block) ||
 					droppedItem.data.eventHandlerContainer !== targetItem.data) &&
-				(self.mode === epfl.mobots.vpl.mode.advanced ||
+				(self.mode === A3a.vpl.mode.advanced ||
 					targetItem.data.events.length === 0 ||
-					(droppedItem.data instanceof epfl.mobots.vpl.Block &&
-						droppedItem.data.blockTemplate.type === epfl.mobots.vpl.blockType.action));
+					(droppedItem.data instanceof A3a.vpl.Block &&
+						droppedItem.data.blockTemplate.type === A3a.vpl.blockType.action));
 		}
 	);
 	canvas.setItem(item);
 
-	/** @type {epfl.mobots.vpl.CanvasItem} */
+	/** @type {A3a.vpl.CanvasItem} */
 	var childItem;
 
 	var events = eventHandler.events;
@@ -229,7 +231,7 @@ epfl.mobots.vpl.Program.prototype.addEventHandlerToCanvas =
 				y);
 		} else {
 			childItem = this.addBlockToCanvas(canvas,
-				new epfl.mobots.vpl.EmptyBlock(epfl.mobots.vpl.blockType.event, eventHandler,
+				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.event, eventHandler,
 					{eventSide: true, index: j}),
 				eventX0 + step * j,
 				y,
@@ -248,7 +250,7 @@ epfl.mobots.vpl.Program.prototype.addEventHandlerToCanvas =
 				y);
 		} else {
 			childItem = this.addBlockToCanvas(canvas,
-				new epfl.mobots.vpl.EmptyBlock(epfl.mobots.vpl.blockType.action, eventHandler,
+				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.action, eventHandler,
 					{eventSide: false, index: j}),
 				actionX0 + step * j,
 				y,
@@ -304,13 +306,13 @@ epfl.mobots.vpl.Program.prototype.addEventHandlerToCanvas =
 };
 
 /** Add to a canvas a link between error marks for conflicting events
-	@param {epfl.mobots.vpl.Canvas} canvas
+	@param {A3a.vpl.Canvas} canvas
 	@param {number} x
 	@param {number} y1
 	@param {number} y2
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas, x, y1, y2) {
+A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas, x, y1, y2) {
 	canvas.addDecoration(function (ctx) {
 		// pink line
 		var xc = x - canvas.dims.stripHorMargin -
@@ -338,7 +340,7 @@ epfl.mobots.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function
 	@param {boolean=} noVpl true to prevent vpl (default: false)
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.setView = function (view, noVpl) {
+A3a.vpl.Program.prototype.setView = function (view, noVpl) {
 	this.noVpl = noVpl || false;
 	document.getElementById("vpl-editor").style.display = view === "vpl" ? "block" : "none";
 	document.getElementById("src-editor").style.display = view === "src" ? "block" : "none";
@@ -350,17 +352,17 @@ epfl.mobots.vpl.Program.prototype.setView = function (view, noVpl) {
 };
 
 /** Render the program to a single canvas
-	@param {epfl.mobots.vpl.Canvas} canvas
+	@param {A3a.vpl.Canvas} canvas
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
+A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// make sure code is up-to-date to have error info
 	this.getCode();
 
 	var canvasSize = canvas.getSize();
-	var renderingState = /** @type {epfl.mobots.vpl.Program.CanvasRenderingState} */(canvas.state);
+	var renderingState = /** @type {A3a.vpl.Program.CanvasRenderingState} */(canvas.state);
 	var self = this;
-	var showState = this.mode === epfl.mobots.vpl.mode.advanced;
+	var showState = this.mode === A3a.vpl.mode.advanced;
 
 	// find size
 	var displaySingleEvent = this.displaySingleEvent();
@@ -496,7 +498,7 @@ epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		function (data, x, y, ev) {
 			if (!self.isEmpty()) {
 				var aesl = self.exportAsAESLFile();
-				epfl.mobots.vpl.Program.downloadXML(aesl, "vpl.aesl");
+				A3a.vpl.Program.downloadXML(aesl, "vpl.aesl");
 			}
 			return 0;
 		},
@@ -554,7 +556,7 @@ epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			function (data, x, y, ev) {
 				if (!self.isEmpty()) {
 					var aesl = self.exportAsAESLFile();
-					epfl.mobots.vpl.Program.downloadXML(aesl, "vpl.aesl");
+					A3a.vpl.Program.downloadXML(aesl, "vpl.aesl");
 				}
 				return 0;
 			},
@@ -617,7 +619,7 @@ epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		canvas.dims.controlSize, canvas.dims.controlSize,
 		// draw
 		function (ctx, item, dx, dy) {
-			var isOn = self.mode === epfl.mobots.vpl.mode.advanced;
+			var isOn = self.mode === A3a.vpl.mode.advanced;
 			ctx.fillStyle = isOn ? "#06f" : "navy";
 			ctx.fillRect(item.x + dx, item.y + dy,
 				canvas.dims.controlSize, canvas.dims.controlSize);
@@ -636,9 +638,9 @@ epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		},
 		// mousedown
 		function (data, x, y, ev) {
-			self.setMode(self.mode === epfl.mobots.vpl.mode.basic
-				? epfl.mobots.vpl.mode.advanced
-				: epfl.mobots.vpl.mode.basic);
+			self.setMode(self.mode === A3a.vpl.mode.basic
+				? A3a.vpl.mode.advanced
+				: A3a.vpl.mode.basic);
 			return 0;
 		},
 		// doDrop
@@ -798,30 +800,30 @@ epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			},
 			// doDrop: compile code fragment and play it
 			function (targetItem, draggedItem) {
-				if (draggedItem.data instanceof epfl.mobots.vpl.Block) {
+				if (draggedItem.data instanceof A3a.vpl.Block) {
 					if (draggedItem.data.eventHandlerContainer) {
 						// action from an event handler: just send it
-						var code = self.codeForBlock(/** @type {epfl.mobots.vpl.Block} */(draggedItem.data));
+						var code = self.codeForBlock(/** @type {A3a.vpl.Block} */(draggedItem.data));
 						window["vplRunFunction"](code);
 					} else {
 						// action from the templates: display in a zoomed state to set the parameters
 						// (disabled by canDrop below)
 						canvas.zoomedItemProxy = canvas.makeZoomedClone(draggedItem);
 					}
-				} else if (draggedItem.data instanceof epfl.mobots.vpl.EventHandler) {
-					var code = self.codeForActions(/** @type {epfl.mobots.vpl.EventHandler} */(draggedItem.data));
+				} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
+					var code = self.codeForActions(/** @type {A3a.vpl.EventHandler} */(draggedItem.data));
 					window["vplRunFunction"](code);
 				}
 			},
 			// canDrop: accept event handler or action block in event handler or in template
 			function (targetItem, draggedItem) {
 				return window["vplNode"] &&
-					draggedItem.data instanceof epfl.mobots.vpl.EventHandler &&
- 						/** @type {epfl.mobots.vpl.EventHandler} */(draggedItem.data).hasBlockOfType(epfl.mobots.vpl.blockType.action) ||
-					draggedItem.data instanceof epfl.mobots.vpl.Block &&
-						/** @type {epfl.mobots.vpl.Block} */(draggedItem.data).eventHandlerContainer != null &&
-						/** @type {epfl.mobots.vpl.Block} */(draggedItem.data).blockTemplate.type ===
-							epfl.mobots.vpl.blockType.action;
+					draggedItem.data instanceof A3a.vpl.EventHandler &&
+ 						/** @type {A3a.vpl.EventHandler} */(draggedItem.data).hasBlockOfType(A3a.vpl.blockType.action) ||
+					draggedItem.data instanceof A3a.vpl.Block &&
+						/** @type {A3a.vpl.Block} */(draggedItem.data).eventHandlerContainer != null &&
+						/** @type {A3a.vpl.Block} */(draggedItem.data).blockTemplate.type ===
+							A3a.vpl.blockType.action;
 			});
 		xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 
@@ -880,14 +882,14 @@ epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null,
 		// doDrop: remove block or event handler
 		function (targetItem, draggedItem) {
-			if (draggedItem.data instanceof epfl.mobots.vpl.Block) {
+			if (draggedItem.data instanceof A3a.vpl.Block) {
 				if (draggedItem.data.eventHandlerContainer !== null) {
 					self.saveStateBeforeChange();
 					draggedItem.data.eventHandlerContainer.removeBlock(
-						/** @type {epfl.mobots.vpl.positionInContainer} */(draggedItem.data.positionInContainer));
+						/** @type {A3a.vpl.positionInContainer} */(draggedItem.data.positionInContainer));
 					canvas.onUpdate && canvas.onUpdate();
 				}
-			} else if (draggedItem.data instanceof epfl.mobots.vpl.EventHandler) {
+			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
 				var i = self.program.indexOf(draggedItem.data);
 				if (i >= 0) {
 					self.saveStateBeforeChange();
@@ -898,7 +900,7 @@ epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		},
 		// canDrop: accept event handler or block in event handler
 		function (targetItem, draggedItem) {
-			return !(draggedItem.data instanceof epfl.mobots.vpl.Block)
+			return !(draggedItem.data instanceof A3a.vpl.Block)
 				|| draggedItem.data.eventHandlerContainer !== null;
 		});
 
@@ -910,17 +912,17 @@ epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// templates
 	var nEvTemplates = 0;
 	var nAcTemplates = 0;
-	epfl.mobots.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
+	A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
 		if (this.customizationMode ||
 			((blockTemplate.modes.indexOf(this.mode) >= 0 || this.disabledBlocks.length > 0) &&
 				this.disabledBlocks.indexOf(blockTemplate.name) < 0)) {
 			switch (blockTemplate.type) {
- 			case epfl.mobots.vpl.blockType.event:
-			case epfl.mobots.vpl.blockType.state:
+ 			case A3a.vpl.blockType.event:
+			case A3a.vpl.blockType.state:
 				nEvTemplates++;
 				break;
-			case epfl.mobots.vpl.blockType.action:
-			case epfl.mobots.vpl.blockType.comment:
+			case A3a.vpl.blockType.action:
+			case A3a.vpl.blockType.comment:
 				nAcTemplates++;
 				break;
 			}
@@ -932,9 +934,9 @@ epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	var doubleAcCol = nAcTemplates * step > scrollingAreaH;
 	var colLen = doubleEvCol ? Math.ceil(nEvTemplates / 2) : nEvTemplates;
 	var row = 0;
-	epfl.mobots.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
-		if ((blockTemplate.type === epfl.mobots.vpl.blockType.event ||
-				blockTemplate.type === epfl.mobots.vpl.blockType.state) &&
+	A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
+		if ((blockTemplate.type === A3a.vpl.blockType.event ||
+				blockTemplate.type === A3a.vpl.blockType.state) &&
 			(this.customizationMode ||
 				((blockTemplate.modes.indexOf(this.mode) >= 0 || this.disabledBlocks.length > 0) &&
 					this.disabledBlocks.indexOf(blockTemplate.name) < 0))) {
@@ -946,9 +948,9 @@ epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	}, this);
 	colLen = doubleAcCol ? Math.ceil(nAcTemplates / 2) : nAcTemplates;
 	row = 0;
-	epfl.mobots.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
-		if ((blockTemplate.type === epfl.mobots.vpl.blockType.action ||
-				blockTemplate.type === epfl.mobots.vpl.blockType.comment) &&
+	A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
+		if ((blockTemplate.type === A3a.vpl.blockType.action ||
+				blockTemplate.type === A3a.vpl.blockType.comment) &&
 			(this.customizationMode ||
 				((blockTemplate.modes.indexOf(this.mode) >= 0 || this.disabledBlocks.length > 0) &&
 					this.disabledBlocks.indexOf(blockTemplate.name) < 0))) {
@@ -969,7 +971,7 @@ epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	var scrollingTotalHeight = this.program.length
 		* (canvas.dims.blockSize + canvas.dims.interRowSpace);
 	renderingState.vertScroll = Math.max(0, Math.min(renderingState.vertScroll, scrollingTotalHeight - scrollingAreaH));
-	var scrollingAreaItem = new epfl.mobots.vpl.CanvasItem(null,
+	var scrollingAreaItem = new A3a.vpl.CanvasItem(null,
 		scrollingAreaW, scrollingAreaH, scrollingAreaX, scrollingAreaY,
 		null,
 		scrollingTotalHeight > scrollingAreaH
@@ -1065,11 +1067,11 @@ epfl.mobots.vpl.Program.prototype.renderToCanvas = function (canvas) {
 };
 
 /** Scroll canvas, typically because of wheel or keyboard event
-	@param {epfl.mobots.vpl.Canvas} canvas
+	@param {A3a.vpl.Canvas} canvas
 	@param {number} dy
 	@return {void}
 */
-epfl.mobots.vpl.Program.prototype.scrollCanvas = function (canvas, dy) {
-	var renderingState = /** @type {epfl.mobots.vpl.Program.CanvasRenderingState} */(canvas.state);
+A3a.vpl.Program.prototype.scrollCanvas = function (canvas, dy) {
+	var renderingState = /** @type {A3a.vpl.Program.CanvasRenderingState} */(canvas.state);
 	renderingState.vertScroll += dy;
 };

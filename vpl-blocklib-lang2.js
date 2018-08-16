@@ -5,9 +5,9 @@
 	For internal use only
 */
 
-epfl.mobots.vpl.patchL2 = function () {
+A3a.vpl.patchL2 = function () {
 
-	epfl.mobots.vpl.BlockTemplate.initOutputs2 =
+	A3a.vpl.BlockTemplate.initOutputs2 =
 		"// reset outputs\n" +
 		"sound.system(-1);\n" +
 		"leds.top(0, 0, 0);\n" +
@@ -16,41 +16,41 @@ epfl.mobots.vpl.patchL2 = function () {
 		"leds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n";
 
 	/** @const */
-	epfl.mobots.vpl.BlockTemplate.initStatesDecl2 =
+	A3a.vpl.BlockTemplate.initStatesDecl2 =
 		"// variables for state\n" +
 		"int state[4];\n";
 
 	/** @const */
-	epfl.mobots.vpl.BlockTemplate.initStatesInit2 =
+	A3a.vpl.BlockTemplate.initStatesInit2 =
 		"state = [0, 0, 0, 0];\n";
 
 	/** @const */
-	epfl.mobots.vpl.BlockTemplate.initCounterDecl2 =
+	A3a.vpl.BlockTemplate.initCounterDecl2 =
 		"// variable for counter\n" +
 		"int counter;\n";
 
 	/** @const */
-	epfl.mobots.vpl.BlockTemplate.initCounterInit2 =
+	A3a.vpl.BlockTemplate.initCounterInit2 =
 		"counter = 0;\n";
 
 	/** @const */
-	epfl.mobots.vpl.BlockTemplate.initTopColorDecl2 =
+	A3a.vpl.BlockTemplate.initTopColorDecl2 =
 		"// RGB color of the top led\n" +
 		"int topColor[3];\n";
 
 	/** @const */
-	epfl.mobots.vpl.BlockTemplate.initTopColorInit2 =
+	A3a.vpl.BlockTemplate.initTopColorInit2 =
 		"topColor = [0, 0, 0];\n";
 
 	/** @const */
-	epfl.mobots.vpl.BlockTemplate.dispStates2 =
+	A3a.vpl.BlockTemplate.dispStates2 =
 		"// display the current state\n" +
 		"void display_state() {\n" +
 		"leds.circle(0,state[1]*32,0,state[3]*32,0,state[2]*32,0,state[0]*32);\n" +
 		"}\n";
 
 	/** @const */
-	epfl.mobots.vpl.BlockTemplate.dispCounter2 =
+	A3a.vpl.BlockTemplate.dispCounter2 =
 		"// display the current counter\n" +
 		"void display_counter(int c) {\n" +
 		"leds.circle((c&1)<<5,(c&2)<<4,(c&4)<<3,(c&8)<<2,\n" +
@@ -58,7 +58,7 @@ epfl.mobots.vpl.patchL2 = function () {
 		"}\n";
 
 	/** @const */
-	epfl.mobots.vpl.BlockTemplate.resetTimer2 =
+	A3a.vpl.BlockTemplate.resetTimer2 =
 		"// stop timer 0\n" +
 		"timer.period[0] = 0;\n";
 
@@ -238,7 +238,7 @@ epfl.mobots.vpl.patchL2 = function () {
 			"timer": function (block) {
 				return {
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.resetTimer
+						A3a.vpl.BlockTemplate.resetTimer
 					],
 					sectionBegin: "onevent timer0 {\n",
 					sectionEnd: "}\n",
@@ -255,10 +255,10 @@ epfl.mobots.vpl.patchL2 = function () {
 				}
 				return {
 					initVarDecl: [
-						epfl.mobots.vpl.BlockTemplate.initStatesDecl2
+						A3a.vpl.BlockTemplate.initStatesDecl2
 					],
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initStatesInit2
+						A3a.vpl.BlockTemplate.initStatesInit2
 					],
 					clause: cond
 				};
@@ -269,10 +269,10 @@ epfl.mobots.vpl.patchL2 = function () {
 						" " + block.param[1];
 					return {
 						initVarDecl: [
-							epfl.mobots.vpl.BlockTemplate.initCounterDecl2
+							A3a.vpl.BlockTemplate.initCounterDecl2
 						],
 						initCodeExec: [
-							epfl.mobots.vpl.BlockTemplate.initCounterInit2
+							A3a.vpl.BlockTemplate.initCounterInit2
 						],
 						clause: cond
 					};
@@ -285,10 +285,10 @@ epfl.mobots.vpl.patchL2 = function () {
 					.join(" && ");
 				return {
 					initVarDecl: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorDecl2
+						A3a.vpl.BlockTemplate.initTopColorDecl2
 					],
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorInit2
+						A3a.vpl.BlockTemplate.initTopColorInit2
 					],
 					clause: cond
 				};
@@ -301,10 +301,10 @@ epfl.mobots.vpl.patchL2 = function () {
 					.join(" && ");
 				return {
 					initVarDecl: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorDecl2
+						A3a.vpl.BlockTemplate.initTopColorDecl2
 					],
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorInit2
+						A3a.vpl.BlockTemplate.initTopColorInit2
 					],
 					clause: cond
 				};
@@ -312,7 +312,7 @@ epfl.mobots.vpl.patchL2 = function () {
 			"motor": function (block) {
 				return {
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initOutputs2
+						A3a.vpl.BlockTemplate.initOutputs2
 					],
 					statement:
 						"motor.left.target = " + Math.round(500 * block.param[0]) + ";\n" +
@@ -326,7 +326,7 @@ epfl.mobots.vpl.patchL2 = function () {
 				var spt = 15;
 				return {
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initOutputs2
+						A3a.vpl.BlockTemplate.initOutputs2
 					],
 					statement:
 						"motor.left.target = " +
@@ -338,11 +338,11 @@ epfl.mobots.vpl.patchL2 = function () {
 			"top color": function (block) {
 				return {
 					initVarDecl: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorDecl2
+						A3a.vpl.BlockTemplate.initTopColorDecl2
 					],
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorInit2,
-						epfl.mobots.vpl.BlockTemplate.initOutputs2
+						A3a.vpl.BlockTemplate.initTopColorInit2,
+						A3a.vpl.BlockTemplate.initOutputs2
 					],
 					statement:
 						"leds.top(" +
@@ -356,11 +356,11 @@ epfl.mobots.vpl.patchL2 = function () {
 			"top color 8": function (block) {
 				return {
 					initVarDecl: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorDecl2
+						A3a.vpl.BlockTemplate.initTopColorDecl2
 					],
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorInit2,
-						epfl.mobots.vpl.BlockTemplate.initOutputs2
+						A3a.vpl.BlockTemplate.initTopColorInit2,
+						A3a.vpl.BlockTemplate.initOutputs2
 					],
 					statement:
 						"leds.top(" +
@@ -374,7 +374,7 @@ epfl.mobots.vpl.patchL2 = function () {
 			"bottom color": function (block) {
 				return {
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initOutputs2
+						A3a.vpl.BlockTemplate.initOutputs2
 					],
 					statement:
 						"leds.bottom.left(" +
@@ -388,7 +388,7 @@ epfl.mobots.vpl.patchL2 = function () {
 			"bottom color 8": function (block) {
 				return {
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initOutputs2
+						A3a.vpl.BlockTemplate.initOutputs2
 					],
 					statement:
 						"leds.bottom.left(" +
@@ -429,7 +429,7 @@ epfl.mobots.vpl.patchL2 = function () {
 						"}\n" +
 						"sound.wave(wave);\n" +
 						"note_index = 6;\n",
-						epfl.mobots.vpl.BlockTemplate.initOutputs2
+						A3a.vpl.BlockTemplate.initOutputs2
 					],
 					initCodeDecl: [
 						"// when a note is finished, play the next one\n" +
@@ -456,13 +456,13 @@ epfl.mobots.vpl.patchL2 = function () {
 				}
 				return {
 					initVarDecl: [
-						epfl.mobots.vpl.BlockTemplate.initStatesDecl2
+						A3a.vpl.BlockTemplate.initStatesDecl2
 					],
 					init: [
-						epfl.mobots.vpl.BlockTemplate.initStatesInit2
+						A3a.vpl.BlockTemplate.initStatesInit2
 					],
 					initCodeDecl: [
-						epfl.mobots.vpl.BlockTemplate.dispStates2
+						A3a.vpl.BlockTemplate.dispStates2
 					],
 					statement: code.length > 0
 						? code + "display_state();\n"
@@ -472,13 +472,13 @@ epfl.mobots.vpl.patchL2 = function () {
 			"set counter": function (block) {
 				return {
 					initVarDecl: [
-						epfl.mobots.vpl.BlockTemplate.initCounterDecl2,
+						A3a.vpl.BlockTemplate.initCounterDecl2,
 					],
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initCounterInit2
+						A3a.vpl.BlockTemplate.initCounterInit2
 					],
 					initCodeDecl: [
-						epfl.mobots.vpl.BlockTemplate.dispCounter2
+						A3a.vpl.BlockTemplate.dispCounter2
 					],
 					statement:
 						(block.param[0] === 0 ? "counter = 0;" :
@@ -491,7 +491,7 @@ epfl.mobots.vpl.patchL2 = function () {
 			"set timer": function (block) {
 				return {
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.resetTimer2
+						A3a.vpl.BlockTemplate.resetTimer2
 					],
 					statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + ";\n"
 				};
@@ -499,7 +499,7 @@ epfl.mobots.vpl.patchL2 = function () {
 			"set timer log": function (block) {
 				return {
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.resetTimer2
+						A3a.vpl.BlockTemplate.resetTimer2
 					],
 					statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + ";\n"
 				};
@@ -510,18 +510,18 @@ epfl.mobots.vpl.patchL2 = function () {
 		};
 		for (var name in libPatchLang2) {
 			if (libPatchLang2.hasOwnProperty(name)) {
-				var blockTemplate = epfl.mobots.vpl.BlockTemplate.findByName(name);
+				var blockTemplate = A3a.vpl.BlockTemplate.findByName(name);
 				blockTemplate.genCode = libPatchLang2[name];
 			}
 		}
 	})();
 
 	/** Generate code for the whole program
-		@param {Array.<epfl.mobots.vpl.Block>=} runBlocks if defined, override the initialization
+		@param {Array.<A3a.vpl.Block>=} runBlocks if defined, override the initialization
 		code
 		@return {string}
 	*/
-	epfl.mobots.vpl.Program.prototype.generateCode = function (runBlocks) {
+	A3a.vpl.Program.prototype.generateCode = function (runBlocks) {
 		var c = this.program.map(function (eh) { return eh.generateCode("&&"); });
 		/** @type {Array.<string>} */
 		var initVarDecl = [];
@@ -577,8 +577,8 @@ epfl.mobots.vpl.patchL2 = function () {
 		// compile runBlocks
 		var runBlocksCode = "";
 		if (runBlocks) {
-			var eh = new epfl.mobots.vpl.EventHandler();
-			var initBlock = new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("init"), null, null);
+			var eh = new A3a.vpl.EventHandler();
+			var initBlock = new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("init"), null, null);
 			eh.setBlock(initBlock, null, null);
 			runBlocks.forEach(function (block) {
 				eh.setBlock(block, null, null);

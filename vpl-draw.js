@@ -6,12 +6,37 @@
 */
 
 /** Draw block background
-	@param {epfl.mobots.vpl.blockType} blockType
+	@param {A3a.vpl.blockType} blockType
+	@param {boolean} doesZoomOnLongPress true to display hint that a long
+	press is needed to zoom the block before control widgets can be manipulated
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.blockBackground = function (blockType) {
+A3a.vpl.Canvas.prototype.blockBackground = function (blockType, doesZoomOnLongPress) {
 	this.ctx.save();
-	this.ctx.fillStyle ={
+	if (doesZoomOnLongPress) {
+		// rounded corner clip
+		var f = 0.2;
+		this.ctx.beginPath();
+		this.ctx.moveTo(0, this.dims.blockSize * f);
+		this.ctx.lineTo(0, this.dims.blockSize * (1 - f));
+		this.ctx.arc(this.dims.blockSize * f, this.dims.blockSize * (1 - f),
+			this.dims.blockSize * f,
+			Math.PI * 1, Math.PI * 0.5, true);
+		this.ctx.lineTo(this.dims.blockSize * (1 - f), this.dims.blockSize);
+		this.ctx.arc(this.dims.blockSize * (1 - f), this.dims.blockSize * (1 - f),
+			this.dims.blockSize * f,
+			Math.PI * 0.5, Math.PI * 0, true);
+		this.ctx.lineTo(this.dims.blockSize, this.dims.blockSize * f);
+		this.ctx.arc(this.dims.blockSize * (1 - f), this.dims.blockSize * f,
+			this.dims.blockSize * f,
+			Math.PI * 0, Math.PI * 1.5, true);
+		this.ctx.lineTo(this.dims.blockSize * f, 0);
+		this.ctx.arc(this.dims.blockSize * f, this.dims.blockSize * f,
+			this.dims.blockSize * f,
+			Math.PI * 1.5, Math.PI * 1, true);
+		this.ctx.clip();
+	}
+	this.ctx.fillStyle = {
 		"e": "#f70",
 		"a": "#38f",
 		"s": "#0d0",
@@ -24,7 +49,7 @@ epfl.mobots.vpl.Canvas.prototype.blockBackground = function (blockType) {
 /** Clear block background
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.clearBlockBackground = function () {
+A3a.vpl.Canvas.prototype.clearBlockBackground = function () {
 	this.ctx.save();
 	this.ctx.fillStyle = "#ddd";
 	this.ctx.fillRect(this.dims.blockLineWidth,
@@ -44,7 +69,7 @@ epfl.mobots.vpl.Canvas.prototype.clearBlockBackground = function () {
 	}=} opt
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.text = function (str, opt) {
+A3a.vpl.Canvas.prototype.text = function (str, opt) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	ctx.save();
@@ -71,7 +96,7 @@ epfl.mobots.vpl.Canvas.prototype.text = function (str, opt) {
 	@param {?Array.<number>=} rgb
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.robotTop = function (withWheels, scale, rot, trans, rgb) {
+A3a.vpl.Canvas.prototype.robotTop = function (withWheels, scale, rot, trans, rgb) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	ctx.save();
@@ -153,7 +178,7 @@ epfl.mobots.vpl.Canvas.prototype.robotTop = function (withWheels, scale, rot, tr
 	@param {number} r half-distance between wheels
 	@return {{phi:number,R:number,x:number,y:number}}
 */
-epfl.mobots.vpl.draw.diffWheels = function (dleft, dright, r) {
+A3a.vpl.draw.diffWheels = function (dleft, dright, r) {
 	var phi = (dright - dleft) / (2 * r);
 	var R = dright === dleft ? Infinity : (dright + dleft) / (2 * phi);
 	return {
@@ -170,7 +195,7 @@ epfl.mobots.vpl.draw.diffWheels = function (dleft, dright, r) {
 	@param {number} r half-distance between wheels, relative to block size
 	@return {{phi:number,R:number,x:number,y:number}}
 */
-epfl.mobots.vpl.Canvas.prototype.traces = function (dleft, dright, r) {
+A3a.vpl.Canvas.prototype.traces = function (dleft, dright, r) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	dleft *= dims.blockSize;
@@ -191,7 +216,7 @@ epfl.mobots.vpl.Canvas.prototype.traces = function (dleft, dright, r) {
 		}
 	}
 
-	var tr = epfl.mobots.vpl.draw.diffWheels(dleft, dright, r);
+	var tr = A3a.vpl.draw.diffWheels(dleft, dright, r);
 	ctx.save();
 	ctx.translate(0.5 * dims.blockSize,
 		0.5 * dims.blockSize);
@@ -230,14 +255,14 @@ epfl.mobots.vpl.Canvas.prototype.traces = function (dleft, dright, r) {
 	@param {Event} ev mouse event
 	@return {boolean}
 */
-epfl.mobots.vpl.Canvas.prototype.robotTopCheck = function (width, height, left, top, dleft, dright, r, ev) {
+A3a.vpl.Canvas.prototype.robotTopCheck = function (width, height, left, top, dleft, dright, r, ev) {
 	var dims = this.dims;
 	dleft *= dims.blockSize;
 	dright *= dims.blockSize;
 	r *= dims.blockSize;
 	var x = ev.clientX - left - width / 2;
 	var y = top + width / 2 - ev.clientY;
-	var tr = epfl.mobots.vpl.draw.diffWheels(dleft, dright, r);
+	var tr = A3a.vpl.draw.diffWheels(dleft, dright, r);
 	return (x - tr.x) * (x - tr.x) + (y - tr.y) * (y - tr.y) < r * r;
 };
 
@@ -245,7 +270,7 @@ epfl.mobots.vpl.Canvas.prototype.robotTopCheck = function (width, height, left, 
 	@param {number=} scale
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.robotSide = function (scale) {
+A3a.vpl.Canvas.prototype.robotSide = function (scale) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	ctx.save();
@@ -288,7 +313,7 @@ epfl.mobots.vpl.Canvas.prototype.robotSide = function (scale) {
 	@param {number=} scale
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.tap = function (scale) {
+A3a.vpl.Canvas.prototype.tap = function (scale) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	ctx.save();
@@ -306,12 +331,12 @@ epfl.mobots.vpl.Canvas.prototype.tap = function (scale) {
 };
 
 /**	Draw an array of buttons
-	@param {Array.<epfl.mobots.vpl.Canvas.buttonShape>} shapes
+	@param {Array.<A3a.vpl.Canvas.buttonShape>} shapes
 	@param {Array.<boolean|number>} state false or 0: gray border,
 	true or 1: red, -1: black, -2: black border
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.buttons = function (shapes, state) {
+A3a.vpl.Canvas.prototype.buttons = function (shapes, state) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	shapes.forEach(function (shape, i) {
@@ -374,14 +399,14 @@ epfl.mobots.vpl.Canvas.prototype.buttons = function (shapes, state) {
 		strokeStyle: (string | undefined)
 	}}
 */
-epfl.mobots.vpl.Canvas.buttonShape;
+A3a.vpl.Canvas.buttonShape;
 
 /** Draw notes
 	@param {Array.<number>} notes array of {tone,duration}x6
 	(tone between 1 and 5, duration=0/1/2)
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.notes = function (notes) {
+A3a.vpl.Canvas.prototype.notes = function (notes) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	ctx.save();
@@ -412,7 +437,7 @@ epfl.mobots.vpl.Canvas.prototype.notes = function (notes) {
 /** Draw microphone (for clap event)
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.microphone = function () {
+A3a.vpl.Canvas.prototype.microphone = function () {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	ctx.save();
@@ -448,7 +473,7 @@ epfl.mobots.vpl.Canvas.prototype.microphone = function () {
 	@param {number} angle value from -6 to 6 (0=normal, 6=90 deg)
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.robotAccelerometer = function (pitch, angle) {
+A3a.vpl.Canvas.prototype.robotAccelerometer = function (pitch, angle) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	var phi = angle * Math.PI / 12;
@@ -524,7 +549,7 @@ epfl.mobots.vpl.Canvas.prototype.robotAccelerometer = function (pitch, angle) {
 	@param {Event} ev mouse event
 	@return {boolean}
 */
-epfl.mobots.vpl.Canvas.prototype.accelerometerCheck = function (width, height, left, top, ev) {
+A3a.vpl.Canvas.prototype.accelerometerCheck = function (width, height, left, top, ev) {
 	var r = 0.45 * width;
 	var x = ev.clientX - left - width / 2;
 	var y = top + width / 2 - ev.clientY;
@@ -539,7 +564,7 @@ epfl.mobots.vpl.Canvas.prototype.accelerometerCheck = function (width, height, l
 	@param {Event} ev mouse event
 	@return {number} new value of the angle, between -6 and 6
 */
-epfl.mobots.vpl.Canvas.prototype.accelerometerDrag = function (width, height, left, top, ev) {
+A3a.vpl.Canvas.prototype.accelerometerDrag = function (width, height, left, top, ev) {
 	var x = ev.clientX - left - width / 2;
 	var y = top + width / 2 - ev.clientY;
 	return Math.max(-6, Math.min(6, Math.round(Math.atan2(x, y) * 12 / Math.PI)));
@@ -556,7 +581,7 @@ epfl.mobots.vpl.Canvas.prototype.accelerometerDrag = function (width, height, le
 	@param {string} fillStyle
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.drawTimerLogArc = function (x0, y0, rExt, rIntMax, rIntMin, angle, fillStyle) {
+A3a.vpl.Canvas.prototype.drawTimerLogArc = function (x0, y0, rExt, rIntMax, rIntMin, angle, fillStyle) {
 	var ctx = this.ctx;
 	var d = (rIntMax - rIntMin) / 4;
 
@@ -586,7 +611,7 @@ epfl.mobots.vpl.Canvas.prototype.drawTimerLogArc = function (x0, y0, rExt, rIntM
 	false for linear time scale between 0 and 4
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
+A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 	var time2 = isLog
 		? time === 0 ? 0 : Math.log(time * 10) / Math.log(100)	// [0.1,10] -> [0,1]
 		: time / 4;	// [0, 4] -> [0, 1]
@@ -657,7 +682,7 @@ epfl.mobots.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 	@param {Array.<number>} state array of 4 states, with 0=unspecified, 1=set, 2=clear
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.drawState = function (state) {
+A3a.vpl.Canvas.prototype.drawState = function (state) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 
@@ -697,7 +722,7 @@ epfl.mobots.vpl.Canvas.prototype.drawState = function (state) {
 };
 
 /**	Check if a mouse event is inside a shape
-	@param {Array.<epfl.mobots.vpl.Canvas.buttonShape>} shapes
+	@param {Array.<A3a.vpl.Canvas.buttonShape>} shapes
 	@param {number} width block width
 	@param {number} height block width
 	@param {number} left block left position
@@ -705,7 +730,7 @@ epfl.mobots.vpl.Canvas.prototype.drawState = function (state) {
 	@param {Event} ev mouse event
 	@return {?number} shape index, or null
 */
-epfl.mobots.vpl.Canvas.prototype.buttonClick = function (shapes, width, height, left, top, ev) {
+A3a.vpl.Canvas.prototype.buttonClick = function (shapes, width, height, left, top, ev) {
 	var x = (ev.clientX - left) / width - 0.5;
 	var y = 0.5 - (ev.clientY - top) / height;
 	for (var i = 0; i < shapes.length; i++) {
@@ -718,7 +743,7 @@ epfl.mobots.vpl.Canvas.prototype.buttonClick = function (shapes, width, height, 
 };
 
 /** @enum {number} */
-epfl.mobots.vpl.draw.levelType = {
+A3a.vpl.draw.levelType = {
 	none: 0,
 	low: 1,
 	high: 2
@@ -729,10 +754,10 @@ epfl.mobots.vpl.draw.levelType = {
 	@param {number} pos slider position
 	@param {boolean} vert true if slider is vertical, false if horizontal
 	@param {string} thumbColor css color of the slider thumb
-	@param {epfl.mobots.vpl.draw.levelType=} levelType
+	@param {A3a.vpl.draw.levelType=} levelType
 	@return {void}
 */
-epfl.mobots.vpl.Canvas.prototype.slider = function (val, pos, vert, thumbColor, levelType) {
+A3a.vpl.Canvas.prototype.slider = function (val, pos, vert, thumbColor, levelType) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	ctx.save();
@@ -770,13 +795,13 @@ epfl.mobots.vpl.Canvas.prototype.slider = function (val, pos, vert, thumbColor, 
 	ctx.stroke();
 	ctx.fillStyle = thumbColor;
 	ctx.strokeStyle = "#666";
-	switch (levelType || epfl.mobots.vpl.draw.levelType.none) {
-	case epfl.mobots.vpl.draw.levelType.low:
+	switch (levelType || A3a.vpl.draw.levelType.none) {
+	case A3a.vpl.draw.levelType.low:
 		sliderPath(0, val);
 		ctx.fill();
 		ctx.stroke();
 		break;
-	case epfl.mobots.vpl.draw.levelType.high:
+	case A3a.vpl.draw.levelType.high:
 		sliderPath(val, 1);
 		ctx.fill();
 		ctx.stroke();
@@ -804,7 +829,7 @@ epfl.mobots.vpl.Canvas.prototype.slider = function (val, pos, vert, thumbColor, 
 	@param {Event} ev mouse event
 	@return {boolean}
 */
-epfl.mobots.vpl.Canvas.prototype.sliderCheck = function (pos, vert, width, height, left, top, ev) {
+A3a.vpl.Canvas.prototype.sliderCheck = function (pos, vert, width, height, left, top, ev) {
 	var x = (ev.clientX - left) / width - 0.5;
 	var y = 0.5 - (ev.clientY - top) / height;
 	return Math.abs((vert ? x : y) - pos) < 0.1;
@@ -819,7 +844,7 @@ epfl.mobots.vpl.Canvas.prototype.sliderCheck = function (pos, vert, width, heigh
 	@param {Event} ev mouse event
 	@return {number} new value of the slider, between 0 and 1
 */
-epfl.mobots.vpl.Canvas.prototype.sliderDrag = function (vert, width, height, left, top, ev) {
+A3a.vpl.Canvas.prototype.sliderDrag = function (vert, width, height, left, top, ev) {
 	var x = (ev.clientX - left) / width - 0.5;
 	var y = 0.5 - (ev.clientY - top) / height;
 	return 0.5 + (vert ? y : x) / 0.8;
@@ -834,7 +859,7 @@ epfl.mobots.vpl.Canvas.prototype.sliderDrag = function (vert, width, height, lef
 	@param {Event} ev mouse event
 	@return {?{index:number,tone:number}}} note, or null
 */
-epfl.mobots.vpl.Canvas.prototype.noteClick = function (notes, width, height, left, top, ev) {
+A3a.vpl.Canvas.prototype.noteClick = function (notes, width, height, left, top, ev) {
 	var x = Math.floor(((ev.clientX - left) / width - 0.1) / (0.8 / 6));
 	var y = Math.floor((0.9 - (ev.clientY - top) / height) / 0.16);
 	return x >= 0 && x < 6 && y >= 0 && y < 5
@@ -852,7 +877,7 @@ epfl.mobots.vpl.Canvas.prototype.noteClick = function (notes, width, height, lef
 	@param {Event} ev mouse event
 	@return {boolean}
 */
-epfl.mobots.vpl.Canvas.prototype.timerCheck = function (width, height, left, top, ev) {
+A3a.vpl.Canvas.prototype.timerCheck = function (width, height, left, top, ev) {
 	var r = 0.4 * width;
 	var x = ev.clientX - left - width / 2;
 	var y = top + height / 2 - ev.clientY;
@@ -869,7 +894,7 @@ epfl.mobots.vpl.Canvas.prototype.timerCheck = function (width, height, left, top
 	@param {Event} ev mouse event
 	@return {number} new value of the time, between 0 and 4
 */
-epfl.mobots.vpl.Canvas.prototype.timerDrag = function (width, height, left, top, isLog, ev) {
+A3a.vpl.Canvas.prototype.timerDrag = function (width, height, left, top, isLog, ev) {
 	var x = ev.clientX - left - width / 2;
 	var y = top + height / 2 - ev.clientY;
 	var time2 = (Math.PI - Math.atan2(x, -y)) / (2 * Math.PI);
@@ -884,7 +909,7 @@ epfl.mobots.vpl.Canvas.prototype.timerDrag = function (width, height, left, top,
 	@param {Event} ev mouse event
 	@return {?number} state index, or null
 */
-epfl.mobots.vpl.Canvas.prototype.stateClick = function (width, height, left, top, ev) {
+A3a.vpl.Canvas.prototype.stateClick = function (width, height, left, top, ev) {
 	var x0 = width / 2;
 	var y0 = height / 2;
 	var r = width * 0.375;

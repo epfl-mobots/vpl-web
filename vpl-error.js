@@ -10,12 +10,12 @@
 	@struct
 	@param {string} msg
 */
-epfl.mobots.vpl.Error = function (msg) {
+A3a.vpl.Error = function (msg) {
 	this.msg = msg;
 	this.eventError = false;
 	this.eventErrorIndices = [];
 	this.actionErrorIndices = [];
-	/** @type {epfl.mobots.vpl.EventHandler} */
+	/** @type {A3a.vpl.EventHandler} */
 	this.conflictEventHandler = null;
 };
 
@@ -24,16 +24,16 @@ epfl.mobots.vpl.Error = function (msg) {
 	empty for all
 	@return {void}
 */
-epfl.mobots.vpl.Error.prototype.addEventError = function (eventIndices) {
+A3a.vpl.Error.prototype.addEventError = function (eventIndices) {
 	this.eventError = true;
 	this.eventErrorIndices = eventIndices;
 };
 
 /** Specify that the event (and state) is the cause of a conflict error
-	@param {epfl.mobots.vpl.EventHandler} conflictEventHandler other event handler which conflicts
+	@param {A3a.vpl.EventHandler} conflictEventHandler other event handler which conflicts
 	@return {void}
 */
-epfl.mobots.vpl.Error.prototype.addEventConflictError = function (conflictEventHandler) {
+A3a.vpl.Error.prototype.addEventConflictError = function (conflictEventHandler) {
 	this.eventError = true;
 	this.conflictEventHandler = conflictEventHandler;
 };
@@ -42,6 +42,6 @@ epfl.mobots.vpl.Error.prototype.addEventConflictError = function (conflictEventH
 	@param {number} i
 	@return {void}
 */
-epfl.mobots.vpl.Error.prototype.addActionError = function (i) {
+A3a.vpl.Error.prototype.addActionError = function (i) {
 	this.actionErrorIndices.push(i);
 };

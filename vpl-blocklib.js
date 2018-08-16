@@ -6,7 +6,7 @@
 */
 
 /** @const */
-epfl.mobots.vpl.BlockTemplate.initOutputs =
+A3a.vpl.BlockTemplate.initOutputs =
 	"# reset outputs\n" +
 	"call sound.system(-1)\n" +
 	"call leds.top(0, 0, 0)\n" +
@@ -15,54 +15,54 @@ epfl.mobots.vpl.BlockTemplate.initOutputs =
 	"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n";
 
 /** @const */
-epfl.mobots.vpl.BlockTemplate.initStatesDecl =
+A3a.vpl.BlockTemplate.initStatesDecl =
 	"var state[4]\n";
 
 /** @const */
-epfl.mobots.vpl.BlockTemplate.initStatesInit =
+A3a.vpl.BlockTemplate.initStatesInit =
 	"state = [0, 0, 0, 0]\n";
 
 /** @const */
-epfl.mobots.vpl.BlockTemplate.initCounterDecl =
+A3a.vpl.BlockTemplate.initCounterDecl =
 	"var counter\n";
 
 /** @const */
-epfl.mobots.vpl.BlockTemplate.initCounterInit =
+A3a.vpl.BlockTemplate.initCounterInit =
 	"counter = 0\n";
 
 /** @const */
-epfl.mobots.vpl.BlockTemplate.initTopColorDecl =
+A3a.vpl.BlockTemplate.initTopColorDecl =
 	"# RGB color of the top led\n" +
 	"var topColor[3]\n";
 
 /** @const */
-epfl.mobots.vpl.BlockTemplate.initTopColorInit =
+A3a.vpl.BlockTemplate.initTopColorInit =
 	"topColor = [0, 0, 0]\n";
 
 /** @const */
-epfl.mobots.vpl.BlockTemplate.dispStates =
+A3a.vpl.BlockTemplate.dispStates =
 	"sub display_state\n" +
 	"call leds.circle(0,state[1]*32,0,state[3]*32,0,state[2]*32,0,state[0]*32)\n";
 
 /** @const */
-epfl.mobots.vpl.BlockTemplate.dispCounter =
+A3a.vpl.BlockTemplate.dispCounter =
 	"sub display_counter\n" +
 	"call leds.circle((counter&1)<<5,(counter&2)<<4,(counter&4)<<3,(counter&8)<<2,(counter&16)<<1,counter&32,(counter&64)>>1,(counter&128)>>2)\n";
 
 /** @const */
-epfl.mobots.vpl.BlockTemplate.resetTimer =
+A3a.vpl.BlockTemplate.resetTimer =
 	"# stop timer 0\n" +
 	"timer.period[0] = 0\n";
 
 /**
 	@const
-	@type {Array.<epfl.mobots.vpl.BlockTemplate>}
+	@type {Array.<A3a.vpl.BlockTemplate>}
 */
-epfl.mobots.vpl.BlockTemplate.lib =	[
-	new epfl.mobots.vpl.BlockTemplate((function () {
+A3a.vpl.BlockTemplate.lib =	[
+	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const
-			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
 		*/
 		var buttons = [
 			{sh: "c", x: 0, y: 0, r: 0},
@@ -73,15 +73,15 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "button",
-			type: epfl.mobots.vpl.blockType.event,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			type: A3a.vpl.blockType.event,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [false, false, false, false, false]; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
 				canvas.buttons(buttons, block.param);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
@@ -90,16 +90,16 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.validateFun} */
+			/** @type {A3a.vpl.BlockTemplate.validateFun} */
 			validate: function (block) {
 				for (var i = 0; i < 5; i++) {
 					if (block.param[i]) {
 						return null;
 					}
 				}
-				return new epfl.mobots.vpl.Error("No button specified");
+				return new A3a.vpl.Error("No button specified");
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				var cond = "";
 				for (var i = 0; i < 5; i++) {
@@ -120,10 +120,10 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const
-			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
 		*/
 		var buttons = [
 			{sh: "r", x: 0, y: 0.4, r: 0, str: "2"},
@@ -136,16 +136,16 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "horiz prox",
-			modes: [epfl.mobots.vpl.mode.basic],
-			type: epfl.mobots.vpl.blockType.event,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			modes: [A3a.vpl.mode.basic],
+			type: A3a.vpl.blockType.event,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0, 0, 0, 0, 0]; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
 				canvas.buttons(buttons, block.param);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
@@ -154,20 +154,20 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.validateFun} */
+			/** @type {A3a.vpl.BlockTemplate.validateFun} */
 			validate: function (block) {
 				for (var i = 0; i < 7; i++) {
 					if (block.param[i]) {
 						return null;
 					}
 				}
-				return new epfl.mobots.vpl.Error("No proximity sensor specified");
+				return new A3a.vpl.Error("No proximity sensor specified");
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 			changeMode: function (block, mode) {
 				switch (mode) {
-				case epfl.mobots.vpl.mode.advanced:
-					var newBlock = new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("horiz prox adv"),
+				case A3a.vpl.mode.advanced:
+					var newBlock = new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("horiz prox adv"),
 						null, null);
 					newBlock.param = block.param.concat(newBlock.param.slice(7));
 					return newBlock;
@@ -175,7 +175,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					return block;
 				}
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				var cond = "";
 				for (var i = 0; i < 7; i++) {
@@ -199,10 +199,10 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const
-			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
 		*/
 		var buttons = [
 			{sh: "r", x: 0, y: 0.4, r: 0, str: "2"},
@@ -215,25 +215,25 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "horiz prox adv",
-			modes: [epfl.mobots.vpl.mode.advanced],
-			type: epfl.mobots.vpl.blockType.event,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			modes: [A3a.vpl.mode.advanced],
+			type: A3a.vpl.blockType.event,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () {
 				return [
 					0, 0, 0, 0, 0, 0, 0,	// sensor modes
 					0.4, 0.1	// levels (700+0.4*3300=2000, 700+0.1*3300=1000)
 				];
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
 				canvas.buttons(buttons, block.param);
 				canvas.slider(/** @type {number} */(block.param[7]), 0.02, false,
-					"red", epfl.mobots.vpl.draw.levelType.high);
+					"red", A3a.vpl.draw.levelType.high);
 				canvas.slider(/** @type {number} */(block.param[8]), -0.2, false,
-					"black", epfl.mobots.vpl.draw.levelType.low);
+					"black", A3a.vpl.draw.levelType.low);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				// sensor click
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
@@ -253,29 +253,29 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return null;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				if (dragIndex >= 7) {
 					var val = canvas.sliderDrag(false, width, height, left, top, ev);
 					block.param[dragIndex] = Math.max(0, Math.min(1, val));
 				}
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.validateFun} */
+			/** @type {A3a.vpl.BlockTemplate.validateFun} */
 			validate: function (block) {
 				for (var i = 0; i < 7; i++) {
 					if (block.param[i]) {
 						return null;
 					}
 				}
-				return new epfl.mobots.vpl.Error("No sensor specified");
+				return new A3a.vpl.Error("No sensor specified");
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 			changeMode: function (block, mode) {
 				switch (mode) {
-				case epfl.mobots.vpl.mode.basic:
+				case A3a.vpl.mode.basic:
 					var defParam = block.blockTemplate.defaultParam();
 					if (block.param[7] === defParam[7] && block.param[8] === defParam[8]) {
-						var newBlock = new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("horiz prox"),
+						var newBlock = new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("horiz prox"),
 							null, null);
 						newBlock.param = block.param.slice(0, 7);
 						return newBlock;
@@ -285,7 +285,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					return block;
 				}
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				var cond = "";
 				for (var i = 0; i < 7; i++) {
@@ -312,10 +312,10 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const
-			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
 		*/
 		var buttons = [
 			{sh: "r", x: -0.15, y: 0.35, str: "0"},
@@ -323,16 +323,16 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "ground",
-			modes: [epfl.mobots.vpl.mode.basic],
-			type: epfl.mobots.vpl.blockType.event,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			modes: [A3a.vpl.mode.basic],
+			type: A3a.vpl.blockType.event,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0]; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop(true);
 				canvas.buttons(buttons, block.param);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
@@ -341,18 +341,18 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.validateFun} */
+			/** @type {A3a.vpl.BlockTemplate.validateFun} */
 			validate: function (block) {
 				if (block.param[0] || block.param[1]) {
 					return null;
 				}
-				return new epfl.mobots.vpl.Error("No ground sensor specified");
+				return new A3a.vpl.Error("No ground sensor specified");
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 			changeMode: function (block, mode) {
 				switch (mode) {
-				case epfl.mobots.vpl.mode.advanced:
-					var newBlock = new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("ground adv"),
+				case A3a.vpl.mode.advanced:
+					var newBlock = new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("ground adv"),
 						null, null);
 					newBlock.param = block.param.concat(newBlock.param.slice(2));
 					return newBlock;
@@ -360,7 +360,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					return block;
 				}
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				var cond = "";
 				for (var i = 0; i < 2; i++) {
@@ -384,10 +384,10 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const
-			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
 		*/
 		var buttons = [
 			{sh: "r", x: -0.15, y: 0.35, str: "0"},
@@ -395,25 +395,25 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "ground adv",
-			modes: [epfl.mobots.vpl.mode.advanced],
-			type: epfl.mobots.vpl.blockType.event,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			modes: [A3a.vpl.mode.advanced],
+			type: A3a.vpl.blockType.event,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () {
 				return [
 					0, 0,	// sensor modes
 					0.6, 0.4	// levels (0.6*1000=600, 0.4*1000=400)
 				];
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop(true);
 				canvas.buttons(buttons, block.param);
 				canvas.slider(/** @type {number} */(block.param[2]), 0.02, false,
-					"red", epfl.mobots.vpl.draw.levelType.high);
+					"red", A3a.vpl.draw.levelType.high);
 				canvas.slider(/** @type {number} */(block.param[3]), -0.2, false,
-					"black", epfl.mobots.vpl.draw.levelType.low);
+					"black", A3a.vpl.draw.levelType.low);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				// sensor click
@@ -433,27 +433,27 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return null;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				if (dragIndex >= 2) {
 					var val = canvas.sliderDrag(false, width, height, left, top, ev);
 					block.param[dragIndex] = Math.max(0, Math.min(1, val));
 				}
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.validateFun} */
+			/** @type {A3a.vpl.BlockTemplate.validateFun} */
 			validate: function (block) {
 				if (block.param[0] || block.param[1]) {
 					return null;
 				}
-				return new epfl.mobots.vpl.Error("No ground sensor specified");
+				return new A3a.vpl.Error("No ground sensor specified");
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 			changeMode: function (block, mode) {
 				switch (mode) {
-				case epfl.mobots.vpl.mode.basic:
+				case A3a.vpl.mode.basic:
 					var defParam = block.blockTemplate.defaultParam();
 					if (block.param[2] === defParam[2] && block.param[3] === defParam[3]) {
-						var newBlock = new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("ground"),
+						var newBlock = new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("ground"),
 							null, null);
 						newBlock.param = block.param.slice(0, 2);
 						return newBlock;
@@ -463,7 +463,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					return block;
 				}
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				var cond = "";
 				for (var i = 0; i < 2; i++) {
@@ -489,27 +489,27 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate({
+	new A3a.vpl.BlockTemplate({
 		name: "tap",
-		modes: [epfl.mobots.vpl.mode.basic],
-		type: epfl.mobots.vpl.blockType.event,
-		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		modes: [A3a.vpl.mode.basic],
+		type: A3a.vpl.blockType.event,
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotSide(0.7);
 			canvas.tap(0.7);
 			canvas.text("tap", {y: 0.2 * canvas.dims.blockSize});
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+		/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 		changeMode: function (block, mode) {
 			switch (mode) {
-			case epfl.mobots.vpl.mode.advanced:
-				return new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("accelerometer"),
+			case A3a.vpl.mode.advanced:
+				return new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("accelerometer"),
 					null, null);
 			default:
 				return block;
 			}
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			return {
 				sectionBegin: "onevent tap\n",
@@ -517,10 +517,10 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			};
 		}
 	}),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const
-			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
 		*/
 		var buttons = [
 			{sh: "c", x: -0.33, y: -0.3, r: 0},
@@ -529,16 +529,16 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "accelerometer",
-			modes: [epfl.mobots.vpl.mode.advanced],
-			type: epfl.mobots.vpl.blockType.event,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			modes: [A3a.vpl.mode.advanced],
+			type: A3a.vpl.blockType.event,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () {
 				return [
 					0,	// 0 for tap, 2 for roll, 1 for pitch
 					0 // integer from -6 to 6
 				];
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				/** @type {number} */
 				var dir = /** @type {number} */(block.param[0]);
@@ -557,7 +557,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				canvas.buttons(buttons, [dir===0, dir===1, dir===2]);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				if (block.param[0] !== 0 && canvas.accelerometerCheck(width, height, left, top, ev)) {
 					block.prepareChange();
@@ -571,19 +571,19 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return null;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				if (dragIndex === 1) {
 					var angle = canvas.accelerometerDrag(width, height, left, top, ev);
 					block.param[1] = angle;
 				}
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 			changeMode: function (block, mode) {
 				switch (mode) {
-				case epfl.mobots.vpl.mode.basic:
+				case A3a.vpl.mode.basic:
 					if (block.param[0] === 0) {
-						return new epfl.mobots.vpl.Block(epfl.mobots.vpl.BlockTemplate.findByName("tap"),
+						return new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("tap"),
 							null, null);
 					}
 					// fallthrough
@@ -591,7 +591,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					return block;
 				}
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				var dir = /** @type {number} */(block.param[0]);
 				if (dir === 0) {
@@ -628,15 +628,15 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate({
+	new A3a.vpl.BlockTemplate({
 		name: "clap",
-		type: epfl.mobots.vpl.blockType.event,
-		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		type: A3a.vpl.blockType.event,
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.microphone();
 			canvas.text("clap", {y: 0.32 * canvas.dims.blockSize, rot: 0.3});
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			return {
 				initCodeExec: [
@@ -650,12 +650,12 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			};
 		}
 	}),
-	new epfl.mobots.vpl.BlockTemplate({
+	new A3a.vpl.BlockTemplate({
 		name: "init",
-		modes: [epfl.mobots.vpl.mode.advanced],
-		type: epfl.mobots.vpl.blockType.event,
+		modes: [A3a.vpl.mode.advanced],
+		type: A3a.vpl.blockType.event,
 		noState: true,
-		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			return {
 				sectionBegin: "# initialization\n",
@@ -663,37 +663,37 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			};
 		}
 	}),
-	new epfl.mobots.vpl.BlockTemplate({
+	new A3a.vpl.BlockTemplate({
 		name: "timer",
-		modes: [epfl.mobots.vpl.mode.advanced],
-		type: epfl.mobots.vpl.blockType.event,
-		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		modes: [A3a.vpl.mode.advanced],
+		type: A3a.vpl.blockType.event,
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.drawTimer(0, true, false);
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			return {
 				initCodeExec: [
-					epfl.mobots.vpl.BlockTemplate.resetTimer
+					A3a.vpl.BlockTemplate.resetTimer
 				],
 				sectionBegin: "onevent timer0\n",
 				sectionPriority: 1000
 			};
 		}
 	}),
-	new epfl.mobots.vpl.BlockTemplate({
+	new A3a.vpl.BlockTemplate({
 		name: "state",
-		modes: [epfl.mobots.vpl.mode.advanced],
-		type: epfl.mobots.vpl.blockType.state,
-		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		modes: [A3a.vpl.mode.advanced],
+		type: A3a.vpl.blockType.state,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0, 0, 0, 0]; },
-		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotTop();
 			canvas.drawState(block.param);
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			var i = canvas.stateClick(width, height, left, top, ev);
 			if (i !== null) {
@@ -702,9 +702,9 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 			return i;
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.changeModeFun} */
+		/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 		changeMode: function (block, mode) {
-			if (mode === epfl.mobots.vpl.mode.basic
+			if (mode === A3a.vpl.mode.basic
 				&& block.param[0] === 0
 				&& block.param[1] === 0
 				&& block.param[2] === 0
@@ -715,7 +715,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			return block;
 		},
 		sectionPriority: function () { return 1; },
-		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			var cond = "";
 			for (var i = 0; i < 4; i++) {
@@ -726,19 +726,19 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 			return {
 				initVarDecl: [
-					epfl.mobots.vpl.BlockTemplate.initStatesDecl
+					A3a.vpl.BlockTemplate.initStatesDecl
 				],
 				initCodeExec: [
-					epfl.mobots.vpl.BlockTemplate.initStatesInit
+					A3a.vpl.BlockTemplate.initStatesInit
 				],
 				clause: cond
 			};
 		}
 	}),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const
-			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
 		*/
 		var buttons = [
 			{sh: "t", x: -0.3, y: 0.3, r: 0},
@@ -749,11 +749,11 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "counter comparison",
-			modes: [epfl.mobots.vpl.mode.advanced],
-			type: epfl.mobots.vpl.blockType.state,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			modes: [A3a.vpl.mode.advanced],
+			type: A3a.vpl.blockType.state,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0]; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.text(block.param[0] === 0 ? "=" : block.param[0] > 0 ? "≥" : "≤",
 					{x: -0.3 * canvas.dims.blockSize, fillStyle: "black"});
@@ -767,7 +767,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					block.param[1] !== 0 ? -2 : 0
 				]);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
@@ -793,37 +793,37 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				return i;
 			},
 			sectionPriority: function () { return 1; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				var cond = "counter " +
 					(block.param[0] === 0 ? "==" : block.param[0] > 0 ? ">=" : "<=") +
 					" " + block.param[1];
 				return {
 					initVarDecl: [
-						epfl.mobots.vpl.BlockTemplate.initCounterDecl
+						A3a.vpl.BlockTemplate.initCounterDecl
 					],
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initCounterInit
+						A3a.vpl.BlockTemplate.initCounterInit
 					],
 					clause: cond
 				};
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate({
+	new A3a.vpl.BlockTemplate({
 		name: "color state",
-		modes: [epfl.mobots.vpl.mode.advanced],
-		type: epfl.mobots.vpl.blockType.state,
-		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		modes: [A3a.vpl.mode.advanced],
+		type: A3a.vpl.blockType.state,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0, 0, 0]; },
-		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotTop(false, null, null, null, block.param);
 			canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
 			canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
 			canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
 				block.prepareChange();
@@ -839,13 +839,13 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 			return null;
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 			var val = canvas.sliderDrag(false, width, height, left, top, ev);
 			block.param[dragIndex] = Math.max(0, Math.min(1, Math.round(val)));
 		},
 		sectionPriority: function () { return 1; },
-		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			var cond = block.param
 				.map(function (p, i) {
@@ -854,16 +854,16 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				.join(" and ");
 			return {
 				initVarDecl: [
-					epfl.mobots.vpl.BlockTemplate.initTopColorDecl
+					A3a.vpl.BlockTemplate.initTopColorDecl
 				],
 				initCodeExec: [
-					epfl.mobots.vpl.BlockTemplate.initTopColorInit
+					A3a.vpl.BlockTemplate.initTopColorInit
 				],
 				clause: cond
 			};
 		}
 	}),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		var sz = 1.4;
 		var buttons = [
 			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
@@ -877,11 +877,11 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "color state 8",
-			modes: [epfl.mobots.vpl.mode.custom],
-			type: epfl.mobots.vpl.blockType.state,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			modes: [A3a.vpl.mode.custom],
+			type: A3a.vpl.blockType.state,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop(false, null, null, null, block.param);
 				canvas.buttons(buttons, [
@@ -889,7 +889,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					block.param[0] > -1 ? -2 : 0
 				]);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
@@ -923,7 +923,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				var cond = block.param
 					.map(function (p, i) {
@@ -932,22 +932,22 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					.join(" and ");
 				return {
 					initVarDecl: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorDecl
+						A3a.vpl.BlockTemplate.initTopColorDecl
 					],
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorInit
+						A3a.vpl.BlockTemplate.initTopColorInit
 					],
 					clause: cond
 				};
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate({
+	new A3a.vpl.BlockTemplate({
 		name: "motor",
-		type: epfl.mobots.vpl.blockType.action,
-		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		type: A3a.vpl.blockType.action,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0, 0]; },
-		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			var tr = canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
 			canvas.robotTop(true, 0.45,
@@ -965,7 +965,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			canvas.slider(0.5 + 0.5 * /** @type {number} */(block.param[1]), 0.4, true,
 				block.param[1] === 0 ? "white" : block.param[0] === block.param[1] ? "#0c0" : "#fd0");
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			if (canvas.sliderCheck(-0.4, true, width, height, left, top, ev)) {
 				block.prepareChange();
@@ -983,7 +983,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 			return null;
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 			if (dragIndex < 2) {
 				// slider
@@ -1015,11 +1015,11 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 			}
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			return {
 				initCodeExec: [
-					epfl.mobots.vpl.BlockTemplate.initOutputs
+					A3a.vpl.BlockTemplate.initOutputs
 				],
 				statement:
 					"motor.left.target = " + Math.round(500 * block.param[0]) + "\n" +
@@ -1027,10 +1027,10 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			};
 		}
 	}),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const
-			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
 		*/
 		var buttons = [
 			{sh: "c", x: 0, y: 0, r: 0},	// stop
@@ -1048,11 +1048,11 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 
 		return {
 			name: "move",
-			modes: [epfl.mobots.vpl.mode.custom],
-			type: epfl.mobots.vpl.blockType.action,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			modes: [A3a.vpl.mode.custom],
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop(true, 0.45);
 				canvas.buttons(buttons, [
@@ -1065,7 +1065,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					block.param[0] === 6 ? 1 : -2
 				]);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
@@ -1074,11 +1074,11 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				return {
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initOutputs
+						A3a.vpl.BlockTemplate.initOutputs
 					],
 					statement:
 						"motor.left.target = " +
@@ -1089,20 +1089,20 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		return {
 			name: "top color",
-			type: epfl.mobots.vpl.blockType.action,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop(false, null, null, null, block.param);
 				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
 				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
 				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
 					block.prepareChange();
@@ -1118,20 +1118,20 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return null;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				var val = canvas.sliderDrag(false, width, height, left, top, ev);
 				block.param[dragIndex] = Math.max(0, Math.min(1, val));
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				return {
 					initVarDecl: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorDecl
+						A3a.vpl.BlockTemplate.initTopColorDecl
 					],
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorInit,
-						epfl.mobots.vpl.BlockTemplate.initOutputs
+						A3a.vpl.BlockTemplate.initTopColorInit,
+						A3a.vpl.BlockTemplate.initOutputs
 					],
 					statement:
 						"call leds.top(" +
@@ -1148,7 +1148,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		var sz = 1.4;
 		var buttons = [
 			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
@@ -1162,11 +1162,11 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "top color 8",
-			modes: [epfl.mobots.vpl.mode.custom],
-			type: epfl.mobots.vpl.blockType.action,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			modes: [A3a.vpl.mode.custom],
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop(false, null, null, null, block.param);
 				canvas.buttons(buttons, [
@@ -1174,7 +1174,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					block.param[0] > -1 ? -2 : 0
 				]);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
@@ -1208,15 +1208,15 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				return {
 					initVarDecl: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorDecl
+						A3a.vpl.BlockTemplate.initTopColorDecl
 					],
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initTopColorInit,
-						epfl.mobots.vpl.BlockTemplate.initOutputs
+						A3a.vpl.BlockTemplate.initTopColorInit,
+						A3a.vpl.BlockTemplate.initOutputs
 					],
 					statement:
 						"call leds.top(" +
@@ -1233,20 +1233,20 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		return {
 			name: "bottom color",
-			type: epfl.mobots.vpl.blockType.action,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop(true, null, null, null, block.param);
 				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
 				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
 				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
 					block.prepareChange();
@@ -1262,16 +1262,16 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return null;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				var val = canvas.sliderDrag(false, width, height, left, top, ev);
 				block.param[dragIndex] = Math.max(0, Math.min(1, val));
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				return {
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initOutputs
+						A3a.vpl.BlockTemplate.initOutputs
 					],
 					statement:
 						"call leds.bottom.left(" +
@@ -1284,7 +1284,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		var sz = 1.4;
 		var buttons = [
 			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
@@ -1298,11 +1298,11 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "bottom color 8",
-			modes: [epfl.mobots.vpl.mode.custom],
-			type: epfl.mobots.vpl.blockType.action,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			modes: [A3a.vpl.mode.custom],
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop(true, null, null, null, block.param);
 				canvas.buttons(buttons, [
@@ -1310,7 +1310,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					block.param[0] > -1 ? -2 : 0
 				]);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
@@ -1344,11 +1344,11 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				return {
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initOutputs
+						A3a.vpl.BlockTemplate.initOutputs
 					],
 					statement:
 						"call leds.bottom.left(" +
@@ -1361,16 +1361,16 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate({
+	new A3a.vpl.BlockTemplate({
 		name: "notes",
-		type: epfl.mobots.vpl.blockType.action,
-		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		type: A3a.vpl.blockType.action,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0, 1, 1, 1, 2, 1, 0, 1, 2, 1, 4, 2]; },
-		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.notes(block.param);
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			var note = canvas.noteClick(block.param, width, height, left, top, ev);
 			if (note) {
@@ -1385,7 +1385,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 			return null;
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			/** @type {Array.<number>} */
 			var notes = [];
@@ -1423,7 +1423,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					"wave[i] = wave_intensity / 256\n" +
 					"end\n" +
 					"call sound.wave(wave)\n",
-					epfl.mobots.vpl.BlockTemplate.initOutputs
+					A3a.vpl.BlockTemplate.initOutputs
 				],
 				initCodeDecl: [
 					"# when a note is finished, play the next one\n" +
@@ -1442,18 +1442,18 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			};
 		}
 	}),
-	new epfl.mobots.vpl.BlockTemplate({
+	new A3a.vpl.BlockTemplate({
 		name: "set state",
-		modes: [epfl.mobots.vpl.mode.advanced],
-		type: epfl.mobots.vpl.blockType.action,
-		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		modes: [A3a.vpl.mode.advanced],
+		type: A3a.vpl.blockType.action,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0, 0, 0, 0]; },
-		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotTop();
 			canvas.drawState(block.param);
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			var i = canvas.stateClick(width, height, left, top, ev);
 			if (i !== null) {
@@ -1462,7 +1462,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 			return i;
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			var code = "";
 			for (var i = 0; i < 4; i++) {
@@ -1472,13 +1472,13 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 			return {
 				initVarDecl: [
-					epfl.mobots.vpl.BlockTemplate.initStatesDecl
+					A3a.vpl.BlockTemplate.initStatesDecl
 				],
 				init: [
-					epfl.mobots.vpl.BlockTemplate.initStatesInit
+					A3a.vpl.BlockTemplate.initStatesInit
 				],
 				initCodeDecl: [
-					epfl.mobots.vpl.BlockTemplate.dispStates
+					A3a.vpl.BlockTemplate.dispStates
 				],
 				statement: code.length > 0
 					? code + "callsub display_state\n"
@@ -1491,10 +1491,10 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			};
 		}
 	}),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const
-			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
 		*/
 		var buttons = [
 			{sh: "t", x: 0, y: 0.3, r: 0},
@@ -1502,11 +1502,11 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "set counter",
-			modes: [epfl.mobots.vpl.mode.advanced],
-			type: epfl.mobots.vpl.blockType.action,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			modes: [A3a.vpl.mode.advanced],
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.text(block.param[0] === 0 ? "= 0" : block.param[0] > 0 ? "+1" : "−1");
 				canvas.buttons(buttons, [
@@ -1514,7 +1514,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					block.param[0] > -1 ? -2 : 0
 				]);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
@@ -1531,17 +1531,17 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				return i;
 			},
 			sectionPriority: function () { return 1; },
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				return {
 					initVarDecl: [
-						epfl.mobots.vpl.BlockTemplate.initCounterDecl,
+						A3a.vpl.BlockTemplate.initCounterDecl,
 					],
 					initCodeExec: [
-						epfl.mobots.vpl.BlockTemplate.initCounterInit
+						A3a.vpl.BlockTemplate.initCounterInit
 					],
 					initCodeDecl: [
-						epfl.mobots.vpl.BlockTemplate.dispCounter
+						A3a.vpl.BlockTemplate.dispCounter
 					],
 					statement:
 						(block.param[0] === 0 ? "counter = 0" :
@@ -1555,17 +1555,17 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
-	new epfl.mobots.vpl.BlockTemplate({
+	new A3a.vpl.BlockTemplate({
 		name: "set timer",
-		modes: [epfl.mobots.vpl.mode.advanced],
-		type: epfl.mobots.vpl.blockType.action,
-		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		modes: [A3a.vpl.mode.advanced],
+		type: A3a.vpl.blockType.action,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [1]; },
-		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.drawTimer(/** @type {number} */(block.param[0]), false, false);
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			if (canvas.timerCheck(width, height, left, top, ev)) {
 				block.prepareChange();
@@ -1573,32 +1573,32 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 			return null;
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 			var t = canvas.timerDrag(width, height, left, top, false, ev);
 			block.param[0] = t;
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			return {
 				initCodeExec: [
-					epfl.mobots.vpl.BlockTemplate.resetTimer
+					A3a.vpl.BlockTemplate.resetTimer
 				],
 				statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + "\n"
 			};
 		}
 	}),
-	new epfl.mobots.vpl.BlockTemplate({
+	new A3a.vpl.BlockTemplate({
 		name: "set timer log",
-		modes: [epfl.mobots.vpl.mode.custom],
-		type: epfl.mobots.vpl.blockType.action,
-		/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+		modes: [A3a.vpl.mode.custom],
+		type: A3a.vpl.blockType.action,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [1]; },
-		/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.drawTimer(/** @type {number} */(block.param[0]), false, true);
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			if (canvas.timerCheck(width, height, left, top, ev)) {
 				block.prepareChange();
@@ -1606,32 +1606,32 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 			}
 			return null;
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.mousedragFun} */
+		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 			var t = canvas.timerDrag(width, height, left, top, true, ev);
 			block.param[0] = t;
 		},
-		/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			return {
 				initCodeExec: [
-					epfl.mobots.vpl.BlockTemplate.resetTimer
+					A3a.vpl.BlockTemplate.resetTimer
 				],
 				statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + "\n"
 			};
 		}
 	}),
-	new epfl.mobots.vpl.BlockTemplate((function () {
+	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const
-			@type {Array.<epfl.mobots.vpl.Canvas.buttonShape>}
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
 		*/
 		var buttons = [
 			{sh: "c", x: -0.33, y: -0.3, r: 0}
 		];
 
 		/** Update image in block
-			@param {epfl.mobots.vpl.Block} block
+			@param {A3a.vpl.Block} block
 			@param {function():void=} loadedFun called once done
 			@return {void}
 		*/
@@ -1650,9 +1650,9 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 
 		return {
 			name: "picture comment",
-			modes: [epfl.mobots.vpl.mode.advanced],
-			type: epfl.mobots.vpl.blockType.comment,
-			/** @type {epfl.mobots.vpl.BlockTemplate.defaultParam} */
+			modes: [A3a.vpl.mode.advanced],
+			type: A3a.vpl.blockType.comment,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () {
 				return [
 					false,	// true for live preview
@@ -1660,16 +1660,16 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 					null	// image
 				];
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.exportParam} */
+			/** @type {A3a.vpl.BlockTemplate.exportParam} */
 			exportParam: function (block) {
 				return block.param.length >= 2 ? [false, block.param[1]] : [false, ""];
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.importParam} */
+			/** @type {A3a.vpl.BlockTemplate.importParam} */
 			importParam: function (block, param, readyFun) {
 				block.param = param.length >= 2 ? [false, param[1]] : [false, ""];
 				updateImage(block, readyFun);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.drawFun} */
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				if (block.param[2]) {
 					canvas.ctx.drawImage(block.param[2],
@@ -1678,19 +1678,19 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				canvas.buttons(buttons,  [block.param[0]]);
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.mousedownFun} */
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons,
 					width, height, left, top, ev);
 				if (i === 0) {
 					if (block.param[0]) {
 						// live preview: stop
-						if (epfl.mobots.webcamVideo) {
-							epfl.mobots.webcamVideo["pause"] && epfl.mobots.webcamVideo["pause"]();
-							epfl.mobots.webcamStream.getTracks().forEach(function(track) {
+						if (A3a.webcamVideo) {
+							A3a.webcamVideo["pause"] && A3a.webcamVideo["pause"]();
+							A3a.webcamStream.getTracks().forEach(function(track) {
 								track["stop"]();
 							});
-							epfl.mobots.webcamVideo = null;
+							A3a.webcamVideo = null;
 						}
 					} else {
 						// start preview
@@ -1698,24 +1698,24 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 						navigator.mediaDevices
 							.getUserMedia({"audio": false, "video": {"width": 320, "height": 240}})
 							.then(function (stream) {
-								epfl.mobots.webcamStream = stream;
-								epfl.mobots.webcamVideo = document.createElement("video");
-								epfl.mobots.webcamVideo["srcObject"] = stream;
-								epfl.mobots.webcamVideo.addEventListener("loadedmetadata", function (e) {
+								A3a.webcamStream = stream;
+								A3a.webcamVideo = document.createElement("video");
+								A3a.webcamVideo["srcObject"] = stream;
+								A3a.webcamVideo.addEventListener("loadedmetadata", function (e) {
 									var id;
 									function grab() {
-										if (!epfl.mobots.webcamVideo) {
+										if (!A3a.webcamVideo) {
 											clearInterval(id);
 										} else {
-											if (!epfl.mobots.webcamCanvas) {
-												epfl.mobots.webcamCanvas = document.createElement("canvas");
-												epfl.mobots.webcamCanvas.width = 240;
-												epfl.mobots.webcamCanvas.height = 240;
+											if (!A3a.webcamCanvas) {
+												A3a.webcamCanvas = document.createElement("canvas");
+												A3a.webcamCanvas.width = 240;
+												A3a.webcamCanvas.height = 240;
 											}
-											epfl.mobots.webcamCanvas.getContext("2d")
-												.drawImage(epfl.mobots.webcamVideo,
+											A3a.webcamCanvas.getContext("2d")
+												.drawImage(A3a.webcamVideo,
 													0, 0, 240, 240, 0, 0, 240, 240);
-											block.param[1] = epfl.mobots.webcamCanvas.toDataURL("image/png");
+											block.param[1] = A3a.webcamCanvas.toDataURL("image/png");
 											updateImage(block,
 												function () {
 													// redraw once the image has been loaded
@@ -1724,7 +1724,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 												});
 										}
 									}
-									epfl.mobots.webcamVideo["play"]();
+									A3a.webcamVideo["play"]();
 									id = setInterval(grab, 100);
 								}, false);
 							});
@@ -1733,7 +1733,7 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {epfl.mobots.vpl.BlockTemplate.genCodeFun} */
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
 				return {};
 			}
@@ -1743,12 +1743,12 @@ epfl.mobots.vpl.BlockTemplate.lib =	[
 
 /** Find a block template specified by name
 	@param {string} name
-	@return {epfl.mobots.vpl.BlockTemplate}
+	@return {A3a.vpl.BlockTemplate}
 */
-epfl.mobots.vpl.BlockTemplate.findByName = function (name) {
-	for (var i = 0; i < epfl.mobots.vpl.BlockTemplate.lib.length; i++) {
-		if (epfl.mobots.vpl.BlockTemplate.lib[i].name === name) {
-			return epfl.mobots.vpl.BlockTemplate.lib[i];
+A3a.vpl.BlockTemplate.findByName = function (name) {
+	for (var i = 0; i < A3a.vpl.BlockTemplate.lib.length; i++) {
+		if (A3a.vpl.BlockTemplate.lib[i].name === name) {
+			return A3a.vpl.BlockTemplate.lib[i];
 		}
 	}
 	return null;
