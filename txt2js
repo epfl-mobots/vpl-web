@@ -1,0 +1,14 @@
+#!/bin/sh
+# Convert text files to strings in a JavaScript object
+
+echo "textfiles = {"
+
+for file in "$@"
+do
+	echo -n '"'$file'": "'
+	sed -E 's/"/\\"/g' <"$file" | sed -E ':a;N;$!ba;s/\n/\\n/g' | tr -d '\n'
+	echo '",'
+done
+
+echo "};"
+

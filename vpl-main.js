@@ -50,6 +50,15 @@ document.addEventListener("touchend", function (e) {
 var textEditor;
 
 window.addEventListener("load", function () {
+	// general settings
+	isClassic = getQueryOption("appearance") === "classic";
+	if (!isClassic) {
+		A3a.vpl.patchSVG();
+	}
+	if (getQueryOption("compiler") === "l2") {
+		A3a.vpl.patchL2();
+	}
+
 	textEditor = new A3a.vpl.TextEditor("editor", "editor-lines");
 	textEditor.onBreakpointChanged = function (bp) {
 		window["vplBreakpointsFunction"] && window["vplBreakpointsFunction"](bp);
@@ -174,16 +183,11 @@ window.addEventListener("load", function () {
 		return "";
 	}
 
-	if (getQueryOption("compiler") === "l2") {
-		A3a.vpl.patchL2();
-	}
 	if (getQueryOption("view") === "text") {
 		window["vplProgram"].setView("src", true);
 	} else {
 		window["vplProgram"].setView("vpl");
 		window["vplProgram"].setTeacherRole(getQueryOption("role") === "teacher");
-
-		// render
 		window["vplProgram"].renderToCanvas(window["vplCanvas"]);
 		document.getElementById("editor").textContent = window["vplProgram"].getCode();
 	}
