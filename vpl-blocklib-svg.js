@@ -8,9 +8,7 @@
 A3a.vpl.BlockTemplate.svgDict = {};
 
 /** Draw svg
-	@param {A3a.vpl.blockType} blockType
-	@param {boolean} doesZoomOnLongPress true to display hint that a long
-	press is needed to zoom the block before control widgets can be manipulated
+	@param {string} svgSrc
 	@param {SVG.Options=} options
 	@return {void}
 */

@@ -18,7 +18,7 @@ SVG.Options;
 
 /** Draw SVG from source code
 	@param {string} src
-	@param {Context2d} ctx
+	@param {CanvasRenderingContext2D} ctx
 	@param {SVG.Options=} options
 */
 SVG.draw = function (src, ctx, options) {
@@ -30,8 +30,18 @@ SVG.draw = function (src, ctx, options) {
 		four solutions, selects the one with the largest arc (>=pi) if largeArcFlag
 		is true or the smallest arc (<pi) if false, and go counterclockwise if
 		sweepFlag is true or clockwise if false.
+		@param {number} rx radius along x axis (before rotation by a)
+		@param {number} ry radius along y axis (before rotation by a
+		@param {number} a ellipse rotation
+		@param {boolean} largeArcFlag true to pick largest (>= pi), false to pick smallest arc (<pi)
+		@param {boolean} sweepFlag true for clockwise arc, false for counterclockwise arc
+		@param {number} x1 start point along x axis
+		@param {number} y1 start point along y axis
+		@param {number} x2 end point along x axis
+		@param {number} y2 end point along y axis
+		@return {void}
 	*/
-	function ellipticalArc(rx, ry, a, largArcFlag, sweepFlag, x1, y1, x2, y2) {
+	function ellipticalArc(rx, ry, a, largeArcFlag, sweepFlag, x1, y1, x2, y2) {
 		// rotate and scale to have a unit circle
 		var ca = Math.cos(a);
 		var sa = Math.sin(a);
@@ -50,7 +60,7 @@ SVG.draw = function (src, ctx, options) {
 		var a2 = xd * xd + yd * yd;
 		var f = Math.sqrt((1 - a2) / a2);
 		// two solutions; pick the correct one
-		if (largArcFlag === sweepFlag) {
+		if (largeArcFlag === sweepFlag) {
 			f = -f;
 		}
 		var xc = xm + f * yd;
@@ -68,6 +78,11 @@ SVG.draw = function (src, ctx, options) {
 		ctx.rotate(-a);
 	}
 
+	/** Recursively collect all css fragments in an element and its children,
+		and append them to css
+		@param {Element} el
+		@return {void}
+	*/
 	function findCSS(el) {
 		switch (el.tagName) {
 		case "svg":
@@ -83,6 +98,7 @@ SVG.draw = function (src, ctx, options) {
 	}
 
 	/** Convert css text to dict of styles for element classes in cssDict
+		@return {void}
 	*/
 	function parseCSS() {
 		css.split("}").forEach(function (s) {
@@ -98,9 +114,10 @@ SVG.draw = function (src, ctx, options) {
 	}
 
 	/** Convert a style string to an object
+		@return {Object}
 	*/
 	function parseStyle(style) {
-		dict = {};
+		var dict = {};
 		style.split(";").forEach(function (st) {
 			st = st.trim().split(":").map(function (s) { return s.trim(); });
 			if (st.length === 2) {
@@ -111,6 +128,10 @@ SVG.draw = function (src, ctx, options) {
 		return dict;
 	}
 
+	/** Draw an element recusrively
+		@param {Element} el
+		@return {void}
+	*/
 	function drawEl(el) {
 		function drawChildren() {
 			for (var i = 0; i < el.childElementCount; i++) {
@@ -118,11 +139,19 @@ SVG.draw = function (src, ctx, options) {
 			}
 		}
 
+		/** Get a numerical SVG element parameter (attribute)
+			@param {string} name
+			@param {number=} def default value
+			@return {number}
+		*/
 		function getArg(name, def) {
 			var val = el.getAttribute(name);
 			return val === null ? def || 0 : parseFloat(val);
 		}
 
+		/** Decode transform parameters and apply them to canvas context ctx
+			@return {void}
+		*/
 		function applyTransform() {
 			var tr = el.getAttribute("transform");
 			if (tr) {
@@ -158,6 +187,10 @@ SVG.draw = function (src, ctx, options) {
 			}
 		}
 
+		/** Get the parsed style of element el using its style and class
+			attributes, if they exist
+			@return {Object}
+		*/
 		function getStyle() {
 			var style = el.getAttribute("style") || "";
 			var classAttr = el.getAttribute("class");
@@ -169,7 +202,7 @@ SVG.draw = function (src, ctx, options) {
 
 		/** Convert a length string with unit suffix to a number
 			@param {string} length
-			@param {number} default value
+			@param {number} def default value
 			@param {number} size reference size use for percentage
 			@return {number}
 		*/
@@ -202,6 +235,11 @@ SVG.draw = function (src, ctx, options) {
 			}
 		}
 
+		/** Parse the "d" attribute of a path element and define a new path in
+			context ctx
+			@param {string} d
+			@return {void}
+		*/
 		function path(d) {
 			d = d
 				.replace(/([.0-9])-/g, "$1 -")
@@ -349,6 +387,9 @@ SVG.draw = function (src, ctx, options) {
 				});
 		}
 
+		/** Paint the current path in context ctx using the style for element el
+			@return {void}
+		*/
 		function paint() {
 			var style = getStyle();
 			if (style["fill"] && style["fill"] !== "none") {
@@ -369,6 +410,12 @@ SVG.draw = function (src, ctx, options) {
 			}
 		}
 
+		/** Paint text at the specified position, using the style for element el
+			@param {string} str
+			@param {number} x
+			@param {number} y
+			@return {void}
+		*/
 		function painText(str, x, y) {
 			var style = getStyle();
 			var fontSize = style["font-size"] || "12px";
@@ -427,7 +474,7 @@ SVG.draw = function (src, ctx, options) {
 
 	var domParser = new DOMParser();
 	var dom = domParser.parseFromString(src, "text/xml");
-	var root = dom.rootElement;
+	var root = dom["rootElement"];
 	findCSS(root);
 	parseCSS();
 	drawEl(root);
@@ -435,7 +482,7 @@ SVG.draw = function (src, ctx, options) {
 
 /** Draw SVG to canvas 2d context from uri
 	@param {string} uri
-	@param {Context2d} ctx
+	@param {CanvasRenderingContext2D} ctx
 	@param {SVG.Options=} options
 */
 SVG.drawFromURI = function (uri, ctx, options) {
