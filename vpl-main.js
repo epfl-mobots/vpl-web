@@ -51,7 +51,7 @@ var textEditor;
 
 window.addEventListener("load", function () {
 	// general settings
-	isClassic = getQueryOption("appearance") === "classic";
+	var isClassic = getQueryOption("appearance") === "classic";
 	if (!isClassic) {
 		A3a.vpl.patchSVG();
 	}

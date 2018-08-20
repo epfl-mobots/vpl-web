@@ -1,7 +1,7 @@
 #!/bin/sh
 # Convert text files to strings in a JavaScript object
 
-echo "textfiles = {"
+echo "var textfiles = {"
 
 for file in "$@"
 do
@@ -11,4 +11,3 @@ do
 done
 
 echo "};"
-
