@@ -930,9 +930,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	}, this);
 	var step = canvas.dims.blockSize * canvas.dims.templateScale +
 		canvas.dims.interBlockSpace;
-	var doubleEvCol = nEvTemplates * step > scrollingAreaH;
-	var doubleAcCol = nAcTemplates * step > scrollingAreaH;
-	var colLen = doubleEvCol ? Math.ceil(nEvTemplates / 2) : nEvTemplates;
+	var evCol = Math.ceil(nEvTemplates * step / scrollingAreaH);
+	var acCol = Math.ceil(nAcTemplates * step / scrollingAreaH);
+	var colLen = Math.ceil(nEvTemplates / evCol);
 	var row = 0;
 	A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
 		if ((blockTemplate.type === A3a.vpl.blockType.event ||
@@ -940,13 +940,13 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			(this.customizationMode ||
 				((blockTemplate.modes.indexOf(this.mode) >= 0 || this.disabledBlocks.length > 0) &&
 					this.disabledBlocks.indexOf(blockTemplate.name) < 0))) {
-			var x = canvas.dims.margin + (row >= colLen ? step : 0);
+			var x = canvas.dims.margin + Math.floor(row / colLen) * step;
 			var y = canvas.dims.margin + canvas.dims.topControlSpace + step * (row % colLen);
 			self.addBlockTemplateToCanvas(canvas, blockTemplate, x, y);
 			row++;
 		}
 	}, this);
-	colLen = doubleAcCol ? Math.ceil(nAcTemplates / 2) : nAcTemplates;
+	colLen = Math.ceil(nAcTemplates / acCol);
 	row = 0;
 	A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
 		if ((blockTemplate.type === A3a.vpl.blockType.action ||
@@ -955,7 +955,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				((blockTemplate.modes.indexOf(this.mode) >= 0 || this.disabledBlocks.length > 0) &&
 					this.disabledBlocks.indexOf(blockTemplate.name) < 0))) {
 			var x = canvasSize.width - canvas.dims.margin + canvas.dims.interBlockSpace -
-				step * ((doubleAcCol && row < colLen ? 2 : 1));
+				step - Math.floor(row / colLen) * step;
 			var y = canvas.dims.margin + canvas.dims.topControlSpace + step * (row % colLen);
 			self.addBlockTemplateToCanvas(canvas, blockTemplate, x, y);
 			row++;
@@ -965,9 +965,8 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// program
 	// scroll region
 	var scrollingAreaX = 2 * canvas.dims.margin - canvas.dims.interBlockSpace +
-		step * (doubleEvCol ? 2 : 1);
-	var scrollingAreaW = canvasSize.width - 2 * scrollingAreaX +
-		(doubleEvCol == doubleAcCol ? 0 : doubleEvCol ? step : -step);
+		step * evCol;
+	var scrollingAreaW = canvasSize.width - 2 * scrollingAreaX + (evCol - acCol) * step;
 	var scrollingTotalHeight = this.program.length
 		* (canvas.dims.blockSize + canvas.dims.interRowSpace);
 	renderingState.vertScroll = Math.max(0, Math.min(renderingState.vertScroll, scrollingTotalHeight - scrollingAreaH));
@@ -992,13 +991,8 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			: null,
 		null,
 		null);
-	if (doubleAcCol && !doubleEvCol) {
-		eventX0 -= step / 2;
-		actionX0 -= step / 2;
-	} else if (doubleEvCol && !doubleAcCol) {
-		eventX0 += step / 2;
-		actionX0 += step / 2;
-	}
+	eventX0 += (evCol - acCol) * step / 2;
+	actionX0 += (evCol - acCol) * step / 2;
 	scrollingAreaItem.draggable = false;
 	canvas.setItem(scrollingAreaItem);
 	if (scrollingTotalHeight > scrollingAreaH) {
