@@ -351,6 +351,62 @@ A3a.vpl.Program.prototype.setView = function (view, noVpl) {
 	}
 };
 
+/** Calculate block position based on a layout with items, fixed intervals, separators,
+	and stretch elements
+	@param {number} pMin min position (left margin)
+	@param {number} pMax max position (right margin)
+	@param {number} itemSize item size
+	@param {number} gap normal gap
+	@param {number} separatorGap large gap used for separators
+	@param {string} layout layout description: "X" = item, " " = separator, "s" = stretch
+ 	@return {Array.<number>} array of item positions (length: number of "X" in layout)
+*/
+A3a.vpl.Program.blockLayout = function (pMin, pMax, itemSize, gap, separatorGap, layout) {
+	// calc. sum of fixed sizes and count stretches
+	var totalFixedSize = 0;
+	var stretchCount = 0;
+	var s = 0;
+	for (var i = 0; i < layout.length; i++) {
+		switch (layout[i]) {
+		case "X":
+			s += layout[i - 1] === "X" ? gap + itemSize : itemSize;
+			break;
+		case " ":
+			s += separatorGap;
+			break;
+		case "s":
+			stretchCount++;
+			break;
+		}
+	}
+	// calc. stretch size
+	var stretchSize = (pMax - pMin) / stretchCount;
+	// calc. positions
+	/** @type {Array.<number>} */
+	var pos = [];
+	var p = pMin;
+	for (var i = 0; i < layout.length; i++) {
+		switch (layout[i]) {
+		case "X":
+			if (layout[i - 1] === "X") {
+				pos.push(p + gap);
+				p += gap + itemSize;
+			} else {
+				pos.push(p);
+				p += itemSize;
+			}
+			break;
+		case " ":
+			p += separatorGap;
+			break;
+		case "s":
+			p += stretchSize;
+			break;
+		}
+	}
+	return pos;
+};
+
 /** Render the program to a single canvas
 	@param {A3a.vpl.Canvas} canvas
 	@return {void}
@@ -408,10 +464,21 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	});
 
 	// top controls
-	var xc = canvas.dims.margin;
+	var layout = "XX" +
+		(window["vplStorageSetFunction"] ? "X" : "") +
+		"X X " +
+		(this.teacherRole ? "X " : "") +
+		"XX" +
+		(window["vplRunFunction"] ? "sXXs" : "s") +
+		"X";
+	var controlPos = A3a.vpl.Program.blockLayout(canvas.dims.margin, canvasSize.width - canvas.dims.margin,
+		canvas.dims.controlSize,
+		canvas.dims.interBlockSpace, 2 * canvas.dims.interBlockSpace,
+		layout);
+	var controlIx = 0;
 
 	// new
-	canvas.addControl(xc, canvas.dims.margin,
+	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
 		canvas.dims.controlSize, canvas.dims.controlSize,
 		// draw
 		function (ctx, item, dx, dy) {
@@ -449,10 +516,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null,
 		// canDrop
 		null);
-	xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 
 	// save
-	canvas.addControl(xc, canvas.dims.margin,
+	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
 		canvas.dims.controlSize, canvas.dims.controlSize,
 		// draw
 		function (ctx, item, dx, dy) {
@@ -506,11 +572,10 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null,
 		// canDrop
 		null);
-	xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 
 	if (window["vplStorageSetFunction"]) {
 		// upload
-		canvas.addControl(xc, canvas.dims.margin,
+		canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
 			canvas.dims.controlSize, canvas.dims.controlSize,
 			// draw
 			function (ctx, item, dx, dy) {
@@ -564,11 +629,10 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			null,
 			// canDrop
 			null);
-		xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 	}
 
 	// text
-	canvas.addControl(xc, canvas.dims.margin,
+	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
 		canvas.dims.controlSize, canvas.dims.controlSize,
 		// draw
 		function (ctx, item, dx, dy) {
@@ -612,10 +676,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null,
 		// canDrop
 		null);
-	xc += canvas.dims.controlSize + 2 * canvas.dims.interBlockSpace;
 
 	// advanced mode (toggle)
-	canvas.addControl(xc, canvas.dims.margin,
+	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
 		canvas.dims.controlSize, canvas.dims.controlSize,
 		// draw
 		function (ctx, item, dx, dy) {
@@ -647,10 +710,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null,
 		// canDrop
 		null);
-	xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 
 	if (this.teacherRole) {
-		canvas.addControl(xc, canvas.dims.margin,
+		canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
 			canvas.dims.controlSize, canvas.dims.controlSize,
 			// draw
 			function (ctx, item, dx, dy) {
@@ -684,10 +746,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			null,
 			// canDrop
 			null);
-		xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 	}
-
-	xc += canvas.dims.interBlockSpace;
 
 	/** Draw control for undo (back arrow) or redo (flipped)
 		@param {CanvasRenderingContext2D} ctx canvas 2d context
@@ -728,7 +787,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	}
 
 	// undo
-	canvas.addControl(xc, canvas.dims.margin,
+	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
 		canvas.dims.controlSize, canvas.dims.controlSize,
 		// draw
 		function (ctx, item, dx, dy) {
@@ -743,10 +802,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null,
 		// canDrop
 		null);
-	xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 
 	// redo
-	canvas.addControl(xc, canvas.dims.margin,
+	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
 		canvas.dims.controlSize, canvas.dims.controlSize,
 		// draw
 		function (ctx, item, dx, dy) {
@@ -761,12 +819,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null,
 		// canDrop
 		null);
-	xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 
 	if (window["vplRunFunction"]) {
-		xc += (canvasSize.width
-			- (3 * canvas.dims.controlSize + 3 * canvas.dims.interBlockSpace) - xc) / 2;
-		canvas.addControl(xc, canvas.dims.margin,
+		canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
 			canvas.dims.controlSize, canvas.dims.controlSize,
 			// draw
 			function (ctx, item, dx, dy) {
@@ -825,9 +880,8 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 						/** @type {A3a.vpl.Block} */(draggedItem.data).blockTemplate.type ===
 							A3a.vpl.blockType.action;
 			});
-		xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 
-		canvas.addControl(xc, canvas.dims.margin,
+		canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
 			canvas.dims.controlSize, canvas.dims.controlSize,
 			// draw
 			function (ctx, item, dx, dy) {
@@ -852,7 +906,6 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			null,
 			// canDrop
 			null);
-		xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 	}
 
 	// trashcan
