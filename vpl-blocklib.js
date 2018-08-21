@@ -960,10 +960,12 @@ A3a.vpl.BlockTemplate.lib =	[
 			canvas.ctx.globalAlpha = 0.2;
 			canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
 			canvas.ctx.restore();
-			canvas.slider(0.5 + 0.5 * /** @type {number} */(block.param[0]), -0.4, true,
-				block.param[0] === 0 ? "white" : block.param[0] === block.param[1] ? "#0c0" : "#fd0");
-			canvas.slider(0.5 + 0.5 * /** @type {number} */(block.param[1]), 0.4, true,
-				block.param[1] === 0 ? "white" : block.param[0] === block.param[1] ? "#0c0" : "#fd0");
+			var col = block.param[0] === 0 ? "white" :
+				block.param[0] === block.param[1] ? "#0c0" :
+				block.param[0] === -block.param[1] ? "#f70" :
+				"#fd0";
+			canvas.slider(0.5 + 0.5 * /** @type {number} */(block.param[0]), -0.4, true, col);
+			canvas.slider(0.5 + 0.5 * /** @type {number} */(block.param[1]), 0.4, true, col);
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
@@ -993,6 +995,8 @@ A3a.vpl.BlockTemplate.lib =	[
 					val = 0;
 				} else if (Math.abs(val - val2) < 0.1) {
 					val = val2;
+				} else if (Math.abs(val + val2) < 0.1) {
+					val = -val2;
 				}
 				block.param[dragIndex] = Math.max(-1, Math.min(1, val));
 			} else {
