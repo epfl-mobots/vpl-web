@@ -269,6 +269,7 @@ SVG.draw = function (src, ctx, options) {
 		*/
 		function path(d, noDraw) {
 			d = d
+				.replace(/\.([0-9]+)(?=\.)/g,".$1 ")	// split e.g. 12.34.56 as 12.34 .56
 				.replace(/([.0-9])-/g, "$1 -")
 				.replace(/\s*([a-z])\s*/gi, ";$1")
 				.replace(/\s*,\s*/g, ",")
