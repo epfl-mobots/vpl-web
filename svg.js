@@ -42,6 +42,11 @@ SVG.draw = function (src, ctx, options) {
 		@return {void}
 	*/
 	function ellipticalArc(rx, ry, a, largeArcFlag, sweepFlag, x1, y1, x2, y2) {
+		// avoid singularities
+		if (rx === 0 || ry === 0) {
+			ctx.moveTo(x2, y2);
+			return;
+		}
 		// rotate and scale to have a unit circle
 		var ca = Math.cos(a);
 		var sa = Math.sin(a);
