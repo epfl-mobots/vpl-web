@@ -274,8 +274,12 @@ SVG.draw = function (src, ctx, options) {
 				.replace(/\s*([a-z])\s*/gi, ";$1")
 				.replace(/\s*,\s*/g, ",")
 				.replace(/\s+/g, ",");
+
 			var x = 0;
 			var y = 0;
+			var xc1 = 0;	// implicit control point for S and s
+			var yc1 = 0;
+
 			ctx && ctx.beginPath();
 			d.slice(1).split(";")
 				.forEach(function (c) {
@@ -316,6 +320,8 @@ SVG.draw = function (src, ctx, options) {
 								ya.push(y);
 							}
 						}
+						xc1 = x;
+						yc1 = y;
 						break;
 					case "L":	// absolute lineTo
 						for (var i = 0; i + 1 < args.length; i += 2) {
@@ -325,6 +331,8 @@ SVG.draw = function (src, ctx, options) {
 							xa.push(x);
 							ya.push(y);
 						}
+						xc1 = x;
+						yc1 = y;
 						break;
 					case "l":	// relative lineTo
 						for (var i = 0; i + 1 < args.length; i += 2) {
@@ -334,6 +342,8 @@ SVG.draw = function (src, ctx, options) {
 							xa.push(x);
 							ya.push(y);
 						}
+						xc1 = x;
+						yc1 = y;
 						break;
 					case "H":	// absolute horizontal lineTo
 						for (var i = 0; i < args.length; i++) {
@@ -342,6 +352,8 @@ SVG.draw = function (src, ctx, options) {
 							xa.push(x);
 							ya.push(y);
 						}
+						xc1 = x;
+						yc1 = y;
 						break;
 					case "h":	// relative horizontal lineTo
 						for (var i = 0; i < args.length; i++) {
@@ -350,6 +362,8 @@ SVG.draw = function (src, ctx, options) {
 							xa.push(x);
 							ya.push(y);
 						}
+						xc1 = x;
+						yc1 = y;
 						break;
 					case "V":	// absolute vertical lineTo
 						for (var i = 0; i < args.length; i++) {
@@ -358,6 +372,8 @@ SVG.draw = function (src, ctx, options) {
 							xa.push(x);
 							ya.push(y);
 						}
+						xc1 = x;
+						yc1 = y;
 						break;
 					case "v":	// relative vertical lineTo
 						for (var i = 0; i < args.length; i++) {
@@ -366,11 +382,13 @@ SVG.draw = function (src, ctx, options) {
 							xa.push(x);
 							ya.push(y);
 						}
+						xc1 = x;
+						yc1 = y;
 						break;
 					case "A":	// elliptical arc curve, absolute coordinates
 						for (var i = 0; i + 6 < args.length; i += 7) {
 							var x1 = args[i + 5];
-								var y1 = args[i + 6];
+							var y1 = args[i + 6];
 							ellipticalArc(args[i], args[i + 1],
 								args[i + 2] * Math.PI / 180,
 								args[i + 3] != 0, args[i + 4] == 0,
@@ -380,11 +398,13 @@ SVG.draw = function (src, ctx, options) {
 							xa.push(x);
 							ya.push(y);
 						}
+						xc1 = x;
+						yc1 = y;
 						break;
 					case "a":	// elliptical arc curve, relative coordinates
 						for (var i = 0; i + 6 < args.length; i += 7) {
 							var x1 = x + args[i + 5];
-								var y1 = y + args[i + 6];
+							var y1 = y + args[i + 6];
 							ellipticalArc(args[i], args[i + 1],
 								args[i + 2] * Math.PI / 180,
 								args[i + 3] != 0, args[i + 4] == 0,
@@ -394,6 +414,8 @@ SVG.draw = function (src, ctx, options) {
 							xa.push(x);
 							ya.push(y);
 						}
+						xc1 = x;
+						yc1 = y;
 						break;
 					case "C":
 						for (var i = 0; i + 5 < args.length; i += 6) {
@@ -402,8 +424,10 @@ SVG.draw = function (src, ctx, options) {
 								args[i + 4], args[i + 5]);
 							x = args[i + 4];
 							y = args[i + 5];
+							xc1 = 2 * x - args[i + 2];
+							yc1 = 2 * y - args[i + 3];
 							xa.push(x);
-							ya.push(y);	
+							ya.push(y);
 						}
 						break;
 					case "c":
@@ -411,8 +435,36 @@ SVG.draw = function (src, ctx, options) {
 							ctx && ctx.bezierCurveTo(x + args[i], y + args[i + 1],
 								x + args[i + 2], y + args[i + 3],
 								x + args[i + 4], y + args[i + 5]);
+							xc1 = x + 2 * args[i + 4] - args[i + 2];
+							yc1 = y + 2 * args[i + 5] - args[i + 3];
 							x += args[i + 4];
 							y += args[i + 5];
+							xa.push(x);
+							ya.push(y);
+						}
+						break;
+					case "S":
+						for (var i = 0; i + 3 < args.length; i += 4) {
+							ctx && ctx.bezierCurveTo(xc1, yc1,
+								args[i], args[i + 1],
+								args[i + 2], args[i + 3]);
+							x = args[i + 2];
+							y = args[i + 3];
+							xc1 = 2 * x - args[i];
+							yc1 = 2 * y - args[i + 1];
+							xa.push(x);
+							ya.push(y);
+						}
+						break;
+					case "s":
+						for (var i = 0; i + 3 < args.length; i += 4) {
+							ctx && ctx.bezierCurveTo(xc1, yc1,
+								x + args[i], y + args[i + 1],
+								x + args[i + 2], y + args[i + 3]);
+							xc1 = x - args[i];
+							yc1 = y - args[i + 1];
+							x += args[i + 2];
+							y += args[i + 3];
 							xa.push(x);
 							ya.push(y);
 						}
@@ -423,6 +475,8 @@ SVG.draw = function (src, ctx, options) {
 								args[i + 2], args[i + 3]);
 							x = args[i + 2];
 							y = args[i + 3];
+							xc1 = 2 * x - args[i];
+							yc1 = 2 * y - args[i + 1];
 							xa.push(x);
 							ya.push(y);
 						}
@@ -431,6 +485,8 @@ SVG.draw = function (src, ctx, options) {
 						for (var i = 0; i + 3 < args.length; i += 4) {
 							ctx && ctx.quadraticCurveTo(x + args[i], y + args[i + 1],
 								x + args[i + 2], y + args[i + 3]);
+							xc1 = x + 2 * args[i + 2] - args[i];
+							yc1 = y + 2 * args[i + 3] - args[i + 1];
 							x += args[i + 2];
 							y += args[i + 3];
 							xa.push(x);
@@ -462,8 +518,8 @@ SVG.draw = function (src, ctx, options) {
 				}
 				if (style["stroke"] && style["stroke"] !== "none") {
 					ctx.lineWidth = lengthToNum(style["stroke-width"] || "1px",
-					1,
-					100);	// size not implemented yet
+						1,
+						100);	// size not implemented yet
 					ctx.strokeStyle = style["stroke"] || "none";
 					ctx.miterLimit = style["stroke-miterlimit"] || 4;
 					ctx.lineJoin = style["stroke-linejoin"] || "miter";
@@ -522,27 +578,77 @@ SVG.draw = function (src, ctx, options) {
 			paint();
 			ctx && ctx.restore();
 			break;
-		case "circle":
+		case "line":
+			var x = getArg("x1");
+			var y = getArg("y1");
+			var x2 = getArg("x2");
+			var y2 = getArg("y2");
 			ctx && ctx.save();
 			applyTransform();
 			ctx && ctx.beginPath();
-			ctx && ctx.arc(getArg("cx"), getArg("cy"), getArg("r"), 0, 2 * Math.PI);
+			ctx && ctx.moveTo(x, y);
+			ctx && ctx.lineTo(x2, y2);
 			paint();
 			ctx && ctx.restore();
+			break;
+		case "polygon":
+			var points = el.getAttribute("points")
+				.trim()
+				.replace(/\s+/g, " ")
+				.split(" ")
+				.map(function (s) { return parseFloat(s); });
+			if (points.length >= 4) {
+				ctx && ctx.save();
+				applyTransform();
+				ctx && ctx.beginPath();
+				ctx && ctx.moveTo(points[0], points[1]);
+				for (var i = 2; i + 1 < points.length; i += 2) {
+					ctx && ctx.lineTo(points[i], points[i + 1]);
+				}
+				paint();
+				ctx && ctx.restore();
+			}
+			break;
+		case "circle":
+			var x = getArg("cx");
+			var y = getArg("cy");
+			var r = getArg("r");
+			ctx && ctx.save();
+			applyTransform();
+			ctx && ctx.beginPath();
+			ctx && ctx.arc(x, y, r, 0, 2 * Math.PI);
+			paint();
+			ctx && ctx.restore();
+			xa.push(x - r);
+			ya.push(y - r);
+			xa.push(x + r);
+			ya.push(y + r);
 			break;
 		case "rect":
+			var x = getArg("x");
+			var y = getArg("y");
+			var width = getArg("width");
+			var height = getArg("height");
 			ctx && ctx.save();
 			applyTransform();
 			ctx && ctx.beginPath();
-			ctx && ctx.rect(getArg("x"), getArg("y"), getArg("width"), getArg("height"));
+			ctx && ctx.rect(x, y, width, height);
 			paint();
 			ctx && ctx.restore();
+			xa.push(x);
+			ya.push(y);
+			xa.push(x + width);
+			ya.push(y + height);
 			break;
 		case "text":
+			var x = getArg("x");
+			var y = getArg("y");
 			ctx && ctx.save();
 			applyTransform();
-			painText(el.textContent, getArg("x"), getArg("y"));
+			paintText(el.textContent, x, y);
 			ctx && ctx.restore();
+			xa.push(x);
+			ya.push(y);
 			break;
 		}
 
