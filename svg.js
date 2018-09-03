@@ -21,10 +21,16 @@ SVG.Options;
 	@param {string} src
 	@param {CanvasRenderingContext2D} ctx
 	@param {SVG.Options=} options
+	@return {{x:Array.<number>,y:Array.<number>}} list of all points
 */
 SVG.draw = function (src, ctx, options) {
 	var css = "";
 	var cssDict = {};
+
+	/** @type {Array.<number>} */
+	var xa = [];
+	/** @type {Array.<number>} */
+	var ya = [];
 
 	/** Add to path an elliptical arc defined by ellipse rotated by angle a,
 		with half-axes rx and ry, from point (x1,y1) to (x2,y2). Among the
@@ -73,15 +79,17 @@ SVG.draw = function (src, ctx, options) {
 		var yc = ym - f * xd;
 		var th1 = Math.atan2((y1p - yc) / rx, (x1p - xc) / ry);
 		var th2 = Math.atan2((y2p - yc) / rx, (x2p - xc) / ry);
-		ctx.rotate(a);
-		ctx.scale(rx, ry);
-		if (!sweepFlag) {
-			ctx.arc(xc, yc, 1, th1, th2);
-		} else {
-			ctx.arc(xc, yc, 1, th1, th2, true);
+		if (ctx) {
+			ctx.rotate(a);
+			ctx.scale(rx, ry);
+			if (!sweepFlag) {
+				ctx.arc(xc, yc, 1, th1, th2);
+			} else {
+				ctx.arc(xc, yc, 1, th1, th2, true);
+			}
+			ctx.scale(1 / rx, 1 / ry);
+			ctx.rotate(-a);
 		}
-		ctx.scale(1 / rx, 1 / ry);
-		ctx.rotate(-a);
 	}
 
 	/** Recursively collect all css fragments in an element and its children,
@@ -177,18 +185,20 @@ SVG.draw = function (src, ctx, options) {
 						.map(function (s) { return parseFloat(s); });
 					switch (c) {
 					case "translate":
-						ctx.translate(args[0] || 0, args[1] || 0);
+						ctx && ctx.translate(args[0] || 0, args[1] || 0);
 						break;
 					case "rotate":
 						var a = (args[0] || 0) * Math.PI / 180;
 						var x0 = args[1] || 0;
 						var y0 = args[2] || 0;
 						if (x0 !== 0 || y0 !== 0) {
-							ctx.translate(-x0, -y0);
-							ctx.rotate(a);
-							ctx.translate(x0, y0);
+							if (ctx) {
+								ctx.translate(-x0, -y0);
+								ctx.rotate(a);
+								ctx.translate(x0, y0);
+							}
 						} else {
-							ctx.rotate(a);
+							ctx && ctx.rotate(a);
 						}
 						break;
 					default:
@@ -254,9 +264,10 @@ SVG.draw = function (src, ctx, options) {
 		/** Parse the "d" attribute of a path element and define a new path in
 			context ctx
 			@param {string} d
+			@param {boolean=} noDraw
 			@return {void}
 		*/
-		function path(d) {
+		function path(d, noDraw) {
 			d = d
 				.replace(/([.0-9])-/g, "$1 -")
 				.replace(/\s*([a-z])\s*/gi, ";$1")
@@ -264,7 +275,7 @@ SVG.draw = function (src, ctx, options) {
 				.replace(/\s+/g, ",");
 			var x = 0;
 			var y = 0;
-			ctx.beginPath();
+			ctx && ctx.beginPath();
 			d.slice(1).split(";")
 				.forEach(function (c) {
 					var cmd = c[0];
@@ -277,23 +288,31 @@ SVG.draw = function (src, ctx, options) {
 						if (args.length >= 2) {
 							x = args[0];
 							y = args[1];
-							ctx.moveTo(x, y);
+							ctx && ctx.moveTo(x, y);
 							for (var i = 2; i + 1 < args.length; i += 2) {
 								x = args[i];
 								y = args[i + 1];
-								ctx.lineTo(x, y);
+								ctx && ctx.lineTo(x, y);
+								xa.push(x);
+								ya.push(y);
 							}
+							xc1 = x;
+							yc1 = y;
 						}
 						break;
 					case "m":	// relative moveTo, then lineTo
 						if (args.length >= 2) {
 							x += args[0];
 							y += args[1];
-							ctx.moveTo(x, y);
+							ctx && ctx.moveTo(x, y);
+							xa.push(x);
+							ya.push(y);
 							for (var i = 2; i + 1 < args.length; i += 2) {
 								x += args[i];
 								y += args[i + 1]
-								ctx.lineTo(x, y);
+								ctx && ctx.lineTo(x, y);
+								xa.push(x);
+								ya.push(y);
 							}
 						}
 						break;
@@ -301,38 +320,50 @@ SVG.draw = function (src, ctx, options) {
 						for (var i = 0; i + 1 < args.length; i += 2) {
 							x = args[i];
 							y = args[i + 1];
-							ctx.lineTo(x, y);
+							ctx && ctx.lineTo(x, y);
+							xa.push(x);
+							ya.push(y);
 						}
 						break;
 					case "l":	// relative lineTo
 						for (var i = 0; i + 1 < args.length; i += 2) {
 							x += args[i];
 							y += args[i + 1];
-							ctx.lineTo(x, y);
+							ctx && ctx.lineTo(x, y);
+							xa.push(x);
+							ya.push(y);
 						}
 						break;
 					case "H":	// absolute horizontal lineTo
 						for (var i = 0; i < args.length; i++) {
 							x = args[i];
-							ctx.lineTo(x, y);
+							ctx && ctx.lineTo(x, y);
+							xa.push(x);
+							ya.push(y);
 						}
 						break;
 					case "h":	// relative horizontal lineTo
 						for (var i = 0; i < args.length; i++) {
 							x += args[i];
-							ctx.lineTo(x, y);
+							ctx && ctx.lineTo(x, y);
+							xa.push(x);
+							ya.push(y);
 						}
 						break;
 					case "V":	// absolute vertical lineTo
 						for (var i = 0; i < args.length; i++) {
 							y = args[i];
-							ctx.lineTo(x, y);
+							ctx && ctx.lineTo(x, y);
+							xa.push(x);
+							ya.push(y);
 						}
 						break;
 					case "v":	// relative vertical lineTo
 						for (var i = 0; i < args.length; i++) {
 							y += args[i];
-							ctx.lineTo(x, y);
+							ctx && ctx.lineTo(x, y);
+							xa.push(x);
+							ya.push(y);
 						}
 						break;
 					case "A":	// elliptical arc curve, absolute coordinates
@@ -345,6 +376,8 @@ SVG.draw = function (src, ctx, options) {
 								x, y, x1, y1);
 							x = x1;
 							y = y1;
+							xa.push(x);
+							ya.push(y);
 						}
 						break;
 					case "a":	// elliptical arc curve, relative coordinates
@@ -357,45 +390,55 @@ SVG.draw = function (src, ctx, options) {
 								x, y, x1, y1);
 							x = x1;
 							y = y1;
+							xa.push(x);
+							ya.push(y);
 						}
 						break;
 					case "C":
 						for (var i = 0; i + 5 < args.length; i += 6) {
-							ctx.bezierCurveTo(args[i], args[i + 1],
+							ctx && ctx.bezierCurveTo(args[i], args[i + 1],
 								args[i + 2], args[i + 3],
 								args[i + 4], args[i + 5]);
 							x = args[i + 4];
 							y = args[i + 5];
+							xa.push(x);
+							ya.push(y);	
 						}
 						break;
 					case "c":
 						for (var i = 0; i + 5 < args.length; i += 6) {
-							ctx.bezierCurveTo(x + args[i], y + args[i + 1],
+							ctx && ctx.bezierCurveTo(x + args[i], y + args[i + 1],
 								x + args[i + 2], y + args[i + 3],
 								x + args[i + 4], y + args[i + 5]);
 							x += args[i + 4];
 							y += args[i + 5];
+							xa.push(x);
+							ya.push(y);
 						}
 						break;
 					case "Q":
 						for (var i = 0; i + 3 < args.length; i += 4) {
-							ctx.quadraticCurveTo(args[i], args[i + 1],
+							ctx && ctx.quadraticCurveTo(args[i], args[i + 1],
 								args[i + 2], args[i + 3]);
 							x = args[i + 2];
 							y = args[i + 3];
+							xa.push(x);
+							ya.push(y);
 						}
 						break;
 					case "q":
 						for (var i = 0; i + 3 < args.length; i += 4) {
-							ctx.quadraticCurveTo(x + args[i], y + args[i + 1],
+							ctx && ctx.quadraticCurveTo(x + args[i], y + args[i + 1],
 								x + args[i + 2], y + args[i + 3]);
 							x += args[i + 2];
 							y += args[i + 3];
+							xa.push(x);
+							ya.push(y);
 						}
 						break;
 					case "Z":
 					case "z":
-						ctx.closePath();
+						ctx && ctx.closePath();
 						break;
 					default:
 						throw "unimplemented path command: " + cmd;
@@ -403,26 +446,28 @@ SVG.draw = function (src, ctx, options) {
 				});
 		}
 
-		/** Paint the current path in context ctx using the style for element el
+		/** Paint the current path in context ctx using the style defined by baseStyle and overriddenStyle
 			@return {void}
 		*/
 		function paint() {
-			var styleStr = (baseStyle || "") + ";" + (overriddenStyle || "");
-			var style = parseStyle(styleStr);
-			if (style["fill"] && style["fill"] !== "none") {
-				ctx.fillStyle = style["fill"] === "white" || style["fill"] === "#fff" || style["fill"] === "#ffffff"
-					? "white"
-					: style["fill"] || "none";
-				ctx.fill();
-			}
-			if (style["stroke"] && style["stroke"] !== "none") {
-				ctx.lineWidth = lengthToNum(style["stroke-width"] || "1px",
-				1,
-				100);	// size not implemented yet
-				ctx.strokeStyle = style["stroke"] || "none";
-				ctx.miterLimit = style["stroke-miterlimit"] || 4;
-				ctx.lineJoin = style["stroke-linejoin"] || "miter";
-				ctx.stroke();
+			if (ctx) {
+				var styleStr = (baseStyle || "") + ";" + (overriddenStyle || "");
+				var style = parseStyle(styleStr);
+				if (style["fill"] && style["fill"] !== "none") {
+					ctx.fillStyle = style["fill"] === "white" || style["fill"] === "#fff" || style["fill"] === "#ffffff"
+						? "white"
+						: style["fill"] || "none";
+					ctx.fill();
+				}
+				if (style["stroke"] && style["stroke"] !== "none") {
+					ctx.lineWidth = lengthToNum(style["stroke-width"] || "1px",
+					1,
+					100);	// size not implemented yet
+					ctx.strokeStyle = style["stroke"] || "none";
+					ctx.miterLimit = style["stroke-miterlimit"] || 4;
+					ctx.lineJoin = style["stroke-linejoin"] || "miter";
+					ctx.stroke();
+				}
 			}
 		}
 
@@ -432,28 +477,29 @@ SVG.draw = function (src, ctx, options) {
 			@param {number} y
 			@return {void}
 		*/
-		function painText(str, x, y) {
-			var styleStr = (baseStyle || "") + ";" + (overriddenStyle || "");
-			var style = parseStyle(styleStr);
-			var fontSize = style["font-size"] || "12px";
-			var fontFamily = style["font-family"] || "helvetica";
-			ctx.font = fontSize + " " + fontFamily;
-			if (style["fill"] && style["fill"] !== "none") {
-				ctx.fillStyle = style["fill"] === "white" || style["fill"] === "#fff" || style["fill"] === "#ffffff"
-					? "white"
-					: options && options.fill || "silver";
-				ctx.fillText(str, x, y);
+		function paintText(str, x, y) {
+			if (ctx) {
+				var styleStr = (baseStyle || "") + ";" + (overriddenStyle || "");
+				var style = parseStyle(styleStr);
+				var fontSize = style["font-size"] || "12px";
+				var fontFamily = style["font-family"] || "helvetica";
+				ctx.font = fontSize + " " + fontFamily;
+				if (style["fill"] && style["fill"] !== "none") {
+					ctx.fillStyle = style["fill"] === "white" || style["fill"] === "#fff" || style["fill"] === "#ffffff"
+						? "white"
+						: options && options.fill || "silver";
+					ctx.fillText(str, x, y);
+				}
+				if (style["stroke"] && style["stroke"] !== "none") {
+					ctx.strokeStyle = options && options.stroke || "black";
+					ctx.strokeText(str, x, y);
+				}
 			}
-			if (style["stroke"] && style["stroke"] !== "none") {
-				ctx.strokeStyle = options && options.stroke || "black";
-				ctx.strokeText(str, x, y);
-			}
-		}
 		}
 
 		var idAttr = el.getAttribute("id");
 		var transformFun = idAttr && options && options.transform && options.transform[idAttr];
-		if (transformFun) {
+		if (transformFun && ctx) {
 			ctx.save();
 			transformFun(ctx);
 		}
@@ -469,37 +515,37 @@ SVG.draw = function (src, ctx, options) {
 			drawChildren();
 			break;
 		case "path":
-			ctx.save();
+			ctx && ctx.save();
 			applyTransform();
 			path(el.getAttribute("d") || "");
 			paint();
-			ctx.restore();
+			ctx && ctx.restore();
 			break;
 		case "circle":
-			ctx.save();
+			ctx && ctx.save();
 			applyTransform();
-			ctx.beginPath();
-			ctx.arc(getArg("cx"), getArg("cy"), getArg("r"), 0, 2 * Math.PI);
+			ctx && ctx.beginPath();
+			ctx && ctx.arc(getArg("cx"), getArg("cy"), getArg("r"), 0, 2 * Math.PI);
 			paint();
-			ctx.restore();
+			ctx && ctx.restore();
 			break;
 		case "rect":
-			ctx.save();
+			ctx && ctx.save();
 			applyTransform();
-			ctx.beginPath();
-			ctx.rect(getArg("x"), getArg("y"), getArg("width"), getArg("height"));
+			ctx && ctx.beginPath();
+			ctx && ctx.rect(getArg("x"), getArg("y"), getArg("width"), getArg("height"));
 			paint();
-			ctx.restore();
+			ctx && ctx.restore();
 			break;
 		case "text":
-			ctx.save();
+			ctx && ctx.save();
 			applyTransform();
 			painText(el.textContent, getArg("x"), getArg("y"));
-			ctx.restore();
+			ctx && ctx.restore();
 			break;
 		}
 
-		if (transformFun) {
+		if (transformFun && ctx) {
 			ctx.restore();
 		}
 	}
@@ -512,7 +558,36 @@ SVG.draw = function (src, ctx, options) {
 	var element = options && options.elementId ? dom.getElementById(options.elementId) : root;
 	if (element) {
 		drawEl(element);
-}
+	}
+	return {x: xa, y: ya}
+};
+
+/** Check if a point is roughly inside an element
+	@param {string} src
+	@param {string} elementId
+	@param {number} x
+	@param {number} y
+	@return {boolean}
+*/
+SVG.isInside = function (src, elementId, x, y) {
+	var p = SVG.draw(src, null, {elementId: elementId});
+	if (p.x.length === 0) {
+		return false;
+	}
+
+	var xmin = p.x[0];
+	var xmax = p.x[0];
+	var ymin = p.y[0];
+	var ymax = p.y[0];
+	for (var i = 1; i < p.x.length; i++) {
+		xmin = Math.min(xmin, p.x[i]);
+		xmax = Math.max(xmax, p.x[i]);
+		ymin = Math.min(ymin, p.y[i]);
+		ymax = Math.max(ymax, p.y[i]);
+	}
+
+	return x >= xmin && x <= xmax && y >= ymin && y <= ymax;
+};
 
 /** Draw SVG to canvas 2d context from uri
 	@param {string} uri
