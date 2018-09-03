@@ -6,7 +6,7 @@ echo "var textfiles = {"
 for file in "$@"
 do
 	echo -n '"'$file'": "'
-	sed -E 's/"/\\"/g' <"$file" | sed -E ':a;N;$!ba;s/\n/\\n/g' | tr -d '\n'
+	tr -d '\r' <"$file" | sed -E 's/"/\\"/g' | sed -E ':a;N;$!ba;s/\n/\\n/g' | tr -d '\n'
 	echo '",'
 done
 
