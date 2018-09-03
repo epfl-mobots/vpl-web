@@ -9,9 +9,10 @@
 var SVG = {};
 
 /** @typedef {{
-		fill: (string | undefined),
-		lineWidth: (number | undefined),
-		stroke: (string | undefined)
+		elementStyle: (string | undefined),
+		style: (Object | undefined),
+		transform: (Object | undefined),
+		elementId: (string | undefined)
 	}}
 */
 SVG.Options;
@@ -135,12 +136,17 @@ SVG.draw = function (src, ctx, options) {
 
 	/** Draw an element recusrively
 		@param {Element} el
+		@param {string=} baseStyle base style, which can be overridden by style defined in SVG children
+		@param {string=} overriddenStyle style with higher priority than SVG's
 		@return {void}
 	*/
-	function drawEl(el) {
+	function drawEl(el, baseStyle, overriddenStyle) {
+		/** Draw all children
+			@return {void}
+		*/
 		function drawChildren() {
 			for (var i = 0; i < el.childElementCount; i++) {
-				drawEl(el.children[i]);
+				drawEl(el.children[i], baseStyle, overriddenStyle);
 			}
 		}
 
@@ -192,17 +198,22 @@ SVG.draw = function (src, ctx, options) {
 			}
 		}
 
-		/** Get the parsed style of element el using its style and class
+		/** Change baseStyle and overriddenStyle for element el using its style and class
 			attributes, if they exist
-			@return {Object}
+			@return {void}
 		*/
 		function getStyle() {
-			var style = el.getAttribute("style") || "";
+			var style = (options && options.elementStyle || "") + ";" + (el.getAttribute("style") || "");
 			var classAttr = el.getAttribute("class");
 			if (classAttr && cssDict.hasOwnProperty(classAttr)) {
 				style = cssDict[classAttr] + ";" + style;
 			}
-			return parseStyle(style);
+			baseStyle = (baseStyle || "") + ";" + style;
+
+			var idAttr = el.getAttribute("id");
+			if (idAttr && options && options.style && options.style.hasOwnProperty(idAttr)) {
+				overriddenStyle = (overriddenStyle || "") + ";" + options.style[idAttr];
+			}
 		}
 
 		/** Convert a length string with unit suffix to a number
@@ -396,33 +407,34 @@ SVG.draw = function (src, ctx, options) {
 			@return {void}
 		*/
 		function paint() {
-			var style = getStyle();
+			var styleStr = (baseStyle || "") + ";" + (overriddenStyle || "");
+			var style = parseStyle(styleStr);
 			if (style["fill"] && style["fill"] !== "none") {
 				ctx.fillStyle = style["fill"] === "white" || style["fill"] === "#fff" || style["fill"] === "#ffffff"
 					? "white"
-					: options && options.fill || "silver";
+					: style["fill"] || "none";
 				ctx.fill();
 			}
-			if (style["stroke"] && style["stroke"] !== "none" &&
-				(options == null || options.stroke !== "none")) {
-				ctx.lineWidth = lengthToNum(options && options.lineWidth
-					? options.lineWidth
-					: style["stroke-width"] || "1px",
-					1,
-					100);	// size not implemented yet
-				ctx.strokeStyle = options && options.stroke || "black";
+			if (style["stroke"] && style["stroke"] !== "none") {
+				ctx.lineWidth = lengthToNum(style["stroke-width"] || "1px",
+				1,
+				100);	// size not implemented yet
+				ctx.strokeStyle = style["stroke"] || "none";
+				ctx.miterLimit = style["stroke-miterlimit"] || 4;
+				ctx.lineJoin = style["stroke-linejoin"] || "miter";
 				ctx.stroke();
 			}
 		}
 
-		/** Paint text at the specified position, using the style for element el
+		/** Paint text at the specified position, using the style defined by baseStyle and overriddenStyle
 			@param {string} str
 			@param {number} x
 			@param {number} y
 			@return {void}
 		*/
 		function painText(str, x, y) {
-			var style = getStyle();
+			var styleStr = (baseStyle || "") + ";" + (overriddenStyle || "");
+			var style = parseStyle(styleStr);
 			var fontSize = style["font-size"] || "12px";
 			var fontFamily = style["font-family"] || "helvetica";
 			ctx.font = fontSize + " " + fontFamily;
@@ -437,6 +449,17 @@ SVG.draw = function (src, ctx, options) {
 				ctx.strokeText(str, x, y);
 			}
 		}
+		}
+
+		var idAttr = el.getAttribute("id");
+		var transformFun = idAttr && options && options.transform && options.transform[idAttr];
+		if (transformFun) {
+			ctx.save();
+			transformFun(ctx);
+		}
+
+		getStyle();
+//if (idAttr==="Btn2_Center"||idAttr==="Btn2_Forward") { console.info(idAttr);console.info(elStyle);}
 
 		switch (el.tagName) {
 		case "svg":
@@ -475,6 +498,10 @@ SVG.draw = function (src, ctx, options) {
 			ctx.restore();
 			break;
 		}
+
+		if (transformFun) {
+			ctx.restore();
+		}
 	}
 
 	var domParser = new DOMParser();
@@ -482,7 +509,9 @@ SVG.draw = function (src, ctx, options) {
 	var root = dom["rootElement"];
 	findCSS(root);
 	parseCSS();
-	drawEl(root);
+	var element = options && options.elementId ? dom.getElementById(options.elementId) : root;
+	if (element) {
+		drawEl(element);
 }
 
 /** Draw SVG to canvas 2d context from uri
