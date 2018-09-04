@@ -15,6 +15,7 @@ A3a.vpl.Program = function (mode) {
 	this.mode = mode || A3a.vpl.mode.basic;
 	this.noVpl = false;	// true for source code editor without vpl counterpart
 	this.teacherRole = true;
+	this.experimentalFeatures = false;
 	/** @type {Array.<A3a.vpl.EventHandler>} */
 	this.program = [];
 	this.uploaded = false;
@@ -202,7 +203,9 @@ A3a.vpl.Program.prototype.enforceSingleTrailingEmptyEventHandler = function () {
 	@return {string}
 */
 A3a.vpl.Program.prototype.generateCode = function (runBlocks) {
-	var c = this.program.map(function (eh) { return eh.generateCode(); });
+	var c = this.program.map(function (eh) {
+		return eh.generateCode();
+	});
 	/** @type {Array.<string>} */
 	var initVarDecl = [];
 	/** @type {Array.<string>} */
@@ -402,6 +405,8 @@ A3a.vpl.Program.prototype.exportToObject = function () {
 			if (block) {
 				b.push({
 					"name": block.blockTemplate.name,
+					"disabled": block.disabled,
+					"locked": block.locked,
 					"param":
 						block.blockTemplate.exportParam
 							? block.blockTemplate.exportParam(block)
@@ -415,7 +420,11 @@ A3a.vpl.Program.prototype.exportToObject = function () {
 		eventHandler.actions.forEach(function (action) {
 			addBlock(action);
 		});
-		return b;
+		return {
+			"blocks": b,
+			"disabled": eventHandler.disabled,
+			"locked": eventHandler.locked
+		};
 	});
 
 	return {
@@ -449,10 +458,12 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 			this.disabledBlocks = obj["hidden"] || [];
 			this.program = obj["program"].map(function (eventHandler) {
 				var eh = new A3a.vpl.EventHandler();
-				eventHandler.forEach(function (block) {
+				eventHandler["blocks"].forEach(function (block) {
 					var bt = A3a.vpl.BlockTemplate.findByName(block["name"]);
 					if (bt) {
 						var b = new A3a.vpl.Block(bt, null, null);
+						b.disabled = block["disabled"] || false;
+						b.locked = block["locked"] || false;
 						if (bt.importParam) {
 							bt.importParam(b, block["param"],
 								function () {
@@ -470,6 +481,8 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 							true);
 					}
 				}, this);
+				eh.disabled = eventHandler["disabled"] || false;
+				eh.locked = eventHandler["locked"] || false;
 				return eh;
 			}, this);
 		}

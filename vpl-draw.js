@@ -59,6 +59,70 @@ A3a.vpl.Canvas.prototype.clearBlockBackground = function () {
 	this.ctx.restore();
 };
 
+/** Draw disabled mark for an item specified by bounding box (block or event handler)
+	@param {number} top
+	@param {number} left
+	@param {number} width
+	@param {number} height
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height) {
+	this.ctx.save();
+	this.ctx.fillStyle = "#fff";
+	this.ctx.globalAlpha = 0.5;
+	this.ctx.fillRect(left, top, width, height);
+	this.ctx.restore();
+	this.ctx.save();
+	this.ctx.strokeStyle = "#777";
+	this.ctx.lineWidth = 5 * this.dims.blockLineWidth;
+	this.ctx.globalAlpha = 0.5;
+	this.ctx.beginPath();
+	this.ctx.moveTo(left - this.dims.blockSize * 0.1, top + height * 0.7);
+	this.ctx.lineTo(left + width + this.dims.blockSize * 0.1, top + height * 0.3);
+	this.ctx.stroke();
+	this.ctx.restore();
+};
+
+/** Draw lock for an item specified by bounding box (block or event handler)
+	@param {CanvasRenderingContext2D} ctx
+	@param {number} x
+	@param {number} y
+	@param {number} r
+	@param {string} color
+	@return {void}
+*/
+A3a.vpl.Canvas.lock = function (ctx, x, y, r, color) {
+	ctx.save();
+	ctx.strokeStyle = color;
+	ctx.fillStyle = color;
+	ctx.lineWidth = r;
+	ctx.fillRect(x - 2.5 * r, y - r, 5 * r, 4 * r);
+	ctx.beginPath();
+	ctx.moveTo(x - 1.7 * r, y);
+	ctx.lineTo(x - 1.7 * r, y);
+	ctx.arc(x, y - 2 * r, 1.7 * r, -Math.PI, 0);
+	ctx.lineTo(x + 1.7 * r, y);
+	ctx.stroke();
+	ctx.restore();
+};
+
+/** Draw locked mark (lock) for an item specified by bounding box (block or event handler)
+	@param {number} top
+	@param {number} left
+	@param {number} width
+	@param {number} height
+	@param {boolean} inside
+	@param {string=} color
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.lockedMark = function (left, top, width, height, inside, color) {
+	var r = 0.03 * this.dims.blockSize;
+	var x = left + width + (inside ? -5 : 5) * r;
+	var y = top + 0.15 * height;
+
+	A3a.vpl.Canvas.lock(this.ctx, x, y, r, color || "#333");
+};
+
 /** Draw centered text
 	@param {string} str text
 	@param {{

@@ -25,7 +25,7 @@ A3a.vpl.Program.CanvasRenderingState = function () {
 		notClicable:(boolean|undefined),
 		notDraggable:(boolean|undefined),
 		scale:(number|undefined),
-		dimmed: (boolean|undefined)
+		disabled: (boolean|undefined)
 	}=} opts
 	@return {A3a.vpl.CanvasItem}
 */
@@ -40,15 +40,12 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x, y, opts
 	}
 	var self = this;
 	var item = new A3a.vpl.CanvasItem(block,
-		canvas.dims.blockSize,
-		canvas.dims.blockSize,
+		canvas.dims.blockSize * (opts && opts.scale || 1),
+		canvas.dims.blockSize * (opts && opts.scale || 1),
 		x, y,
 		// draw
 		function (ctx, item, dx, dy) {
 			canvas.ctx.save();
-			if (opts && opts.dimmed) {
-				canvas.ctx.globalAlpha = 0.5;
-			}
 			if (opts && opts.scale) {
 				var dims0 = canvas.dims;
 				canvas.dims = A3a.vpl.Canvas.calcDims(canvas.dims.blockSize * opts.scale, canvas.dims.controlSize * opts.scale);
@@ -56,17 +53,31 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x, y, opts
 					/** @type {A3a.vpl.Block} */(item.data),
 					item.x + dx, item.y + dy,
 					item.zoomOnLongPress != null);
+				if (block.locked) {
+					canvas.lockedMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize, true);
+				}
+				if (block.disabled || opts.disabled) {
+					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize);
+				}
 				canvas.dims = dims0;
 			} else {
 				block.blockTemplate.renderToCanvas(canvas,
 					/** @type {A3a.vpl.Block} */(item.data),
 					item.x + dx, item.y + dy,
 					item.zoomOnLongPress != null);
+				if (block.locked) {
+					canvas.lockedMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize, true);
+				}
+				if (block.disabled) {
+					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize);
+				}
 			}
 			canvas.ctx.restore();
 		},
 		// interactiveCB
-		opts && opts.notInteractive || !block.blockTemplate.mousedown
+		opts && opts.notInteractive ||
+			block.locked || (block.eventHandlerContainer && block.eventHandlerContainer.locked) ||
+			!block.blockTemplate.mousedown
 			? opts && opts.mousedown
 				? {
 					mousedown: opts.mousedown
@@ -127,7 +138,7 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 			notInteractive: true,
 			notDropTarget: true,
 			scale: canvas.dims.templateScale,
-			dimmed: disabled,
+			disabled: disabled,
 			mousedown: this.customizationMode
 				? function (canvas, data, width, height, x, y, downEvent) {
 					if (self.disabledBlocks.indexOf(blockTemplate.name) >= 0) {
@@ -180,6 +191,10 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				canvas.dims.interEventActionSpace / 6,
 				0, 2 * Math.PI);
 			ctx.fill();
+			if (eventHandler.locked) {
+				canvas.lockedMark(item.x, item.y, item.width, item.height,
+					false, eventHandler.disabled ? "#ddd" : "");
+			}
 		},
 		// interactiveCB
 		null,
@@ -215,6 +230,11 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 						droppedItem.data.blockTemplate.type === A3a.vpl.blockType.action));
 		}
 	);
+	if (eventHandler.disabled) {
+		item.drawOverlay = function (ctx, item, dx, dy) {
+			canvas.disabledMark(item.x, item.y, item.width, item.height);
+		};
+	}
 	canvas.setItem(item);
 
 	/** @type {A3a.vpl.CanvasItem} */
@@ -228,14 +248,22 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		if (event) {
 			childItem = this.addBlockToCanvas(canvas, event,
 				eventX0 + step * j,
-				y);
+				y,
+				{
+					notInteractive: eventHandler.disabled,
+					notClicable: eventHandler.disabled
+				});
 		} else {
 			childItem = this.addBlockToCanvas(canvas,
 				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.event, eventHandler,
 					{eventSide: true, index: j}),
 				eventX0 + step * j,
 				y,
-				{notDropTarget: false, notClicable: true, notDraggable: true});
+				{
+					notDropTarget: eventHandler.disabled,
+					notClicable: true,
+					notDraggable: true
+				});
 		}
 		item.attachItem(childItem);
 	}, this);
@@ -247,7 +275,11 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		if (action) {
 			childItem = this.addBlockToCanvas(canvas, action,
 				actionX0 + step * j,
-				y);
+				y,
+				{
+					notInteractive: eventHandler.disabled,
+					notClicable: eventHandler.disabled
+				});
 		} else {
 			childItem = this.addBlockToCanvas(canvas,
 				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.action, eventHandler,
@@ -380,7 +412,7 @@ A3a.vpl.Program.blockLayout = function (pMin, pMax, itemSize, gap, separatorGap,
 		}
 	}
 	// calc. stretch size
-	var stretchSize = (pMax - pMin) / stretchCount;
+	var stretchSize = (pMax - pMin - s) / stretchCount;
 	// calc. positions
 	/** @type {Array.<number>} */
 	var pos = [];
@@ -468,8 +500,11 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		(window["vplStorageSetFunction"] ? "X" : "") +
 		"X X " +
 		(this.teacherRole ? "X " : "") +
-		"XX" +
+		"sXX" +
 		(window["vplRunFunction"] ? "sXXs" : "s") +
+		(this.experimentalFeatures
+			? this.teacherRole ? "XX" : "X"
+			: "") +
 		"X";
 	var controlPos = A3a.vpl.Program.blockLayout(canvas.dims.margin, canvasSize.width - canvas.dims.margin,
 		canvas.dims.controlSize,
@@ -908,8 +943,94 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			null);
 	}
 
+	if (this.experimentalFeatures) {
+		// disable
+		canvas.addControl(controlPos[controlIx++],
+			canvas.dims.margin,
+			canvas.dims.controlSize, canvas.dims.controlSize,
+			// draw
+			function (ctx, item, dx, dy) {
+				ctx.fillStyle = "navy";
+				ctx.fillRect(item.x + dx, item.y + dy,
+					canvas.dims.controlSize, canvas.dims.controlSize);
+				ctx.strokeStyle = "white";
+				ctx.lineWidth = canvas.dims.blockLineWidth;
+				ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
+					item.y + dy + canvas.dims.controlSize * 0.3,
+					canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.4);
+				ctx.beginPath();
+				ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.2,
+					item.y + dy + canvas.dims.controlSize * 0.6);
+				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.8,
+					item.y + dy + canvas.dims.controlSize * 0.4);
+				ctx.stroke();
+			},
+			// mousedown
+			null,
+			// doDrop: disable or reenable block or event handler
+			function (targetItem, draggedItem) {
+				if (draggedItem.data instanceof A3a.vpl.Block) {
+					self.saveStateBeforeChange();
+					draggedItem.data.disabled = !draggedItem.data.disabled;
+					canvas.onUpdate && canvas.onUpdate();
+				} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
+					self.saveStateBeforeChange();
+					draggedItem.data.toggleDisable();
+					canvas.onUpdate && canvas.onUpdate();
+				}
+			},
+			// canDrop: accept event handler or block in event handler
+			function (targetItem, draggedItem) {
+				return !(draggedItem.data instanceof A3a.vpl.Block)
+					|| draggedItem.data.eventHandlerContainer !== null;
+			});
+
+		if (this.teacherRole) {
+			// lock
+			canvas.addControl(controlPos[controlIx++],
+				canvas.dims.margin,
+				canvas.dims.controlSize, canvas.dims.controlSize,
+				// draw
+				function (ctx, item, dx, dy) {
+					ctx.fillStyle = "navy";
+					ctx.fillRect(item.x + dx, item.y + dy,
+						canvas.dims.controlSize, canvas.dims.controlSize);
+					ctx.strokeStyle = "white";
+					ctx.fillStyle = "white";
+					ctx.lineWidth = canvas.dims.blockLineWidth;
+					ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
+						item.y + dy + canvas.dims.controlSize * 0.3,
+						canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.4);
+					A3a.vpl.Canvas.lock(ctx,
+						item.x + dx + canvas.dims.controlSize * 0.5,
+						item.y + dy + canvas.dims.controlSize * 0.52,
+						canvas.dims.controlSize * 0.04,
+						"white");
+				},
+				// mousedown
+				null,
+				// doDrop: lock or unlock block or event handler
+				function (targetItem, draggedItem) {
+					if (draggedItem.data instanceof A3a.vpl.Block) {
+						self.saveStateBeforeChange();
+						draggedItem.data.locked = !draggedItem.data.locked;
+						canvas.onUpdate && canvas.onUpdate();
+					} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
+						self.saveStateBeforeChange();
+						draggedItem.data.locked = !draggedItem.data.locked;
+						canvas.onUpdate && canvas.onUpdate();
+					}
+				},
+				// canDrop: accept event handler or block in event handler
+				function (targetItem, draggedItem) {
+					return !(draggedItem.data instanceof A3a.vpl.Block)
+						|| draggedItem.data.eventHandlerContainer !== null;
+				});
+		}
+	}
+
 	// trashcan
-	canvas.addControl(canvasSize.width - canvas.dims.margin - canvas.dims.controlSize,
+	canvas.addControl(controlPos[controlIx++],
 		canvas.dims.margin,
 		canvas.dims.controlSize, canvas.dims.controlSize,
 		// draw
@@ -953,8 +1074,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		},
 		// canDrop: accept event handler or block in event handler
 		function (targetItem, draggedItem) {
-			return !(draggedItem.data instanceof A3a.vpl.Block)
-				|| draggedItem.data.eventHandlerContainer !== null;
+			return draggedItem.data instanceof A3a.vpl.Block
+				? draggedItem.data.eventHandlerContainer !== null && !draggedItem.data.locked
+				: !draggedItem.data.locked;
 		});
 
 	// scrolling area vertical span, used to choose the layout of templates

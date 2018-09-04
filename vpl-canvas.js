@@ -32,6 +32,8 @@ A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, d
 	/** @type {Array.<A3a.vpl.CanvasItem>} */
 	this.attachedItems = [];
 	this.drawContent = draw;
+	/** @type {?A3a.vpl.CanvasItem.draw} */
+	this.drawOverlay = null;
 	this.clicable = true;
 	this.draggable = true;
 	this.interactiveCB = interactiveCB || null;
@@ -64,6 +66,7 @@ A3a.vpl.CanvasItem.prototype.clone = function () {
 		this.interactiveCB,
 		this.doDrop,
 		this.canDrop);
+	c.drawOverlay = this.drawOverlay;
 	return c;
 };
 
@@ -72,19 +75,28 @@ A3a.vpl.CanvasItem.prototype.clone = function () {
 	@param {number=} dx horizontal offset wrt original position, or not supplied
 	to draw at the original position with clipping
 	@param {number=} dy vertical offset wrt original position
+	@param {boolean=} overlay true to call drawOverlay, false to call drawContent
 	@return {void}
 */
-A3a.vpl.CanvasItem.prototype.draw = function (ctx, dx, dy) {
+A3a.vpl.CanvasItem.prototype.draw = function (ctx, dx, dy, overlay) {
 	if (dx === undefined && this.clippingRect) {
 		ctx.save();
 		ctx.beginPath();
 		ctx.rect(this.clippingRect.x, this.clippingRect.y,
 			this.clippingRect.w, this.clippingRect.h);
 		ctx.clip();
-		this.drawContent && this.drawContent(ctx, this, 0, 0);
+		if (overlay) {
+			this.drawOverlay && this.drawOverlay(ctx, this, 0, 0);
+		} else {
+			this.drawContent && this.drawContent(ctx, this, 0, 0);
+		}
 		ctx.restore();
 	} else {
-		this.drawContent && this.drawContent(ctx, this, dx || 0, dy || 0);
+		if (overlay) {
+			this.drawOverlay && this.drawOverlay(ctx, this, dx || 0, dy || 0);
+		} else {
+			this.drawContent && this.drawContent(ctx, this, dx || 0, dy || 0);
+		}
 	}
 };
 
@@ -456,6 +468,16 @@ A3a.vpl.Canvas.prototype.makeZoomedClone = function (item) {
 		item.drawContent(ctx, c, item1.x - c.x, item1.y - c.y);
 		ctx.restore();
 	};
+	if (item.drawOverlay) {
+	c.drawOverlay = function (ctx, item1, dx, dy) {
+		ctx.save();
+		ctx.translate(item1.x, item1.y);
+		ctx.scale(sc, sc);
+		ctx.translate(-item1.x, -item1.y);
+		item.drawOverlay(ctx, c, item1.x - c.x, item1.y - c.y);
+		ctx.restore();
+		};
+	}
 	return c;
 };
 
@@ -595,7 +617,11 @@ A3a.vpl.Canvas.prototype.redraw = function () {
 	this.items.forEach(function (item) {
 		item.draw(this.ctx);
 	}, this);
+	this.items.forEach(function (item) {
+		item.draw(this.ctx, 0, 0, true);
+	}, this);
 	if (this.zoomedItemProxy) {
 		this.zoomedItemProxy.draw(this.ctx);
+		this.zoomedItemProxy.draw(this.ctx, 0, 0, true);
 	}
 };

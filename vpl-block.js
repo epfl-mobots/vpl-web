@@ -16,6 +16,8 @@ A3a.vpl.Block = function (blockTemplate, eventHandlerContainer, positionInContai
 	this.blockTemplate = blockTemplate;
 	this.eventHandlerContainer = eventHandlerContainer;
 	this.positionInContainer = positionInContainer;
+	this.disabled = false;
+	this.locked = false;
 	/** @type {A3a.vpl.BlockTemplate.param} */
 	this.param = blockTemplate.defaultParam ? blockTemplate.defaultParam() : null;
 	/** @type {?function():void} */
@@ -41,6 +43,7 @@ A3a.vpl.positionInContainer;
 A3a.vpl.Block.prototype.copy = function (eventHandlerContainer, positionInContainer, onPrepareChange) {
 	var newBlock = new A3a.vpl.Block(this.blockTemplate,
 		eventHandlerContainer, positionInContainer);
+	newBlock.disabled = this.disabled;
 	newBlock.onPrepareChange = onPrepareChange;
 	if (this.param) {
 		var newParam = /*this.blockTemplate.exportParam
@@ -79,5 +82,7 @@ A3a.vpl.compiledCode;
 	@return {A3a.vpl.compiledCode}
 */
 A3a.vpl.Block.prototype.generateCode = function () {
-	return this.blockTemplate.genCode(this);
+	return this.disabled
+		? {}
+		: this.blockTemplate.genCode(this);
 };

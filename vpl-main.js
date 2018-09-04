@@ -187,6 +187,7 @@ window.addEventListener("load", function () {
 		window["vplProgram"].setView("src", true);
 	} else {
 		window["vplProgram"].setView("vpl");
+		window["vplProgram"].experimentalFeatures = getQueryOption("exp") === "true";
 		window["vplProgram"].setTeacherRole(getQueryOption("role") === "teacher");
 		window["vplProgram"].renderToCanvas(window["vplCanvas"]);
 		document.getElementById("editor").textContent = window["vplProgram"].getCode();

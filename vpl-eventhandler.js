@@ -16,6 +16,9 @@ A3a.vpl.EventHandler = function () {
 	this.actions = [];
 	/** @type {A3a.vpl.Error} */
 	this.error = null;
+
+	this.disabled = false;
+	this.locked = false;
 };
 
 /** Check if empty (no event, no actions)
@@ -23,6 +26,16 @@ A3a.vpl.EventHandler = function () {
 */
 A3a.vpl.EventHandler.prototype.isEmpty = function () {
 	return this.events.length === 0 && this.actions.length === 0;
+};
+
+/** Toggle between enabled and disabled state
+	@return {void}
+*/
+A3a.vpl.EventHandler.prototype.toggleDisable = function () {
+	this.disabled = !this.disabled;
+	if (this.disabled) {
+		this.error = null;
+	}
 };
 
 /** Check if contains at least one block of the specified type
@@ -178,7 +191,7 @@ A3a.vpl.EventHandler.prototype.fixBlockContainerRefs = function () {
 	@return {A3a.vpl.compiledCode}
 */
 A3a.vpl.EventHandler.prototype.generateCode = function (andOp) {
-	if (this.isEmpty()) {
+	if (this.disabled || this.isEmpty()) {
 		return {};
 	}
 
@@ -186,7 +199,8 @@ A3a.vpl.EventHandler.prototype.generateCode = function (andOp) {
 	this.error = null;
 	var hasEvent = false;
 	for (var i = 0; i < this.events.length; i++) {
-		if (this.events[i].blockTemplate.type === A3a.vpl.blockType.event) {
+		if (!this.events[i].disabled &&
+			this.events[i].blockTemplate.type === A3a.vpl.blockType.event) {
 			hasEvent = true;
 			if (this.events[i].blockTemplate.validate) {
 				var err = this.events[i].blockTemplate.validate(this.events[i]);
@@ -198,18 +212,22 @@ A3a.vpl.EventHandler.prototype.generateCode = function (andOp) {
 			}
 		}
 	}
+	var hasAction = false;
+	for (var i = 0; i < this.actions.length; i++) {
+		if (!this.actions[i].disabled &&
+			this.actions[i].blockTemplate.type === A3a.vpl.blockType.action) {
+			hasAction = true;
+			break;
+		}
+	}
+	if (!hasEvent && !hasAction) {
+		return {};
+	}
 	if (!hasEvent) {
 		var err = new A3a.vpl.Error("Missing event block");
 		err.addEventError([]);
 		this.error = err;
 		return {error: err};
-	}
-	var hasAction = false;
-	for (var i = 0; i < this.actions.length; i++) {
-		if (this.actions[i].blockTemplate.type === A3a.vpl.blockType.action) {
-			hasAction = true;
-			break;
-		}
 	}
 	if (!hasAction) {
 		var err = new A3a.vpl.Error("Missing action block");
