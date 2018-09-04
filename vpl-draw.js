@@ -37,10 +37,10 @@ A3a.vpl.Canvas.prototype.blockBackground = function (blockType, doesZoomOnLongPr
 		this.ctx.clip();
 	}
 	this.ctx.fillStyle = {
-		"e": "#f70",
-		"a": "#38f",
-		"s": "#0d0",
-		"c": "#aaa"
+		"e": this.dims.eventStyle,
+		"a": this.dims.actionStyle,
+		"s": this.dims.stateStyle,
+		"c": this.dims.commentStyle
 	}[blockType];
 	this.ctx.fillRect(0, 0, this.dims.blockSize, this.dims.blockSize);
 	this.ctx.restore();

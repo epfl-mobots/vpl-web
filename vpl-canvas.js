@@ -356,7 +356,11 @@ A3a.vpl.Canvas.prototype["update"] = function () {
 		controlFont: string,
 		topControlSpace: number,
 		stripHorMargin: number,
-		stripVertMargin: number
+		stripVertMargin: number,
+		eventStyle: string,
+		stateStyle: string,
+		actionStyle: string,
+		commentStyle: string
 	}}
 */
 A3a.vpl.Canvas.dims;
@@ -382,7 +386,11 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		controlFont: "bold 15px sans-serif",
 		topControlSpace: 2 * controlSize,
 		stripHorMargin: Math.min(Math.max(blockSize / 15, 2), 6),
-		stripVertMargin: Math.min(Math.max(blockSize / 15, 2), 6)
+		stripVertMargin: Math.min(Math.max(blockSize / 15, 2), 6),
+		eventStyle: "#f70",
+		stateStyle: "#0d0",
+		actionStyle: "#38f",
+		commentStyle: "#aaa"
 	};
 };
 

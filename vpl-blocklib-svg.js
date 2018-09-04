@@ -133,4 +133,28 @@ A3a.vpl.patchSVG = function () {
 		}
 		A3a.vpl.BlockTemplate.lib[j] = A3a.vpl.BlockTemplate.libSVG[i];
 	}
+
+	A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
+		return {
+			blockSize: blockSize,
+			blockLineWidth: Math.max(1, Math.min(3, blockSize / 40)),
+			thinLineWidth: 1,
+			blockFont: Math.round(blockSize / 4).toString(10) + "px sans-serif",
+			blockLargeFont: Math.round(blockSize / 3).toString(10) + "px sans-serif",
+			templateScale: Math.max(0.666, 32 / blockSize),
+			margin: Math.min(Math.round(blockSize / 4), 20),
+			interRowSpace: Math.round(blockSize / 2),
+			interEventActionSpace: blockSize / 2,
+			interBlockSpace: Math.round(blockSize / 6),
+			controlSize: controlSize,
+			controlFont: "bold 15px sans-serif",
+			topControlSpace: 2 * controlSize,
+			stripHorMargin: Math.min(Math.max(blockSize / 15, 2), 6),
+			stripVertMargin: Math.min(Math.max(blockSize / 15, 2), 6),
+			eventStyle: "#ff6e40",
+			stateStyle: "#ff6e40",
+			actionStyle: "#38f",
+			commentStyle: "#aaa"
+		};
+	};
 };
