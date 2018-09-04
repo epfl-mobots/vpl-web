@@ -9,10 +9,11 @@
 var SVG = {};
 
 /** @typedef {{
+		globalTransform: (function(CanvasRenderingContext2D,Array.<number>):void | undefined),
 		elementStyle: (string | undefined),
 		style: (Object | undefined),
 		transform: (Object | undefined),
-		elementId: (string | undefined)
+		elementId: (string | undefined),
 	}}
 */
 SVG.Options;
@@ -660,10 +661,16 @@ SVG.draw = function (src, ctx, options) {
 	var domParser = new DOMParser();
 	var dom = domParser.parseFromString(src, "text/xml");
 	var root = dom["rootElement"];
+	var viewBox = (root.getAttribute("viewBox") || "0 0 1 1")
+		.split(" ")
+		.map(function (s) { return parseFloat(s); });
 	findCSS(root);
 	parseCSS();
 	var element = options && options.elementId ? dom.getElementById(options.elementId) : root;
 	if (element) {
+		if (options.globalTransform) {
+			options.globalTransform(ctx, viewBox);
+		}
 		drawEl(element);
 	}
 	return {x: xa, y: ya}
