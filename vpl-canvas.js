@@ -172,6 +172,8 @@ A3a.vpl.Canvas = function (canvas) {
 	/** @type {A3a.vpl.CanvasItem} */
 	this.zoomedItemProxy = null;
 
+	this.clientData = {};	// can be used to store client data
+
 	/** @type {A3a.vpl.Canvas.dims} */
 	this.dims = /** @type {A3a.vpl.Canvas.dims} */(null);
 	this.resize(this.width, this.height);	// force set this.dims
@@ -477,13 +479,13 @@ A3a.vpl.Canvas.prototype.makeZoomedClone = function (item) {
 		ctx.restore();
 	};
 	if (item.drawOverlay) {
-	c.drawOverlay = function (ctx, item1, dx, dy) {
-		ctx.save();
-		ctx.translate(item1.x, item1.y);
-		ctx.scale(sc, sc);
-		ctx.translate(-item1.x, -item1.y);
-		item.drawOverlay(ctx, c, item1.x - c.x, item1.y - c.y);
-		ctx.restore();
+		c.drawOverlay = function (ctx, item1, dx, dy) {
+			ctx.save();
+			ctx.translate(item1.x, item1.y);
+			ctx.scale(sc, sc);
+			ctx.translate(-item1.x, -item1.y);
+			item.drawOverlay(ctx, c, item1.x - c.x, item1.y - c.y);
+			ctx.restore();
 		};
 	}
 	return c;

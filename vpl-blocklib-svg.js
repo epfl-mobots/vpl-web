@@ -22,22 +22,29 @@ A3a.vpl.BlockTemplate.svgDict = {};
 */
 A3a.vpl.Canvas.prototype.drawSVG = function (svgSrc, options) {
 	this.ctx.save();
-	var sc = this.dims.blockSize / 85;
-	var o = -5.5 * sc;
-	this.ctx.translate(o, o);
-	// this.ctx.fillRect(0, 0, this.dims.blockSize, this.dims.blockSize);
-	this.ctx.scale(sc, sc);
+	options.globalTransform = function (ctx, viewBox) {
+		this.clientData.blockViewBox = viewBox;
+		ctx.translate(-viewBox[0], -viewBox[1]);
+		ctx.scale(this.dims.blockSize / (viewBox[2] - viewBox[0]),
+			this.dims.blockSize / (viewBox[3] - viewBox[1]));
+	}.bind(this);
 	SVG.draw(svgSrc, this.ctx, options);
 	this.ctx.restore();
 };
 
 /** Convert x or y coordinate from event (pixel), relative to top left
 	corner, to svg
-	@param {number} x
-	@return {number}
+	@param {number} clickX
+	@param {number} clickY
+	@return {{x:number,y:number}}
 */
-A3a.vpl.Canvas.prototype.canvasToSVGCoord = function (x) {
-	return 85 / this.dims.blockSize * (x + 5.5);
+A3a.vpl.Canvas.prototype.canvasToSVGCoord = function (clickX, clickY) {
+	return {
+		x: (this.clientData.blockViewBox[2] - this.clientData.blockViewBox[0]) /
+			this.dims.blockSize * (clickX + this.clientData.blockViewBox[0]),
+		y: (this.clientData.blockViewBox[3] - this.clientData.blockViewBox[1]) /
+			this.dims.blockSize * (clickY + this.clientData.blockViewBox[1])
+	};
 };
 
 /** Handle a mousedown event on block buttons (typically called from
@@ -53,11 +60,10 @@ A3a.vpl.Canvas.prototype.canvasToSVGCoord = function (x) {
 	is outside the SVG shape
 */
 A3a.vpl.Canvas.prototype.mousedownSVGButton = function (block, left, top, ev, buttonIds, funSep, funAll) {
-	var x = this.canvasToSVGCoord(ev.clientX - left);
-	var y = this.canvasToSVGCoord(ev.clientY - top);
+	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top);
 	for (var i = 0; i < buttonIds.length; i++) {
 		var id = buttonIds[i];
-		if (SVG.isInside(textfiles["Blocks_test4.svg"], id, x, y)) {
+		if (SVG.isInside(textfiles["Blocks_test4.svg"], id, pt.x, pt.y)) {
 			block.prepareChange();
 			if (funSep) {
 				block.param[i] = funSep(block.param[i]);
