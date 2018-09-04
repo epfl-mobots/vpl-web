@@ -495,9 +495,9 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
+			canvas.ctx.translate(canvas.dims.blockSize * 0.05, 0);
 			canvas.robotSide(0.7);
 			canvas.tap(0.7);
-			canvas.text("tap", {y: 0.2 * canvas.dims.blockSize});
 		},
 		/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 		changeMode: function (block, mode) {
@@ -629,12 +629,121 @@ A3a.vpl.BlockTemplate.lib =	[
 		};
 	})()),
 	new A3a.vpl.BlockTemplate({
+		name: "pitch",
+		modes: [],
+		type: A3a.vpl.blockType.event,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () {
+			return [
+				0 // integer from -6 to 6
+			];
+		},
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			/** @type {number} */
+			var a = /** @type {number} */(block.param[0]);
+			canvas.robotAccelerometer(false, a);
+		},
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			if (canvas.accelerometerCheck(width, height, left, top, ev)) {
+				block.prepareChange();
+				return 1;
+			}
+			return null;
+		},
+		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
+		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+			var angle = canvas.accelerometerDrag(width, height, left, top, ev);
+			block.param[0] = angle;
+		},
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			/** @type {number} */
+			var a = /** @type {number} */(block.param[1]);
+			/** @type {string} */
+			var cond;
+			if (a <= -6) {
+				cond = "pitchAngle < " + Math.round(2730.67 * a + 1365.33);
+			} else if (a >= 6) {
+				cond = "pitchAngle >= " + Math.round(2730.67 * a - 1365.33);
+			} else {
+				cond = "pitchAngle >= " + Math.round(2730.67 * a - 1365.33) +
+					" and pitchAngle < " + Math.round(2730.67 * a + 1365.33);
+			}
+			return {
+				initVarDecl: [
+					"# pitch angle from accelerometer\nvar pitchAngle\n"
+				],
+				sectionBegin: "onevent acc\n",
+				sectionPriority: 1,
+				clauseInit:
+					"call math.atan2(pitchAngle, acc[0], acc[2])\n",
+				clause: cond
+			};
+		}
+	}),
+	new A3a.vpl.BlockTemplate({
+		name: "roll",
+		modes: [],
+		type: A3a.vpl.blockType.event,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () {
+			return [
+				0 // integer from -6 to 6
+			];
+		},
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			/** @type {number} */
+			var a = /** @type {number} */(block.param[0]);
+			canvas.robotAccelerometer(true, a);
+		},
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			if (canvas.accelerometerCheck(width, height, left, top, ev)) {
+				block.prepareChange();
+				return 1;
+			}
+			return null;
+		},
+		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
+		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+			var angle = canvas.accelerometerDrag(width, height, left, top, ev);
+			block.param[0] = angle;
+		},
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			/** @type {number} */
+			var a = -/** @type {number} */(block.param[1]);
+			/** @type {string} */
+			var cond;
+			if (a <= -6) {
+				cond = "rollAngle < " + Math.round(2730.67 * a + 1365.33);
+			} else if (a >= 6) {
+				cond = "rollAngle >= " + Math.round(2730.67 * a - 1365.33);
+			} else {
+				cond = "rollAngle >= " + Math.round(2730.67 * a - 1365.33) +
+					" and rollAngle < " + Math.round(2730.67 * a + 1365.33);
+			}
+			return {
+				initVarDecl: [
+					"# roll angle from accelerometer\nvar rollAngle\n"
+				],
+				sectionBegin: "onevent acc\n",
+				sectionPriority: 1,
+				clauseInit:
+					"call math.atan2(rollAngle, acc[1], acc[2])\n",
+				clause: cond
+			};
+		}
+	}),
+	new A3a.vpl.BlockTemplate({
 		name: "clap",
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.microphone();
-			canvas.text("clap", {y: 0.32 * canvas.dims.blockSize, rot: 0.3});
 		},
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
@@ -654,6 +763,10 @@ A3a.vpl.BlockTemplate.lib =	[
 		name: "init",
 		modes: [A3a.vpl.mode.advanced],
 		type: A3a.vpl.blockType.event,
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.drawInit();
+		},
 		noState: true,
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {

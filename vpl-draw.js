@@ -442,28 +442,30 @@ A3a.vpl.Canvas.prototype.microphone = function () {
 	var dims = this.dims;
 	ctx.save();
 	ctx.beginPath();
-	ctx.arc(dims.blockSize * 0.6,
+	ctx.arc(dims.blockSize * 0.7,
 		dims.blockSize * 0.6,
 		dims.blockSize * 0.15,
 		0, 2 * Math.PI);
 	ctx.fillStyle = "white";
 	ctx.fill();
 	ctx.beginPath();
-	ctx.moveTo(dims.blockSize * 0.6,
+	ctx.moveTo(dims.blockSize * 0.7,
 		dims.blockSize * 0.6);
-	ctx.lineTo(dims.blockSize * 0.7,
+	ctx.lineTo(dims.blockSize * 0.8,
 		dims.blockSize * 0.95);
 	ctx.strokeStype = "white";
 	ctx.lineWidth = 0.13 * dims.blockSize;
 	ctx.stroke();
 	ctx.lineWidth = dims.blockLineWidth;
-	for (var i = 0; i < 3; i++) {
+	ctx.translate(dims.blockSize * 0.3, dims.blockSize * 0.3);
+	for (var i = 0; i < 8; i++) {
 		ctx.beginPath();
-		ctx.arc(dims.blockSize * 0.6,
-			dims.blockSize * 0.6,
-			dims.blockSize * (0.2 + 0.05 * i),
-			3.2, 5.6);
+		ctx.moveTo(0.07 * dims.blockSize, 0);
+		ctx.lineTo(0.14 * dims.blockSize, 0);
+		ctx.moveTo(0.17 * dims.blockSize, 0);
+		ctx.lineTo(0.22 * dims.blockSize, 0);
 		ctx.stroke();
+		ctx.rotate(Math.PI / 4);
 	}
 	ctx.restore();
 };
@@ -556,19 +558,21 @@ A3a.vpl.Canvas.prototype.accelerometerCheck = function (width, height, left, top
 	return y >= 0 && x * x + y * y <= r * r;
 };
 
-/** Drag a timer handle
+/** Drag an accelerometer handle
 	@param {number} width block width
 	@param {number} height block width
 	@param {number} left left position of the block
 	@param {number} top top position of the block
 	@param {Event} ev mouse event
+	@param {boolean=} tp true for -12..11, false for -6..6
 	@return {number} new value of the angle, between -6 and 6
 */
-A3a.vpl.Canvas.prototype.accelerometerDrag = function (width, height, left, top, ev) {
+A3a.vpl.Canvas.prototype.accelerometerDrag = function (width, height, left, top, ev, tp) {
 	var x = ev.clientX - left - width / 2;
 	var y = top + width / 2 - ev.clientY;
-	return Math.max(-6, Math.min(6, Math.round(Math.atan2(x, y) * 12 / Math.PI)));
-}
+	var a = Math.round(Math.atan2(x, y) * 12 / Math.PI);
+	return tp ? a : Math.max(-6, Math.min(6, a));
+};
 
 /** Draw red arc for timer, thicker and thicker clockwise from noon
 	(inner border is a spiral with 4 centers)
@@ -604,6 +608,34 @@ A3a.vpl.Canvas.prototype.drawTimerLogArc = function (x0, y0, rExt, rIntMax, rInt
 	ctx.restore();
 };
 
+/** Draw init
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.drawInit = function () {
+	var ctx = this.ctx;
+	var dims = this.dims;
+	var r = 0.4 * dims.blockSize;
+	ctx.save();
+	ctx.fillStyle = "black";
+	ctx.strokeStyle = "black";
+	ctx.beginPath();
+	ctx.arc(dims.blockSize * 0.3, dims.blockSize * 0.5,
+		dims.blockSize * 0.08,
+		0, 2 * Math.PI);
+	ctx.fill();
+	ctx.beginPath();
+	ctx.moveTo(dims.blockSize * 0.42, dims.blockSize * 0.5);
+	ctx.lineTo(dims.blockSize * 0.7, dims.blockSize * 0.5);
+	ctx.stroke();
+	var triSize = r * 0.4;
+	ctx.beginPath();
+	ctx.moveTo(dims.blockSize * 0.8, dims.blockSize * 0.5);
+	ctx.lineTo(dims.blockSize * 0.8 - triSize * Math.sqrt(3) / 2, dims.blockSize * 0.5 + triSize / 2);
+	ctx.lineTo(dims.blockSize * 0.8 - triSize * Math.sqrt(3) / 2, dims.blockSize * 0.5 - triSize / 2);
+	ctx.fill();
+	ctx.restore();
+};
+
 /** Draw timer
 	@param {number} time time between 0.1 and 10
 	@param {boolean} isEvent
@@ -618,10 +650,12 @@ A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	var r = 0.4 * dims.blockSize;
+	var dy = isEvent ? 0.09 * dims.blockSize : 0;
+	var x0 = dims.blockSize / 2;
+	var y0 = dims.blockSize / 2 + dy;
 	ctx.save();
 	ctx.beginPath();
-	ctx.arc(dims.blockSize / 2,
-		dims.blockSize / 2,
+	ctx.arc(x0, y0,
 		r,
 		0, 2 * Math.PI);
 	ctx.fillStyle = "white";
@@ -629,51 +663,47 @@ A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 	if (!isEvent) {
 		ctx.textAlign = "start";
 		ctx.textBaseline = "top";
-		ctx.fillText(time.toFixed(time < 1 ? 2 : 1), dims.blockSize / 20, 0);
+		ctx.fillText(time.toFixed(time < 1 ? 2 : 1), dims.blockSize / 20, dy);
 	}
-	this.drawTimerLogArc(dims.blockSize / 2, dims.blockSize / 2,
+	this.drawTimerLogArc(x0, y0,
 		r * 0.9, isLog ? r * 0.8 : r * 0.6, isLog ? r * 0.5 : r * 0.6,
 		2 * Math.PI * time2,
 		"red");
 	ctx.beginPath();
-	ctx.arc(dims.blockSize / 2,
-		dims.blockSize / 2,
+	ctx.arc(x0, y0,
 		r / 2,
 		0, 2 * Math.PI);
 	ctx.fill();
 	ctx.beginPath();
-	ctx.arc(dims.blockSize / 2,
-		dims.blockSize / 2,
+	ctx.arc(x0, y0,
 		r,
 		0, 2 * Math.PI);
 	ctx.strokeStyle = "black";
 	ctx.lineWidth = dims.blockLineWidth;
 	ctx.stroke();
 	ctx.beginPath();
-	ctx.moveTo(dims.blockSize / 2 - 0.1 * r * Math.sin(2 * time2 * Math.PI),
-		dims.blockSize / 2 + 0.1 * r * Math.cos(2 * time2 * Math.PI));
-	ctx.lineTo(dims.blockSize / 2 + 0.9 * r * Math.sin(2 * time2 * Math.PI),
-		dims.blockSize / 2 - 0.9 * r * Math.cos(2 * time2 * Math.PI));
+	ctx.moveTo(x0 - 0.1 * r * Math.sin(2 * time2 * Math.PI),
+		y0 + 0.1 * r * Math.cos(2 * time2 * Math.PI));
+	ctx.lineTo(x0 + 0.9 * r * Math.sin(2 * time2 * Math.PI),
+		y0 - 0.9 * r * Math.cos(2 * time2 * Math.PI));
 	ctx.lineWidth = 2 * dims.blockLineWidth;
 	ctx.stroke();
 	if (isEvent) {
 		ctx.strokeStyle = "white";
-		for (var i = 0; i < 4; i++) {
-			ctx.beginPath();
-			ctx.arc(dims.blockSize / 2,
-				dims.blockSize / 2,
-				r * 1.35,
-				Math.PI * (i / 2 + 0.15),
-				Math.PI * (i / 2 + 0.35));
-			ctx.stroke();
-			ctx.beginPath();
-			ctx.arc(dims.blockSize / 2,
-				dims.blockSize / 2,
-				r * 1.6,
-				Math.PI * (i / 2 + 0.2),
-				Math.PI * (i / 2 + 0.3));
-			ctx.stroke();
-		}
+		ctx.lineWidth = dims.blockLineWidth * 0.9;
+		ctx.fillStyle = "white";
+		ctx.beginPath();
+		ctx.arc(x0, y0,
+			r * 1.3,
+			-Math.PI * 0.45,
+			-Math.PI * 0.3);
+		ctx.stroke();
+		var triSize = r * 0.4;
+		ctx.beginPath();
+		ctx.moveTo(x0, y0 - r * 1.25);
+		ctx.lineTo(x0 + triSize * Math.sqrt(3) / 2, y0 - r * 1.25 + triSize / 2);
+		ctx.lineTo(x0 + triSize * Math.sqrt(3) / 2, y0 - r * 1.25 - triSize / 2);
+		ctx.fill();
 	}
 	ctx.restore();
 };
