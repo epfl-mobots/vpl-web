@@ -79,24 +79,20 @@ A3a.vpl.CanvasItem.prototype.clone = function () {
 	@return {void}
 */
 A3a.vpl.CanvasItem.prototype.draw = function (ctx, dx, dy, overlay) {
-	if (dx === undefined && this.clippingRect) {
+	if (this.clippingRect) {
 		ctx.save();
 		ctx.beginPath();
 		ctx.rect(this.clippingRect.x, this.clippingRect.y,
 			this.clippingRect.w, this.clippingRect.h);
 		ctx.clip();
-		if (overlay) {
-			this.drawOverlay && this.drawOverlay(ctx, this, 0, 0);
-		} else {
-			this.drawContent && this.drawContent(ctx, this, 0, 0);
-		}
-		ctx.restore();
+	}
+	if (overlay) {
+		this.drawOverlay && this.drawOverlay(ctx, this, dx || 0, dy || 0);
 	} else {
-		if (overlay) {
-			this.drawOverlay && this.drawOverlay(ctx, this, dx || 0, dy || 0);
-		} else {
-			this.drawContent && this.drawContent(ctx, this, dx || 0, dy || 0);
-		}
+		this.drawContent && this.drawContent(ctx, this, dx || 0, dy || 0);
+	}
+	if (this.clippingRect) {
+		ctx.restore();
 	}
 };
 

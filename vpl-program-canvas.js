@@ -489,7 +489,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		ctx.textAlign = "start";
 		ctx.textBaseline = "bottom";
 		ctx.rotate(-Math.PI / 2);
-		ctx.fillText("Piguet/MOBOTS/2018",
+		ctx.fillText("EPFL 2018",
 			-canvasSize.height + canvas.dims.blockLineWidth,
 			canvasSize.width - canvas.dims.blockLineWidth);
 		ctx.restore();
