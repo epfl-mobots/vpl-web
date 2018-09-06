@@ -29,6 +29,160 @@ var SVG = function (src) {
 */
 SVG.Options;
 
+/** Color dict (obtained from https://www.w3.org/TR/css-color-3/#svg-color with the following
+	regexp replacement: s/^(\S+)\s+(#\S{6}).*$/\t"$1": "$2",/g)
+	@const
+*/
+SVG.colorDict = {
+	"aliceblue": "#F0F8FF",
+	"antiquewhite": "#FAEBD7",
+	"aqua": "#00FFFF",
+	"aquamarine": "#7FFFD4",
+	"azure": "#F0FFFF",
+	"beige": "#F5F5DC",
+	"bisque": "#FFE4C4",
+	"black": "#000000",
+	"blanchedalmond": "#FFEBCD",
+	"blue": "#0000FF",
+	"blueviolet": "#8A2BE2",
+	"brown": "#A52A2A",
+	"burlywood": "#DEB887",
+	"cadetblue": "#5F9EA0",
+	"chartreuse": "#7FFF00",
+	"chocolate": "#D2691E",
+	"coral": "#FF7F50",
+	"cornflowerblue": "#6495ED",
+	"cornsilk": "#FFF8DC",
+	"crimson": "#DC143C",
+	"cyan": "#00FFFF",
+	"darkblue": "#00008B",
+	"darkcyan": "#008B8B",
+	"darkgoldenrod": "#B8860B",
+	"darkgray": "#A9A9A9",
+	"darkgreen": "#006400",
+	"darkgrey": "#A9A9A9",
+	"darkkhaki": "#BDB76B",
+	"darkmagenta": "#8B008B",
+	"darkolivegreen": "#556B2F",
+	"darkorange": "#FF8C00",
+	"darkorchid": "#9932CC",
+	"darkred": "#8B0000",
+	"darksalmon": "#E9967A",
+	"darkseagreen": "#8FBC8F",
+	"darkslateblue": "#483D8B",
+	"darkslategray": "#2F4F4F",
+	"darkslategrey": "#2F4F4F",
+	"darkturquoise": "#00CED1",
+	"darkviolet": "#9400D3",
+	"deeppink": "#FF1493",
+	"deepskyblue": "#00BFFF",
+	"dimgray": "#696969",
+	"dimgrey": "#696969",
+	"dodgerblue": "#1E90FF",
+	"firebrick": "#B22222",
+	"floralwhite": "#FFFAF0",
+	"forestgreen": "#228B22",
+	"fuchsia": "#FF00FF",
+	"gainsboro": "#DCDCDC",
+	"ghostwhite": "#F8F8FF",
+	"gold": "#FFD700",
+	"goldenrod": "#DAA520",
+	"gray": "#808080",
+	"green": "#008000",
+	"greenyellow": "#ADFF2F",
+	"grey": "#808080",
+	"honeydew": "#F0FFF0",
+	"hotpink": "#FF69B4",
+	"indianred": "#CD5C5C",
+	"indigo": "#4B0082",
+	"ivory": "#FFFFF0",
+	"khaki": "#F0E68C",
+	"lavender": "#E6E6FA",
+	"lavenderblush": "#FFF0F5",
+	"lawngreen": "#7CFC00",
+	"lemonchiffon": "#FFFACD",
+	"lightblue": "#ADD8E6",
+	"lightcoral": "#F08080",
+	"lightcyan": "#E0FFFF",
+	"lightgoldenrodyellow": "#FAFAD2",
+	"lightgray": "#D3D3D3",
+	"lightgreen": "#90EE90",
+	"lightgrey": "#D3D3D3",
+	"lightpink": "#FFB6C1",
+	"lightsalmon": "#FFA07A",
+	"lightseagreen": "#20B2AA",
+	"lightskyblue": "#87CEFA",
+	"lightslategray": "#778899",
+	"lightslategrey": "#778899",
+	"lightsteelblue": "#B0C4DE",
+	"lightyellow": "#FFFFE0",
+	"lime": "#00FF00",
+	"limegreen": "#32CD32",
+	"linen": "#FAF0E6",
+	"magenta": "#FF00FF",
+	"maroon": "#800000",
+	"mediumaquamarine": "#66CDAA",
+	"mediumblue": "#0000CD",
+	"mediumorchid": "#BA55D3",
+	"mediumpurple": "#9370DB",
+	"mediumseagreen": "#3CB371",
+	"mediumslateblue": "#7B68EE",
+	"mediumspringgreen": "#00FA9A",
+	"mediumturquoise": "#48D1CC",
+	"mediumvioletred": "#C71585",
+	"midnightblue": "#191970",
+	"mintcream": "#F5FFFA",
+	"mistyrose": "#FFE4E1",
+	"moccasin": "#FFE4B5",
+	"navajowhite": "#FFDEAD",
+	"navy": "#000080",
+	"oldlace": "#FDF5E6",
+	"olive": "#808000",
+	"olivedrab": "#6B8E23",
+	"orange": "#FFA500",
+	"orangered": "#FF4500",
+	"orchid": "#DA70D6",
+	"palegoldenrod": "#EEE8AA",
+	"palegreen": "#98FB98",
+	"paleturquoise": "#AFEEEE",
+	"palevioletred": "#DB7093",
+	"papayawhip": "#FFEFD5",
+	"peachpuff": "#FFDAB9",
+	"peru": "#CD853F",
+	"pink": "#FFC0CB",
+	"plum": "#DDA0DD",
+	"powderblue": "#B0E0E6",
+	"purple": "#800080",
+	"red": "#FF0000",
+	"rosybrown": "#BC8F8F",
+	"royalblue": "#4169E1",
+	"saddlebrown": "#8B4513",
+	"salmon": "#FA8072",
+	"sandybrown": "#F4A460",
+	"seagreen": "#2E8B57",
+	"seashell": "#FFF5EE",
+	"sienna": "#A0522D",
+	"silver": "#C0C0C0",
+	"skyblue": "#87CEEB",
+	"slateblue": "#6A5ACD",
+	"slategray": "#708090",
+	"slategrey": "#708090",
+	"snow": "#FFFAFA",
+	"springgreen": "#00FF7F",
+	"steelblue": "#4682B4",
+	"tan": "#D2B48C",
+	"teal": "#008080",
+	"thistle": "#D8BFD8",
+	"tomato": "#FF6347",
+	"turquoise": "#40E0D0",
+	"violet": "#EE82EE",
+	"wheat": "#F5DEB3",
+	"white": "#FFFFFF",
+	"whitesmoke": "#F5F5F5",
+	"yellow": "#FFFF00",
+	"yellowgreen": "#9ACD32"
+};
+
 /** Draw SVG from source code
 	@param {CanvasRenderingContext2D} ctx
 	@param {SVG.Options=} options
@@ -159,7 +313,7 @@ SVG.prototype.draw = function (ctx, options) {
 		@param {string=} overriddenStyle style with higher priority than SVG's
 		@return {void}
 	*/
-	function drawEl(el, baseStyle, overriddenStyle) {
+	var drawEl = function (el, baseStyle, overriddenStyle) {
 		/** Draw all children
 			@return {void}
 		*/
@@ -514,6 +668,108 @@ SVG.prototype.draw = function (ctx, options) {
 				});
 		}
 
+		/** Convert fill style to something compatible with fillStyle 2d context property
+			@param {string} fill
+			@return {(string|CanvasGradient)}
+		*/
+		var decodeFillStyle = function (fill) {
+			/** Fill radialGradient prop object with element attributes
+				@param {Element} el
+				@param {Object} props
+				@return {Object}
+			*/
+			var fillRadialGradientProps = function (el, props) {
+				// follow link
+				if (el.attributes["xlink:href"]) {
+					var href = el.getAttribute("xlink:href");
+					if (href[0] === "#") {
+						var targetEl = this.dom.getElementById(href.slice(1));
+						if (targetEl) {
+							props = fillRadialGradientProps(targetEl, props);
+						}
+					}
+				}
+
+				// local attributes
+				props.cx = el.attributes["cx"] ? parseFloat(el.getAttribute("cx")) : props.cx || 0;
+				props.cy = el.attributes["cy"] ? parseFloat(el.getAttribute("cy")) : props.cy || 0;
+				props.r = el.attributes["r"] ? parseFloat(el.getAttribute("cx")) : props.r || 0;
+
+				// local children
+				props.stops = props.stops || [];
+				var stopEl = el.getElementsByTagName("stop");
+				if (stopEl.length > 0) {
+					props.stops = [];
+					for (var i = 0; i < stopEl.length; i++) {
+						var str = (stopEl[i].getAttribute("offset") || "0").trim();
+						var offset = /%$/.test(str) ? parseFloat(str,slice(0, -1)) / 100 : parseFloat(str);
+						if (!isNaN(offset) && stopEl[i].attributes["stop-color"]) {
+							var color = stopEl[i].getAttribute("stop-color") || "#000";
+							if (SVG.colorDict.hasOwnProperty(color)) {
+								color = SVG.colorDict[color];
+							}
+							str = (stopEl[i].getAttribute("stop-opacity") || "1").trim();
+							var opacity = /%$/.test(str) ? parseFloat(str,slice(0, -1)) / 100 : parseFloat(str);
+							if (opacity !== 1) {
+								// convert color and opacity to a single css rgba(...) or hsla(...) spec
+								if (/^#[0-9a-f]{3}$/i.test(color)) {
+									// #RGB
+									color = "rgba(" +
+										color
+											.slice(1)
+											.split("")
+											.map(function (s) { return parseInt(s, 16) * 17; })
+											.map(function (x) { return x.toString(10); })
+											.join(",") +
+										"," + opacity.toFixed(2) + ")";
+								} else if (/^#[0-9a-f]{6}$/i.test(color)) {
+									// #RGB
+									color = "rgba(" +
+										[color.slice(1, 3), color.slice(3, 5), color.slice(5)]
+											.map(function (s) { return parseInt(s, 16); })
+											.map(function (x) { return x.toString(10); })
+											.join(",") +
+										"," + opacity.toFixed(2) + ")";
+								} else if (/^rgb(\d+%?(,|\s+)\d+%?(,|\s+)\d+%?)$/i.test(color)) {
+									// rgb(r,g,b) or rgb(r g b)
+									color = color.slice(0, -1).replace(/\s+/g, ",") +
+										"," + opacity.toFixed(2) + ")";
+								} else if (/^hsl(\d+%?(,|\s+)\d+%?(,|\s+)\d+%?)$/i.test(color)) {
+									// hsl(h,s,l) with h in degrees and s,l as percentages
+									color = color.slice(0, -1).replace(/\s+/g, ",") +
+										"," + opacity.toFixed(2) + ")";
+								}
+							}
+							props.stops.push({
+								offset: offset,
+								color: color
+							});
+						}
+					}
+				}
+
+				return props;
+			}.bind(this);
+
+			// "url(#id)"
+			var id = /^url\(#(.+)\)$/.exec(fill);
+			if (id && id[1]) {
+				var targetEl = this.dom.getElementById(id[1]);
+				if (targetEl) {
+					switch (targetEl.tagName) {
+					case "radialGradient":
+						var rg = fillRadialGradientProps(targetEl, {});
+						var radialGradient = ctx.createRadialGradient(rg.cx, rg.cy, 0, rg.cx, rg.cy, rg.r);
+						for (var i = 0; i < rg.stops.length; i++) {
+							radialGradient.addColorStop(rg.stops[i].offset, rg.stops[i].color);
+						}
+						return radialGradient;
+					}
+				}
+			}
+			return fill;
+		}.bind(this);
+
 		/** Paint the current path in context ctx using the style defined by baseStyle and overriddenStyle
 			@return {void}
 		*/
@@ -524,7 +780,7 @@ SVG.prototype.draw = function (ctx, options) {
 				if (style["fill"] && style["fill"] !== "none") {
 					ctx.fillStyle = style["fill"] === "white" || style["fill"] === "#fff" || style["fill"] === "#ffffff"
 						? "white"
-						: style["fill"] || "none";
+						: decodeFillStyle(style["fill"]) || "none";
 					ctx.fill();
 				}
 				if (style["stroke"] && style["stroke"] !== "none") {
@@ -665,7 +921,7 @@ SVG.prototype.draw = function (ctx, options) {
 		if (transformFun && ctx) {
 			ctx.restore();
 		}
-	}
+	}.bind(this);
 
 	findCSS(this.root);
 	parseCSS();
