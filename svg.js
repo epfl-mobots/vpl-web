@@ -189,6 +189,8 @@ SVG.colorDict = {
 	@return {{x:Array.<number>,y:Array.<number>}} list of all points
 */
 SVG.prototype.draw = function (ctx, options) {
+	var self = this;
+
 	var css = "";
 	var cssDict = {};
 
@@ -672,18 +674,18 @@ SVG.prototype.draw = function (ctx, options) {
 			@param {string} fill
 			@return {(string|CanvasGradient)}
 		*/
-		var decodeFillStyle = function (fill) {
+		function decodeFillStyle(fill) {
 			/** Fill radialGradient prop object with element attributes
 				@param {Element} el
 				@param {Object} props
 				@return {Object}
 			*/
-			var fillRadialGradientProps = function (el, props) {
+			function fillRadialGradientProps(el, props) {
 				// follow link
 				if (el.attributes["xlink:href"]) {
 					var href = el.getAttribute("xlink:href");
 					if (href[0] === "#") {
-						var targetEl = this.dom.getElementById(href.slice(1));
+						var targetEl = self.dom.getElementById(href.slice(1));
 						if (targetEl) {
 							props = fillRadialGradientProps(targetEl, props);
 						}
@@ -702,14 +704,14 @@ SVG.prototype.draw = function (ctx, options) {
 					props.stops = [];
 					for (var i = 0; i < stopEl.length; i++) {
 						var str = (stopEl[i].getAttribute("offset") || "0").trim();
-						var offset = /%$/.test(str) ? parseFloat(str,slice(0, -1)) / 100 : parseFloat(str);
+						var offset = /%$/.test(str) ? parseFloat(str.slice(0, -1)) / 100 : parseFloat(str);
 						if (!isNaN(offset) && stopEl[i].attributes["stop-color"]) {
 							var color = stopEl[i].getAttribute("stop-color") || "#000";
 							if (SVG.colorDict.hasOwnProperty(color)) {
 								color = SVG.colorDict[color];
 							}
 							str = (stopEl[i].getAttribute("stop-opacity") || "1").trim();
-							var opacity = /%$/.test(str) ? parseFloat(str,slice(0, -1)) / 100 : parseFloat(str);
+							var opacity = /%$/.test(str) ? parseFloat(str.slice(0, -1)) / 100 : parseFloat(str);
 							if (opacity !== 1) {
 								// convert color and opacity to a single css rgba(...) or hsla(...) spec
 								if (/^#[0-9a-f]{3}$/i.test(color)) {
@@ -749,12 +751,12 @@ SVG.prototype.draw = function (ctx, options) {
 				}
 
 				return props;
-			}.bind(this);
+			}
 
 			// "url(#id)"
 			var id = /^url\(#(.+)\)$/.exec(fill);
 			if (id && id[1]) {
-				var targetEl = this.dom.getElementById(id[1]);
+				var targetEl = self.dom.getElementById(id[1]);
 				if (targetEl) {
 					switch (targetEl.tagName) {
 					case "radialGradient":
@@ -768,7 +770,7 @@ SVG.prototype.draw = function (ctx, options) {
 				}
 			}
 			return fill;
-		}.bind(this);
+		}
 
 		/** Paint the current path in context ctx using the style defined by baseStyle and overriddenStyle
 			@return {void}
@@ -921,7 +923,7 @@ SVG.prototype.draw = function (ctx, options) {
 		if (transformFun && ctx) {
 			ctx.restore();
 		}
-	}.bind(this);
+	}
 
 	findCSS(this.root);
 	parseCSS();
