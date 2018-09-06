@@ -39,20 +39,24 @@ A3a.vpl.Canvas.prototype.drawSVG = function (svgSrc, options) {
 	corner, to svg
 	@param {number} clickX
 	@param {number} clickY
+	@param {number} width
+	@param {number} height
 	@return {{x:number,y:number}}
 */
-A3a.vpl.Canvas.prototype.canvasToSVGCoord = function (clickX, clickY) {
+A3a.vpl.Canvas.prototype.canvasToSVGCoord = function (clickX, clickY, width, height) {
 	return {
 		x: (this.clientData.blockViewBox[2] - this.clientData.blockViewBox[0]) /
-			this.dims.blockSize * (clickX + this.clientData.blockViewBox[0]),
+			width * (clickX + this.clientData.blockViewBox[0]),
 		y: (this.clientData.blockViewBox[3] - this.clientData.blockViewBox[1]) /
-			this.dims.blockSize * (clickY + this.clientData.blockViewBox[1])
+			height * (clickY + this.clientData.blockViewBox[1])
 	};
 };
 
 /** Handle a mousedown event on block buttons (typically called from
 	A3a.vpl.BlockTemplate.mousedownFun)
 	@param {A3a.vpl.Block} block
+	@param {number} width
+	@param {number} height
 	@param {number} left
 	@param {number} top
 	@param {Event} ev
@@ -62,8 +66,8 @@ A3a.vpl.Canvas.prototype.canvasToSVGCoord = function (clickX, clickY) {
 	@return {?number} index of the button in buttonIds, or null if click
 	is outside the SVG shape
 */
-A3a.vpl.Canvas.prototype.mousedownSVGButton = function (block, left, top, ev, buttonIds, funSep, funAll) {
-	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top);
+A3a.vpl.Canvas.prototype.mousedownSVGButton = function (block, width, height, left, top, ev, buttonIds, funSep, funAll) {
+	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top, width, height);
 	for (var i = 0; i < buttonIds.length; i++) {
 		var id = buttonIds[i];
 		if (this.clientData.svg.isInside(id, pt.x, pt.y)) {
@@ -113,7 +117,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			return canvas.mousedownSVGButton(block, left, top, ev,
+			return canvas.mousedownSVGButton(block, width, height, left, top, ev,
 				[
 					"Btn2_Center",
 					"Btn2_Forward",
@@ -186,7 +190,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			return canvas.mousedownSVGButton(block, left, top, ev,
+			return canvas.mousedownSVGButton(block, width, height, left, top, ev,
 				[
 					"Btn3_Prox0",
 					"Btn3_Prox1",
@@ -271,7 +275,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			return canvas.mousedownSVGButton(block, left, top, ev,
+			return canvas.mousedownSVGButton(block, width, height, left, top, ev,
 				[
 					"Btn2_ProxGd1",
 					"Btn2_ProxGd0"
@@ -586,7 +590,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			return canvas.mousedownSVGButton(block, left, top, ev,
+			return canvas.mousedownSVGButton(block, width, height, left, top, ev,
 				[
 					"Btn2_State0",
 					"Btn2_State1",
@@ -877,7 +881,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
-				return canvas.mousedownSVGButton(block, left, top, ev,
+				return canvas.mousedownSVGButton(block, width, height, left, top, ev,
 					[
 						"Btn2_Stop",
 						"Btn2_Fwd",
@@ -928,7 +932,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-				return canvas.mousedownSVGButton(block, left, top, ev,
+				return canvas.mousedownSVGButton(block, width, height, left, top, ev,
 					[
 						"Btn2_NoColor",
 						"Btn2_White_Select",
@@ -1005,7 +1009,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-				return canvas.mousedownSVGButton(block, left, top, ev,
+				return canvas.mousedownSVGButton(block, width, height, left, top, ev,
 					[
 						"Btn2_NoColor-2",
 						"Btn2_White_Select-2",
