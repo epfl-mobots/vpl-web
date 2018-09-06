@@ -21,6 +21,9 @@ A3a.vpl.BlockTemplate.svgDict = {};
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.drawSVG = function (svgSrc, options) {
+	if (!this.clientData.svg) {
+		this.clientData.svg = new SVG(svgSrc);
+	}
 	this.ctx.save();
 	options.globalTransform = function (ctx, viewBox) {
 		this.clientData.blockViewBox = viewBox;
@@ -28,7 +31,7 @@ A3a.vpl.Canvas.prototype.drawSVG = function (svgSrc, options) {
 		ctx.scale(this.dims.blockSize / (viewBox[2] - viewBox[0]),
 			this.dims.blockSize / (viewBox[3] - viewBox[1]));
 	}.bind(this);
-	SVG.draw(svgSrc, this.ctx, options);
+	this.clientData.svg.draw(this.ctx, options);
 	this.ctx.restore();
 };
 
@@ -63,7 +66,7 @@ A3a.vpl.Canvas.prototype.mousedownSVGButton = function (block, left, top, ev, bu
 	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top);
 	for (var i = 0; i < buttonIds.length; i++) {
 		var id = buttonIds[i];
-		if (SVG.isInside(textfiles["Blocks_test4.svg"], id, pt.x, pt.y)) {
+		if (this.clientData.svg.isInside(id, pt.x, pt.y)) {
 			block.prepareChange();
 			if (funSep) {
 				block.param[i] = funSep(block.param[i]);

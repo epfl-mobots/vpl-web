@@ -5,8 +5,19 @@
 	For internal use only
 */
 
-/** @const */
-var SVG = {};
+/** SVG top Object
+	@constructor
+	@param {string} src
+*/
+var SVG = function (src) {
+	this.src = src;
+	this.domParser = new DOMParser();
+	this.dom = this.domParser.parseFromString(src, "text/xml");
+	this.root = this.dom["rootElement"];
+	this.viewBox = (this.root.getAttribute("viewBox") || "0 0 1 1")
+		.split(" ")
+		.map(function (s) { return parseFloat(s); });
+};
 
 /** @typedef {{
 		globalTransform: (function(CanvasRenderingContext2D,Array.<number>):void | undefined),
@@ -19,12 +30,11 @@ var SVG = {};
 SVG.Options;
 
 /** Draw SVG from source code
-	@param {string} src
 	@param {CanvasRenderingContext2D} ctx
 	@param {SVG.Options=} options
 	@return {{x:Array.<number>,y:Array.<number>}} list of all points
 */
-SVG.draw = function (src, ctx, options) {
+SVG.prototype.draw = function (ctx, options) {
 	var css = "";
 	var cssDict = {};
 
@@ -563,7 +573,6 @@ SVG.draw = function (src, ctx, options) {
 		}
 
 		getStyle();
-//if (idAttr==="Btn2_Center"||idAttr==="Btn2_Forward") { console.info(idAttr);console.info(elStyle);}
 
 		switch (el.tagName) {
 		case "svg":
@@ -658,18 +667,12 @@ SVG.draw = function (src, ctx, options) {
 		}
 	}
 
-	var domParser = new DOMParser();
-	var dom = domParser.parseFromString(src, "text/xml");
-	var root = dom["rootElement"];
-	var viewBox = (root.getAttribute("viewBox") || "0 0 1 1")
-		.split(" ")
-		.map(function (s) { return parseFloat(s); });
-	findCSS(root);
+	findCSS(this.root);
 	parseCSS();
-	var element = options && options.elementId ? dom.getElementById(options.elementId) : root;
+	var element = options && options.elementId ? this.dom.getElementById(options.elementId) : this.root;
 	if (element) {
 		if (options.globalTransform) {
-			options.globalTransform(ctx, viewBox);
+			options.globalTransform(ctx, this.viewBox);
 		}
 		drawEl(element);
 	}
@@ -677,14 +680,13 @@ SVG.draw = function (src, ctx, options) {
 };
 
 /** Check if a point is roughly inside an element
-	@param {string} src
 	@param {string} elementId
 	@param {number} x
 	@param {number} y
 	@return {boolean}
 */
-SVG.isInside = function (src, elementId, x, y) {
-	var p = SVG.draw(src, null, {elementId: elementId});
+SVG.prototype.isInside = function (elementId, x, y) {
+	var p = this.draw(null, {elementId: elementId});
 	if (p.x.length === 0) {
 		return false;
 	}
@@ -711,7 +713,8 @@ SVG.isInside = function (src, elementId, x, y) {
 SVG.drawFromURI = function (uri, ctx, options) {
 	var xhr = new XMLHttpRequest();
 	xhr.addEventListener("load", function () {
-		SVG.draw(this.response, ctx, options);
+		var svg = new SVG(this.response);
+		svg.draw(ctx, options);
 	});
 	xhr.open("GET", uri);
 	xhr.send();
