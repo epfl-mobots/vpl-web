@@ -101,8 +101,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 
 			canvas.drawSVG(textfiles["Blocks_test4.svg"],
 				{
-					"elementId": "Ev_Buttons",
-					"style": {
+					elementId: "Ev_Buttons",
+					style: {
 						"Btn2_Center": style(block.param[0]),
 						"Btn2_Forward": style(block.param[1]),
 						"Btn2_Backward": style(block.param[2]),
@@ -172,8 +172,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 
 			canvas.drawSVG(textfiles["Blocks_test4.svg"],
 				{
-					"elementId": "Ev_Prox",
-					"style": {
+					elementId: "Ev_Prox",
+					style: {
 						"Btn3_Prox0": style(block.param[0]),
 						"Btn3_Prox1": style(block.param[1]),
 						"Btn3_Prox2": style(block.param[2]),
@@ -262,8 +262,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 
 			canvas.drawSVG(textfiles["Blocks_test4.svg"],
 				{
-					"elementId": "Ev_ProxGround",
-					"style": {
+					elementId: "Ev_ProxGround",
+					style: {
 						"Btn2_ProxGd1": style(block.param[0]),
 						"Btn2_ProxGd0": style(block.param[1])
 					}
@@ -327,7 +327,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		noState: true,
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
-			canvas.drawSVG(textfiles["Blocks_test4.svg"], {"elementId": "Ev_Start"});
+			canvas.drawSVG(textfiles["Blocks_test4.svg"], {elementId: "Ev_Start"});
 		},
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
@@ -343,7 +343,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
-			canvas.drawSVG(textfiles["Blocks_test4.svg"], {"elementId": "Ev_TimersUp"});
+			canvas.drawSVG(textfiles["Blocks_test4.svg"], {elementId: "Ev_TimersUp"});
 		},
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
@@ -370,8 +370,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		draw: function (canvas, block) {
 			canvas.drawSVG(textfiles["Blocks_test4.svg"],
 				{
-					"elementId": "Ev_Acc0",
-					"transform": {
+					elementId: "Ev_Acc0",
+					transform: {
 						"Rot180_Acc0": function (ctx) {
 							var ox = 50;
 							var oy = 50;
@@ -435,8 +435,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		draw: function (canvas, block) {
 			canvas.drawSVG(textfiles["Blocks_test4.svg"],
 				{
-					"elementId": "Ev_Acc1",
-					"transform": {
+					elementId: "Ev_Acc1",
+					transform: {
 						"Rot180_Acc1": function (ctx) {
 							var ox = 50;
 							var oy = 50;
@@ -500,8 +500,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		draw: function (canvas, block) {
 			canvas.drawSVG(textfiles["Blocks_test4.svg"],
 				{
-					"elementId": "Ev_Acc2",
-					"transform": {
+					elementId: "Ev_Acc2",
+					transform: {
 						"Rot180_Acc2": function (ctx) {
 							var ox = 50;
 							var oy = 50;
@@ -571,8 +571,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 
 			canvas.drawSVG(textfiles["Blocks_test4.svg"],
 				{
-					"elementId": "Ev_States",
-					"style": {
+					elementId: "Ev_States",
+					style: {
 						"Btn2_State0": style(block.param[0]),
 						"Btn2_State1": style(block.param[1]),
 						"Btn2_State2": style(block.param[2]),
@@ -646,8 +646,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		draw: function (canvas, block) {
 			canvas.drawSVG(textfiles["Blocks_test4.svg"],
 				{
-					"elementId": "Ev_Color_Top",
-					"style": {
+					elementId: "Ev_Color_Top",
+					style: {
 					}
 				});
 		},
@@ -687,8 +687,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		draw: function (canvas, block) {
 			canvas.drawSVG(textfiles["Blocks_test4.svg"],
 				{
-					"elementId": "Ev_Color_Bottom",
-					"style": {
+					elementId: "Ev_Color_Bottom",
+					style: {
 					}
 				});
 		},
@@ -724,7 +724,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
-			canvas.drawSVG(textfiles["Blocks_test4.svg"], {"elementId": "Ev_Acc_Hit"});
+			canvas.drawSVG(textfiles["Blocks_test4.svg"], {elementId: "Ev_Acc_Hit"});
 		},
 		/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 		changeMode: function (block, mode) {
@@ -749,7 +749,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
-			canvas.drawSVG(textfiles["Blocks_test4.svg"], {"elementId": "Ev_Clap"});
+			canvas.drawSVG(textfiles["Blocks_test4.svg"], {elementId: "Ev_Clap"});
 		},
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
@@ -774,8 +774,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		draw: function (canvas, block) {
 			canvas.drawSVG(textfiles["Blocks_test4.svg"],
 				{
-					"elementId": "Ac_Wheels",
-					"transform": {
+					elementId: "Ac_Wheels",
+					transform: {
 						"HandleLeft": function (ctx) {
 							ctx.translate(0, -0.4 * canvas.dims.blockSize * block.param[0]);
 						},
@@ -861,8 +861,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 
 				canvas.drawSVG(textfiles["Blocks_test4.svg"],
 					{
-						"elementId": "Ac_Directions",
-						"style": {
+						elementId: "Ac_Directions",
+						style: {
 							"Btn2_Stop": style(block.param, 0),
 							"Btn2_Fwd": style(block.param, 1),
 							"Btn2_FwdRight": style(block.param, 2),
@@ -919,8 +919,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		draw: function (canvas, block) {
 				canvas.drawSVG(textfiles["Blocks_test4.svg"],
 					{
-						"elementId": "Ac_ColorTop",
-						"style": {
+						elementId: "Ac_ColorTop",
+						style: {
 							"Gradient_Top-2": "fill:#" +
 								block.param.map(function (c) { return Math.floor(15.999 * c).toString(16); }).join("")
 						}
@@ -996,8 +996,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		draw: function (canvas, block) {
 				canvas.drawSVG(textfiles["Blocks_test4.svg"],
 					{
-						"elementId": "Ac_ColorBottom",
-						"style": {
+						elementId: "Ac_ColorBottom",
+						style: {
 							"Gradient_Bottom-2": "fill:#" +
 								block.param.map(function (c) { return Math.floor(15.999 * c).toString(16); }).join("")
 						}
@@ -1068,7 +1068,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		defaultParam: function () { return [1]; },
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
-			canvas.drawSVG(textfiles["Blocks_test4.svg"], {"elementId": "Ac_Timer"});
+			canvas.drawSVG(textfiles["Blocks_test4.svg"], {elementId: "Ac_Timer"});
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
@@ -1104,6 +1104,7 @@ A3a.vpl.BlockTemplate.libRemoveSVG = [
 	"ground adv",
 	"accelerometer",
 	"counter comparison",
+	"color state 8",
 	"top color",
 	"bottom color",
 	"notes",
