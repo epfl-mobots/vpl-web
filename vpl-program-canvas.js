@@ -232,7 +232,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	);
 	if (eventHandler.disabled) {
 		item.drawOverlay = function (ctx, item, dx, dy) {
-			canvas.disabledMark(item.x, item.y, item.width, item.height);
+			canvas.disabledMark(item.x + dx, item.y + dy, item.width, item.height);
 		};
 	}
 	canvas.setItem(item);

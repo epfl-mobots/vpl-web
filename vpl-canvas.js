@@ -79,7 +79,7 @@ A3a.vpl.CanvasItem.prototype.clone = function () {
 	@return {void}
 */
 A3a.vpl.CanvasItem.prototype.draw = function (ctx, dx, dy, overlay) {
-	if (this.clippingRect) {
+	if (this.clippingRect && dx === undefined) {
 		ctx.save();
 		ctx.beginPath();
 		ctx.rect(this.clippingRect.x, this.clippingRect.y,
@@ -91,7 +91,7 @@ A3a.vpl.CanvasItem.prototype.draw = function (ctx, dx, dy, overlay) {
 	} else {
 		this.drawContent && this.drawContent(ctx, this, dx || 0, dy || 0);
 	}
-	if (this.clippingRect) {
+	if (this.clippingRect && dx === undefined) {
 		ctx.restore();
 	}
 };
@@ -287,7 +287,9 @@ A3a.vpl.Canvas = function (canvas) {
 						item.draw(ctx, dragEvent.clientX - x0, dragEvent.clientY - y0);
 						item.attachedItems.forEach(function (attachedItem) {
 							attachedItem.draw(ctx, dragEvent.clientX - x0, dragEvent.clientY - y0);
+							attachedItem.draw(ctx, dragEvent.clientX - x0, dragEvent.clientY - y0, true);
 						});
+						item.draw(ctx, dragEvent.clientX - x0, dragEvent.clientY - y0, true);
 						ctx.restore();
 						self.canvas.style.cursor = canDrop ? "copy" : "default";
 					}
