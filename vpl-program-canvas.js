@@ -76,6 +76,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x, y, opts
 		},
 		// interactiveCB
 		opts && opts.notInteractive ||
+			block.disabled ||
 			block.locked || (block.eventHandlerContainer && block.eventHandlerContainer.locked) ||
 			!block.blockTemplate.mousedown
 			? opts && opts.mousedown
