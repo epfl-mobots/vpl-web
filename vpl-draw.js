@@ -731,8 +731,8 @@ A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 	}
 	this.drawTimerLogArc(x0, y0,
 		r * 0.9, isLog ? r * 0.8 : r * 0.6, isLog ? r * 0.5 : r * 0.6,
-		2 * Math.PI * time2,
-		"red");
+		2 * Math.PI * (isEvent ? 0.2 : time2),
+		isEvent ? "#ddd" : "red");
 	ctx.beginPath();
 	ctx.arc(x0, y0,
 		r / 2,

@@ -716,24 +716,27 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
 		canvas.dims.controlSize, canvas.dims.controlSize,
 		// draw
-		function (ctx, item, dx, dy) {
-			var isOn = self.mode === A3a.vpl.mode.advanced;
-			ctx.fillStyle = isOn ? "#06f" : "navy";
-			ctx.fillRect(item.x + dx, item.y + dy,
-				canvas.dims.controlSize, canvas.dims.controlSize);
-			ctx.fillStyle = "white";
-			ctx.font = canvas.dims.controlFont;
-			ctx.textAlign = "center";
-			ctx.textBaseline = "middle";
-			ctx.fillText("Pro",
-				item.x + dx + canvas.dims.controlSize / 2,
-				item.y + dy + canvas.dims.controlSize / 2);
-			ctx.fillStyle = isOn ? "white" : "#44a";
-			ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.1,
-				item.y + dy + canvas.dims.controlSize * 0.8,
-				canvas.dims.controlSize * 0.8,
-				canvas.dims.controlSize * 0.1);
-		},
+        function (ctx, item, dx, dy) {
+            var isOn = self.mode === A3a.vpl.mode.advanced;
+            ctx.fillStyle = isOn ? "#06f" : "navy";
+            ctx.fillRect(item.x + dx, item.y + dy,
+                canvas.dims.controlSize, canvas.dims.controlSize);
+            ctx.fillStyle = "white";
+            for (var i = 0; i < 4; i++) {
+                for (var j = 0; j < 5; j++) {
+                    ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.1 * (1 + i) +
+                            (i < 2 ? 0 : canvas.dims.controlSize * 0.43),
+                        item.y + dy + canvas.dims.controlSize * 0.1 * (2 + j),
+                        canvas.dims.controlSize * 0.07,
+                        canvas.dims.controlSize * 0.07);
+                }
+            }
+            ctx.fillStyle = isOn ? "white" : "#44a";
+            ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.1,
+                item.y + dy + canvas.dims.controlSize * 0.8,
+                canvas.dims.controlSize * 0.8,
+                canvas.dims.controlSize * 0.1);
+        },
 		// mousedown
 		function (data, x, y, ev) {
 			self.setMode(self.mode === A3a.vpl.mode.basic
