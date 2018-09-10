@@ -21,6 +21,20 @@ A3a.vpl.EventHandler = function () {
 	this.locked = false;
 };
 
+/** Copy this
+    @return {A3a.vpl.EventHandler}
+*/
+A3a.vpl.EventHandler.prototype.copy = function () {
+    var eh = new A3a.vpl.EventHandler();
+    for (var i = 0; i < this.events.length; i++) {
+        eh.setBlock(this.events[i], null, null);
+    }
+    for (var i = 0; i < this.actions.length; i++) {
+        eh.setBlock(this.actions[i], null, null);
+    }
+    return eh;
+};
+
 /** Check if empty (no event, no actions)
 	@return {boolean}
 */

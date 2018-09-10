@@ -503,7 +503,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		"sXX" +
 		(window["vplRunFunction"] ? "sXXs" : "s") +
 		(this.experimentalFeatures
-			? this.teacherRole ? "XX" : "X"
+			? this.teacherRole ? "XXX" : "XX"
 			: "") +
 		"X";
 	var controlPos = A3a.vpl.Program.blockLayout(canvas.dims.margin, canvasSize.width - canvas.dims.margin,
@@ -944,6 +944,42 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	}
 
 	if (this.experimentalFeatures) {
+        // duplicate
+        canvas.addControl(controlPos[controlIx++],
+            canvas.dims.margin,
+            canvas.dims.controlSize, canvas.dims.controlSize,
+            // draw
+            function (ctx, item, dx, dy) {
+                ctx.fillStyle = "navy";
+                ctx.fillRect(item.x + dx, item.y + dy,
+                    canvas.dims.controlSize, canvas.dims.controlSize);
+                ctx.strokeStyle = "white";
+                ctx.lineWidth = canvas.dims.blockLineWidth;
+                ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
+                    item.y + dy + canvas.dims.controlSize * 0.3,
+                    canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.15);
+                ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
+                    item.y + dy + canvas.dims.controlSize * 0.55,
+                    canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.15);
+            },
+            // mousedown
+            null,
+            // doDrop: duplicate event handler
+            function (targetItem, draggedItem) {
+                    if (draggedItem.data instanceof A3a.vpl.EventHandler) {
+                    var i = self.program.indexOf(draggedItem.data);
+                    if (i >= 0) {
+                        self.saveStateBeforeChange();
+                        self.program.splice(i + 1, 0, draggedItem.data.copy());
+                        canvas.onUpdate && canvas.onUpdate();
+                    }
+                }
+            },
+            // canDrop: accept event handler
+            function (targetItem, draggedItem) {
+                return !(draggedItem.data instanceof A3a.vpl.Block);
+            });
+
 		// disable
 		canvas.addControl(controlPos[controlIx++],
 			canvas.dims.margin,
