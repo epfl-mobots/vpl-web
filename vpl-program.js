@@ -29,6 +29,8 @@ A3a.vpl.Program = function (mode) {
 	this.customizationMode = false;
 	/** @type {Array.<string>} */
 	this.disabledBlocks = [];
+	/** @type {Array.<string>} */
+	this.disabledUI = [];
 };
 
 /** Clear program
@@ -37,6 +39,7 @@ A3a.vpl.Program = function (mode) {
 A3a.vpl.Program.prototype.new = function () {
 	this.mode = A3a.vpl.mode.basic;
 	this.disabledBlocks = [];
+	this.disabledUI = [];
 	this.program = [];
 	this.undoState.reset();
 	this.code = null;

@@ -443,6 +443,42 @@ A3a.vpl.Program.blockLayout = function (pMin, pMax, itemSize, gap, separatorGap,
 	return pos;
 };
 
+/** Add a control button, taking care of disabled ones
+	@param {A3a.vpl.ControlBar} controlBar
+	@param {string} id
+	@param {A3a.vpl.CanvasItem.draw} draw
+	@param {?A3a.vpl.CanvasItem.mousedown=} mousedown
+	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
+	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
+	@param {boolean} keepEnabled
+	@return {void}
+*/
+A3a.vpl.Program.prototype.addControl = function (controlBar, id, draw, mousedown, doDrop, canDrop, keepEnabled) {
+	var self = this;
+	var canvas = controlBar.canvas;
+	var disabled = this.disabledUI.indexOf(id) >= 0;
+	if (this.customizationMode || !disabled) {
+		controlBar.addControl(
+			function (ctx, item, dx, dy) {
+				draw(ctx, item, dx, dy);
+				if (disabled) {
+					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.controlSize, canvas.dims.controlSize);
+				}
+			},
+			this.customizationMode && !keepEnabled
+				? function (canvas, data, width, height, x, y, downEvent) {
+					if (disabled) {
+						self.disabledUI.splice(self.disabledUI.indexOf(id), 1);
+					} else {
+						self.disabledUI.push(id);
+					}
+					return 1;
+				}
+				: mousedown,
+			doDrop, canDrop);
+	}
+};
+
 /** Render the program to a single canvas
 	@param {A3a.vpl.Canvas} canvas
 	@return {void}
@@ -503,7 +539,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	var controlBar = new A3a.vpl.ControlBar(canvas);
 
 	// new
-	controlBar.addControl(
+	this.addControl(controlBar, "new",
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.fillStyle = "navy";
@@ -542,7 +578,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null);
 
 	// save
-	controlBar.addControl(
+	this.addControl(controlBar, "save",
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.fillStyle = "navy";
@@ -598,7 +634,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 	if (window["vplStorageSetFunction"]) {
 		// upload
-		controlBar.addControl(
+		this.addControl(controlBar, "upload",
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
@@ -654,7 +690,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	}
 
 	// text
-	controlBar.addControl(
+	this.addControl(controlBar, "text",
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.fillStyle = "navy";
@@ -701,7 +737,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	controlBar.addSpace();
 
 	// advanced mode (toggle)
-	controlBar.addControl(
+	this.addControl(controlBar, "advanced",
 		// draw
         function (ctx, item, dx, dy) {
             var isOn = self.mode === A3a.vpl.mode.advanced;
@@ -738,7 +774,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 	if (this.teacherRole) {
 		controlBar.addSpace();
-		controlBar.addControl(
+		this.addControl(controlBar, "teacher",
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = self.customizationMode ? "#06f" : "navy";
@@ -770,7 +806,8 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			// doDrop
 			null,
 			// canDrop
-			null);
+			null,
+			true);
 	}
 
 	/** Draw control for undo (back arrow) or redo (flipped)
@@ -815,7 +852,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	controlBar.addStretch();
 
 	// undo
-	controlBar.addControl(
+	this.addControl(controlBar, "undo",
 		// draw
 		function (ctx, item, dx, dy) {
 			drawUndo(ctx, item.x + dx, item.y + dy, false, self.undoState.canUndo());
@@ -831,7 +868,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null);
 
 	// redo
-	controlBar.addControl(
+	this.addControl(controlBar, "redo",
 		// draw
 		function (ctx, item, dx, dy) {
 			drawUndo(ctx, item.x + dx, item.y + dy, true, self.undoState.canRedo());
@@ -849,7 +886,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	controlBar.addStretch();
 
 	if (window["vplRunFunction"]) {
-		controlBar.addControl(
+		this.addControl(controlBar, "run",
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
@@ -908,7 +945,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 							A3a.vpl.blockType.action;
 			});
 
-		controlBar.addControl(
+		this.addControl(controlBar, "stop",
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
@@ -938,7 +975,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 	if (this.experimentalFeatures) {
         // duplicate
-        controlBar.addControl(
+		this.addControl(controlBar, "duplicate",
             // draw
             function (ctx, item, dx, dy) {
                 ctx.fillStyle = "navy";
@@ -972,7 +1009,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
             });
 
 		// disable
-		controlBar.addControl(
+		this.addControl(controlBar, "disable",
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
@@ -1012,7 +1049,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 		if (this.teacherRole) {
 			// lock
-			controlBar.addControl(
+			this.addControl(controlBar, "lock",
 				// draw
 				function (ctx, item, dx, dy) {
 					ctx.fillStyle = "navy";
@@ -1053,7 +1090,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	}
 
 	// trashcan
-	controlBar.addControl(
+	this.addControl(controlBar, "trashcan",
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.fillStyle = "navy";
