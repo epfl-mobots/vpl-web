@@ -73,14 +73,20 @@ A3a.vpl.ControlBar.prototype.addStretch = function () {
  	@return {void}
 */
 A3a.vpl.ControlBar.prototype.calcLayout = function (pMin, pMax, itemSize, gap, separatorGap) {
+	// remove duplicate spaces and stretches
+	var layout = this.layout
+		.trim()
+		.replace(/ +/g, " ")
+		.replace(/s +/g, "s").replace(/ +s/g, "s")
+		.replace(/s+/g, "s");
 	// calc. sum of fixed sizes and count stretches
 	var totalFixedSize = 0;
 	var stretchCount = 0;
 	var s = 0;
-	for (var i = 0; i < this.layout.length; i++) {
-		switch (this.layout[i]) {
+	for (var i = 0; i < layout.length; i++) {
+		switch (layout[i]) {
 		case "X":
-			s += this.layout[i - 1] === "X" ? gap + itemSize : itemSize;
+			s += layout[i - 1] === "X" ? gap + itemSize : itemSize;
 			break;
 		case " ":
 			s += separatorGap;
@@ -95,10 +101,10 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (pMin, pMax, itemSize, gap, s
 	// calc. positions
 	var controlIx = 0;
 	var p = pMin;
-	for (var i = 0; i < this.layout.length; i++) {
-		switch (this.layout[i]) {
+	for (var i = 0; i < layout.length; i++) {
+		switch (layout[i]) {
 		case "X":
-			if (this.layout[i - 1] === "X") {
+			if (layout[i - 1] === "X") {
 				this.controls[controlIx++].pos = p + gap;
 				p += gap + itemSize;
 			} else {
