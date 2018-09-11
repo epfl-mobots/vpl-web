@@ -219,17 +219,20 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			}
 			canvas.onUpdate && canvas.onUpdate();
 		},
-		// canDrop
-		function (targetItem, droppedItem) {
-			// not event handler on itself, or child block, or event block in basic mode
-			return droppedItem.data !== targetItem.data &&
-				(!(droppedItem.data instanceof A3a.vpl.Block) ||
-					droppedItem.data.eventHandlerContainer !== targetItem.data) &&
-				(self.mode === A3a.vpl.mode.advanced ||
-					targetItem.data.events.length === 0 ||
-					(droppedItem.data instanceof A3a.vpl.Block &&
-						droppedItem.data.blockTemplate.type === A3a.vpl.blockType.action));
-		}
+        // canDrop
+        function (targetItem, droppedItem) {
+            // not event handler on itself, or child block, or event block in basic mode
+            return droppedItem.data instanceof A3a.vpl.EventHandler
+                // event handler: ok to another one
+                ? droppedItem.data !== targetItem.data
+                // block: not in parent event handler
+                : droppedItem.data.eventHandlerContainer !== targetItem.data &&
+                    // ...and not a new event in basic mode
+                    (self.mode === A3a.vpl.mode.advanced ||
+                        targetItem.data.events.length === 0 ||
+                        (droppedItem.data instanceof A3a.vpl.Block &&
+                            droppedItem.data.blockTemplate.type === A3a.vpl.blockType.action));
+        }
 	);
 	if (eventHandler.disabled) {
 		item.drawOverlay = function (ctx, item, dx, dy) {
