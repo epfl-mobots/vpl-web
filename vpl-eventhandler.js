@@ -358,63 +358,73 @@ A3a.vpl.EventHandler.prototype.generateCode = function (andOp) {
 };
 
 /** Check conflict with another event handler, setting their error if there is
-	one
-	@return {boolean} true if there is a conflict
+    one
+    @return {boolean} true if there is a conflict
 */
 A3a.vpl.EventHandler.prototype.checkConflicts = function (otherEventHandler) {
-	/** Compare function for sorting events
-		@param {A3a.vpl.Block} a
-		@param {A3a.vpl.Block} b
-		@return {number}
-	*/
-	function compareEvents(a, b) {
-		var at = a.blockTemplate.name;
-		var bt = b.blockTemplate.name;
-		return at > bt ? 1 : at < bt ? -1 : 0;
-	}
+    /** Compare function for sorting events
+        @param {A3a.vpl.Block} a
+        @param {A3a.vpl.Block} b
+        @return {number}
+    */
+    function compareEvents(a, b) {
+        if (a.disabled) {
+            return b.disabled ? 0 : 1;
+        } else if (b.disabled) {
+            return -1;
+        }
+        var at = a.blockTemplate.name;
+        var bt = b.blockTemplate.name;
+        return at > bt ? 1 : at < bt ? -1 : 0;
+    }
 
-	/** Check if parameters of two blocks are equal
-		@param {A3a.vpl.Block} block1
-		@param {A3a.vpl.Block} block2
-		@return {boolean}
-	*/
-	function areParamEqual(block1, block2) {
-		if (block1.param === null && block2.param === null) {
-			return true;
-		}
-		if (block1.param === null || block2.param === null
-			|| block1.param.length !== block2.param.length) {
-			return false;
-		}
-		for (var i = 0; i < block1.param.length; i++) {
-			if (block1.param[i] !== block2.param[i]) {
-				return false;
-			}
-		}
-		return true;
-	}
+    /** Check if parameters of two blocks are equal
+        @param {A3a.vpl.Block} block1
+        @param {A3a.vpl.Block} block2
+        @return {boolean}
+    */
+    function areParamEqual(block1, block2) {
+        if (block1.param === null && block2.param === null) {
+            return true;
+        }
+        if (block1.param === null || block2.param === null
+            || block1.param.length !== block2.param.length) {
+            return false;
+        }
+        for (var i = 0; i < block1.param.length; i++) {
+            if (block1.param[i] !== block2.param[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-	// ok if events are missing or in different number
-	if (this.events.length === 0 ||
-		otherEventHandler.events.length !== this.events.length) {
-		return false;
-	}
-	// ok if events are different
-	var eSorted = this.events.slice().sort(compareEvents);
-	var eOtherSorted = otherEventHandler.events.slice().sort(compareEvents);
-	for (var i = 0; i < eSorted.length; i++) {
-		if (eSorted[i].blockTemplate !== eOtherSorted[i].blockTemplate ||
-			!areParamEqual(eSorted[i], eOtherSorted[i])) {
-			return false;
-		}
-	}
+    // ok if event handlers are disabled
+    if (this.disabled || otherEventHandler.disabled) {
+        return false;
+    }
 
-	// else error
-	var err = new A3a.vpl.Error("Duplicate event");
-	err.addEventConflictError(otherEventHandler);
-	this.error = this.error || err;
-	err = new A3a.vpl.Error("Duplicate event");
-	err.addEventConflictError(this);
-	otherEventHandler.error = otherEventHandler.error || err;
-	return true;
+    // ok if events are missing or in different number
+    if (this.events.length === 0 ||
+        otherEventHandler.events.length !== this.events.length) {
+        return false;
+    }
+    // ok if events are different
+    var eSorted = this.events.slice().sort(compareEvents);
+    var eOtherSorted = otherEventHandler.events.slice().sort(compareEvents);
+    for (var i = 0; i < eSorted.length && !eSorted[i].disabled && !eOtherSorted[i].disabled; i++) {
+        if (eSorted[i].blockTemplate !== eOtherSorted[i].blockTemplate ||
+            !areParamEqual(eSorted[i], eOtherSorted[i])) {
+            return false;
+        }
+    }
+
+    // else error
+    var err = new A3a.vpl.Error("Duplicate event");
+    err.addEventConflictError(otherEventHandler);
+    this.error = this.error || err;
+    err = new A3a.vpl.Error("Duplicate event");
+    err.addEventConflictError(this);
+    otherEventHandler.error = otherEventHandler.error || err;
+    return true;
 };
