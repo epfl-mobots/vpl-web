@@ -500,25 +500,10 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	});
 
 	// top controls
-	var layout = "XX" +
-		(window["vplStorageSetFunction"] ? "X" : "") +
-		"X X " +
-		(this.teacherRole ? "X " : "") +
-		"sXX" +
-		(window["vplRunFunction"] ? "sXXs" : "s") +
-		(this.experimentalFeatures
-			? this.teacherRole ? "XXX" : "XX"
-			: "") +
-		"X";
-	var controlPos = A3a.vpl.Program.blockLayout(canvas.dims.margin, canvasSize.width - canvas.dims.margin,
-		canvas.dims.controlSize,
-		canvas.dims.interBlockSpace, 2 * canvas.dims.interBlockSpace,
-		layout);
-	var controlIx = 0;
+	var controlBar = new A3a.vpl.ControlBar(canvas);
 
 	// new
-	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
-		canvas.dims.controlSize, canvas.dims.controlSize,
+	controlBar.addControl(
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.fillStyle = "navy";
@@ -557,8 +542,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null);
 
 	// save
-	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
-		canvas.dims.controlSize, canvas.dims.controlSize,
+	controlBar.addControl(
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.fillStyle = "navy";
@@ -614,8 +598,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 	if (window["vplStorageSetFunction"]) {
 		// upload
-		canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
-			canvas.dims.controlSize, canvas.dims.controlSize,
+		controlBar.addControl(
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
@@ -671,8 +654,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	}
 
 	// text
-	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
-		canvas.dims.controlSize, canvas.dims.controlSize,
+	controlBar.addControl(
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.fillStyle = "navy";
@@ -716,9 +698,10 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		// canDrop
 		null);
 
+	controlBar.addSpace();
+
 	// advanced mode (toggle)
-	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
-		canvas.dims.controlSize, canvas.dims.controlSize,
+	controlBar.addControl(
 		// draw
         function (ctx, item, dx, dy) {
             var isOn = self.mode === A3a.vpl.mode.advanced;
@@ -754,8 +737,8 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null);
 
 	if (this.teacherRole) {
-		canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
-			canvas.dims.controlSize, canvas.dims.controlSize,
+		controlBar.addSpace();
+		controlBar.addControl(
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = self.customizationMode ? "#06f" : "navy";
@@ -828,9 +811,11 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		ctx.restore();
 	}
 
+
+	controlBar.addStretch();
+
 	// undo
-	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
-		canvas.dims.controlSize, canvas.dims.controlSize,
+	controlBar.addControl(
 		// draw
 		function (ctx, item, dx, dy) {
 			drawUndo(ctx, item.x + dx, item.y + dy, false, self.undoState.canUndo());
@@ -846,8 +831,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null);
 
 	// redo
-	canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
-		canvas.dims.controlSize, canvas.dims.controlSize,
+	controlBar.addControl(
 		// draw
 		function (ctx, item, dx, dy) {
 			drawUndo(ctx, item.x + dx, item.y + dy, true, self.undoState.canRedo());
@@ -862,9 +846,10 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		// canDrop
 		null);
 
+	controlBar.addStretch();
+
 	if (window["vplRunFunction"]) {
-		canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
-			canvas.dims.controlSize, canvas.dims.controlSize,
+		controlBar.addControl(
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
@@ -923,8 +908,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 							A3a.vpl.blockType.action;
 			});
 
-		canvas.addControl(controlPos[controlIx++], canvas.dims.margin,
-			canvas.dims.controlSize, canvas.dims.controlSize,
+		controlBar.addControl(
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
@@ -948,13 +932,13 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			null,
 			// canDrop
 			null);
+
+		controlBar.addStretch();
 	}
 
 	if (this.experimentalFeatures) {
         // duplicate
-        canvas.addControl(controlPos[controlIx++],
-            canvas.dims.margin,
-            canvas.dims.controlSize, canvas.dims.controlSize,
+        controlBar.addControl(
             // draw
             function (ctx, item, dx, dy) {
                 ctx.fillStyle = "navy";
@@ -988,9 +972,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
             });
 
 		// disable
-		canvas.addControl(controlPos[controlIx++],
-			canvas.dims.margin,
-			canvas.dims.controlSize, canvas.dims.controlSize,
+		controlBar.addControl(
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
@@ -1030,9 +1012,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 		if (this.teacherRole) {
 			// lock
-			canvas.addControl(controlPos[controlIx++],
-				canvas.dims.margin,
-				canvas.dims.controlSize, canvas.dims.controlSize,
+			controlBar.addControl(
 				// draw
 				function (ctx, item, dx, dy) {
 					ctx.fillStyle = "navy";
@@ -1073,9 +1053,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	}
 
 	// trashcan
-	canvas.addControl(controlPos[controlIx++],
-		canvas.dims.margin,
-		canvas.dims.controlSize, canvas.dims.controlSize,
+	controlBar.addControl(
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.fillStyle = "navy";
@@ -1121,6 +1099,11 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				? draggedItem.data.eventHandlerContainer !== null && !draggedItem.data.locked
 				: !draggedItem.data.locked;
 		});
+
+	controlBar.calcLayout(canvas.dims.margin, canvasSize.width - canvas.dims.margin,
+		canvas.dims.controlSize,
+		canvas.dims.interBlockSpace, 2 * canvas.dims.interBlockSpace);
+	controlBar.addToCanvas();
 
 	// scrolling area vertical span, used to choose the layout of templates
 	var scrollingAreaY = canvas.dims.margin + canvas.dims.topControlSpace -
