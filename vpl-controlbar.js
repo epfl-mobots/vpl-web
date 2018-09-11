@@ -80,24 +80,43 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (pMin, pMax, itemSize, gap, s
 		.replace(/s +/g, "s").replace(/ +s/g, "s")
 		.replace(/s+/g, "s");
 	// calc. sum of fixed sizes and count stretches
-	var totalFixedSize = 0;
+	var itemCount = 0;
+	var gapCount = 0;
+	var sepCount = 0;
 	var stretchCount = 0;
-	var s = 0;
 	for (var i = 0; i < layout.length; i++) {
 		switch (layout[i]) {
 		case "X":
-			s += layout[i - 1] === "X" ? gap + itemSize : itemSize;
+			itemCount++;
+			if (layout[i - 1] === "X") {
+				gapCount++;
+			}
 			break;
 		case " ":
-			s += separatorGap;
+			sepCount++;
 			break;
 		case "s":
 			stretchCount++;
 			break;
 		}
 	}
+	var stretchSize = 0;
+	if (itemSize * itemCount >= pMax - pMin) {
+		// not enough room for controls without spacing
+		gap = 0;
+		separatorGap = 0;
+	} else {
+		while (true) {
+			var s = itemSize * itemCount + gap * gapCount + separatorGap * sepCount;
+			stretchSize = (pMax - pMin - s) / stretchCount;
+			if (stretchSize >= separatorGap) {
+				break;
+			}
+			gap /= 2;
+			separatorGap /= 2;
+		}
+	}
 	// calc. stretch size
-	var stretchSize = (pMax - pMin - s) / stretchCount;
 	// calc. positions
 	var controlIx = 0;
 	var p = pMin;
