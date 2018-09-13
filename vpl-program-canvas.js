@@ -973,80 +973,80 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		controlBar.addStretch();
 	}
 
-	if (this.experimentalFeatures) {
-        // duplicate
-		this.addControl(controlBar, "duplicate",
-            // draw
-            function (ctx, item, dx, dy) {
-                ctx.fillStyle = "navy";
-                ctx.fillRect(item.x + dx, item.y + dy,
-                    canvas.dims.controlSize, canvas.dims.controlSize);
-                ctx.strokeStyle = "white";
-                ctx.lineWidth = canvas.dims.blockLineWidth;
-                ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
-                    item.y + dy + canvas.dims.controlSize * 0.3,
-                    canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.15);
-                ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
-                    item.y + dy + canvas.dims.controlSize * 0.55,
-                    canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.15);
-            },
-            // mousedown
-            null,
-            // doDrop: duplicate event handler
-            function (targetItem, draggedItem) {
-                    if (draggedItem.data instanceof A3a.vpl.EventHandler) {
-                    var i = self.program.indexOf(draggedItem.data);
-                    if (i >= 0) {
-                        self.saveStateBeforeChange();
-                        self.program.splice(i + 1, 0, draggedItem.data.copy());
-                        canvas.onUpdate && canvas.onUpdate();
-                    }
+    // duplicate
+	this.addControl(controlBar, "duplicate",
+        // draw
+        function (ctx, item, dx, dy) {
+            ctx.fillStyle = "navy";
+            ctx.fillRect(item.x + dx, item.y + dy,
+                canvas.dims.controlSize, canvas.dims.controlSize);
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = canvas.dims.blockLineWidth;
+            ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
+                item.y + dy + canvas.dims.controlSize * 0.3,
+                canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.15);
+            ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
+                item.y + dy + canvas.dims.controlSize * 0.55,
+                canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.15);
+        },
+        // mousedown
+        null,
+        // doDrop: duplicate event handler
+        function (targetItem, draggedItem) {
+                if (draggedItem.data instanceof A3a.vpl.EventHandler) {
+                var i = self.program.indexOf(draggedItem.data);
+                if (i >= 0) {
+                    self.saveStateBeforeChange();
+                    self.program.splice(i + 1, 0, draggedItem.data.copy());
+                    canvas.onUpdate && canvas.onUpdate();
                 }
-            },
-            // canDrop: accept event handler
-            function (targetItem, draggedItem) {
-                return !(draggedItem.data instanceof A3a.vpl.Block);
-            });
+            }
+        },
+        // canDrop: accept event handler
+        function (targetItem, draggedItem) {
+            return !(draggedItem.data instanceof A3a.vpl.Block);
+        });
 
-		// disable
-		this.addControl(controlBar, "disable",
-			// draw
-			function (ctx, item, dx, dy) {
-				ctx.fillStyle = "navy";
-				ctx.fillRect(item.x + dx, item.y + dy,
-					canvas.dims.controlSize, canvas.dims.controlSize);
-				ctx.strokeStyle = "white";
-				ctx.lineWidth = canvas.dims.blockLineWidth;
-				ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
-					item.y + dy + canvas.dims.controlSize * 0.3,
-					canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.4);
-				ctx.beginPath();
-				ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.2,
-					item.y + dy + canvas.dims.controlSize * 0.6);
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.8,
-					item.y + dy + canvas.dims.controlSize * 0.4);
-				ctx.stroke();
-			},
-			// mousedown
-			null,
-			// doDrop: disable or reenable block or event handler
-			function (targetItem, draggedItem) {
-				if (draggedItem.data instanceof A3a.vpl.Block) {
-					self.saveStateBeforeChange();
-					draggedItem.data.disabled = !draggedItem.data.disabled;
-					canvas.onUpdate && canvas.onUpdate();
-				} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
-					self.saveStateBeforeChange();
-					draggedItem.data.toggleDisable();
-					canvas.onUpdate && canvas.onUpdate();
-				}
-			},
-			// canDrop: accept event handler or block in event handler
-			function (targetItem, draggedItem) {
-				return !(draggedItem.data instanceof A3a.vpl.Block)
-					|| draggedItem.data.eventHandlerContainer !== null;
-			});
+	// disable
+	this.addControl(controlBar, "disable",
+		// draw
+		function (ctx, item, dx, dy) {
+			ctx.fillStyle = "navy";
+			ctx.fillRect(item.x + dx, item.y + dy,
+				canvas.dims.controlSize, canvas.dims.controlSize);
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = canvas.dims.blockLineWidth;
+			ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
+				item.y + dy + canvas.dims.controlSize * 0.3,
+				canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.4);
+			ctx.beginPath();
+			ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.2,
+				item.y + dy + canvas.dims.controlSize * 0.6);
+			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.8,
+				item.y + dy + canvas.dims.controlSize * 0.4);
+			ctx.stroke();
+		},
+		// mousedown
+		null,
+		// doDrop: disable or reenable block or event handler
+		function (targetItem, draggedItem) {
+			if (draggedItem.data instanceof A3a.vpl.Block) {
+				self.saveStateBeforeChange();
+				draggedItem.data.disabled = !draggedItem.data.disabled;
+				canvas.onUpdate && canvas.onUpdate();
+			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
+				self.saveStateBeforeChange();
+				draggedItem.data.toggleDisable();
+				canvas.onUpdate && canvas.onUpdate();
+			}
+		},
+		// canDrop: accept event handler or block in event handler
+		function (targetItem, draggedItem) {
+			return !(draggedItem.data instanceof A3a.vpl.Block)
+				|| draggedItem.data.eventHandlerContainer !== null;
+		});
 
+	if (this.experimentalFeatures) {
 		if (this.teacherRole) {
 			// lock
 			this.addControl(controlBar, "lock",
