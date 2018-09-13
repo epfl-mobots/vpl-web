@@ -50,6 +50,31 @@ document.addEventListener("touchend", function (e) {
 var textEditor;
 
 window.addEventListener("load", function () {
+
+	/** Get value corresponding to key in the URI query
+		@param {string} key
+		@return {string}
+	*/
+	function getQueryOption(key) {
+		var q = document.location.href.indexOf("?");
+		if (q >= 0) {
+			var pairs = document.location.href
+				.slice(q + 1)
+				.split("&").map(function (p) {
+					return p.split("=")
+						.map(function (s) {
+							return decodeURIComponent(s);
+						});
+					});
+			for (var i = 0; i < pairs.length; i++) {
+				if (pairs[i][0] === key) {
+					return pairs[i][1];
+				}
+			}
+		}
+		return "";
+	}
+
 	// general settings
 	var isClassic = getQueryOption("appearance") === "classic";
 	if (!isClassic) {
@@ -57,6 +82,14 @@ window.addEventListener("load", function () {
 	}
 	if (getQueryOption("compiler") === "l2") {
 		A3a.vpl.patchL2();
+	}
+
+	var hasThymio = getQueryOption("robot") === "true";
+	if (hasThymio) {
+		window["vplRunFunction"] && window["vplRunFunction"]["init"] &&
+			window["vplRunFunction"]["init"]();
+	} else {
+		window["vplRunFunction"] = null;
 	}
 
 	textEditor = new A3a.vpl.TextEditor("editor", "editor-lines");
@@ -158,30 +191,6 @@ window.addEventListener("load", function () {
 		// normal behavior
 		return true;
 	}, false);
-
-	/** Get value corresponding to key in the URI query
-		@param {string} key
-		@return {string}
-	*/
-	function getQueryOption(key) {
-		var q = document.location.href.indexOf("?");
-		if (q >= 0) {
-			var pairs = document.location.href
-				.slice(q + 1)
-				.split("&").map(function (p) {
-					return p.split("=")
-						.map(function (s) {
-							return decodeURIComponent(s);
-						});
-					});
-			for (var i = 0; i < pairs.length; i++) {
-				if (pairs[i][0] === key) {
-					return pairs[i][1];
-				}
-			}
-		}
-		return "";
-	}
 
 	if (getQueryOption("view") === "text") {
 		window["vplProgram"].setView("src", true);

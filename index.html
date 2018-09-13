@@ -97,6 +97,7 @@ window["vplOnRun"] = function (code) {
 <script src="vpl-blocklib-lang2.js"></script>
 <script src="vpl-eventhandler.js"></script>
 <script src="vpl-program.js"></script>
+<script src="vpl-controlbar.js"></script>
 <script src="vpl-program-canvas.js"></script>
 <script src="vpl-error.js"></script>
 <script src="vpl-draw.js"></script>
@@ -105,10 +106,30 @@ window["vplOnRun"] = function (code) {
 <script src="vpl-texteditor.js"></script>
 <script src="vpl-main.js"></script>
 
+<script src="a3a-nodebase.js"></script>
+<script src="a3a-nodeproxy.js"></script>
+
 <script>
-if (/\?.*l2$/.test(document.URL)) {
-	epfl.mobots.vpl.patchL2();
-}
+
+window["vplRunFunction"] = function (code) {
+	window["vplNode"].putA3aCodeAsync(code);
+};
+window["vplRunFunction"]["init"] = function () {
+	// initialize the list of nodes
+	try {
+		var origin = document.location.origin.slice(0, 5) === "file:"
+			? "http://127.0.0.1:3000"
+			: document.location.origin;
+		A3a.NodeProxy.init(origin, function () {
+			window["vplNode"] = A3a.Node.getNodeList()[0];
+			window["vplCanvas"]["update"]();
+		});
+	} catch (e) {
+		console.info(e);
+		window["vplCanvas"]["update"]();
+	}
+};
+
 </script>
 
 </head>

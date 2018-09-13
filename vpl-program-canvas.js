@@ -450,7 +450,7 @@ A3a.vpl.Program.blockLayout = function (pMin, pMax, itemSize, gap, separatorGap,
 	@param {?A3a.vpl.CanvasItem.mousedown=} mousedown
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
-	@param {boolean} keepEnabled
+	@param {boolean=} keepEnabled
 	@return {void}
 */
 A3a.vpl.Program.prototype.addControl = function (controlBar, id, draw, mousedown, doDrop, canDrop, keepEnabled) {
