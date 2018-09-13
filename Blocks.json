@@ -1,0 +1,55 @@
+{
+	"button": {
+		"background": ["Event_bg"],
+		"main": "Ev_Buttons",
+		"buttons": [
+			{
+				"id": "Btn2_Center",
+				"val": [false, true],
+				"st": ["fill:#ddd", "fill:#f33"]
+			},
+			{
+				"id": "Btn2_Forward",
+				"val": [false, true],
+				"st": ["fill:#ddd", "fill:#f33"]
+			},
+			{
+				"id": "Btn2_Backward",
+				"val": [false, true],
+				"st": ["fill:#ddd", "fill:#f33"]
+			},
+			{
+				"id": "Btn2_Right",
+				"val": [false, true],
+				"st": ["fill:#ddd", "fill:#f33"]
+			},
+			{
+				"id": "Btn2_Left",
+				"val": [false, true],
+				"st": ["fill:#ddd", "fill:#f33"]
+			}
+		]
+	},
+	"tap": {
+		"background": ["Event_bg"],
+		"main": "Ev_Acc_Hit"
+	},
+	"motor": {
+		"background": ["Act_bg"],
+		"main": "Ac_Wheels",
+		"sliders": [
+			{
+				"id": "Slider_R",
+				"thumbId": "RightCursor",
+				"min": -1,
+				"max": 1
+			},
+			{
+				"id": "Slider_L",
+				"thumbId": "LeftCursor",
+				"min": -1,
+				"max": 1
+			}
+		]
+	}
+}

@@ -937,16 +937,14 @@ SVG.prototype.draw = function (ctx, options) {
 	return {x: xa, y: ya}
 };
 
-/** Check if a point is roughly inside an element
+/** Get element bounds
 	@param {string} elementId
-	@param {number} x
-	@param {number} y
-	@return {boolean}
+	@return {{xmin:number,xmax:number,ymin:number,ymax:number}}
 */
-SVG.prototype.isInside = function (elementId, x, y) {
+SVG.prototype.getElementBounds = function (elementId) {
 	var p = this.draw(null, {elementId: elementId});
 	if (p.x.length === 0) {
-		return false;
+		return {xmin: 0, xmax: 0, ymin: 0, ymax: 0};
 	}
 
 	var xmin = p.x[0];
@@ -960,7 +958,23 @@ SVG.prototype.isInside = function (elementId, x, y) {
 		ymax = Math.max(ymax, p.y[i]);
 	}
 
-	return x >= xmin && x <= xmax && y >= ymin && y <= ymax;
+	return {
+		xmin: xmin,
+		xmax: xmax,
+		ymin: ymin,
+		ymax: ymax
+	};
+};
+
+/** Check if a point is roughly inside an element
+	@param {string} elementId
+	@param {number} x
+	@param {number} y
+	@return {boolean}
+*/
+SVG.prototype.isInside = function (elementId, x, y) {
+	var bnds = this.getElementBounds(elementId);
+	return x >= bnds.xmin && x <= bnds.xmax && y >= bnds.ymin && y <= bnds.ymax;
 };
 
 /** Draw SVG to canvas 2d context from uri
