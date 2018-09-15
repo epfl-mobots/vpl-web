@@ -84,6 +84,17 @@ window.addEventListener("load", function () {
 		A3a.vpl.patchL2();
 	}
 
+	var filterBlur = 0;	// 0.1 px
+	var filterGrayscale = 0;	// %
+	var opt = getQueryOption("blur").trim() || "";
+	if (/^\d+$/.test(opt)) {
+		filterBlur = parseInt(opt, 10) / 10;
+	}
+	opt = getQueryOption("grayscale") || "";
+	if (/^\d+$/.test(opt)) {
+		filterGrayscale = parseInt(opt, 10) / 100;
+	}
+
 	var hasThymio = getQueryOption("robot") === "true";
 	if (hasThymio) {
 		window["vplRunFunction"] && window["vplRunFunction"]["init"] &&
@@ -111,6 +122,12 @@ window.addEventListener("load", function () {
 		textEditor.setContent(window["vplProgram"].getCode());
 	};
 	window["vplProgram"].addEventHandler(true);
+
+	// apply canvas filters
+	if (filterBlur > 0 || filterGrayscale > 0) {
+		window["vplCanvas"].canvas["style"]["filter"] =
+			"blur(" + filterBlur.toFixed(1) + "px) grayscale(" + filterGrayscale.toFixed(2) + ")";
+	}
 
 	canvas = document.getElementById("editorTBCanvas");
 	window["srcTBCanvas"] = new A3a.vpl.Canvas(canvas);
