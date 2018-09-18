@@ -30,6 +30,65 @@
 			}
 		]
 	},
+	"horiz prox": {
+		"background": ["Event_bg"],
+		"main": "Ev_Prox",
+		"buttons": [
+			{
+				"id": "Prox0_group",
+				"val": [0, 1, -1],
+				"st": ["fill:#ddd;stroke:#aaa", "fill:#f66;stroke:#700", "fill:white;stroke:black"]
+			},
+			{
+				"id": "Prox1_group",
+				"val": [0, 1, -1],
+				"st": ["fill:#ddd;stroke:#aaa", "fill:#f66;stroke:#700", "fill:white;stroke:black"]
+			},
+			{
+				"id": "Prox2_group",
+				"val": [0, 1, -1],
+				"st": ["fill:#ddd;stroke:#aaa", "fill:#f66;stroke:#700", "fill:white;stroke:black"]
+			},
+			{
+				"id": "Prox3_group",
+				"val": [0, 1, -1],
+				"st": ["fill:#ddd;stroke:#aaa", "fill:#f66;stroke:#700", "fill:white;stroke:black"]
+			},
+			{
+				"id": "Prox4_group",
+				"val": [0, 1, -1],
+				"st": ["fill:#ddd;stroke:#aaa", "fill:#f66;stroke:#700", "fill:white;stroke:black"]
+			},
+			{
+				"id": "Prox5_group",
+				"val": [0, 1, -1],
+				"st": ["fill:#ddd;stroke:#aaa", "fill:#f66;stroke:#700", "fill:white;stroke:black"]
+			},
+			{
+				"id": "prox6_group",
+				"val": [0, 1, -1],
+				"st": ["fill:#ddd;stroke:#aaa", "fill:#f66;stroke:#700", "fill:white;stroke:black"]
+			}
+		],
+		"sliders": [
+			{
+				"id": "Slid_absence_fill",
+				"thumbId": "cursor_absence",
+				"min": 0,
+				"max": 1000
+			},
+			{
+				"id": "Slid_presence_fill",
+				"thumbId": "cursor_presence",
+				"min": 0,
+				"max": 1000
+			}
+		]
+	},
+	"init": {
+		"background": ["Event_bg"],
+		"main": "Ev_Start"
+	},
 	"tap": {
 		"background": ["Event_bg"],
 		"main": "Ev_Acc_Hit"
@@ -39,14 +98,14 @@
 		"main": "Ac_Wheels",
 		"sliders": [
 			{
-				"id": "Slider_R",
-				"thumbId": "RightCursor",
+				"id": "Slider_L",
+				"thumbId": "LeftCursor",
 				"min": -1,
 				"max": 1
 			},
 			{
-				"id": "Slider_L",
-				"thumbId": "LeftCursor",
+				"id": "Slider_R",
+				"thumbId": "RightCursor",
 				"min": -1,
 				"max": 1
 			}

@@ -55,7 +55,6 @@ A3a.vpl.BlockTemplate.resetTimer =
 	"timer.period[0] = 0\n";
 
 /**
-	@const
 	@type {Array.<A3a.vpl.BlockTemplate>}
 */
 A3a.vpl.BlockTemplate.lib =	[

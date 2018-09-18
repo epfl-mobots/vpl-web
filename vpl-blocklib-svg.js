@@ -52,7 +52,7 @@ A3a.vpl.Canvas.prototype.canvasToSVGCoord = function (clickX, clickY, width, hei
 	};
 };
 
-A3a.vpl.Canvas.prototype.mousedownSVGButton2 = function (block, width, height, left, top, ev, buttons) {
+A3a.vpl.Canvas.prototype.mousedownSVGButtons = function (block, width, height, left, top, ev, buttons) {
 	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top, width, height);
 	for (var i = 0; i < buttons.length; i++) {
 		var id = buttons[i].id;
@@ -69,7 +69,8 @@ A3a.vpl.Canvas.prototype.mousedownSVGButton2 = function (block, width, height, l
 };
 
 /** Handle a mousedown event on block buttons (typically called from
-	A3a.vpl.BlockTemplate.mousedownFun)
+	A3a.vpl.BlockTemplate.mousedownFun) OBSOLETE, will eventually be replaced
+	by mousedownSVGButtons once the json is completed
 	@param {A3a.vpl.Block} block
 	@param {number} width
 	@param {number} height
@@ -82,7 +83,7 @@ A3a.vpl.Canvas.prototype.mousedownSVGButton2 = function (block, width, height, l
 	@return {?number} index of the button in buttonIds, or null if click
 	is outside the SVG shape
 */
-A3a.vpl.Canvas.prototype.mousedownSVGButton = function (block, width, height, left, top, ev, buttonIds, funSep, funAll) {
+A3a.vpl.Canvas.prototype.mousedownSVGButtonOld = function (block, width, height, left, top, ev, buttonIds, funSep, funAll) {
 	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top, width, height);
 	for (var i = 0; i < buttonIds.length; i++) {
 		var id = buttonIds[i];
@@ -105,6 +106,10 @@ A3a.vpl.Canvas.prototype.mousedownSVGButton = function (block, width, height, le
 	@return {Object}
 */
 A3a.vpl.Canvas.prototype.buttonStyles = function (aux, param) {
+	if (aux["buttons"] == undefined) {
+		return {};
+	}
+
 	var styles = {};
 	for (var i = 0; i < aux["buttons"].length; i++) {
 		var val = aux["buttons"][i]["val"];
@@ -117,12 +122,27 @@ A3a.vpl.Canvas.prototype.buttonStyles = function (aux, param) {
 	return styles;
 };
 
+/** Return a transform function which translates
+	@param {number} dx
+	@param {number} dy
+	@return {function(CanvasRenderingContext2D):void}
+*/
+A3a.vpl.Canvas.translateFunction = function (dx, dy) {
+	return function (ctx) {
+		ctx.translate(dx, dy);
+	};
+};
+
 /** Make transform object for drawSVG with sliders
 	@param {Object} aux description of the block containing sliders, as defined in the json
 	@param {Array} param block parameters
 	@return {Object}
 */
 A3a.vpl.Canvas.prototype.sliderTransforms = function (aux, param) {
+	if (aux["sliders"] == undefined) {
+		return {};
+	}
+
 	var transforms = {};
 	for (var i = 0; i < aux["sliders"].length; i++) {
 		var sliderAux = aux["sliders"][i];
@@ -135,32 +155,32 @@ A3a.vpl.Canvas.prototype.sliderTransforms = function (aux, param) {
 		}
 		// calc thumb position
 		var f = (param[i] - sliderAux["min"]) / (sliderAux["max"] - sliderAux["min"]);
-		transforms[sliderAux["thumbId"]] = function (ctx) {
-			ctx.translate(bnds.xmin * (f - 0.5) + bnds.xmax * (0.5 - f),
+		// translate thumb
+		transforms[sliderAux["thumbId"]] = A3a.vpl.Canvas.translateFunction(
+			bnds.xmax * (f - 0.5) + bnds.xmin * (0.5 - f),
 				bnds.ymin * (f - 0.5) + bnds.ymax * (0.5 - f));
-		};
 	}
 	return transforms;
 };
 
 /** Handle mousedown event in A3a.vpl.BlockTemplate.mousedownFun for a block with sliders
 	@param {A3a.vpl.Block} block
-	@param {Object} aux description of the block containing sliders, as defined in the json
 	@param {number} width block width
 	@param {number} height block width
 	@param {number} left left position of the block
 	@param {number} top top position of the block
 	@param {Event} ev mouse event
+	@param {Array.<Object>} sliders description of the sliders, as defined in the json
 	@return {?number}
 */
-A3a.vpl.Canvas.prototype.sliderMousedown = function (block, aux, width, height, left, top, ev) {
-	for (var i = 0; i < aux["sliders"].length; i++) {
-		this.clientData.sliderAux = aux["sliders"][i];
+A3a.vpl.Canvas.prototype.mousedownSVGSliders = function (block, width, height, left, top, ev, sliders) {
+	for (var i = 0; i < sliders.length; i++) {
+		this.clientData.sliderAux = sliders[i];
 		var bnds = this.clientData.svg.getElementBounds(this.clientData.sliderAux["id"]);
 		this.clientData.vert = bnds.xmax - bnds.xmin < bnds.ymax - bnds.ymin;
 		var x0 = (bnds.xmin + bnds.xmax) / 2;
 		var y0 = (bnds.ymin + bnds.ymax) / 2;
-		if (this.sliderCheck(this.clientData.vert ? x0 / width - 0.5 : y0 / height - 0.5,
+		if (this.sliderCheck(this.clientData.vert ? x0 / width - 0.5 : 0.5 - y0 / height,
 			this.clientData.vert, width, height, left, top, ev)) {
 			block.prepareChange();
 			return i;
@@ -188,6 +208,46 @@ A3a.vpl.Canvas.prototype.sliderMousedrag = function (block, dragIndex, aux, widt
 		Math.min(this.clientData.sliderAux["max"], val));
 };
 
+A3a.vpl.Canvas.drawBlockSVG = function (aux, canvas, block) {
+	aux["background"].forEach(function (id) {
+		canvas.drawSVG(textfiles["Blocks.svg"], {elementId: id});
+	});
+	canvas.drawSVG(textfiles["Blocks.svg"],
+		{
+			elementId: aux["main"],
+			style: canvas.buttonStyles(aux, block.param),
+			transform: canvas.sliderTransforms(aux, block.param)
+		});
+};
+
+A3a.vpl.Canvas.mousedownBlockSVG = function (aux, canvas, block, width, height, left, top, ev) {
+	var ix0 = 0;
+	var buttons = aux["buttons"];
+	if (buttons) {
+		var ix = canvas.mousedownSVGButtons(block, width, height, left, top, ev, buttons);
+		if (ix !== null) {
+			return ix0 + ix;
+		}
+		ix0 += buttons.length;
+	}
+	var sliders = aux["sliders"];
+	if (sliders) {
+		ix = canvas.mousedownSVGSliders(block, width, height, left, top, ev, sliders);
+		if (ix !== null) {
+			return ix0 + ix;
+		}
+	}
+	return null;
+};
+
+A3a.vpl.Canvas.mousedragBlockSVG = function (aux,
+	canvas, block, dragIndex, width, height, left, top, ev) {
+	var ix0 = aux["buttons"] ? aux["buttons"].length : 0;
+	if (dragIndex >= ix0) {
+		canvas.sliderMousedrag(block, dragIndex - ix0, aux, width, height, left, top, ev);
+	}
+};
+
 /**
 	@const
 	@type {Array.<A3a.vpl.BlockTemplate>}
@@ -200,20 +260,13 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		defaultParam: function () { return [false, false, false, false, false]; },
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
-			var aux = A3a.vpl.BlockTemplate.svgBlockAuxData["button"];
-			aux["background"].forEach(function (id) {
-				canvas.drawSVG(textfiles["Blocks.svg"], {elementId: id});
-			});
-			canvas.drawSVG(textfiles["Blocks.svg"],
-				{
-					elementId: aux["main"],
-					style: canvas.buttonStyles(aux, block.param)
-				});
+			A3a.vpl.Canvas.drawBlockSVG(A3a.vpl.BlockTemplate.svgBlockAuxData["button"],
+				canvas, block);
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			var buttons = A3a.vpl.BlockTemplate.svgBlockAuxData["button"]["buttons"];
-			return canvas.mousedownSVGButton2(block, width, height, left, top, ev, buttons);
+			return A3a.vpl.Canvas.mousedownBlockSVG(A3a.vpl.BlockTemplate.svgBlockAuxData["button"],
+				canvas, block, width, height, left, top, ev);
 		},
 		/** @type {A3a.vpl.BlockTemplate.validateFun} */
 		validate: function (block) {
@@ -252,44 +305,18 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		defaultParam: function () { return [0, 0, 0, 0, 0, 0, 0]; },
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
-			/** Button style for drawSVG
-				@param {number} p button state (1, 0 or -1)
-				@return {string}
-			*/
-			function style(p) {
-				return "" +
-					"fill:" + (p > 0 ? "#f66" : p < 0 ? "white" : "#ddd") + ";" +
-					"stroke:" + (p > 0 ? "#700" : p < 0 ? "black" : "#aaa");
-			}
-
-			canvas.drawSVG(textfiles["Blocks.svg"], {elementId: "Event_bg"});
-			canvas.drawSVG(textfiles["Blocks.svg"],
-				{
-					elementId: "Ev_Prox",
-					style: {
-						"Btn3_Prox0": style(block.param[0]),
-						"Btn3_Prox1": style(block.param[1]),
-						"Btn3_Prox2": style(block.param[2]),
-						"Btn3_Prox3": style(block.param[3]),
-						"Btn3_Prox4": style(block.param[4]),
-						"Btn3_Prox5": style(block.param[5]),
-						"Btn3_Prox6": style(block.param[6])
-					}
-				});
+			A3a.vpl.Canvas.drawBlockSVG(A3a.vpl.BlockTemplate.svgBlockAuxData["horiz prox"],
+				canvas, block);
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			return canvas.mousedownSVGButton(block, width, height, left, top, ev,
-				[
-					"Btn3_Prox0",
-					"Btn3_Prox1",
-					"Btn3_Prox2",
-					"Btn3_Prox3",
-					"Btn3_Prox4",
-					"Btn3_Prox5",
-					"Btn3_Prox6"
-				],
-				function (p) { return (p + 2) % 3 - 1; });
+			return A3a.vpl.Canvas.mousedownBlockSVG(A3a.vpl.BlockTemplate.svgBlockAuxData["horiz prox"],
+				canvas, block, width, height, left, top, ev);
+		},
+		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
+		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+			A3a.vpl.Canvas.mousedragBlockSVG(A3a.vpl.BlockTemplate.svgBlockAuxData["horiz prox"],
+				canvas, block, dragIndex, width, height, left, top, ev);
 		},
 		/** @type {A3a.vpl.BlockTemplate.validateFun} */
 		validate: function (block) {
@@ -365,7 +392,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			return canvas.mousedownSVGButton(block, width, height, left, top, ev,
+			return canvas.mousedownSVGButtonOld(block, width, height, left, top, ev,
 				[
 					"Btn2_ProxGd1",
 					"Btn2_ProxGd0"
@@ -421,8 +448,8 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		noState: true,
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
-			canvas.drawSVG(textfiles["Blocks.svg"], {elementId: "Event_bg"});
-			canvas.drawSVG(textfiles["Blocks.svg"], {elementId: "Ev_Start"});
+			A3a.vpl.Canvas.drawBlockSVG(A3a.vpl.BlockTemplate.svgBlockAuxData["init"],
+				canvas, block);
 		},
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
@@ -686,7 +713,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			return canvas.mousedownSVGButton(block, width, height, left, top, ev,
+			return canvas.mousedownSVGButtonOld(block, width, height, left, top, ev,
 				[
 					"Btn2_State0",
 					"Btn2_State1",
@@ -888,13 +915,13 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			var aux = A3a.vpl.BlockTemplate.svgBlockAuxData["motor"];
-			return canvas.sliderMousedown(block, aux, width, height, left, top, ev);
+			return A3a.vpl.Canvas.mousedownBlockSVG(A3a.vpl.BlockTemplate.svgBlockAuxData["motor"],
+				canvas, block, width, height, left, top, ev);
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
-			var aux = A3a.vpl.BlockTemplate.svgBlockAuxData["motor"];
-			canvas.sliderMousedrag(block, dragIndex, aux, width, height, left, top, ev);
+			A3a.vpl.Canvas.mousedragBlockSVG(A3a.vpl.BlockTemplate.svgBlockAuxData["motor"],
+				canvas, block, dragIndex, width, height, left, top, ev);
 		},
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
@@ -944,7 +971,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			return canvas.mousedownSVGButton(block, width, height, left, top, ev,
+			return canvas.mousedownSVGButtonOld(block, width, height, left, top, ev,
 				[
 					"Btn2_Stop",
 					"Btn2_Fwd",
@@ -999,7 +1026,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-				return canvas.mousedownSVGButton(block, width, height, left, top, ev,
+				return canvas.mousedownSVGButtonOld(block, width, height, left, top, ev,
 					[
 						"Btn2_NoColor",
 						"Btn2_White_Select",
@@ -1077,7 +1104,7 @@ A3a.vpl.BlockTemplate.libSVG =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-				return canvas.mousedownSVGButton(block, width, height, left, top, ev,
+				return canvas.mousedownSVGButtonOld(block, width, height, left, top, ev,
 					[
 						"Btn2_NoColor-2",
 						"Btn2_White_Select-2",
@@ -1168,26 +1195,6 @@ A3a.vpl.BlockTemplate.libSVG =	[
 	}),
 ];
 
-/**
-	@const
-	@type {Array.<string>}
-*/
-A3a.vpl.BlockTemplate.libRemoveSVG = [
-	"horiz prox adv",
-	"ground adv",
-	"accelerometer",
-	"counter comparison",
-	"color state 8",
-	"top color",
-	"bottom color",
-	"notes",
-	"set state",
-	"set counter",
-	"set timer",
-	"set timer log",
-	"picture comment"
-];
-
 /** Auxiliary data for displaying blocks defined in SVG
 	@type {Object}
 */
@@ -1197,23 +1204,9 @@ A3a.vpl.BlockTemplate.svgBlockAuxData = {};
 	@return {void}
 */
 A3a.vpl.patchSVG = function () {
-	for (var i = 0; i < A3a.vpl.BlockTemplate.libSVG.length; i++) {
-		var name = A3a.vpl.BlockTemplate.libSVG[i].name;
-		var j = 0;
-		while (j < A3a.vpl.BlockTemplate.lib.length &&
-			A3a.vpl.BlockTemplate.lib[j].name !== name) {
-			j++;
-		}
-		A3a.vpl.BlockTemplate.lib[j] = A3a.vpl.BlockTemplate.libSVG[i];
-	}
-
-	for (var i = 0; i < A3a.vpl.BlockTemplate.lib.length; ) {
-		if (A3a.vpl.BlockTemplate.libRemoveSVG.indexOf(A3a.vpl.BlockTemplate.lib[i].name) >= 0) {
-			A3a.vpl.BlockTemplate.lib.splice(i, 1);
-		} else {
-			i++;
-		}
-	}
+	A3a.vpl.BlockTemplate.lib = A3a.vpl.BlockTemplate.libSVG;
+// A3a.vpl.BlockTemplate.lib = [A3a.vpl.BlockTemplate.findByName("horiz prox")];
+	A3a.vpl.BlockTemplate.svgBlockAuxData = /** @type {Object} */(JSON.parse(textfiles["Blocks.json"]));
 
 	A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		return {
@@ -1238,6 +1231,4 @@ A3a.vpl.patchSVG = function () {
 			commentStyle: "#aaa"
 		};
 	};
-
-	A3a.vpl.BlockTemplate.svgBlockAuxData = /** @type {Object} */(JSON.parse(textfiles["Blocks.json"]));
 };
