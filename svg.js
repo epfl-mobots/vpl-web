@@ -194,6 +194,8 @@ SVG.prototype.draw = function (ctx, options) {
 	var css = "";
 	var cssDict = {};
 
+	var transform = new SVG.Transform.Stack();
+
 	/** @type {Array.<number>} */
 	var xa = [];
 	/** @type {Array.<number>} */
@@ -353,6 +355,7 @@ SVG.prototype.draw = function (ctx, options) {
 					switch (c) {
 					case "translate":
 						ctx && ctx.translate(args[0] || 0, args[1] || 0);
+						transform.translate(args[0] || 0, args[1] || 0);
 						break;
 					case "rotate":
 						var a = (args[0] || 0) * Math.PI / 180;
@@ -363,9 +366,13 @@ SVG.prototype.draw = function (ctx, options) {
 								ctx.translate(-x0, -y0);
 								ctx.rotate(a);
 								ctx.translate(x0, y0);
+								transform.translate(-x0, -y0);
+								transform.rotate(a);
+								transform.translate(x0, y0);
 							}
 						} else {
 							ctx && ctx.rotate(a);
+							transform.rotate(a);
 						}
 						break;
 					default:
@@ -373,6 +380,15 @@ SVG.prototype.draw = function (ctx, options) {
 					}
 				});
 			}
+		}
+
+		/** Add a pair of points to xa and ya, taking current transform into account
+			@return {void}
+		*/
+		function addPoint(x, y) {
+			var pt = transform.apply(new SVG.Transform.Point(x, y));
+			xa.push(pt.x);
+			ya.push(pt.y);
 		}
 
 		/** Change baseStyle and overriddenStyle for element el using its style and class
@@ -465,8 +481,7 @@ SVG.prototype.draw = function (ctx, options) {
 								x = args[i];
 								y = args[i + 1];
 								ctx && ctx.lineTo(x, y);
-								xa.push(x);
-								ya.push(y);
+								addPoint(x, y);
 							}
 							xc1 = x;
 							yc1 = y;
@@ -477,14 +492,12 @@ SVG.prototype.draw = function (ctx, options) {
 							x += args[0];
 							y += args[1];
 							ctx && ctx.moveTo(x, y);
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 							for (var i = 2; i + 1 < args.length; i += 2) {
 								x += args[i];
 								y += args[i + 1]
 								ctx && ctx.lineTo(x, y);
-								xa.push(x);
-								ya.push(y);
+								addPoint(x, y);
 							}
 						}
 						xc1 = x;
@@ -495,8 +508,7 @@ SVG.prototype.draw = function (ctx, options) {
 							x = args[i];
 							y = args[i + 1];
 							ctx && ctx.lineTo(x, y);
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -506,8 +518,7 @@ SVG.prototype.draw = function (ctx, options) {
 							x += args[i];
 							y += args[i + 1];
 							ctx && ctx.lineTo(x, y);
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -516,8 +527,7 @@ SVG.prototype.draw = function (ctx, options) {
 						for (var i = 0; i < args.length; i++) {
 							x = args[i];
 							ctx && ctx.lineTo(x, y);
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -526,8 +536,7 @@ SVG.prototype.draw = function (ctx, options) {
 						for (var i = 0; i < args.length; i++) {
 							x += args[i];
 							ctx && ctx.lineTo(x, y);
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -536,8 +545,7 @@ SVG.prototype.draw = function (ctx, options) {
 						for (var i = 0; i < args.length; i++) {
 							y = args[i];
 							ctx && ctx.lineTo(x, y);
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -546,8 +554,7 @@ SVG.prototype.draw = function (ctx, options) {
 						for (var i = 0; i < args.length; i++) {
 							y += args[i];
 							ctx && ctx.lineTo(x, y);
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -562,8 +569,7 @@ SVG.prototype.draw = function (ctx, options) {
 								x, y, x1, y1);
 							x = x1;
 							y = y1;
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -578,8 +584,7 @@ SVG.prototype.draw = function (ctx, options) {
 								x, y, x1, y1);
 							x = x1;
 							y = y1;
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -593,8 +598,7 @@ SVG.prototype.draw = function (ctx, options) {
 							y = args[i + 5];
 							xc1 = 2 * x - args[i + 2];
 							yc1 = 2 * y - args[i + 3];
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						break;
 					case "c":
@@ -606,8 +610,7 @@ SVG.prototype.draw = function (ctx, options) {
 							yc1 = y + 2 * args[i + 5] - args[i + 3];
 							x += args[i + 4];
 							y += args[i + 5];
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						break;
 					case "S":
@@ -619,8 +622,7 @@ SVG.prototype.draw = function (ctx, options) {
 							y = args[i + 3];
 							xc1 = 2 * x - args[i];
 							yc1 = 2 * y - args[i + 1];
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						break;
 					case "s":
@@ -632,8 +634,7 @@ SVG.prototype.draw = function (ctx, options) {
 							yc1 = y - args[i + 1];
 							x += args[i + 2];
 							y += args[i + 3];
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						break;
 					case "Q":
@@ -644,8 +645,7 @@ SVG.prototype.draw = function (ctx, options) {
 							y = args[i + 3];
 							xc1 = 2 * x - args[i];
 							yc1 = 2 * y - args[i + 1];
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						break;
 					case "q":
@@ -656,8 +656,7 @@ SVG.prototype.draw = function (ctx, options) {
 							yc1 = y + 2 * args[i + 3] - args[i + 1];
 							x += args[i + 2];
 							y += args[i + 3];
-							xa.push(x);
-							ya.push(y);
+							addPoint(x, y);
 						}
 						break;
 					case "Z":
@@ -825,8 +824,9 @@ SVG.prototype.draw = function (ctx, options) {
 
 		var idAttr = el.getAttribute("id");
 		var transformFun = idAttr && options && options.transform && options.transform[idAttr];
+		ctx && ctx.save();
+		transform.save();
 		if (transformFun && ctx) {
-			ctx.save();
 			transformFun(ctx);
 		}
 
@@ -841,10 +841,12 @@ SVG.prototype.draw = function (ctx, options) {
 			break;
 		case "path":
 			ctx && ctx.save();
+			transform.save();
 			applyTransform();
 			path(el.getAttribute("d") || "");
 			paint();
 			ctx && ctx.restore();
+			transform.restore();
 			break;
 		case "line":
 			var x = getArg("x1");
@@ -852,12 +854,16 @@ SVG.prototype.draw = function (ctx, options) {
 			var x2 = getArg("x2");
 			var y2 = getArg("y2");
 			ctx && ctx.save();
+			transform.save();
 			applyTransform();
 			ctx && ctx.beginPath();
 			ctx && ctx.moveTo(x, y);
 			ctx && ctx.lineTo(x2, y2);
 			paint();
+			addPoint(x, y);
+			addPoint(x2, y2);
 			ctx && ctx.restore();
+			transform.restore();
 			break;
 		case "polygon":
 			var points = el.getAttribute("points")
@@ -867,6 +873,7 @@ SVG.prototype.draw = function (ctx, options) {
 				.map(function (s) { return parseFloat(s); });
 			if (points.length >= 4) {
 				ctx && ctx.save();
+				transform.save();
 				applyTransform();
 				ctx && ctx.beginPath();
 				ctx && ctx.moveTo(points[0], points[1]);
@@ -875,6 +882,7 @@ SVG.prototype.draw = function (ctx, options) {
 				}
 				paint();
 				ctx && ctx.restore();
+				transform.restore();
 			}
 			break;
 		case "circle":
@@ -882,15 +890,17 @@ SVG.prototype.draw = function (ctx, options) {
 			var y = getArg("cy");
 			var r = getArg("r");
 			ctx && ctx.save();
+			transform.save();
 			applyTransform();
 			ctx && ctx.beginPath();
 			ctx && ctx.arc(x, y, r, 0, 2 * Math.PI);
 			paint();
+			addPoint(x - r, y - r);
+			addPoint(x - r, y + r);
+			addPoint(x + r, y - r);
+			addPoint(x + r, y + r);
 			ctx && ctx.restore();
-			xa.push(x - r);
-			ya.push(y - r);
-			xa.push(x + r);
-			ya.push(y + r);
+			transform.restore();
 			break;
 		case "rect":
 			var x = getArg("x");
@@ -898,31 +908,33 @@ SVG.prototype.draw = function (ctx, options) {
 			var width = getArg("width");
 			var height = getArg("height");
 			ctx && ctx.save();
+			transform.save();
 			applyTransform();
 			ctx && ctx.beginPath();
 			ctx && ctx.rect(x, y, width, height);
 			paint();
+			addPoint(x, y);
+			addPoint(x, y + height);
+			addPoint(x + width, y);
+			addPoint(x + width, y + height);
 			ctx && ctx.restore();
-			xa.push(x);
-			ya.push(y);
-			xa.push(x + width);
-			ya.push(y + height);
+			transform.restore();
 			break;
 		case "text":
 			var x = getArg("x");
 			var y = getArg("y");
 			ctx && ctx.save();
+			transform.save();
 			applyTransform();
 			paintText(el.textContent, x, y);
+			addPoint(x, y);
 			ctx && ctx.restore();
-			xa.push(x);
-			ya.push(y);
+			transform.restore();
 			break;
 		}
 
-		if (transformFun && ctx) {
-			ctx.restore();
-		}
+		ctx && ctx.restore();
+		transform.restore();
 	}
 
 	findCSS(this.root);
