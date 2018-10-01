@@ -142,7 +142,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
-				canvas.buttons(buttons, block.param);
+				canvas.buttons(buttons, block.param, {cross: true});
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
@@ -226,7 +226,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
-				canvas.buttons(buttons, block.param);
+				canvas.buttons(buttons, block.param, {cross: true});
 				canvas.slider(/** @type {number} */(block.param[7]), 0.02, false,
 					"red", A3a.vpl.draw.levelType.high);
 				canvas.slider(/** @type {number} */(block.param[8]), -0.2, false,
@@ -329,7 +329,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop(true);
-				canvas.buttons(buttons, block.param);
+				canvas.buttons(buttons, block.param, {cross: true});
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
@@ -406,7 +406,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop(true);
-				canvas.buttons(buttons, block.param);
+				canvas.buttons(buttons, block.param, {cross: true});
 				canvas.slider(/** @type {number} */(block.param[2]), 0.02, false,
 					"red", A3a.vpl.draw.levelType.high);
 				canvas.slider(/** @type {number} */(block.param[3]), -0.2, false,

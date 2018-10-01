@@ -398,9 +398,10 @@ A3a.vpl.Canvas.prototype.tap = function (scale) {
 	@param {Array.<A3a.vpl.Canvas.buttonShape>} shapes
 	@param {Array.<boolean|number>} state false or 0: gray border,
 	true or 1: red, -1: black, -2: black border
+	@param {{cross:(boolean|undefined)}=} opt
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.buttons = function (shapes, state) {
+A3a.vpl.Canvas.prototype.buttons = function (shapes, state, opt) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	shapes.forEach(function (shape, i) {
@@ -446,6 +447,17 @@ A3a.vpl.Canvas.prototype.buttons = function (shapes, state) {
 			ctx.fill();
 			ctx.stroke();
 			break;
+		}
+		if (state && state[i] === -1 && opt && opt.cross) {
+			// white cross
+			var s = 0.06;
+			ctx.strokeStyle = "white";
+			ctx.beginPath();
+			ctx.moveTo(-dims.blockSize * s * sz, -dims.blockSize * s * sz);
+			ctx.lineTo(dims.blockSize * s * sz, dims.blockSize * s * sz);
+			ctx.moveTo(-dims.blockSize * s * sz, dims.blockSize * s * sz);
+			ctx.lineTo(dims.blockSize * s * sz, -dims.blockSize * s * sz);
+			ctx.stroke();
 		}
 		ctx.restore();
 	});
@@ -520,7 +532,7 @@ A3a.vpl.Canvas.prototype.microphone = function () {
 	ctx.strokeStype = "white";
 	ctx.lineWidth = 0.13 * dims.blockSize;
 	ctx.stroke();
-	ctx.lineWidth = dims.blockLineWidth;
+	ctx.lineWidth = 1.5 * dims.blockLineWidth;
 	ctx.translate(dims.blockSize * 0.3, dims.blockSize * 0.3);
 	for (var i = 0; i < 8; i++) {
 		ctx.beginPath();
