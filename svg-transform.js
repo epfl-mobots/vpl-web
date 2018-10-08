@@ -7,7 +7,7 @@
 
 /** SVG transaform state
 	@constructor
-	@param {Array.<number>=}
+	@param {Array.<number>=} mat
 */
 SVG.Transform = function (mat) {
 	this.mat = mat || [1, 0, 0, 0, 1, 0];

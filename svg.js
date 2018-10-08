@@ -24,7 +24,7 @@ var SVG = function (src) {
 		elementStyle: (string | undefined),
 		style: (Object | undefined),
 		transform: (Object | undefined),
-		elementId: (string | undefined),
+		elementId: (string | undefined)
 	}}
 */
 SVG.Options;
