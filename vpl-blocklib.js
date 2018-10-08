@@ -23,6 +23,14 @@ A3a.vpl.BlockTemplate.initStatesInit =
 	"state = [0, 0, 0, 0]\n";
 
 /** @const */
+A3a.vpl.BlockTemplate.initState8Decl =
+	"var state8\n";
+
+/** @const */
+A3a.vpl.BlockTemplate.initState8Init =
+	"state8 = 0\n";
+
+/** @const */
 A3a.vpl.BlockTemplate.initCounterDecl =
 	"var counter\n";
 
@@ -43,6 +51,11 @@ A3a.vpl.BlockTemplate.initTopColorInit =
 A3a.vpl.BlockTemplate.dispStates =
 	"sub display_state\n" +
 	"call leds.circle(0,state[1]*32,0,state[3]*32,0,state[2]*32,0,state[0]*32)\n";
+
+/** @const */
+A3a.vpl.BlockTemplate.dispState8 =
+	"sub display_state8\n" +
+	"call leds.circle((state8==0)*32, (state8==1)*32, (state8==2)*32, (state8==3)*32, (state8==4)*32, (state8==5)*32, (state8==6)*32, (state8==7)*32)\n";
 
 /** @const */
 A3a.vpl.BlockTemplate.dispCounter =
@@ -220,7 +233,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () {
 				return [
 					0, 0, 0, 0, 0, 0, 0,	// sensor modes
-					0.4, 0.1	// levels (700+0.4*3300=2000, 700+0.1*3300=1000)
+					0.4, 0.1	// levels (700+0.4*3300 approx 2000, 700+0.1*3300 approx 1000)
 				];
 			},
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
@@ -295,6 +308,111 @@ A3a.vpl.BlockTemplate.lib =	[
 								? ">= " + Math.round(7 + 33 * block.param[7])
 								: "<= " + Math.round(7 + 33 * block.param[8])) +
 							"00";
+					}
+				}
+				if (cond === "") {
+					for (var i = 1; i < 7; i++) {
+						cond += " or prox.horizontal[" + buttons[i].str + "] >= 2000";
+					}
+					cond = cond.slice(5);	// crop initial " or "
+				}
+				return {
+					sectionBegin: "onevent prox\n",
+					sectionPriority: 1,
+					clause: cond
+				};
+			}
+		};
+	})()),
+	new A3a.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "r", x: 0, y: 0.4, r: 0, str: "2"},
+			{sh: "r", x: -0.22, y: 0.35, r: -0.45, str: "1"},
+			{sh: "r", x: 0.22, y: 0.35, r: 0.45, str: "3"},
+			{sh: "r", x: -0.4, y: 0.22, r: -0.8, str: "0"},
+			{sh: "r", x: 0.4, y: 0.22, r: 0.8, str: "4"},
+			{sh: "r", x: -0.2, y: -0.4, str: "5"},
+			{sh: "r", x: 0.2, y: -0.4, str: "6"},
+		];
+		return {
+			name: "horiz prox 1",
+			modes: [],
+			type: A3a.vpl.blockType.event,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () {
+				return [
+					0, 0, 0, 0, 0, 0, 0,	// sensor modes
+					0.25	// levels (700+0.25*3300 approx 1500)
+				];
+			},
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop();
+				canvas.buttons(buttons, block.param, {cross: true});
+				canvas.slider(/** @type {number} */(block.param[7]), -0.1, false,
+					"black", A3a.vpl.draw.levelType.low);
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				// sensor click
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					block.param[i] = (block.param[i] + 2) % 3 - 1;
+					return i;
+				}
+				// slider drag
+				if (canvas.sliderCheck(-0.1, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 7;
+				}
+				return null;
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
+			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+				if (dragIndex >= 7) {
+					var val = canvas.sliderDrag(false, width, height, left, top, ev);
+					block.param[dragIndex] = Math.max(0, Math.min(1, val));
+				}
+			},
+			/** @type {A3a.vpl.BlockTemplate.validateFun} */
+			validate: function (block) {
+				for (var i = 0; i < 7; i++) {
+					if (block.param[i]) {
+						return null;
+					}
+				}
+				return new A3a.vpl.Error("No sensor specified");
+			},
+			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
+			changeMode: function (block, mode) {
+				switch (mode) {
+				case A3a.vpl.mode.basic:
+					var defParam = block.blockTemplate.defaultParam();
+					if (block.param[7] === defParam[7]) {
+						var newBlock = new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("horiz prox"),
+							null, null);
+						newBlock.param = block.param.slice(0, 7);
+						return newBlock;
+					}
+					// fallthrough
+				default:
+					return block;
+				}
+			},
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				var cond = "";
+				for (var i = 0; i < 7; i++) {
+					if (block.param[i]) {
+						cond += (cond.length === 0 ? "" : " and ") +
+							"prox.horizontal[" + buttons[i].str + "] " +
+							(block.param[i] > 0 ? ">=" : "<") + " " +
+							Math.round(7 + 33 * block.param[7]) + "00";
 					}
 				}
 				if (cond === "") {
@@ -472,6 +590,105 @@ A3a.vpl.BlockTemplate.lib =	[
 							(block.param[i] > 0
 								? ">= " + 25 * Math.round(40 * block.param[2])
 								: "<= " + 25 * Math.round(40 * block.param[3]));
+					}
+				}
+				if (cond === "") {
+					for (var i = 1; i < 2; i++) {
+						cond += " or prox.ground.delta[" + buttons[i] + "] >= 450";
+					}
+					cond = cond.slice(4);	// crop initial " or "
+				}
+				return {
+					sectionBegin: "onevent prox\n",
+					sectionPriority: 1,
+					clause: cond
+				};
+			}
+		};
+	})()),
+	new A3a.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "r", x: -0.15, y: 0.35, str: "0"},
+			{sh: "r", x: 0.15, y: 0.35, str: "1"},
+		];
+		return {
+			name: "ground 1",
+			modes: [],
+			type: A3a.vpl.blockType.event,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () {
+				return [
+					0, 0,	// sensor modes
+					0.5	// levels (0.5*1000=500)
+				];
+			},
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop(true);
+				canvas.buttons(buttons, block.param, {cross: true});
+				canvas.slider(/** @type {number} */(block.param[2]), 0, false,
+					"black", A3a.vpl.draw.levelType.low);
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				// sensor click
+				if (i !== null) {
+					block.prepareChange();
+					block.param[i] = (block.param[i] + 2) % 3 - 1;
+					return i;
+				}
+				// slider drag
+				if (canvas.sliderCheck(0, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 2;
+				}
+				return null;
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
+			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+				if (dragIndex >= 2) {
+					var val = canvas.sliderDrag(false, width, height, left, top, ev);
+					block.param[dragIndex] = Math.max(0, Math.min(1, val));
+				}
+			},
+			/** @type {A3a.vpl.BlockTemplate.validateFun} */
+			validate: function (block) {
+				if (block.param[0] || block.param[1]) {
+					return null;
+				}
+				return new A3a.vpl.Error("No ground sensor specified");
+			},
+			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
+			changeMode: function (block, mode) {
+				switch (mode) {
+				case A3a.vpl.mode.basic:
+					var defParam = block.blockTemplate.defaultParam();
+					if (block.param[2] === defParam[2]) {
+						var newBlock = new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("ground"),
+							null, null);
+						newBlock.param = block.param.slice(0, 2);
+						return newBlock;
+					}
+					// fallthrough
+				default:
+					return block;
+				}
+			},
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				var cond = "";
+				for (var i = 0; i < 2; i++) {
+					if (block.param[i]) {
+						cond += (cond.length === 0 ? "" : " and ") +
+							"prox.ground.delta[" + buttons[i].str + "] " +
+							(block.param[i] > 0
+								? ">= " : "< ") +
+							25 * Math.round(40 * block.param[2]);
 					}
 				}
 				if (cond === "") {
@@ -843,6 +1060,40 @@ A3a.vpl.BlockTemplate.lib =	[
 					A3a.vpl.BlockTemplate.initStatesInit
 				],
 				clause: cond
+			};
+		}
+	}),
+	new A3a.vpl.BlockTemplate({
+		name: "state 8",
+		modes: [],
+		type: A3a.vpl.blockType.state,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () { return [0]; },
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.robotTop();
+			canvas.drawState8(block.param[0]);
+		},
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			var i = canvas.state8Click(width, height, left, top, ev);
+			if (i !== null) {
+				block.prepareChange();
+				block.param[0] = i;
+			}
+			return i;
+		},
+		sectionPriority: function () { return 1; },
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			return {
+				initVarDecl: [
+					A3a.vpl.BlockTemplate.initStatesDecl
+				],
+				initCodeExec: [
+					A3a.vpl.BlockTemplate.initStatesInit
+				],
+				clause: "state[0] == " + block.param[0].toString(10)
 			};
 		}
 	}),
@@ -1610,6 +1861,139 @@ A3a.vpl.BlockTemplate.lib =	[
 			};
 		}
 	}),
+	new A3a.vpl.BlockTemplate({
+		name: "set state 8",
+		modes: [],
+		type: A3a.vpl.blockType.action,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () { return [0]; },
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.robotTop();
+			canvas.drawState8(block.param[0]);
+		},
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			var i = canvas.state8Click(width, height, left, top, ev);
+			if (i !== null) {
+				block.prepareChange();
+				block.param[0] = i;
+			}
+			return i;
+		},
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			var code = "";
+				code += "state8 = " + block.param[0].toString(10) + "\n";
+			return {
+				initVarDecl: [
+					A3a.vpl.BlockTemplate.initState8Decl
+				],
+				init: [
+					A3a.vpl.BlockTemplate.initState8Init
+				],
+				initCodeDecl: [
+					A3a.vpl.BlockTemplate.dispState8
+				],
+				statement: code.length > 0
+					? code + "callsub display_state8\n"
+					: "",
+				statementWithoutInit:
+					"call leds.circle(" + (block.param[0] === 0 ? "32" : "0") +
+						"," + (block.param[0] === 1 ? "32" : "0") +
+						"," + (block.param[0] === 2 ? "32" : "0") +
+						"," + (block.param[0] === 3 ? "32" : "0") +
+						"," + (block.param[0] === 4 ? "32" : "0") +
+						"," + (block.param[0] === 5 ? "32" : "0") +
+						"," + (block.param[0] === 6 ? "32" : "0") +
+						"," + (block.param[0] === 7 ? "32" : "0") +
+						")\n"
+			};
+		}
+	}),
+	new A3a.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "c", x: -0.2, y: 0},
+			{sh: "c", x: 0.2, y: 0}
+		];
+		return {
+			name: "change state 8",
+			modes: [],
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [1]; },
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop();
+				canvas.drawState8Change();
+				canvas.drawArcArrow(canvas.dims.blockSize / 2, canvas.dims.blockSize / 2,
+					canvas.dims.blockSize * 0.375,
+					-0.8, 0.8,
+					{
+						style: "black",
+						lineWidth: canvas.dims.blockLineWidth,
+						arrowSize: 5 * canvas.dims.blockLineWidth
+					});
+				canvas.drawArcArrow(canvas.dims.blockSize / 2, canvas.dims.blockSize / 2,
+					canvas.dims.blockSize * 0.375,
+					Math.PI - 0.8, Math.PI + 0.8,
+					{
+						arrowAtStart: true,
+						style: "black",
+						lineWidth: canvas.dims.blockLineWidth,
+						arrowSize: 5 * canvas.dims.blockLineWidth
+					});
+				canvas.buttons(buttons, [
+					block.param[0] < 0,
+					block.param[0] > 0
+				]);
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					block.param[0] = i === 0 ? -1 : 1;
+				}
+				return i;
+			},
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				var code = "";
+					code += "state8 = (state8 + " +
+						(block.param[0] > 0 ? "1" : "7") +
+						") % 8\n";
+				return {
+					initVarDecl: [
+						A3a.vpl.BlockTemplate.initState8Decl
+					],
+					init: [
+						A3a.vpl.BlockTemplate.initState8Init
+					],
+					initCodeDecl: [
+						A3a.vpl.BlockTemplate.dispState8
+					],
+					statement: code.length > 0
+						? code + "callsub display_state8\n"
+						: "",
+					statementWithoutInit:
+						"call leds.circle(" + (block.param[0] === 0 ? "32" : "0") +
+							"," + (block.param[0] === 1 ? "32" : "0") +
+							"," + (block.param[0] === 2 ? "32" : "0") +
+							"," + (block.param[0] === 3 ? "32" : "0") +
+							"," + (block.param[0] === 4 ? "32" : "0") +
+							"," + (block.param[0] === 5 ? "32" : "0") +
+							"," + (block.param[0] === 6 ? "32" : "0") +
+							"," + (block.param[0] === 7 ? "32" : "0") +
+							")\n"
+				};
+			}
+		};
+	})()),
 	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const

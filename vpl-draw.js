@@ -123,6 +123,56 @@ A3a.vpl.Canvas.prototype.lockedMark = function (left, top, width, height, inside
 	A3a.vpl.Canvas.lock(this.ctx, x, y, r, color || "#333");
 };
 
+/** Draw an arc ending with an arrow
+	@param {number} x
+	@param {number} y
+	@param {number} r
+	@param {number} a1
+	@param {number} a2
+	@param {{
+		arrowAtStart: (boolean | undefined),
+		style: (string | undefined),
+		lineWidth: (number | undefined),
+		arrowSize: (number | undefined),
+		alpha: (number | undefined)
+	}} opt
+*/
+A3a.vpl.Canvas.prototype.drawArcArrow = function (x, y, r, a1, a2, opt) {
+	var ctx = this.ctx;
+	ctx.save();
+	if (opt) {
+		if (opt.style) {
+			ctx.strokeStyle = opt.style;
+			ctx.fillStyle = opt.style;
+		}
+		if (opt.lineWidth !== undefined) {
+			ctx.lineWidth = opt.lineWidth;
+		}
+		if (opt.alpha !== undefined) {
+			ctx.globalAlpha = opt.alpha;
+		}
+	}
+	var s = opt && opt.arrowSize !== undefined ? opt.arrowSize : 5 * ctx.lineWidth;
+	ctx.beginPath();
+	var a1b = a1 + (opt && opt.arrowAtStart ? s / r : 0);
+	var a2b = a2 - (opt && opt.arrowAtStart ? 0 : s / r);
+	ctx.arc(x, y, r, a1b, a2b);
+	ctx.stroke();
+	if (opt && opt.arrowAtStart) {
+		ctx.translate(x + r * Math.cos(a1), y + r * Math.sin(a1));
+		ctx.rotate((a1 + a1b) / 2 + Math.PI);
+	} else {
+		ctx.translate(x + r * Math.cos(a2), y + r * Math.sin(a2));
+		ctx.rotate((a2 + a2b) / 2);
+	}
+	ctx.beginPath();
+	ctx.moveTo(0, 0);
+	ctx.lineTo(s / 2, -s * 1.2);
+	ctx.lineTo(-s / 2, -s * 1.2);
+	ctx.fill();
+	ctx.restore();
+};
+
 /** Draw centered text
 	@param {string} str text
 	@param {{
@@ -412,7 +462,7 @@ A3a.vpl.Canvas.prototype.buttons = function (shapes, state, opt) {
 		ctx.fillStyle = shape.fillStyle ? shape.fillStyle
 			: state && state[i] === true ? "red"
 			: state && state[i] === 1 ? "#f66"
-			: state && state[i] === -1 ? "#333"
+			: state && state[i] === -1  ? "#333"
 			: "white";
 		ctx.strokeStyle = shape.strokeStyle ? shape.strokeStyle
 			: state && (state[i] === 1 || state[i] === true) ? "#700"
@@ -726,8 +776,9 @@ A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	var r = 0.4 * dims.blockSize;
+	var dx = isEvent ? -0.05 * dims.blockSize : 0;
 	var dy = isEvent ? 0.09 * dims.blockSize : 0;
-	var x0 = dims.blockSize / 2;
+	var x0 = dims.blockSize / 2 + dx;
 	var y0 = dims.blockSize / 2 + dy;
 	ctx.save();
 	ctx.beginPath();
@@ -765,22 +816,45 @@ A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 	ctx.lineWidth = 2 * dims.blockLineWidth;
 	ctx.stroke();
 	if (isEvent) {
-		ctx.strokeStyle = "white";
-		ctx.lineWidth = dims.blockLineWidth * 0.9;
-		ctx.fillStyle = "white";
-		ctx.beginPath();
-		ctx.arc(x0, y0,
-			r * 1.3,
-			-Math.PI * 0.45,
-			-Math.PI * 0.3);
-		ctx.stroke();
-		var triSize = r * 0.4;
-		ctx.beginPath();
-		ctx.moveTo(x0, y0 - r * 1.25);
-		ctx.lineTo(x0 + triSize * Math.sqrt(3) / 2, y0 - r * 1.25 + triSize / 2);
-		ctx.lineTo(x0 + triSize * Math.sqrt(3) / 2, y0 - r * 1.25 - triSize / 2);
-		ctx.fill();
+		this.drawArcArrow(x0, y0, r * 1.25,
+			-Math.PI * 0.5,
+			-Math.PI * 0.1,
+			{
+				arrowAtStart: true,
+				arrowSize: 5 * dims.blockLineWidth,
+				style: "black"
+			});
 	}
+	ctx.restore();
+};
+
+/** Draw a state
+	@param {number} a1 angle 1 (counterclockwise starting at right)
+	@param {number} a2 angle 2 (larger than angle 1)
+	@param {number} val 1=set, -1=reset, 0=nop
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.drawArc = function (a1, a2, val) {
+	var ctx = this.ctx;
+	var dims = this.dims;
+
+	var x0 = dims.blockSize / 2;
+	var y0 = dims.blockSize / 2;
+	var rInner = dims.blockSize * 0.3;
+	var rOuter = dims.blockSize * 0.45;
+	var rMid = (rInner + rOuter) / 2;
+	var rEnd = (rOuter - rInner) / 2;
+	ctx.save();
+	ctx.beginPath();
+	ctx.arc(x0, y0, rInner, -a2, -a1);
+	ctx.arc(x0 + rMid * Math.cos(a1), y0 - rMid * Math.sin(a1), rEnd, -a1 - Math.PI, -a1, true);
+	ctx.arc(x0, y0, rOuter, -a1, -a2, true);
+	ctx.arc(x0 + rMid * Math.cos(a2), y0 - rMid * Math.sin(a2), rEnd, -a2, -a2 + Math.PI, true);
+	ctx.fillStyle = val < 0 ? "white" : val > 0 ? "#f70" : "#ddd";
+	ctx.strokeStyle = val === 0 ? "#bbb" : "black";
+	ctx.lineWidth = dims.blockLineWidth;
+	ctx.fill();
+	ctx.stroke();
 	ctx.restore();
 };
 
@@ -790,40 +864,40 @@ A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 */
 A3a.vpl.Canvas.prototype.drawState = function (state) {
 	var ctx = this.ctx;
-	var dims = this.dims;
-
-	/** Draw a state
-		@param {number} a1 angle 1 (counterclockwise starting at right)
-		@param {number} a2 angle 2 (larger than angle 1)
-		@param {number} val 1=set, -1=reset, 0=nop
-		@return {void}
-	*/
-	function drawArc(a1, a2, val) {
-		var x0 = dims.blockSize / 2;
-		var y0 = dims.blockSize / 2;
-		var rInner = dims.blockSize * 0.3;
-		var rOuter = dims.blockSize * 0.45;
-		var rMid = (rInner + rOuter) / 2;
-		var rEnd = (rOuter - rInner) / 2;
-		ctx.save();
-		ctx.beginPath();
-		ctx.arc(x0, y0, rInner, -a2, -a1);
-		ctx.arc(x0 + rMid * Math.cos(a1), y0 - rMid * Math.sin(a1), rEnd, -a1 - Math.PI, -a1, true);
-		ctx.arc(x0, y0, rOuter, -a1, -a2, true);
-		ctx.arc(x0 + rMid * Math.cos(a2), y0 - rMid * Math.sin(a2), rEnd, -a2, -a2 + Math.PI, true);
-		ctx.fillStyle = val < 0 ? "white" : val > 0 ? "#f70" : "#ddd";
-		ctx.strokeStyle = val === 0 ? "#bbb" : "black";
-		ctx.lineWidth = dims.blockLineWidth;
-		ctx.fill();
-		ctx.stroke();
-		ctx.restore();
-	}
 
 	ctx.save();
-	drawArc(Math.PI * 0.6, Math.PI * 0.9, state[0]);
-	drawArc(Math.PI * 0.1, Math.PI * 0.4, state[1]);
-	drawArc(Math.PI * 1.1, Math.PI * 1.4, state[2]);
-	drawArc(Math.PI * 1.6, Math.PI * 1.9, state[3]);
+	this.drawArc(Math.PI * 0.6, Math.PI * 0.9, state[0]);
+	this.drawArc(Math.PI * 0.1, Math.PI * 0.4, state[1]);
+	this.drawArc(Math.PI * 1.1, Math.PI * 1.4, state[2]);
+	this.drawArc(Math.PI * 1.6, Math.PI * 1.9, state[3]);
+	ctx.restore();
+};
+
+/** Draw state 8
+	@param {number} state
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.drawState8 = function (state) {
+	var ctx = this.ctx;
+
+	ctx.save();
+	for (var i = 0; i < 8; i++) {
+		this.drawArc(Math.PI * (0.5 - 0.04 - i * 0.25), Math.PI * (0.5 + 0.04 - i * 0.25),
+			i === state ? 1 : -1);
+	}
+	ctx.restore();
+};
+
+/** Draw state 8 change (disabled states without east and west ones to leave room for buttons)
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.drawState8Change = function () {
+	var ctx = this.ctx;
+
+	ctx.save();
+	for (var i = 0; i < 8; i++) {
+		this.drawArc(Math.PI * (0.5 - 0.04 - i * 0.25), Math.PI * (0.5 + 0.04 - i * 0.25), 0);
+	}
 	ctx.restore();
 };
 
@@ -1024,6 +1098,27 @@ A3a.vpl.Canvas.prototype.stateClick = function (width, height, left, top, ev) {
 	var y = y0 - (ev.clientY - top);
 	if (Math.abs(Math.sqrt(x * x + y * y) - r) <= thickness2) {
 		return y >= 0 ? x < 0 ? 0 : 1 : x < 0 ? 2 : 3;
+	} else {
+		return null;
+	}
+};
+
+/**	Check if a mouse event is inside a state 8
+	@param {number} left block left position
+	@param {number} top bock top position
+	@param {Event} ev mouse event
+	@return {?number} state, or null
+*/
+A3a.vpl.Canvas.prototype.state8Click = function (width, height, left, top, ev) {
+	var x0 = width / 2;
+	var y0 = height / 2;
+	var r = width * 0.375;
+	var thickness2 = width * 0.15;
+	var x = ev.clientX - left - x0;
+	var y = y0 - (ev.clientY - top);
+	if (Math.abs(Math.sqrt(x * x + y * y) - r) <= thickness2) {
+		var th = Math.atan2(x, y) + Math.PI / 8;
+		return Math.floor((th < 0 ? th + 2 * Math.PI : th) / (Math.PI / 4));
 	} else {
 		return null;
 	}
