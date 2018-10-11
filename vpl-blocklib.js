@@ -954,6 +954,61 @@ A3a.vpl.BlockTemplate.lib =	[
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
+		name: "yaw",
+		modes: [],
+		type: A3a.vpl.blockType.event,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () {
+			return [
+				0 // integer from -12 to 11
+			];
+		},
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			/** @type {number} */
+			var a = /** @type {number} */(block.param[0]);
+			canvas.robotYaw(a);
+		},
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			if (canvas.accelerometerCheck(width, height, left, top, ev)) {
+				block.prepareChange();
+				return 1;
+			}
+			return null;
+		},
+		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
+		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+			var angle = canvas.accelerometerDrag(width, height, left, top, ev);
+			block.param[0] = angle;
+		},
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			/** @type {number} */
+			var a = -/** @type {number} */(block.param[1]);
+			/** @type {string} */
+			var cond;
+			if (a <= -6) {
+				cond = "yawAngle < " + Math.round(2730.67 * a + 1365.33);
+			} else if (a >= 6) {
+				cond = "yawAngle >= " + Math.round(2730.67 * a - 1365.33);
+			} else {
+				cond = "yawAngle >= " + Math.round(2730.67 * a - 1365.33) +
+					" and yawAngle < " + Math.round(2730.67 * a + 1365.33);
+			}
+			return {
+				initVarDecl: [
+					"# yaw angle from accelerometer\nvar yawAngle\n"
+				],
+				sectionBegin: "onevent acc\n",
+				sectionPriority: 1,
+				clauseInit:
+					"call math.atan2(yawAngle, acc[0], acc[1])\n",
+				clause: cond
+			};
+		}
+	}),
+	new A3a.vpl.BlockTemplate({
 		name: "clap",
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
@@ -1304,6 +1359,89 @@ A3a.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
+	new A3a.vpl.BlockTemplate({
+		name: "motor state",
+		modes: [A3a.vpl.mode.custom],
+		type: A3a.vpl.blockType.state,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () { return [0, 0]; },
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			var tr = canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
+			canvas.robotTop(true, 0.45,
+				tr.phi,
+				[
+					tr.x + 0.13 * canvas.dims.blockSize * Math.sin(tr.phi),
+					tr.y + 0.13 * canvas.dims.blockSize * Math.cos(tr.phi)
+				]);
+			canvas.ctx.save();
+			canvas.ctx.globalAlpha = 0.2;
+			canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
+			canvas.ctx.restore();
+			canvas.slider(0.5 + 0.5 * /** @type {number} */(block.param[0]), -0.4, true,
+				block.param[0] === 0 ? "white" :
+					block.param[0] === block.param[1] ? "#0c0" :
+					block.param[0] === -block.param[1] ? "#f70" :
+					"#fd0");
+			canvas.slider(0.5 + 0.5 * /** @type {number} */(block.param[1]), 0.4, true,
+				block.param[1] === 0 ? "white" :
+					block.param[0] === block.param[1] ? "#0c0" :
+					block.param[0] === -block.param[1] ? "#f70" :
+					"#fd0");
+		},
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			if (canvas.sliderCheck(-0.4, true, width, height, left, top, ev)) {
+				block.prepareChange();
+				return 0;
+			}
+			if (canvas.sliderCheck(0.4, true, width, height, left, top, ev)) {
+				block.prepareChange();
+				return 1;
+			}
+			if (canvas.robotTopCheck(width, height, left, top,
+					0.5 * block.param[0], 0.5 * block.param[1], 0.21,
+					ev)) {
+				block.prepareChange();
+				return 2;
+			}
+			return null;
+		},
+		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
+		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+			if (dragIndex < 2) {
+				// slider
+				var val = canvas.sliderDrag(true, width, height, left, top, ev);
+				val = val < 0.25 ? -1 : val > 0.75 ? 1 : 0;
+				block.param[dragIndex] = val;
+			} else {
+				// robot (move forward)
+				var val = canvas.sliderDrag(true, width, height, left, top, ev);
+				val = val < 0.25 ? -1 : val > 0.75 ? 1 : 0;
+				block.param[0] = val;
+				block.param[1] = val;
+			}
+		},
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+		genCode: function (block) {
+			/** Clause for one of the motors
+				@param {string} side
+				@param {number} x
+				@return {string}
+			*/
+			function clause1(side, x) {
+				return x > 0 ? "motor." + side + ".target > 250"
+					: x < 0 ? "motor." + side + ".target < -250"
+					: "abs(motor." + side + ".target) < 250";
+			}
+
+			return {
+				clause:
+					clause1("left", block.param[0]) + " and " +
+						clause1("right", block.param[1])
+			};
+		}
+	}),
 	new A3a.vpl.BlockTemplate({
 		name: "motor",
 		type: A3a.vpl.blockType.action,

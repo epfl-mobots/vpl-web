@@ -584,16 +584,40 @@ A3a.vpl.Canvas.prototype.microphone = function () {
 	ctx.stroke();
 	ctx.lineWidth = 1.5 * dims.blockLineWidth;
 	ctx.translate(dims.blockSize * 0.3, dims.blockSize * 0.3);
-	for (var i = 0; i < 8; i++) {
+	ctx.rotate(0.1);
+	for (var i = 0; i < 9; i++) {
 		ctx.beginPath();
 		ctx.moveTo(0.07 * dims.blockSize, 0);
 		ctx.lineTo(0.14 * dims.blockSize, 0);
 		ctx.moveTo(0.17 * dims.blockSize, 0);
 		ctx.lineTo(0.22 * dims.blockSize, 0);
 		ctx.stroke();
-		ctx.rotate(Math.PI / 4);
+		ctx.rotate(Math.PI / 4.5);
 	}
 	ctx.restore();
+};
+
+/** Draw accelerometer handle
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.accelerometerHandle = function () {
+	var ctx = this.ctx;
+	var dims = this.dims;
+	ctx.beginPath();
+	ctx.arc(0, 0,
+		dims.blockSize * 0.4,
+		0, 2 * Math.PI, true)
+	ctx.moveTo(0, 0);
+	ctx.lineTo(0, -dims.blockSize * 0.4);
+	ctx.strokeStyle = "#666";
+	ctx.stroke();
+	ctx.beginPath();
+	ctx.arc(0, -dims.blockSize * 0.4, dims.blockSize * 0.1,
+		0, 2 * Math.PI);
+	ctx.fillStyle = "white";
+	ctx.fill();
+	ctx.strokeStyle = "black";
+	ctx.stroke();
 };
 
 /** Draw accelerometer
@@ -608,23 +632,8 @@ A3a.vpl.Canvas.prototype.robotAccelerometer = function (pitch, angle) {
 	ctx.save();
 	ctx.translate(dims.blockSize * 0.5,
 		dims.blockSize * 0.5);
-	ctx.beginPath();
-	ctx.arc(0, 0,
-		dims.blockSize * 0.4,
-		0, Math.PI, true)
-	ctx.fillStyle = "#666";
-	ctx.fill();
 	ctx.rotate(phi);
-	ctx.beginPath();
-	ctx.moveTo(0.02 * dims.blockSize, 0);
-	ctx.lineTo(0.05 * dims.blockSize,
-		-0.45 * dims.blockSize);
-	ctx.lineTo(-0.05 * dims.blockSize,
-		-0.45 * dims.blockSize);
-	ctx.lineTo(-0.02 * dims.blockSize, 0);
-	ctx.closePath();
-	ctx.fillStyle = "white";
-	ctx.fill();
+	this.accelerometerHandle();
 	// robot
 	ctx.fillRect(-0.28 * dims.blockSize, -0.10 * dims.blockSize,
 		0.56 * dims.blockSize,
@@ -666,6 +675,24 @@ A3a.vpl.Canvas.prototype.robotAccelerometer = function (pitch, angle) {
 			0, 2 * Math.PI);
 		ctx.fill();
 	}
+	ctx.restore();
+};
+
+/** Draw yaw accelerometer
+	@param {number} angle value from -6 to 6 (0=normal, 6=90 deg)
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.robotYaw = function (angle) {
+	var ctx = this.ctx;
+	var dims = this.dims;
+	var phi = angle * Math.PI / 12;
+	ctx.save();
+	ctx.translate(dims.blockSize * 0.5,
+		dims.blockSize * 0.5);
+	ctx.rotate(phi);
+	this.accelerometerHandle();
+	ctx.translate(-dims.blockSize / 2, -dims.blockSize / 2);
+	this.robotTop(true, 0.45);
 	ctx.restore();
 };
 
@@ -790,6 +817,7 @@ A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 	if (!isEvent) {
 		ctx.textAlign = "start";
 		ctx.textBaseline = "top";
+		ctx.font = Math.round(dims.blockSize / 6).toString(10) + "px sans-serif";
 		ctx.fillText(time.toFixed(time < 1 ? 2 : 1), dims.blockSize / 20, dy);
 	}
 	this.drawTimerLogArc(x0, y0,
