@@ -215,13 +215,13 @@ SVG.prototype.draw = function (ctx, options) {
 		@param {number} y1 start point along y axis
 		@param {number} x2 end point along x axis
 		@param {number} y2 end point along y axis
-		@return {void}
+		@return {SVG.Transform.Point} middle-point of the arc
 	*/
 	function ellipticalArc(rx, ry, a, largeArcFlag, sweepFlag, x1, y1, x2, y2) {
 		// avoid singularities
 		if (rx === 0 || ry === 0) {
 			ctx.moveTo(x2, y2);
-			return;
+			return new SVG.Transform.Point(x2, y2);	// degenerated, don't care
 		}
 		// rotate and scale to have a unit circle
 		var ca = Math.cos(a);
@@ -259,6 +259,15 @@ SVG.prototype.draw = function (ctx, options) {
 			ctx.scale(1 / rx, 1 / ry);
 			ctx.rotate(-a);
 		}
+
+		var tr = new SVG.Transform();
+		tr.rotate(a);
+		tr.scale(rx, ry);
+		var aMid = sweepFlag
+			? th1 < th2 ? (th1 + th2) / 2 + Math.PI : (th1 + th2) / 2
+			: th1 < th2 ? (th1 + th2) / 2 : (th1 + th2) / 2 + Math.PI;
+		var pMid = tr.apply(new SVG.Transform.Point(xc + Math.cos(aMid), yc + Math.sin(aMid)));
+		return pMid;
 	}
 
 	/** Recursively collect all css fragments in an element and its children,
@@ -563,12 +572,13 @@ SVG.prototype.draw = function (ctx, options) {
 						for (var i = 0; i + 6 < args.length; i += 7) {
 							var x1 = args[i + 5];
 							var y1 = args[i + 6];
-							ellipticalArc(args[i], args[i + 1],
+							var p = ellipticalArc(args[i], args[i + 1],
 								args[i + 2] * Math.PI / 180,
 								args[i + 3] != 0, args[i + 4] == 0,
 								x, y, x1, y1);
 							x = x1;
 							y = y1;
+							addPoint(p.x, p.y);
 							addPoint(x, y);
 						}
 						xc1 = x;
@@ -578,12 +588,13 @@ SVG.prototype.draw = function (ctx, options) {
 						for (var i = 0; i + 6 < args.length; i += 7) {
 							var x1 = x + args[i + 5];
 							var y1 = y + args[i + 6];
-							ellipticalArc(args[i], args[i + 1],
+							var p = ellipticalArc(args[i], args[i + 1],
 								args[i + 2] * Math.PI / 180,
 								args[i + 3] != 0, args[i + 4] == 0,
 								x, y, x1, y1);
 							x = x1;
 							y = y1;
+							addPoint(p.x, p.y);
 							addPoint(x, y);
 						}
 						xc1 = x;
@@ -877,8 +888,10 @@ SVG.prototype.draw = function (ctx, options) {
 				applyTransform();
 				ctx && ctx.beginPath();
 				ctx && ctx.moveTo(points[0], points[1]);
+				addPoint(points[0], points[1]);
 				for (var i = 2; i + 1 < points.length; i += 2) {
 					ctx && ctx.lineTo(points[i], points[i + 1]);
+					addPoint(points[i], points[i + 1]);
 				}
 				paint();
 				ctx && ctx.restore();
@@ -939,7 +952,12 @@ SVG.prototype.draw = function (ctx, options) {
 
 	findCSS(this.root);
 	parseCSS();
-	var element = options && options.elementId ? this.dom.getElementById(options.elementId) : this.root;
+	var element = this.root;
+	if (options && options.elementId) {
+		element = this.dom.getElementById(options.elementId);
+		// apply ancestors transforms
+		// [to do...]
+	}
 	if (element) {
 		if (options.globalTransform) {
 			options.globalTransform(ctx, this.viewBox);
