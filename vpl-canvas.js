@@ -388,7 +388,7 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		stripHorMargin: Math.min(Math.max(blockSize / 15, 2), 6),
 		stripVertMargin: Math.min(Math.max(blockSize / 15, 2), 6),
 		eventStyle: "#f70",
-		stateStyle: "#0d0",
+		stateStyle: "#0c0",
 		actionStyle: "#38f",
 		commentStyle: "#aaa"
 	};
