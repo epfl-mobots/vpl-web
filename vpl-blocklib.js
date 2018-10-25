@@ -875,7 +875,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			/** @type {number} */
-			var a = /** @type {number} */(block.param[1]);
+			var a = /** @type {number} */(block.param[0]);
 			/** @type {string} */
 			var cond;
 			if (a <= -6) {
@@ -930,7 +930,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			/** @type {number} */
-			var a = -/** @type {number} */(block.param[1]);
+			var a = -/** @type {number} */(block.param[0]);
 			/** @type {string} */
 			var cond;
 			if (a <= -6) {
@@ -985,7 +985,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
 			/** @type {number} */
-			var a = -/** @type {number} */(block.param[1]);
+			var a = -/** @type {number} */(block.param[0]);
 			/** @type {string} */
 			var cond;
 			if (a <= -6) {
