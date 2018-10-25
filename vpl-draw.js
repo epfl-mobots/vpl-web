@@ -701,14 +701,15 @@ A3a.vpl.Canvas.prototype.robotYaw = function (angle) {
 	@param {number} height block width
 	@param {number} left left position of the block
 	@param {number} top top position of the block
+	@param {boolean=} tp true for -12..11, false for -6..6 (default: false)
 	@param {Event} ev mouse event
 	@return {boolean}
 */
-A3a.vpl.Canvas.prototype.accelerometerCheck = function (width, height, left, top, ev) {
-	var r = 0.45 * width;
+A3a.vpl.Canvas.prototype.accelerometerCheck = function (width, height, left, top, ev, tp) {
 	var x = ev.clientX - left - width / 2;
 	var y = top + width / 2 - ev.clientY;
-	return y >= 0 && x * x + y * y <= r * r;
+	var r2 = (x * x + y * y) / (width * width / 4);
+	return r2 < 1 && r2 > 0.4 && (tp || y >= 0);
 };
 
 /** Drag an accelerometer handle
@@ -717,8 +718,8 @@ A3a.vpl.Canvas.prototype.accelerometerCheck = function (width, height, left, top
 	@param {number} left left position of the block
 	@param {number} top top position of the block
 	@param {Event} ev mouse event
-	@param {boolean=} tp true for -12..11, false for -6..6
-	@return {number} new value of the angle, between -6 and 6
+	@param {boolean=} tp true for -12..11, false for -6..6 (default: false)
+	@return {number} new value of the angle, between -6..6 or -12..11
 */
 A3a.vpl.Canvas.prototype.accelerometerDrag = function (width, height, left, top, ev, tp) {
 	var x = ev.clientX - left - width / 2;

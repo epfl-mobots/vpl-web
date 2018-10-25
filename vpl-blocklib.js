@@ -861,7 +861,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			if (canvas.accelerometerCheck(width, height, left, top, ev)) {
+			if (canvas.accelerometerCheck(width, height, left, top, ev, true)) {
 				block.prepareChange();
 				return 1;
 			}
@@ -869,7 +869,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
-			var angle = canvas.accelerometerDrag(width, height, left, top, ev);
+			var angle = canvas.accelerometerDrag(width, height, left, top, ev, true);
 			block.param[0] = angle;
 		},
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
@@ -916,7 +916,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			if (canvas.accelerometerCheck(width, height, left, top, ev)) {
+			if (canvas.accelerometerCheck(width, height, left, top, ev, true)) {
 				block.prepareChange();
 				return 1;
 			}
@@ -924,7 +924,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
-			var angle = canvas.accelerometerDrag(width, height, left, top, ev);
+			var angle = canvas.accelerometerDrag(width, height, left, top, ev, true);
 			block.param[0] = angle;
 		},
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
@@ -971,7 +971,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			if (canvas.accelerometerCheck(width, height, left, top, ev)) {
+			if (canvas.accelerometerCheck(width, height, left, top, ev, true)) {
 				block.prepareChange();
 				return 1;
 			}
@@ -979,7 +979,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
-			var angle = canvas.accelerometerDrag(width, height, left, top, ev);
+			var angle = canvas.accelerometerDrag(width, height, left, top, ev, true);
 			block.param[0] = angle;
 		},
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
