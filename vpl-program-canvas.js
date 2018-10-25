@@ -57,6 +57,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x, y, opts
 					canvas.lockedMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize, true);
 				}
 				if (block.disabled || opts.disabled) {
+					canvas.dims.blockLineWidth = dims0.blockLineWidth;    // unscaled line width for disabled mark
 					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize);
 				}
 				canvas.dims = dims0;
