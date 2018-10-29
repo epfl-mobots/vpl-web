@@ -24,7 +24,8 @@ var SVG = function (src) {
 		elementStyle: (string | undefined),
 		style: (Object | undefined),
 		transform: (Object | undefined),
-		elementId: (string | undefined)
+		elementId: (string | undefined),
+		element: (Element | undefined)
 	}}
 */
 SVG.Options;
@@ -957,6 +958,8 @@ SVG.prototype.draw = function (ctx, options) {
 		element = this.dom.getElementById(options.elementId);
 		// apply ancestors transforms
 		// [to do...]
+	} else if (options && options.element) {
+		element = options.element;
 	}
 	if (element) {
 		if (options.globalTransform) {
