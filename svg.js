@@ -184,6 +184,15 @@ SVG.colorDict = {
 	"yellowgreen": "#9ACD32"
 };
 
+/** @typedef {{
+		dx: (number | undefined),
+		dy: (number | undefined),
+		phi: (number | undefined)
+	}}
+	Displacement of a shape (first by (dx,dy), then rotation by phi around shape center)
+*/
+SVG.Displacement;
+
 /** Draw SVG from source code
 	@param {CanvasRenderingContext2D} ctx
 	@param {SVG.Options=} options
@@ -835,11 +844,23 @@ SVG.prototype.draw = function (ctx, options) {
 		}
 
 		var idAttr = el.getAttribute("id");
-		var transformFun = idAttr && options && options.transform && options.transform[idAttr];
+		/** @type {SVG.Displacement} */
+		var displacement = idAttr && options && options.displacement && options.displacement[idAttr];
 		ctx && ctx.save();
 		transform.save();
-		if (transformFun && ctx) {
-			transformFun(ctx);
+		if (displacement && ctx) {
+			if (displacement && displacement.phi && displacement.phi != 0) {
+				var p = self.draw(null, {element: el});
+				var bnds = SVG.calcBounds(p);
+				var x0 = (bnds.xmin + bnds.xmax) / 2;
+				var y0 = (bnds.ymin + bnds.ymax) / 2;
+				ctx.translate(x0 + (displacement.dx || 0), y0 + (displacement.dy || 0));
+				ctx.rotate(displacement.phi);
+				ctx.translate(-x0, -y0);
+			} else if (displacement.dx || displacement.dy) {
+				ctx.translate(/** @type {number} */(displacement.dx),
+					/** @type {number} */(displacement.dy));
+			}
 		}
 
 		getStyle();
@@ -970,12 +991,11 @@ SVG.prototype.draw = function (ctx, options) {
 	return {x: xa, y: ya}
 };
 
-/** Get element bounds
-	@param {string} elementId
+/** Calculate element bounds from arrays of coordinates
+	@param {{x:Array.<number>,y:Array.<number>}} p list of all points
 	@return {{xmin:number,xmax:number,ymin:number,ymax:number}}
 */
-SVG.prototype.getElementBounds = function (elementId) {
-	var p = this.draw(null, {elementId: elementId});
+SVG.calcBounds = function (p) {
 	if (p.x.length === 0) {
 		return {xmin: 0, xmax: 0, ymin: 0, ymax: 0};
 	}
@@ -997,6 +1017,15 @@ SVG.prototype.getElementBounds = function (elementId) {
 		ymin: ymin,
 		ymax: ymax
 	};
+};
+
+/** Get element bounds
+	@param {string} elementId
+	@return {{xmin:number,xmax:number,ymin:number,ymax:number}}
+*/
+SVG.prototype.getElementBounds = function (elementId) {
+	var p = this.draw(null, {elementId: elementId});
+	return SVG.calcBounds(p);
 };
 
 /** Check if a point is roughly inside an element
