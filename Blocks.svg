@@ -1,234 +1,380 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 96 96">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 96 96.19">
   <defs>
     <style>
       .cls-1 {
-        fill: #ff6e40;
+        isolation: isolate;
       }
 
       .cls-2 {
-        fill: #3d5afe;
+        fill: #ff804a;
       }
 
-      .cls-23, .cls-3, .cls-4, .cls-54, .cls-61 {
-        fill: #d1d1d1;
-      }
-
-      .cls-3, .cls-5 {
-        stroke: #757575;
-      }
-
-      .cls-14, .cls-15, .cls-19, .cls-20, .cls-22, .cls-23, .cls-3, .cls-32, .cls-33, .cls-34, .cls-5, .cls-53, .cls-57, .cls-63, .cls-64 {
-        stroke-linejoin: round;
-      }
-
-      .cls-10, .cls-13, .cls-14, .cls-15, .cls-18, .cls-19, .cls-20, .cls-21, .cls-22, .cls-23, .cls-3, .cls-32, .cls-33, .cls-34, .cls-37, .cls-38, .cls-41, .cls-5, .cls-53, .cls-57, .cls-58, .cls-7, .cls-8 {
-        stroke-width: 2px;
-      }
-
-      .cls-13, .cls-17, .cls-18, .cls-21, .cls-22, .cls-32, .cls-37, .cls-38, .cls-5, .cls-52, .cls-57, .cls-58, .cls-63, .cls-64 {
+      .cls-18, .cls-22, .cls-23, .cls-24, .cls-25, .cls-26, .cls-3, .cls-34, .cls-42, .cls-56, .cls-57, .cls-78, .cls-83, .cls-86, .cls-87, .cls-89, .cls-9, .cls-91, .cls-97, .cls-98 {
         fill: none;
       }
 
-      .cls-6 {
-        fill: #ff7f49;
+      .cls-3, .cls-5, .cls-8 {
+        stroke: #405359;
       }
 
-      .cls-20, .cls-7, .cls-9 {
-        fill: #e0e0e0;
-      }
-
-      .cls-10, .cls-14, .cls-15, .cls-19, .cls-20, .cls-22, .cls-23, .cls-41, .cls-53, .cls-58, .cls-7, .cls-8 {
-        stroke: #424242;
-      }
-
-      .cls-10, .cls-13, .cls-17, .cls-18, .cls-21, .cls-37, .cls-38, .cls-41, .cls-58, .cls-7, .cls-8 {
-        stroke-miterlimit: 10;
-      }
-
-      .cls-10, .cls-19, .cls-34, .cls-50, .cls-8 {
-        fill: #fff;
-      }
-
-      .cls-10, .cls-13, .cls-17, .cls-21, .cls-32, .cls-37, .cls-38, .cls-63, .cls-64 {
+      .cls-17, .cls-18, .cls-22, .cls-23, .cls-25, .cls-3, .cls-42, .cls-5, .cls-56, .cls-83, .cls-86, .cls-87, .cls-89, .cls-91, .cls-98 {
         stroke-linecap: round;
       }
 
-      .cls-11, .cls-53 {
-        fill: #1de9b6;
+      .cls-10, .cls-11, .cls-19, .cls-20, .cls-23, .cls-24, .cls-26, .cls-27, .cls-3, .cls-35, .cls-42, .cls-5, .cls-58, .cls-60, .cls-79, .cls-8, .cls-80, .cls-86, .cls-87, .cls-88, .cls-89, .cls-9, .cls-90, .cls-91, .cls-92, .cls-97, .cls-98 {
+        stroke-linejoin: round;
       }
 
-      .cls-12, .cls-55, .cls-56, .cls-59 {
-        fill: #424242;
+      .cls-10, .cls-11, .cls-12, .cls-14, .cls-15, .cls-17, .cls-18, .cls-19, .cls-20, .cls-22, .cls-23, .cls-25, .cls-26, .cls-27, .cls-3, .cls-34, .cls-35, .cls-42, .cls-5, .cls-56, .cls-57, .cls-58, .cls-60, .cls-74, .cls-79, .cls-8, .cls-80, .cls-86, .cls-87, .cls-88, .cls-89, .cls-9, .cls-90, .cls-91, .cls-92, .cls-97, .cls-98 {
+        stroke-width: 2px;
       }
 
-      .cls-13, .cls-17, .cls-33, .cls-34, .cls-64 {
-        stroke: #1de9b6;
+      .cls-4 {
+        fill: #405359;
+      }
+
+      .cls-10, .cls-27, .cls-35, .cls-5, .cls-6, .cls-8 {
+        fill: #90a4ae;
+      }
+
+      .cls-11, .cls-12, .cls-7, .cls-79 {
+        fill: #84edcf;
+      }
+
+      .cls-24, .cls-9, .cls-98 {
+        stroke: #90a4ae;
+      }
+
+      .cls-10 {
+        stroke: #4c6468;
+      }
+
+      .cls-11, .cls-12, .cls-14, .cls-15, .cls-17, .cls-19, .cls-20, .cls-22, .cls-23, .cls-26, .cls-27, .cls-57, .cls-58, .cls-60, .cls-62, .cls-74, .cls-80, .cls-83 {
+        stroke: #263238;
+      }
+
+      .cls-12, .cls-14, .cls-15, .cls-17, .cls-18, .cls-22, .cls-25, .cls-34, .cls-56, .cls-57, .cls-62, .cls-74, .cls-83 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-13, .cls-94 {
+        fill: #263238;
       }
 
       .cls-14, .cls-16 {
+        fill: #eceff1;
+      }
+
+      .cls-15, .cls-17, .cls-33, .cls-60 {
+        fill: #fff;
+      }
+
+      .cls-18, .cls-42 {
+        stroke: #84edcf;
+      }
+
+      .cls-19, .cls-21 {
         fill: #ffab91;
       }
 
-      .cls-15 {
+      .cls-20 {
         fill: #ffccbc;
       }
 
-      .cls-17, .cls-63, .cls-64 {
-        stroke-width: 4px;
+      .cls-25, .cls-34 {
+        stroke: #37474f;
       }
 
-      .cls-18, .cls-32, .cls-63 {
-        stroke: #d1d1d1;
-      }
-
-      .cls-21 {
-        stroke: #616161;
-      }
-
-      .cls-21, .cls-37 {
+      .cls-25, .cls-56 {
         stroke-dasharray: 2 4;
       }
 
-      .cls-24 {
+      .cls-28 {
         fill: url(#radial-gradient);
       }
 
-      .cls-25 {
+      .cls-29 {
         fill: url(#radial-gradient-2);
       }
 
-      .cls-26 {
+      .cls-30 {
         fill: url(#radial-gradient-3);
       }
 
-      .cls-27 {
+      .cls-31 {
         fill: url(#radial-gradient-4);
       }
 
-      .cls-28 {
+      .cls-32 {
         fill: url(#radial-gradient-5);
       }
 
-      .cls-29 {
-        fill: url(#radial-gradient-6);
-      }
-
-      .cls-30 {
-        fill: url(#radial-gradient-7);
-      }
-
-      .cls-31 {
-        fill: url(#radial-gradient-8);
-      }
-
-      .cls-35, .cls-36 {
-        opacity: 0.45;
-      }
-
       .cls-35 {
-        fill: url(#radial-gradient-9);
+        stroke: #5a7280;
       }
 
       .cls-36 {
-        fill: url(#radial-gradient-10);
+        fill: url(#radial-gradient-6);
       }
 
-      .cls-37, .cls-38 {
-        stroke: #e0e0e0;
+      .cls-37 {
+        fill: url(#radial-gradient-7);
       }
 
       .cls-38 {
-        stroke-dasharray: 1.96 3.91;
+        fill: url(#radial-gradient-8);
       }
 
       .cls-39 {
-        fill: url(#radial-gradient-11);
+        fill: url(#radial-gradient-9);
       }
 
       .cls-40 {
-        fill: url(#radial-gradient-12);
+        fill: url(#radial-gradient-10);
       }
 
       .cls-41 {
-        fill: #f0f0f0;
-      }
-
-      .cls-42 {
-        fill: url(#radial-gradient-13);
+        fill: url(#radial-gradient-11);
       }
 
       .cls-43 {
-        fill: lime;
+        fill: url(#radial-gradient-12);
       }
 
       .cls-44 {
-        fill: blue;
+        fill: url(#radial-gradient-13);
       }
 
       .cls-45 {
-        fill: red;
-      }
-
-      .cls-46 {
-        fill: #ff0;
-      }
-
-      .cls-47 {
-        fill: aqua;
-      }
-
-      .cls-48 {
-        fill: #f0f;
-      }
-
-      .cls-49 {
-        fill: #ff3d00;
-      }
-
-      .cls-51 {
         fill: url(#radial-gradient-14);
       }
 
-      .cls-54, .cls-55 {
-        font-size: 20px;
+      .cls-46 {
+        fill: url(#radial-gradient-15);
       }
 
-      .cls-54, .cls-55, .cls-56, .cls-59, .cls-61 {
-        font-family: Rubik-Medium, Rubik;
+      .cls-47 {
+        fill: url(#radial-gradient-16);
+      }
+
+      .cls-48 {
+        fill: url(#radial-gradient-17);
+      }
+
+      .cls-49 {
+        fill: url(#radial-gradient-18);
+      }
+
+      .cls-50 {
+        fill: url(#radial-gradient-19);
+      }
+
+      .cls-51 {
+        fill: url(#radial-gradient-20);
+      }
+
+      .cls-52 {
+        fill: url(#radial-gradient-21);
+      }
+
+      .cls-53 {
+        fill: url(#radial-gradient-22);
+      }
+
+      .cls-54 {
+        fill: url(#radial-gradient-23);
+      }
+
+      .cls-55 {
+        opacity: 0.45;
+        fill: url(#radial-gradient-24);
       }
 
       .cls-56 {
-        font-size: 28.35px;
+        stroke: #b0bec5;
       }
 
-      .cls-57 {
-        stroke: #ff3d00;
+      .cls-59 {
+        opacity: 0.52;
+        fill: url(#radial-gradient-25);
       }
 
-      .cls-59, .cls-61 {
-        font-size: 16px;
-      }
-
-      .cls-60 {
-        letter-spacing: -0.02em;
+      .cls-61 {
+        fill: url(#radial-gradient-26);
       }
 
       .cls-62 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-63 {
+        opacity: 0.15;
+        mix-blend-mode: multiply;
+      }
+
+      .cls-64 {
+        fill: url(#radial-gradient-27);
+      }
+
+      .cls-65 {
+        fill: #ff8a65;
+      }
+
+      .cls-66 {
+        fill: #00ff50;
+      }
+
+      .cls-67 {
+        fill: #1919ff;
+      }
+
+      .cls-68 {
+        fill: red;
+      }
+
+      .cls-69 {
+        fill: #00eaff;
+      }
+
+      .cls-70 {
+        fill: #ffea00;
+      }
+
+      .cls-71 {
+        fill: #ff00fb;
+      }
+
+      .cls-72, .cls-74 {
+        fill: #cfd8dc;
+      }
+
+      .cls-73, .cls-92 {
+        fill: #ff3d00;
+      }
+
+      .cls-75 {
+        fill: url(#radial-gradient-28);
+      }
+
+      .cls-76 {
+        fill: url(#radial-gradient-29);
+      }
+
+      .cls-77 {
+        font-size: 20px;
+        fill: #424242;
+      }
+
+      .cls-77, .cls-94 {
+        font-family: Rubik-Medium, Rubik;
+      }
+
+      .cls-79, .cls-88, .cls-90, .cls-92, .cls-97 {
+        stroke: #424242;
+      }
+
+      .cls-80, .cls-82 {
+        fill: #1de9b6;
+      }
+
+      .cls-81 {
+        fill: #5a7280;
+      }
+
+      .cls-83 {
+        stroke-dasharray: 0.97 1.95;
+      }
+
+      .cls-84 {
+        fill: url(#radial-gradient-30);
+      }
+
+      .cls-85 {
+        fill: url(#radial-gradient-31);
+      }
+
+      .cls-86 {
+        stroke: #cfd8dc;
+      }
+
+      .cls-87 {
+        stroke: blue;
+      }
+
+      .cls-88 {
+        fill: blue;
+      }
+
+      .cls-89 {
+        stroke: lime;
+      }
+
+      .cls-90 {
+        fill: lime;
+      }
+
+      .cls-91 {
+        stroke: #ff3d00;
+      }
+
+      .cls-93 {
+        fill: #448aff;
+      }
+
+      .cls-94 {
+        font-size: 16px;
+      }
+
+      .cls-95 {
+        letter-spacing: -0.02em;
+      }
+
+      .cls-96 {
         letter-spacing: -0.03em;
       }
     </style>
-    <radialGradient id="radial-gradient" cx="74.01" cy="80.01" r="2" gradientUnits="userSpaceOnUse">
+    <radialGradient id="radial-gradient" cx="61.81" cy="23.3" r="45.79" gradientTransform="matrix(0.09, -0.99, 1.36, 0.12, -24.45, 112.46)" gradientUnits="userSpaceOnUse">
+      <stop offset="0.09" stop-color="#fff"/>
+      <stop offset="0.21" stop-color="#fff" stop-opacity="0.99"/>
+      <stop offset="0.32" stop-color="#fff" stop-opacity="0.94"/>
+      <stop offset="0.43" stop-color="#fff" stop-opacity="0.87"/>
+      <stop offset="0.53" stop-color="#fff" stop-opacity="0.77"/>
+      <stop offset="0.63" stop-color="#fff" stop-opacity="0.64"/>
+      <stop offset="0.73" stop-color="#fff" stop-opacity="0.47"/>
+      <stop offset="0.83" stop-color="#fff" stop-opacity="0.28"/>
+      <stop offset="0.93" stop-color="#fff" stop-opacity="0.07"/>
+      <stop offset="0.95" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-2" cx="26.62" cy="49.81" r="45.73" gradientTransform="translate(0 0.59)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-3" cx="115.51" cy="137.85" r="47.77" gradientTransform="matrix(0.7, -0.7, 0.96, 0.96, -181.3, 11.94)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-4" cx="44.91" cy="68.01" r="47.01" gradientTransform="translate(-20.02 112.93) rotate(-90) scale(1 0.95)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-5" cx="51.87" cy="82.21" r="43.91" gradientTransform="translate(-29.74 134.08) rotate(-90) scale(1 0.99)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-6" cx="49.16" cy="90.39" r="1.7" gradientUnits="userSpaceOnUse">
       <stop offset="0.27" stop-color="#ff3d00"/>
       <stop offset="1" stop-color="#ff3d00" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="radial-gradient-2" cx="22.01" cy="80.01" r="2" xlink:href="#radial-gradient"/>
-    <radialGradient id="radial-gradient-3" cx="47.21" cy="14.57" r="2" gradientTransform="translate(112.43 72.1) rotate(-142)" xlink:href="#radial-gradient"/>
-    <radialGradient id="radial-gradient-4" cx="63.38" cy="12.39" r="2" gradientTransform="translate(127.76 52.21) rotate(-162)" xlink:href="#radial-gradient"/>
-    <radialGradient id="radial-gradient-5" cx="40.01" cy="15.68" r="2" xlink:href="#radial-gradient"/>
-    <radialGradient id="radial-gradient-6" cx="56.01" cy="15.68" r="2" xlink:href="#radial-gradient"/>
-    <radialGradient id="radial-gradient-7" cx="36.57" cy="21.1" r="2" gradientTransform="matrix(0.95, -0.31, -0.31, -0.95, -3.55, 52.21)" xlink:href="#radial-gradient"/>
-    <radialGradient id="radial-gradient-8" cx="25" cy="31.92" r="2" gradientTransform="matrix(0.79, -0.62, -0.62, -0.79, 11.78, 72.1)" xlink:href="#radial-gradient"/>
-    <radialGradient id="radial-gradient-9" cx="59.52" cy="19.07" r="18.59" gradientUnits="userSpaceOnUse">
+    <radialGradient id="radial-gradient-7" cx="47.86" cy="76.2" r="1.7" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-8" cx="24.88" cy="69.05" r="1.7" gradientTransform="translate(63.37 -12.14) rotate(45)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-9" cx="38.49" cy="69.05" r="1.7" gradientTransform="translate(63.37 -12.14) rotate(45)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-10" cx="19.84" cy="48.18" r="1.7" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-11" cx="-14.99" cy="-1.55" r="1.7" gradientTransform="matrix(0.99, 0.12, 0.12, -0.99, 20.72, 47.16)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-12" cx="115.52" cy="137.84" r="45.79" gradientTransform="matrix(0.7, -0.7, 0.96, 0.96, -181.28, 11.96)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-13" cx="79.33" cy="81.75" r="45.79" gradientTransform="matrix(0.42, -0.9, 1.23, 0.58, -111.07, 81.26)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-14" cx="61.82" cy="23.3" r="45.79" gradientTransform="matrix(0.09, -0.99, 1.36, 0.12, -24.43, 112.47)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-15" cx="294.3" cy="171.98" r="45.79" gradientTransform="matrix(0.9, -0.42, -0.58, -1.23, -127.08, 408.59)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-16" cx="237.06" cy="192.87" r="45.79" gradientTransform="matrix(0.99, -0.09, -0.12, -1.36, -169.95, 365.46)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-17" cx="32.95" cy="-38.99" r="1.7" gradientTransform="translate(91.9 118.34) rotate(-97)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-18" cx="65.96" cy="-43.75" r="1.7" gradientTransform="translate(116.8 115.11) rotate(-117)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-19" cx="24.89" cy="69.04" r="1.7" gradientTransform="translate(63.37 -12.14) rotate(45)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-20" cx="38.5" cy="69.04" r="1.7" gradientTransform="translate(63.37 -12.14) rotate(45)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-21" cx="8.12" cy="-24.95" r="1.7" gradientTransform="matrix(0.89, 0.45, 0.45, -0.89, 23.95, 22.27)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-22" cx="-14.98" cy="-1.55" r="1.7" gradientTransform="matrix(0.99, 0.12, 0.12, -0.99, 20.72, 47.16)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-23" cx="71.17" cy="29.05" r="18.59" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-opacity="0.8"/>
+      <stop offset="0.89" stop-opacity="0.22"/>
+      <stop offset="1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-24" cx="18.02" cy="29.05" r="18.59" gradientTransform="matrix(-1, 0, 0, 1, 68.15, 0)" gradientUnits="userSpaceOnUse">
       <stop offset="0.12" stop-color="#fff" stop-opacity="0.8"/>
       <stop offset="0.44" stop-color="#fff" stop-opacity="0.79"/>
       <stop offset="0.56" stop-color="#fff" stop-opacity="0.77"/>
@@ -241,10 +387,36 @@
       <stop offset="0.95" stop-color="#fff" stop-opacity="0.02"/>
       <stop offset="0.95" stop-color="#fff" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="radial-gradient-10" cx="29.67" cy="19.07" r="18.59" gradientTransform="matrix(-1, 0, 0, 1, 68.15, 0)" xlink:href="#radial-gradient-9"/>
-    <radialGradient id="radial-gradient-11" cx="66.02" cy="18" r="2" gradientTransform="matrix(0.98, 0.21, -0.21, 0.98, 5.01, -11.67)" xlink:href="#radial-gradient"/>
-    <radialGradient id="radial-gradient-12" cx="30.44" cy="22.36" r="2" gradientTransform="matrix(0.98, -0.21, 0.21, 0.98, -4.24, 4.12)" xlink:href="#radial-gradient"/>
-    <radialGradient id="radial-gradient-13" cx="161.92" cy="128.31" r="49.88" gradientTransform="translate(-121.32 -165.67) scale(1.05 1.75)" gradientUnits="userSpaceOnUse">
+    <radialGradient id="radial-gradient-25" cx="79.93" cy="28.2" r="2" gradientTransform="matrix(0.98, 0.21, -0.21, 0.98, 5.01, -11.67)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-26" cx="38.99" cy="37.34" r="2" gradientTransform="matrix(0.98, -0.21, 0.21, 0.98, -4.24, 4.12)" xlink:href="#radial-gradient-6"/>
+    <linearGradient id="linear-gradient" x1="8.38" y1="85.35" x2="8.38" y2="13" gradientUnits="userSpaceOnUse">
+      <stop offset="0"/>
+      <stop offset="0.07" stop-color="#262626"/>
+      <stop offset="0.16" stop-color="#494949"/>
+      <stop offset="0.24" stop-color="#656565"/>
+      <stop offset="0.33" stop-color="#787878"/>
+      <stop offset="0.41" stop-color="#848484"/>
+      <stop offset="0.5" stop-color="#888"/>
+      <stop offset="0.6" stop-color="#8c8c8c"/>
+      <stop offset="0.69" stop-color="#979797"/>
+      <stop offset="0.78" stop-color="#aaa"/>
+      <stop offset="0.86" stop-color="#c5c5c5"/>
+      <stop offset="0.95" stop-color="#e7e7e7"/>
+      <stop offset="1" stop-color="#fff"/>
+    </linearGradient>
+    <radialGradient id="radial-gradient-27" cx="34.15" cy="-67.39" r="12.26" gradientTransform="translate(115.95 5.03) rotate(180) scale(1.13 0.78)" gradientUnits="userSpaceOnUse">
+      <stop offset="0.16" stop-color="#fff"/>
+      <stop offset="0.31" stop-color="#fff" stop-opacity="0.99"/>
+      <stop offset="0.43" stop-color="#fff" stop-opacity="0.95"/>
+      <stop offset="0.52" stop-color="#fff" stop-opacity="0.89"/>
+      <stop offset="0.61" stop-color="#fff" stop-opacity="0.8"/>
+      <stop offset="0.7" stop-color="#fff" stop-opacity="0.69"/>
+      <stop offset="0.78" stop-color="#fff" stop-opacity="0.55"/>
+      <stop offset="0.86" stop-color="#fff" stop-opacity="0.38"/>
+      <stop offset="0.93" stop-color="#fff" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-28" cx="161.92" cy="128.88" r="49.88" gradientTransform="translate(-140.67 -196.54) scale(1.17 2)" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#fff"/>
       <stop offset="0.17" stop-color="#fff" stop-opacity="0.99"/>
       <stop offset="0.3" stop-color="#fff" stop-opacity="0.95"/>
@@ -256,413 +428,673 @@
       <stop offset="0.93" stop-color="#fff" stop-opacity="0.16"/>
       <stop offset="1" stop-color="#fff" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="radial-gradient-14" cx="161.92" cy="113.22" r="49.88" gradientTransform="translate(-121.32 -192.57) scale(1.05 1.98)" xlink:href="#radial-gradient-13"/>
+    <radialGradient id="radial-gradient-29" cx="161.92" cy="113.22" r="49.88" gradientTransform="translate(-140.77 -229.01) scale(1.17 2.3)" xlink:href="#radial-gradient-28"/>
+    <radialGradient id="radial-gradient-30" cx="167.03" cy="131.79" r="34.92" gradientTransform="translate(-158.41 -196.54) scale(1.24 2)" xlink:href="#radial-gradient-28"/>
+    <radialGradient id="radial-gradient-31" cx="167.03" cy="137.63" r="34.92" gradientTransform="translate(-158.41 -242.09) scale(1.24 2.33)" xlink:href="#radial-gradient-28"/>
   </defs>
-  <title>Asset 162</title>
-  <g id="Layer_2" data-name="Layer 2">
-    <g id="Event_bg">
-      <rect id="BlocsBg_events" class="cls-1" width="96" height="96" rx="4" ry="4"/>
-    </g>
-    <g id="Act_bg">
-      <rect id="BlocsBg_actions" class="cls-2" width="96" height="96" rx="4" ry="4" transform="translate(96) rotate(90)"/>
-    </g>
-    <g id="Ev_Buttons">
-      <g id="ButtonsOff">
-        <circle id="Btn2_Center" class="cls-3" cx="47.96" cy="48" r="10"/>
-        <g id="Btn2_Forward">
-          <path class="cls-4" d="M38.92,29.36c-.56,0-.78-.39-.51-.88l9-15.57a.53.53,0,0,1,1,0l9,15.57c.27.49.05.88-.51.88Z"/>
-          <path class="cls-5" d="M38.92,29.36c-.56,0-.78-.39-.51-.88l9-15.57a.53.53,0,0,1,1,0l9,15.57c.27.49.05.88-.51.88Z"/>
-        </g>
-        <g id="Btn2_Backward">
-          <path class="cls-4" d="M38.92,66.63c-.56,0-.78.39-.51.88l9,15.57a.53.53,0,0,0,1,0l9-15.57c.27-.49.05-.88-.51-.88Z"/>
-          <path class="cls-5" d="M38.92,66.63c-.56,0-.78.39-.51.88l9,15.57a.53.53,0,0,0,1,0l9-15.57c.27-.49.05-.88-.51-.88Z"/>
-        </g>
-        <g id="Btn2_Right">
-          <path class="cls-4" d="M66.59,39c0-.56.4-.78.88-.51l15.57,9a.53.53,0,0,1,0,1l-15.57,9c-.48.28-.88.05-.88-.5Z"/>
-          <path class="cls-5" d="M66.59,39c0-.56.4-.78.88-.51l15.57,9a.53.53,0,0,1,0,1l-15.57,9c-.48.28-.88.05-.88-.5Z"/>
-        </g>
-        <g id="Btn2_Left">
-          <path class="cls-4" d="M29.32,39c0-.56-.39-.78-.87-.51l-15.58,9a.53.53,0,0,0,0,1l15.58,9c.48.28.87.05.87-.5Z"/>
-          <path class="cls-5" d="M29.32,39c0-.56-.39-.78-.87-.51l-15.58,9a.53.53,0,0,0,0,1l15.58,9c.48.28.87.05.87-.5Z"/>
-        </g>
-      </g>
-      <g id="Bg_States">
-        <path id="_0" data-name="0" class="cls-6" d="M58,11.35a38.23,38.23,0,0,0-20.14,0,2,2,0,0,1-2.4-1.3h0a2,2,0,0,1,1.39-2.56A42.12,42.12,0,0,1,59,7.49a2,2,0,0,1,1.39,2.56h0A2,2,0,0,1,58,11.35Z"/>
-        <path id="_1" data-name="1" class="cls-6" d="M81,29.21A38.45,38.45,0,0,0,66.74,15,2,2,0,0,1,66,12.35h0a2,2,0,0,1,2.8-.83A42.45,42.45,0,0,1,84.43,27.19,2,2,0,0,1,83.6,30h0A2,2,0,0,1,81,29.21Z"/>
-        <path id="_2" data-name="2" class="cls-6" d="M85.9,60.47h0a2,2,0,0,1-1.3-2.41,38.2,38.2,0,0,0,0-20.13,2,2,0,0,1,1.3-2.41h0a2,2,0,0,1,2.56,1.39,42,42,0,0,1,0,22.17A2,2,0,0,1,85.9,60.47Z"/>
-        <path id="_3" data-name="3" class="cls-6" d="M66,83.64h0A2,2,0,0,1,66.74,81,38.45,38.45,0,0,0,81,66.78,2,2,0,0,1,83.6,66h0a2,2,0,0,1,.83,2.8A42.45,42.45,0,0,1,68.76,84.47,2,2,0,0,1,66,83.64Z"/>
-        <path id="_4" data-name="4" class="cls-6" d="M48,90a42.27,42.27,0,0,1-11.08-1.49,2,2,0,0,1-1.39-2.57h0a2,2,0,0,1,2.41-1.3,38.2,38.2,0,0,0,20.13,0,2,2,0,0,1,2.41,1.3h0A2,2,0,0,1,59,88.51,42.29,42.29,0,0,1,48,90Z"/>
-        <path id="_5" data-name="5" class="cls-6" d="M27.15,84.47A42.37,42.37,0,0,1,11.48,68.8,2,2,0,0,1,12.3,66h0a2,2,0,0,1,2.63.78A38.45,38.45,0,0,0,29.17,81a2,2,0,0,1,.77,2.62h0A2,2,0,0,1,27.15,84.47Z"/>
-        <path id="_6" data-name="6" class="cls-6" d="M10,60.47a2,2,0,0,1-2.57-1.39,42,42,0,0,1,0-22.17A2,2,0,0,1,10,35.52h0a2,2,0,0,1,1.3,2.41,37.92,37.92,0,0,0,0,20.13A2,2,0,0,1,10,60.47Z"/>
-        <path id="_7" data-name="7" class="cls-6" d="M12.3,30h0a2,2,0,0,1-.82-2.8A42.37,42.37,0,0,1,27.15,11.52a2,2,0,0,1,2.79.83h0A2,2,0,0,1,29.17,15,38.45,38.45,0,0,0,14.93,29.21,2,2,0,0,1,12.3,30Z"/>
-      </g>
-    </g>
-    <g id="States">
-      <g id="Ev_Bg_buttons">
-        <circle class="cls-6" cx="48" cy="48" r="8.88"/>
-        <path class="cls-6" d="M40.13,31.49c-.56,0-.79-.39-.51-.87l7.8-13.68a.54.54,0,0,1,1,0l7.94,13.6c.28.48.06.87-.5.87Z"/>
-        <path class="cls-6" d="M40.13,64.51c-.56,0-.79.39-.51.87l7.8,13.68a.54.54,0,0,0,1,0l7.94-13.6c.28-.48.06-.87-.5-.87Z"/>
-        <path class="cls-6" d="M64.51,40.13c0-.56.39-.79.87-.51l13.68,7.8a.54.54,0,0,1,0,1l-13.6,7.94c-.48.28-.87.06-.87-.5Z"/>
-        <path class="cls-6" d="M31.49,40.13c0-.56-.39-.79-.87-.51l-13.68,7.8a.54.54,0,0,0,0,1l13.6,7.94c.48.28.87.06.87-.5Z"/>
-      </g>
-      <g id="StatesOff">
-        <path id="Btn2_State0" class="cls-3" d="M37.93,14.24A2.9,2.9,0,0,1,35.39,10,2.93,2.93,0,0,1,37.2,8.53a41.22,41.22,0,0,1,21.6,0A2.91,2.91,0,0,1,60.6,10a2.9,2.9,0,0,1-2.54,4.27,2.78,2.78,0,0,1-.76-.1,35.26,35.26,0,0,0-18.61,0A2.78,2.78,0,0,1,37.93,14.24Z"/>
-        <path id="Btn2_State1" class="cls-3" d="M81,32.09a2.89,2.89,0,0,1-2.5-1.45A35.36,35.36,0,0,0,65.36,17.48a2.9,2.9,0,0,1,1.46-5.41,3,3,0,0,1,1.45.39A41.28,41.28,0,0,1,83.54,27.73,3,3,0,0,1,83.8,30a2.89,2.89,0,0,1-1.47,1.76A3,3,0,0,1,81,32.09Z"/>
-        <path id="Btn2_State2" class="cls-3" d="M84.66,61a3.09,3.09,0,0,1-.91-.14,2.88,2.88,0,0,1-1.89-3.51,35.22,35.22,0,0,0,0-18.6,2.88,2.88,0,0,1,1.89-3.51,3.09,3.09,0,0,1,.91-.14,2.93,2.93,0,0,1,2.81,2.15,40.95,40.95,0,0,1,0,21.6A2.93,2.93,0,0,1,84.66,61Z"/>
-        <path id="Btn2_State3" class="cls-3" d="M66.82,83.93a2.9,2.9,0,0,1-1.46-5.41A35.36,35.36,0,0,0,78.52,65.36,2.89,2.89,0,0,1,81,63.91,2.93,2.93,0,0,1,83.8,66a3,3,0,0,1-.26,2.29A41.28,41.28,0,0,1,68.27,83.54,3,3,0,0,1,66.82,83.93Z"/>
-        <path id="Btn2_State4" class="cls-3" d="M48,88.92a41.11,41.11,0,0,1-10.81-1.45A2.91,2.91,0,0,1,35.39,86a2.9,2.9,0,0,1,2.54-4.27,3.23,3.23,0,0,1,.76.1,35.26,35.26,0,0,0,18.61,0,3.23,3.23,0,0,1,.76-.1,2.91,2.91,0,0,1,.74,5.71A41,41,0,0,1,48,88.92Z"/>
-        <path id="Btn2_State5" class="cls-3" d="M29.17,83.93a3,3,0,0,1-1.45-.39A41.18,41.18,0,0,1,12.46,68.27,2.91,2.91,0,0,1,12.19,66,2.93,2.93,0,0,1,15,63.91a2.89,2.89,0,0,1,2.5,1.45A35.39,35.39,0,0,0,30.64,78.52a2.9,2.9,0,0,1-1.47,5.41Z"/>
-        <path id="Btn2_State6" class="cls-3" d="M11.33,61a2.91,2.91,0,0,1-2.8-2.15,40.95,40.95,0,0,1,0-21.6,2.91,2.91,0,0,1,2.8-2.15,3.09,3.09,0,0,1,.91.14,2.88,2.88,0,0,1,1.89,3.51,35.22,35.22,0,0,0,0,18.6,2.88,2.88,0,0,1-1.89,3.51A3.09,3.09,0,0,1,11.33,61Z"/>
-        <path id="Btn2_State7" class="cls-3" d="M15,32.09A2.93,2.93,0,0,1,12.19,30a2.91,2.91,0,0,1,.27-2.29A41.18,41.18,0,0,1,27.72,12.46a3,3,0,0,1,1.46-.39,2.9,2.9,0,0,1,1.46,5.41A35.39,35.39,0,0,0,17.47,30.64,2.89,2.89,0,0,1,15,32.09Z"/>
-      </g>
-    </g>
-    <g id="Ev_Start">
-      <g id="Bg_Th_Profile">
-        <g>
-          <path class="cls-7" d="M64.65,79.9c.55.67.6,2.72,1.56,3.72a3.88,3.88,0,0,0,4.82,0c.94-1,1-3.05,1.54-3.72Z"/>
-          <rect class="cls-8" x="16.1" y="55.72" width="64" height="24" rx="2" ry="2"/>
-          <path class="cls-9" d="M79.1,74.89v2.77a1,1,0,0,1-1,1h-60a1,1,0,0,1-1-1V74.89Z"/>
-          <line class="cls-10" x1="68.1" y1="64.68" x2="73.18" y2="64.68"/>
-          <line class="cls-10" x1="77.55" y1="64.68" x2="80.09" y2="64.68"/>
-          <circle class="cls-8" cx="33.73" cy="71.93" r="12.83"/>
-          <path class="cls-9" d="M42,63.54a11.71,11.71,0,0,1,1.82,6.28,11.85,11.85,0,0,1-20.09,8.53A11.85,11.85,0,1,0,42,63.54Z"/>
-        </g>
-      </g>
-      <g id="StartIndicator">
-        <circle class="cls-11" cx="48.1" cy="30" r="18"/>
-        <path class="cls-12" d="M44.71,36.36V23.76A.9.9,0,0,1,46.15,23l8.41,6.3a.9.9,0,0,1,0,1.44l-8.41,6.3A.9.9,0,0,1,44.71,36.36Z"/>
-      </g>
-    </g>
-    <g id="Ev_Clap">
-      <g id="Bg_Th_Profile-2" data-name="Bg_Th_Profile">
-        <path class="cls-7" d="M64.65,79.9c.55.67.6,2.72,1.56,3.72a3.88,3.88,0,0,0,4.82,0c.94-1,1-3.05,1.54-3.72Z"/>
-        <rect class="cls-8" x="16.1" y="55.72" width="64" height="24" rx="2" ry="2"/>
-        <path class="cls-9" d="M79.1,74.89v2.77a1,1,0,0,1-1,1h-60a1,1,0,0,1-1-1V74.89Z"/>
-        <line class="cls-10" x1="68.1" y1="64.68" x2="73.18" y2="64.68"/>
-        <line class="cls-10" x1="77.55" y1="64.68" x2="80.09" y2="64.68"/>
-        <line class="cls-8" x1="64.65" y1="79.9" x2="63.81" y2="79.9"/>
-        <circle class="cls-8" cx="33.73" cy="71.93" r="12.83"/>
-        <path class="cls-9" d="M42,63.54a11.71,11.71,0,0,1,1.82,6.28,11.85,11.85,0,0,1-20.09,8.53A11.85,11.85,0,1,0,42,63.54Z"/>
-      </g>
-      <g id="Bg_ClapHands">
-        <g>
-          <line class="cls-13" x1="21.56" y1="31.16" x2="15.56" y2="31.16"/>
-          <line class="cls-13" x1="18.37" y1="24.16" x2="23.56" y2="27.16"/>
-          <line class="cls-13" x1="18.37" y1="38.16" x2="23.56" y2="35.16"/>
-        </g>
-        <g>
-          <line class="cls-13" x1="58.38" y1="14.08" x2="58.38" y2="8.08"/>
-          <line class="cls-13" x1="65.38" y1="10.89" x2="62.38" y2="16.09"/>
-          <line class="cls-13" x1="51.37" y1="10.89" x2="54.37" y2="16.09"/>
-        </g>
-        <path id="HandFront" class="cls-14" d="M41.54,47.63,28.89,35.06a2.24,2.24,0,0,1,0-3.44,2.53,2.53,0,0,1,1.64-.73,2.35,2.35,0,0,1,1.79.72l9.17,9.12a.53.53,0,1,0,.75-.76l-9.16-9.11h0l-4.52-4.49a2.32,2.32,0,0,1,.11-3.44,2.22,2.22,0,0,1,3.33,0L45.54,36.39a.54.54,0,0,0,.76,0,.55.55,0,0,0,0-.76L32.74,22.16l-1.4-1.39a2.37,2.37,0,0,1,0-3.44A2.53,2.53,0,0,1,33,16.6a2.32,2.32,0,0,1,1.79.73L37.41,20h0L49.83,32.3a.54.54,0,0,0,.76-.76L38.17,19.19a2.3,2.3,0,0,1,.11-3.42,2.22,2.22,0,0,1,3.33,0L57.26,31.33s.36.64.89.51.36-.75.36-.75L54.7,23.82a3.29,3.29,0,0,1,1.42-4.52s1-.47,1.36.27l6.16,11.78h0a14.08,14.08,0,0,1-2.18,16.22s0,0,0,0A14.12,14.12,0,0,1,41.54,47.63Z"/>
-        <path id="HandFront-2" data-name="HandFront" class="cls-15" d="M45.08,47.16,32.44,34.58a2.23,2.23,0,0,1,0-3.43,2.44,2.44,0,0,1,1.64-.73,2.35,2.35,0,0,1,1.79.72L45,40.25a.53.53,0,0,0,.75,0,.54.54,0,0,0,0-.76l-9.16-9.1h0l-4.52-4.5a2.32,2.32,0,0,1,.1-3.43,2.22,2.22,0,0,1,3.33,0L49.09,35.92a.53.53,0,0,0,.75-.76L36.29,21.69l-1.4-1.4a2.35,2.35,0,0,1,0-3.43,2.48,2.48,0,0,1,1.64-.73,2.34,2.34,0,0,1,1.79.73L41,19.47h0L53.38,31.82a.53.53,0,1,0,.75-.75L41.71,18.72a2.32,2.32,0,0,1,.11-3.43,2.22,2.22,0,0,1,3.33,0L60.81,30.85s.35.65.88.51.37-.74.36-.75l-3.8-7.27a3.28,3.28,0,0,1,1.42-4.52s1-.47,1.35.28l6.17,11.77h0A14.13,14.13,0,0,1,65,47.1s0,0,0,0A14.14,14.14,0,0,1,45.08,47.16Z"/>
-        <path class="cls-16" d="M58.28,49.84a21.28,21.28,0,0,0,4.1-4.67c3.86-5.41-1.65-12.07-1.84-12.36L60,32.27,43.44,15.56a1.39,1.39,0,0,1,1,.43L60,31.48a1.73,1.73,0,0,0,1.93.85,1.51,1.51,0,0,0,.93-.7A1.73,1.73,0,0,0,63,30.37l0-.09,0-.09-3.83-7.31a2.3,2.3,0,0,1,1-3.17l.07,0,6.1,11.65a13.1,13.1,0,0,1-2,15.07l-.09.1A12.87,12.87,0,0,1,58.28,49.84Z"/>
-        <path class="cls-16" d="M52.44,33.16l-15.88-16a1.36,1.36,0,0,1,1,.43L52.8,32.69a2,2,0,0,0,1.08.28C53.92,33.45,53,33.47,52.44,33.16Z"/>
-      </g>
-    </g>
-    <g id="Ev_Acc_Hit">
-      <g id="ThymioProfile">
-        <path class="cls-7" d="M64.65,73.66c.55.67.6,2.72,1.56,3.72a3.19,3.19,0,0,0,2.41.84A3.26,3.26,0,0,0,71,77.38c.94-1,1-3,1.54-3.72Z"/>
-        <rect class="cls-8" x="16.1" y="49.48" width="64" height="24" rx="2" ry="2"/>
-        <path class="cls-9" d="M79.1,68.66v2.76a1,1,0,0,1-1,1h-60a1,1,0,0,1-1-1V68.66Z"/>
-        <line class="cls-10" x1="68.1" y1="58.45" x2="73.18" y2="58.45"/>
-        <line class="cls-10" x1="77.55" y1="58.45" x2="80.09" y2="58.45"/>
-        <circle class="cls-8" cx="33.73" cy="65.69" r="12.83"/>
-        <path class="cls-9" d="M42,57.3a11.71,11.71,0,0,1,1.82,6.28,11.85,11.85,0,0,1-20.09,8.53A11.85,11.85,0,1,0,42,57.3Z"/>
-      </g>
-      <g id="ArrowNLines">
-        <line class="cls-10" x1="8" y1="80" x2="88" y2="80"/>
-        <g>
-          <line class="cls-17" x1="48" y1="24" x2="48" y2="37.43"/>
-          <polygon class="cls-11" points="42.02 35.68 48 46.04 53.98 35.68 42.02 35.68"/>
-        </g>
-        <g>
-          <line class="cls-13" x1="13.75" y1="48.31" x2="7.75" y2="48.31"/>
-          <line class="cls-13" x1="10.56" y1="41.31" x2="15.75" y2="44.31"/>
-        </g>
-        <g>
-          <line class="cls-13" x1="81.97" y1="48.31" x2="87.97" y2="48.31"/>
-          <line class="cls-13" x1="85.16" y1="41.31" x2="79.96" y2="44.31"/>
-        </g>
-      </g>
-    </g>
-    <g id="Ev_Accel">
-      <circle id="_360Rot_rail" data-name="360Rot_rail" class="cls-18" cx="48" cy="47.98" r="39.86"/>
-      <g id="Rot360">
-        <g id="ThymioAcc0">
-          <path class="cls-7" d="M64.74,60.16c.55.67.59,2.72,1.55,3.72a3.89,3.89,0,0,0,4.83,0c.93-1,1-3.05,1.54-3.72Z"/>
-          <rect class="cls-8" x="16" y="35.98" width="64" height="24" rx="2" ry="2"/>
-          <path class="cls-9" d="M79,55.22V58a1,1,0,0,1-1,1H18a1,1,0,0,1-1-1V55.22Z"/>
-          <line class="cls-10" x1="68.01" y1="44.95" x2="73.09" y2="44.95"/>
-          <line class="cls-10" x1="77.46" y1="44.95" x2="80" y2="44.95"/>
-          <circle class="cls-8" cx="33.81" cy="52.19" r="12.83"/>
-          <path class="cls-9" d="M42.12,43.8a11.71,11.71,0,0,1,1.82,6.28,11.85,11.85,0,0,1-20.09,8.53A11.85,11.85,0,1,0,42.12,43.8Z"/>
-        </g>
-        <g id="ThymioAcc1">
-          <path class="cls-7" d="M78.33,60v2.54a1,1,0,0,1-1,1H70.77a1,1,0,0,1-1-1V60Z"/>
-          <path class="cls-7" d="M26.37,60v2.54a1,1,0,0,1-1,1H18.81a1,1,0,0,1-1-1V60Z"/>
-          <rect class="cls-19" x="16" y="35.98" width="64" height="24" rx="2" ry="2"/>
-          <line class="cls-10" x1="59.27" y1="47.3" x2="65.27" y2="47.3"/>
-          <line class="cls-10" x1="72.28" y1="47.3" x2="77.06" y2="47.3"/>
-          <line class="cls-10" x1="36.73" y1="47.3" x2="30.73" y2="47.3"/>
-          <line class="cls-10" x1="23.72" y1="47.3" x2="18.94" y2="47.3"/>
-          <path class="cls-20" d="M44,60c.55.53.6,2.12,1.56,2.89a3.87,3.87,0,0,0,2.41.66,3.93,3.93,0,0,0,2.41-.66c.94-.78,1-2.37,1.54-2.89Z"/>
-          <line class="cls-10" x1="44.36" y1="47.3" x2="51.51" y2="47.3"/>
-          <path class="cls-9" d="M79,55.08v3.18a.9.9,0,0,1-.9.9H17.9a.9.9,0,0,1-.9-.9V55.08Z"/>
-        </g>
-        <g id="ThymioAcc2">
-          <path class="cls-8" d="M47.71,72A32.94,32.94,0,0,0,71,62.43a2.39,2.39,0,0,0,.69-1.7l0-34.69a2,2,0,0,0-2-2l-44,0a2,2,0,0,0-2,2l0,34.69a2.39,2.39,0,0,0,.69,1.7A33,33,0,0,0,47.71,72Z"/>
-          <rect class="cls-21" x="23.72" y="27.95" width="6" height="20" rx="2" ry="2"/>
-          <path class="cls-9" d="M69.9,25.06H68.44V59a2.3,2.3,0,0,1-.66,1.63,31.74,31.74,0,0,1-36.6,5.85,31.75,31.75,0,0,0,38.9-4.58,2.3,2.3,0,0,0,.66-1.63V25.9A.84.84,0,0,0,69.9,25.06Z"/>
-          <rect class="cls-21" x="65.76" y="27.95" width="6" height="20" rx="2" ry="2"/>
-        </g>
-        <g id="Rot360_Handle">
-          <line class="cls-22" x1="48" y1="44.98" x2="48" y2="8.12"/>
-          <circle class="cls-23" cx="48" cy="47.98" r="3"/>
-          <circle id="Btn2_HandleAcc0" class="cls-23" cx="48" cy="8.12" r="5"/>
-        </g>
-      </g>
-    </g>
-    <g id="Ev_Prox">
-      <path id="Bg_ThymioTop_Big" class="cls-8" d="M48,8A54.92,54.92,0,0,0,9.15,24,4,4,0,0,0,8,26.84v59.7A1.47,1.47,0,0,0,9.46,88H86.54A1.47,1.47,0,0,0,88,86.54V26.84A4,4,0,0,0,86.85,24,54.92,54.92,0,0,0,48,8Z"/>
-      <g id="ProxOff">
-        <g id="prox6_group">
-          <rect id="Btn3_Prox6" class="cls-3" x="61.01" y="75" width="10" height="10"/>
-          <circle id="Led_6" class="cls-24" cx="74.01" cy="80.01" r="2"/>
-        </g>
-        <g id="Prox5_group">
-          <rect id="Btn3_Prox5" class="cls-3" x="25.01" y="75" width="10" height="10"/>
-          <circle id="Led_5" class="cls-25" cx="22.01" cy="80.01" r="2"/>
-        </g>
-        <g id="Prox4_group">
-          <rect id="Btn3_Prox2" class="cls-3" x="72.89" y="21.63" width="10" height="10" transform="translate(8.95 71.61) rotate(-52)"/>
-          <circle id="Led_4" class="cls-26" cx="84.2" cy="31.55" r="2"/>
-        </g>
-        <g id="Prox3_group">
-          <rect id="Btn3_Prox2-2" data-name="Btn3_Prox2" class="cls-3" x="58.7" y="13.38" width="10" height="10" transform="translate(26.54 73.28) rotate(-72)"/>
-          <circle id="Led_3" class="cls-27" cx="71.31" cy="20.84" r="2"/>
-        </g>
-        <g id="Prox2_group">
-          <rect id="Btn3_Prox2-3" data-name="Btn3_Prox2" class="cls-3" x="43.01" y="10.67" width="10" height="10"/>
-          <circle id="Led_2_" class="cls-28" cx="40.01" cy="15.68" r="2"/>
-          <circle id="Led_2" class="cls-29" cx="56.01" cy="15.68" r="2"/>
-        </g>
-        <g id="Prox1_group">
-          <rect id="Btn3_Prox1" class="cls-3" x="27.33" y="13.38" width="10" height="10" transform="translate(-4.1 10.89) rotate(-18)"/>
-          <circle id="Led_1" class="cls-30" cx="24.72" cy="20.84" r="2"/>
-        </g>
-        <g id="Prox0_group">
-          <rect id="Btn3_Prox2-4" data-name="Btn3_Prox2" class="cls-3" x="13.14" y="21.64" width="10" height="10" transform="translate(-12.55 16.82) rotate(-38)"/>
-          <circle id="Led_0" class="cls-31" cx="11.83" cy="31.55" r="2"/>
-        </g>
-      </g>
-      <g id="SlidersProx">
-        <g id="Slider_prox_abs">
-          <path id="Slid_absence_stroke" class="cls-5" d="M13.9,64.75a2,2,0,0,1,0-4h68a2,2,0,0,1,0,4Z"/>
-          <line id="Slid_absence_fill" class="cls-32" x1="13.83" y1="62.75" x2="82.2" y2="62.75"/>
-          <circle id="cursor_absence" class="cls-33" cx="47.91" cy="62.75" r="4.8"/>
-        </g>
-        <g id="slider_prox_pres">
-          <path id="Slid_presence_stroke" class="cls-5" d="M13.9,50a2,2,0,1,1,0-4h68a2,2,0,0,1,0,4Z"/>
-          <line id="Slid_presence_fill" class="cls-32" x1="13.83" y1="48" x2="82.2" y2="48"/>
-          <circle id="cursor_presence" class="cls-34" cx="47.91" cy="48" r="5"/>
-        </g>
-      </g>
-    </g>
-    <g id="Ev_ProxGround">
-      <path id="Gradient_ProxGd1" class="cls-35" d="M58.11.71a18.07,18.07,0,0,0-10,3l-.1.06V34a.53.53,0,0,1,.1.06A18.17,18.17,0,1,0,58.11.71Z"/>
-      <path id="Gradient_ProxGd0" class="cls-36" d="M37.89.71a18.07,18.07,0,0,1,10,3l.1.06V34a.53.53,0,0,0-.1.06A18.17,18.17,0,1,1,37.89.71Z"/>
-      <g id="Bg_ThymioTop_Big_Wheels">
-        <path class="cls-8" d="M47.91,8A54.89,54.89,0,0,0,9.07,24a4,4,0,0,0-1.16,2.83v59.7A1.47,1.47,0,0,0,9.38,88H86.45a1.46,1.46,0,0,0,1.46-1.46V26.84A4,4,0,0,0,86.76,24,54.9,54.9,0,0,0,47.91,8Z"/>
-        <path class="cls-37" d="M82.71,47.56H79.26a3.44,3.44,0,0,0-3.21,3.63V78.1a3.43,3.43,0,0,0,3.21,3.62h3.45a3.43,3.43,0,0,0,3.2-3.62V51.19A3.44,3.44,0,0,0,82.71,47.56Z"/>
-        <path class="cls-38" d="M13.27,81.72h3.45a3.43,3.43,0,0,0,3.21-3.62V51.19a3.44,3.44,0,0,0-3.21-3.63H13.27a3.44,3.44,0,0,0-3.2,3.63V78.1A3.43,3.43,0,0,0,13.27,81.72Z"/>
-      </g>
-      <g id="LedProx1_group">
-        <rect id="Btn2_ProxGd1" class="cls-23" x="53.02" y="12.99" width="10" height="10" transform="translate(28.36 71) rotate(-78)"/>
-        <circle id="Led_Gd1" class="cls-39" cx="65.84" cy="19.66" r="2"/>
-      </g>
-      <g id="ProxGd0_group">
-        <rect id="Btn2_ProxGd0" class="cls-23" x="33.01" y="12.99" width="10" height="10" transform="translate(-2.91 8.29) rotate(-12)"/>
-        <circle id="Led_Gd0" class="cls-40" cx="30.18" cy="19.66" r="2"/>
-      </g>
-      <g id="SlidersProxGd">
-        <g id="Slider_proxGd_abs">
-          <path id="Slid_Gd_absence_stroke" class="cls-5" d="M13.9,64.75a2,2,0,0,1,0-4h68a2,2,0,0,1,0,4Z"/>
-          <line id="Slid_Gd_absence_fill" class="cls-32" x1="13.83" y1="62.75" x2="82.2" y2="62.75"/>
-          <circle id="cursor_Gd_absence" class="cls-33" cx="47.91" cy="62.75" r="4.8"/>
-        </g>
-        <g id="slider_proxGd_pres">
-          <path id="Slid_Gd_presence_stroke" class="cls-5" d="M13.9,50a2,2,0,1,1,0-4h68a2,2,0,0,1,0,4Z"/>
-          <line id="Slid_Gd_presence_fill" class="cls-32" x1="13.83" y1="48" x2="82.2" y2="48"/>
-          <circle id="cursor_Gd_presence" class="cls-34" cx="47.91" cy="48" r="5"/>
-        </g>
-      </g>
-    </g>
-    <g id="ColorTop">
-      <g id="ThymioFront_greyed">
-        <path class="cls-7" d="M82.11,79.91v2.86A1.15,1.15,0,0,1,81,83.92H73.61a1.15,1.15,0,0,1-1.15-1.15V79.92Z"/>
-        <path class="cls-7" d="M23.66,79.91v2.86a1.15,1.15,0,0,1-1.15,1.15H15.16A1.16,1.16,0,0,1,14,82.77V79.92Z"/>
-        <rect class="cls-41" x="11.99" y="52.92" width="72" height="27" rx="2" ry="2"/>
-        <line class="cls-10" x1="60.67" y1="65.65" x2="67.42" y2="65.65"/>
-        <line class="cls-10" x1="75.31" y1="65.65" x2="80.68" y2="65.65"/>
-        <line class="cls-10" x1="35.32" y1="65.65" x2="28.56" y2="65.65"/>
-        <line class="cls-10" x1="20.68" y1="65.65" x2="15.3" y2="65.65"/>
-        <path class="cls-7" d="M43.54,79.92c.62.59.67,2.38,1.75,3.25a4.39,4.39,0,0,0,2.71.74,4.48,4.48,0,0,0,2.72-.74c1.05-.88,1.11-2.67,1.73-3.25Z"/>
-        <line class="cls-10" x1="43.9" y1="65.65" x2="51.94" y2="65.65"/>
-      </g>
-      <rect id="Gradient_Top" class="cls-42" x="13" y="53.95" width="70" height="10.61" rx="0.75" ry="0.75"/>
-      <g id="Obj_ColorPalette">
-        <rect id="Btn2_Green" class="cls-43" x="12" y="8.06" width="17.96" height="17.96"/>
-        <rect id="Btn2_Blue" class="cls-44" x="29.96" y="8.06" width="17.96" height="17.96"/>
-        <rect id="Btn2_Red" class="cls-45" x="47.93" y="8.06" width="17.96" height="17.96"/>
-        <rect id="Btn2_Yellow" class="cls-46" x="12" y="26.03" width="17.96" height="17.96"/>
-        <rect id="Btn2_Cyan" class="cls-47" x="29.96" y="26.03" width="17.96" height="17.96"/>
-        <rect id="Btn2_Magenta" class="cls-48" x="47.93" y="26.03" width="17.96" height="17.96"/>
-        <g id="Btn2_NoColor">
-          <rect class="cls-4" x="65.89" y="26.03" width="17.96" height="17.96"/>
-          <polygon class="cls-49" points="67.3 43.99 65.89 43.99 65.89 42.58 82.44 26.03 83.85 26.02 83.85 27.44 67.3 43.99"/>
-        </g>
-        <rect id="Btn2_White_Select" class="cls-50" x="65.89" y="8.06" width="17.96" height="17.96"/>
-      </g>
-    </g>
-    <g id="ColorBottom">
-      <g id="Bg_ThymioFront">
-        <g id="ThymioFront">
-          <path class="cls-7" d="M82.11,39v2.85A1.14,1.14,0,0,1,81,43H73.61a1.14,1.14,0,0,1-1.15-1.15V39Z"/>
-          <path class="cls-7" d="M23.66,39v2.85A1.14,1.14,0,0,1,22.51,43H15.16A1.15,1.15,0,0,1,14,41.85V39Z"/>
-          <rect class="cls-41" x="11.99" y="12" width="72" height="27" rx="2" ry="2"/>
-          <line class="cls-10" x1="60.67" y1="24.73" x2="67.42" y2="24.73"/>
-          <line class="cls-10" x1="75.31" y1="24.73" x2="80.68" y2="24.73"/>
-          <line class="cls-10" x1="35.32" y1="24.73" x2="28.56" y2="24.73"/>
-          <line class="cls-10" x1="20.68" y1="24.73" x2="15.3" y2="24.73"/>
-          <path class="cls-7" d="M43.54,39c.62.59.67,2.38,1.75,3.25A4.31,4.31,0,0,0,48,43a4.48,4.48,0,0,0,2.72-.74c1.05-.88,1.11-2.66,1.73-3.25Z"/>
-          <line class="cls-10" x1="43.9" y1="24.73" x2="51.94" y2="24.73"/>
-        </g>
-      </g>
-      <rect id="Gradient_Bottom" class="cls-51" x="13" y="25.98" width="70" height="12" rx="1" ry="1"/>
-      <g id="Obj_ColorPalette-2" data-name="Obj_ColorPalette">
-        <rect id="Btn2_Green-2" data-name="Btn2_Green" class="cls-43" x="12" y="52.07" width="17.96" height="17.96"/>
-        <rect id="Btn2_Blue-2" data-name="Btn2_Blue" class="cls-44" x="29.96" y="52.07" width="17.96" height="17.96"/>
-        <rect id="Btn2_Red-2" data-name="Btn2_Red" class="cls-45" x="47.93" y="52.07" width="17.96" height="17.96"/>
-        <rect id="Btn2_Yellow-2" data-name="Btn2_Yellow" class="cls-46" x="12" y="70.04" width="17.96" height="17.96"/>
-        <rect id="Btn2_Cyan-2" data-name="Btn2_Cyan" class="cls-47" x="29.96" y="70.04" width="17.96" height="17.96"/>
-        <rect id="Btn2_Magenta-2" data-name="Btn2_Magenta" class="cls-48" x="47.93" y="70.04" width="17.96" height="17.96"/>
-        <g id="Btn2_NoColor-2" data-name="Btn2_NoColor">
-          <rect class="cls-4" x="65.89" y="70.04" width="17.96" height="17.96"/>
-          <polygon class="cls-49" points="67.3 88 65.89 88 65.89 86.59 82.44 70.04 83.85 70.03 83.85 71.45 67.3 88"/>
-        </g>
-        <rect id="Btn2_White_Select-2" data-name="Btn2_White_Select" class="cls-50" x="65.89" y="52.07" width="17.96" height="17.96"/>
-      </g>
-    </g>
-    <g id="EvCounter">
-      <rect id="Operators_ListMask" class="cls-52" x="-7.4" y="33.58" width="74" height="28.8" rx="1" ry="1" transform="translate(77.58 18.39) rotate(90)"/>
-      <rect id="Bg_SelectedOperator" class="cls-53" x="17.6" y="34.01" width="24" height="27.27" rx="1" ry="1" transform="translate(77.24 18.05) rotate(90)"/>
-      <g id="Counr_List_operators">
-        <text class="cls-54" transform="translate(23.97 28.22)">≤</text>
-        <text class="cls-54" transform="translate(23.97 79.44)">≥</text>
-        <text class="cls-55" transform="translate(23.68 53.83)">=</text>
-      </g>
-      <g id="ValueButtons">
-        <g id="Btn1_CountValueDown">
-          <path class="cls-9" d="M69.79,75.59a1,1,0,0,1-.84-.44l-4-6a1,1,0,0,1,.84-1.56h8a1,1,0,0,1,.88.53,1,1,0,0,1,0,1l-4,6A1,1,0,0,1,69.79,75.59Z"/>
-          <path class="cls-12" d="M73.79,68.59l-4,6-4-6h8m0-2h-8a2,2,0,0,0-1.67,3.11l4,6a2,2,0,0,0,3.33,0l4-6a2,2,0,0,0,.1-2,2,2,0,0,0-1.76-1.06Z"/>
-        </g>
-        <g id="Btn1_CountValueUp">
-          <path class="cls-9" d="M65.79,28.37a1,1,0,0,1-.89-.53,1,1,0,0,1,0-1l4-6a1,1,0,0,1,1.67,0l4,6a1,1,0,0,1,0,1,1,1,0,0,1-.88.53Z"/>
-          <path class="cls-12" d="M69.79,21.37l4,6h-8l4-6m0-2a2,2,0,0,0-1.67.89l-4,6a2,2,0,0,0,1.67,3.11h8a2,2,0,0,0,1.76-1.06,2,2,0,0,0-.1-2l-4-6a2,2,0,0,0-1.66-.89Z"/>
-        </g>
-      </g>
-      <text class="cls-56" transform="translate(60.98 56.25)">n</text>
-    </g>
-    <g id="Ev_TimersUp">
-      <g id="Bg_TimerUp">
-        <path class="cls-8" d="M33.82,82.9a3,3,0,0,1-3-3V55.56a3.05,3.05,0,0,1,1.53-2.64l9.57-5.47L32.31,42a3.05,3.05,0,0,1-1.53-2.64V15a3,3,0,0,1,3-3H62.18a3,3,0,0,1,3,3V39.35A3.05,3.05,0,0,1,63.69,42l-9.56,5.46,9.56,5.47a3.05,3.05,0,0,1,1.53,2.64V79.87a3,3,0,0,1-3,3Z"/>
-        <polygon class="cls-11" points="35.21 78.47 35.21 56.37 48 49.06 60.79 56.37 60.79 78.47 35.21 78.47"/>
-      </g>
-    </g>
-    <g id="Ac_Directions">
-      <g id="DirectionArrows">
-        <polygon id="Btn2_FwdDir" class="cls-3" points="44.02 25.59 44.02 15.95 40.3 15.95 48.02 2.59 55.74 15.95 52.02 15.95 52.02 25.59 44.02 25.59"/>
-        <path id="Btn2_FwdRightDir" class="cls-3" d="M60,27.28l.45-.68a28.22,28.22,0,0,1,6.87-7.21l-2-3.32,15.43-.13-7.6,13.43-1.78-3A20.3,20.3,0,0,0,66.46,32l-.65,1.13Z"/>
-        <path id="Btn2_TurnRightDir" class="cls-3" d="M69.67,54.51,83,46.79v2.6a4,4,0,0,0-2.75-6.88h-1v-8h1A12,12,0,0,1,83,58.18v4Z"/>
-        <path id="Btn2_BwdRightDir" class="cls-3" d="M65.33,79.89l2-3.32a28.34,28.34,0,0,1-6.87-7.2L60,68.68l5.85-5.85L66.46,64a20.3,20.3,0,0,0,4.92,5.66l1.78-3L80.76,80Z"/>
-        <polygon id="Btn2_BwdDir" class="cls-3" points="40.3 80.01 44.02 80.01 44.02 70.38 52.02 70.38 52.02 80.01 55.74 80.01 48.02 93.38 40.3 80.01"/>
-        <path id="Btn2_BwdLeftDir" class="cls-3" d="M22.88,66.59l1.78,3A20.3,20.3,0,0,0,29.58,64l.65-1.13,5.85,5.85-.45.69a28,28,0,0,1-6.87,7.2l1.95,3.32L15.28,80Z"/>
-        <path id="Btn2_TurnLeftDir" class="cls-3" d="M13,58.18a12,12,0,0,1,2.75-23.67h1v8h-1A4,4,0,0,0,13,49.39v-2.6l13.37,7.72L13,62.22Z"/>
-        <path id="Btn2_FwdLeftDir" class="cls-3" d="M29.58,32a20.3,20.3,0,0,0-4.92-5.66l-1.78,3-7.6-13.43,15.43.13-1.95,3.32a27.89,27.89,0,0,1,6.87,7.21l.45.68-5.85,5.85Z"/>
-        <g id="Stop">
-          <circle id="Btn2_StopDir" class="cls-3" cx="48.03" cy="48" r="9"/>
-          <circle id="StopSign" class="cls-49" cx="48" cy="48" r="4"/>
-        </g>
-      </g>
-    </g>
-    <g id="Ac_Wheels">
-      <g id="Sliders_Wheels">
-        <g id="Slider_L">
-          <g id="Slid_Wheels_L">
-            <path class="cls-4" d="M16.2,89a1,1,0,0,1-.87-.5l-4-6.91a1,1,0,0,1,0-1,1,1,0,0,1,.87-.5h1V15.91h-1a1,1,0,0,1-.87-.5,1,1,0,0,1,0-1l4-6.91A1,1,0,0,1,16.2,7h0a1,1,0,0,1,.86.5l4,6.91a1,1,0,0,1-.86,1.5h-1V80.09h1a1,1,0,0,1,.86,1.5l-4,6.91A1,1,0,0,1,16.2,89Z"/>
-            <path class="cls-12" d="M16.2,8l4,6.91h-2V81.09h2L16.2,88l-4-6.91h2V14.91h-2L16.2,8m0-2a2,2,0,0,0-1.73,1l-4,6.91a2,2,0,0,0,0,2,2,2,0,0,0,1.72,1V79.09a2,2,0,0,0-1.72,1,2,2,0,0,0,0,2l4,6.91a2,2,0,0,0,1.73,1,2,2,0,0,0,1.73-1l4-6.91a2,2,0,0,0,0-2,2,2,0,0,0-1.72-1V16.91a2,2,0,0,0,1.72-1,2,2,0,0,0,0-2L17.93,7A2,2,0,0,0,16.2,6Z"/>
+  <title>newBlocksAsset 287</title>
+  <g class="cls-1">
+    <g id="Layer_2" data-name="Layer 2">
+      <g id="Ev_Buttons">
+        <g id="Bg_States">
+          <path id="_0" data-name="0" class="cls-2" d="M57.11,8.92a34.55,34.55,0,0,0-18.22,0,1.8,1.8,0,0,1-2.18-1.18h0A1.82,1.82,0,0,1,38,5.42,38.14,38.14,0,0,1,58,5.42a1.83,1.83,0,0,1,1.26,2.32h0A1.8,1.8,0,0,1,57.11,8.92Z"/>
+          <path id="_1" data-name="1" class="cls-2" d="M77.88,25.07A34.83,34.83,0,0,0,65,12.19a1.8,1.8,0,0,1-.71-2.37h0a1.82,1.82,0,0,1,2.53-.75A38.36,38.36,0,0,1,81,23.25a1.82,1.82,0,0,1-.75,2.53h0A1.79,1.79,0,0,1,77.88,25.07Z"/>
+          <path id="_2" data-name="2" class="cls-2" d="M82.33,53.36h0a1.8,1.8,0,0,1-1.18-2.18,34.35,34.35,0,0,0,0-18.22,1.8,1.8,0,0,1,1.18-2.18h0A1.83,1.83,0,0,1,84.65,32a37.93,37.93,0,0,1,0,20.06A1.82,1.82,0,0,1,82.33,53.36Z"/>
+          <path id="_3" data-name="3" class="cls-2" d="M64.29,74.33h0A1.81,1.81,0,0,1,65,72,34.76,34.76,0,0,0,77.88,59.07a1.78,1.78,0,0,1,2.37-.7h0A1.82,1.82,0,0,1,81,60.9,38.43,38.43,0,0,1,66.82,75.08,1.83,1.83,0,0,1,64.29,74.33Z"/>
+          <path id="_4" data-name="4" class="cls-2" d="M48,80.07a37.72,37.72,0,0,1-10-1.35,1.82,1.82,0,0,1-1.26-2.32h0a1.8,1.8,0,0,1,2.18-1.18,34.55,34.55,0,0,0,18.22,0,1.8,1.8,0,0,1,2.18,1.18h0A1.82,1.82,0,0,1,58,78.72,37.72,37.72,0,0,1,48,80.07Z"/>
+          <path id="_5" data-name="5" class="cls-2" d="M29.18,75.08A38.43,38.43,0,0,1,15,60.9a1.82,1.82,0,0,1,.75-2.53h0a1.79,1.79,0,0,1,2.37.7A34.76,34.76,0,0,0,31,72a1.81,1.81,0,0,1,.71,2.38h0A1.83,1.83,0,0,1,29.18,75.08Z"/>
+          <path id="_6" data-name="6" class="cls-2" d="M13.67,53.36a1.82,1.82,0,0,1-2.32-1.26,37.93,37.93,0,0,1,0-20.06,1.83,1.83,0,0,1,2.32-1.26h0A1.8,1.8,0,0,1,14.85,33a34.35,34.35,0,0,0,0,18.22,1.8,1.8,0,0,1-1.18,2.18Z"/>
+          <path id="_7" data-name="7" class="cls-2" d="M15.75,25.78h0A1.82,1.82,0,0,1,15,23.25,38.36,38.36,0,0,1,29.18,9.07a1.82,1.82,0,0,1,2.53.75h0A1.8,1.8,0,0,1,31,12.19,34.83,34.83,0,0,0,18.12,25.07,1.79,1.79,0,0,1,15.75,25.78Z"/>
+          <g>
+            <rect class="cls-3" x="41.54" y="83.57" width="13.62" height="7.96"/>
+            <polygon class="cls-4" points="39.27 86.09 40.79 85.89 40.79 89.22 39.27 89.02 39.27 86.09"/>
           </g>
-          <path id="StopLeftMark" class="cls-57" d="M20.19,48h-8"/>
         </g>
-        <g id="Slider_R">
-          <g id="Slid_Wheels_R">
-            <path class="cls-4" d="M80.05,89a1,1,0,0,1-.86-.5l-4-6.91a1,1,0,0,1,0-1,1,1,0,0,1,.86-.5h1V15.91h-1a1,1,0,0,1-.86-.5,1,1,0,0,1,0-1l4-6.91a1,1,0,0,1,.86-.5,1,1,0,0,1,.87.5l4,6.91a1,1,0,0,1,0,1,1,1,0,0,1-.87.5h-1V80.09h1a1,1,0,0,1,.87.5,1,1,0,0,1,0,1l-4,6.91A1,1,0,0,1,80.05,89Z"/>
-            <path class="cls-12" d="M80.05,8l4,6.91h-2V81.09h2l-4,6.91-4-6.91h2V14.91h-2l4-6.91m0-2a2,2,0,0,0-1.73,1l-4,6.91a2,2,0,0,0,0,2,2,2,0,0,0,1.72,1V79.09a2,2,0,0,0-1.72,1,2,2,0,0,0,0,2l4,6.91a2,2,0,0,0,1.73,1,2,2,0,0,0,1.73-1l4-6.91a2,2,0,0,0,0-2,2,2,0,0,0-1.72-1V16.91a2,2,0,0,0,1.72-1,2,2,0,0,0,0-2L81.78,7a2,2,0,0,0-1.73-1Z"/>
+        <g id="ButtonsOff">
+          <circle id="Btn2_Center" class="cls-5" cx="48.02" cy="42.04" r="8.75"/>
+          <g id="Btn2_Forward">
+            <path class="cls-6" d="M40.23,25.23c-.55,0-.78-.39-.5-.87L47.47,11a.53.53,0,0,1,1,0l7.74,13.41c.28.48.05.87-.5.87Z"/>
+            <path class="cls-3" d="M40.23,25.23c-.55,0-.78-.39-.5-.87L47.47,11a.53.53,0,0,1,1,0l7.74,13.41c.28.48.05.87-.5.87Z"/>
           </g>
-          <path id="StopRightMark" class="cls-57" d="M84,48h-8"/>
-        </g>
-        <g id="RightCursor">
-          <circle id="Wheels_cursorRight" class="cls-53" cx="80.05" cy="48.01" r="6"/>
-          <circle id="StopIndicator_R" class="cls-49" cx="80.05" cy="48.01" r="2"/>
-        </g>
-        <g id="LeftCursor">
-          <circle id="WheelsCursorLeft" class="cls-53" cx="16.2" cy="48.01" r="6"/>
-          <circle id="StopIndicatorL" class="cls-49" cx="16.2" cy="48.01" r="2"/>
+          <g id="Btn2_Backward">
+            <path class="cls-6" d="M40.23,58.84c-.55,0-.78.4-.5.88l7.74,13.41a.53.53,0,0,0,1,0l7.74-13.41c.28-.48.05-.88-.5-.88Z"/>
+            <path class="cls-3" d="M40.23,58.84c-.55,0-.78.4-.5.88l7.74,13.41a.53.53,0,0,0,1,0l7.74-13.41c.28-.48.05-.88-.5-.88Z"/>
+          </g>
+          <g id="Btn2_Right">
+            <path class="cls-6" d="M65,34.4c0-.55.39-.78.87-.5L79,41.49a.53.53,0,0,1,0,1L65.83,50.09c-.48.27-.87,0-.87-.51Z"/>
+            <path class="cls-3" d="M65,34.4c0-.55.39-.78.87-.5L79,41.49a.53.53,0,0,1,0,1L65.83,50.09c-.48.27-.87,0-.87-.51Z"/>
+          </g>
+          <g id="Btn2_Left">
+            <path class="cls-6" d="M31.08,34.4c0-.55-.39-.78-.87-.5L17.06,41.49a.53.53,0,0,0,0,1l13.15,7.59c.48.27.87,0,.87-.51Z"/>
+            <path class="cls-3" d="M31.08,34.4c0-.55-.39-.78-.87-.5L17.06,41.49a.53.53,0,0,0,0,1l13.15,7.59c.48.27.87,0,.87-.51Z"/>
+          </g>
         </g>
       </g>
-      <g id="ThymioTop_small">
+      <g id="Ev_Remote1">
+        <g id="RemoteSignal">
+          <path class="cls-7" d="M10.09,90.69A1,1,0,0,1,9.8,90a4.17,4.17,0,0,0-4.17-4.17,1,1,0,1,1,0-2A6.18,6.18,0,0,1,11.8,90a1,1,0,0,1-1,1A1,1,0,0,1,10.09,90.69Z"/>
+          <path class="cls-7" d="M13.41,90.69a1,1,0,0,1-.29-.7A7.48,7.48,0,0,0,5.63,82.5a1,1,0,1,1,0-2A9.49,9.49,0,0,1,15.12,90a1,1,0,0,1-1,1A1,1,0,0,1,13.41,90.69Z"/>
+        </g>
+        <g id="Remote1_buttons">
+          <path id="Btn2_Remote1_85" class="cls-8" d="M30,48a17.87,17.87,0,0,1,3-9.9,2,2,0,0,0-.24-2.53L25.57,28.4a2,2,0,0,0-3,.19,32,32,0,0,0,0,38.82,2,2,0,0,0,3,.19l7.17-7.17A2,2,0,0,0,33,57.9,17.87,17.87,0,0,1,30,48Z"/>
+          <path id="Btn2_Remote1_81" class="cls-8" d="M48,66a17.87,17.87,0,0,1-9.9-3,2,2,0,0,0-2.53.24L28.4,70.43a2,2,0,0,0,.19,3,32,32,0,0,0,38.82,0,2,2,0,0,0,.19-3l-7.17-7.17A2,2,0,0,0,57.9,63,17.87,17.87,0,0,1,48,66Z"/>
+          <path id="Btn2_Remote1_86" class="cls-8" d="M66,48a17.87,17.87,0,0,1-3,9.9,2,2,0,0,0,.24,2.53l7.17,7.17a2,2,0,0,0,3-.19,32,32,0,0,0,0-38.82,2,2,0,0,0-3-.19l-7.17,7.17A2,2,0,0,0,63,38.1,17.87,17.87,0,0,1,66,48Z"/>
+          <path id="Btn2_Remote1_80" class="cls-8" d="M48,30a17.87,17.87,0,0,1,9.9,3,2,2,0,0,0,2.53-.24l7.17-7.17a2,2,0,0,0-.19-3,32,32,0,0,0-38.82,0,2,2,0,0,0-.19,3l7.17,7.17A2,2,0,0,0,38.1,33,17.87,17.87,0,0,1,48,30Z"/>
+          <circle id="Btn2_Remote1_87" class="cls-8" cx="48" cy="48" r="12"/>
+        </g>
+      </g>
+      <g id="Ev_Remote2">
+        <g id="Remote2_Buttons">
+          <rect id="Btn2_Remote2_0" class="cls-8" x="40" y="67.92" width="16" height="12"/>
+          <path id="Btn2_Remote2_17" class="cls-8" d="M22,67.92H32a0,0,0,0,1,0,0v12a0,0,0,0,1,0,0H22a6,6,0,0,1-6-6v0A6,6,0,0,1,22,67.92Z"/>
+          <path id="Btn2_Remote2_16" class="cls-8" d="M64,67.92H74a6,6,0,0,1,6,6v0a6,6,0,0,1-6,6H64a0,0,0,0,1,0,0v-12A0,0,0,0,1,64,67.92Z"/>
+          <path id="Btn2_Remote2_9" class="cls-8" d="M64,49.92H74a6,6,0,0,1,6,6v0a6,6,0,0,1-6,6H64a0,0,0,0,1,0,0v-12A0,0,0,0,1,64,49.92Z"/>
+          <rect id="Btn2_Remote2_8" class="cls-8" x="40" y="49.92" width="16" height="12"/>
+          <path id="Btn2_Remote2_7" class="cls-8" d="M22,49.92H32a0,0,0,0,1,0,0v12a0,0,0,0,1,0,0H22a6,6,0,0,1-6-6v0a6,6,0,0,1,6-6Z"/>
+          <path id="Btn2_Remote2_6" class="cls-8" d="M64,31.92H74a6,6,0,0,1,6,6v0a6,6,0,0,1-6,6H64a0,0,0,0,1,0,0v-12A0,0,0,0,1,64,31.92Z"/>
+          <rect id="Btn2_Remote2_5" class="cls-8" x="40" y="31.92" width="16" height="12"/>
+          <path id="Btn2_Remote2_4" class="cls-8" d="M22,31.92H32a0,0,0,0,1,0,0v12a0,0,0,0,1,0,0H22a6,6,0,0,1-6-6v0a6,6,0,0,1,6-6Z"/>
+          <path id="Btn2_Remote2_3" class="cls-8" d="M64,13.92H74a6,6,0,0,1,6,6v0a6,6,0,0,1-6,6H64a0,0,0,0,1,0,0v-12A0,0,0,0,1,64,13.92Z"/>
+          <rect id="Btn2_Remote2_2" class="cls-8" x="40" y="13.92" width="16" height="12"/>
+          <path id="Btn2_Remote2_1" class="cls-8" d="M22,13.92H32a0,0,0,0,1,0,0v12a0,0,0,0,1,0,0H22a6,6,0,0,1-6-6v0a6,6,0,0,1,6-6Z"/>
+        </g>
+        <g id="RemoteSignal-2" data-name="RemoteSignal">
+          <path class="cls-7" d="M10.09,90.69A1,1,0,0,1,9.8,90a4.17,4.17,0,0,0-4.17-4.17,1,1,0,1,1,0-2A6.18,6.18,0,0,1,11.8,90a1,1,0,0,1-1,1A1,1,0,0,1,10.09,90.69Z"/>
+          <path class="cls-7" d="M13.41,90.69a1,1,0,0,1-.29-.7A7.48,7.48,0,0,0,5.63,82.5a1,1,0,1,1,0-2A9.49,9.49,0,0,1,15.12,90a1,1,0,0,1-1,1A1,1,0,0,1,13.41,90.69Z"/>
+        </g>
+      </g>
+      <g id="CircleLeds">
+        <g id="Ev_Bg_buttons">
+          <circle id="center" class="cls-2" cx="48" cy="42.01" r="8.34"/>
+          <g id="up">
+            <path class="cls-2" d="M40.66,26.5c-.55,0-.78-.38-.5-.87l7.26-12.74a.54.54,0,0,1,1,0l7.4,12.67c.28.48.06.87-.5.87Z"/>
+          </g>
+          <g id="down">
+            <path class="cls-2" d="M40.66,57.52c-.55,0-.78.39-.5.87l7.26,12.75a.53.53,0,0,0,1,0l7.4-12.66c.28-.48.06-.87-.5-.88Z"/>
+          </g>
+          <g id="right">
+            <path class="cls-2" d="M63.51,34.68c0-.56.39-.78.87-.51l12.74,7.27a.53.53,0,0,1,0,1l-12.67,7.4c-.47.28-.87,0-.87-.5Z"/>
+          </g>
+          <g id="left">
+            <path class="cls-2" d="M32.49,34.68c0-.56-.39-.78-.87-.51L18.88,41.44a.53.53,0,0,0,0,1l12.66,7.4c.48.28.88,0,.88-.5Z"/>
+          </g>
+          <g id="Battery">
+            <rect class="cls-9" x="42.33" y="85.07" width="13.62" height="7.96"/>
+            <polygon class="cls-6" points="40.05 87.58 41.58 87.38 41.58 90.72 40.05 90.52 40.05 87.58"/>
+          </g>
+        </g>
+        <g id="StatesOff_copy" data-name="StatesOff copy">
+          <path id="Btn2_State0" class="cls-10" d="M38.65,10.66a2.69,2.69,0,0,1-2.36-4A2.74,2.74,0,0,1,38,5.36,38.21,38.21,0,0,1,58,5.36,2.74,2.74,0,0,1,59.7,6.69a2.69,2.69,0,0,1-2.36,4,2.74,2.74,0,0,1-.7-.09,32.79,32.79,0,0,0-17.29,0A2.74,2.74,0,0,1,38.65,10.66Z"/>
+          <path id="Btn2_State1" class="cls-10" d="M78.66,27.24a2.67,2.67,0,0,1-2.32-1.35A32.87,32.87,0,0,0,64.12,13.67a2.69,2.69,0,0,1,1.35-5A2.78,2.78,0,0,1,66.82,9,38.28,38.28,0,0,1,81,23.19a2.73,2.73,0,0,1,.25,2.13A2.7,2.7,0,0,1,79.88,27,2.67,2.67,0,0,1,78.66,27.24Z"/>
+          <path id="Btn2_State2" class="cls-10" d="M82,54a2.68,2.68,0,0,1-2.6-3.39,32.49,32.49,0,0,0,0-17.28,2.68,2.68,0,0,1,1.76-3.25A2.64,2.64,0,0,1,82,30a2.73,2.73,0,0,1,2.61,2,38,38,0,0,1,0,20.07A2.72,2.72,0,0,1,82,54Z"/>
+          <path id="Btn2_State3" class="cls-10" d="M65.47,75.38a2.69,2.69,0,0,1-1.35-5A32.9,32.9,0,0,0,76.34,58.13a2.66,2.66,0,0,1,2.32-1.34,2.71,2.71,0,0,1,1.22.29,2.66,2.66,0,0,1,1.36,1.63A2.69,2.69,0,0,1,81,60.84,38.28,38.28,0,0,1,66.82,75,2.78,2.78,0,0,1,65.47,75.38Z"/>
+          <path id="Btn2_State4" class="cls-10" d="M48,80a38.25,38.25,0,0,1-10-1.34,2.76,2.76,0,0,1-1.67-1.34,2.69,2.69,0,0,1,2.36-4,2.75,2.75,0,0,1,.7.1,32.79,32.79,0,0,0,17.29,0,2.75,2.75,0,0,1,.7-.1,2.68,2.68,0,0,1,2.55,1.86,2.64,2.64,0,0,1-.19,2.11A2.76,2.76,0,0,1,58,78.67,38.23,38.23,0,0,1,48,80Z"/>
+          <path id="Btn2_State5" class="cls-10" d="M30.52,75.38A2.78,2.78,0,0,1,29.17,75,38.28,38.28,0,0,1,15,60.84a2.69,2.69,0,0,1-.24-2.13,2.66,2.66,0,0,1,1.36-1.63,2.74,2.74,0,0,1,1.22-.29,2.67,2.67,0,0,1,2.32,1.35A33,33,0,0,0,31.87,70.36a2.69,2.69,0,0,1-1.35,5Z"/>
+          <path id="Btn2_State6" class="cls-10" d="M14,54a2.73,2.73,0,0,1-2.61-2,38.25,38.25,0,0,1,0-20.07A2.74,2.74,0,0,1,14,30a2.64,2.64,0,0,1,.84.14,2.67,2.67,0,0,1,1.76,3.25,32.49,32.49,0,0,0,0,17.28,2.68,2.68,0,0,1-1.76,3.26A2.63,2.63,0,0,1,14,54Z"/>
+          <path id="Btn2_State7" class="cls-10" d="M17.33,27.24A2.74,2.74,0,0,1,16.11,27a2.66,2.66,0,0,1-1.36-1.63A2.69,2.69,0,0,1,15,23.19,38.28,38.28,0,0,1,29.17,9a2.78,2.78,0,0,1,1.35-.36,2.69,2.69,0,0,1,1.35,5A32.94,32.94,0,0,0,19.65,25.89,2.67,2.67,0,0,1,17.33,27.24Z"/>
+        </g>
+        <path id="Btn2_State0-2" data-name="Btn2_State0" class="cls-11" d="M38.65,10.66a2.69,2.69,0,0,1-2.36-4A2.74,2.74,0,0,1,38,5.36,38.21,38.21,0,0,1,58,5.36,2.74,2.74,0,0,1,59.7,6.69a2.69,2.69,0,0,1-2.36,4,2.74,2.74,0,0,1-.7-.09,32.79,32.79,0,0,0-17.29,0A2.74,2.74,0,0,1,38.65,10.66Z"/>
+      </g>
+      <g id="Ev_Start">
+        <g id="StartIndicator">
+          <circle class="cls-12" cx="48.1" cy="30" r="18"/>
+          <path class="cls-13" d="M44.71,36.36V23.76A.9.9,0,0,1,46.15,23l8.41,6.3a.9.9,0,0,1,0,1.44l-8.41,6.3A.9.9,0,0,1,44.71,36.36Z"/>
+        </g>
+        <g id="Bg_Th_Profile-2" data-name="Bg_Th_Profile">
+          <path class="cls-14" d="M64.65,79.9c.55.67.6,2.72,1.56,3.72a3.88,3.88,0,0,0,4.82,0c.94-1,1-3.05,1.54-3.72Z"/>
+          <rect class="cls-15" x="16.1" y="55.72" width="64" height="24" rx="2" ry="2"/>
+          <path class="cls-16" d="M79.1,74.89v2.77a1,1,0,0,1-1,1h-60a1,1,0,0,1-1-1V74.89Z"/>
+          <line class="cls-17" x1="68.1" y1="64.68" x2="73.18" y2="64.68"/>
+          <line class="cls-17" x1="77.55" y1="64.68" x2="80.09" y2="64.68"/>
+          <circle class="cls-15" cx="33.73" cy="71.93" r="12.83"/>
+          <path class="cls-16" d="M42,63.54a11.71,11.71,0,0,1,1.82,6.28,11.85,11.85,0,0,1-20.09,8.53A11.85,11.85,0,1,0,42,63.54Z"/>
+        </g>
+      </g>
+      <g id="Ev_Clap">
+        <g id="Bg_Th_Profile-3" data-name="Bg_Th_Profile">
+          <path class="cls-14" d="M64.65,79.9c.55.67.6,2.72,1.56,3.72a3.88,3.88,0,0,0,4.82,0c.94-1,1-3.05,1.54-3.72Z"/>
+          <rect class="cls-15" x="16.1" y="55.72" width="64" height="24" rx="2" ry="2"/>
+          <path class="cls-16" d="M79.1,74.89v2.77a1,1,0,0,1-1,1h-60a1,1,0,0,1-1-1V74.89Z"/>
+          <line class="cls-17" x1="68.1" y1="64.68" x2="73.18" y2="64.68"/>
+          <line class="cls-17" x1="77.55" y1="64.68" x2="80.09" y2="64.68"/>
+          <circle class="cls-15" cx="33.73" cy="71.93" r="12.83"/>
+          <path class="cls-16" d="M42,63.54a11.71,11.71,0,0,1,1.82,6.28,11.85,11.85,0,0,1-20.09,8.53A11.85,11.85,0,1,0,42,63.54Z"/>
+        </g>
+        <g id="Bg_ClapHands">
+          <g id="fx">
+            <line class="cls-18" x1="21.56" y1="31.16" x2="15.56" y2="31.16"/>
+            <line class="cls-18" x1="18.37" y1="24.16" x2="23.56" y2="27.16"/>
+            <line class="cls-18" x1="18.37" y1="38.16" x2="23.56" y2="35.16"/>
+          </g>
+          <g id="fx-2" data-name="fx">
+            <line class="cls-18" x1="58.38" y1="14.08" x2="58.38" y2="8.08"/>
+            <line class="cls-18" x1="65.38" y1="10.89" x2="62.38" y2="16.09"/>
+            <line class="cls-18" x1="51.37" y1="10.89" x2="54.37" y2="16.09"/>
+          </g>
+          <path id="HandBack" class="cls-19" d="M41.54,47.63,28.89,35.06a2.24,2.24,0,0,1,0-3.44,2.53,2.53,0,0,1,1.64-.73,2.35,2.35,0,0,1,1.79.72l9.17,9.12a.53.53,0,1,0,.75-.76l-9.16-9.11h0l-4.52-4.49a2.32,2.32,0,0,1,.11-3.44,2.22,2.22,0,0,1,3.33,0L45.54,36.39a.54.54,0,0,0,.76,0,.55.55,0,0,0,0-.76L32.74,22.16l-1.4-1.39a2.37,2.37,0,0,1,0-3.44A2.53,2.53,0,0,1,33,16.6a2.32,2.32,0,0,1,1.79.73L37.41,20h0L49.83,32.3a.54.54,0,0,0,.76-.76L38.17,19.19a2.3,2.3,0,0,1,.11-3.42,2.22,2.22,0,0,1,3.33,0L57.26,31.33s.36.64.89.51.36-.75.36-.75L54.7,23.82a3.29,3.29,0,0,1,1.42-4.52s1-.47,1.36.27l6.16,11.78h0a14.08,14.08,0,0,1-2.18,16.22s0,0,0,0A14.12,14.12,0,0,1,41.54,47.63Z"/>
+          <g id="HandFront">
+            <path id="HandFront-2" data-name="HandFront" class="cls-20" d="M45.08,47.16,32.44,34.58a2.23,2.23,0,0,1,0-3.43,2.44,2.44,0,0,1,1.64-.73,2.35,2.35,0,0,1,1.79.72L45,40.25a.53.53,0,0,0,.75,0,.54.54,0,0,0,0-.76l-9.16-9.1h0l-4.52-4.5a2.32,2.32,0,0,1,.1-3.43,2.22,2.22,0,0,1,3.33,0L49.09,35.92a.53.53,0,0,0,.75-.76L36.29,21.68l-1.4-1.39a2.35,2.35,0,0,1,0-3.43,2.48,2.48,0,0,1,1.64-.73,2.34,2.34,0,0,1,1.79.73L41,19.47h0L53.38,31.82a.53.53,0,1,0,.75-.75L41.71,18.72a2.32,2.32,0,0,1,.11-3.43,2.22,2.22,0,0,1,3.33,0L60.81,30.85s.35.65.88.51.37-.74.36-.75l-3.8-7.27a3.28,3.28,0,0,1,1.42-4.52s1-.47,1.35.28l6.17,11.77h0A14.13,14.13,0,0,1,65,47.1s0,0,0,0A14.14,14.14,0,0,1,45.08,47.16Z"/>
+            <path class="cls-21" d="M58.28,49.84a21.28,21.28,0,0,0,4.1-4.67c3.86-5.41-1.65-12.07-1.84-12.36L60,32.27,43.44,15.56a1.39,1.39,0,0,1,1,.43L60,31.48a1.73,1.73,0,0,0,1.93.85,1.51,1.51,0,0,0,.93-.7A1.73,1.73,0,0,0,63,30.37l0-.09,0-.09-3.83-7.31a2.3,2.3,0,0,1,1-3.17l.07,0,6.1,11.65a13.1,13.1,0,0,1-2,15.07l-.09.1A12.87,12.87,0,0,1,58.28,49.84Z"/>
+            <path class="cls-21" d="M52.44,33.16l-15.88-16a1.36,1.36,0,0,1,1,.43L52.8,32.69a2,2,0,0,0,1.08.28C53.92,33.45,53,33.47,52.44,33.16Z"/>
+          </g>
+        </g>
+      </g>
+      <g id="Ev_Acc_Hit">
+        <g id="fx-3" data-name="fx">
+          <path id="Arrow" class="cls-7" d="M50,35.68V24a2,2,0,0,0-4,0V35.68H42L48,46l6-10.36Z"/>
+          <g id="MotionLinesL">
+            <path class="cls-7" d="M13.75,49.31h-6a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z"/>
+            <path class="cls-7" d="M15.75,45.31a1,1,0,0,1-.5-.14l-5.19-3a1,1,0,0,1-.37-1.36,1,1,0,0,1,1.37-.37l5.19,3a1,1,0,0,1-.5,1.87Z"/>
+          </g>
+          <g id="MotionLinesR">
+            <path class="cls-7" d="M88,49.31H82a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z"/>
+            <path class="cls-7" d="M80,45.31a1,1,0,0,1-.5-1.87l5.2-3a1,1,0,0,1,1,1.73l-5.2,3A1,1,0,0,1,80,45.31Z"/>
+          </g>
+        </g>
+        <line id="Ground" class="cls-22" x1="8" y1="80" x2="88" y2="80"/>
+        <g id="Bg_Th_Profile-4" data-name="Bg_Th_Profile">
+          <path class="cls-14" d="M64.65,74.06c.55.67.6,2.72,1.56,3.72a3.88,3.88,0,0,0,4.82,0c.94-1,1-3,1.54-3.72Z"/>
+          <rect class="cls-15" x="16.1" y="49.88" width="64" height="24" rx="2" ry="2"/>
+          <path class="cls-16" d="M79.1,69.06v2.76a1,1,0,0,1-1,1h-60a1,1,0,0,1-1-1V69.06Z"/>
+          <line class="cls-17" x1="68.1" y1="58.85" x2="73.18" y2="58.85"/>
+          <line class="cls-17" x1="77.55" y1="58.85" x2="80.09" y2="58.85"/>
+          <circle class="cls-15" cx="33.73" cy="66.09" r="12.83"/>
+          <path class="cls-16" d="M42,57.7A11.71,11.71,0,0,1,43.85,64a11.85,11.85,0,0,1-20.09,8.53A11.85,11.85,0,1,0,42,57.7Z"/>
+        </g>
+      </g>
+      <g id="Ev_Acc_Fall">
+        <g id="Hand">
+          <path class="cls-20" d="M52.52,96v-.81s-.29-4.82,6.78-9.35c4-2.57,3.86-4.75,2.54-6.07-1.61-1.6-4.42.22-4.42.22s-3,1.77-6.51,4-7.18-1.4-7.18-1.4L30.54,71.22S28,68.81,26,70.63a2.69,2.69,0,0,0-.32,3.78S23.29,72,21.8,73.89a1.68,1.68,0,0,0-.31,1.94l-.13.15a2.9,2.9,0,0,0,.27,4l2.6,2.26c-2.12.9-.75,2.85-.75,2.85s5.29,4.39,7.61,6.38A20.33,20.33,0,0,1,34.66,95s.14.11.14.19V96"/>
+          <path class="cls-21" d="M24.11,83.46a1,1,0,0,0,.15,1l7.32,6.13s.12-.25-.22-.82Z"/>
+          <path class="cls-21" d="M32.78,88.3c-.12-.09-6.75-5.83-6.75-5.83l-3.71-3.22a2.21,2.21,0,0,1-.65-1.32l10.87,9.49A1.24,1.24,0,0,1,32.78,88.3Z"/>
+          <path class="cls-21" d="M26.45,73.77a1.61,1.61,0,0,1-.3-1.74L38.18,83s.64,1,.27,1.32C38.33,84.38,26.45,73.77,26.45,73.77Z"/>
+          <path class="cls-21" d="M34.8,86.34c-.12-.08-12.11-10.55-12.11-10.55a.83.83,0,0,1-.14-1.24,3.13,3.13,0,0,0,.25-.26L34.51,84.65A1.61,1.61,0,0,1,35,85.79C35.05,86.24,34.8,86.34,34.8,86.34Z"/>
+          <path class="cls-21" d="M48,96c.53-5.67,5.74-9.08,8.55-10.92,5.08-3.3,4.54-4.6,4.54-4.6a1.58,1.58,0,0,1,.54,1.3c-.06.54-.52,1.69-2.91,3.22-6.57,4.21-7.16,8.8-7.2,10l0,1Z"/>
+          <path class="cls-23" d="M34,87,22.18,76.69a1.92,1.92,0,0,1-.38-2.8c1.52-1.87,3.86.52,3.86.52l12,10.48"/>
+          <line class="cls-23" x1="21.63" y1="79.96" x2="32.01" y2="88.96"/>
+        </g>
+        <g id="fx-4" data-name="fx">
+          <line class="cls-18" x1="41.51" y1="4.72" x2="41.51" y2="15.83"/>
+          <line class="cls-18" x1="13.72" y1="13.55" x2="13.72" y2="25.64"/>
+          <line class="cls-18" x1="35.52" y1="7.37" x2="35.52" y2="13.01"/>
+          <path class="cls-18" d="M49.35,70.59a8.51,8.51,0,0,1-5-4.88"/>
+          <path class="cls-18" d="M46.58,73.51a15,15,0,0,1-7.92-9.39"/>
+        </g>
+        <g id="Bg_Th_Profile-5" data-name="Bg_Th_Profile">
+          <path class="cls-14" d="M50.74,61c-.07.76-1.31,2.06-1.33,3.27a2.77,2.77,0,0,0,1,2,2.85,2.85,0,0,0,2,1c1.21,0,2.5-1.27,3.25-1.35Z"/>
+          <rect class="cls-15" x="20.04" y="32.73" width="56" height="21" rx="2" ry="2" transform="translate(44.64 -21.31) rotate(45)"/>
+          <path class="cls-16" d="M62.67,66.75,61,68.45a.87.87,0,0,1-1.23,0L22.82,31.53a.87.87,0,0,1,0-1.23l1.7-1.7Z"/>
+          <line class="cls-17" x1="62.29" y1="53.73" x2="65.44" y2="56.87"/>
+          <line class="cls-17" x1="68.14" y1="59.57" x2="69.71" y2="61.14"/>
+          <circle class="cls-15" cx="36.54" cy="36.94" r="11.22" transform="translate(-15.42 36.66) rotate(-45)"/>
+          <path class="cls-16" d="M46.74,36.77a10.21,10.21,0,0,1-20.17-2.1,10.22,10.22,0,1,0,20.17,2.1Z"/>
+        </g>
+      </g>
+      <g id="Ev_Accel">
+        <g id="Rot360Rail">
+          <circle id="Rail" class="cls-24" cx="48" cy="47.98" r="39.86"/>
+          <g id="Angles">
+            <g>
+              <circle class="cls-4" cx="87.86" cy="48.07" r="1"/>
+              <circle class="cls-4" cx="8.14" cy="48.07" r="1"/>
+            </g>
+            <g>
+              <circle class="cls-4" cx="82.52" cy="28.13" r="1"/>
+              <circle class="cls-4" cx="13.48" cy="68" r="1"/>
+            </g>
+            <g>
+              <circle class="cls-4" cx="67.93" cy="13.54" r="1"/>
+              <circle class="cls-4" cx="28.07" cy="82.59" r="1"/>
+            </g>
+            <g>
+              <circle class="cls-4" cx="48" cy="8.2" r="1"/>
+              <circle class="cls-4" cx="48" cy="87.93" r="1"/>
+            </g>
+            <g>
+              <circle class="cls-4" cx="28.07" cy="13.54" r="1"/>
+              <circle class="cls-4" cx="67.93" cy="82.59" r="1"/>
+            </g>
+            <g>
+              <circle class="cls-4" cx="13.48" cy="28.13" r="1"/>
+              <circle class="cls-4" cx="82.52" cy="68" r="1"/>
+            </g>
+          </g>
+        </g>
+        <g id="Rot360">
+          <g id="Bg_Th_Profile-6" data-name="Bg_Th_Profile">
+            <path class="cls-14" d="M64.55,60.17c.55.67.6,2.72,1.55,3.72a3.25,3.25,0,0,0,2.42.85,3.3,3.3,0,0,0,2.41-.85c.94-1,1-3,1.54-3.72Z"/>
+            <rect class="cls-15" x="16" y="35.99" width="64" height="24" rx="2" ry="2"/>
+            <path class="cls-16" d="M79,55.17v2.76a1,1,0,0,1-1,1H18a1,1,0,0,1-1-1V55.17Z"/>
+            <line class="cls-17" x1="68" y1="44.96" x2="73.08" y2="44.96"/>
+            <line class="cls-17" x1="77.45" y1="44.96" x2="79.99" y2="44.96"/>
+            <circle class="cls-15" cx="33.63" cy="52.2" r="12.83"/>
+            <path class="cls-16" d="M41.93,43.81a11.72,11.72,0,0,1,1.82,6.29,11.85,11.85,0,0,1-20.09,8.53A11.85,11.85,0,1,0,41.93,43.81Z"/>
+          </g>
+          <g id="ThymioAcc1">
+            <path class="cls-14" d="M78.33,60v2.54a1,1,0,0,1-1,1H70.77a1,1,0,0,1-1-1V60Z"/>
+            <path class="cls-14" d="M26.37,60v2.54a1,1,0,0,1-1,1H18.81a1,1,0,0,1-1-1V60Z"/>
+            <rect class="cls-15" x="16" y="35.98" width="64" height="24" rx="2" ry="2"/>
+            <line class="cls-22" x1="59.27" y1="47.3" x2="65.27" y2="47.3"/>
+            <line class="cls-22" x1="72.28" y1="47.3" x2="77.06" y2="47.3"/>
+            <line class="cls-22" x1="36.73" y1="47.3" x2="30.73" y2="47.3"/>
+            <line class="cls-22" x1="23.72" y1="47.3" x2="18.94" y2="47.3"/>
+            <path class="cls-14" d="M44,60c.55.53.6,2.12,1.56,2.89a3.87,3.87,0,0,0,2.41.66,3.93,3.93,0,0,0,2.41-.66c.94-.78,1-2.37,1.54-2.89Z"/>
+            <line class="cls-22" x1="44.36" y1="47.3" x2="51.51" y2="47.3"/>
+            <path class="cls-16" d="M79,55.08v3.18a.9.9,0,0,1-.9.9H17.9a.9.9,0,0,1-.9-.9V55.08Z"/>
+          </g>
+          <g id="ThymioAcc2">
+            <path class="cls-15" d="M47.71,72A32.94,32.94,0,0,0,71,62.43a2.39,2.39,0,0,0,.69-1.7l0-34.69a2,2,0,0,0-2-2l-44,0a2,2,0,0,0-2,2l0,34.69a2.39,2.39,0,0,0,.69,1.7A33,33,0,0,0,47.71,72Z"/>
+            <rect class="cls-25" x="23.72" y="27.95" width="6" height="20" rx="2" ry="2"/>
+            <path class="cls-16" d="M69.9,25.06H68.44V59a2.3,2.3,0,0,1-.66,1.63,31.74,31.74,0,0,1-36.6,5.85,31.75,31.75,0,0,0,38.9-4.58,2.3,2.3,0,0,0,.66-1.63V25.9A.84.84,0,0,0,69.9,25.06Z"/>
+            <rect class="cls-25" x="65.76" y="27.95" width="6" height="20" rx="2" ry="2"/>
+          </g>
+          <g id="Rot360_Handle">
+            <line class="cls-26" x1="48" y1="44.98" x2="48" y2="8.12"/>
+            <circle class="cls-27" cx="48" cy="47.98" r="3"/>
+            <circle id="Btn2_HandleAcc0" class="cls-27" cx="48" cy="8.12" r="5"/>
+          </g>
+        </g>
+      </g>
+      <g id="Ev_Prox_medium">
+        <g id="ProxOff">
+          <g id="ProxZones">
+            <path id="ProxZone_0" class="cls-28" d="M13.57,41.26c1.85.16,2.68.32,4.47.62L32,3,2.09.33l7,40.76A43.09,43.09,0,0,1,13.57,41.26Z"/>
+            <path id="ProxZone_1" class="cls-29" d="M28.46,45.2a43.14,43.14,0,0,1,4,2.11L58.86,15.49,31.67,2.81,24.27,43.5A44.86,44.86,0,0,1,28.46,45.2Z"/>
+            <path id="ProxZone_2" class="cls-30" d="M41.58,54.34c1.32,1.32,1.85,2,3,3.35l35.7-20.86L59.1,15.61,38.23,51.31C39.61,52.49,40.26,53,41.58,54.34Z"/>
+            <path id="ProxZone_3" class="cls-31" d="M50.71,67.45a44.37,44.37,0,0,0-2.12-4L80.41,37.05,93.09,64.23l-40.68,7.4C51.77,69.93,51.5,69.14,50.71,67.45Z"/>
+            <path id="ProxZone_4" class="cls-32" d="M54.65,82.34c-.17-1.86-.32-2.69-.63-4.48L93,63.93l2.61,29.88-40.76-7C54.8,85,54.81,84.2,54.65,82.34Z"/>
+          </g>
+          <g id="Bg_Thymio_front45">
+            <path id="Bg_ThymioTop_Big" class="cls-33" d="M47.87,96l6.52-6.51a3.39,3.39,0,0,0,1-2.38A46.55,46.55,0,0,0,9,40.72a3.33,3.33,0,0,0-2.38,1L0,48.34V92a4,4,0,0,0,4,4Z"/>
+            <g>
+              <circle class="cls-34" cx="7.06" cy="88.98" r="3.11"/>
+              <path class="cls-16" d="M9,88.23a2.07,2.07,0,0,1-.5.82,2.09,2.09,0,0,1-3,0,2.16,2.16,0,0,1-.47-.74A2.09,2.09,0,1,0,9,88.23Z"/>
+            </g>
+            <path class="cls-13" d="M42.46,53.66A47.21,47.21,0,0,0,9,39.73H9A4.36,4.36,0,0,0,5.91,41L0,46.94v2.85l7.33-7.35A2.21,2.21,0,0,1,9,41.73,45.17,45.17,0,0,1,41,55.08,45.17,45.17,0,0,1,54.39,87.13a2.43,2.43,0,0,1-.71,1.67l-6.51,6.51h0l-.69.69H49.3l5.79-5.79a4.4,4.4,0,0,0,1.3-3.09A47.21,47.21,0,0,0,42.46,53.66Z"/>
+          </g>
+          <g id="ProxOff-2" data-name="ProxOff">
+            <g id="Prox4_group">
+              <rect id="Btn3_Prox2" class="cls-35" x="44.07" y="79.38" width="8.5" height="8.5" transform="translate(-9.83 6.51) rotate(-7)"/>
+              <circle id="Led_4" class="cls-36" cx="49.16" cy="90.39" r="1.7"/>
+            </g>
+            <g id="Prox3_group">
+              <rect id="Btn3_Prox2-2" data-name="Btn3_Prox2" class="cls-35" x="40.51" y="65.89" width="8.5" height="8.5" transform="translate(-26.97 27.96) rotate(-27)"/>
+              <circle id="Led_3" class="cls-37" cx="47.86" cy="76.2" r="1.7"/>
+            </g>
+            <g id="Prox2_group">
+              <rect id="Btn3_Prox2-3" data-name="Btn3_Prox2" class="cls-35" x="32.71" y="54.83" width="8.5" height="8.5" transform="translate(-30.95 43.44) rotate(-45)"/>
+              <circle id="Led_2_" class="cls-38" cx="32.14" cy="54.28" r="1.7"/>
+              <circle id="Led_2" class="cls-39" cx="41.76" cy="63.9" r="1.7"/>
+            </g>
+            <g id="Prox1_group">
+              <rect id="Btn3_Prox1" class="cls-35" x="21.65" y="47.03" width="8.5" height="8.5" transform="translate(-31.55 51.07) rotate(-63)"/>
+              <circle id="Led_1" class="cls-40" cx="19.84" cy="48.18" r="1.7"/>
+            </g>
+            <g id="Prox0_group">
+              <rect id="Btn3_Prox2-4" data-name="Btn3_Prox2" class="cls-35" x="8.15" y="43.46" width="8.5" height="8.5" transform="translate(-36.47 54.21) rotate(-83)"/>
+              <circle id="Led_0" class="cls-41" cx="5.65" cy="46.87" r="1.7"/>
+            </g>
+          </g>
+        </g>
+        <g id="ObjectsPresence">
+          <polygon class="cls-4" points="59.05 36.59 55.39 36.01 53.7 39.31 56.32 41.93 59.63 40.25 59.05 36.59"/>
+          <polygon class="cls-4" points="38.96 22.28 35.32 22.99 34.87 26.67 38.23 28.24 40.76 25.52 38.96 22.28"/>
+          <polygon class="cls-4" points="15.63 15.9 12.45 17.81 13.29 21.42 16.98 21.75 18.43 18.33 15.63 15.9"/>
+          <polygon class="cls-4" points="78.96 80.39 76.53 77.59 73.11 79.04 73.44 82.73 77.05 83.57 78.96 80.39"/>
+          <polygon class="cls-4" points="72.95 56.85 69.7 55.05 66.99 57.58 68.56 60.95 72.24 60.49 72.95 56.85"/>
+        </g>
+        <g id="Adv_Slider">
+          <line id="slid_prox_off" class="cls-23" x1="87.93" y1="16" x2="87.93" y2="80"/>
+          <line id="slid_prox_on" class="cls-42" x1="87.93" y1="16" x2="87.93" y2="80"/>
+          <circle id="cursor" class="cls-11" cx="87.93" cy="20.61" r="5"/>
+          <g id="value">
+            <path id="plus" class="cls-13" d="M87.37,12a.28.28,0,0,1-.08-.21V9.47H85a.27.27,0,0,1-.28-.28V8.54a.28.28,0,0,1,.08-.21.3.3,0,0,1,.2-.08h2.3V6a.25.25,0,0,1,.08-.21.3.3,0,0,1,.2-.08h.72a.29.29,0,0,1,.21.08.25.25,0,0,1,.08.21V8.25h2.29a.27.27,0,0,1,.29.29v.65a.26.26,0,0,1-.08.2.25.25,0,0,1-.21.08H88.58v2.34a.28.28,0,0,1-.08.21.29.29,0,0,1-.21.08h-.72A.3.3,0,0,1,87.37,12Z"/>
+            <path id="minus" class="cls-13" d="M85.88,87.92a.32.32,0,0,1-.08-.21V86.9a.27.27,0,0,1,.29-.29h3.69a.25.25,0,0,1,.21.08.29.29,0,0,1,.08.21v.81a.27.27,0,0,1-.29.29H86.09A.32.32,0,0,1,85.88,87.92Z"/>
+          </g>
+        </g>
+      </g>
+      <g id="Ev_Prox_adv">
+        <g id="ProxZones_Presence">
+          <path class="cls-43" d="M41.6,54.34c1.32,1.32,1.85,2,3,3.35l35.7-20.86L59.11,15.61,38.25,51.31C39.63,52.49,40.28,53,41.6,54.34Z"/>
+          <path class="cls-44" d="M28.47,45.2a43.14,43.14,0,0,1,4,2.11L58.87,15.49,31.68,2.81,24.29,43.5A44.69,44.69,0,0,1,28.47,45.2Z"/>
+          <path class="cls-45" d="M13.58,41.26c1.86.16,2.69.32,4.47.62L32,3,2.1.33l7,40.76C10.88,41.11,11.72,41.09,13.58,41.26Z"/>
+          <path class="cls-46" d="M50.72,67.45a44.31,44.31,0,0,0-2.11-4L80.43,37.05,93.11,64.23l-40.69,7.4A44.69,44.69,0,0,0,50.72,67.45Z"/>
+          <path class="cls-47" d="M54.66,82.34c-.16-1.86-.32-2.69-.62-4.48L93,63.93l2.62,29.88-40.76-7C54.81,85,54.82,84.2,54.66,82.34Z"/>
+        </g>
         <g>
-          <path class="cls-50" d="M40.31,53.16A1.29,1.29,0,0,1,39,51.87V40a1.82,1.82,0,0,1,.52-1.28,12,12,0,0,1,16.92,0A1.79,1.79,0,0,1,57,40V51.87a1.29,1.29,0,0,1-1.29,1.29Z"/>
-          <path class="cls-12" d="M48,36.2a11,11,0,0,1,7.76,3.19A.81.81,0,0,1,56,40V51.87a.29.29,0,0,1-.29.29H40.31a.29.29,0,0,1-.29-.29V40a.81.81,0,0,1,.23-.57A11,11,0,0,1,48,36.2m0-2A12.92,12.92,0,0,0,38.84,38,2.82,2.82,0,0,0,38,40V51.87a2.29,2.29,0,0,0,2.29,2.29H55.7A2.29,2.29,0,0,0,58,51.87V40a2.82,2.82,0,0,0-.82-2A12.93,12.93,0,0,0,48,34.2Z"/>
+          <path id="Bg_ThymioTop_Big-2" data-name="Bg_ThymioTop_Big" class="cls-33" d="M47.87,96l6.52-6.51a3.39,3.39,0,0,0,1-2.38A46.55,46.55,0,0,0,9,40.72a3.33,3.33,0,0,0-2.38,1L0,48.34V92a4,4,0,0,0,4,4Z"/>
+          <path class="cls-13" d="M42.46,53.66A47.21,47.21,0,0,0,9,39.73H9A4.36,4.36,0,0,0,5.91,41L0,46.94v2.85l7.33-7.35A2.21,2.21,0,0,1,9,41.73,45.17,45.17,0,0,1,41,55.08,45.17,45.17,0,0,1,54.39,87.13a2.43,2.43,0,0,1-.71,1.67l-6.51,6.51h0l-.69.69H49.3l5.79-5.79a4.4,4.4,0,0,0,1.3-3.09A47.21,47.21,0,0,0,42.46,53.66Z"/>
+          <g>
+            <circle class="cls-34" cx="9.02" cy="86.52" r="3.11"/>
+            <path class="cls-16" d="M11,85.77a2.16,2.16,0,0,1-.49.82,2.09,2.09,0,0,1-3,0A2,2,0,0,1,7,85.85,2.06,2.06,0,0,0,7.53,88,2.09,2.09,0,0,0,11,85.77Z"/>
+          </g>
         </g>
-        <path class="cls-58" d="M55.38,45.38h-.69a.58.58,0,0,0-.64.53v4a.59.59,0,0,0,.64.53h.69a.6.6,0,0,0,.64-.53v-4A.59.59,0,0,0,55.38,45.38Z"/>
-        <path class="cls-58" d="M40.69,50.4h.69a.59.59,0,0,0,.64-.53v-4a.58.58,0,0,0-.64-.53h-.69a.59.59,0,0,0-.64.53v4A.6.6,0,0,0,40.69,50.4Z"/>
-        <path class="cls-12" d="M48,36.2a11,11,0,0,1,7.76,3.19A.81.81,0,0,1,56,40V51.87a.29.29,0,0,1-.29.29H40.31a.29.29,0,0,1-.29-.29V40a.81.81,0,0,1,.23-.57A11,11,0,0,1,48,36.2m0-2A12.92,12.92,0,0,0,38.84,38,2.82,2.82,0,0,0,38,40V51.87a2.29,2.29,0,0,0,2.29,2.29H55.7A2.29,2.29,0,0,0,58,51.87V40a2.82,2.82,0,0,0-.82-2A12.93,12.93,0,0,0,48,34.2Z"/>
-      </g>
-    </g>
-    <g id="AcCounter">
-      <rect id="Values_ListMask" class="cls-52" x="10.88" y="33.58" width="74" height="28.8" rx="1" ry="1" transform="translate(95.86 0.1) rotate(90)"/>
-      <rect id="Bg_SelectedValue" class="cls-53" x="35.88" y="33.6" width="24" height="28.8" rx="1" ry="1" transform="translate(95.89 0.12) rotate(90)"/>
-      <g id="List_count_values">
-        <text class="cls-59" transform="translate(39.44 53.61)"><tspan class="cls-60">+</tspan><tspan x="9.46" y="0">1</tspan></text>
-        <text class="cls-61" transform="translate(40.58 28.66)"><tspan class="cls-62">-</tspan><tspan x="7.18" y="0">1</tspan></text>
-        <text class="cls-61" transform="translate(38.07 78.44)">=0</text>
-      </g>
-    </g>
-    <g id="Ac_Timer">
-      <g id="timer_0_1secs">
-        <path id="timer_01sec_container" class="cls-8" d="M38.05,76a2.51,2.51,0,0,1-2.28-2.74v-22a2.87,2.87,0,0,1,1-2.31l6.56-5-6.56-5a2.89,2.89,0,0,1-1-2.32v-22A2.51,2.51,0,0,1,38.05,12H57.26a2.51,2.51,0,0,1,2.28,2.74v22a2.9,2.9,0,0,1-1,2.32l-6.56,5,6.56,5a2.88,2.88,0,0,1,1,2.31v22A2.51,2.51,0,0,1,57.26,76Z"/>
-        <g id="timer_01sec">
-          <polygon id="_1-2" data-name="1" class="cls-11" points="55.54 36.24 47.65 42.25 39.77 36.24 55.54 36.24"/>
-          <rect id="_2-2" data-name="2" class="cls-11" x="39.77" y="33.74" width="15.78" height="2.5"/>
-          <rect id="_3-2" data-name="3" class="cls-11" x="39.77" y="31.24" width="15.78" height="2.5"/>
-          <rect id="_4-2" data-name="4" class="cls-11" x="39.77" y="28.74" width="15.78" height="2.5"/>
-          <rect id="_5-2" data-name="5" class="cls-11" x="39.77" y="26.24" width="15.78" height="2.5"/>
-          <rect id="_6-2" data-name="6" class="cls-11" x="39.77" y="23.74" width="15.78" height="2.5"/>
-          <rect id="_7-2" data-name="7" class="cls-11" x="39.77" y="21.24" width="15.78" height="2.5"/>
-          <rect id="_8" data-name="8" class="cls-11" x="39.77" y="18.74" width="15.78" height="2.5"/>
-          <rect id="_9" data-name="9" class="cls-11" x="39.77" y="16.24" width="15.78" height="2.5"/>
+        <g id="ProxSensors">
+          <g id="Prox4_group-2" data-name="Prox4_group">
+            <rect id="Btn3_Prox4" class="cls-35" x="44.09" y="79.38" width="8.5" height="8.5" transform="translate(-9.83 6.51) rotate(-7)"/>
+            <circle id="Led_4-2" data-name="Led_4" class="cls-48" cx="49.18" cy="90.39" r="1.7"/>
+          </g>
+          <g id="Prox3_group-2" data-name="Prox3_group">
+            <rect id="Btn3_Prox3" class="cls-35" x="40.52" y="65.89" width="8.5" height="8.5" transform="translate(-26.96 27.97) rotate(-27)"/>
+            <circle id="Led_3-2" data-name="Led_3" class="cls-49" cx="47.87" cy="76.2" r="1.7"/>
+          </g>
+          <g id="Prox2_group-2" data-name="Prox2_group">
+            <rect id="Btn3_Prox2-5" data-name="Btn3_Prox2" class="cls-35" x="32.72" y="54.83" width="8.5" height="8.5" transform="translate(-30.95 43.45) rotate(-45)"/>
+            <circle id="Led_2_2" data-name="Led_2_" class="cls-50" cx="32.16" cy="54.28" r="1.7"/>
+            <circle id="Led_2-2" data-name="Led_2" class="cls-51" cx="41.78" cy="63.9" r="1.7"/>
+          </g>
+          <g id="Prox1_group-2" data-name="Prox1_group">
+            <rect id="Btn3_Prox1-2" data-name="Btn3_Prox1" class="cls-35" x="21.66" y="47.03" width="8.5" height="8.5" transform="translate(-31.54 51.09) rotate(-63)"/>
+            <circle id="Led_1-2" data-name="Led_1" class="cls-52" cx="19.86" cy="48.18" r="1.7"/>
+          </g>
+          <g id="Prox0_group-2" data-name="Prox0_group">
+            <rect id="Btn3_Prox0" class="cls-35" x="8.17" y="43.46" width="8.5" height="8.5" transform="translate(-36.45 54.22) rotate(-83)"/>
+            <circle id="Led_0-2" data-name="Led_0" class="cls-53" cx="5.67" cy="46.87" r="1.7"/>
+          </g>
+        </g>
+        <g id="SlidersProx_copy" data-name="SlidersProx copy">
+          <g>
+            <line class="cls-23" x1="87.93" y1="16" x2="87.93" y2="80"/>
+            <circle id="cursor_presence" class="cls-11" cx="87.93" cy="20.61" r="5"/>
+            <path class="cls-13" d="M87.37,12a.28.28,0,0,1-.08-.21V9.47H85a.27.27,0,0,1-.28-.28V8.54a.28.28,0,0,1,.08-.21.3.3,0,0,1,.2-.08h2.3V6a.25.25,0,0,1,.08-.21.3.3,0,0,1,.2-.08h.72a.29.29,0,0,1,.21.08.25.25,0,0,1,.08.21V8.25h2.29a.27.27,0,0,1,.29.29v.65a.26.26,0,0,1-.08.2.25.25,0,0,1-.21.08H88.58v2.34a.28.28,0,0,1-.08.21.29.29,0,0,1-.21.08h-.72A.3.3,0,0,1,87.37,12Z"/>
+            <path class="cls-13" d="M85.88,87.92a.32.32,0,0,1-.08-.21V86.9a.27.27,0,0,1,.29-.29h3.69a.25.25,0,0,1,.21.08.29.29,0,0,1,.08.21v.81a.27.27,0,0,1-.29.29H86.09A.32.32,0,0,1,85.88,87.92Z"/>
+          </g>
+        </g>
+        <g id="ObjectsPresence-2" data-name="ObjectsPresence">
+          <polygon class="cls-4" points="59.05 36.59 55.39 36.01 53.7 39.31 56.32 41.93 59.63 40.25 59.05 36.59"/>
+          <polygon class="cls-4" points="38.96 22.28 35.32 22.99 34.87 26.67 38.23 28.24 40.76 25.52 38.96 22.28"/>
+          <polygon class="cls-4" points="15.63 15.9 12.45 17.81 13.29 21.42 16.98 21.75 18.43 18.33 15.63 15.9"/>
+          <polygon class="cls-4" points="78.96 80.39 76.53 77.59 73.11 79.04 73.44 82.73 77.05 83.57 78.96 80.39"/>
+          <polygon class="cls-4" points="72.95 56.85 69.7 55.05 66.99 57.58 68.56 60.95 72.24 60.49 72.95 56.85"/>
         </g>
       </g>
-      <g id="Sliders">
-        <line id="slid_unit" class="cls-63" x1="84" y1="76.01" x2="84" y2="12.01"/>
-        <line id="slid_10" class="cls-63" x1="80" y1="85.04" x2="16" y2="85.04"/>
-        <line id="slid_unit_full" class="cls-64" x1="84" y1="76.01" x2="84" y2="12.01"/>
-        <line id="slid_10_full" class="cls-64" x1="80" y1="85.04" x2="16" y2="85.04"/>
-        <circle id="Handle10" class="cls-53" cx="48" cy="85.04" r="5"/>
-        <circle id="HandleUnits" class="cls-53" cx="84" cy="44.02" r="5"/>
+      <g id="Ev_ProxGround">
+        <path id="Gradient_ProxGd1" class="cls-54" d="M69.75,10.68a18,18,0,0,0-10,3l-.1.06V44l.1.06a18.17,18.17,0,1,0,10-33.34Z"/>
+        <path id="Gradient_ProxGd0" class="cls-55" d="M49.54,10.68a18,18,0,0,1,10,3l.11.06V44l-.11.06a18.17,18.17,0,1,1-10-33.34Z"/>
+        <g id="ThymioAcc2-2" data-name="ThymioAcc2">
+          <path class="cls-33" d="M59.68,21.6a41.11,41.11,0,0,0-29.12,12,3,3,0,0,0-.87,2.12l0,43.33a2.49,2.49,0,0,0,2.49,2.5l55,.06a2.5,2.5,0,0,0,2.5-2.5l0-43.33a3,3,0,0,0-.86-2.12A41.14,41.14,0,0,0,59.68,21.6Z"/>
+          <path class="cls-16" d="M87.5,80.49H85.66V37.68a2.88,2.88,0,0,0-.84-2.06,40.06,40.06,0,0,0-46.16-7.39A40.1,40.1,0,0,1,87.73,34a2.92,2.92,0,0,1,.84,2.06V79.43A1.07,1.07,0,0,1,87.5,80.49Z"/>
+          <rect class="cls-56" x="82.15" y="51.65" width="7.49" height="24.98" rx="2" ry="2" transform="translate(171.8 128.27) rotate(180)"/>
+          <rect class="cls-56" x="29.64" y="51.65" width="7.49" height="24.98" rx="2" ry="2" transform="translate(66.78 128.27) rotate(180)"/>
+          <path class="cls-57" d="M59.68,21.6a41.11,41.11,0,0,0-29.12,12,3,3,0,0,0-.87,2.12l0,43.33a2.49,2.49,0,0,0,2.49,2.5l55,.06a2.5,2.5,0,0,0,2.5-2.5l0-43.33a3,3,0,0,0-.86-2.12A41.14,41.14,0,0,0,59.68,21.6Z"/>
+        </g>
+        <g id="LedProx1_group">
+          <rect id="Btn2_ProxGd1" class="cls-58" x="64.5" y="25.86" width="10" height="10" transform="translate(24.87 92.42) rotate(-78)"/>
+          <circle id="Led_Gd1" class="cls-59" cx="77.32" cy="32.53" r="2"/>
+        </g>
+        <g id="ProxGd0_group">
+          <rect id="Btn2_ProxGd0" class="cls-60" x="44.48" y="25.86" width="10" height="10" transform="translate(-5.33 10.96) rotate(-12)"/>
+          <circle id="Led_Gd0" class="cls-61" cx="41.66" cy="32.53" r="2"/>
+        </g>
+        <rect class="cls-62" x="6.38" y="8" width="4" height="80" rx="2" ry="2"/>
+        <g>
+          <polyline points="23.38 48 23.38 54 13.38 54 10.38 48"/>
+          <polyline class="cls-33" points="10.38 48 13.38 42 23.38 42 23.38 48"/>
+          <g>
+            <image class="cls-63" width="22" height="20" transform="translate(6 38)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAUCAYAAACJfM0wAAAACXBIWXMAAAsSAAALEgHS3X78AAABuUlEQVQ4T7XVzWtTURAF8N99JkWwLX51U2mhVKhudOXS/92dCzfiSqVFrIgKbfATtElzXcy9eR+x1YoeeCSX5J45M3NmXso5GyKllOrXpR9/jQy5Q5aGxCmlBiNcLp+N8zHHDN8xyznPiYsLFKVj3MAWrpfzeZhigkMcp5SmOefcIxbqruA2HmJHBD8V6db0UnkuFeJ9PMK3cm4Vd9TexB3cwwY+4rNIt4sxrmGtnJ8JvoSe4qp2WxCv4w2e4q2oYUXCavnffRFkrNOPEUu13cWmUPkEj/EOJx3iBldFgG1Rqh6q4q7aPaHmJV7gNT4NLldlX0RNlzw7KmpHwgG7gnyKA9Hpr8JGrUfD5nP9hvZQI6+IMuyI5s1wpDQtD83+B/id+f8alfgEx3gllI6E8nVtuS6EpqQ5E9NT6zrW1ntVkDf1EYIa7aAsobpiLqbmUDhhE7eEQybOttuaEDEcniDOOeeU0lSU40AQ3sWDcvGsAdkT0zcxQHfyuqqfC8VbQlUd6e6uWNGO9Adh0XklWxB3VB8V4g39JTREzfC9WEITneDD7VZV7+OHi6/NRbn+26JfIubfvJp+AsaBoUGayMQmAAAAAElFTkSuQmCC"/>
+            <polygon class="cls-42" points="13.38 42 23.38 42 23.38 54 13.38 54 10.38 48 13.38 42"/>
+          </g>
+        </g>
+      </g>
+      <g id="Basic_ProxGround">
+        <g id="Bg_Th_Profile-7" data-name="Bg_Th_Profile">
+          <path class="cls-14" d="M64.55,60.17c.55.67.6,2.72,1.55,3.72a3.25,3.25,0,0,0,2.42.85,3.3,3.3,0,0,0,2.41-.85c.94-1,1-3,1.54-3.72Z"/>
+          <path class="cls-64" d="M77.72,68.25c3.45,0,6.83-.08,10.12-.24L77.45,56.66h0L67.05,68Q72.26,68.25,77.72,68.25Z"/>
+          <rect class="cls-15" x="16" y="35.99" width="64" height="24" rx="2" ry="2"/>
+          <path class="cls-16" d="M79,55.17v2.76a1,1,0,0,1-1,1H18a1,1,0,0,1-1-1V55.17Z"/>
+          <line class="cls-17" x1="68" y1="44.96" x2="73.08" y2="44.96"/>
+          <line class="cls-17" x1="77.45" y1="44.96" x2="79.99" y2="44.96"/>
+          <circle class="cls-15" cx="33.63" cy="52.2" r="12.83"/>
+          <path class="cls-16" d="M41.93,43.81a11.72,11.72,0,0,1,1.82,6.29,11.85,11.85,0,0,1-20.09,8.53A11.85,11.85,0,1,0,41.93,43.81Z"/>
+        </g>
+        <line class="cls-18" x1="6.37" y1="67.13" x2="89.63" y2="67.13"/>
+        <rect class="cls-65" x="6.37" y="68.25" width="83.25" height="13.63"/>
+      </g>
+      <g id="ColorTop_basic">
+        <g id="ColorPalette">
+          <rect id="Btn2_Green" class="cls-66" x="12" y="8.06" width="17.96" height="17.96"/>
+          <rect id="Btn2_Blue" class="cls-67" x="29.96" y="8.06" width="17.96" height="17.96"/>
+          <rect id="Btn2_Red" class="cls-68" x="47.93" y="8.06" width="17.96" height="17.96"/>
+          <rect id="Btn2_Yellow" class="cls-69" x="12" y="26.03" width="17.96" height="17.96"/>
+          <rect id="Btn2_Cyan" class="cls-70" x="47.93" y="26.03" width="17.96" height="17.96"/>
+          <rect id="Btn2_Magenta" class="cls-71" x="29.96" y="26.03" width="17.96" height="17.96"/>
+          <g id="Btn2_NoColor">
+            <rect class="cls-72" x="65.89" y="26.03" width="17.96" height="17.96"/>
+            <polygon class="cls-73" points="67.3 43.99 65.89 43.99 65.89 42.58 82.44 26.03 83.85 26.02 83.85 27.44 67.3 43.99"/>
+          </g>
+          <rect id="Btn2_White_Select" class="cls-33" x="65.89" y="8.06" width="17.96" height="17.96"/>
+        </g>
+        <g id="Bg_Thymio_front_color">
+          <path class="cls-74" d="M85.91,83.94v3.17a1.28,1.28,0,0,1-1.28,1.28H76.46a1.28,1.28,0,0,1-1.28-1.28V84Z"/>
+          <path class="cls-74" d="M21,83.94v3.17a1.27,1.27,0,0,1-1.27,1.28H11.52a1.28,1.28,0,0,1-1.28-1.28V84Z"/>
+          <rect class="cls-74" x="8" y="53.95" width="80" height="30" rx="2" ry="2"/>
+          <line class="cls-22" x1="62.08" y1="68.09" x2="69.59" y2="68.09"/>
+          <line class="cls-22" x1="78.35" y1="68.09" x2="84.32" y2="68.09"/>
+          <line class="cls-22" x1="33.92" y1="68.09" x2="26.41" y2="68.09"/>
+          <line class="cls-22" x1="17.65" y1="68.09" x2="11.68" y2="68.09"/>
+          <path class="cls-74" d="M43.05,84c.69.65.75,2.64,2,3.61a4.82,4.82,0,0,0,3,.82,5,5,0,0,0,3-.82c1.17-1,1.23-3,1.92-3.61Z"/>
+          <line class="cls-22" x1="43.45" y1="68.09" x2="52.38" y2="68.09"/>
+        </g>
+        <rect id="Gradient_Top" class="cls-75" x="8.99" y="54.95" width="77.99" height="12.09" rx="0.75" ry="0.75"/>
+        <rect id="SelectedStroke" class="cls-26" x="65.89" y="8.06" width="17.96" height="17.97"/>
+      </g>
+      <g id="ColorBottom_basic">
+        <g id="ColorPalette-2" data-name="ColorPalette">
+          <rect id="Btn2_Green-2" data-name="Btn2_Green" class="cls-66" x="12" y="52.07" width="17.96" height="17.96"/>
+          <rect id="Btn2_Blue-2" data-name="Btn2_Blue" class="cls-67" x="29.96" y="52.07" width="17.96" height="17.96"/>
+          <rect id="Btn2_Red-2" data-name="Btn2_Red" class="cls-68" x="47.93" y="52.07" width="17.96" height="17.96"/>
+          <rect id="Btn2_Yellow-2" data-name="Btn2_Yellow" class="cls-69" x="12" y="70.03" width="17.96" height="17.96"/>
+          <rect id="Btn2_Cyan-2" data-name="Btn2_Cyan" class="cls-70" x="47.93" y="70.03" width="17.96" height="17.96"/>
+          <rect id="Btn2_Magenta-2" data-name="Btn2_Magenta" class="cls-71" x="29.96" y="70.03" width="17.96" height="17.96"/>
+          <g id="Btn2_NoColor-2" data-name="Btn2_NoColor">
+            <rect class="cls-72" x="65.89" y="70.03" width="17.96" height="17.96"/>
+            <polygon class="cls-73" points="67.3 88 65.89 88 65.89 86.58 82.44 70.03 83.85 70.03 83.85 71.45 67.3 88"/>
+          </g>
+          <rect id="Btn2_White_Select-2" data-name="Btn2_White_Select" class="cls-33" x="65.89" y="52.07" width="17.96" height="17.96"/>
+        </g>
+        <g id="Bg_Thymio_front_color-2" data-name="Bg_Thymio_front_color">
+          <path class="cls-74" d="M85.91,38.91v3.18a1.27,1.27,0,0,1-1.28,1.27H76.46a1.28,1.28,0,0,1-1.28-1.27V38.92Z"/>
+          <path class="cls-74" d="M21,38.91v3.18a1.27,1.27,0,0,1-1.27,1.27H11.52a1.27,1.27,0,0,1-1.28-1.27V38.92Z"/>
+          <rect class="cls-74" x="8" y="8.92" width="80" height="30" rx="2" ry="2"/>
+          <line class="cls-22" x1="62.08" y1="23.07" x2="69.59" y2="23.07"/>
+          <line class="cls-22" x1="78.35" y1="23.07" x2="84.32" y2="23.07"/>
+          <line class="cls-22" x1="33.92" y1="23.07" x2="26.41" y2="23.07"/>
+          <line class="cls-22" x1="17.65" y1="23.07" x2="11.68" y2="23.07"/>
+          <path class="cls-74" d="M43.05,38.92c.69.65.75,2.65,2,3.61a4.86,4.86,0,0,0,3,.83,5,5,0,0,0,3-.83c1.17-1,1.23-3,1.92-3.61Z"/>
+          <line class="cls-22" x1="43.45" y1="23.07" x2="52.38" y2="23.07"/>
+        </g>
+        <rect class="cls-26" x="65.89" y="52.07" width="17.96" height="17.97"/>
+        <rect id="Gradient_Bottom" class="cls-76" x="8.98" y="24.09" width="78.04" height="13.9" rx="1" ry="1"/>
+      </g>
+      <g id="EvCounter">
+        <rect id="Mask_ListOperators" class="cls-2" x="-7.4" y="33.58" width="74" height="28.8" rx="1" ry="1" transform="translate(77.58 18.39) rotate(90)"/>
+        <rect id="Bg_Selected" class="cls-11" x="38.5" y="13.1" width="24" height="69.08" rx="1" ry="1" transform="translate(98.15 -2.86) rotate(90)"/>
+        <g id="List_operators">
+          <g id="OperatorSmallThan">
+            <text class="cls-77" transform="translate(23.97 28.22)">≤</text>
+          </g>
+          <g id="OperatorBigThan">
+            <text class="cls-77" transform="translate(23.97 79.44)">≥</text>
+          </g>
+          <text class="cls-77" transform="translate(23.68 53.83)">=</text>
+        </g>
+        <g id="ValueButtons">
+          <polygon id="ValueDown" class="cls-27" points="62.05 66.59 77.52 66.59 69.79 78.2 62.05 66.59"/>
+          <polygon id="ValueUp" class="cls-27" points="62.05 29.37 69.79 17.76 77.52 29.37 62.05 29.37"/>
+        </g>
+        <path id="Value-2" data-name="Value" class="cls-13" d="M64.09,53.75a.54.54,0,0,1-.16-.4V42a.54.54,0,0,1,.16-.42.56.56,0,0,1,.41-.16h2a.55.55,0,0,1,.58.58v1a4.89,4.89,0,0,1,4-1.8,4.47,4.47,0,0,1,3.5,1.44,5.73,5.73,0,0,1,1.3,4v6.75a.58.58,0,0,1-.16.4.51.51,0,0,1-.42.17H73.14a.58.58,0,0,1-.58-.57v-6.6a3.18,3.18,0,0,0-.68-2.18,2.45,2.45,0,0,0-1.95-.78,2.56,2.56,0,0,0-2,.8,3,3,0,0,0-.75,2.16v6.6a.57.57,0,0,1-.15.4.54.54,0,0,1-.42.17H64.5A.53.53,0,0,1,64.09,53.75Z"/>
+        <rect id="text_value" class="cls-78" x="56.33" y="36.98" width="26.91" height="21.33"/>
+      </g>
+      <g id="Ev_TimersUp">
+        <g id="Bg_TimerUp">
+          <path id="Bg_Timer" class="cls-33" d="M33.8,81.9a2,2,0,0,1-2-2V55.56a2,2,0,0,1,1-1.77l11.09-6.34L32.78,41.12a2,2,0,0,1-1-1.77V15a2,2,0,0,1,2-2H62.16a2,2,0,0,1,2,2V39.35a2,2,0,0,1-1,1.77L52.09,47.45l11.08,6.34a2,2,0,0,1,1,1.77V79.87a2,2,0,0,1-2,2Z"/>
+          <polygon id="Time" class="cls-79" points="34.76 78.9 34.76 56.12 47.98 48.59 61.19 56.12 61.19 78.9 34.76 78.9"/>
+        </g>
+        <g id="fx-5" data-name="fx">
+          <g id="fx_left">
+            <path class="cls-18" d="M27.3,71.38a10.59,10.59,0,0,1-.19-9.49"/>
+            <path class="cls-18" d="M23.77,73.94a16.36,16.36,0,0,1-.29-14.61"/>
+          </g>
+          <g id="fx_right">
+            <path class="cls-18" d="M68.7,61.89a10.59,10.59,0,0,1,.19,9.49"/>
+            <path class="cls-18" d="M72.23,59.33a16.36,16.36,0,0,1,.29,14.61"/>
+          </g>
+        </g>
+      </g>
+      <g id="Ac_Directions">
+        <g id="DirectionArrows">
+          <polygon id="Btn2_FwdDir" class="cls-8" points="44.05 25.42 44.05 15.78 40.34 15.78 48.05 2.42 55.77 15.78 52.05 15.78 52.05 25.42 44.05 25.42"/>
+          <path id="Btn2_FwdRightDir" class="cls-8" d="M60,27.11l.45-.68a28.22,28.22,0,0,1,6.87-7.21l-2-3.31,15.43-.14L73.19,29.2l-1.78-3a20.2,20.2,0,0,0-4.92,5.67L65.84,33Z"/>
+          <path id="Btn2_TurnRightDir" class="cls-8" d="M69.7,54.34l13.37-7.72v2.6a4,4,0,0,0-2.75-6.88h-1v-8h1A12,12,0,0,1,83.07,58v4Z"/>
+          <path id="Btn2_BwdRightDir" class="cls-8" d="M65.36,79.72l2-3.32a28.34,28.34,0,0,1-6.87-7.2L60,68.52l5.85-5.86.65,1.13a20.3,20.3,0,0,0,4.92,5.66l1.78-3,7.6,13.44Z"/>
+          <polygon id="Btn2_BwdDir" class="cls-8" points="40.34 79.84 44.05 79.84 44.05 70.21 52.05 70.21 52.05 79.84 55.77 79.84 48.05 93.21 40.34 79.84"/>
+          <path id="Btn2_BwdLeftDir" class="cls-8" d="M22.91,66.42l1.78,3a20.3,20.3,0,0,0,4.92-5.66l.65-1.13,5.85,5.86-.45.68a28,28,0,0,1-6.87,7.2l1.95,3.32-15.43.14Z"/>
+          <path id="Btn2_TurnLeftDir" class="cls-8" d="M13,58a12,12,0,0,1,2.75-23.67h1v8h-1A4,4,0,0,0,13,49.22v-2.6l13.36,7.72L13,62.05Z"/>
+          <path id="Btn2_FwdLeftDir" class="cls-8" d="M29.61,31.84a20.2,20.2,0,0,0-4.92-5.67l-1.78,3-7.6-13.43,15.43.14-1.95,3.31a27.89,27.89,0,0,1,6.87,7.21l.45.68L30.26,33Z"/>
+          <g id="Stop">
+            <circle id="Btn2_StopDir" class="cls-8" cx="48.06" cy="47.83" r="9"/>
+            <circle id="StopSign" class="cls-73" cx="48.03" cy="47.83" r="4"/>
+          </g>
+        </g>
+      </g>
+      <g id="Ac_Wheels">
+        <g id="Sliders">
+          <g id="Slid_right">
+            <g>
+              <line class="cls-26" x1="80.05" y1="11.02" x2="80.05" y2="84.99"/>
+              <polygon class="cls-13" points="76.56 12.04 80.05 6 83.54 12.04 76.56 12.04"/>
+              <polygon class="cls-13" points="76.56 83.97 80.05 90.01 83.54 83.97 76.56 83.97"/>
+            </g>
+            <g id="Cursor_right">
+              <circle id="CursorRight" class="cls-80" cx="80.05" cy="48.01" r="6"/>
+              <circle id="SameSpeed_R" class="cls-81" cx="80.05" cy="48.01" r="2"/>
+              <rect id="StopIndicator_R" class="cls-73" x="77.97" y="45.87" width="4.27" height="4.27"/>
+            </g>
+          </g>
+          <g id="Slid_left">
+            <g>
+              <line class="cls-26" x1="16.2" y1="11.02" x2="16.2" y2="84.99"/>
+              <polygon class="cls-13" points="12.71 12.04 16.2 6 19.69 12.04 12.71 12.04"/>
+              <polygon class="cls-13" points="12.71 83.97 16.2 90.01 19.69 83.97 12.71 83.97"/>
+            </g>
+            <g id="Cursor_left">
+              <circle id="CursorLeft" class="cls-80" cx="16.2" cy="48.01" r="6"/>
+              <circle id="SameSpeed_L" class="cls-81" cx="16.2" cy="48.01" r="2"/>
+              <rect id="StopIndicator_L" class="cls-73" x="14.12" y="45.87" width="4.27" height="4.27"/>
+            </g>
+          </g>
+        </g>
+        <g id="ThymioTop_wheels_mini">
+          <path class="cls-15" d="M48,35.23a12.38,12.38,0,0,0-8.74,3.59.9.9,0,0,0-.26.64v13a.76.76,0,0,0,.75.75H56.24a.74.74,0,0,0,.75-.74v-13a.9.9,0,0,0-.26-.64A12.31,12.31,0,0,0,48,35.23Z"/>
+          <g>
+            <rect class="cls-82" x="54.75" y="44.24" width="2.25" height="7.49" rx="1.12" ry="1.12"/>
+            <rect class="cls-83" x="54.75" y="44.24" width="2.25" height="7.49" rx="1.12" ry="1.12"/>
+          </g>
+          <g>
+            <rect class="cls-82" x="39" y="44.24" width="2.25" height="7.49" rx="1.12" ry="1.12"/>
+            <rect class="cls-83" x="39" y="44.24" width="2.25" height="7.49" rx="1.12" ry="1.12"/>
+          </g>
+        </g>
+      </g>
+      <g id="Color_adv">
+        <g id="Bg_Thymio_front_color-3" data-name="Bg_Thymio_front_color">
+          <path class="cls-74" d="M76.43,84.08v2.38a1,1,0,0,1-1,1H69.35a1,1,0,0,1-1-1V84.08Z"/>
+          <path class="cls-74" d="M27.72,84.08v2.38a.94.94,0,0,1-.95,1H20.64a1,1,0,0,1-1-1V84.08Z"/>
+          <rect class="cls-74" x="18" y="61.58" width="60" height="22.5" rx="2" ry="2"/>
+          <line class="cls-22" x1="58.56" y1="72.19" x2="64.19" y2="72.19"/>
+          <line class="cls-22" x1="70.76" y1="72.19" x2="75.24" y2="72.19"/>
+          <line class="cls-22" x1="37.44" y1="72.19" x2="31.81" y2="72.19"/>
+          <line class="cls-22" x1="25.24" y1="72.19" x2="20.76" y2="72.19"/>
+          <path class="cls-74" d="M44.29,84.08c.52.49.56,2,1.46,2.71a3.65,3.65,0,0,0,2.26.62,3.72,3.72,0,0,0,2.26-.62c.88-.73.93-2.22,1.44-2.71Z"/>
+          <line class="cls-22" x1="44.59" y1="72.19" x2="51.29" y2="72.19"/>
+        </g>
+        <rect id="Gradient_top-2" data-name="Gradient_top" class="cls-84" x="19.04" y="62.58" width="57.9" height="8.46" rx="0.75" ry="0.75"/>
+        <rect id="Gradient_bottom-2" data-name="Gradient_bottom" class="cls-85" x="19.04" y="73.21" width="57.9" height="9.85" rx="0.75" ry="0.75"/>
+        <g id="Sliders_rgb">
+          <g id="Slid_blue">
+            <line id="Bg_slid_blue" class="cls-86" x1="66" y1="55.28" x2="66" y2="7.28"/>
+            <line id="Slid_blue_value" class="cls-87" x1="66" y1="55.28" x2="66" y2="7.28"/>
+            <circle id="Cursor_blue" class="cls-88" cx="66" cy="33.75" r="5"/>
+          </g>
+          <g id="Slid_green">
+            <line id="Bg_slid_green" class="cls-86" x1="48" y1="55.28" x2="48" y2="7.28"/>
+            <line id="Slid_green_value" class="cls-89" x1="48" y1="55.28" x2="48" y2="7.28"/>
+            <circle id="Cursor_green" class="cls-90" cx="48" cy="33.75" r="5"/>
+          </g>
+          <g id="Slid_red">
+            <line id="Bg_slid_red" class="cls-86" x1="30" y1="55.28" x2="30" y2="7.28"/>
+            <line id="Slid_red_value" class="cls-91" x1="30" y1="55.28" x2="30" y2="7.28"/>
+            <circle id="Cursor_red" class="cls-92" cx="30" cy="33.75" r="5"/>
+          </g>
+        </g>
+      </g>
+      <g id="Ac_music">
+        <g id="zones_Bg">
+          <rect class="cls-93" x="11.28" y="74.45" width="72" height="10"/>
+          <rect class="cls-93" x="11.28" y="62.43" width="72" height="10"/>
+          <rect class="cls-93" x="11.28" y="50.41" width="72" height="10"/>
+          <rect class="cls-93" x="11.28" y="38.39" width="72" height="10"/>
+          <rect class="cls-93" x="11.28" y="26.37" width="72" height="10"/>
+        </g>
+        <circle id="Btn3_note1" class="cls-26" cx="17.59" cy="79.45" r="5"/>
+        <circle id="Btn3_note2" class="cls-58" cx="29.2" cy="67.43" r="5"/>
+        <circle id="Btn3_note3" class="cls-60" cx="40.81" cy="55.41" r="5"/>
+        <circle id="Btn3_note4" class="cls-60" cx="52.42" cy="43.39" r="5"/>
+        <circle id="Btn3_note5" class="cls-60" cx="64.03" cy="31.37" r="5"/>
+        <circle id="Btn3_note6" class="cls-60" cx="75.64" cy="43.39" r="5"/>
+        <g id="Slider">
+          <line id="slid_off" class="cls-23" x1="84.02" y1="12.83" x2="25.89" y2="12.83"/>
+          <line id="slid_on" class="cls-42" x1="84.02" y1="12.83" x2="25.89" y2="12.83"/>
+          <circle id="cursor-2" data-name="cursor" class="cls-11" cx="41.12" cy="12.83" r="5"/>
+        </g>
+        <g id="beat">
+          <path class="cls-7" d="M23.11,10.86a.28.28,0,0,1,.08.2v.82a.3.3,0,0,1-.08.2.28.28,0,0,1-.21.08H19.21a.28.28,0,0,1-.21-.07.32.32,0,0,1-.08-.21v-.82a.28.28,0,0,1,.08-.2.29.29,0,0,1,.21-.09H22.9A.29.29,0,0,1,23.11,10.86Z"/>
+          <path class="cls-7" d="M23.11,13.58a.3.3,0,0,1,.08.2v.82a.28.28,0,0,1-.08.2.29.29,0,0,1-.21.09H19.21a.27.27,0,0,1-.29-.29v-.82a.3.3,0,0,1,.08-.2.28.28,0,0,1,.21-.08H22.9A.28.28,0,0,1,23.11,13.58Z"/>
+          <path id="note_Bg" class="cls-7" d="M16,7.56h0a.65.65,0,0,0-.66.66v6.25a2.65,2.65,0,0,0-2.22-.22,2.67,2.67,0,0,0,1.32,5.15,2.74,2.74,0,0,0,2.23-2.73V8.22A.66.66,0,0,0,16,7.56Z"/>
+        </g>
+      </g>
+      <g id="AcCounter">
+        <rect id="Values_ListMask" class="cls-93" x="10.88" y="33.58" width="74" height="28.8" rx="1" ry="1" transform="translate(95.86 0.1) rotate(90)"/>
+        <rect id="Bg_SelectedValue" class="cls-11" x="35.88" y="33.6" width="24" height="28.8" rx="1" ry="1" transform="translate(95.89 0.12) rotate(90)"/>
+        <g id="List_count_values">
+          <text class="cls-94" transform="translate(39.44 53.61)"><tspan class="cls-95">+</tspan><tspan x="9.46" y="0">1</tspan></text>
+          <text class="cls-94" transform="translate(40.58 28.66)"><tspan class="cls-96">-</tspan><tspan x="7.18" y="0">1</tspan></text>
+          <text class="cls-94" transform="translate(38.07 78.44)">=0</text>
+        </g>
+      </g>
+      <g id="Ac_Timer">
+        <g id="_10_Seconds" data-name="10_Seconds">
+          <path id="timer10Secods_bg" class="cls-33" d="M32.26,79.84A2.1,2.1,0,0,1,30,78V55.35a1.88,1.88,0,0,1,1.14-1.65l13-5.89-13-5.88A1.88,1.88,0,0,1,30,40.28V17.68a2.1,2.1,0,0,1,2.26-1.9H63.74A2.1,2.1,0,0,1,66,17.68v22.6a1.88,1.88,0,0,1-1.14,1.65l-13,5.88,13,5.89A1.88,1.88,0,0,1,66,55.35V78a2.1,2.1,0,0,1-2.26,1.89Z"/>
+          <g id="timer_10sec_units">
+            <polygon id="_10" data-name="10" class="cls-7" points="63 39.47 48 46.25 33 39.47 63 39.47"/>
+            <rect id="_20" data-name="20" class="cls-7" x="33" y="36.89" width="30" height="2.59"/>
+            <rect id="_30" data-name="30" class="cls-7" x="33" y="34.3" width="30" height="2.59"/>
+            <rect id="_40" data-name="40" class="cls-7" x="33" y="31.71" width="30" height="2.59"/>
+            <rect id="_50" data-name="50" class="cls-7" x="33" y="29.13" width="30" height="2.59"/>
+            <rect id="_60" data-name="60" class="cls-7" x="33" y="26.54" width="30" height="2.59"/>
+            <rect id="_70" data-name="70" class="cls-7" x="33" y="23.95" width="30" height="2.59"/>
+            <rect id="_80" data-name="80" class="cls-7" x="33" y="21.37" width="30" height="2.59"/>
+            <rect id="_90" data-name="90" class="cls-7" x="33" y="18.78" width="30" height="2.59"/>
+            <polygon id="Stroke_90" class="cls-97" points="63 18.78 63 39.47 48 46.25 33 39.47 33 18.78 63 18.78"/>
+            <polygon id="Stroke_80" class="cls-97" points="63 21.37 63 39.47 48 46.25 33 39.47 33 21.37 63 21.37"/>
+            <polygon id="Stroke_70" class="cls-97" points="63 23.95 63 39.47 48 46.25 33 39.47 33 23.95 63 23.95"/>
+            <polygon id="Stroke_60" class="cls-97" points="63 26.54 63 39.47 48 46.25 33 39.47 33 26.54 63 26.54"/>
+            <polygon id="Stroke_50" class="cls-97" points="63 29.13 63 39.47 48 46.25 33 39.47 33 29.13 63 29.13"/>
+            <polygon id="Stroke_40" class="cls-97" points="63 31.71 63 39.47 48 46.25 33 39.47 33 31.71 63 31.71"/>
+            <polygon id="Stroke_30" class="cls-97" points="63 34.3 63 39.47 48 46.25 33 39.47 33 34.3 63 34.3"/>
+            <polygon id="Stroke_20" class="cls-97" points="63 36.89 63 39.47 48 46.25 33 39.47 33 36.89 63 36.89"/>
+            <polygon id="Stroke_10" class="cls-97" points="63 39.47 48 46.25 33 39.47 63 39.47"/>
+          </g>
+        </g>
+        <g id="Slider-2" data-name="Slider">
+          <line id="slid_unit_full" class="cls-98" x1="84" y1="79.96" x2="84" y2="15.97"/>
+          <line id="slid_unit_full-2" data-name="slid_unit_full" class="cls-42" x1="84" y1="79.96" x2="84" y2="15.97"/>
+          <circle id="Cursor_units" class="cls-79" cx="84" cy="21.29" r="5"/>
+        </g>
+        <rect id="text_TimeDisplay" class="cls-78" x="4" y="40.75" width="24" height="14.5"/>
+      </g>
+      <g id="invisibleFrame">
+        <rect class="cls-78" width="96" height="96"/>
       </g>
     </g>
   </g>

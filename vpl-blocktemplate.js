@@ -10,7 +10,8 @@ A3a.vpl.blockType = {
 	event: "e",
 	action: "a",
 	state: "s",
-	comment: "c"
+	comment: "c",
+	undef: "?"
 };
 
 /** @enum {string} */

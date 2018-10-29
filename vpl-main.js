@@ -78,7 +78,17 @@ window.addEventListener("load", function () {
 	// general settings
 	var isClassic = getQueryOption("appearance") === "classic";
 	if (!isClassic) {
-		A3a.vpl.patchSVG();
+		try {
+			var txt = document.getElementById("ui.json").textContent;
+			var uiConfig = /** @type {Object} */(JSON.parse(txt));
+			var svg = {};
+			uiConfig["svgFilenames"].forEach(function (filename) {
+				txt = document.getElementById(filename).textContent;
+				svg[filename] = txt;
+			});
+			uiConfig["svg"] = svg;
+			A3a.vpl.patchSVG(uiConfig);
+		} catch (e) {}
 	}
 	if (getQueryOption("compiler") === "l2") {
 		A3a.vpl.patchL2();

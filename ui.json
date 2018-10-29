@@ -1,0 +1,151 @@
+{
+	"styles": {
+		"event": "#ff6e40",
+		"state": "#ff6e40",
+		"action": "#38f",
+		"comment": "#aaa"
+	},
+
+	"blocks": [
+		{
+			"name": "button",
+			"type": "event",
+			"modes": ["basic", "advanced"],
+			"background": [
+				{
+					"uri": "blocks.svg#Ev_Bg_buttons"
+				}
+			],
+			"main": "blocks.svg#Ev_Buttons",
+			"defaultParameters": [false, false, false, false, false],
+			"buttons": [
+				{
+					"id": "Btn2_Center",
+					"val": [false, true],
+					"st": ["fill:#ddd", "fill:#f33"]
+				},
+				{
+					"id": "Btn2_Forward",
+					"val": [false, true],
+					"st": ["fill:#ddd", "fill:#f33"]
+				},
+				{
+					"id": "Btn2_Backward",
+					"val": [false, true],
+					"st": ["fill:#ddd", "fill:#f33"]
+				},
+				{
+					"id": "Btn2_Right",
+					"val": [false, true],
+					"st": ["fill:#ddd", "fill:#f33"]
+				},
+				{
+					"id": "Btn2_Left",
+					"val": [false, true],
+					"st": ["fill:#ddd", "fill:#f33"]
+				}
+			]
+		},
+		{
+			"name": "?",
+			"type": "event",
+			"modes": ["basic", "advanced"],
+			"background": [
+				{
+					"uri": "blocks.svg#Ev_Bg_buttons"
+				}
+			],
+			"main": "blocks.svg#Ev_Accel",
+			"defaultParameters": [0],
+			"rotating": [
+				{
+					"id": "Rot360",
+					"centerId": "Rot360",
+					"thumbId": "Btn2_HandleAcc0"
+				}
+			]
+		},
+		{
+			"name": "motor",
+			"type": "action",
+			"modes": ["basic"],
+			"background": [],
+			"main": "blocks.svg#Ac_Wheels",
+			"diffwheelmotion": "ThymioTop_wheels_mini",
+			"defaultParameters": [0, 0],
+			"sliders": [
+				{
+					"id": "Slid_left",
+					"thumbId": "Cursor_left",
+					"min": -1,
+					"max": 1
+				},
+				{
+					"id": "Slid_right",
+					"thumbId": "Cursor_right",
+					"min": -1,
+					"max": 1
+				}
+			]
+		},
+		{
+			"name": "move",
+			"type": "action",
+			"modes": ["basic"],
+			"background": [],
+			"main": "blocks.svg#Ac_Directions",
+			"defaultParameters": [0],
+			"radiobuttons": [
+				{
+					"id": "StopSign",
+					"val": 0,
+					"st": ["fill:#ddd", "fill:#f33"]
+				},
+				{
+					"id": "Btn2_FwdDir",
+					"val": 1,
+					"st": ["fill:#ddd", "fill:#f33"]
+				},
+				{
+					"id": "Btn2_FwdRightDir",
+					"val": 2,
+					"st": ["fill:#ddd", "fill:#f33"]
+				},
+				{
+					"id": "Btn2_TurnRightDir",
+					"val": 3,
+					"st": ["fill:#ddd", "fill:#f33"]
+				},
+				{
+					"id": "Btn2_BwdRightDir",
+					"val": 4,
+					"st": ["fill:#ddd", "fill:#f33"]
+				},
+				{
+					"id": "Btn2_BwdDir",
+					"val": 5,
+					"st": ["fill:#ddd", "fill:#f33"]
+				},
+				{
+					"id": "Btn2_BwdLeftDir",
+					"val": 6,
+					"st": ["fill:#ddd", "fill:#f33"]
+				},
+				{
+					"id": "Btn2_TurnLeftDir",
+					"val": 7,
+					"st": ["fill:#ddd", "fill:#f33"]
+				},
+				{
+					"id": "Btn2_FwdLeftDir",
+					"val": 8,
+					"st": ["fill:#ddd", "fill:#f33"]
+				}
+			]
+		}
+	],
+
+	"svgFilenames": [
+		"blocks.svg"
+	]
+}
