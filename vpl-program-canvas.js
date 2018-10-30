@@ -623,8 +623,10 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		// mousedown
 		function (data, x, y, ev) {
 			if (!self.isEmpty()) {
-				var aesl = self.exportAsAESLFile();
-				A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
+				// var aesl = self.exportAsAESLFile();
+				// A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
+				var json = self.exportToJSON();
+				A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
 			}
 			return 0;
 		},
@@ -680,7 +682,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			function (data, x, y, ev) {
 				if (!self.isEmpty()) {
 					var aesl = self.exportAsAESLFile();
-					A3a.vpl.Program.downloadXML(aesl, "vpl.aesl");
+					A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
 				}
 				return 0;
 			},

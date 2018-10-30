@@ -86,7 +86,7 @@ window.addEventListener("load", function () {
 				txt = document.getElementById(filename).textContent;
 				svg[filename] = txt;
 			});
-			uiConfig["svg"] = svg;
+			uiConfig.svg = svg;
 			A3a.vpl.patchSVG(uiConfig);
 		} catch (e) {}
 	}
@@ -158,8 +158,18 @@ window.addEventListener("load", function () {
 			reader.onload = function (event) {
 				var data = event.target.result;
 				var filename = file.name;
-				window["vplProgram"].importFromAESLFile(data);
-				window["vplCanvas"].onUpdate();
+				try {
+					// try aesl first
+					window["vplProgram"].importFromAESLFile(data);
+					window["vplCanvas"].onUpdate();
+				} catch (e) {
+					// then try json
+					try {
+						window["vplProgram"].importFromJSON(data, function () {
+							window["vplCanvas"].onUpdate();
+						});
+					} catch (e) {}
+				}
 			};
 			reader["readAsText"](file);
 		}
