@@ -75,7 +75,7 @@
 		{
 			"name": "motor",
 			"type": "action",
-			"modes": ["basic"],
+			"modes": ["basic", "advanced"],
 			"svg": [
 				{
 					"uri": "blocks.svg#Ac_Wheels"
@@ -101,7 +101,7 @@
 		{
 			"name": "move",
 			"type": "action",
-			"modes": ["basic"],
+			"modes": ["basic", "advanced"],
 			"svg": [
 				{
 					"uri": "blocks.svg#Ac_Directions"
