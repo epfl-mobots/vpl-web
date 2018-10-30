@@ -11,12 +11,10 @@
 			"name": "button",
 			"type": "event",
 			"modes": ["basic", "advanced"],
-			"background": [
+			"svg": [
 				{
 					"uri": "blocks.svg#Ev_Bg_buttons"
-				}
-			],
-			"main": [
+				},
 				{
 					"uri": "blocks.svg#Ev_Buttons"
 				}
@@ -54,12 +52,10 @@
 			"name": "yaw",
 			"type": "event",
 			"modes": ["basic", "advanced"],
-			"background": [
+			"svg": [
 				{
 					"uri": "blocks.svg#Rot360Rail"
-				}
-			],
-			"main": [
+				},
 				{
 					"uri": "blocks.svg#ThymioAcc1"
 				},
@@ -80,8 +76,7 @@
 			"name": "motor",
 			"type": "action",
 			"modes": ["basic"],
-			"background": [],
-			"main": [
+			"svg": [
 				{
 					"uri": "blocks.svg#Ac_Wheels"
 				}
@@ -107,8 +102,7 @@
 			"name": "move",
 			"type": "action",
 			"modes": ["basic"],
-			"background": [],
-			"main": [
+			"svg": [
 				{
 					"uri": "blocks.svg#Ac_Directions"
 				}

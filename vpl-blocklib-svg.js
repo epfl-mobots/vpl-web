@@ -302,11 +302,7 @@ A3a.vpl.Canvas.prototype.mousedragSVGRotating = function (block, dragIndex, aux,
 };
 
 A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
-	aux["background"].forEach(function (bg) {
-		var d = A3a.vpl.Canvas.decodeURI(bg["uri"]);
-		this.drawSVG(d.f, uiConfig.svg[d.f], {elementId: d.id});
-	}, this);
-	var f = A3a.vpl.Canvas.decodeURI(aux["main"][0]["uri"]).f;
+	var f = A3a.vpl.Canvas.decodeURI(aux["svg"][0]["uri"]).f;
 	var displacements = this.getDisplacements(aux, f, block.param);
 	if (aux["diffwheelmotion"]) {
 		var robotId = aux["diffwheelmotion"];
@@ -326,7 +322,7 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 			phi: -tr.phi
 		};
 	}
-	aux["main"].forEach(function (el) {
+	aux["svg"].forEach(function (el) {
 		var d = A3a.vpl.Canvas.decodeURI(el["uri"]);
 		this.drawSVG(d.f, uiConfig.svg[d.f],
 			{
@@ -338,7 +334,7 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 };
 
 A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width, height, left, top, ev) {
-	var f = A3a.vpl.Canvas.decodeURI(aux["main"][0]["uri"]).f;
+	var f = A3a.vpl.Canvas.decodeURI(aux["svg"][0]["uri"]).f;
 	var ix0 = 0;
 	var buttons = aux["buttons"];
 	if (buttons) {
