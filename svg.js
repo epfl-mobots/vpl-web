@@ -330,7 +330,72 @@ SVG.prototype.draw = function (ctx, options) {
 		return dict;
 	}
 
-	/** Draw an element recusrively
+	/** Apply displacement to context (not to transform)
+		@param {Element} el
+		@param {SVG.Displacement} displacement
+		@return {void}
+	*/
+	function applyDisplacement(el, displacement) {
+		if (displacement.phi && displacement.phi != 0) {
+			var p = self.draw(null, {element: el});
+			var bnds = SVG.calcBounds(p);
+			var x0 = (bnds.xmin + bnds.xmax) / 2;
+			var y0 = (bnds.ymin + bnds.ymax) / 2;
+			ctx.translate(x0 + (displacement.dx || 0), y0 + (displacement.dy || 0));
+			ctx.rotate(displacement.phi);
+			ctx.translate(-x0, -y0);
+		} else if (displacement.dx || displacement.dy) {
+			ctx.translate(/** @type {number} */(displacement.dx),
+				/** @type {number} */(displacement.dy));
+		}
+	}
+
+	/** Decode transform parameters and apply them to canvas context ctx
+		@param {string} tr value of attribute "transform"
+		@return {void}
+	*/
+	function applyTransform(tr) {
+		if (tr) {
+			tr = tr
+				.replace(/\s*\(\s*/g, "(")
+				.replace(/\s*\)\s*/g, ")")
+				.replace(/\s+/g, ",");
+			var tra = tr.split(")");
+			tra.slice(0, -1).forEach(function (t) {
+				var c = t.split("(")[0];
+				var args = t.split("(")[1].split(",")
+					.map(function (s) { return parseFloat(s); });
+				switch (c) {
+				case "translate":
+					ctx && ctx.translate(args[0] || 0, args[1] || 0);
+					transform.translate(args[0] || 0, args[1] || 0);
+					break;
+				case "rotate":
+					var a = (args[0] || 0) * Math.PI / 180;
+					var x0 = args[1] || 0;
+					var y0 = args[2] || 0;
+					if (x0 !== 0 || y0 !== 0) {
+						if (ctx) {
+							ctx.translate(-x0, -y0);
+							ctx.rotate(a);
+							ctx.translate(x0, y0);
+							transform.translate(-x0, -y0);
+							transform.rotate(a);
+							transform.translate(x0, y0);
+						}
+					} else {
+						ctx && ctx.rotate(a);
+						transform.rotate(a);
+					}
+					break;
+				default:
+					throw "transform not implemented: " + c;
+				}
+			});
+		}
+	}
+
+	/** Draw an element recursively
 		@param {Element} el
 		@param {string=} baseStyle base style, which can be overridden by style defined in SVG children
 		@param {string=} overriddenStyle style with higher priority than SVG's
@@ -354,51 +419,6 @@ SVG.prototype.draw = function (ctx, options) {
 		function getArg(name, def) {
 			var val = el.getAttribute(name);
 			return val === null ? def || 0 : parseFloat(val);
-		}
-
-		/** Decode transform parameters and apply them to canvas context ctx
-			@return {void}
-		*/
-		function applyTransform() {
-			var tr = el.getAttribute("transform");
-			if (tr) {
-				tr = tr
-					.replace(/\s*\(\s*/g, "(")
-					.replace(/\s*\)\s*/g, ")")
-					.replace(/\s+/g, ",");
-				var tra = tr.split(")");
-				tra.slice(0, -1).forEach(function (t) {
-					var c = t.split("(")[0];
-					var args = t.split("(")[1].split(",")
-						.map(function (s) { return parseFloat(s); });
-					switch (c) {
-					case "translate":
-						ctx && ctx.translate(args[0] || 0, args[1] || 0);
-						transform.translate(args[0] || 0, args[1] || 0);
-						break;
-					case "rotate":
-						var a = (args[0] || 0) * Math.PI / 180;
-						var x0 = args[1] || 0;
-						var y0 = args[2] || 0;
-						if (x0 !== 0 || y0 !== 0) {
-							if (ctx) {
-								ctx.translate(-x0, -y0);
-								ctx.rotate(a);
-								ctx.translate(x0, y0);
-								transform.translate(-x0, -y0);
-								transform.rotate(a);
-								transform.translate(x0, y0);
-							}
-						} else {
-							ctx && ctx.rotate(a);
-							transform.rotate(a);
-						}
-						break;
-					default:
-						throw "transform not implemented: " + c;
-					}
-				});
-			}
 		}
 
 		/** Add a pair of points to xa and ya, taking current transform into account
@@ -849,18 +869,7 @@ SVG.prototype.draw = function (ctx, options) {
 		ctx && ctx.save();
 		transform.save();
 		if (displacement && ctx) {
-			if (displacement && displacement.phi && displacement.phi != 0) {
-				var p = self.draw(null, {element: el});
-				var bnds = SVG.calcBounds(p);
-				var x0 = (bnds.xmin + bnds.xmax) / 2;
-				var y0 = (bnds.ymin + bnds.ymax) / 2;
-				ctx.translate(x0 + (displacement.dx || 0), y0 + (displacement.dy || 0));
-				ctx.rotate(displacement.phi);
-				ctx.translate(-x0, -y0);
-			} else if (displacement.dx || displacement.dy) {
-				ctx.translate(/** @type {number} */(displacement.dx),
-					/** @type {number} */(displacement.dy));
-			}
+			applyDisplacement(el, displacement);
 		}
 
 		getStyle();
@@ -875,7 +884,7 @@ SVG.prototype.draw = function (ctx, options) {
 		case "path":
 			ctx && ctx.save();
 			transform.save();
-			applyTransform();
+			applyTransform(el.getAttribute("transform"));
 			path(el.getAttribute("d") || "");
 			paint();
 			ctx && ctx.restore();
@@ -888,7 +897,7 @@ SVG.prototype.draw = function (ctx, options) {
 			var y2 = getArg("y2");
 			ctx && ctx.save();
 			transform.save();
-			applyTransform();
+			applyTransform(el.getAttribute("transform"));
 			ctx && ctx.beginPath();
 			ctx && ctx.moveTo(x, y);
 			ctx && ctx.lineTo(x2, y2);
@@ -907,7 +916,7 @@ SVG.prototype.draw = function (ctx, options) {
 			if (points.length >= 4) {
 				ctx && ctx.save();
 				transform.save();
-				applyTransform();
+				applyTransform(el.getAttribute("transform"));
 				ctx && ctx.beginPath();
 				ctx && ctx.moveTo(points[0], points[1]);
 				addPoint(points[0], points[1]);
@@ -926,7 +935,7 @@ SVG.prototype.draw = function (ctx, options) {
 			var r = getArg("r");
 			ctx && ctx.save();
 			transform.save();
-			applyTransform();
+			applyTransform(el.getAttribute("transform"));
 			ctx && ctx.beginPath();
 			ctx && ctx.arc(x, y, r, 0, 2 * Math.PI);
 			paint();
@@ -944,7 +953,7 @@ SVG.prototype.draw = function (ctx, options) {
 			var height = getArg("height");
 			ctx && ctx.save();
 			transform.save();
-			applyTransform();
+			applyTransform(el.getAttribute("transform"));
 			ctx && ctx.beginPath();
 			ctx && ctx.rect(x, y, width, height);
 			paint();
@@ -960,7 +969,7 @@ SVG.prototype.draw = function (ctx, options) {
 			var y = getArg("y");
 			ctx && ctx.save();
 			transform.save();
-			applyTransform();
+			applyTransform(el.getAttribute("transform"));
 			paintText(el.textContent, x, y);
 			addPoint(x, y);
 			ctx && ctx.restore();
@@ -977,8 +986,6 @@ SVG.prototype.draw = function (ctx, options) {
 	var element = this.root;
 	if (options && options.elementId) {
 		element = this.dom.getElementById(options.elementId);
-		// apply ancestors transforms
-		// [to do...]
 	} else if (options && options.element) {
 		element = options.element;
 	}
@@ -986,6 +993,29 @@ SVG.prototype.draw = function (ctx, options) {
 		if (options.globalTransform) {
 			options.globalTransform(ctx, this.viewBox);
 		}
+
+		// collect ancestors
+		if (ctx) {
+			/** @type {Array.<Element>} */
+			var ancestors = [];
+			for (var ancestor = element.parentElement;
+				ancestor != null;
+				ancestor = ancestor.parentElement) {
+				ancestors.push(ancestor);
+			}
+			// apply ancestor transforms from root
+			for (var i = ancestors.length - 1; i >= 0; i--) {
+				var idAttr = ancestors[i].getAttribute("id");
+				/** @type {SVG.Displacement} */
+				var displacement = idAttr && options && options.displacement && options.displacement[idAttr];
+				if (displacement) {
+					applyDisplacement(ancestors[i], displacement);
+				}
+				var tr = ancestors[i].getAttribute("transform");
+				applyTransform(tr);
+			}
+		}
+
 		drawEl(element);
 	}
 	return {x: xa, y: ya}
