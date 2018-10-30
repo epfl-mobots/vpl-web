@@ -306,12 +306,12 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 		var d = A3a.vpl.Canvas.decodeURI(bg["uri"]);
 		this.drawSVG(d.f, uiConfig.svg[d.f], {elementId: d.id});
 	}, this);
-	var d = A3a.vpl.Canvas.decodeURI(aux["main"]);
-	var displacements = this.getDisplacements(aux, d.f, block.param);
+	var f = A3a.vpl.Canvas.decodeURI(aux["main"][0]["uri"]).f;
+	var displacements = this.getDisplacements(aux, f, block.param);
 	if (aux["diffwheelmotion"]) {
 		var robotId = aux["diffwheelmotion"];
-		this.loadSVG(d.f, uiConfig.svg[d.f]);
-		var bnds = this.clientData.svg[d.f].getElementBounds(robotId);
+		this.loadSVG(f, uiConfig.svg[f]);
+		var bnds = this.clientData.svg[f].getElementBounds(robotId);
 		var ixSlider = (aux["buttons"] ? aux["buttons"].length : 0) +
 			(aux["radiobuttons"] ? 1 : 0);
 		var dleft = 4 * block.param[ixSlider];
@@ -326,20 +326,24 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 			phi: -tr.phi
 		};
 	}
-	this.drawSVG(d.f, uiConfig.svg[d.f],
-		{
-			elementId: d.id,
-			style: this.getStyles(aux, block.param),
-			displacement: displacements
-		});
+	aux["main"].forEach(function (el) {
+		var d = A3a.vpl.Canvas.decodeURI(el["uri"]);
+		this.drawSVG(d.f, uiConfig.svg[d.f],
+			{
+				elementId: d.id,
+				style: this.getStyles(aux, block.param),
+				displacement: displacements
+			});
+	}, this);
 };
 
 A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width, height, left, top, ev) {
+	var f = A3a.vpl.Canvas.decodeURI(aux["main"][0]["uri"]).f;
 	var ix0 = 0;
 	var buttons = aux["buttons"];
 	if (buttons) {
-		var ix = canvas.mousedownSVGButtons(block, width, height, left, top, ev,
-			A3a.vpl.Canvas.decodeURI(aux["main"]).f, buttons);
+		var ix = canvas.mousedownSVGButtons(block, width, height, left, top, ev, f,
+			buttons);
 		if (ix !== null) {
 			return ix0 + ix;
 		}
@@ -347,8 +351,8 @@ A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width
 	}
 	var radiobuttons = aux["radiobuttons"];
 	if (radiobuttons) {
-		var ix = canvas.mousedownSVGRadioButtons(block, width, height, left, top, ev,
-			A3a.vpl.Canvas.decodeURI(aux["main"]).f, radiobuttons, buttons || 0);
+		var ix = canvas.mousedownSVGRadioButtons(block, width, height, left, top, ev, f,
+			radiobuttons, buttons || 0);
 		if (ix !== null) {
 			return ix0 + ix;
 		}
@@ -356,8 +360,8 @@ A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width
 	}
 	var sliders = aux["sliders"];
 	if (sliders) {
-		ix = canvas.mousedownSVGSliders(block, width, height, left, top, ev,
-			A3a.vpl.Canvas.decodeURI(aux["main"]).f, sliders);
+		ix = canvas.mousedownSVGSliders(block, width, height, left, top, ev, f,
+			sliders);
 		if (ix !== null) {
 			return ix0 + ix;
 		}
@@ -365,8 +369,7 @@ A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width
 	}
 	var rotating = aux["rotating"];
 	if (rotating) {
-		ix = canvas.mousedownSVGRotating(block, width, height, left, top, ev,
-			A3a.vpl.Canvas.decodeURI(aux["main"]).f,
+		ix = canvas.mousedownSVGRotating(block, width, height, left, top, ev, f,
 			rotating, block.param.slice(ix0, ix0 + rotating.length));
 		if (ix !== null) {
 			return ix0 + ix;

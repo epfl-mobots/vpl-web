@@ -16,7 +16,11 @@
 					"uri": "blocks.svg#Ev_Bg_buttons"
 				}
 			],
-			"main": "blocks.svg#Ev_Buttons",
+			"main": [
+				{
+					"uri": "blocks.svg#Ev_Buttons"
+				}
+			],
 			"defaultParameters": [false, false, false, false, false],
 			"buttons": [
 				{
@@ -47,15 +51,22 @@
 			]
 		},
 		{
-			"name": "?",
+			"name": "yaw",
 			"type": "event",
 			"modes": ["basic", "advanced"],
 			"background": [
 				{
-					"uri": "blocks.svg#Ev_Bg_buttons"
+					"uri": "blocks.svg#Rot360Rail"
 				}
 			],
-			"main": "blocks.svg#Ev_Accel",
+			"main": [
+				{
+					"uri": "blocks.svg#ThymioAcc1"
+				},
+				{
+					"uri": "blocks.svg#Rot360_Handle"
+				}
+			],
 			"defaultParameters": [0],
 			"rotating": [
 				{
@@ -70,7 +81,11 @@
 			"type": "action",
 			"modes": ["basic"],
 			"background": [],
-			"main": "blocks.svg#Ac_Wheels",
+			"main": [
+				{
+					"uri": "blocks.svg#Ac_Wheels"
+				}
+			],
 			"diffwheelmotion": "ThymioTop_wheels_mini",
 			"defaultParameters": [0, 0],
 			"sliders": [
@@ -93,7 +108,11 @@
 			"type": "action",
 			"modes": ["basic"],
 			"background": [],
-			"main": "blocks.svg#Ac_Directions",
+			"main": [
+				{
+					"uri": "blocks.svg#Ac_Directions"
+				}
+			],
 			"defaultParameters": [0],
 			"radiobuttons": [
 				{

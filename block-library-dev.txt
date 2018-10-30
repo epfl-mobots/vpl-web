@@ -34,14 +34,14 @@ In json, block contain the following properties:
 
 - "modes" (array of strings, possibly empty, required): in which VPL mode the block is displayed. Contains "basic" if displayed in basic mode, "advanced" if displayed in advanced mode. This defines only the default block usage; customization can override it.
 
-- "background" (array of objects, possibly empty, required): list of fixed parts of the block appearance. Each part is described by an object with the following properties:
+- "background" (array of objects, possibly empty, required): list of fixed parts defining the block appearance. Each part is described by an object with the following properties:
 
 	- "uri" (string, required): uri of the svg element
 	- "scale" (number, optional, default: 1): scale at which the element is displayed
 	- "dx" (number, optional, default: 0): horizontal displacement
 	- "dy" (number, optional, default: 0): vertical displacement
 
-- "main" (string, required): uri of the block appearance including buttons, sliders, etc.
+- "main" (array of objects, at least one element, required): list of the parts defining the block appearance including buttons, sliders, etc.
 
 - "defaultParameters" (array of number, boolean or string values, optional): default values of the block parameters which define the state, in this order, of buttons (one value per button), radiobuttons (a single values for all radiobuttons), sliders (one value per slider), rotating controls (one value per control).
 
