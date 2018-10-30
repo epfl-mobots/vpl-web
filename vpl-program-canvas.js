@@ -624,7 +624,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		function (data, x, y, ev) {
 			if (!self.isEmpty()) {
 				var aesl = self.exportAsAESLFile();
-				A3a.vpl.Program.downloadXML(aesl, "vpl.aesl");
+				A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
 			}
 			return 0;
 		},

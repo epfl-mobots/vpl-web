@@ -339,7 +339,7 @@ function srcToolbarRender(canvas, noVpl) {
 			if (!isEditorEmpty) {
 				var src = document.getElementById("editor").value;
 				var aesl = A3a.vpl.Program.toAESLFile(src);
-				A3a.vpl.Program.downloadXML(aesl, "code.aesl");
+				A3a.vpl.Program.downloadText(aesl, "code.aesl");
 			}
 			return 0;
 		},

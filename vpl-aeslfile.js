@@ -150,55 +150,60 @@ A3a.vpl.Block.parseFromAESLBlockElement = function (blockElement, advanced) {
 	return block;
 };
 
-/** Set anchor element so that it downloads xml
+/** Set anchor element so that it downloads text
 	@param {Element} anchor "a" element
-	@param {string} xml
+	@param {string} text
 	@param {string=} filename filename of downloaded file (default: "untitled.xml")
+	@param {string=} mimetype mime type of downloaded file (default: "application/xml")
 	@return {void}
 */
-A3a.vpl.Program.setAnchorXMLDownload = function (anchor, xml, filename) {
+A3a.vpl.Program.setAnchorDownload = function (anchor, text, filename, mimetype) {
+	mimetype = mimetype || "application/xml";
 	/** @type {string} */
 	var url;
 	if (typeof window.Blob === "function" && window.URL) {
 		// blob URL
-		var blob = new window.Blob([xml], {"type": "application/xml"});
+		var blob = new window.Blob([text], {"type": mimetype});
 		url = window.URL.createObjectURL(blob);
 	} else {
 		// data URL
-		url = "data:application/xml;base64," + window["btoa"](xml);
+		url = "data:" + mimetype + ";base64," + window["btoa"](text);
 	}
 	anchor.href = url;
 	anchor["download"] = filename || "untitled.xml";
 };
 
-/** Download xml
-	@param {string} xml
+/** Download file
+	@param {string} text
 	@param {string=} filename filename of downloaded file (default: "untitled.xml")
+	@param {string=} mimetype mime type of downloaded file (default: "application/xml")
 	@return {void}
 */
-A3a.vpl.Program.downloadXML = (function () {
+A3a.vpl.Program.downloadText = (function () {
 	// add a hidden anchor to document, which will be reused
 	/** @type {Element} */
 	var anchor = null;
 
-	return function (xml, filename) {
+	return function (text, filename, mimetype) {
 		if (anchor === null) {
 			anchor = document.createElement("a");
 			document.body.appendChild(anchor);
 			anchor.style.display = "none";
 		}
 
+		mimetype = mimetype || "application/xml";
+
 		/** @type {string} */
 		var url;
 		if (typeof window.Blob === "function" && window.URL) {
 			// blob URL
-			var blob = new window.Blob([xml], {"type": "application/xml"});
+			var blob = new window.Blob([text], {"type": mimetype});
 			url = window.URL.createObjectURL(blob);
 		} else {
 			// data URL
-			url = "data:application/xml;base64," + window["btoa"](xml);
+			url = "data:" + mimetype + ";base64," + window["btoa"](text);
 		}
-		A3a.vpl.Program.setAnchorXMLDownload(anchor, xml, filename);
+		A3a.vpl.Program.setAnchorDownload(anchor, text, filename, mimetype);
 		anchor.click();
 		if (typeof url !== "string") {
 			window.URL.revokeObjectURL(url);
