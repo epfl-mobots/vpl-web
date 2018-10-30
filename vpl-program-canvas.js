@@ -133,7 +133,8 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x, y, opts
 */
 A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemplate, x, y) {
 	var block = new A3a.vpl.Block(blockTemplate, null, null);
-	var disabled = this.disabledBlocks.indexOf(blockTemplate.name) >= 0;
+	var disabled = (this.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
+		.indexOf(blockTemplate.name) < 0;
 	var self = this;
 	this.addBlockToCanvas(canvas, block, x, y,
 		{
@@ -143,10 +144,11 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 			disabled: disabled,
 			mousedown: this.customizationMode
 				? function (canvas, data, width, height, x, y, downEvent) {
-					if (self.disabledBlocks.indexOf(blockTemplate.name) >= 0) {
-						self.disabledBlocks.splice(self.disabledBlocks.indexOf(blockTemplate.name), 1);
+					var a = self.mode === A3a.vpl.mode.basic ? self.enabledBlocksBasic : self.enabledBlocksAdvanced;
+					if (a.indexOf(blockTemplate.name) >= 0) {
+						a.splice(a.indexOf(blockTemplate.name), 1);
 					} else {
-						self.disabledBlocks.push(blockTemplate.name);
+						a.push(blockTemplate.name);
 					}
 					return 1;
 				}
@@ -1155,8 +1157,8 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	var nAcTemplates = 0;
 	A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
 		if (this.customizationMode ||
-			((blockTemplate.modes.indexOf(this.mode) >= 0 || this.disabledBlocks.length > 0) &&
-				this.disabledBlocks.indexOf(blockTemplate.name) < 0)) {
+			(self.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
+				.indexOf(blockTemplate.name) >= 0) {
 			switch (blockTemplate.type) {
  			case A3a.vpl.blockType.event:
 			case A3a.vpl.blockType.state:
@@ -1179,8 +1181,8 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		if ((blockTemplate.type === A3a.vpl.blockType.event ||
 				blockTemplate.type === A3a.vpl.blockType.state) &&
 			(this.customizationMode ||
-				((blockTemplate.modes.indexOf(this.mode) >= 0 || this.disabledBlocks.length > 0) &&
-					this.disabledBlocks.indexOf(blockTemplate.name) < 0))) {
+				(self.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
+					.indexOf(blockTemplate.name) >= 0)) {
 			var x = canvas.dims.margin + Math.floor(row / colLen) * step;
 			var y = canvas.dims.margin + canvas.dims.topControlSpace + step * (row % colLen);
 			self.addBlockTemplateToCanvas(canvas, blockTemplate, x, y);
@@ -1193,8 +1195,8 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		if ((blockTemplate.type === A3a.vpl.blockType.action ||
 				blockTemplate.type === A3a.vpl.blockType.comment) &&
 			(this.customizationMode ||
-				((blockTemplate.modes.indexOf(this.mode) >= 0 || this.disabledBlocks.length > 0) &&
-					this.disabledBlocks.indexOf(blockTemplate.name) < 0))) {
+				(self.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
+					.indexOf(blockTemplate.name) >= 0)) {
 			var x = canvasSize.width - canvas.dims.margin + canvas.dims.interBlockSpace -
 				step - Math.floor(row / colLen) * step;
 			var y = canvas.dims.margin + canvas.dims.topControlSpace + step * (row % colLen);

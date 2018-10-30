@@ -28,17 +28,26 @@ A3a.vpl.Program = function (mode) {
 
 	this.customizationMode = false;
 	/** @type {Array.<string>} */
-	this.disabledBlocks = [];
+	this.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
+	/** @type {Array.<string>} */
+	this.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
 	/** @type {Array.<string>} */
 	this.disabledUI = [];
 };
+
+/** @type {Array.<string>} */
+A3a.vpl.Program.basicBlocks = [];
+
+/** @type {Array.<string>} */
+A3a.vpl.Program.advancedBlocks = [];
 
 /** Clear program
 	@return {void}
 */
 A3a.vpl.Program.prototype.new = function () {
 	this.mode = A3a.vpl.mode.basic;
-	this.disabledBlocks = [];
+	this.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
+	this.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
 	this.disabledUI = [];
 	this.program = [];
 	this.undoState.reset();
@@ -432,7 +441,8 @@ A3a.vpl.Program.prototype.exportToObject = function () {
 
 	return {
 		"advanced": this.mode === A3a.vpl.mode.advanced,
-		"hidden": this.disabledBlocks,
+		"basicBlocks": this.enabledBlocksBasic,
+		"advancedBlocks": this.enabledBlocksAdvanced,
 		"program": p
 	};
 };
@@ -458,7 +468,8 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 			this.mode = obj["advanced"]
 				? A3a.vpl.mode.advanced
 				: A3a.vpl.mode.basic;
-			this.disabledBlocks = obj["hidden"] || [];
+			this.enabledBlocksBasic = obj["basicBlocks"] || A3a.vpl.Program.basicBlocks;
+			this.enabledBlocksAdvanced = obj["advancedBlocks"] || A3a.vpl.Program.advancedBlocks;
 			this.program = obj["program"].map(function (eventHandler) {
 				var eh = new A3a.vpl.EventHandler();
 				eventHandler["blocks"].forEach(function (block) {

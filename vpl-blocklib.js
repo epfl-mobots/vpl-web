@@ -2394,3 +2394,32 @@ A3a.vpl.BlockTemplate.findByName = function (name) {
 	}
 	return null;
 };
+
+/** Filter block names, keeping only those defined in A3a.vpl.BlockTemplate.lib
+	@param {Array.<string>} a
+	@return {Array.<string>}
+*/
+A3a.vpl.BlockTemplate.filterBlocks = function (a) {
+	/** @type {Array.<string>} */
+	var af = [];
+	a.forEach(function (name) {
+		if (A3a.vpl.BlockTemplate.findByName(name)) {
+			af.push(name);
+		}
+	});
+	return af;
+};
+
+/** Get all blocks defined for the specified mode
+	@param {A3a.vpl.mode} mode
+	@return {Array.<A3a.vpl.BlockTemplate>}
+*/
+A3a.vpl.BlockTemplate.getBlocksByMode = function (mode) {
+	var a = [];
+	A3a.vpl.BlockTemplate.lib.forEach(function (b) {
+		if (b.modes.indexOf(mode) >= 0) {
+			a.push(b);
+		}
+	});
+	return a;
+};
