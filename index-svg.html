@@ -59,7 +59,11 @@
 					"val": [false, true],
 					"st": ["fill:#ddd", "fill:#f33"]
 				}
-			]
+			],
+			"aseba": {
+				"sectionBegin": "onevent buttons\n",
+				"clauseAnd": "{$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''}"
+			}
 		},
 		{
 			"name": "yaw",
@@ -83,7 +87,16 @@
 					"centerId": "Rot360",
 					"thumbId": "Btn2_HandleAcc0"
 				}
-			]
+			],
+			"aseba": {
+				"initVarDecl": [
+					"# yaw angle from accelerometer\nvar yawAngle\n"
+				],
+				"sectionBegin": "onevent acc\n",
+				"clauseInit":
+					"call math.atan2(yawAngle, acc[0], acc[1])\n",
+				"clause": "yawAngle >= {Math.round(2730.67 * $[0] - 1365.33)} and yawAngle < {Math.round(2730.67 * $[0] + 1365.33)}"
+			}
 		},
 		{
 			"name": "motor",
@@ -109,7 +122,14 @@
 					"min": -1,
 					"max": 1
 				}
-			]
+			],
+			"aseba": {
+				"initCodeExec": [
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"motor.left.target = {Math.round(500 * $[0])}\nmotor.right.target = {Math.round(500 * $[1])}\n"
+			}
 		},
 		{
 			"name": "move",
@@ -167,7 +187,14 @@
 					"val": 8,
 					"st": ["fill:#ddd", "fill:#f33"]
 				}
-			]
+			],
+			"aseba": {
+				"initCodeExec": [
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"motor.left.target = {[0,200,250,100,-150,-200,-250,-100,150][$[0]]}\nmotor.right.target = {[0,200,150,-100,-250,-200,-150,100,250][$[0]]}\n"
+			}
 		}
 	],
 

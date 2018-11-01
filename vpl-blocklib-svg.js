@@ -425,6 +425,25 @@ A3a.vpl.patchSVG = function (uiConfig) {
 		};
 	};
 
+	/** Substitute inline expressions {expr} in input string, where expr is a
+		JavaScript expression; variable $ contains the block parameters
+		@param {string} fmt
+		@param {A3a.vpl.Block} block
+		@param {number=} i parameter index in clauseAnd fragments
+		@return {string}
+	*/
+	function substInline(fmt, block, i) {
+		while (true) {
+			var r = /{([^}]*)}/.exec(fmt);
+			if (r == null) {
+				break;
+			}
+			var result = new Function("$", "i", "return " + r[1] + ";")(block.param, i);
+			fmt = fmt.slice(0, r.index) + result + fmt.slice(r.index + r[0].length);
+		}
+		return fmt;
+	}
+
 	// build array of block templates from definitions in uiConfig.blocks and svg in uiConfig.svg
 	/** @type {Array.<A3a.vpl.BlockTemplate>} */
 	var lib = [];
@@ -479,6 +498,34 @@ A3a.vpl.patchSVG = function (uiConfig) {
 				canvas, block, dragIndex, width, height, left, top, ev);
 		};
 
+		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+		var genCode = function (block) {
+			var c = {};
+			b["aseba"] && b["aseba"]["initVarDecl"] && (c.initVarDecl = substInline(b["aseba"]["initVarDecl"], block));
+			b["aseba"] && b["aseba"]["initCodeDecl"] && (c.initCodeDecl = substInline(b["aseba"]["initCodeDecl"], block));
+			b["aseba"] && b["aseba"]["initCodeExec"] && (c.initCodeExec = substInline(b["aseba"]["initCodeExec"], block));
+			b["aseba"] && b["aseba"]["sectionBegin"] && (c.sectionBegin = substInline(b["aseba"]["sectionBegin"], block));
+			b["aseba"] && b["aseba"]["sectionEnd"] && (c.sectionEnd = substInline(b["aseba"]["sectionEnd"], block));
+			c.sectionPriority = /** @type {boolean} */(b["aseba"] && b["aseba"]["sectionPriority"]) || 1;
+			b["aseba"] && b["aseba"]["clauseInit"] && (c.clauseInit = substInline(b["aseba"]["clauseInit"], block));
+			if (b["aseba"] && b["aseba"]["clauseAnd"]) {
+				var clause = "";
+				block.param.forEach(function (p, i) {
+					var cl = substInline(b["aseba"]["clauseAnd"], block, i);
+					if (cl) {
+						clause += (clause.length > 0 ? " and " : "") + cl;
+					}
+				});
+				c.clause = clause || "1 == 1";
+			} else if (b["aseba"] && b["aseba"]["clause"]) {
+ 				c.clause = substInline(b["aseba"]["clause"], block);
+			}
+			c.clauseOptional = /** @type {boolean} */(b["aseba"] && b["aseba"]["clauseOptional"]) || false;
+			b["aseba"] && b["aseba"]["statement"] && (c.statement = substInline(b["aseba"]["statement"], block));
+			b["aseba"] && b["aseba"]["error"] && (c.clause = substInline(b["error"]["error"], block));
+			return c;
+		};
+
 		/** @type {A3a.vpl.BlockTemplate.params} */
 		var p = {
 			name: b["name"],
@@ -487,7 +534,8 @@ A3a.vpl.patchSVG = function (uiConfig) {
 			defaultParam: function () { return b["defaultParameters"]; },
 			draw: draw,
 			mousedown: mousedown,
-			mousedrag: mousedrag
+			mousedrag: mousedrag,
+			genCode: genCode
 		};
 		lib.push(new A3a.vpl.BlockTemplate(p));
 	});
