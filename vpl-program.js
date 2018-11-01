@@ -253,6 +253,11 @@ A3a.vpl.Program.prototype.generateCode = function (runBlocks) {
  			if (folding[evCode.sectionBegin] !== undefined) {
 				// fold evCode into c[folding[evCode.sectionBegin]]
 				var foldedFrag = c[folding[evCode.sectionBegin]];
+				if (evCode.clauseInit &&
+					(!foldedFrag.clauseInit || foldedFrag.clauseInit.indexOf(evCode.clauseInit) < 0)) {
+					// concat all clauseInit fragments without duplicates
+					foldedFrag.clauseInit = (foldedFrag.clauseInit || "") + evCode.clauseInit;
+				}
 				foldedFrag.statement += statement;
 				evCode.statement = undefined;
 			} else {
@@ -324,7 +329,7 @@ A3a.vpl.Program.prototype.generateCode = function (runBlocks) {
 	for (var i = 0; i < this.program.length; i++) {
 		if (initEventIndices.indexOf(i) < 0 && c[i].statement) {
 			str += "\n";
-			str += (c[i].sectionBegin || "") + (c[i].statement || "") + (c[i].sectionEnd || "");
+			str += (c[i].sectionBegin || "") + (c[i].clauseInit || "") + (c[i].statement || "") + (c[i].sectionEnd || "");
 		}
 	}
 	// remove initial lf
