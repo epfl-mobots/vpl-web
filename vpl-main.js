@@ -93,6 +93,13 @@ window.addEventListener("load", function () {
 	if (getQueryOption("compiler") === "l2") {
 		A3a.vpl.patchL2();
 	}
+	
+	A3a.vpl.Program.basicBlocks = A3a.vpl.BlockTemplate
+		.getBlocksByMode(A3a.vpl.mode.basic)
+		.map(function (b) { return b.name; });
+	A3a.vpl.Program.advancedBlocks = A3a.vpl.BlockTemplate
+		.getBlocksByMode(A3a.vpl.mode.advanced)
+		.map(function (b) { return b.name; });
 
 	var filterBlur = 0;	// 0.1 px
 	var filterGrayscale = 0;	// %

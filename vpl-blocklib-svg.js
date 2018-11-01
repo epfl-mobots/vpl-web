@@ -541,10 +541,4 @@ A3a.vpl.patchSVG = function (uiConfig) {
 	});
 
 	A3a.vpl.BlockTemplate.lib = lib;
-	A3a.vpl.Program.basicBlocks = A3a.vpl.BlockTemplate
-		.getBlocksByMode(A3a.vpl.mode.basic)
-		.map(function (b) { return b.name; });
-	A3a.vpl.Program.advancedBlocks = A3a.vpl.BlockTemplate
-		.getBlocksByMode(A3a.vpl.mode.advanced)
-		.map(function (b) { return b.name; });
 };
