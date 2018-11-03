@@ -777,44 +777,6 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		// canDrop
 		null);
 
-	if (this.teacherRole) {
-		controlBar.addSpace();
-		this.addControl(controlBar, "teacher",
-			// draw
-			function (ctx, item, dx, dy) {
-				ctx.fillStyle = self.customizationMode ? "#06f" : "navy";
-				ctx.fillRect(item.x + dx, item.y + dy,
-					canvas.dims.controlSize, canvas.dims.controlSize);
-				ctx.fillStyle = "white";
-				var x0 = item.x + dx + canvas.dims.controlSize * 0.5;
-				var y0 = item.y + dy + canvas.dims.controlSize * 0.4;
-				var r = canvas.dims.controlSize * 0.27;
-				ctx.beginPath();
-				ctx.moveTo(x0 + r * Math.cos(0.1), y0 + r * Math.sin(0.2));
-				for (var i = 1; i < 6; i++) {
-					ctx.lineTo(x0 + r * Math.cos(i * Math.PI / 3 + 0.2), y0 + r * Math.sin(i * Math.PI / 3 + 0.2));
-				}
-				ctx.closePath();
-				ctx.arc(x0, y0, r * 0.5, 0, 2 * Math.PI, true);
-				ctx.fill();
-				ctx.fillStyle = self.customizationMode ? "white" : "#44a";
-				ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.1,
-					item.y + dy + canvas.dims.controlSize * 0.8,
-					canvas.dims.controlSize * 0.8,
-					canvas.dims.controlSize * 0.1);
-			},
-			// mousedown
-			function (data, x, y, ev) {
-				self.customizationMode = !self.customizationMode;
-				return 0;
-			},
-			// doDrop
-			null,
-			// canDrop
-			null,
-			true);
-	}
-
 	/** Draw control for undo (back arrow) or redo (flipped)
 		@param {CanvasRenderingContext2D} ctx canvas 2d context
 		@param {number} x
@@ -852,7 +814,6 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		ctx.stroke();
 		ctx.restore();
 	}
-
 
 	controlBar.addStretch();
 
@@ -1141,6 +1102,44 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				? draggedItem.data.eventHandlerContainer !== null && !draggedItem.data.locked
 				: !draggedItem.data.locked;
 		});
+
+	if (this.teacherRole) {
+		controlBar.addStretch();
+		this.addControl(controlBar, "teacher",
+			// draw
+			function (ctx, item, dx, dy) {
+				ctx.fillStyle = self.customizationMode ? "#f55" : "#c00";
+				ctx.fillRect(item.x + dx, item.y + dy,
+					canvas.dims.controlSize, canvas.dims.controlSize);
+				ctx.fillStyle = "white";
+				var x0 = item.x + dx + canvas.dims.controlSize * 0.5;
+				var y0 = item.y + dy + canvas.dims.controlSize * 0.4;
+				var r = canvas.dims.controlSize * 0.27;
+				ctx.beginPath();
+				ctx.moveTo(x0 + r * Math.cos(0.1), y0 + r * Math.sin(0.2));
+				for (var i = 1; i < 6; i++) {
+					ctx.lineTo(x0 + r * Math.cos(i * Math.PI / 3 + 0.2), y0 + r * Math.sin(i * Math.PI / 3 + 0.2));
+				}
+				ctx.closePath();
+				ctx.arc(x0, y0, r * 0.5, 0, 2 * Math.PI, true);
+				ctx.fill();
+				ctx.fillStyle = self.customizationMode ? "white" : "#c66";
+				ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.1,
+					item.y + dy + canvas.dims.controlSize * 0.8,
+					canvas.dims.controlSize * 0.8,
+					canvas.dims.controlSize * 0.1);
+			},
+			// mousedown
+			function (data, x, y, ev) {
+				self.customizationMode = !self.customizationMode;
+				return 0;
+			},
+			// doDrop
+			null,
+			// canDrop
+			null,
+			true);
+	}
 
 	controlBar.calcLayout(canvas.dims.margin, canvasSize.width - canvas.dims.margin,
 		canvas.dims.controlSize,
