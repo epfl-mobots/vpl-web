@@ -446,7 +446,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () { return [0, 0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop(true);
+				canvas.robotTop({withWheels: true});
 				canvas.buttons(buttons, block.param, {cross: true});
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
@@ -523,7 +523,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			},
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop(true);
+				canvas.robotTop({withWheels: true});
 				canvas.buttons(buttons, block.param, {cross: true});
 				canvas.slider(/** @type {number} */(block.param[2]), 0.02, false,
 					"red", A3a.vpl.draw.levelType.high);
@@ -628,7 +628,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			},
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop(true);
+				canvas.robotTop({withWheels: true});
 				canvas.buttons(buttons, block.param, {cross: true});
 				canvas.slider(/** @type {number} */(block.param[2]), 0, false,
 					"black", A3a.vpl.draw.levelType.low);
@@ -1235,7 +1235,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		defaultParam: function () { return [0, 0, 0]; },
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
-			canvas.robotTop(false, null, null, null, block.param);
+			canvas.robotTop({rgb: block.param});
 			canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
 			canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
 			canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
@@ -1300,7 +1300,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () { return [0, 0, 0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop(false, null, null, null, block.param);
+				canvas.robotTop({rgb: block.param});
 				canvas.buttons(buttons, [
 					block.param[0] < 1 ? -2 : 0,
 					block.param[0] > -1 ? -2 : 0
@@ -1368,12 +1368,15 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			var tr = canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
-			canvas.robotTop(true, 0.45,
-				tr.phi,
-				[
+			canvas.robotTop({
+				withWheels: true,
+				scale: 0.45,
+				rotation: tr.phi,
+				translation: [
 					tr.x + 0.13 * canvas.dims.blockSize * Math.sin(tr.phi),
 					tr.y + 0.13 * canvas.dims.blockSize * Math.cos(tr.phi)
-				]);
+				]
+			});
 			canvas.ctx.save();
 			canvas.ctx.globalAlpha = 0.2;
 			canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
@@ -1450,12 +1453,15 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			var tr = canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
-			canvas.robotTop(true, 0.45,
-				tr.phi,
-				[
+			canvas.robotTop({
+				withWheels: true,
+				scale: 0.45,
+				rotation: tr.phi,
+				translation: [
 					tr.x + 0.13 * canvas.dims.blockSize * Math.sin(tr.phi),
 					tr.y + 0.13 * canvas.dims.blockSize * Math.cos(tr.phi)
-				]);
+				]
+			});
 			canvas.ctx.save();
 			canvas.ctx.globalAlpha = 0.2;
 			canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
@@ -1562,7 +1568,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () { return [0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop(true, 0.45);
+				canvas.robotTop({withWheels: true, scale: 0.45});
 				canvas.buttons(buttons, [
 					block.param[0] === 0 ? 1 : -2,
 					block.param[0] === 1 ? 1 : -2,
@@ -1605,7 +1611,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () { return [0, 0, 0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop(false, null, null, null, block.param);
+				canvas.robotTop({rgb: block.param});
 				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
 				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
 				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
@@ -1676,7 +1682,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () { return [0, 0, 0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop(false, null, null, null, block.param);
+				canvas.robotTop({rgb: block.param});
 				canvas.buttons(buttons, [
 					block.param[0] < 1 ? -2 : 0,
 					block.param[0] > -1 ? -2 : 0
@@ -1749,7 +1755,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () { return [0, 0, 0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop(true, null, null, null, block.param);
+				canvas.robotTop({withWheels: true, rgb: block.param});
 				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
 				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
 				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
@@ -1793,6 +1799,104 @@ A3a.vpl.BlockTemplate.lib =	[
 		};
 	})()),
 	new A3a.vpl.BlockTemplate((function () {
+		return {
+			name: "bottom-left color",
+			modes: [A3a.vpl.mode.custom],
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0, 0]; },
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop({withWheels: true, rgb: block.param, side: "left"});
+				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
+				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
+				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 0;
+				}
+				if (canvas.sliderCheck(0, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 1;
+				}
+				if (canvas.sliderCheck(-0.3, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 2;
+				}
+				return null;
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
+			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+				var val = canvas.sliderDrag(false, width, height, left, top, ev);
+				block.param[dragIndex] = Math.max(0, Math.min(1, val));
+			},
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				return {
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.initOutputs
+					],
+					statement:
+						"call leds.bottom.left(" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						")\n"
+				};
+			}
+		};
+	})()),
+	new A3a.vpl.BlockTemplate((function () {
+		return {
+			name: "bottom-right color",
+			modes: [A3a.vpl.mode.custom],
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0, 0]; },
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop({withWheels: true, rgb: block.param, side: "right"});
+				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
+				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
+				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 0;
+				}
+				if (canvas.sliderCheck(0, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 1;
+				}
+				if (canvas.sliderCheck(-0.3, false, width, height, left, top, ev)) {
+					block.prepareChange();
+					return 2;
+				}
+				return null;
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
+			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+				var val = canvas.sliderDrag(false, width, height, left, top, ev);
+				block.param[dragIndex] = Math.max(0, Math.min(1, val));
+			},
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				return {
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.initOutputs
+					],
+					statement:
+						"call leds.bottom.right(" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						")\n"
+				};
+			}
+		};
+	})()),
+	new A3a.vpl.BlockTemplate((function () {
 		var sz = 1.4;
 		var buttons = [
 			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
@@ -1812,7 +1916,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () { return [0, 0, 0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop(true, null, null, null, block.param);
+				canvas.robotTop({withWheels: true, rgb: block.param});
 				canvas.buttons(buttons, [
 					block.param[0] < 1 ? -2 : 0,
 					block.param[0] > -1 ? -2 : 0
@@ -1862,6 +1966,154 @@ A3a.vpl.BlockTemplate.lib =	[
 						"call leds.bottom.left(" +
 						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
 						")\n" +
+						"call leds.bottom.right(" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						")\n"
+				};
+			}
+		};
+	})()),
+	new A3a.vpl.BlockTemplate((function () {
+		var sz = 1.4;
+		var buttons = [
+			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
+			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
+			{sh: "r", x: -0.3, y: 0, size: sz, str: "red", fillStyle: "red", strokeStyle: "white"},
+			{sh: "r", x: 0, y: 0, size: sz, str: "green", fillStyle: "#0c0", strokeStyle: "@0c0"},
+			{sh: "r", x: 0.3, y: 0, size: sz, str: "yellow", fillStyle: "yellow", strokeStyle: "silver"},
+			{sh: "r", x: -0.3, y: -0.3, size: sz, str: "blue", fillStyle: "blue", strokeStyle: "white"},
+			{sh: "r", x: 0, y: -0.3, size: sz, str: "magenta", fillStyle: "magenta", strokeStyle: "white"},
+			{sh: "r", x: 0.3, y: -0.3, size: sz, str: "cyan", fillStyle: "cyan", strokeStyle: "white"},
+		];
+		return {
+			name: "bottom-left color 8",
+			modes: [A3a.vpl.mode.custom],
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0, 0]; },
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop({withWheels: true, rgb: block.param, side: "left"});
+				canvas.buttons(buttons, [
+					block.param[0] < 1 ? -2 : 0,
+					block.param[0] > -1 ? -2 : 0
+				]);
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					switch (i) {
+					case 0:
+						block.param = [0, 0, 0];
+						break;
+					case 1:
+						block.param = [1, 1, 1];
+						break;
+					case 2:
+						block.param = [1, 0, 0];
+						break;
+					case 3:
+						block.param = [0, 1, 0];
+						break;
+					case 4:
+						block.param = [1, 1, 0];
+						break;
+					case 5:
+						block.param = [0, 0, 1];
+						break;
+					case 6:
+						block.param = [1, 0, 1];
+						break;
+					case 7:
+						block.param = [0, 1, 1];
+						break;
+					}
+				}
+				return i;
+			},
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				return {
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.initOutputs
+					],
+					statement:
+						"call leds.bottom.left(" +
+						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+						")\n"
+				};
+			}
+		};
+	})()),
+	new A3a.vpl.BlockTemplate((function () {
+		var sz = 1.4;
+		var buttons = [
+			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
+			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
+			{sh: "r", x: -0.3, y: 0, size: sz, str: "red", fillStyle: "red", strokeStyle: "white"},
+			{sh: "r", x: 0, y: 0, size: sz, str: "green", fillStyle: "#0c0", strokeStyle: "@0c0"},
+			{sh: "r", x: 0.3, y: 0, size: sz, str: "yellow", fillStyle: "yellow", strokeStyle: "silver"},
+			{sh: "r", x: -0.3, y: -0.3, size: sz, str: "blue", fillStyle: "blue", strokeStyle: "white"},
+			{sh: "r", x: 0, y: -0.3, size: sz, str: "magenta", fillStyle: "magenta", strokeStyle: "white"},
+			{sh: "r", x: 0.3, y: -0.3, size: sz, str: "cyan", fillStyle: "cyan", strokeStyle: "white"},
+		];
+		return {
+			name: "bottom-right color 8",
+			modes: [A3a.vpl.mode.custom],
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0, 0]; },
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop({withWheels: true, rgb: block.param, side: "right"});
+				canvas.buttons(buttons, [
+					block.param[0] < 1 ? -2 : 0,
+					block.param[0] > -1 ? -2 : 0
+				]);
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					switch (i) {
+					case 0:
+						block.param = [0, 0, 0];
+						break;
+					case 1:
+						block.param = [1, 1, 1];
+						break;
+					case 2:
+						block.param = [1, 0, 0];
+						break;
+					case 3:
+						block.param = [0, 1, 0];
+						break;
+					case 4:
+						block.param = [1, 1, 0];
+						break;
+					case 5:
+						block.param = [0, 0, 1];
+						break;
+					case 6:
+						block.param = [1, 0, 1];
+						break;
+					case 7:
+						block.param = [0, 1, 1];
+						break;
+					}
+				}
+				return i;
+			},
+			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
+			genCode: function (block) {
+				return {
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.initOutputs
+					],
+					statement:
 						"call leds.bottom.right(" +
 						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
 						")\n"

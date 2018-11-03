@@ -203,14 +203,17 @@ A3a.vpl.Canvas.prototype.text = function (str, opt) {
 };
 
 /** Draw the robot seen from above
-	@param {?boolean=} withWheels true to display wheels
-	@param {?number=} scale scale factor (<1 to shrink)
-	@param {?number=} rot robot rotation around its center
-	@param {?Array.<number>=} trans translation [xLeft,yUp]
-	@param {?Array.<number>=} rgb
+	@param {{
+		withWheels: (boolean|undefined),
+		scale: (number|undefined),
+		rotation: (number|undefined),
+		translation: (Array.<number>|undefined),
+		rgb: (Array.<number>|undefined),
+		side: (string|undefined)
+	}=} options
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.robotTop = function (withWheels, scale, rot, trans, rgb) {
+A3a.vpl.Canvas.prototype.robotTop = function (options) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	ctx.save();
@@ -220,46 +223,57 @@ A3a.vpl.Canvas.prototype.robotTop = function (withWheels, scale, rot, trans, rgb
 	ctx.rect(0, 0, this.dims.blockSize, this.dims.blockSize);
 	ctx.clip();
 
-	if (scale || rot) {
-		if (trans) {
-			ctx.translate(-trans[0], -trans[1]);
+	if (options && (options.scale || options.rotation)) {
+		if (options.translation) {
+			ctx.translate(-options.translation[0], -options.translation[1]);
 		}
 		ctx.translate(0.5 * dims.blockSize,
 			0.5 * dims.blockSize);
-		if (scale) {
-			ctx.scale(scale, scale);
+		if (options.scale) {
+			ctx.scale(options.scale, options.scale);
 		}
-		if (rot) {
-			ctx.rotate(-rot);
+		if (options.rotation) {
+			ctx.rotate(-options.rotation);
 		}
 		ctx.translate(-0.5 * dims.blockSize,
 			-0.5 * dims.blockSize);
 	}
 	ctx.beginPath();
-	ctx.moveTo(dims.blockLineWidth,
+	// middle rear
+	ctx.moveTo(dims.blockSize * 0.5,
 		dims.blockSize - dims.blockLineWidth);
-	ctx.lineTo(dims.blockSize - dims.blockLineWidth,
-		dims.blockSize - dims.blockLineWidth);
-	ctx.lineTo(dims.blockSize - dims.blockLineWidth,
-		dims.blockSize * 0.25);
-	ctx.bezierCurveTo(dims.blockSize * 0.8,
-		dims.blockLineWidth,
-		dims.blockSize * 0.52,
-		dims.blockLineWidth,
-		dims.blockSize * 0.5,
-		dims.blockLineWidth);
-	ctx.bezierCurveTo(dims.blockSize * 0.48,
-		dims.blockLineWidth,
-		dims.blockSize * 0.2,
-		dims.blockLineWidth,
-		dims.blockLineWidth,
-		dims.blockSize * 0.25);
+	if (!options || options.side !== "left") {
+		// right side
+		ctx.lineTo(dims.blockSize - dims.blockLineWidth,
+			dims.blockSize - dims.blockLineWidth);
+		ctx.lineTo(dims.blockSize - dims.blockLineWidth,
+			dims.blockSize * 0.25);
+		ctx.bezierCurveTo(dims.blockSize * 0.8,
+			dims.blockLineWidth,
+			dims.blockSize * 0.52,
+			dims.blockLineWidth,
+			dims.blockSize * 0.5,
+			dims.blockLineWidth);
+	}
+	if (!options || options.side !== "right") {
+		// left side
+		ctx.lineTo(dims.blockSize * 0.5,
+			dims.blockLineWidth);
+		ctx.bezierCurveTo(dims.blockSize * 0.48,
+			dims.blockLineWidth,
+			dims.blockSize * 0.2,
+			dims.blockLineWidth,
+			dims.blockLineWidth,
+			dims.blockSize * 0.25);
+		ctx.lineTo(dims.blockLineWidth,
+			dims.blockSize - dims.blockLineWidth);
+	}
 	ctx.closePath();
-	if (rgb) {
-		rgb = [
-			rgb[0],
-			Math.max(0.2 + 0.8 * rgb[1], rgb[2] / 2),
-			rgb[2]
+	if (options && options.rgb) {
+		var rgb = [
+			options.rgb[0],
+			Math.max(0.2 + 0.8 * options.rgb[1], options.rgb[2] / 2),
+			options.rgb[2]
 		];
 		var max = Math.max(rgb[0], Math.max(rgb[1], rgb[2]));
 		ctx.fillStyle = "rgb(" +
@@ -271,12 +285,12 @@ A3a.vpl.Canvas.prototype.robotTop = function (withWheels, scale, rot, trans, rgb
 		ctx.fillStyle = "white";
 	}
 	ctx.fill();
-	if (rgb) {
+	if (options && options.rgb) {
 		ctx.strokeStyle = "white";
 		ctx.lineWidth = dims.blockLineWidth;
 		ctx.stroke();
 	}
-	if (withWheels) {
+	if (options && options.withWheels) {
 		ctx.fillStyle = "black";
 		ctx.fillRect(0, dims.blockSize * 0.6,
 			dims.blockSize * 0.1, dims.blockSize * 0.35);
@@ -692,7 +706,7 @@ A3a.vpl.Canvas.prototype.robotYaw = function (angle) {
 	ctx.rotate(phi);
 	this.accelerometerHandle();
 	ctx.translate(-dims.blockSize / 2, -dims.blockSize / 2);
-	this.robotTop(true, 0.45);
+	this.robotTop({withWheels: true, scale: 0.45});
 	ctx.restore();
 };
 
