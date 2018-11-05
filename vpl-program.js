@@ -41,6 +41,18 @@ A3a.vpl.Program.basicBlocks = [];
 /** @type {Array.<string>} */
 A3a.vpl.Program.advancedBlocks = [];
 
+/** Reset basic and advanced blocks
+	@return {void}
+*/
+A3a.vpl.Program.resetBlockLib = function () {
+	A3a.vpl.Program.basicBlocks = A3a.vpl.BlockTemplate
+		.getBlocksByMode(A3a.vpl.mode.basic)
+		.map(function (b) { return b.name; });
+	A3a.vpl.Program.advancedBlocks = A3a.vpl.BlockTemplate
+		.getBlocksByMode(A3a.vpl.mode.advanced)
+		.map(function (b) { return b.name; });
+};
+
 /** Clear program
 	@return {void}
 */

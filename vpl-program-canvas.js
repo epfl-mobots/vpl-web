@@ -1103,8 +1103,65 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				: !draggedItem.data.locked;
 		});
 
+	function drawHexagonalNut(ctx, x0, y0, r) {
+		ctx.beginPath();
+		ctx.moveTo(x0 + r * Math.cos(0.1), y0 + r * Math.sin(0.2));
+		for (var i = 1; i < 6; i++) {
+			ctx.lineTo(x0 + r * Math.cos(i * Math.PI / 3 + 0.2), y0 + r * Math.sin(i * Math.PI / 3 + 0.2));
+		}
+		ctx.closePath();
+		ctx.arc(x0, y0, r * 0.5, 0, 2 * Math.PI, true);
+		ctx.fill();
+	}
+
 	if (this.teacherRole) {
 		controlBar.addStretch();
+		if (self.customizationMode) {
+			this.addControl(controlBar, "teacher-reset",
+				// draw
+				function (ctx, item, dx, dy) {
+					ctx.fillStyle = "#c00";
+					ctx.fillRect(item.x + dx, item.y + dy,
+						canvas.dims.controlSize, canvas.dims.controlSize);
+					ctx.beginPath();
+					ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.25,
+						item.y + dy + canvas.dims.controlSize * 0.2);
+					ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.25,
+						item.y + dy + canvas.dims.controlSize * 0.8);
+					ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
+						item.y + dy + canvas.dims.controlSize * 0.8);
+					ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
+						item.y + dy + canvas.dims.controlSize * 0.3);
+					ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.65,
+						item.y + dy + canvas.dims.controlSize * 0.2);
+					ctx.closePath();
+					ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.65,
+						item.y + dy + canvas.dims.controlSize * 0.2);
+					ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.65,
+						item.y + dy + canvas.dims.controlSize * 0.3);
+					ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
+						item.y + dy + canvas.dims.controlSize * 0.3);
+					ctx.strokeStyle = "white";
+					ctx.lineWidth = canvas.dims.blockLineWidth;
+					ctx.stroke();
+					ctx.fillStyle = "white";
+					drawHexagonalNut(ctx,
+						item.x + dx + canvas.dims.controlSize * 0.63,
+						item.y + dy + canvas.dims.controlSize * 0.7,
+						canvas.dims.controlSize * 0.2);
+				},
+				// mousedown
+				function (data, x, y, ev) {
+					A3a.vpl.Program.resetBlockLib();
+					self.new();
+					return 0;
+				},
+				// doDrop
+				null,
+				// canDrop
+				null,
+				true);
+		}
 		this.addControl(controlBar, "teacher",
 			// draw
 			function (ctx, item, dx, dy) {
@@ -1112,17 +1169,10 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				ctx.fillRect(item.x + dx, item.y + dy,
 					canvas.dims.controlSize, canvas.dims.controlSize);
 				ctx.fillStyle = "white";
-				var x0 = item.x + dx + canvas.dims.controlSize * 0.5;
-				var y0 = item.y + dy + canvas.dims.controlSize * 0.4;
-				var r = canvas.dims.controlSize * 0.27;
-				ctx.beginPath();
-				ctx.moveTo(x0 + r * Math.cos(0.1), y0 + r * Math.sin(0.2));
-				for (var i = 1; i < 6; i++) {
-					ctx.lineTo(x0 + r * Math.cos(i * Math.PI / 3 + 0.2), y0 + r * Math.sin(i * Math.PI / 3 + 0.2));
-				}
-				ctx.closePath();
-				ctx.arc(x0, y0, r * 0.5, 0, 2 * Math.PI, true);
-				ctx.fill();
+				drawHexagonalNut(ctx,
+					item.x + dx + canvas.dims.controlSize * 0.5,
+					item.y + dy + canvas.dims.controlSize * 0.4,
+					canvas.dims.controlSize * 0.27);
 				ctx.fillStyle = self.customizationMode ? "white" : "#c66";
 				ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.1,
 					item.y + dy + canvas.dims.controlSize * 0.8,
