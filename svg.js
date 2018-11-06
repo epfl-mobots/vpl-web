@@ -735,7 +735,7 @@ SVG.prototype.draw = function (ctx, options) {
 				// local attributes
 				props.cx = el.attributes["cx"] ? parseFloat(el.getAttribute("cx")) : props.cx || 0;
 				props.cy = el.attributes["cy"] ? parseFloat(el.getAttribute("cy")) : props.cy || 0;
-				props.r = el.attributes["r"] ? parseFloat(el.getAttribute("cx")) : props.r || 0;
+				props.r = el.attributes["r"] ? parseFloat(el.getAttribute("r")) : props.r || 0;
 
 				// local children
 				props.stops = props.stops || [];
