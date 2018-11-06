@@ -49,8 +49,88 @@ document.addEventListener("touchend", function (e) {
 
 var textEditor;
 
-window.addEventListener("load", function () {
+/** Load resources via XMLHttpRequest (requires http(s), x-origin blocking with file)
+	@param {string} rootFilename filename of the ui json file
+	@param {function(Object):Array.<string>} getAuxiliaryFilenames get a list of
+	filenames of resources referenced in the ui file (svg etc.)
+	@param {function(Object,Object):void} onLoad function called asynchronously once
+	everything has been loaded; first arg is the parsed ui json file, second arg is an
+	object with properties for all resources (key=filename, value=text content)
+	@param {function():void} onError function called asynchronously upon error
+	@return {void}
+*/
+function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, onError) {
+	var rsrc = {};
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", function () {
+		if (xhr.status === 200) {
+			rsrc[rootFilename] = xhr.responseText;
+			var uiConfig = /** @type {Object} */(JSON.parse(xhr.responseText));
+			var auxFiles = getAuxiliaryFilenames(uiConfig);
+			var nRemaining = auxFiles.length;
+			var error = false;
+			auxFiles.forEach(function (f) {
+				var xhr = new XMLHttpRequest();
+				xhr.addEventListener("load", function () {
+					if (xhr.status === 200) {
+						rsrc[f] = xhr.responseText;
+						nRemaining--;
+						if (!error && nRemaining === 0) {
+							onLoad(uiConfig, rsrc);
+						}
+					} else if (!error) {
+						error = true;
+						onError();
+					}
+				});
+				xhr.addEventListener("error", function () {
+					if (!error) {
+						error = true;
+						onError();
+					}
+				});
+				xhr.open("GET", f);
+				xhr.send();
+			});
+		} else {
+			onError();
+		}
+	});
+	xhr.addEventListener("error", onError);
+	xhr.open("GET", rootFilename);
+	xhr.send();
+}
 
+/** Load resources in script elements
+	@param {string} rootFilename filename (script id) of the ui json file
+	@param {function(Object):Array.<string>} getAuxiliaryFilenames get a list of
+	filenames of resources referenced in the ui file (svg etc.)
+	@param {function(Object,Object):void} onLoad function called synchronously once
+	everything has been loaded; first arg is the parsed ui json file, second arg is an
+	object with properties for all resources (key=filename, value=text content)
+	@param {function():void} onError function called synchronously upon error
+	@return {void}
+*/
+function vplLoadResourcesInScripts(rootFilename, getAuxiliaryFilenames, onLoad, onError) {
+	try {
+		var txt = document.getElementById(rootFilename).textContent;
+		var uiConfig = /** @type {Object} */(JSON.parse(txt));
+		var rsrc = {};
+		uiConfig["svgFilenames"].forEach(function (filename) {
+			txt = document.getElementById(filename).textContent;
+			rsrc[filename] = txt;
+		});
+		onLoad(uiConfig, rsrc);
+	} catch (e) {
+		onError();
+	}
+}
+
+/** Setup everything for vpl
+	@param {Object=} uiConfig
+	@return {void}
+*/
+function vplSetup(uiConfig) {
 	/** Get value corresponding to key in the URI query
 		@param {string} key
 		@return {string}
@@ -77,16 +157,8 @@ window.addEventListener("load", function () {
 
 	// general settings
 	var isClassic = getQueryOption("appearance") === "classic";
-	if (!isClassic) {
+	if (!isClassic && uiConfig) {
 		try {
-			var txt = document.getElementById("ui.json").textContent;
-			var uiConfig = /** @type {Object} */(JSON.parse(txt));
-			var svg = {};
-			uiConfig["svgFilenames"].forEach(function (filename) {
-				txt = document.getElementById(filename).textContent;
-				svg[filename] = txt;
-			});
-			uiConfig.svg = svg;
 			A3a.vpl.patchSVG(uiConfig);
 		} catch (e) {}
 	}
@@ -241,6 +313,28 @@ window.addEventListener("load", function () {
 		document.getElementById("editor").textContent = window["vplProgram"].getCode();
 	}
 	srcToolbarRender(window["srcTBCanvas"], window["vplProgram"].noVpl);
+}
+
+window.addEventListener("load", function () {
+	(/^https?:\/\//.test(document.location.href) ? vplLoadResourcesWithXHR : vplLoadResourcesInScripts)(
+		"ui.json",
+		function (obj) {
+			// get subfiles
+			return obj["svgFilenames"];
+		},
+		function (uiConfig, rsrc) {
+			// success
+			uiConfig.svg = {};
+			uiConfig["svgFilenames"].forEach(function (filename) {
+				uiConfig.svg[filename] = rsrc[filename];
+			});
+			vplSetup(uiConfig);
+		},
+		function () {
+			// error
+			vplSetup();
+		}
+	);
 }, false);
 
 function srcToolbarHeight(canvas) {
@@ -470,7 +564,7 @@ function srcToolbarRender(canvas, noVpl) {
 	}
 
 	canvas.redraw();
-};
+}
 
 function vplResize() {
 	var width = window.innerWidth;

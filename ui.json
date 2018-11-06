@@ -13,10 +13,10 @@
 			"modes": ["basic", "advanced"],
 			"svg": [
 				{
-					"uri": "blocks.svg#Ev_Bg_buttons"
+					"uri": "Blocks.svg#Ev_Bg_buttons"
 				},
 				{
-					"uri": "blocks.svg#Ev_Buttons"
+					"uri": "Blocks.svg#Ev_Buttons"
 				}
 			],
 			"defaultParameters": [false, false, false, false, false],
@@ -58,13 +58,13 @@
 			"modes": ["basic", "advanced"],
 			"svg": [
 				{
-					"uri": "blocks.svg#Rot360Rail"
+					"uri": "Blocks.svg#Rot360Rail"
 				},
 				{
-					"uri": "blocks.svg#ThymioAcc1"
+					"uri": "Blocks.svg#ThymioAcc1"
 				},
 				{
-					"uri": "blocks.svg#Rot360_Handle"
+					"uri": "Blocks.svg#Rot360_Handle"
 				}
 			],
 			"defaultParameters": [0],
@@ -91,7 +91,7 @@
 			"modes": ["basic", "advanced"],
 			"svg": [
 				{
-					"uri": "blocks.svg#Ac_Wheels"
+					"uri": "Blocks.svg#Ac_Wheels"
 				}
 			],
 			"diffwheelmotion": "ThymioTop_wheels_mini",
@@ -124,7 +124,7 @@
 			"modes": ["basic", "advanced"],
 			"svg": [
 				{
-					"uri": "blocks.svg#Ac_Directions"
+					"uri": "Blocks.svg#Ac_Directions"
 				}
 			],
 			"defaultParameters": [0],
@@ -186,6 +186,6 @@
 	],
 
 	"svgFilenames": [
-		"blocks.svg"
+		"Blocks.svg"
 	]
 }
