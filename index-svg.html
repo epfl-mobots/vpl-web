@@ -1409,28 +1409,7 @@ window["vplOnRun"] = function (code) {
 <script src="a3a-nodebase.js"></script>
 <script src="a3a-nodeproxy.js"></script>
 
-<script>
-
-window["vplRunFunction"] = function (code) {
-	window["vplNode"].putA3aCodeAsync(code);
-};
-window["vplRunFunction"]["init"] = function () {
-	// initialize the list of nodes
-	try {
-		var origin = document.location.origin.slice(0, 5) === "file:"
-			? "http://127.0.0.1:3000"
-			: document.location.origin;
-		A3a.NodeProxy.init(origin, function () {
-			window["vplNode"] = A3a.Node.getNodeList()[0];
-			window["vplCanvas"]["update"]();
-		});
-	} catch (e) {
-		console.info(e);
-		window["vplCanvas"]["update"]();
-	}
-};
-
-</script>
+<script src="vpl-thymio.js"></script>
 
 </head>
 

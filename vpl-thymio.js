@@ -19,7 +19,7 @@ window["vplRunFunction"] = function (code) {
 window["vplRunFunction"]["init"] = function () {
 	// initialize the list of nodes
 	try {
-		var origin = document.location.origin.slice(0, 5) === "file:"
+		var origin = document.location.origin.slice(0, 5) !== "http:"
 			? "http://127.0.0.1:3000"
 			: document.location.origin;
 		A3a.NodeProxy.init(origin, function () {
