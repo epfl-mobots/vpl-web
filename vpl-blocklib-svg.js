@@ -434,12 +434,31 @@ A3a.vpl.patchSVG = function (uiConfig) {
 	*/
 	function substInline(fmt, block, i) {
 		while (true) {
-			var r = /{([^}]*)}/.exec(fmt);
-			if (r == null) {
+			var leftIx = fmt.indexOf("{");
+			if (leftIx < 0) {
 				break;
 			}
-			var result = new Function("$", "i", "return " + r[1] + ";")(block.param, i);
-			fmt = fmt.slice(0, r.index) + result + fmt.slice(r.index + r[0].length);
+			var depth = 1;
+			var rightIx = fmt.indexOf("}", leftIx + 1);
+			for (var i = leftIx + 1; rightIx >= 0 && i < fmt.length; ) {
+				var nextLeftIx = fmt.indexOf("{", i);
+				if (nextLeftIx >= 0 && nextLeftIx < rightIx) {
+					depth++;
+					i = nextLeftIx + 1;
+				} else {
+					depth--;
+					if (depth === 0) {
+						break;
+					}
+					i = rightIx + 1;
+					rightIx = fmt.indexOf("}", i);
+				}
+			}
+			if (depth > 0) {
+				break;
+			}
+			var result = new Function("$", "i", "return " + fmt.slice(leftIx + 1, rightIx) + ";")(block.param, i);
+			fmt = fmt.slice(0, leftIx) + result + fmt.slice(rightIx + 1);
 		}
 		return fmt;
 	}
@@ -516,7 +535,7 @@ A3a.vpl.patchSVG = function (uiConfig) {
 						clause += (clause.length > 0 ? " and " : "") + cl;
 					}
 				});
-				c.clause = clause || "1 == 1";
+				c.clause = /** @type {string} */(clause || "1 == 1");
 			} else if (b["aseba"] && b["aseba"]["clause"]) {
  				c.clause = substInline(b["aseba"]["clause"], block);
 			}

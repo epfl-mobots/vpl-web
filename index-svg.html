@@ -195,6 +195,50 @@
 				"statement":
 					"motor.left.target = {[0,200,250,100,-150,-200,-250,-100,150][$[0]]}\nmotor.right.target = {[0,200,150,-100,-250,-200,-150,100,250][$[0]]}\n"
 			}
+		},
+		{
+			"name": "top color",
+			"type": "action",
+			"modes": ["basic", "advanced"],
+			"svg": [
+				{
+					"uri": "blocks.svg#Color_adv"
+				}
+			],
+			"defaultParameters": [0, 0, 0],
+			"sliders": [
+				{
+					"id": "Slid_red",
+					"thumbId": "Cursor_red",
+					"min": 0,
+					"max": 1
+				},
+				{
+					"id": "Slid_green",
+					"thumbId": "Cursor_green",
+					"min": 0,
+					"max": 1
+				},
+				{
+					"id": "Slid_blue",
+					"thumbId": "Cursor_blue",
+					"min": 0,
+					"max": 1
+				}
+			],
+			"aseba": {
+				"initVarDecl": [
+					"# RGB color of the top led\nvar topColor[3]\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n",
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"call leds.top({$.map(function (x) { return Math.round(32 * x); }).join(', ')})\ntopColor = [{$.map(function (x) { return Math.round(32 * x); }).join(', ')}]\n",
+				"statementWithoutInit":
+					"call leds.top({$.map(function (x) { return Math.round(32 * x); }).join(', ')})\n"
+			}
 		}
 	],
 
