@@ -108,19 +108,58 @@ A3a.vpl.Canvas.prototype.mousedownSVGRadioButtons = function (block, width, heig
 	return null;
 };
 
-/** Make style object for drawSVG with buttons and/or radiobuttons
+/** Substitute inline expressions {expr} in input string, where expr is a
+	JavaScript expression; variable $ contains the block parameters
+	@param {string} fmt
+	@param {A3a.vpl.Block} block
+	@param {number=} i parameter index in clauseAnd fragments
+	@return {string}
+*/
+A3a.vpl.Canvas.substInline = function (fmt, block, i) {
+	while (true) {
+		var leftIx = fmt.indexOf("{");
+		if (leftIx < 0) {
+			break;
+		}
+		var depth = 1;
+		var rightIx = fmt.indexOf("}", leftIx + 1);
+		for (var j = leftIx + 1; rightIx >= 0 && j < fmt.length; ) {
+			var nextLeftIx = fmt.indexOf("{", j);
+			if (nextLeftIx >= 0 && nextLeftIx < rightIx) {
+				depth++;
+				j = nextLeftIx + 1;
+			} else {
+				depth--;
+				if (depth === 0) {
+					break;
+				}
+				j = rightIx + 1;
+				rightIx = fmt.indexOf("}", j);
+			}
+		}
+		if (depth > 0) {
+			break;
+		}
+		var result = new Function("$", "i", "return " + fmt.slice(leftIx + 1, rightIx) + ";")(block.param, i);
+		fmt = fmt.slice(0, leftIx) + result + fmt.slice(rightIx + 1);
+	}
+	return fmt;
+};
+
+/** Make style object for drawSVG with buttons, radiobuttons, style
 	@param {Object} aux description of the block containing buttons, as defined in the json
-	@param {Array} param block parameters
+	@param {A3a.vpl.Block} block
 	@return {Object}
 */
-A3a.vpl.Canvas.prototype.getStyles = function (aux, param) {
+A3a.vpl.Canvas.prototype.getStyles = function (aux, block) {
 	var styles = {};
 	var nButtons = aux["buttons"] ? aux["buttons"].length : 0;
 	var nRadioButtons = aux["radiobuttons"] ? aux["radiobuttons"].length : 0;
+	var nStyles = aux["styles"] ? aux["styles"].length : 0;
 	for (var i = 0; i < nButtons; i++) {
 		var val = aux["buttons"][i]["val"];
 		var st =  aux["buttons"][i]["st"];
-		var ix = val.indexOf(param[i]);
+		var ix = val.indexOf(block.param[i]);
 		if (ix >= 0) {
 			styles[aux["buttons"][i]["id"]] = st[ix];
 		}
@@ -128,7 +167,10 @@ A3a.vpl.Canvas.prototype.getStyles = function (aux, param) {
 	for (var i = 0; i < nRadioButtons; i++) {
 		var val = aux["radiobuttons"][i]["val"];
 		var st =  aux["radiobuttons"][i]["st"];
-		styles[aux["radiobuttons"][i]["id"]] = st[param[nButtons] === val ? 1 : 0];
+		styles[aux["radiobuttons"][i]["id"]] = st[block.param[nButtons] === val ? 1 : 0];
+	}
+	for (var i = 0; i < nStyles; i++) {
+		styles[aux["styles"][i]["id"]] = A3a.vpl.Canvas.substInline(aux["styles"][i]["st"], block);
 	}
 	return styles;
 };
@@ -327,7 +369,7 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 		this.drawSVG(d.f, uiConfig.svg[d.f],
 			{
 				elementId: d.id,
-				style: this.getStyles(aux, block.param),
+				style: this.getStyles(aux, block),
 				displacement: displacements
 			});
 	}, this);
@@ -425,44 +467,6 @@ A3a.vpl.patchSVG = function (uiConfig) {
 		};
 	};
 
-	/** Substitute inline expressions {expr} in input string, where expr is a
-		JavaScript expression; variable $ contains the block parameters
-		@param {string} fmt
-		@param {A3a.vpl.Block} block
-		@param {number=} i parameter index in clauseAnd fragments
-		@return {string}
-	*/
-	function substInline(fmt, block, i) {
-		while (true) {
-			var leftIx = fmt.indexOf("{");
-			if (leftIx < 0) {
-				break;
-			}
-			var depth = 1;
-			var rightIx = fmt.indexOf("}", leftIx + 1);
-			for (var j = leftIx + 1; rightIx >= 0 && j < fmt.length; ) {
-				var nextLeftIx = fmt.indexOf("{", j);
-				if (nextLeftIx >= 0 && nextLeftIx < rightIx) {
-					depth++;
-					j = nextLeftIx + 1;
-				} else {
-					depth--;
-					if (depth === 0) {
-						break;
-					}
-					j = rightIx + 1;
-					rightIx = fmt.indexOf("}", j);
-				}
-			}
-			if (depth > 0) {
-				break;
-			}
-			var result = new Function("$", "i", "return " + fmt.slice(leftIx + 1, rightIx) + ";")(block.param, i);
-			fmt = fmt.slice(0, leftIx) + result + fmt.slice(rightIx + 1);
-		}
-		return fmt;
-	}
-
 	/** Substitute inline expressions {expr} in strings of input array, where expr is a
 		JavaScript expression; variable $ contains the block parameters
 		@param {Array.<string>} fmtArray
@@ -471,7 +475,7 @@ A3a.vpl.patchSVG = function (uiConfig) {
 	*/
 	function substInlineA(fmtArray, block) {
 		return fmtArray.map(function (fmt) {
-			return substInline(fmt, block);
+			return A3a.vpl.Canvas.substInline(fmt, block);
 		});
 	}
 
@@ -535,25 +539,25 @@ A3a.vpl.patchSVG = function (uiConfig) {
 			b["aseba"] && b["aseba"]["initVarDecl"] && (c.initVarDecl = substInlineA(b["aseba"]["initVarDecl"], block));
 			b["aseba"] && b["aseba"]["initCodeDecl"] && (c.initCodeDecl = substInlineA(b["aseba"]["initCodeDecl"], block));
 			b["aseba"] && b["aseba"]["initCodeExec"] && (c.initCodeExec = substInlineA(b["aseba"]["initCodeExec"], block));
-			b["aseba"] && b["aseba"]["sectionBegin"] && (c.sectionBegin = substInline(b["aseba"]["sectionBegin"], block));
-			b["aseba"] && b["aseba"]["sectionEnd"] && (c.sectionEnd = substInline(b["aseba"]["sectionEnd"], block));
+			b["aseba"] && b["aseba"]["sectionBegin"] && (c.sectionBegin = A3a.vpl.Canvas.substInline(b["aseba"]["sectionBegin"], block));
+			b["aseba"] && b["aseba"]["sectionEnd"] && (c.sectionEnd = A3a.vpl.Canvas.substInline(b["aseba"]["sectionEnd"], block));
 			c.sectionPriority = /** @type {number} */(b["aseba"] && b["aseba"]["sectionPriority"]) || 1;
-			b["aseba"] && b["aseba"]["clauseInit"] && (c.clauseInit = substInline(b["aseba"]["clauseInit"], block));
+			b["aseba"] && b["aseba"]["clauseInit"] && (c.clauseInit = A3a.vpl.Canvas.substInline(b["aseba"]["clauseInit"], block));
 			if (b["aseba"] && b["aseba"]["clauseAnd"]) {
 				var clause = "";
 				block.param.forEach(function (p, i) {
-					var cl = substInline(b["aseba"]["clauseAnd"], block, i);
+					var cl = A3a.vpl.Canvas.substInline(b["aseba"]["clauseAnd"], block, i);
 					if (cl) {
 						clause += (clause.length > 0 ? " and " : "") + cl;
 					}
 				});
 				c.clause = /** @type {string} */(clause || "1 == 1");
 			} else if (b["aseba"] && b["aseba"]["clause"]) {
- 				c.clause = substInline(b["aseba"]["clause"], block);
+ 				c.clause = A3a.vpl.Canvas.substInline(b["aseba"]["clause"], block);
 			}
 			c.clauseOptional = /** @type {boolean} */(b["aseba"] && b["aseba"]["clauseOptional"]) || false;
-			b["aseba"] && b["aseba"]["statement"] && (c.statement = substInline(b["aseba"]["statement"], block));
-			b["aseba"] && b["aseba"]["error"] && (c.clause = substInline(b["error"]["error"], block));
+			b["aseba"] && b["aseba"]["statement"] && (c.statement = A3a.vpl.Canvas.substInline(b["aseba"]["statement"], block));
+			b["aseba"] && b["aseba"]["error"] && (c.clause = A3a.vpl.Canvas.substInline(b["error"]["error"], block));
 			return c;
 		};
 
