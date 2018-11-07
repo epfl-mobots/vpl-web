@@ -440,18 +440,18 @@ A3a.vpl.patchSVG = function (uiConfig) {
 			}
 			var depth = 1;
 			var rightIx = fmt.indexOf("}", leftIx + 1);
-			for (var i = leftIx + 1; rightIx >= 0 && i < fmt.length; ) {
-				var nextLeftIx = fmt.indexOf("{", i);
+			for (var j = leftIx + 1; rightIx >= 0 && j < fmt.length; ) {
+				var nextLeftIx = fmt.indexOf("{", j);
 				if (nextLeftIx >= 0 && nextLeftIx < rightIx) {
 					depth++;
-					i = nextLeftIx + 1;
+					j = nextLeftIx + 1;
 				} else {
 					depth--;
 					if (depth === 0) {
 						break;
 					}
-					i = rightIx + 1;
-					rightIx = fmt.indexOf("}", i);
+					j = rightIx + 1;
+					rightIx = fmt.indexOf("}", j);
 				}
 			}
 			if (depth > 0) {
@@ -461,6 +461,18 @@ A3a.vpl.patchSVG = function (uiConfig) {
 			fmt = fmt.slice(0, leftIx) + result + fmt.slice(rightIx + 1);
 		}
 		return fmt;
+	}
+
+	/** Substitute inline expressions {expr} in strings of input array, where expr is a
+		JavaScript expression; variable $ contains the block parameters
+		@param {Array.<string>} fmtArray
+		@param {A3a.vpl.Block} block
+		@return {Array.<string>}
+	*/
+	function substInlineA(fmtArray, block) {
+		return fmtArray.map(function (fmt) {
+			return substInline(fmt, block);
+		});
 	}
 
 	// build array of block templates from definitions in uiConfig.blocks and svg in uiConfig.svg
@@ -520,12 +532,12 @@ A3a.vpl.patchSVG = function (uiConfig) {
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		var genCode = function (block) {
 			var c = {};
-			b["aseba"] && b["aseba"]["initVarDecl"] && (c.initVarDecl = substInline(b["aseba"]["initVarDecl"], block));
-			b["aseba"] && b["aseba"]["initCodeDecl"] && (c.initCodeDecl = substInline(b["aseba"]["initCodeDecl"], block));
-			b["aseba"] && b["aseba"]["initCodeExec"] && (c.initCodeExec = substInline(b["aseba"]["initCodeExec"], block));
+			b["aseba"] && b["aseba"]["initVarDecl"] && (c.initVarDecl = substInlineA(b["aseba"]["initVarDecl"], block));
+			b["aseba"] && b["aseba"]["initCodeDecl"] && (c.initCodeDecl = substInlineA(b["aseba"]["initCodeDecl"], block));
+			b["aseba"] && b["aseba"]["initCodeExec"] && (c.initCodeExec = substInlineA(b["aseba"]["initCodeExec"], block));
 			b["aseba"] && b["aseba"]["sectionBegin"] && (c.sectionBegin = substInline(b["aseba"]["sectionBegin"], block));
 			b["aseba"] && b["aseba"]["sectionEnd"] && (c.sectionEnd = substInline(b["aseba"]["sectionEnd"], block));
-			c.sectionPriority = /** @type {boolean} */(b["aseba"] && b["aseba"]["sectionPriority"]) || 1;
+			c.sectionPriority = /** @type {number} */(b["aseba"] && b["aseba"]["sectionPriority"]) || 1;
 			b["aseba"] && b["aseba"]["clauseInit"] && (c.clauseInit = substInline(b["aseba"]["clauseInit"], block));
 			if (b["aseba"] && b["aseba"]["clauseAnd"]) {
 				var clause = "";
