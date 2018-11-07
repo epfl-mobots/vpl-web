@@ -9,9 +9,12 @@
 	@constructor
 	@struct
 	@param {string} msg
+	@param {boolean=} isWarning
 */
-A3a.vpl.Error = function (msg) {
+A3a.vpl.Error = function (msg, isWarning) {
 	this.msg = msg;
+	/** @type {boolean} */
+	this.isWarning = isWarning || false;
 	this.eventError = false;
 	this.eventErrorIndices = [];
 	this.actionErrorIndices = [];

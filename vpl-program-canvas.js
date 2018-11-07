@@ -318,7 +318,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			ctx.font = Math.round(canvas.dims.blockSize * 0.3).toString() + "px sans-serif";
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
-			ctx.fillText("?", xc, yc);
+			ctx.fillText(eventHandler.error.isWarning ? "!" : "?", xc, yc);
 			ctx.beginPath();
 			var ya = y + canvas.dims.blockSize + canvas.dims.stripVertMargin + canvas.dims.interRowSpace * 0.2;
 			if (eventHandler.error.eventError) {

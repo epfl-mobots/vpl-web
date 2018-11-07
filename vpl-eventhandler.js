@@ -220,8 +220,12 @@ A3a.vpl.EventHandler.prototype.generateCode = function (andOp) {
 				var err = this.events[i].blockTemplate.validate(this.events[i]);
 				if (err) {
 					err.addEventError([i]);
-					this.error = err;
-					return {error: err};
+					if (!err.isWarning || !this.error) {
+						this.error = err;
+					}
+					if (!err.isWarning) {
+						return {error: err};
+					}
 				}
 			}
 		}
@@ -253,7 +257,7 @@ A3a.vpl.EventHandler.prototype.generateCode = function (andOp) {
 			for (var j = i + 1; j < this.actions.length; j++) {
 				if (this.actions[j].blockTemplate.type === A3a.vpl.blockType.action &&
 					this.actions[j].blockTemplate === this.actions[i].blockTemplate) {
-					var err = new A3a.vpl.Error("Duplicate action blocks");
+					var err = new A3a.vpl.Error("Duplicate action blocks", true);
 					err.addActionError(i);
 					err.addActionError(j);
 					this.error = err;

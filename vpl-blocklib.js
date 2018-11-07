@@ -109,7 +109,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						return null;
 					}
 				}
-				return new A3a.vpl.Error("No button specified");
+				return new A3a.vpl.Error("No button specified", true);
 			},
 			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
@@ -173,7 +173,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						return null;
 					}
 				}
-				return new A3a.vpl.Error("No proximity sensor specified");
+				return new A3a.vpl.Error("No proximity sensor specified", true);
 			},
 			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 			changeMode: function (block, mode) {
@@ -279,7 +279,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						return null;
 					}
 				}
-				return new A3a.vpl.Error("No sensor specified");
+				return new A3a.vpl.Error("No sensor specified", true);
 			},
 			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 			changeMode: function (block, mode) {
@@ -386,7 +386,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						return null;
 					}
 				}
-				return new A3a.vpl.Error("No sensor specified");
+				return new A3a.vpl.Error("No sensor specified", true);
 			},
 			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 			changeMode: function (block, mode) {
@@ -463,7 +463,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				if (block.param[0] || block.param[1]) {
 					return null;
 				}
-				return new A3a.vpl.Error("No ground sensor specified");
+				return new A3a.vpl.Error("No ground sensor specified", true);
 			},
 			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 			changeMode: function (block, mode) {
@@ -562,7 +562,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				if (block.param[0] || block.param[1]) {
 					return null;
 				}
-				return new A3a.vpl.Error("No ground sensor specified");
+				return new A3a.vpl.Error("No ground sensor specified", true);
 			},
 			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 			changeMode: function (block, mode) {
@@ -661,7 +661,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				if (block.param[0] || block.param[1]) {
 					return null;
 				}
-				return new A3a.vpl.Error("No ground sensor specified");
+				return new A3a.vpl.Error("No ground sensor specified", true);
 			},
 			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
 			changeMode: function (block, mode) {
