@@ -72,7 +72,8 @@
 				{
 					"id": "Rot360",
 					"centerId": "Rot360",
-					"thumbId": "Btn2_HandleAcc0"
+					"thumbId": "Btn2_HandleAcc0",
+					"numSteps": 24
 				}
 			],
 			"aseba": {

@@ -207,9 +207,10 @@ A3a.vpl.Canvas.prototype.getDisplacements = function (aux, svgFilename, param) {
 	if (aux["rotating"] != undefined) {
 		for (var i = 0; i < aux["rotating"].length; i++) {
 			var rotatingAux = aux["rotating"][i];
+			var f = rotatingAux["numSteps"] ? 2 * Math.PI / parseInt(rotatingAux["numSteps"], 10) : 1;
 			// rotate element
 			displacements[rotatingAux["id"]] = {
-				phi: param[i]
+				phi: param[i] * f
 			};
 		}
 	}
@@ -311,9 +312,10 @@ A3a.vpl.Canvas.prototype.mousedownSVGRotating = function (block, width, height, 
 			x: (bnds.xmin + bnds.xmax) / 2,
 			y: (bnds.ymin + bnds.ymax) / 2
 		};
+		var f = rotating[i]["numSteps"] ? 2 * Math.PI / parseInt(rotating[i]["numSteps"], 10) : 1;
 		var pt0 = {
-			x: c.x + (pt.x - c.x) * Math.cos(param[i]) + (pt.y - c.y) * Math.sin(param[i]),
-			y: c.y - (pt.x - c.x) * Math.sin(param[i]) + (pt.y - c.y) * Math.cos(param[i])
+			x: c.x + (pt.x - c.x) * Math.cos(param[i] * f) + (pt.y - c.y) * Math.sin(param[i] * f),
+			y: c.y - (pt.x - c.x) * Math.sin(param[i] * f) + (pt.y - c.y) * Math.cos(param[i] * f)
 		};
 		if (this.clientData.svg[svgFilename].isInside(rotating[i]["thumbId"], pt0.x, pt0.y)) {
 			this.clientData.rotatingAux = rotating[i];
@@ -328,7 +330,7 @@ A3a.vpl.Canvas.prototype.mousedownSVGRotating = function (block, width, height, 
 
 /** Handle mousedrag event in A3a.vpl.BlockTemplate.mousedragFun for a block with rotating elements
 	@param {A3a.vpl.Block} block
-	@param {number} dragIndex
+	@param {number} dragIndex index of rotating element
 	@param {Object} aux description of the block containing rotating elements, as defined in the json
 	@param {number} width block width
 	@param {number} height block width
@@ -340,7 +342,8 @@ A3a.vpl.Canvas.prototype.mousedownSVGRotating = function (block, width, height, 
 A3a.vpl.Canvas.prototype.mousedragSVGRotating = function (block, dragIndex, aux, width, height, left, top, ev) {
 	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top, width, height);
 	var val = Math.atan2(pt.y - this.clientData.c.y, pt.x - this.clientData.c.x) - this.clientData.phi0;
-	block.param[dragIndex] = val;
+	var f = aux["rotating"][dragIndex]["numSteps"] ? 2 * Math.PI / parseInt(aux["rotating"][dragIndex]["numSteps"], 10) : 1;
+	block.param[dragIndex] = Math.round(val / f);
 };
 
 A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
@@ -376,11 +379,11 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 };
 
 A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width, height, left, top, ev) {
-	var f = A3a.vpl.Canvas.decodeURI(aux["svg"][0]["uri"]).f;
+	var filename = A3a.vpl.Canvas.decodeURI(aux["svg"][0]["uri"]).f;
 	var ix0 = 0;
 	var buttons = aux["buttons"];
 	if (buttons) {
-		var ix = canvas.mousedownSVGButtons(block, width, height, left, top, ev, f,
+		var ix = canvas.mousedownSVGButtons(block, width, height, left, top, ev, filename,
 			buttons);
 		if (ix !== null) {
 			return ix0 + ix;
@@ -389,7 +392,7 @@ A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width
 	}
 	var radiobuttons = aux["radiobuttons"];
 	if (radiobuttons) {
-		var ix = canvas.mousedownSVGRadioButtons(block, width, height, left, top, ev, f,
+		var ix = canvas.mousedownSVGRadioButtons(block, width, height, left, top, ev, filename,
 			radiobuttons, buttons || 0);
 		if (ix !== null) {
 			return ix0 + ix;
@@ -398,7 +401,7 @@ A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width
 	}
 	var sliders = aux["sliders"];
 	if (sliders) {
-		ix = canvas.mousedownSVGSliders(block, width, height, left, top, ev, f,
+		ix = canvas.mousedownSVGSliders(block, width, height, left, top, ev, filename,
 			sliders);
 		if (ix !== null) {
 			return ix0 + ix;
@@ -407,7 +410,7 @@ A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width
 	}
 	var rotating = aux["rotating"];
 	if (rotating) {
-		ix = canvas.mousedownSVGRotating(block, width, height, left, top, ev, f,
+		ix = canvas.mousedownSVGRotating(block, width, height, left, top, ev, filename,
 			rotating, block.param.slice(ix0, ix0 + rotating.length));
 		if (ix !== null) {
 			return ix0 + ix;
