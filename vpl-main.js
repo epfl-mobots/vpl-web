@@ -353,11 +353,12 @@ function srcToolbarRender(canvas, noVpl) {
 
 	// top controls
 	var canvasSize = canvas.getSize();
-	var xc = canvas.dims.margin;
+
+	// top controls
+	var controlBar = new A3a.vpl.ControlBar(canvas);
 
 	// new
-	canvas.addControl(xc, canvas.dims.margin,
-		canvas.dims.controlSize, canvas.dims.controlSize,
+	controlBar.addControl(
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.fillStyle = "navy";
@@ -394,12 +395,10 @@ function srcToolbarRender(canvas, noVpl) {
 		null,
 		// canDrop
 		null);
-	xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 
 	// save
 	var isEditorEmpty = document.getElementById("editor").value.trim().length === 0;
-	canvas.addControl(xc, canvas.dims.margin,
-		canvas.dims.controlSize, canvas.dims.controlSize,
+	controlBar.addControl(
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.fillStyle = "navy";
@@ -453,12 +452,10 @@ function srcToolbarRender(canvas, noVpl) {
 		null,
 		// canDrop
 		null);
-	xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 
 	// vpl
 	if (!noVpl) {
-		canvas.addControl(xc, canvas.dims.margin,
-			canvas.dims.controlSize, canvas.dims.controlSize,
+		controlBar.addControl(
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
@@ -502,14 +499,12 @@ function srcToolbarRender(canvas, noVpl) {
 			null,
 			// canDrop
 			null);
-		xc += canvas.dims.controlSize + 2 * canvas.dims.interBlockSpace;
 	}
 
+	controlBar.addStretch();
+
 	if (window["vplRunFunction"]) {
-		xc += (canvasSize.width
-			- (3 * canvas.dims.controlSize + 3 * canvas.dims.interBlockSpace) - xc) / 2;
-		canvas.addControl(xc, canvas.dims.margin,
-			canvas.dims.controlSize, canvas.dims.controlSize,
+		controlBar.addControl(
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
@@ -523,29 +518,29 @@ function srcToolbarRender(canvas, noVpl) {
 				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.8,
 					item.y + dy + canvas.dims.controlSize * 0.5);
 				ctx.closePath();
-				ctx.fillStyle = "white";
+				ctx.fillStyle = window["vplNode"] ? "white" : "#777";
 				ctx.fill();
 			},
 			// mousedown
 			function (data, x, y, ev) {
-				var code = document.getElementById("editor").value;
-				window["vplRunFunction"](code);
+				if (window["vplNode"]) {
+					var code = document.getElementById("editor").value;
+					window["vplRunFunction"](code);
+				}
 				return 0;
 			},
 			// doDrop
 			null,
 			// canDrop
 			null);
-		xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
 
-		canvas.addControl(xc, canvas.dims.margin,
-			canvas.dims.controlSize, canvas.dims.controlSize,
+		controlBar.addControl(
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
 				ctx.fillRect(item.x + dx, item.y + dy,
 					canvas.dims.controlSize, canvas.dims.controlSize);
-				ctx.fillStyle = "white";
+				ctx.fillStyle = window["vplNode"] ? "white" : "#777";
 				ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.28,
 					item.y + dy + canvas.dims.controlSize * 0.28,
 					canvas.dims.controlSize * 0.44, canvas.dims.controlSize * 0.44);
@@ -553,16 +548,23 @@ function srcToolbarRender(canvas, noVpl) {
 			},
 			// mousedown
 			function (data, x, y, ev) {
-				window["vplRunFunction"]("motor.left.target = 0\nmotor.right.target = 0\n");
+				if (window["vplNode"]) {
+					window["vplRunFunction"]("motor.left.target = 0\nmotor.right.target = 0\n");
+				}
 				return 0;
 			},
 			// doDrop
 			null,
 			// canDrop
 			null);
-		xc += canvas.dims.controlSize + canvas.dims.interBlockSpace;
+
+		controlBar.addStretch();
 	}
 
+	controlBar.calcLayout(canvas.dims.margin, canvasSize.width - canvas.dims.margin,
+		canvas.dims.controlSize,
+		canvas.dims.interBlockSpace, 2 * canvas.dims.interBlockSpace);
+	controlBar.addToCanvas();
 	canvas.redraw();
 }
 

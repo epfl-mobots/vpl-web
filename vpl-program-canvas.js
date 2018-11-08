@@ -386,6 +386,7 @@ A3a.vpl.Program.prototype.setView = function (view, noVpl) {
 	switch (view) {
 	case "src":
 		document.getElementById("editor").focus();
+		window["srcTBCanvas"].redraw();	// update toolbar state
 		break;
 	}
 };
@@ -1120,7 +1121,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			this.addControl(controlBar, "teacher-reset",
 				// draw
 				function (ctx, item, dx, dy) {
-					ctx.fillStyle = "#c00";
+					ctx.fillStyle = "#a00";
 					ctx.fillRect(item.x + dx, item.y + dy,
 						canvas.dims.controlSize, canvas.dims.controlSize);
 					ctx.beginPath();
@@ -1165,7 +1166,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		this.addControl(controlBar, "teacher",
 			// draw
 			function (ctx, item, dx, dy) {
-				ctx.fillStyle = self.customizationMode ? "#f55" : "#c00";
+				ctx.fillStyle = self.customizationMode ? "#d10" : "#a00";
 				ctx.fillRect(item.x + dx, item.y + dy,
 					canvas.dims.controlSize, canvas.dims.controlSize);
 				ctx.fillStyle = "white";
