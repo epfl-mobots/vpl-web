@@ -69,6 +69,14 @@ A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
 /** @typedef {function(Array.<number>):void} */
 A3a.vpl.TextEditor.OnBreakpointChanged;
 
+/** Set readonly attribute
+	@param {boolean} ro true for readonly, false for editable
+	@return {void}
+*/
+A3a.vpl.TextEditor.prototype.setReadOnly = function (ro) {
+	this.textarea.readOnly = ro;
+};
+
 /** Clear all breakpoints
 	@return {void}
 */

@@ -46,6 +46,7 @@ JS = \
 	vpl-undo.js \
 	vpl-aeslfile.js \
 	vpl-texteditor.js \
+	vpl-sourceedit.js \
 	vpl-main.js \
 	vpl-thymio.js
 

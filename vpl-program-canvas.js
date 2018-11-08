@@ -376,17 +376,16 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 
 /** Change current view
 	@param {string} view "vpl" or "src"
-	@param {boolean=} noVpl true to prevent vpl (default: false)
+	@param {boolean=} noVPL true to prevent vpl (default: false)
 	@return {void}
 */
-A3a.vpl.Program.prototype.setView = function (view, noVpl) {
-	this.noVpl = noVpl || false;
+A3a.vpl.Program.prototype.setView = function (view, noVPL) {
+	this.noVPL = noVPL || false;
 	document.getElementById("vpl-editor").style.display = view === "vpl" ? "block" : "none";
 	document.getElementById("src-editor").style.display = view === "src" ? "block" : "none";
 	switch (view) {
 	case "src":
-		document.getElementById("editor").focus();
-		window["srcTBCanvas"].redraw();	// update toolbar state
+		window["vplEditor"].focus();
 		break;
 	}
 };
@@ -695,7 +694,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			null);
 	}
 
-	// text
+	// source code editor
 	this.addControl(controlBar, "text",
 		// draw
 		function (ctx, item, dx, dy) {

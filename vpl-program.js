@@ -13,7 +13,7 @@
 A3a.vpl.Program = function (mode) {
 	/** @type {A3a.vpl.mode} */
 	this.mode = mode || A3a.vpl.mode.basic;
-	this.noVpl = false;	// true for source code editor without vpl counterpart
+	this.noVPL = false;	// true for source code editor without vpl counterpart
 	this.teacherRole = true;
 	this.experimentalFeatures = false;
 	/** @type {Array.<A3a.vpl.EventHandler>} */
