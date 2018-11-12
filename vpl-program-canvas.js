@@ -385,6 +385,7 @@ A3a.vpl.Program.prototype.setView = function (view, noVPL) {
 	document.getElementById("src-editor").style.display = view === "src" ? "block" : "none";
 	switch (view) {
 	case "src":
+		window["vplEditor"].lockWithVPL(true);
 		window["vplEditor"].focus();
 		break;
 	}

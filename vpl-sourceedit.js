@@ -16,7 +16,7 @@ A3a.vpl.VPLSourceEditor = function (noVPL, runCode) {
 	this.code0 = "";	// from VPL, to restore when VPL lock is set
 	this.isLockedWithVPL = true;
 	this.textEditor = new A3a.vpl.TextEditor("editor", "editor-lines");
-	this.textEditor.setReadOnly(true);
+	this.textEditor.setReadOnly(this.isLockedWithVPL);
 	this.textEditor.onBreakpointChanged = function (bp) {
 		window["vplBreakpointsFunction"] && window["vplBreakpointsFunction"](bp);
 	};
@@ -197,6 +197,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 		controlBar.addControl(
 			// draw
 			function (ctx, item, dx, dy) {
+				var enabled = self.getCode() === self.code0.trim();
 				ctx.save();
 				ctx.fillStyle = "navy";
 				ctx.fillRect(item.x + dx, item.y + dy,
@@ -219,7 +220,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 					item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
 				ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
 					item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
-				ctx.strokeStyle = self.isLockedWithVPL ? "white" : "#777";
+				ctx.strokeStyle = enabled ? "white" : "#777";
 				ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
 				ctx.stroke();
 				ctx.fillStyle = "#99a";
@@ -233,7 +234,8 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			},
 			// mousedown
 			function (data, x, y, ev) {
-				if (self.isLockedWithVPL) {
+				var enabled = self.getCode() === self.code0.trim();
+				if (enabled) {
 					window["vplProgram"].setView("vpl");
 				}
 				return 0;
@@ -253,7 +255,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 					self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
 				ctx.strokeStyle = "white";
 				ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
-				ctx.fillStyle = self.isLockedWithVPL ? "white" : "#99a";
+				ctx.fillStyle = self.isLockedWithVPL ? "#ddf" : "#99a";
 				for (var y = 0.15; y < 0.6; y += 0.15) {
 					ctx.fillRect(item.x + dx + self.tbCanvas.dims.controlSize * 0.15,
 						item.y + dy + self.tbCanvas.dims.controlSize * (0 + y),
@@ -261,10 +263,11 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 						self.tbCanvas.dims.controlSize * 0.10);
 				}
 				A3a.vpl.Canvas.lock(ctx,
-					item.x + dx + self.tbCanvas.dims.controlSize * 0.8,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.33,
-					self.tbCanvas.dims.controlSize * 0.04,
-					"white");
+					item.x + dx + self.tbCanvas.dims.controlSize * 0.77,
+					item.y + dy + self.tbCanvas.dims.controlSize * 0.36,
+					self.tbCanvas.dims.controlSize * 0.06,
+					"white",
+					!self.isLockedWithVPL);
 	            ctx.fillStyle = self.isLockedWithVPL ? "white" : "#44a";
 	            ctx.fillRect(item.x + dx + self.tbCanvas.dims.controlSize * 0.1,
 	                item.y + dy + self.tbCanvas.dims.controlSize * 0.8,
@@ -274,11 +277,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			},
 			// mousedown
 			function (data, x, y, ev) {
-				self.isLockedWithVPL = !self.isLockedWithVPL;
-				if (self.isLockedWithVPL) {
-					self.textEditor.setContent(self.code0);
-				}
-				self.textEditor.setReadOnly(self.isLockedWithVPL);
+				self.lockWithVPL(!self.isLockedWithVPL);
 				self.tbCanvas.redraw();
 				return 0;
 			},
@@ -353,6 +352,18 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 		this.tbCanvas.dims.interBlockSpace, 2 * this.tbCanvas.dims.interBlockSpace);
 	controlBar.addToCanvas();
 	this.tbCanvas.redraw();
+};
+
+/** Change the lock status
+	@param {boolean} b
+	@return {void}
+*/
+A3a.vpl.VPLSourceEditor.prototype.lockWithVPL = function (b) {
+	this.isLockedWithVPL = b;
+	if (b) {
+		this.textEditor.setContent(this.code0);
+	}
+	this.textEditor.setReadOnly(b);
 };
 
 /** Resize the source code editor

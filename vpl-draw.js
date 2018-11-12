@@ -89,9 +89,10 @@ A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height) {
 	@param {number} y
 	@param {number} r
 	@param {string} color
+	@param {boolean=} unlocked
 	@return {void}
 */
-A3a.vpl.Canvas.lock = function (ctx, x, y, r, color) {
+A3a.vpl.Canvas.lock = function (ctx, x, y, r, color, unlocked) {
 	ctx.save();
 	ctx.strokeStyle = color;
 	ctx.fillStyle = color;
@@ -100,8 +101,13 @@ A3a.vpl.Canvas.lock = function (ctx, x, y, r, color) {
 	ctx.beginPath();
 	ctx.moveTo(x - 1.7 * r, y);
 	ctx.lineTo(x - 1.7 * r, y);
-	ctx.arc(x, y - 2 * r, 1.7 * r, -Math.PI, 0);
-	ctx.lineTo(x + 1.7 * r, y);
+	if (unlocked) {
+		ctx.arc(x - 3.4 * r, y - 2 * r, 1.7 * r, 0, Math.PI, true);
+		ctx.lineTo(x - 5.1 * r, y);
+	} else {
+		ctx.arc(x, y - 2 * r, 1.7 * r, -Math.PI, 0);
+		ctx.lineTo(x + 1.7 * r, y);
+	}
 	ctx.stroke();
 	ctx.restore();
 };
