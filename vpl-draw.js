@@ -745,7 +745,9 @@ A3a.vpl.Canvas.prototype.accelerometerDrag = function (width, height, left, top,
 	var x = ev.clientX - left - width / 2;
 	var y = top + width / 2 - ev.clientY;
 	var a = Math.round(Math.atan2(x, y) * 12 / Math.PI);
-	return tp ? a : Math.max(-6, Math.min(6, a));
+	return tp
+		? a === 12 ? -12 : a	// -12..11
+		: Math.max(-6, Math.min(6, a));	// -6..6
 };
 
 /** Draw red arc for timer, thicker and thicker clockwise from noon
