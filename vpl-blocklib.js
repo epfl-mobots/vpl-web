@@ -844,13 +844,13 @@ A3a.vpl.BlockTemplate.lib =	[
 		};
 	})()),
 	new A3a.vpl.BlockTemplate({
-		name: "pitch",
+		name: "roll",
 		modes: [A3a.vpl.mode.advanced],
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () {
 			return [
-				0 // integer from -6 to 6
+				0 // integer from -12 to 11
 			];
 		},
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
@@ -876,36 +876,31 @@ A3a.vpl.BlockTemplate.lib =	[
 		genCode: function (block) {
 			/** @type {number} */
 			var a = /** @type {number} */(block.param[0]);
-			/** @type {string} */
-			var cond;
-			if (a <= -6) {
-				cond = "pitchAngle < " + Math.round(2730.67 * a + 1365.33);
-			} else if (a >= 6) {
-				cond = "pitchAngle >= " + Math.round(2730.67 * a - 1365.33);
-			} else {
-				cond = "pitchAngle >= " + Math.round(2730.67 * a - 1365.33) +
-					" and pitchAngle < " + Math.round(2730.67 * a + 1365.33);
-			}
 			return {
 				initVarDecl: [
-					"# pitch angle from accelerometer\nvar pitchAngle\n"
+					"# roll angle from accelerometer\nvar rollAngle\n"
 				],
 				sectionBegin: "onevent acc\n",
 				sectionPriority: 1,
 				clauseInit:
-					"call math.atan2(pitchAngle, acc[0], acc[2])\n",
-				clause: cond
+					"call math.atan2(rollAngle, acc[0], acc[2])\n",
+				clause:
+					a === -12
+						? "rollAngle >= " + Math.round(2730.67 * 12 - 1365.33) +
+							" or rollAngle < " + Math.round(2730.67 * a + 1365.33)
+						: "rollAngle >= " + Math.round(2730.67 * a - 1365.33) +
+							" and rollAngle < " + Math.round(2730.67 * a + 1365.33)
 			};
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
-		name: "roll",
+		name: "pitch",
 		modes: [A3a.vpl.mode.advanced],
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () {
 			return [
-				0 // integer from -6 to 6
+				0 // integer from -12 to 11
 			];
 		},
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
@@ -931,25 +926,20 @@ A3a.vpl.BlockTemplate.lib =	[
 		genCode: function (block) {
 			/** @type {number} */
 			var a = -/** @type {number} */(block.param[0]);
-			/** @type {string} */
-			var cond;
-			if (a <= -6) {
-				cond = "rollAngle < " + Math.round(2730.67 * a + 1365.33);
-			} else if (a >= 6) {
-				cond = "rollAngle >= " + Math.round(2730.67 * a - 1365.33);
-			} else {
-				cond = "rollAngle >= " + Math.round(2730.67 * a - 1365.33) +
-					" and rollAngle < " + Math.round(2730.67 * a + 1365.33);
-			}
 			return {
 				initVarDecl: [
-					"# roll angle from accelerometer\nvar rollAngle\n"
+					"# pitch angle from accelerometer\nvar pitchAngle\n"
 				],
 				sectionBegin: "onevent acc\n",
 				sectionPriority: 1,
 				clauseInit:
-					"call math.atan2(rollAngle, acc[1], acc[2])\n",
-				clause: cond
+					"call math.atan2(pitchAngle, acc[1], acc[2])\n",
+				clause:
+					a === -12
+						? "pitchAngle >= " + Math.round(2730.67 * 12 - 1365.33) +
+							" or pitchAngle < " + Math.round(2730.67 * a + 1365.33)
+						: "pitchAngle >= " + Math.round(2730.67 * a - 1365.33) +
+							" and pitchAngle < " + Math.round(2730.67 * a + 1365.33)
 			};
 		}
 	}),
@@ -986,16 +976,6 @@ A3a.vpl.BlockTemplate.lib =	[
 		genCode: function (block) {
 			/** @type {number} */
 			var a = -/** @type {number} */(block.param[0]);
-			/** @type {string} */
-			var cond;
-			if (a <= -6) {
-				cond = "yawAngle < " + Math.round(2730.67 * a + 1365.33);
-			} else if (a >= 6) {
-				cond = "yawAngle >= " + Math.round(2730.67 * a - 1365.33);
-			} else {
-				cond = "yawAngle >= " + Math.round(2730.67 * a - 1365.33) +
-					" and yawAngle < " + Math.round(2730.67 * a + 1365.33);
-			}
 			return {
 				initVarDecl: [
 					"# yaw angle from accelerometer\nvar yawAngle\n"
@@ -1004,7 +984,12 @@ A3a.vpl.BlockTemplate.lib =	[
 				sectionPriority: 1,
 				clauseInit:
 					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				clause: cond
+				clause:
+					a === -12
+						? "yawAngle >= " + Math.round(2730.67 * 12 - 1365.33) +
+							" or yawAngle < " + Math.round(2730.67 * a + 1365.33)
+						: "yawAngle >= " + Math.round(2730.67 * a - 1365.33) +
+							" and yawAngle < " + Math.round(2730.67 * a + 1365.33)
 			};
 		}
 	}),
