@@ -227,7 +227,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "horiz prox adv",
-			modes: [A3a.vpl.mode.advanced],
+			modes: [A3a.vpl.mode.custom],
 			type: A3a.vpl.blockType.event,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () {
@@ -340,7 +340,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "horiz prox 1",
-			modes: [],
+			modes: [A3a.vpl.mode.advanced],
 			type: A3a.vpl.blockType.event,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () {
@@ -512,7 +512,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "ground adv",
-			modes: [A3a.vpl.mode.advanced],
+			modes: [A3a.vpl.mode.custom],
 			type: A3a.vpl.blockType.event,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () {
@@ -617,7 +617,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "ground 1",
-			modes: [],
+			modes: [A3a.vpl.mode.advanced],
 			type: A3a.vpl.blockType.event,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () {
@@ -707,7 +707,7 @@ A3a.vpl.BlockTemplate.lib =	[
 	})()),
 	new A3a.vpl.BlockTemplate({
 		name: "tap",
-		modes: [A3a.vpl.mode.basic],
+		modes: [A3a.vpl.mode.basic, A3a.vpl.mode.advanced],
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
@@ -745,7 +745,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "accelerometer",
-			modes: [A3a.vpl.mode.advanced],
+			modes: [A3a.vpl.mode.custom],
 			type: A3a.vpl.blockType.event,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () {
@@ -845,7 +845,7 @@ A3a.vpl.BlockTemplate.lib =	[
 	})()),
 	new A3a.vpl.BlockTemplate({
 		name: "pitch",
-		modes: [],
+		modes: [A3a.vpl.mode.advanced],
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () {
@@ -900,7 +900,7 @@ A3a.vpl.BlockTemplate.lib =	[
 	}),
 	new A3a.vpl.BlockTemplate({
 		name: "roll",
-		modes: [],
+		modes: [A3a.vpl.mode.advanced],
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () {
@@ -955,7 +955,7 @@ A3a.vpl.BlockTemplate.lib =	[
 	}),
 	new A3a.vpl.BlockTemplate({
 		name: "yaw",
-		modes: [],
+		modes: [A3a.vpl.mode.advanced],
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () {
@@ -1120,7 +1120,7 @@ A3a.vpl.BlockTemplate.lib =	[
 	}),
 	new A3a.vpl.BlockTemplate({
 		name: "state 8",
-		modes: [],
+		modes: [A3a.vpl.mode.custom],
 		type: A3a.vpl.blockType.state,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0]; },
@@ -1606,6 +1606,7 @@ A3a.vpl.BlockTemplate.lib =	[
 	new A3a.vpl.BlockTemplate((function () {
 		return {
 			name: "top color",
+			modes: [A3a.vpl.mode.advanced],
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
@@ -1676,7 +1677,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "top color 8",
-			modes: [A3a.vpl.mode.custom],
+			modes: [A3a.vpl.mode.basic],
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
@@ -1750,6 +1751,7 @@ A3a.vpl.BlockTemplate.lib =	[
 	new A3a.vpl.BlockTemplate((function () {
 		return {
 			name: "bottom color",
+			modes: [A3a.vpl.mode.advanced],
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
@@ -1910,7 +1912,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "bottom color 8",
-			modes: [A3a.vpl.mode.custom],
+			modes: [A3a.vpl.mode.basic],
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
@@ -2253,7 +2255,7 @@ A3a.vpl.BlockTemplate.lib =	[
 	}),
 	new A3a.vpl.BlockTemplate({
 		name: "set state 8",
-		modes: [],
+		modes: [A3a.vpl.mode.custom],
 		type: A3a.vpl.blockType.action,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0]; },
@@ -2312,7 +2314,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "change state 8",
-			modes: [],
+			modes: [A3a.vpl.mode.custom],
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [1]; },
