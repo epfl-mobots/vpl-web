@@ -1128,12 +1128,12 @@ A3a.vpl.BlockTemplate.lib =	[
 		genCode: function (block) {
 			return {
 				initVarDecl: [
-					A3a.vpl.BlockTemplate.initStatesDecl
+					A3a.vpl.BlockTemplate.initState8Decl
 				],
 				initCodeExec: [
-					A3a.vpl.BlockTemplate.initStatesInit
+					A3a.vpl.BlockTemplate.initState8Init
 				],
-				clause: "state[0] == " + block.param[0].toString(10)
+				clause: "state8 == " + block.param[0].toString(10)
 			};
 		}
 	}),
@@ -2221,7 +2221,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				initVarDecl: [
 					A3a.vpl.BlockTemplate.initStatesDecl
 				],
-				init: [
+				initCodeExec: [
 					A3a.vpl.BlockTemplate.initStatesInit
 				],
 				initCodeDecl: [
@@ -2260,13 +2260,12 @@ A3a.vpl.BlockTemplate.lib =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 		genCode: function (block) {
-			var code = "";
-				code += "state8 = " + block.param[0].toString(10) + "\n";
+			var code = "state8 = " + block.param[0].toString(10) + "\n";
 			return {
 				initVarDecl: [
 					A3a.vpl.BlockTemplate.initState8Decl
 				],
-				init: [
+				initCodeExec: [
 					A3a.vpl.BlockTemplate.initState8Init
 				],
 				initCodeDecl: [
@@ -2340,23 +2339,20 @@ A3a.vpl.BlockTemplate.lib =	[
 			},
 			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
 			genCode: function (block) {
-				var code = "";
-					code += "state8 = (state8 + " +
-						(block.param[0] > 0 ? "1" : "7") +
-						") % 8\n";
 				return {
 					initVarDecl: [
 						A3a.vpl.BlockTemplate.initState8Decl
 					],
-					init: [
+					initCodeExec: [
 						A3a.vpl.BlockTemplate.initState8Init
 					],
 					initCodeDecl: [
 						A3a.vpl.BlockTemplate.dispState8
 					],
-					statement: code.length > 0
-						? code + "callsub display_state8\n"
-						: "",
+					statement: "state8 = (state8 + " +
+							(block.param[0] > 0 ? "1" : "7") +
+							") % 8\n" +
+							"callsub display_state8\n",
 					statementWithoutInit:
 						"call leds.circle(" + (block.param[0] === 0 ? "32" : "0") +
 							"," + (block.param[0] === 1 ? "32" : "0") +
