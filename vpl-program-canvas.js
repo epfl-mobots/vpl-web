@@ -1248,7 +1248,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				(self.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
 					.indexOf(blockTemplate.name) >= 0)) {
 			var x = canvasSize.width - canvas.dims.margin + canvas.dims.interBlockSpace -
-				step - Math.floor(row / colLen) * step;
+				(acCol - Math.floor(row / colLen)) * step;
 			var y = canvas.dims.margin + canvas.dims.topControlSpace + step * (row % colLen);
 			self.addBlockTemplateToCanvas(canvas, blockTemplate, x, y);
 			row++;
