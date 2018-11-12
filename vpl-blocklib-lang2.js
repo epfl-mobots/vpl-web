@@ -5,7 +5,10 @@
 	For internal use only
 */
 
-A3a.vpl.patchL2 = function () {
+/** Patch standard blocks to generate L2 code
+	@return {void}
+*/
+A3a.vpl.patchL2Blocks = function () {
 
 	A3a.vpl.BlockTemplate.initOutputs2 =
 		"// reset outputs\n" +
@@ -749,7 +752,12 @@ A3a.vpl.patchL2 = function () {
 			}
 		}
 	})();
+};
 
+/** Patch methods required to generate L2 code, except for blocks
+	@return {void}
+*/
+A3a.vpl.patchL2 = function () {
 	/** Generate code for the whole program
 		@param {Array.<A3a.vpl.Block>=} runBlocks if defined, override the initialization
 		code

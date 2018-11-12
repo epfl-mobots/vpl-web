@@ -62,7 +62,14 @@
 			],
 			"aseba": {
 				"sectionBegin": "onevent buttons\n",
-				"clauseAnd": "{$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''}"
+				"sectionPriority": 10,
+				"clauseAnd": "`$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''`"
+			},
+			"l2": {
+				"sectionBegin": "onevent buttons {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 10,
+				"clauseAnd": "`$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''`"
 			}
 		},
 		{
@@ -96,7 +103,15 @@
 				"sectionBegin": "onevent acc\n",
 				"clauseInit":
 					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				"clause": "yawAngle >= {Math.round(2730.67 * $[0] - 1365.33)} and yawAngle < {Math.round(2730.67 * $[0] + 1365.33)}"
+				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+			},
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
 			}
 		},
 		{
@@ -129,7 +144,14 @@
 					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
 				],
 				"statement":
-					"motor.left.target = {Math.round(500 * $[0])}\nmotor.right.target = {Math.round(500 * $[1])}\n"
+					"motor.left.target = `Math.round(500 * $[0])`\nmotor.right.target = `Math.round(500 * $[1])`\n"
+			},
+			"l2": {
+				"initCodeExec": [
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"motor.left.target = `Math.round(500 * $[0])`;\nmotor.right.target = `Math.round(500 * $[1])`;\n"
 			}
 		},
 		{
@@ -194,7 +216,14 @@
 					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
 				],
 				"statement":
-					"motor.left.target = {[0,200,250,100,-150,-200,-250,-100,150][$[0]]}\nmotor.right.target = {[0,200,150,-100,-250,-200,-150,100,250][$[0]]}\n"
+					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`\n"
+			},
+			"l2": {
+				"initCodeExec": [
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`;\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`;\n"
 			}
 		},
 		{
@@ -230,7 +259,7 @@
 			"styles": [
 				{
 					"id": "Gradient_top-2",
-					"st": "fill:#{$.map(function (c) { return Math.floor(c * 15.999).toString(16); }).join('')}"
+					"st": "fill:#`$.map(function (c) { return Math.floor(c * 15.999).toString(16); }).join('')`"
 				}
 			],
 			"aseba": {
@@ -242,9 +271,22 @@
 					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
 				],
 				"statement":
-					"call leds.top({$.map(function (x) { return Math.round(32 * x); }).join(', ')})\ntopColor = [{$.map(function (x) { return Math.round(32 * x); }).join(', ')}]\n",
+					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\ntopColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
 				"statementWithoutInit":
-					"call leds.top({$.map(function (x) { return Math.round(32 * x); }).join(', ')})\n"
+					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
+			},
+			"l2": {
+				"initVarDecl": [
+					"// RGB color of the top led\nint topColor[3];\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0];\n",
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\ntopColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`];\n",
+				"statementWithoutInit":
+					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n"
 			}
 		}
 	],

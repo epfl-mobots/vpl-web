@@ -153,12 +153,15 @@ function vplSetup(uiConfig) {
 
 	// general settings
 	var isClassic = getQueryOption("appearance") === "classic";
+	var isL2 = getQueryOption("compiler") === "l2";
 	if (!isClassic && uiConfig) {
 		try {
-			A3a.vpl.patchSVG(uiConfig);
+			A3a.vpl.patchSVG(uiConfig, isL2);
 		} catch (e) {}
+	} else if (isL2) {
+		A3a.vpl.patchL2Blocks();
 	}
-	if (getQueryOption("compiler") === "l2") {
+	if (isL2) {
 		A3a.vpl.patchL2();
 	}
 

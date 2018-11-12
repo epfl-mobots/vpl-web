@@ -152,7 +152,7 @@ A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, x0, y0
 	canvas.ctx.restore();
 };
 
-/** Substitute inline expressions {expr} in input string, where expr is a
+/** Substitute inline expressions `expr` in input string, where expr is a
 	JavaScript expression; variable $ contains the block parameters
 	@param {string} fmt
 	@param {A3a.vpl.Block} block
@@ -161,31 +161,12 @@ A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, x0, y0
 */
 A3a.vpl.BlockTemplate.substInline = function (fmt, block, i) {
 	while (true) {
-		var leftIx = fmt.indexOf("{");
-		if (leftIx < 0) {
+		var r = /`([^`]*)`/.exec(fmt);
+		if (r == null) {
 			break;
 		}
-		var depth = 1;
-		var rightIx = fmt.indexOf("}", leftIx + 1);
-		for (var j = leftIx + 1; rightIx >= 0 && j < fmt.length; ) {
-			var nextLeftIx = fmt.indexOf("{", j);
-			if (nextLeftIx >= 0 && nextLeftIx < rightIx) {
-				depth++;
-				j = nextLeftIx + 1;
-			} else {
-				depth--;
-				if (depth === 0) {
-					break;
-				}
-				j = rightIx + 1;
-				rightIx = fmt.indexOf("}", j);
-			}
-		}
-		if (depth > 0) {
-			break;
-		}
-		var result = new Function("$", "i", "return " + fmt.slice(leftIx + 1, rightIx) + ";")(block.param, i);
-		fmt = fmt.slice(0, leftIx) + result + fmt.slice(rightIx + 1);
+		var result = new Function("$", "i", "return " + r[1] + ";")(block.param, i);
+		fmt = fmt.slice(0, r.index) + result + fmt.slice(r.index + r[0].length);
 	}
 	return fmt;
 };
