@@ -311,21 +311,27 @@ A3a.vpl.Canvas.prototype.mousedragSVGRotating = function (block, dragIndex, aux,
 A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 	var f = A3a.vpl.Canvas.decodeURI(aux["svg"][0]["uri"]).f;
 	var displacements = this.getDisplacements(aux, f, block.param);
-	if (aux["diffwheelmotion"]) {
-		var robotId = aux["diffwheelmotion"];
+	if (aux["diffwheelmotion"] && aux["diffwheelmotion"]["id"]) {
+		var dw = aux["diffwheelmotion"];
+		var robotId = dw["id"];
+		var dx = dw["dx"] || 0;
+		var dy = dw["dy"] || 0;
+		var adjSc = dw["adjscale"] || 1;
+		var color = dw["color"] || "black";
+		var linewidth = dw["linewidth"] === undefined ? 1 : dw["linewidth"];
 		this.loadSVG(f, uiConfig.svg[f]);
 		var bnds = this.clientData.svg[f].getElementBounds(robotId);
+		var r = (0.5 + dx) * (bnds.xmax - bnds.xmin) * adjSc;
 		var ixSlider = (aux["buttons"] ? aux["buttons"].length : 0) +
 			(aux["radiobuttons"] ? 1 : 0);
-		var dleft = 4 * block.param[ixSlider];
-		var dright = 4 * block.param[ixSlider + 1];
-		var r = 0.4 * (bnds.xmax - bnds.xmin);
-		// var tr = A3a.vpl.draw.diffWheels(dleft * r, dright * r, r);
+		var dleft = 2.4 * block.param[ixSlider];
+		var dright = 2.4 * block.param[ixSlider + 1];
 		var s = this.dims.blockSize;
-		var tr = this.traces(dleft * r / s, dright * r / s, r / s);
+		var rw = r / s;	// ?
+		var tr = this.traces(dleft, dright, rw, {color: color, linewidth: linewidth});
 		displacements[robotId] = {
-			dx: -tr.x,
-			dy: -tr.y,
+			dx: -(tr.x * rw * s + dy * s * Math.sin(tr.phi)),
+			dy: -(tr.y * rw * s + dy * s * Math.cos(tr.phi)),
 			phi: -tr.phi
 		};
 	}

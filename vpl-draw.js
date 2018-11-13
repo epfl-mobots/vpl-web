@@ -307,13 +307,14 @@ A3a.vpl.Canvas.prototype.robotTop = function (options) {
 };
 
 /**	Calculate trajectory from wheel advances
-	@param {number} dleft
-	@param {number} dright
-	@param {number} r half-distance between wheels
+	@param {number} dleft distance of the left wheel divided by the distance of the wheel
+	wrt the center of the differential wheel axis
+	@param {number} dright distance of the right wheel divided by the distance of the wheel
+	wrt the center of the differential wheel axis
 	@return {{phi:number,R:number,x:number,y:number}}
 */
-A3a.vpl.draw.diffWheels = function (dleft, dright, r) {
-	var phi = (dright - dleft) / (2 * r);
+A3a.vpl.draw.diffWheels = function (dleft, dright) {
+	var phi = (dright - dleft) / 2;
 	var R = dright === dleft ? Infinity : (dright + dleft) / (2 * phi);
 	return {
 		phi: phi,
@@ -324,17 +325,25 @@ A3a.vpl.draw.diffWheels = function (dleft, dright, r) {
 };
 
 /**	Draw wheel traces from center to
-	@param {number} dleft distance of left wheel, relative to block size
-	@param {number} dright distance of right wheel, relative to block size
-	@param {number} r half-distance between wheels, relative to block size
+	@param {number} dleft distance of the left wheel divided by the distance of the wheel
+	wrt the center of the differential wheel axis
+	@param {number} dright distance of the right wheel divided by the distance of the wheel
+	wrt the center of the differential wheel axis
+	@param {number} rw half-distance between wheels (fraction of block size)
+	@param {{
+		color: (string | undefined),
+		r: (Array.<number> | undefined),
+		linewidth: (number | undefined)
+	}=} options options (r: distance from center, relative to block size; color: trace color)
 	@return {{phi:number,R:number,x:number,y:number}}
 */
-A3a.vpl.Canvas.prototype.traces = function (dleft, dright, r) {
+A3a.vpl.Canvas.prototype.traces = function (dleft, dright, rw, options) {
 	var ctx = this.ctx;
 	var dims = this.dims;
-	dleft *= dims.blockSize;
-	dright *= dims.blockSize;
-	r *= dims.blockSize;
+	rw *= dims.blockSize;
+	var ra = options && options.r || [-1, 0, 1];
+	var color = options && options.color || "black";
+	var linewidth = options && options.linewidth !== undefined ? options.linewidth : 1;
 
 	/*	Add an arc to the current path from angle=0
 		@param {number} x
@@ -350,30 +359,25 @@ A3a.vpl.Canvas.prototype.traces = function (dleft, dright, r) {
 		}
 	}
 
-	var tr = A3a.vpl.draw.diffWheels(dleft, dright, r);
+	var tr = A3a.vpl.draw.diffWheels(dleft, dright);
 	ctx.save();
-	ctx.translate(0.5 * dims.blockSize,
-		0.5 * dims.blockSize);
-	ctx.strokeStyle = "black";
-	ctx.lineWidth = dims.blockLineWidth;
-	ctx.beginPath();
-	if (Math.abs(tr.R) > 20 * r) {
-		ctx.moveTo(-r, 0);
-		ctx.lineTo(tr.x - r, -tr.y);
-		ctx.moveTo(r, 0);
-		ctx.lineTo(tr.x + r, -tr.y);
-		ctx.moveTo(0, 0);
-		ctx.lineTo(tr.x, -tr.y);
+	ctx.translate(0.5 * dims.blockSize, 0.5 * dims.blockSize);
+	ctx.strokeStyle = color;
+	ctx.lineWidth = dims.blockLineWidth * linewidth;
+	if (Math.abs(tr.R) > 20) {
+		ctx.beginPath();
+		ra.forEach(function (r) {
+			ctx.moveTo(r * rw, 0);
+			ctx.lineTo((tr.x + r) * rw, -tr.y * rw);
+		});
+		ctx.stroke();
 	} else {
-		arc(-tr.R, 0, tr.R - r, tr.phi);
-		ctx.stroke();
-		ctx.beginPath();
-		arc(-tr.R, 0, tr.R + r, tr.phi);
-		ctx.stroke();
-		ctx.beginPath();
-		arc(-tr.R, 0, tr.R, tr.phi);
+		ra.forEach(function (r) {
+			ctx.beginPath();
+			arc(-tr.R * rw, 0, (tr.R + r) * rw, tr.phi);
+			ctx.stroke();
+		});
 	}
-	ctx.stroke();
 	ctx.restore();
 	return tr;
 };
@@ -383,8 +387,10 @@ A3a.vpl.Canvas.prototype.traces = function (dleft, dright, r) {
 	@param {number} height block width
 	@param {number} left left position of the block
 	@param {number} top top position of the block
-	@param {number} dleft distance of left wheel, relative to block size
-	@param {number} dright distance of right wheel, relative to block size
+	@param {number} dleft distance of the left wheel divided by the distance of the wheel
+	wrt the center of the differential wheel axis
+	@param {number} dright distance of the right wheel divided by the distance of the wheel
+	wrt the center of the differential wheel axis
 	@param {number} r half-distance between wheels, relative to block size
 	@param {Event} ev mouse event
 	@return {boolean}
@@ -396,7 +402,7 @@ A3a.vpl.Canvas.prototype.robotTopCheck = function (width, height, left, top, dle
 	r *= dims.blockSize;
 	var x = ev.clientX - left - width / 2;
 	var y = top + width / 2 - ev.clientY;
-	var tr = A3a.vpl.draw.diffWheels(dleft, dright, r);
+	var tr = A3a.vpl.draw.diffWheels(dleft, dright);
 	return (x - tr.x) * (x - tr.x) + (y - tr.y) * (y - tr.y) < r * r;
 };
 

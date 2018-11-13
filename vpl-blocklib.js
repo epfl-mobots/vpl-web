@@ -1352,7 +1352,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		defaultParam: function () { return [0, 0]; },
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
-			var tr = canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
+			var tr = canvas.traces(2.4 * block.param[0], 2.4 * block.param[1], 0.19);
 			canvas.robotTop({
 				withWheels: true,
 				scale: 0.45,
@@ -1364,7 +1364,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			});
 			canvas.ctx.save();
 			canvas.ctx.globalAlpha = 0.2;
-			canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
+			canvas.traces(2.4 * block.param[0], 2.4 * block.param[1], 0.19);
 			canvas.ctx.restore();
 			canvas.slider(0.5 + 0.5 * /** @type {number} */(block.param[0]), -0.4, true,
 				block.param[0] === 0 ? "white" :
@@ -1437,19 +1437,20 @@ A3a.vpl.BlockTemplate.lib =	[
 		defaultParam: function () { return [0, 0]; },
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
-			var tr = canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
+			var rw = 0.19;
+			var tr = canvas.traces(2.4 * block.param[0], 2.4 * block.param[1], rw);
 			canvas.robotTop({
 				withWheels: true,
 				scale: 0.45,
 				rotation: tr.phi,
 				translation: [
-					tr.x + 0.13 * canvas.dims.blockSize * Math.sin(tr.phi),
-					tr.y + 0.13 * canvas.dims.blockSize * Math.cos(tr.phi)
+					tr.x * rw * canvas.dims.blockSize + 0.13 * canvas.dims.blockSize * Math.sin(tr.phi),
+					tr.y * rw * canvas.dims.blockSize + 0.13 * canvas.dims.blockSize * Math.cos(tr.phi)
 				]
 			});
 			canvas.ctx.save();
 			canvas.ctx.globalAlpha = 0.2;
-			canvas.traces(0.45 * block.param[0], 0.45 * block.param[1], 0.19);
+			canvas.traces(2.4 * block.param[0], 2.4 * block.param[1], rw);
 			canvas.ctx.restore();
 			canvas.slider(0.5 + 0.5 * /** @type {number} */(block.param[0]), -0.4, true,
 				block.param[0] === 0 ? "white" :

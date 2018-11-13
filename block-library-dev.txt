@@ -67,6 +67,15 @@ In json, block contain the following properties:
 	- "centerId" (string, required): id of the svg element whose center is the center of rotation.
 	- "thumbId" (string, required): id of the svg element corresponding to the control part which can be moved.
 
+- "diffwheelmotion" (object, optional): robot with differential wheel motion. The robot, seen from above, is defined by a svg element, with wheel axis on the x axis and positive motion up. Wheel motion is specified with two sliders which should be defined with "sliders". Contains the following properties:
+
+	- "id" (string, required): id of the svg element corresponding to the robot.
+	- "dx" (number, optional): relative horizontal adjustment of the right wheel position (left wheel is moved symmetrically).
+	- "dy" (number, optional): relative vertical adjustment of the wheels.
+	- "adjscale" (number, optional): scale adjustment for the traces; 1 (default) means that the wheels are at the svg element boundaries, <1 that they are inside the svg element boundaries.
+	- "color" (string, optional): trace color as a css color string (default: "black")
+	- "linewidth" (number, optional): relative trace width. 1 (default) is the default line width of the block.
+
 - "aseba" (object, optional): code fragments to generate Aseba language source code. Code fragments contain Aseba source code. Except for "clause" and "clauseAnd" which contain expression fragments, they can contain muliple lines, comments, empty lines, terminated by linefeeds ("\n"). Backticks mark JavaScript expressions which are evaluated to substitute block parameters; variable whose name is a dollar character contains the block parameters, and variable "i" contains the parameter index in "clauseAnd" fragments. The object contains the following properties:
 	- "initVarDecl" (array of strings, optional): code fragments for (global) variable declarations. Identical fragments (after backtick-expressions evaluation) are output only once.
 	- "initCodeDecl" (array of strings, optional): code fragments for subroutine declarations. Identical fragments (after backtick-expressions evaluation) are output only once.
