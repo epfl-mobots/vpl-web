@@ -489,7 +489,7 @@ A3a.vpl.Program.prototype.addControl = function (controlBar, id, draw, mousedown
 */
 A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// make sure code is up-to-date to have error info
-	this.getCode();
+	this.getCode(A3a.vpl.defaultLanguage);
 
 	var canvasSize = canvas.getSize();
 	var renderingState = /** @type {A3a.vpl.Program.CanvasRenderingState} */(canvas.state);
@@ -878,7 +878,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			// mousedown
 			function (data, x, y, ev) {
 				if (window["vplNode"]) {
-					var code = self.getCode();
+					var code = self.getCode(self.currentLanguage);
 					window["vplRunFunction"](code);
 					self.uploaded = true;
 				}
@@ -889,7 +889,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				if (draggedItem.data instanceof A3a.vpl.Block) {
 					if (draggedItem.data.eventHandlerContainer) {
 						// action from an event handler: just send it
-						var code = self.codeForBlock(/** @type {A3a.vpl.Block} */(draggedItem.data));
+						var code = self.codeForBlock(/** @type {A3a.vpl.Block} */(draggedItem.data), self.currentLanguage);
 						window["vplRunFunction"](code);
 					} else {
 						// action from the templates: display in a zoomed state to set the parameters
@@ -897,7 +897,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 						canvas.zoomedItemProxy = canvas.makeZoomedClone(draggedItem);
 					}
 				} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
-					var code = self.codeForActions(/** @type {A3a.vpl.EventHandler} */(draggedItem.data));
+					var code = self.codeForActions(/** @type {A3a.vpl.EventHandler} */(draggedItem.data), self.currentLanguage);
 					window["vplRunFunction"](code);
 				}
 			},

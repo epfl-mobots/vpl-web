@@ -33,6 +33,8 @@ JS = \
 	vpl-emptyblock.js \
 	vpl-eventhandler.js \
 	vpl-program.js \
+	vpl-code-aseba.js \
+	vpl-code-l2.js \
 	vpl-controlbar.js \
 	vpl-program-canvas.js \
 	vpl-canvas.js \
@@ -41,7 +43,7 @@ JS = \
 	svg.js \
 	svg-transform.js \
 	vpl-blocklib-svg.js \
-	vpl-blocklib-lang2.js \
+	vpl-blocklib-l2.js \
 	vpl-error.js \
 	vpl-undo.js \
 	vpl-aeslfile.js \

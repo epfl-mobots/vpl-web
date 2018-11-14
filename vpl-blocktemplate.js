@@ -21,6 +21,9 @@ A3a.vpl.mode = {
 	custom: "c"
 };
 
+/** @const */
+A3a.vpl.defaultLanguage = "aseba";
+
 /**
 	@constructor
 	@struct
@@ -36,19 +39,20 @@ A3a.vpl.BlockTemplate = function (blockParams) {
 	this.exportParam = blockParams.exportParam || null;
 	this.importParam = blockParams.importParam || null;
 	this.validate = blockParams.validate || null;
-	/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-	this.genCode = blockParams.genCode
-		|| (this.type === A3a.vpl.blockType.event
-			? function (block) {
-				return {
-					begin: "# onevent " + block.blockTemplate.name + "\n"
-				};
-			}
-			: function (block) {
-				return {
-					statement: "# " + block.blockTemplate.name + "\n"
-				};
-			});
+ 	this.genCode = blockParams.genCode
+		|| {
+			"aseba": this.type === A3a.vpl.blockType.event
+				? function (block) {
+					return {
+						begin: "# onevent " + block.blockTemplate.name + "\n"
+					};
+				}
+				: function (block) {
+					return {
+						statement: "# " + block.blockTemplate.name + "\n"
+					};
+				}
+		};
 	/** @type {A3a.vpl.BlockTemplate.drawFun} */
 	this.draw = blockParams.draw || function (canvas, block) {
 		canvas.text(block.blockTemplate.name);
@@ -125,7 +129,7 @@ A3a.vpl.BlockTemplate.sectionPriFun;
 		defaultParam: (A3a.vpl.BlockTemplate.defaultParam|undefined),
 		exportParam: (A3a.vpl.BlockTemplate.exportParam|undefined),
 		validate: (A3a.vpl.BlockTemplate.validateFun|undefined),
-		genCode: (A3a.vpl.BlockTemplate.genCodeFun|undefined),
+		genCode: (Object<string,A3a.vpl.BlockTemplate.genCodeFun>|undefined),
 		draw: (A3a.vpl.BlockTemplate.drawFun|undefined),
 		mousedown: (A3a.vpl.BlockTemplate.mousedownFun|undefined),
 		mousedrag: (A3a.vpl.BlockTemplate.mousedragFun|undefined),

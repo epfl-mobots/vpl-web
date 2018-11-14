@@ -111,24 +111,26 @@ A3a.vpl.BlockTemplate.lib =	[
 				}
 				return new A3a.vpl.Error("No button specified", true);
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				var cond = "";
-				for (var i = 0; i < 5; i++) {
-					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " and ") +
-							"button." + ["center", "forward", "backward", "right", "left"][i] +
-							" == 1";
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					var cond = "";
+					for (var i = 0; i < 5; i++) {
+						if (block.param[i]) {
+							cond += (cond.length === 0 ? "" : " and ") +
+								"button." + ["center", "forward", "backward", "right", "left"][i] +
+								" == 1";
+						}
 					}
+					if (cond === "") {
+						cond = "button.center == 1 or button.forward == 1 or button.backward == 1 or button.right == 1 or button.left == 1";
+					}
+					return {
+						sectionBegin: "onevent buttons\n",
+						sectionPriority: 10,
+						clause: cond
+					};
 				}
-				if (cond === "") {
-					cond = "button.center == 1 or button.forward == 1 or button.backward == 1 or button.right == 1 or button.left == 1";
-				}
-				return {
-					sectionBegin: "onevent buttons\n",
-					sectionPriority: 10,
-					clause: cond
-				};
 			}
 		};
 	})()),
@@ -187,27 +189,29 @@ A3a.vpl.BlockTemplate.lib =	[
 					return block;
 				}
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				var cond = "";
-				for (var i = 0; i < 7; i++) {
-					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " and ") +
-							"prox.horizontal[" + buttons[i].str + "] " +
-							(block.param[i] > 0 ? ">= 2" : "<= 1") + "000";
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					var cond = "";
+					for (var i = 0; i < 7; i++) {
+						if (block.param[i]) {
+							cond += (cond.length === 0 ? "" : " and ") +
+								"prox.horizontal[" + buttons[i].str + "] " +
+								(block.param[i] > 0 ? ">= 2" : "<= 1") + "000";
+						}
 					}
-				}
-				if (cond === "") {
-					for (var i = 1; i < 7; i++) {
-						cond += " or prox.horizontal[" + buttons[i] + "] >= 2000";
+					if (cond === "") {
+						for (var i = 1; i < 7; i++) {
+							cond += " or prox.horizontal[" + buttons[i] + "] >= 2000";
+						}
+						cond = cond.slice(4);	// crop initial " or "
 					}
-					cond = cond.slice(4);	// crop initial " or "
+					return {
+						sectionBegin: "onevent prox\n",
+						sectionPriority: 1,
+						clause: cond
+					};
 				}
-				return {
-					sectionBegin: "onevent prox\n",
-					sectionPriority: 1,
-					clause: cond
-				};
 			}
 		};
 	})()),
@@ -297,30 +301,32 @@ A3a.vpl.BlockTemplate.lib =	[
 					return block;
 				}
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				var cond = "";
-				for (var i = 0; i < 7; i++) {
-					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " and ") +
-							"prox.horizontal[" + buttons[i].str + "] " +
-							(block.param[i] > 0
-								? ">= " + Math.round(7 + 33 * block.param[7])
-								: "<= " + Math.round(7 + 33 * block.param[8])) +
-							"00";
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					var cond = "";
+					for (var i = 0; i < 7; i++) {
+						if (block.param[i]) {
+							cond += (cond.length === 0 ? "" : " and ") +
+								"prox.horizontal[" + buttons[i].str + "] " +
+								(block.param[i] > 0
+									? ">= " + Math.round(7 + 33 * block.param[7])
+									: "<= " + Math.round(7 + 33 * block.param[8])) +
+								"00";
+						}
 					}
-				}
-				if (cond === "") {
-					for (var i = 1; i < 7; i++) {
-						cond += " or prox.horizontal[" + buttons[i].str + "] >= 2000";
+					if (cond === "") {
+						for (var i = 1; i < 7; i++) {
+							cond += " or prox.horizontal[" + buttons[i].str + "] >= 2000";
+						}
+						cond = cond.slice(5);	// crop initial " or "
 					}
-					cond = cond.slice(5);	// crop initial " or "
+					return {
+						sectionBegin: "onevent prox\n",
+						sectionPriority: 1,
+						clause: cond
+					};
 				}
-				return {
-					sectionBegin: "onevent prox\n",
-					sectionPriority: 1,
-					clause: cond
-				};
 			}
 		};
 	})()),
@@ -404,28 +410,30 @@ A3a.vpl.BlockTemplate.lib =	[
 					return block;
 				}
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				var cond = "";
-				for (var i = 0; i < 7; i++) {
-					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " and ") +
-							"prox.horizontal[" + buttons[i].str + "] " +
-							(block.param[i] > 0 ? ">=" : "<") + " " +
-							Math.round(7 + 33 * block.param[7]) + "00";
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					var cond = "";
+					for (var i = 0; i < 7; i++) {
+						if (block.param[i]) {
+							cond += (cond.length === 0 ? "" : " and ") +
+								"prox.horizontal[" + buttons[i].str + "] " +
+								(block.param[i] > 0 ? ">=" : "<") + " " +
+								Math.round(7 + 33 * block.param[7]) + "00";
+						}
 					}
-				}
-				if (cond === "") {
-					for (var i = 1; i < 7; i++) {
-						cond += " or prox.horizontal[" + buttons[i].str + "] >= 2000";
+					if (cond === "") {
+						for (var i = 1; i < 7; i++) {
+							cond += " or prox.horizontal[" + buttons[i].str + "] >= 2000";
+						}
+						cond = cond.slice(5);	// crop initial " or "
 					}
-					cond = cond.slice(5);	// crop initial " or "
+					return {
+						sectionBegin: "onevent prox\n",
+						sectionPriority: 1,
+						clause: cond
+					};
 				}
-				return {
-					sectionBegin: "onevent prox\n",
-					sectionPriority: 1,
-					clause: cond
-				};
 			}
 		};
 	})()),
@@ -477,27 +485,29 @@ A3a.vpl.BlockTemplate.lib =	[
 					return block;
 				}
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				var cond = "";
-				for (var i = 0; i < 2; i++) {
-					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " and ") +
-							"prox.ground.delta[" + buttons[i].str + "] " +
-							(block.param[i] > 0 ? ">= 450" : "<= 400");
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					var cond = "";
+					for (var i = 0; i < 2; i++) {
+						if (block.param[i]) {
+							cond += (cond.length === 0 ? "" : " and ") +
+								"prox.ground.delta[" + buttons[i].str + "] " +
+								(block.param[i] > 0 ? ">= 450" : "<= 400");
+						}
 					}
-				}
-				if (cond === "") {
-					for (var i = 1; i < 2; i++) {
-						cond += " or prox.ground.delta[" + buttons[i] + "] >= 450";
+					if (cond === "") {
+						for (var i = 1; i < 2; i++) {
+							cond += " or prox.ground.delta[" + buttons[i] + "] >= 450";
+						}
+						cond = cond.slice(4);	// crop initial " or "
 					}
-					cond = cond.slice(4);	// crop initial " or "
+					return {
+						sectionBegin: "onevent prox\n",
+						sectionPriority: 1,
+						clause: cond
+					};
 				}
-				return {
-					sectionBegin: "onevent prox\n",
-					sectionPriority: 1,
-					clause: cond
-				};
 			}
 		};
 	})()),
@@ -580,29 +590,31 @@ A3a.vpl.BlockTemplate.lib =	[
 					return block;
 				}
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				var cond = "";
-				for (var i = 0; i < 2; i++) {
-					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " and ") +
-							"prox.ground.delta[" + buttons[i].str + "] " +
-							(block.param[i] > 0
-								? ">= " + 25 * Math.round(40 * block.param[2])
-								: "<= " + 25 * Math.round(40 * block.param[3]));
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					var cond = "";
+					for (var i = 0; i < 2; i++) {
+						if (block.param[i]) {
+							cond += (cond.length === 0 ? "" : " and ") +
+								"prox.ground.delta[" + buttons[i].str + "] " +
+								(block.param[i] > 0
+									? ">= " + 25 * Math.round(40 * block.param[2])
+									: "<= " + 25 * Math.round(40 * block.param[3]));
+						}
 					}
-				}
-				if (cond === "") {
-					for (var i = 1; i < 2; i++) {
-						cond += " or prox.ground.delta[" + buttons[i] + "] >= 450";
+					if (cond === "") {
+						for (var i = 1; i < 2; i++) {
+							cond += " or prox.ground.delta[" + buttons[i] + "] >= 450";
+						}
+						cond = cond.slice(4);	// crop initial " or "
 					}
-					cond = cond.slice(4);	// crop initial " or "
+					return {
+						sectionBegin: "onevent prox\n",
+						sectionPriority: 1,
+						clause: cond
+					};
 				}
-				return {
-					sectionBegin: "onevent prox\n",
-					sectionPriority: 1,
-					clause: cond
-				};
 			}
 		};
 	})()),
@@ -679,29 +691,31 @@ A3a.vpl.BlockTemplate.lib =	[
 					return block;
 				}
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				var cond = "";
-				for (var i = 0; i < 2; i++) {
-					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " and ") +
-							"prox.ground.delta[" + buttons[i].str + "] " +
-							(block.param[i] > 0
-								? ">= " : "< ") +
-							25 * Math.round(40 * block.param[2]);
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					var cond = "";
+					for (var i = 0; i < 2; i++) {
+						if (block.param[i]) {
+							cond += (cond.length === 0 ? "" : " and ") +
+								"prox.ground.delta[" + buttons[i].str + "] " +
+								(block.param[i] > 0
+									? ">= " : "< ") +
+								25 * Math.round(40 * block.param[2]);
+						}
 					}
-				}
-				if (cond === "") {
-					for (var i = 1; i < 2; i++) {
-						cond += " or prox.ground.delta[" + buttons[i] + "] >= 450";
+					if (cond === "") {
+						for (var i = 1; i < 2; i++) {
+							cond += " or prox.ground.delta[" + buttons[i] + "] >= 450";
+						}
+						cond = cond.slice(4);	// crop initial " or "
 					}
-					cond = cond.slice(4);	// crop initial " or "
+					return {
+						sectionBegin: "onevent prox\n",
+						sectionPriority: 1,
+						clause: cond
+					};
 				}
-				return {
-					sectionBegin: "onevent prox\n",
-					sectionPriority: 1,
-					clause: cond
-				};
 			}
 		};
 	})()),
@@ -725,12 +739,14 @@ A3a.vpl.BlockTemplate.lib =	[
 				return block;
 			}
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			return {
-				sectionBegin: "onevent tap\n",
-				sectionPriority: 1000
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				return {
+					sectionBegin: "onevent tap\n",
+					sectionPriority: 1000
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate((function () {
@@ -806,39 +822,41 @@ A3a.vpl.BlockTemplate.lib =	[
 					return block;
 				}
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				var dir = /** @type {number} */(block.param[0]);
-				if (dir === 0) {
-					// tap
-					return {
-						sectionBegin: "onevent tap\n",
-						sectionPriority: 1000
-					};
-				} else {
-					/** @type {number} */
-					var a = (dir === 2 ? -1 : 1) * /** @type {number} */(block.param[1]);
-					var name = dir === 1 ? "roll" : "pitch";
-					/** @type {string} */
-					var cond;
-					if (a <= -6) {
-						cond = name + "Angle < " + Math.round(2730.67 * a + 1365.33);
-					} else if (a >= 6) {
-						cond = name + "Angle >= " + Math.round(2730.67 * a - 1365.33);
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					var dir = /** @type {number} */(block.param[0]);
+					if (dir === 0) {
+						// tap
+						return {
+							sectionBegin: "onevent tap\n",
+							sectionPriority: 1000
+						};
 					} else {
-						cond = name + "Angle >= " + Math.round(2730.67 * a - 1365.33) +
-							" and " + name + "Angle < " + Math.round(2730.67 * a + 1365.33);
+						/** @type {number} */
+						var a = (dir === 2 ? -1 : 1) * /** @type {number} */(block.param[1]);
+						var name = dir === 1 ? "roll" : "pitch";
+						/** @type {string} */
+						var cond;
+						if (a <= -6) {
+							cond = name + "Angle < " + Math.round(2730.67 * a + 1365.33);
+						} else if (a >= 6) {
+							cond = name + "Angle >= " + Math.round(2730.67 * a - 1365.33);
+						} else {
+							cond = name + "Angle >= " + Math.round(2730.67 * a - 1365.33) +
+								" and " + name + "Angle < " + Math.round(2730.67 * a + 1365.33);
+						}
+						return {
+							initVarDecl: [
+								"# " + name + " angle from accelerometer\nvar " + name + "Angle\n"
+							],
+							sectionBegin: "onevent acc\n",
+							sectionPriority: 1,
+							clauseInit:
+								"call math.atan2(" + name + "Angle, acc[" + (dir === 2 ? "1" : "0") + "], acc[2])\n",
+							clause: cond
+						};
 					}
-					return {
-						initVarDecl: [
-							"# " + name + " angle from accelerometer\nvar " + name + "Angle\n"
-						],
-						sectionBegin: "onevent acc\n",
-						sectionPriority: 1,
-						clauseInit:
-							"call math.atan2(" + name + "Angle, acc[" + (dir === 2 ? "1" : "0") + "], acc[2])\n",
-						clause: cond
-					};
 				}
 			}
 		};
@@ -872,25 +890,27 @@ A3a.vpl.BlockTemplate.lib =	[
 			var angle = canvas.accelerometerDrag(width, height, left, top, ev, true);
 			block.param[0] = angle;
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			/** @type {number} */
-			var a = /** @type {number} */(block.param[0]);
-			return {
-				initVarDecl: [
-					"# roll angle from accelerometer\nvar rollAngle\n"
-				],
-				sectionBegin: "onevent acc\n",
-				sectionPriority: 1,
-				clauseInit:
-					"call math.atan2(rollAngle, acc[0], acc[2])\n",
-				clause:
-					a === -12
-						? "rollAngle >= " + Math.round(2730.67 * 12 - 1365.33) +
-							" or rollAngle < " + Math.round(2730.67 * a + 1365.33)
-						: "rollAngle >= " + Math.round(2730.67 * a - 1365.33) +
-							" and rollAngle < " + Math.round(2730.67 * a + 1365.33)
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				/** @type {number} */
+				var a = /** @type {number} */(block.param[0]);
+				return {
+					initVarDecl: [
+						"# roll angle from accelerometer\nvar rollAngle\n"
+					],
+					sectionBegin: "onevent acc\n",
+					sectionPriority: 1,
+					clauseInit:
+						"call math.atan2(rollAngle, acc[0], acc[2])\n",
+					clause:
+						a === -12
+							? "rollAngle >= " + Math.round(2730.67 * 12 - 1365.33) +
+								" or rollAngle < " + Math.round(2730.67 * a + 1365.33)
+							: "rollAngle >= " + Math.round(2730.67 * a - 1365.33) +
+								" and rollAngle < " + Math.round(2730.67 * a + 1365.33)
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -922,25 +942,27 @@ A3a.vpl.BlockTemplate.lib =	[
 			var angle = canvas.accelerometerDrag(width, height, left, top, ev, true);
 			block.param[0] = angle;
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			/** @type {number} */
-			var a = -/** @type {number} */(block.param[0]);
-			return {
-				initVarDecl: [
-					"# pitch angle from accelerometer\nvar pitchAngle\n"
-				],
-				sectionBegin: "onevent acc\n",
-				sectionPriority: 1,
-				clauseInit:
-					"call math.atan2(pitchAngle, acc[1], acc[2])\n",
-				clause:
-					a === -12
-						? "pitchAngle >= " + Math.round(2730.67 * 12 - 1365.33) +
-							" or pitchAngle < " + Math.round(2730.67 * a + 1365.33)
-						: "pitchAngle >= " + Math.round(2730.67 * a - 1365.33) +
-							" and pitchAngle < " + Math.round(2730.67 * a + 1365.33)
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				/** @type {number} */
+				var a = -/** @type {number} */(block.param[0]);
+				return {
+					initVarDecl: [
+						"# pitch angle from accelerometer\nvar pitchAngle\n"
+					],
+					sectionBegin: "onevent acc\n",
+					sectionPriority: 1,
+					clauseInit:
+						"call math.atan2(pitchAngle, acc[1], acc[2])\n",
+					clause:
+						a === -12
+							? "pitchAngle >= " + Math.round(2730.67 * 12 - 1365.33) +
+								" or pitchAngle < " + Math.round(2730.67 * a + 1365.33)
+							: "pitchAngle >= " + Math.round(2730.67 * a - 1365.33) +
+								" and pitchAngle < " + Math.round(2730.67 * a + 1365.33)
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -972,25 +994,27 @@ A3a.vpl.BlockTemplate.lib =	[
 			var angle = canvas.accelerometerDrag(width, height, left, top, ev, true);
 			block.param[0] = angle;
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			/** @type {number} */
-			var a = -/** @type {number} */(block.param[0]);
-			return {
-				initVarDecl: [
-					"# yaw angle from accelerometer\nvar yawAngle\n"
-				],
-				sectionBegin: "onevent acc\n",
-				sectionPriority: 1,
-				clauseInit:
-					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				clause:
-					a === -12
-						? "yawAngle >= " + Math.round(2730.67 * 12 - 1365.33) +
-							" or yawAngle < " + Math.round(2730.67 * a + 1365.33)
-						: "yawAngle >= " + Math.round(2730.67 * a - 1365.33) +
-							" and yawAngle < " + Math.round(2730.67 * a + 1365.33)
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				/** @type {number} */
+				var a = -/** @type {number} */(block.param[0]);
+				return {
+					initVarDecl: [
+						"# yaw angle from accelerometer\nvar yawAngle\n"
+					],
+					sectionBegin: "onevent acc\n",
+					sectionPriority: 1,
+					clauseInit:
+						"call math.atan2(yawAngle, acc[0], acc[1])\n",
+					clause:
+						a === -12
+							? "yawAngle >= " + Math.round(2730.67 * 12 - 1365.33) +
+								" or yawAngle < " + Math.round(2730.67 * a + 1365.33)
+							: "yawAngle >= " + Math.round(2730.67 * a - 1365.33) +
+								" and yawAngle < " + Math.round(2730.67 * a + 1365.33)
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -1000,18 +1024,20 @@ A3a.vpl.BlockTemplate.lib =	[
 		draw: function (canvas, block) {
 			canvas.microphone();
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			return {
-				initCodeExec: [
-					"# setup threshold for detecting claps\n" +
-					"mic.threshold = 250\n"
-				],
-				sectionBegin: "onevent mic\n",
-				sectionPriority: 1,
-				clause: "mic.intensity > mic.threshold",
-				clauseOptional: true
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				return {
+					initCodeExec: [
+						"# setup threshold for detecting claps\n" +
+						"mic.threshold = 250\n"
+					],
+					sectionBegin: "onevent mic\n",
+					sectionPriority: 1,
+					clause: "mic.intensity > mic.threshold",
+					clauseOptional: true
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -1023,12 +1049,14 @@ A3a.vpl.BlockTemplate.lib =	[
 			canvas.drawInit();
 		},
 		noState: true,
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			return {
-				sectionBegin: "# initialization\n",
-				sectionPriority: 10000
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				return {
+					sectionBegin: "# initialization\n",
+					sectionPriority: 10000
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -1039,15 +1067,17 @@ A3a.vpl.BlockTemplate.lib =	[
 		draw: function (canvas, block) {
 			canvas.drawTimer(0, true, false);
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			return {
-				initCodeExec: [
-					A3a.vpl.BlockTemplate.resetTimer
-				],
-				sectionBegin: "onevent timer0\n",
-				sectionPriority: 1000
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				return {
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.resetTimer
+					],
+					sectionBegin: "onevent timer0\n",
+					sectionPriority: 1000
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -1083,24 +1113,26 @@ A3a.vpl.BlockTemplate.lib =	[
 			return block;
 		},
 		sectionPriority: function () { return 1; },
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			var cond = "";
-			for (var i = 0; i < 4; i++) {
-				if (block.param[i]) {
-					cond += (cond.length === 0 ? "" : " and ") +
-						"state[" + i + "] == " + (block.param[i] > 0 ? "1" : "0");
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				var cond = "";
+				for (var i = 0; i < 4; i++) {
+					if (block.param[i]) {
+						cond += (cond.length === 0 ? "" : " and ") +
+							"state[" + i + "] == " + (block.param[i] > 0 ? "1" : "0");
+					}
 				}
+				return {
+					initVarDecl: [
+						A3a.vpl.BlockTemplate.initStatesDecl
+					],
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.initStatesInit
+					],
+					clause: cond
+				};
 			}
-			return {
-				initVarDecl: [
-					A3a.vpl.BlockTemplate.initStatesDecl
-				],
-				initCodeExec: [
-					A3a.vpl.BlockTemplate.initStatesInit
-				],
-				clause: cond
-			};
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -1124,17 +1156,19 @@ A3a.vpl.BlockTemplate.lib =	[
 			return i;
 		},
 		sectionPriority: function () { return 1; },
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			return {
-				initVarDecl: [
-					A3a.vpl.BlockTemplate.initState8Decl
-				],
-				initCodeExec: [
-					A3a.vpl.BlockTemplate.initState8Init
-				],
-				clause: "state8 == " + block.param[0].toString(10)
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				return {
+					initVarDecl: [
+						A3a.vpl.BlockTemplate.initState8Decl
+					],
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.initState8Init
+					],
+					clause: "state8 == " + block.param[0].toString(10)
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate((function () {
@@ -1195,20 +1229,22 @@ A3a.vpl.BlockTemplate.lib =	[
 				return i;
 			},
 			sectionPriority: function () { return 1; },
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				var cond = "counter " +
-					(block.param[0] === 0 ? "==" : block.param[0] > 0 ? ">=" : "<=") +
-					" " + block.param[1];
-				return {
-					initVarDecl: [
-						A3a.vpl.BlockTemplate.initCounterDecl
-					],
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initCounterInit
-					],
-					clause: cond
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					var cond = "counter " +
+						(block.param[0] === 0 ? "==" : block.param[0] > 0 ? ">=" : "<=") +
+						" " + block.param[1];
+					return {
+						initVarDecl: [
+							A3a.vpl.BlockTemplate.initCounterDecl
+						],
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initCounterInit
+						],
+						clause: cond
+					};
+				}
 			}
 		};
 	})()),
@@ -1247,22 +1283,24 @@ A3a.vpl.BlockTemplate.lib =	[
 			block.param[dragIndex] = Math.max(0, Math.min(1, Math.round(val)));
 		},
 		sectionPriority: function () { return 1; },
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			var cond = block.param
-				.map(function (p, i) {
-					return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
-				})
-				.join(" and ");
-			return {
-				initVarDecl: [
-					A3a.vpl.BlockTemplate.initTopColorDecl
-				],
-				initCodeExec: [
-					A3a.vpl.BlockTemplate.initTopColorInit
-				],
-				clause: cond
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				var cond = block.param
+					.map(function (p, i) {
+						return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
+					})
+					.join(" and ");
+				return {
+					initVarDecl: [
+						A3a.vpl.BlockTemplate.initTopColorDecl
+					],
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.initTopColorInit
+					],
+					clause: cond
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate((function () {
@@ -1325,22 +1363,24 @@ A3a.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				var cond = block.param
-					.map(function (p, i) {
-						return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
-					})
-					.join(" and ");
-				return {
-					initVarDecl: [
-						A3a.vpl.BlockTemplate.initTopColorDecl
-					],
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initTopColorInit
-					],
-					clause: cond
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					var cond = block.param
+						.map(function (p, i) {
+							return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
+						})
+						.join(" and ");
+					return {
+						initVarDecl: [
+							A3a.vpl.BlockTemplate.initTopColorDecl
+						],
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initTopColorInit
+						],
+						clause: cond
+					};
+				}
 			}
 		};
 	})()),
@@ -1410,24 +1450,26 @@ A3a.vpl.BlockTemplate.lib =	[
 				block.param[1] = val;
 			}
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			/** Clause for one of the motors
-				@param {string} side
-				@param {number} x
-				@return {string}
-			*/
-			function clause1(side, x) {
-				return x > 0 ? "motor." + side + ".target > 250"
-					: x < 0 ? "motor." + side + ".target < -250"
-					: "abs(motor." + side + ".target) < 250";
-			}
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				/** Clause for one of the motors
+					@param {string} side
+					@param {number} x
+					@return {string}
+				*/
+				function clause1(side, x) {
+					return x > 0 ? "motor." + side + ".target > 250"
+						: x < 0 ? "motor." + side + ".target < -250"
+						: "abs(motor." + side + ".target) < 250";
+				}
 
-			return {
-				clause:
-					clause1("left", block.param[0]) + " and " +
-						clause1("right", block.param[1])
-			};
+				return {
+					clause:
+						clause1("left", block.param[0]) + " and " +
+							clause1("right", block.param[1])
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -1515,16 +1557,18 @@ A3a.vpl.BlockTemplate.lib =	[
 				}
 			}
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			return {
-				initCodeExec: [
-					A3a.vpl.BlockTemplate.initOutputs
-				],
-				statement:
-					"motor.left.target = " + Math.round(500 * block.param[0]) + "\n" +
-					"motor.right.target = " + Math.round(500 * block.param[1]) + "\n"
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				return {
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.initOutputs
+					],
+					statement:
+						"motor.left.target = " + Math.round(500 * block.param[0]) + "\n" +
+						"motor.right.target = " + Math.round(500 * block.param[1]) + "\n"
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate((function () {
@@ -1574,18 +1618,20 @@ A3a.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				return {
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputs
-					],
-					statement:
-						"motor.left.target = " +
-							[0, sp, -sp, sp-spt, sp+spt, -sp, sp][block.param[0]] + "\n" +
-						"motor.right.target = " +
-							[0, sp, -sp, sp+spt, sp-spt, sp, -sp][block.param[0]] + "\n"
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initOutputs
+						],
+						statement:
+							"motor.left.target = " +
+								[0, sp, -sp, sp-spt, sp+spt, -sp, sp][block.param[0]] + "\n" +
+							"motor.right.target = " +
+								[0, sp, -sp, sp+spt, sp-spt, sp, -sp][block.param[0]] + "\n"
+					};
+				}
 			}
 		};
 	})()),
@@ -1624,28 +1670,30 @@ A3a.vpl.BlockTemplate.lib =	[
 				var val = canvas.sliderDrag(false, width, height, left, top, ev);
 				block.param[dragIndex] = Math.max(0, Math.min(1, val));
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				return {
-					initVarDecl: [
-						A3a.vpl.BlockTemplate.initTopColorDecl
-					],
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initTopColorInit,
-						A3a.vpl.BlockTemplate.initOutputs
-					],
-					statement:
-						"call leds.top(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						")\n" +
-						"topColor = [" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						"]\n",
-					statementWithoutInit:
-						"call leds.top(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						")\n"
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {
+						initVarDecl: [
+							A3a.vpl.BlockTemplate.initTopColorDecl
+						],
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initTopColorInit,
+							A3a.vpl.BlockTemplate.initOutputs
+						],
+						statement:
+							"call leds.top(" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							")\n" +
+							"topColor = [" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							"]\n",
+						statementWithoutInit:
+							"call leds.top(" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							")\n"
+					};
+				}
 			}
 		};
 	})()),
@@ -1709,28 +1757,30 @@ A3a.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				return {
-					initVarDecl: [
-						A3a.vpl.BlockTemplate.initTopColorDecl
-					],
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initTopColorInit,
-						A3a.vpl.BlockTemplate.initOutputs
-					],
-					statement:
-						"call leds.top(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						")\n" +
-						"topColor = [" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						"]\n",
-					statementWithoutInit:
-						"call leds.top(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						")\n"
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {
+						initVarDecl: [
+							A3a.vpl.BlockTemplate.initTopColorDecl
+						],
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initTopColorInit,
+							A3a.vpl.BlockTemplate.initOutputs
+						],
+						statement:
+							"call leds.top(" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							")\n" +
+							"topColor = [" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							"]\n",
+						statementWithoutInit:
+							"call leds.top(" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							")\n"
+					};
+				}
 			}
 		};
 	})()),
@@ -1769,20 +1819,22 @@ A3a.vpl.BlockTemplate.lib =	[
 				var val = canvas.sliderDrag(false, width, height, left, top, ev);
 				block.param[dragIndex] = Math.max(0, Math.min(1, val));
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				return {
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputs
-					],
-					statement:
-						"call leds.bottom.left(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						")\n" +
-						"call leds.bottom.right(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						")\n"
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initOutputs
+						],
+						statement:
+							"call leds.bottom.left(" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							")\n" +
+							"call leds.bottom.right(" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							")\n"
+					};
+				}
 			}
 		};
 	})()),
@@ -1821,17 +1873,19 @@ A3a.vpl.BlockTemplate.lib =	[
 				var val = canvas.sliderDrag(false, width, height, left, top, ev);
 				block.param[dragIndex] = Math.max(0, Math.min(1, val));
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				return {
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputs
-					],
-					statement:
-						"call leds.bottom.left(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						")\n"
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initOutputs
+						],
+						statement:
+							"call leds.bottom.left(" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							")\n"
+					};
+				}
 			}
 		};
 	})()),
@@ -1870,17 +1924,19 @@ A3a.vpl.BlockTemplate.lib =	[
 				var val = canvas.sliderDrag(false, width, height, left, top, ev);
 				block.param[dragIndex] = Math.max(0, Math.min(1, val));
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				return {
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputs
-					],
-					statement:
-						"call leds.bottom.right(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						")\n"
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initOutputs
+						],
+						statement:
+							"call leds.bottom.right(" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							")\n"
+					};
+				}
 			}
 		};
 	})()),
@@ -1944,20 +2000,22 @@ A3a.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				return {
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputs
-					],
-					statement:
-						"call leds.bottom.left(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						")\n" +
-						"call leds.bottom.right(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						")\n"
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initOutputs
+						],
+						statement:
+							"call leds.bottom.left(" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							")\n" +
+							"call leds.bottom.right(" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							")\n"
+					};
+				}
 			}
 		};
 	})()),
@@ -2021,17 +2079,19 @@ A3a.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				return {
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputs
-					],
-					statement:
-						"call leds.bottom.left(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						")\n"
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initOutputs
+						],
+						statement:
+							"call leds.bottom.left(" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							")\n"
+					};
+				}
 			}
 		};
 	})()),
@@ -2095,17 +2155,19 @@ A3a.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				return {
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputs
-					],
-					statement:
-						"call leds.bottom.right(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						")\n"
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initOutputs
+						],
+						statement:
+							"call leds.bottom.right(" +
+							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
+							")\n"
+					};
+				}
 			}
 		};
 	})()),
@@ -2133,61 +2195,63 @@ A3a.vpl.BlockTemplate.lib =	[
 			}
 			return null;
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			/** @type {Array.<number>} */
-			var notes = [];
-			/** @type {Array.<number>} */
-			var durations = [];
-			for (var i = 0; i < 6; i++) {
-				if (block.param[2 * i + 1] > 0) {
-					notes.push([262, 311, 370, 440, 524, 370][/** @type {number} */(block.param[2 * i])]);
-					durations.push(7 * block.param[2 * i + 1]);
-				} else {
-					notes.push(0);
-					durations.push(28);
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				/** @type {Array.<number>} */
+				var notes = [];
+				/** @type {Array.<number>} */
+				var durations = [];
+				for (var i = 0; i < 6; i++) {
+					if (block.param[2 * i + 1] > 0) {
+						notes.push([262, 311, 370, 440, 524, 370][/** @type {number} */(block.param[2 * i])]);
+						durations.push(7 * block.param[2 * i + 1]);
+					} else {
+						notes.push(0);
+						durations.push(28);
+					}
 				}
+				return {
+					initVarDecl: [
+						"# variables for notes\n" +
+						"var notes[6]\n" +
+						"var durations[6]\n" +
+						"var note_index\n" +
+						"var note_count\n" +
+						"var wave[142]\n" +
+						"var i\n" +
+						"var wave_phase\n" +
+						"var wave_intensity\n",
+					],
+					initCodeExec: [
+						"# init. variables for notes\n" +
+						"note_index = 6\n" +
+						"note_count = 6\n",
+						"# compute a sinus wave for sound\n" +
+						"for i in 0 : 141 do\n" +
+						"wave_phase = (i - 70) * 468\n" +
+						"call math.cos(wave_intensity, wave_phase)\n" +
+						"wave[i] = wave_intensity / 256\n" +
+						"end\n" +
+						"call sound.wave(wave)\n",
+						A3a.vpl.BlockTemplate.initOutputs
+					],
+					initCodeDecl: [
+						"# when a note is finished, play the next one\n" +
+						"onevent sound.finished\n" +
+						"if note_index != note_count then\n" +
+						"call sound.freq(notes[note_index], durations[note_index])\n" +
+						"note_index++\n" +
+						"end\n"
+					],
+					statement:
+						"notes = [" + notes.join(", ") + "]\n" +
+						"durations = [" + durations.join(", ") + "]\n" +
+						"note_index = 1\n" +
+						"note_count = 6\n" +
+						"call sound.freq(notes[0], durations[0])\n"
+				};
 			}
-			return {
-				initVarDecl: [
-					"# variables for notes\n" +
-					"var notes[6]\n" +
-					"var durations[6]\n" +
-					"var note_index\n" +
-					"var note_count\n" +
-					"var wave[142]\n" +
-					"var i\n" +
-					"var wave_phase\n" +
-					"var wave_intensity\n",
-				],
-				initCodeExec: [
-					"# init. variables for notes\n" +
-					"note_index = 6\n" +
-					"note_count = 6\n",
-					"# compute a sinus wave for sound\n" +
-					"for i in 0 : 141 do\n" +
-					"wave_phase = (i - 70) * 468\n" +
-					"call math.cos(wave_intensity, wave_phase)\n" +
-					"wave[i] = wave_intensity / 256\n" +
-					"end\n" +
-					"call sound.wave(wave)\n",
-					A3a.vpl.BlockTemplate.initOutputs
-				],
-				initCodeDecl: [
-					"# when a note is finished, play the next one\n" +
-					"onevent sound.finished\n" +
-					"if note_index != note_count then\n" +
-					"call sound.freq(notes[note_index], durations[note_index])\n" +
-					"note_index++\n" +
-					"end\n"
-				],
-				statement:
-					"notes = [" + notes.join(", ") + "]\n" +
-					"durations = [" + durations.join(", ") + "]\n" +
-					"note_index = 1\n" +
-					"note_count = 6\n" +
-					"call sound.freq(notes[0], durations[0])\n"
-			};
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -2210,33 +2274,35 @@ A3a.vpl.BlockTemplate.lib =	[
 			}
 			return i;
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			var code = "";
-			for (var i = 0; i < 4; i++) {
-				if (block.param[i]) {
-					code += "state[" + i + "] = " + (block.param[i] > 0 ? "1" : "0") + "\n";
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				var code = "";
+				for (var i = 0; i < 4; i++) {
+					if (block.param[i]) {
+						code += "state[" + i + "] = " + (block.param[i] > 0 ? "1" : "0") + "\n";
+					}
 				}
+				return {
+					initVarDecl: [
+						A3a.vpl.BlockTemplate.initStatesDecl
+					],
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.initStatesInit
+					],
+					initCodeDecl: [
+						A3a.vpl.BlockTemplate.dispStates
+					],
+					statement: code.length > 0
+						? code + "callsub display_state\n"
+						: "",
+					statementWithoutInit:
+						"call leds.circle(0," + (block.param[1] ? "32" : "0") +
+							",0," + (block.param[3] ? "32" : "0") +
+							",0," + (block.param[2] ? "32" : "0") +
+							",0," + (block.param[0] ? "32" : "0") + ")\n"
+				};
 			}
-			return {
-				initVarDecl: [
-					A3a.vpl.BlockTemplate.initStatesDecl
-				],
-				initCodeExec: [
-					A3a.vpl.BlockTemplate.initStatesInit
-				],
-				initCodeDecl: [
-					A3a.vpl.BlockTemplate.dispStates
-				],
-				statement: code.length > 0
-					? code + "callsub display_state\n"
-					: "",
-				statementWithoutInit:
-					"call leds.circle(0," + (block.param[1] ? "32" : "0") +
-						",0," + (block.param[3] ? "32" : "0") +
-						",0," + (block.param[2] ? "32" : "0") +
-						",0," + (block.param[0] ? "32" : "0") + ")\n"
-			};
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -2259,33 +2325,35 @@ A3a.vpl.BlockTemplate.lib =	[
 			}
 			return i;
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			var code = "state8 = " + block.param[0].toString(10) + "\n";
-			return {
-				initVarDecl: [
-					A3a.vpl.BlockTemplate.initState8Decl
-				],
-				initCodeExec: [
-					A3a.vpl.BlockTemplate.initState8Init
-				],
-				initCodeDecl: [
-					A3a.vpl.BlockTemplate.dispState8
-				],
-				statement: code.length > 0
-					? code + "callsub display_state8\n"
-					: "",
-				statementWithoutInit:
-					"call leds.circle(" + (block.param[0] === 0 ? "32" : "0") +
-						"," + (block.param[0] === 1 ? "32" : "0") +
-						"," + (block.param[0] === 2 ? "32" : "0") +
-						"," + (block.param[0] === 3 ? "32" : "0") +
-						"," + (block.param[0] === 4 ? "32" : "0") +
-						"," + (block.param[0] === 5 ? "32" : "0") +
-						"," + (block.param[0] === 6 ? "32" : "0") +
-						"," + (block.param[0] === 7 ? "32" : "0") +
-						")\n"
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				var code = "state8 = " + block.param[0].toString(10) + "\n";
+				return {
+					initVarDecl: [
+						A3a.vpl.BlockTemplate.initState8Decl
+					],
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.initState8Init
+					],
+					initCodeDecl: [
+						A3a.vpl.BlockTemplate.dispState8
+					],
+					statement: code.length > 0
+						? code + "callsub display_state8\n"
+						: "",
+					statementWithoutInit:
+						"call leds.circle(" + (block.param[0] === 0 ? "32" : "0") +
+							"," + (block.param[0] === 1 ? "32" : "0") +
+							"," + (block.param[0] === 2 ? "32" : "0") +
+							"," + (block.param[0] === 3 ? "32" : "0") +
+							"," + (block.param[0] === 4 ? "32" : "0") +
+							"," + (block.param[0] === 5 ? "32" : "0") +
+							"," + (block.param[0] === 6 ? "32" : "0") +
+							"," + (block.param[0] === 7 ? "32" : "0") +
+							")\n"
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate((function () {
@@ -2338,33 +2406,35 @@ A3a.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				return {
-					initVarDecl: [
-						A3a.vpl.BlockTemplate.initState8Decl
-					],
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initState8Init
-					],
-					initCodeDecl: [
-						A3a.vpl.BlockTemplate.dispState8
-					],
-					statement: "state8 = (state8 + " +
-							(block.param[0] > 0 ? "1" : "7") +
-							") % 8\n" +
-							"callsub display_state8\n",
-					statementWithoutInit:
-						"call leds.circle(" + (block.param[0] === 0 ? "32" : "0") +
-							"," + (block.param[0] === 1 ? "32" : "0") +
-							"," + (block.param[0] === 2 ? "32" : "0") +
-							"," + (block.param[0] === 3 ? "32" : "0") +
-							"," + (block.param[0] === 4 ? "32" : "0") +
-							"," + (block.param[0] === 5 ? "32" : "0") +
-							"," + (block.param[0] === 6 ? "32" : "0") +
-							"," + (block.param[0] === 7 ? "32" : "0") +
-							")\n"
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {
+						initVarDecl: [
+							A3a.vpl.BlockTemplate.initState8Decl
+						],
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initState8Init
+						],
+						initCodeDecl: [
+							A3a.vpl.BlockTemplate.dispState8
+						],
+						statement: "state8 = (state8 + " +
+								(block.param[0] > 0 ? "1" : "7") +
+								") % 8\n" +
+								"callsub display_state8\n",
+						statementWithoutInit:
+							"call leds.circle(" + (block.param[0] === 0 ? "32" : "0") +
+								"," + (block.param[0] === 1 ? "32" : "0") +
+								"," + (block.param[0] === 2 ? "32" : "0") +
+								"," + (block.param[0] === 3 ? "32" : "0") +
+								"," + (block.param[0] === 4 ? "32" : "0") +
+								"," + (block.param[0] === 5 ? "32" : "0") +
+								"," + (block.param[0] === 6 ? "32" : "0") +
+								"," + (block.param[0] === 7 ? "32" : "0") +
+								")\n"
+					};
+				}
 			}
 		};
 	})()),
@@ -2408,27 +2478,29 @@ A3a.vpl.BlockTemplate.lib =	[
 				return i;
 			},
 			sectionPriority: function () { return 1; },
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				return {
-					initVarDecl: [
-						A3a.vpl.BlockTemplate.initCounterDecl,
-					],
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.initCounterInit
-					],
-					initCodeDecl: [
-						A3a.vpl.BlockTemplate.dispCounter
-					],
-					statement:
-						(block.param[0] === 0 ? "counter = 0" :
-							block.param[0] > 0 ? "if counter < 255 then\ncounter++\nend" :
-							"if counter > 0 then\ncounter--\nend") +
-						"\n" +
-						"callsub display_counter\n",
-					statementWithoutInit:
-						"call leds.circle(" + (block.param[0] > 0 ? "1" : "0") + ",0,0,0,0,0,0,0)\n"
-				};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {
+						initVarDecl: [
+							A3a.vpl.BlockTemplate.initCounterDecl,
+						],
+						initCodeExec: [
+							A3a.vpl.BlockTemplate.initCounterInit
+						],
+						initCodeDecl: [
+							A3a.vpl.BlockTemplate.dispCounter
+						],
+						statement:
+							(block.param[0] === 0 ? "counter = 0" :
+								block.param[0] > 0 ? "if counter < 255 then\ncounter++\nend" :
+								"if counter > 0 then\ncounter--\nend") +
+							"\n" +
+							"callsub display_counter\n",
+						statementWithoutInit:
+							"call leds.circle(" + (block.param[0] > 0 ? "1" : "0") + ",0,0,0,0,0,0,0)\n"
+					};
+				}
 			}
 		};
 	})()),
@@ -2455,14 +2527,16 @@ A3a.vpl.BlockTemplate.lib =	[
 			var t = canvas.timerDrag(width, height, left, top, false, ev);
 			block.param[0] = t;
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			return {
-				initCodeExec: [
-					A3a.vpl.BlockTemplate.resetTimer
-				],
-				statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + "\n"
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				return {
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.resetTimer
+					],
+					statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + "\n"
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -2488,14 +2562,16 @@ A3a.vpl.BlockTemplate.lib =	[
 			var t = canvas.timerDrag(width, height, left, top, true, ev);
 			block.param[0] = t;
 		},
-		/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-		genCode: function (block) {
-			return {
-				initCodeExec: [
-					A3a.vpl.BlockTemplate.resetTimer
-				],
-				statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + "\n"
-			};
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				return {
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.resetTimer
+					],
+					statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + "\n"
+				};
+			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate((function () {
@@ -2610,9 +2686,11 @@ A3a.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			/** @type {A3a.vpl.BlockTemplate.genCodeFun} */
-			genCode: function (block) {
-				return {};
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {};
+				}
 			}
 		};
 	})())

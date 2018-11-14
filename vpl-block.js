@@ -79,10 +79,11 @@ A3a.vpl.Block.prototype.prepareChange = function () {
 A3a.vpl.compiledCode;
 
 /** Generate code
+	@param {string} language
 	@return {A3a.vpl.compiledCode}
 */
-A3a.vpl.Block.prototype.generateCode = function () {
+A3a.vpl.Block.prototype.generateCode = function (language) {
 	return this.disabled
 		? {}
-		: this.blockTemplate.genCode(this);
+		: this.blockTemplate.genCode[language](this);
 };

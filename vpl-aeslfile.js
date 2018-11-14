@@ -50,7 +50,7 @@ A3a.vpl.Program.prototype.toXML = function () {
 	@return {string} content of the AESL file (xml)
 */
 A3a.vpl.Program.prototype.exportAsAESLFile = function () {
-	return A3a.vpl.Program.toAESLFile(this.getCode(),
+	return A3a.vpl.Program.toAESLFile(this.getCode("aseba"),
 		this.toXML());
 };
 

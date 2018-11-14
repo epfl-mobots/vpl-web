@@ -156,13 +156,10 @@ function vplSetup(uiConfig) {
 	var isL2 = getQueryOption("compiler") === "l2";
 	if (!isClassic && uiConfig) {
 		try {
-			A3a.vpl.patchSVG(uiConfig, isL2);
+			A3a.vpl.patchSVG(uiConfig);
 		} catch (e) {}
 	} else if (isL2) {
 		A3a.vpl.patchL2Blocks();
-	}
-	if (isL2) {
-		A3a.vpl.patchL2();
 	}
 
 	A3a.vpl.Program.resetBlockLib();
@@ -187,6 +184,7 @@ function vplSetup(uiConfig) {
 	}
 
 	window["vplProgram"] = new A3a.vpl.Program();
+	window["vplProgram"].currentLanguage = isL2 ? "l2" : "aseba";
 	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["vplProgram"].noVPL, window["vplRunFunction"]);
 	var canvas = document.getElementById("programCanvas");
 	window["vplCanvas"] = new A3a.vpl.Canvas(canvas);
@@ -199,7 +197,7 @@ function vplSetup(uiConfig) {
 		window["vplProgram"].invalidateCode();
 		window["vplProgram"].enforceSingleTrailingEmptyEventHandler();
 		window["vplProgram"].renderToCanvas(window["vplCanvas"]);
-		window["vplEditor"].setCode(window["vplProgram"].getCode());
+		window["vplEditor"].setCode(window["vplProgram"].getCode(window["vplProgram"].currentLanguage));
 	};
 	window["vplProgram"].addEventHandler(true);
 
@@ -279,7 +277,7 @@ function vplSetup(uiConfig) {
 		window["vplProgram"].experimentalFeatures = getQueryOption("exp") === "true";
 		window["vplProgram"].setTeacherRole(getQueryOption("role") === "teacher");
 		window["vplProgram"].renderToCanvas(window["vplCanvas"]);
-		document.getElementById("editor").textContent = window["vplProgram"].getCode();
+		document.getElementById("editor").textContent = window["vplProgram"].getCode(window["vplProgram"].currentLanguage);
 	}
 	window["vplEditor"].toolbarRender();
 }

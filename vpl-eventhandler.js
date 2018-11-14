@@ -201,10 +201,11 @@ A3a.vpl.EventHandler.prototype.fixBlockContainerRefs = function () {
 };
 
 /** Generate code
-	@param {string=} andOp operator for "and" (default: "and")
+	@param {string} language
+	@param {string} andOp operator for "and" ("and", "&&", etc.)
 	@return {A3a.vpl.compiledCode}
 */
-A3a.vpl.EventHandler.prototype.generateCode = function (andOp) {
+A3a.vpl.EventHandler.prototype.generateCode = function (language, andOp) {
 	if (this.disabled || this.isEmpty()) {
 		return {};
 	}
@@ -284,7 +285,7 @@ A3a.vpl.EventHandler.prototype.generateCode = function (andOp) {
 	var clauses = [];
 	var clauseInit = "";
 	this.events.forEach(function (event, i) {
-		var code = event.generateCode();
+		var code = event.generateCode(language);
 		if (code.sectionPriority > priPri) {
 			priPri = code.sectionPriority;
 			priIx = i;
@@ -320,7 +321,7 @@ A3a.vpl.EventHandler.prototype.generateCode = function (andOp) {
 		: clauses.map(function (c) { return "(" + c + ")"; }).join(" " + (andOp || "and") + " ");
 	var str = "";
 	for (var i = 0; i < this.actions.length; i++) {
-		var code = this.actions[i].generateCode();
+		var code = this.actions[i].generateCode(language);
 		str += code.statement || "";
 		if (code.initVarDecl) {
 			code.initVarDecl.forEach(function (frag) {
@@ -345,7 +346,7 @@ A3a.vpl.EventHandler.prototype.generateCode = function (andOp) {
 		}
 	}
 	if (priEv && str.length > 0) {
-		var eventCode = priEv.generateCode();
+		var eventCode = priEv.generateCode(language);
 		return {
 			initVarDecl: initVarDecl,
 			initCodeExec: initCodeExec,
