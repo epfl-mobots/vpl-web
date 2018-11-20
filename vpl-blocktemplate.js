@@ -11,6 +11,7 @@ A3a.vpl.blockType = {
 	action: "a",
 	state: "s",
 	comment: "c",
+	hidden: "h",
 	undef: "?"
 };
 

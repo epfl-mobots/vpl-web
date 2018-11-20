@@ -912,30 +912,33 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 							A3a.vpl.blockType.action;
 			});
 
-		this.addControl(controlBar, "stop",
-			// draw
-			function (ctx, item, dx, dy) {
-				ctx.fillStyle = "navy";
-				ctx.fillRect(item.x + dx, item.y + dy,
-					canvas.dims.controlSize, canvas.dims.controlSize);
-				ctx.fillStyle = window["vplNode"] ? "white" : "#777";
-				ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.28,
-					item.y + dy + canvas.dims.controlSize * 0.28,
-					canvas.dims.controlSize * 0.44, canvas.dims.controlSize * 0.44);
-				ctx.fill();
-			},
-			// mousedown
-			function (data, x, y, ev) {
-				if (window["vplNode"]) {
-					window["vplRunFunction"]("motor.left.target = 0\nmotor.right.target = 0\n");
-					self.uploaded = false;
-				}
-				return 0;
-			},
-			// doDrop
-			null,
-			// canDrop
-			null);
+		var stopGenCode = A3a.vpl.BlockTemplate.findByName("stop").genCode[self.currentLanguage];
+		if (stopGenCode) {
+			this.addControl(controlBar, "stop",
+				// draw
+				function (ctx, item, dx, dy) {
+					ctx.fillStyle = "navy";
+					ctx.fillRect(item.x + dx, item.y + dy,
+						canvas.dims.controlSize, canvas.dims.controlSize);
+					ctx.fillStyle = window["vplNode"] ? "white" : "#777";
+					ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.28,
+						item.y + dy + canvas.dims.controlSize * 0.28,
+						canvas.dims.controlSize * 0.44, canvas.dims.controlSize * 0.44);
+					ctx.fill();
+				},
+				// mousedown
+				function (data, x, y, ev) {
+					if (window["vplNode"]) {
+						window["vplRunFunction"](stopGenCode(null).statement);
+						self.uploaded = false;
+					}
+					return 0;
+				},
+				// doDrop
+				null,
+				// canDrop
+				null);
+		}
 
 		controlBar.addStretch();
 	}

@@ -71,6 +71,20 @@ A3a.vpl.BlockTemplate.resetTimer =
 	@type {Array.<A3a.vpl.BlockTemplate>}
 */
 A3a.vpl.BlockTemplate.lib =	[
+	new A3a.vpl.BlockTemplate({
+		name: "stop",
+		type: A3a.vpl.blockType.hidden,
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				return {
+					statement:
+						"motor.left.target = 0\n" +
+						"motor.right.target = 0\n"
+				};
+			}
+		}
+	}),
 	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const
