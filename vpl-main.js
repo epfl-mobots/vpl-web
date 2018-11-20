@@ -153,13 +153,19 @@ function vplSetup(uiConfig) {
 
 	// general settings
 	var isClassic = getQueryOption("appearance") === "classic";
-	var isL2 = getQueryOption("compiler") === "l2";
-	if (!isClassic && uiConfig) {
+	var compiler = getQueryOption("compiler") || A3a.vpl.defaultLanguage;
+	if (isClassic) {
+	 	if (A3a.vpl.patchL2Blocks) {
+			A3a.vpl.patchL2Blocks();
+		}
+	} else if (uiConfig) {
 		try {
 			A3a.vpl.patchSVG(uiConfig);
 		} catch (e) {}
-	} else if (isL2) {
-		A3a.vpl.patchL2Blocks();
+	}
+
+	if (!A3a.vpl.Program.generateCode[compiler]) {
+		throw "Unsupported language " + compiler;
 	}
 
 	A3a.vpl.Program.resetBlockLib();
@@ -177,6 +183,7 @@ function vplSetup(uiConfig) {
 
 	var hasThymio = getQueryOption("robot") === "true";
 	if (hasThymio) {
+		window["installThymio"]();
 		window["vplRunFunction"] && window["vplRunFunction"]["init"] &&
 			window["vplRunFunction"]["init"]();
 	} else {
@@ -184,7 +191,7 @@ function vplSetup(uiConfig) {
 	}
 
 	window["vplProgram"] = new A3a.vpl.Program();
-	window["vplProgram"].currentLanguage = isL2 ? "l2" : "aseba";
+	window["vplProgram"].currentLanguage = compiler;
 	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["vplProgram"].noVPL, window["vplRunFunction"]);
 	var canvas = document.getElementById("programCanvas");
 	window["vplCanvas"] = new A3a.vpl.Canvas(canvas);

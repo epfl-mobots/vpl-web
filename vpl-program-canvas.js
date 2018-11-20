@@ -867,9 +867,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.8,
 					item.y + dy + canvas.dims.controlSize * 0.5);
 				ctx.closePath();
-				ctx.fillStyle = window["vplNode"] ? "white" : "#777";
+				ctx.fillStyle = window["vplRunFunction"]["isEnabled"]() ? "white" : "#777";
 				ctx.fill();
-				ctx.fillStyle = window["vplNode"] ? self.uploaded ? "white" : "#44a" : "#777";
+				ctx.fillStyle = window["vplRunFunction"]["isEnabled"]() ? self.uploaded ? "white" : "#44a" : "#777";
 				ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.1,
 					item.y + dy + canvas.dims.controlSize * 0.8,
 					canvas.dims.controlSize * 0.8,
@@ -877,7 +877,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			},
 			// mousedown
 			function (data, x, y, ev) {
-				if (window["vplNode"]) {
+				if (window["vplRunFunction"]["isEnabled"]()) {
 					var code = self.getCode(self.currentLanguage);
 					window["vplRunFunction"](code);
 					self.uploaded = true;
@@ -903,7 +903,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			},
 			// canDrop: accept event handler or action block in event handler or in template
 			function (targetItem, draggedItem) {
-				return window["vplNode"] &&
+				return window["vplRunFunction"]["isEnabled"]() &&
 					draggedItem.data instanceof A3a.vpl.EventHandler &&
  						/** @type {A3a.vpl.EventHandler} */(draggedItem.data).hasBlockOfType(A3a.vpl.blockType.action) ||
 					draggedItem.data instanceof A3a.vpl.Block &&
@@ -920,7 +920,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 					ctx.fillStyle = "navy";
 					ctx.fillRect(item.x + dx, item.y + dy,
 						canvas.dims.controlSize, canvas.dims.controlSize);
-					ctx.fillStyle = window["vplNode"] ? "white" : "#777";
+					ctx.fillStyle = window["vplRunFunction"]["isEnabled"]() ? "white" : "#777";
 					ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.28,
 						item.y + dy + canvas.dims.controlSize * 0.28,
 						canvas.dims.controlSize * 0.44, canvas.dims.controlSize * 0.44);
@@ -928,7 +928,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				},
 				// mousedown
 				function (data, x, y, ev) {
-					if (window["vplNode"]) {
+					if (window["vplRunFunction"]["isEnabled"]()) {
 						window["vplRunFunction"](stopGenCode(null).statement);
 						self.uploaded = false;
 					}
