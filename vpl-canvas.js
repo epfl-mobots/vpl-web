@@ -16,7 +16,8 @@
 	@param {?A3a.vpl.CanvasItem.draw} draw
 	@param {?{
 		mousedown:(A3a.vpl.CanvasItem.mousedown|null|undefined),
-		mousedrag:(A3a.vpl.CanvasItem.mousedrag|null|undefined)
+		mousedrag:(A3a.vpl.CanvasItem.mousedrag|null|undefined),
+		mouseup:(A3a.vpl.CanvasItem.mouseup|null|undefined)
 	}=} interactiveCB
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
@@ -125,6 +126,11 @@ A3a.vpl.CanvasItem.mousedown;
 A3a.vpl.CanvasItem.mousedrag;
 
 /**
+	@typedef {function(A3a.vpl.Canvas,*,number):void}
+*/
+A3a.vpl.CanvasItem.mouseup;
+
+/**
 	@typedef {function(A3a.vpl.CanvasItem,A3a.vpl.CanvasItem):void}
 	(arguments: target item, dropped item)
 */
@@ -204,6 +210,10 @@ A3a.vpl.Canvas = function (canvas) {
 								canvasBndRect.left + item.x,
 								canvasBndRect.top + item.y,
 								e);
+							self.onUpdate && self.onUpdate();
+						} else if (item.interactiveCB.mouseup) {
+							item.interactiveCB.mouseup(self, item.data,
+								/** @type {number} */(item.dragging));
 							self.onUpdate && self.onUpdate();
 						}
 					}
