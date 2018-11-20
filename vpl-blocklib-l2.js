@@ -659,6 +659,28 @@ A3a.vpl.patchL2Blocks = function () {
 						: ""
 				};
 			},
+			"toggle state": function (block) {
+				var code = "";
+				for (var i = 0; i < 4; i++) {
+					if (block.param[i]) {
+						code += "state[" + i + "] = !state[" + i + "];\n";
+					}
+				}
+				return {
+					initVarDecl: [
+						A3a.vpl.BlockTemplate.initStatesDecl2
+					],
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.initStatesInit2
+					],
+					initCodeDecl: [
+						A3a.vpl.BlockTemplate.dispStates2
+					],
+					statement: code.length > 0
+						? code + "display_state();\n"
+						: ""
+				};
+			},
 			"set state 8": function (block) {
 				var code = "state8 = " + block.param[0].toString(10) + ";\n";
 				return {

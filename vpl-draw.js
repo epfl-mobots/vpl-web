@@ -885,20 +885,21 @@ A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 	ctx.restore();
 };
 
-/** Draw a state
+/** Draw a state (low-level)
+	@param {CanvasRenderingContext2D} ctx
+	@param {number} x0
+	@param {number} y0
+	@param {number} rInner inner radius
+	@param {number} rOuter outer radius
 	@param {number} a1 angle 1 (counterclockwise starting at right)
 	@param {number} a2 angle 2 (larger than angle 1)
-	@param {number} val 1=set, -1=reset, 0=nop
+	@param {string} fillStyle
+	@param {string} strokeStyle
+	@param {number} lineWidth
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.drawArc = function (a1, a2, val) {
-	var ctx = this.ctx;
-	var dims = this.dims;
-
-	var x0 = dims.blockSize / 2;
-	var y0 = dims.blockSize / 2;
-	var rInner = dims.blockSize * 0.3;
-	var rOuter = dims.blockSize * 0.45;
+A3a.vpl.Canvas.drawArc = function (ctx, x0, y0, rInner, rOuter, a1, a2,
+	fillStyle, strokeStyle, lineWidth) {
 	var rMid = (rInner + rOuter) / 2;
 	var rEnd = (rOuter - rInner) / 2;
 	ctx.save();
@@ -907,19 +908,54 @@ A3a.vpl.Canvas.prototype.drawArc = function (a1, a2, val) {
 	ctx.arc(x0 + rMid * Math.cos(a1), y0 - rMid * Math.sin(a1), rEnd, -a1 - Math.PI, -a1, true);
 	ctx.arc(x0, y0, rOuter, -a1, -a2, true);
 	ctx.arc(x0 + rMid * Math.cos(a2), y0 - rMid * Math.sin(a2), rEnd, -a2, -a2 + Math.PI, true);
-	ctx.fillStyle = val < 0 ? "white" : val > 0 ? "#f70" : "#ddd";
-	ctx.strokeStyle = val === 0 ? "#bbb" : "black";
-	ctx.lineWidth = dims.blockLineWidth;
+	ctx.fillStyle = fillStyle;
+	ctx.strokeStyle = strokeStyle;
+	ctx.lineWidth = lineWidth;
 	ctx.fill();
 	ctx.stroke();
 	ctx.restore();
 };
 
+/** Draw a state
+	@param {number} a1 angle 1 (counterclockwise starting at right)
+	@param {number} a2 angle 2 (larger than angle 1)
+	@param {number} val 1=set, -1=reset, 0=nop, 2=toggle
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.drawArc = function (a1, a2, val) {
+	var dims = this.dims;
+
+	var x0 = dims.blockSize / 2;
+	var y0 = dims.blockSize / 2;
+	var rInner = dims.blockSize * 0.3;
+	var rOuter = dims.blockSize * 0.45;
+	A3a.vpl.Canvas.drawArc(this.ctx,
+		x0, y0, rInner, rOuter, a1, a2,
+		val < 0 ? "white" : val === 2 ? "red" : val > 0 ? "#f70" : "#ddd",
+		val === 0 ? "#bbb" : "black",
+		dims.blockLineWidth);
+};
+
 /** Draw state
-	@param {Array.<number>} state array of 4 states, with 0=unspecified, 1=set, 2=clear
+	@param {Array.<number>} state array of 4 states, with 0=unspecified, 1=set, -1=reset, 2=toggle
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.drawState = function (state) {
+	var ctx = this.ctx;
+
+	ctx.save();
+	this.drawArc(Math.PI * 0.6, Math.PI * 0.9, state[0]);
+	this.drawArc(Math.PI * 0.1, Math.PI * 0.4, state[1]);
+	this.drawArc(Math.PI * 1.1, Math.PI * 1.4, state[2]);
+	this.drawArc(Math.PI * 1.6, Math.PI * 1.9, state[3]);
+	ctx.restore();
+};
+
+/** Draw state
+	@param {Array.<number>} state array of 4 states, with false=white, true=red
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.drawStateToggle = function (state) {
 	var ctx = this.ctx;
 
 	ctx.save();
@@ -945,7 +981,7 @@ A3a.vpl.Canvas.prototype.drawState8 = function (state) {
 	ctx.restore();
 };
 
-/** Draw state 8 change (disabled states without east and west ones to leave room for buttons)
+/** Draw state 8 change (disabled states)
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.drawState8Change = function () {

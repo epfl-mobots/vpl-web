@@ -1272,8 +1272,8 @@ A3a.vpl.BlockTemplate.lib =	[
 		draw: function (canvas, block) {
 			canvas.robotTop({rgb: block.param});
 			canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
-			canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
-			canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
+			canvas.slider(/** @type {number} */(block.param[1]), 0, false, "#0c0");
+			canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "#08f");
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
@@ -1660,8 +1660,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			draw: function (canvas, block) {
 				canvas.robotTop({rgb: block.param});
 				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
-				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
-				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
+				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "#0c0");
+				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "#08f");
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
@@ -1809,8 +1809,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true, rgb: block.param});
 				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
-				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
-				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
+				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "#0c0");
+				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "#08f");
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
@@ -1863,8 +1863,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true, rgb: block.param, side: "left"});
 				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
-				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
-				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
+				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "#0c0");
+				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "#08f");
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
@@ -1914,8 +1914,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true, rgb: block.param, side: "right"});
 				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
-				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "green");
-				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "blue");
+				canvas.slider(/** @type {number} */(block.param[1]), 0, false, "#0c0");
+				canvas.slider(/** @type {number} */(block.param[2]), -0.3, false, "#08f");
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
@@ -2320,6 +2320,73 @@ A3a.vpl.BlockTemplate.lib =	[
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
+		name: "toggle state",
+		modes: [A3a.vpl.mode.custom],
+		type: A3a.vpl.blockType.action,
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		defaultParam: function () { return [false, false, false, false]; },
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.robotTop();
+			canvas.drawState(block.param.map(function (b) { return b ? 2 : 0; }));
+			canvas.drawArcArrow(canvas.dims.blockSize / 2, canvas.dims.blockSize / 2,
+				canvas.dims.blockSize * 0.2,
+				-1.4, 1.4,
+				{
+					style: "black",
+					lineWidth: canvas.dims.blockLineWidth,
+					arrowSize: 5 * canvas.dims.blockLineWidth
+				});
+			canvas.drawArcArrow(canvas.dims.blockSize / 2, canvas.dims.blockSize / 2,
+				canvas.dims.blockSize * 0.2,
+				Math.PI - 1.4, Math.PI + 1.4,
+				{
+					style: "black",
+					lineWidth: canvas.dims.blockLineWidth,
+					arrowSize: 5 * canvas.dims.blockLineWidth
+				});
+		},
+		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+		mousedown: function (canvas, block, width, height, left, top, ev) {
+			var i = canvas.stateClick(width, height, left, top, ev);
+			if (i !== null) {
+				block.prepareChange();
+				block.param[i] = !block.param[i];
+			}
+			return i;
+		},
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				var code = "";
+				for (var i = 0; i < 4; i++) {
+					if (block.param[i]) {
+						code += "state[" + i + "] = 1 - state[" + i + "]\n";
+					}
+				}
+				return {
+					initVarDecl: [
+						A3a.vpl.BlockTemplate.initStatesDecl
+					],
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.initStatesInit
+					],
+					initCodeDecl: [
+						A3a.vpl.BlockTemplate.dispStates
+					],
+					statement: code.length > 0
+						? code + "callsub display_state\n"
+						: "",
+					statementWithoutInit:
+						"call leds.circle(0," + (block.param[1] ? "32" : "0") +
+							",0," + (block.param[3] ? "32" : "0") +
+							",0," + (block.param[2] ? "32" : "0") +
+							",0," + (block.param[0] ? "32" : "0") + ")\n"
+				};
+			}
+		}
+	}),
+	new A3a.vpl.BlockTemplate({
 		name: "set state 8",
 		modes: [A3a.vpl.mode.custom],
 		type: A3a.vpl.blockType.action,
@@ -2342,7 +2409,6 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 		genCode: {
 			"aseba": function (block) {
-				var code = "state8 = " + block.param[0].toString(10) + "\n";
 				return {
 					initVarDecl: [
 						A3a.vpl.BlockTemplate.initState8Decl
@@ -2353,9 +2419,9 @@ A3a.vpl.BlockTemplate.lib =	[
 					initCodeDecl: [
 						A3a.vpl.BlockTemplate.dispState8
 					],
-					statement: code.length > 0
-						? code + "callsub display_state8\n"
-						: "",
+					statement:
+						"state8 = " + block.param[0].toString(10) + "\n" +
+						"callsub display_state8\n",
 					statementWithoutInit:
 						"call leds.circle(" + (block.param[0] === 0 ? "32" : "0") +
 							"," + (block.param[0] === 1 ? "32" : "0") +
