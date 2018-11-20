@@ -660,7 +660,7 @@ A3a.vpl.patchL2Blocks = function () {
 				};
 			},
 			"set state 8": function (block) {
-				var code = "state8 = " + block.param[0].toString(10) + "\n";
+				var code = "state8 = " + block.param[0].toString(10) + ";\n";
 				return {
 					initVarDecl: [
 						A3a.vpl.BlockTemplate.initState8Decl2
@@ -672,10 +672,10 @@ A3a.vpl.patchL2Blocks = function () {
 						A3a.vpl.BlockTemplate.dispState82
 					],
 					statement: code.length > 0
-						? code + "callsub display_state8\n"
+						? code + "display_state8();\n"
 						: "",
 					statementWithoutInit:
-						"call leds.circle(" + (block.param[0] === 0 ? "32" : "0") +
+						"leds.circle(" + (block.param[0] === 0 ? "32" : "0") +
 							"," + (block.param[0] === 1 ? "32" : "0") +
 							"," + (block.param[0] === 2 ? "32" : "0") +
 							"," + (block.param[0] === 3 ? "32" : "0") +
@@ -683,11 +683,10 @@ A3a.vpl.patchL2Blocks = function () {
 							"," + (block.param[0] === 5 ? "32" : "0") +
 							"," + (block.param[0] === 6 ? "32" : "0") +
 							"," + (block.param[0] === 7 ? "32" : "0") +
-							")\n"
+							");\n"
 				};
 			},
 			"change state 8": function (block) {
-				var code = "state8 = " + block.param[0].toString(10) + "\n";
 				return {
 					initVarDecl: [
 						A3a.vpl.BlockTemplate.initState8Decl2
@@ -698,9 +697,10 @@ A3a.vpl.patchL2Blocks = function () {
 					initCodeDecl: [
 						A3a.vpl.BlockTemplate.dispState82
 					],
-					statement: code.length > 0
-						? code + "callsub display_state8\n"
-						: "",
+					statement: "state8 = (state8 + " +
+							(block.param[0] > 0 ? "1" : "7") +
+							") % 8;\n" +
+							"display_state8();\n",
 					statementWithoutInit:
 						"call leds.circle(" + (block.param[0] === 0 ? "32" : "0") +
 							"," + (block.param[0] === 1 ? "32" : "0") +
