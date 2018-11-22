@@ -153,19 +153,18 @@ function vplSetup(uiConfig) {
 
 	// general settings
 	var isClassic = getQueryOption("appearance") === "classic";
-	var compiler = getQueryOption("compiler") || A3a.vpl.defaultLanguage;
+	var language = getQueryOption("language");
 	if (isClassic) {
 	 	if (A3a.vpl.patchL2Blocks) {
 			A3a.vpl.patchL2Blocks();
+		}
+	 	if (A3a.vpl.patchJSBlocks) {
+			A3a.vpl.patchJSBlocks();
 		}
 	} else if (uiConfig) {
 		try {
 			A3a.vpl.patchSVG(uiConfig);
 		} catch (e) {}
-	}
-
-	if (!A3a.vpl.Program.generateCode[compiler]) {
-		throw "Unsupported language " + compiler;
 	}
 
 	A3a.vpl.Program.resetBlockLib();
@@ -181,18 +180,32 @@ function vplSetup(uiConfig) {
 		filterGrayscale = parseInt(opt, 10) / 100;
 	}
 
-	var hasThymio = getQueryOption("robot") === "true";
-	if (hasThymio) {
+	switch (getQueryOption("robot")) {
+ 	case "thymio":
 		window["installThymio"]();
-		window["vplRunFunction"] && window["vplRunFunction"]["init"] &&
-			window["vplRunFunction"]["init"]();
-	} else {
-		window["vplRunFunction"] = null;
+		window["vplRun"] && window["vplRun"].init();
+		break;
+ 	case "sim":
+		window["installRobotSimulator"]();
+		window["vplRun"] && window["vplRun"].init();
+		break;
+	default:
+		window["vplRun"] = null;
+	}
+
+	if (!language) {
+		language = window["vplRun"]
+			? window["vplRun"].preferredLanguage
+			: A3a.vpl.defaultLanguage;
+	}
+
+	if (!A3a.vpl.Program.generateCode[language]) {
+		throw "Unsupported language " + language;
 	}
 
 	window["vplProgram"] = new A3a.vpl.Program();
-	window["vplProgram"].currentLanguage = compiler;
-	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["vplProgram"].noVPL, window["vplRunFunction"]);
+	window["vplProgram"].currentLanguage = language;
+	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["vplProgram"].noVPL, language, window["vplRun"]);
 	var canvas = document.getElementById("programCanvas");
 	window["vplCanvas"] = new A3a.vpl.Canvas(canvas);
 	window["vplCanvas"].wheel = function (dx, dy) {
@@ -207,6 +220,14 @@ function vplSetup(uiConfig) {
 		window["vplEditor"].setCode(window["vplProgram"].getCode(window["vplProgram"].currentLanguage));
 	};
 	window["vplProgram"].addEventHandler(true);
+
+	if (window["vplRun"]) {
+		var stopBlock = A3a.vpl.BlockTemplate.findByName("stop");
+		var stopGenCode = stopBlock && stopBlock.genCode[language];
+		if (stopGenCode) {
+			window["vplRun"].setStopCode(stopGenCode(null).statement, language);
+		}
+	}
 
 	// apply canvas filters
 	if (filterBlur > 0 || filterGrayscale > 0) {
@@ -326,6 +347,12 @@ function vplResize() {
 
 	// editor
 	window["vplEditor"].resize();
+
+	// sim
+	if (window["vplSim"]) {
+		window["vplSim"].sim.simCanvas.resize(width, height);
+		window["vplSim"].sim.render();
+	}
 }
 
 // remember state across reload

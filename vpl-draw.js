@@ -130,6 +130,7 @@ A3a.vpl.Canvas.prototype.lockedMark = function (left, top, width, height, inside
 };
 
 /** Draw an arc ending with an arrow
+	@param {CanvasRenderingContext2D} ctx
 	@param {number} x
 	@param {number} y
 	@param {number} r
@@ -143,8 +144,7 @@ A3a.vpl.Canvas.prototype.lockedMark = function (left, top, width, height, inside
 		alpha: (number | undefined)
 	}} opt
 */
-A3a.vpl.Canvas.prototype.drawArcArrow = function (x, y, r, a1, a2, opt) {
-	var ctx = this.ctx;
+A3a.vpl.Canvas.drawArcArrow = function (ctx, x, y, r, a1, a2, opt) {
 	ctx.save();
 	if (opt) {
 		if (opt.style) {
@@ -758,6 +758,7 @@ A3a.vpl.Canvas.prototype.accelerometerDrag = function (width, height, left, top,
 
 /** Draw red arc for timer, thicker and thicker clockwise from noon
 	(inner border is a spiral with 4 centers)
+	@param {CanvasRenderingContext2D} ctx
 	@param {number} x0 center of exterior circle along x axis
 	@param {number} y0 center of exterior circle along y axis
 	@param {number} rExt exterior radius (constant)
@@ -767,8 +768,7 @@ A3a.vpl.Canvas.prototype.accelerometerDrag = function (width, height, left, top,
 	@param {string} fillStyle
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.drawTimerLogArc = function (x0, y0, rExt, rIntMax, rIntMin, angle, fillStyle) {
-	var ctx = this.ctx;
+A3a.vpl.Canvas.drawTimerLogArc = function (ctx, x0, y0, rExt, rIntMax, rIntMin, angle, fillStyle) {
 	var d = (rIntMax - rIntMin) / 4;
 
 	ctx.save();
@@ -818,38 +818,34 @@ A3a.vpl.Canvas.prototype.drawInit = function () {
 	ctx.restore();
 };
 
-/** Draw timer
+/** Draw timer (low-level)
+	@param {CanvasRenderingContext2D} ctx
+	@param {number} x0
+	@param {number} y0
+	@param {number} r
+	@param {number} lineWidth
+	@param {?function(number):void} drawText
 	@param {number} time time between 0.1 and 10
 	@param {boolean} isEvent
 	@param {boolean} isLog true for logarithmic time scale between 0.1 and 10,
 	false for linear time scale between 0 and 4
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
+A3a.vpl.Canvas.drawTimer = function (ctx, x0, y0, r, lineWidth, drawText, time, isEvent, isLog) {
 	var time2 = isLog
-		? time === 0 ? 0 : Math.log(time * 10) / Math.log(100)	// [0.1,10] -> [0,1]
+		? time <= 0 ? 0 : Math.max(Math.log(time * 10) / Math.log(100), 0)	// [0.1,10] -> [0,1]
 		: time / 4;	// [0, 4] -> [0, 1]
-	var ctx = this.ctx;
-	var dims = this.dims;
-	var r = 0.4 * dims.blockSize;
-	var dx = isEvent ? -0.05 * dims.blockSize : 0;
-	var dy = isEvent ? 0.09 * dims.blockSize : 0;
-	var x0 = dims.blockSize / 2 + dx;
-	var y0 = dims.blockSize / 2 + dy;
 	ctx.save();
+	if (!isEvent && drawText) {
+		drawText(time);
+	}
 	ctx.beginPath();
 	ctx.arc(x0, y0,
 		r,
 		0, 2 * Math.PI);
 	ctx.fillStyle = "white";
 	ctx.fill();
-	if (!isEvent) {
-		ctx.textAlign = "start";
-		ctx.textBaseline = "top";
-		ctx.font = Math.round(dims.blockSize / 6).toString(10) + "px sans-serif";
-		ctx.fillText(time.toFixed(time < 1 ? 2 : 1), dims.blockSize / 20, dy);
-	}
-	this.drawTimerLogArc(x0, y0,
+	A3a.vpl.Canvas.drawTimerLogArc(ctx, x0, y0,
 		r * 0.9, isLog ? r * 0.8 : r * 0.6, isLog ? r * 0.5 : r * 0.6,
 		2 * Math.PI * (isEvent ? 0.2 : time2),
 		isEvent ? "#ddd" : "red");
@@ -863,26 +859,57 @@ A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 		r,
 		0, 2 * Math.PI);
 	ctx.strokeStyle = "black";
-	ctx.lineWidth = dims.blockLineWidth;
+	ctx.lineWidth = lineWidth;
 	ctx.stroke();
 	ctx.beginPath();
 	ctx.moveTo(x0 - 0.1 * r * Math.sin(2 * time2 * Math.PI),
 		y0 + 0.1 * r * Math.cos(2 * time2 * Math.PI));
 	ctx.lineTo(x0 + 0.9 * r * Math.sin(2 * time2 * Math.PI),
 		y0 - 0.9 * r * Math.cos(2 * time2 * Math.PI));
-	ctx.lineWidth = 2 * dims.blockLineWidth;
+	ctx.lineWidth = 2 * lineWidth;
 	ctx.stroke();
 	if (isEvent) {
-		this.drawArcArrow(x0, y0, r * 1.25,
+		A3a.vpl.Canvas.drawArcArrow(ctx, x0, y0, r * 1.25,
 			-Math.PI * 0.5,
 			-Math.PI * 0.1,
 			{
 				arrowAtStart: true,
-				arrowSize: 5 * dims.blockLineWidth,
+				arrowSize: 5 * lineWidth,
 				style: "black"
 			});
 	}
 	ctx.restore();
+};
+
+/** Draw timer
+	@param {number} time time between 0.1 and 10
+	@param {boolean} isEvent
+	@param {boolean} isLog true for logarithmic time scale between 0.1 and 10,
+	false for linear time scale between 0 and 4
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
+	var ctx = this.ctx;
+	var s = this.dims.blockSize;
+	var time2 = isLog
+		? time === 0 ? 0 : Math.log(time * 10) / Math.log(100)	// [0.1,10] -> [0,1]
+		: time / 4;	// [0, 4] -> [0, 1]
+	var r = 0.4 * s;
+	var dx = isEvent ? -0.05 * s : 0;
+	var dy = isEvent ? 0.09 * s : 0;
+	var x0 = s / 2 + dx;
+	var y0 = s / 2 + dy;
+
+	A3a.vpl.Canvas.drawTimer(ctx, x0, y0, r,
+		this.dims.blockLineWidth,
+		function (t) {
+			ctx.textAlign = "start";
+			ctx.textBaseline = "top";
+			ctx.font = Math.round(s / 6).toString(10) + "px sans-serif";
+			ctx.fillStyle = "white";
+			ctx.fillText(t.toFixed(t < 1 ? 2 : 1), s / 20, dy);
+		},
+		time, isEvent, isLog);
 };
 
 /** Draw a state (low-level)

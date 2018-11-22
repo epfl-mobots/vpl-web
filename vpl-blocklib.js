@@ -2329,7 +2329,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		draw: function (canvas, block) {
 			canvas.robotTop();
 			canvas.drawState(block.param.map(function (b) { return b ? 2 : 0; }));
-			canvas.drawArcArrow(canvas.dims.blockSize / 2, canvas.dims.blockSize / 2,
+			A3a.vpl.Canvas.drawArcArrow(canvas.ctx, canvas.dims.blockSize / 2, canvas.dims.blockSize / 2,
 				canvas.dims.blockSize * 0.2,
 				-1.4, 1.4,
 				{
@@ -2337,7 +2337,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					lineWidth: canvas.dims.blockLineWidth,
 					arrowSize: 5 * canvas.dims.blockLineWidth
 				});
-			canvas.drawArcArrow(canvas.dims.blockSize / 2, canvas.dims.blockSize / 2,
+			A3a.vpl.Canvas.drawArcArrow(canvas.ctx, canvas.dims.blockSize / 2, canvas.dims.blockSize / 2,
 				canvas.dims.blockSize * 0.2,
 				Math.PI - 1.4, Math.PI + 1.4,
 				{
@@ -2455,7 +2455,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			draw: function (canvas, block) {
 				canvas.robotTop();
 				canvas.drawState8Change();
-				canvas.drawArcArrow(canvas.dims.blockSize / 2, canvas.dims.blockSize / 2,
+				A3a.vpl.Canvas.drawArcArrow(canvas.ctx, canvas.dims.blockSize / 2, canvas.dims.blockSize / 2,
 					canvas.dims.blockSize * 0.375,
 					-0.8, 0.8,
 					{
@@ -2463,7 +2463,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						lineWidth: canvas.dims.blockLineWidth,
 						arrowSize: 5 * canvas.dims.blockLineWidth
 					});
-				canvas.drawArcArrow(canvas.dims.blockSize / 2, canvas.dims.blockSize / 2,
+				A3a.vpl.Canvas.drawArcArrow(canvas.ctx, canvas.dims.blockSize / 2, canvas.dims.blockSize / 2,
 					canvas.dims.blockSize * 0.375,
 					Math.PI - 0.8, Math.PI + 0.8,
 					{

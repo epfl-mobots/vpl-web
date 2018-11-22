@@ -11,14 +11,14 @@
 	code
 	@return {string}
 */
-A3a.vpl.Program.generateCode["l2"] = function (program, runBlocks) {
+A3a.vpl.Program.generateCode["js"] = function (program, runBlocks) {
 	var c = program.program.map(function (eh) {
-		return eh.generateCode("l2", "&&");
+		return eh.generateCode("js", "&&");
 	});
 	/** @type {Array.<string>} */
-	var initVarDecl = [];
+	var initVarDecl = ["var cond0;\nvar cond;\n"];
 	/** @type {Array.<string>} */
-	var initCodeExec = [];
+	var initCodeExec = ["cond0 = [];\n"];
 	/** @type {Array.<string>} */
 	var initCodeDecl = [];
 	/** @dict */
@@ -44,7 +44,12 @@ A3a.vpl.Program.generateCode["l2"] = function (program, runBlocks) {
 		});
 		var statement = (evCode.statement || "");
 		if (evCode.clause) {
-			statement = "when (" + evCode.clause + ") {\n" + statement + "}\n";
+			statement =
+				"cond = " + evCode.clause + ";\n" +
+				"if (cond && !cond0[" + i + "]) {\n" +
+				statement +
+				"}\n" +
+				"cond0[" + i + "] = cond;\n";
 		}
 		if (evCode.sectionBegin) {
  			if (folding[evCode.sectionBegin] !== undefined) {
@@ -84,7 +89,7 @@ A3a.vpl.Program.generateCode["l2"] = function (program, runBlocks) {
 	}
 
 	// build program from fragments:
-	// init fragments (var declarations first, then code, without sub/onevent)
+	// init fragments (var declarations first, then code)
 	var str = initVarDecl.length > 0 ? "\n" + initVarDecl.join("\n") : "";
 	if (runBlocks) {
 		str += "\n" + runBlocksCode;
@@ -101,12 +106,15 @@ A3a.vpl.Program.generateCode["l2"] = function (program, runBlocks) {
 			}
 		}
 		if (strInit) {
-			str += (str.length > 0 ? "\n" : "") + strInit.slice(1);	// skip initial linefeed
+			str += (str.length > 0 ? "\n" : "") +
+				"this.addEventListener(\"init\", function (name, param) {\n" +
+				strInit.slice(1) +	// skip initial linefeed
+				"});\n";
 		}
 	}
-	// init fragments defining functions and onevent
+	// init fragments defining sub and onevent
 	if (initCodeDecl.length > 0) {
-		str += "\n" + initCodeDecl.join("\n");
+		throw "internal error, unsupported sub/onevent in js";
 	}
 	// explicit events
 	for (var i = 0; i < program.program.length; i++) {
