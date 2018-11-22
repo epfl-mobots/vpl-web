@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, height=device-height, maximum-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
+<!-- definition of the user interface and blocks -->
+<script type="application/json" id="ui.json">
+{
+	"styles": {
+		"event": "transparent",
+		"state": "transparent",
+		"action": "#38f",
+		"comment": "#aaa"
+	},
+
+	"blocks": [
+		{
+			"name": "button",
+			"type": "event",
+			"modes": ["basic", "advanced"],
+			"svg": [
+			   {
+					"uri": "Blocks.svg#Events_bg"
+				},
+			
+				{
+					"uri": "Blocks.svg#Bg_Thymio"
+				},
+				{
+					"uri": "Blocks.svg#Ev_Buttons"
+				}
+			],
+			"defaultParameters": [false, false, false, false, false],
+			"buttons": [
+				{
+					"id": "Btn2_Center",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				},
+				{
+					"id": "Btn2_Forward",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				},
+				{
+					"id": "Btn2_Backward",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				},
+				{
+					"id": "Btn2_Right",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				},
+				{
+					"id": "Btn2_Left",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				}
+			],
+			"aseba": {
+				"sectionBegin": "onevent buttons\n",
+				"sectionPriority": 10,
+				"clauseAnd": "`$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''`"
+			},
+			"l2": {
+				"sectionBegin": "onevent buttons {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 10,
+				"clauseAnd": "`$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''`"
+			}
+		},
+		{
+			"name": "yaw",
+			"type": "event",
+			"modes": ["basic", "advanced"],
+			"svg": [
+			
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+			
+				{
+					"uri": "Blocks.svg#Rot360Rail"
+				},
+				{
+					"uri": "Blocks.svg#ThymioAcc1"
+				},
+				{
+					"uri": "Blocks.svg#Rot360_Handle"
+				}
+			],
+			"defaultParameters": [0],
+			"rotating": [
+				{
+					"id": "Rot360",
+					"centerId": "Rot360_Center",
+					"thumbId": "Btn2_HandleAcc0",
+					"numSteps": 24
+				}
+			],
+			"aseba": {
+				"initVarDecl": [
+					"# yaw angle from accelerometer\nvar yawAngle\n"
+				],
+				"sectionBegin": "onevent acc\n",
+				"clauseInit":
+					"call math.atan2(yawAngle, acc[0], acc[1])\n",
+				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+			},
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+			}
+		},
+		{
+			"name": "motor",
+			"type": "action",
+			"modes": ["basic", "advanced"],
+			"svg": [
+			
+			{
+					"uri": "Blocks.svg#Actions_bg"
+				},
+			
+				{
+					"uri": "Blocks.svg#Ac_Wheels"
+				}
+			],
+			"diffwheelmotion": {
+				"id": "ThymioTop_wheels_mini",
+				"dx": -0.1,
+				"dy": 0.05,
+				"adjscale": 0.55,
+				"color": "#aaf",
+				"linewidth": 0.8
+			},
+			"defaultParameters": [0, 0],
+			"sliders": [
+				{
+					"id": "Slid_left",
+					"thumbId": "Cursor_left",
+					"min": -1,
+					"max": 1
+				},
+				{
+					"id": "Slid_right",
+					"thumbId": "Cursor_right",
+					"min": -1,
+					"max": 1
+				}
+			],
+			"aseba": {
+				"initCodeExec": [
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"motor.left.target = `Math.round(500 * $[0])`\nmotor.right.target = `Math.round(500 * $[1])`\n"
+			},
+			"l2": {
+				"initCodeExec": [
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"motor.left.target = `Math.round(500 * $[0])`;\nmotor.right.target = `Math.round(500 * $[1])`;\n"
+			}
+		},
+		{
+			"name": "move",
+			"type": "action",
+			"modes": ["basic", "advanced"],
+			"svg": [
+			
+				{
+					"uri": "Blocks.svg#Actions_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ac_Directions"
+				}
+			],
+			"defaultParameters": [0],
+			"radiobuttons": [
+				{
+					"id": "Btn2_StopDir",
+					"val": 0,
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				},
+				{
+					"id": "Btn2_FwdDir",
+					"val": 1,
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				},
+				{
+					"id": "Btn2_FwdRightDir",
+					"val": 2,
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				},
+				{
+					"id": "Btn2_RightDir",
+					"val": 3,
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				},
+				{
+					"id": "Btn2_BwdRightDir",
+					"val": 4,
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				},
+				{
+					"id": "Btn2_BwdDir",
+					"val": 5,
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				},
+				{
+					"id": "Btn2_BwdLeftDir",
+					"val": 6,
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				},
+				{
+					"id": "Btn2_LeftDir",
+					"val": 7,
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				},
+				{
+					"id": "Btn2_FwdLeftDir",
+					"val": 8,
+					"st": ["fill:#90a4ae", "fill:#2ee6b7"]
+				}
+			],
+			"aseba": {
+				"initCodeExec": [
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`\n"
+			},
+			"l2": {
+				"initCodeExec": [
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`;\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`;\n"
+			}
+		},
+		{
+			"name": "top color",
+			"type": "action",
+			"modes": ["basic", "advanced"],
+			"svg": [
+			
+				{
+					"uri": "Blocks.svg#Actions_bg"
+				},
+				{
+					"uri": "Blocks.svg#Color_adv"
+				}
+			],
+			"defaultParameters": [0, 0, 0],
+			"sliders": [
+				{
+					"id": "Slid_red",
+					"thumbId": "Cursor_red",
+					"min": 0,
+					"max": 1
+				},
+				{
+					"id": "Slid_green",
+					"thumbId": "Cursor_green",
+					"min": 0,
+					"max": 1
+				},
+				{
+					"id": "Slid_blue",
+					"thumbId": "Cursor_blue",
+					"min": 0,
+					"max": 1
+				}
+			],
+			"styles": [
+				{
+					"id": "Gradient_top",
+					"st": "fill:#`$.map(function (c) { return Math.floor(c * 15.999).toString(16); }).join('')`"
+				}
+			],
+			"aseba": {
+				"initVarDecl": [
+					"# RGB color of the top led\nvar topColor[3]\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n",
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\ntopColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
+				"statementWithoutInit":
+					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
+			},
+			"l2": {
+				"initVarDecl": [
+					"// RGB color of the top led\nint topColor[3];\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0];\n",
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\ntopColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`];\n",
+				"statementWithoutInit":
+					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n"
+			}
+		}
+	],
+
+	"svgFilenames": [
+		"Blocks.svg"
+	]
+}
+</script>
+
+<!-- appearance of the blocks -->
+<script type="image/svg+xml" id="Blocks.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 96 96">
+  <defs>
+    <style>
+      .cls-1 {
+        isolation: isolate;
+      }
+ 		.cls-1 {
+        fill: #fbe9e7;
+        stroke: #ffccbc;
+      }
+
+      .cls-1, .cls-10, .cls-11, .cls-13, .cls-14, .cls-15, .cls-2, .cls-24, .cls-25, .cls-5 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        fill: #dce7ff;
+        stroke: #a4c6ff;
+      }
+
+      .cls-17, .cls-18, .cls-3, .cls-6 {
+        fill: #90a4ae;
+      }
+
+      .cls-14, .cls-15, .cls-16, .cls-24, .cls-28, .cls-4, .cls-5, .cls-7, .cls-8 {
+        fill: none;
+      }
+
+      .cls-18, .cls-4 {
+        stroke: #405359;
+      }
+
+      .cls-13, .cls-14, .cls-15, .cls-18, .cls-24, .cls-28, .cls-4, .cls-6, .cls-7 {
+        stroke-linecap: round;
+      }
+
+      .cls-16, .cls-17, .cls-18, .cls-21, .cls-28, .cls-29, .cls-30, .cls-31, .cls-4, .cls-6, .cls-7, .cls-8 {
+        stroke-linejoin: round;
+      }
+
+      .cls-10, .cls-11, .cls-13, .cls-14, .cls-15, .cls-16, .cls-17, .cls-18, .cls-21, .cls-25, .cls-28, .cls-29, .cls-30, .cls-31, .cls-4, .cls-5, .cls-6, .cls-7 {
+        stroke-width: 2px;
+      }
+
+      .cls-5 {
+        stroke: #ffc0ac;
+      }
+
+      .cls-6, .cls-7 {
+        stroke: #607d8b;
+      }
+
+      .cls-8 {
+        stroke: #90a4ae;
+      }
+
+      .cls-9 {
+        fill: #ff6738;
+      }
+
+      .cls-10, .cls-12 {
+        fill: #eceff1;
+      }
+
+      .cls-10, .cls-11, .cls-13, .cls-14, .cls-16, .cls-17, .cls-21, .cls-24, .cls-25, .cls-29, .cls-30, .cls-31 {
+        stroke: #263238;
+      }
+
+      .cls-11, .cls-13 {
+        fill: #fff;
+      }
+
+      .cls-15 {
+        stroke: #37474f;
+        stroke-dasharray: 2 4;
+      }
+
+      .cls-19, .cls-31 {
+        fill: #ff3d00;
+      }
+
+      .cls-20 {
+        fill: #263238;
+      }
+
+      .cls-21, .cls-23 {
+        fill: #1de9b6;
+      }
+
+      .cls-22 {
+        fill: #5a7280;
+      }
+
+      .cls-24 {
+        stroke-dasharray: 0.97 1.95;
+      }
+
+      .cls-25 {
+        fill: #cfd8dc;
+      }
+
+      .cls-26 {
+        fill: url(#radial-gradient);
+      }
+
+      .cls-27 {
+        fill: url(#radial-gradient-2);
+      }
+
+      .cls-28 {
+        stroke: #d1d1d1;
+      }
+
+      .cls-29 {
+        fill: blue;
+      }
+
+      .cls-30 {
+        fill: lime;
+      }
+
+      .cls-32 {
+        fill: lime;
+      }
+
+      .cls-33 {
+        stroke: #ff3d00;
+      }
+
+      .cls-35 {
+        stroke: #5a7280;
+      }
+
+      .cls-36 {
+        fill: url(#radial-gradient-6);
+      }
+
+      .cls-37 {
+        fill: url(#radial-gradient-7);
+      }
+
+      .cls-38 {
+        fill: url(#radial-gradient-8);
+      }
+
+      .cls-39 {
+        fill: url(#radial-gradient-9);
+      }
+
+      .cls-40 {
+        fill: url(#radial-gradient-10);
+      }
+
+      .cls-41 {
+        fill: url(#radial-gradient-11);
+      }
+
+      .cls-43 {
+        fill: url(#radial-gradient-12);
+      }
+
+      .cls-44 {
+        fill: url(#radial-gradient-13);
+      }
+
+      .cls-45 {
+        fill: url(#radial-gradient-14);
+      }
+
+      .cls-46 {
+        fill: url(#radial-gradient-15);
+      }
+
+      .cls-47 {
+        fill: url(#radial-gradient-16);
+      }
+
+      .cls-48 {
+        fill: url(#radial-gradient-17);
+      }
+
+      .cls-49 {
+        fill: url(#radial-gradient-18);
+      }
+
+      .cls-50 {
+        fill: url(#radial-gradient-19);
+      }
+
+      .cls-51 {
+        fill: url(#radial-gradient-20);
+      }
+
+      .cls-52 {
+        fill: url(#radial-gradient-21);
+      }
+
+      .cls-53 {
+        fill: url(#radial-gradient-22);
+      }
+
+      .cls-54 {
+        fill: url(#radial-gradient-23);
+      }
+
+      .cls-55 {
+        opacity: 0.45;
+        fill: url(#radial-gradient-24);
+      }
+
+      .cls-56 {
+        stroke: #b0bec5;
+      }
+
+      .cls-59 {
+        opacity: 0.52;
+        fill: url(#radial-gradient-25);
+      }
+
+      .cls-61 {
+        fill: url(#radial-gradient-26);
+      }
+
+      .cls-62 {
+        fill: url(#linear-gradient);
+      }
+
+      .cls-63 {
+        opacity: 0.15;
+        mix-blend-mode: multiply;
+      }
+
+      .cls-64 {
+        fill: url(#radial-gradient-27);
+      }
+
+      .cls-65 {
+        fill: #ff8a65;
+      }
+
+      .cls-66 {
+        fill: #00ff50;
+      }
+
+      .cls-67 {
+        fill: #1919ff;
+      }
+
+      .cls-68 {
+        fill: red;
+      }
+
+      .cls-69 {
+        fill: #00eaff;
+      }
+
+      .cls-70 {
+        fill: #ffea00;
+      }
+
+      .cls-71 {
+        fill: #ff00fb;
+      }
+
+      .cls-72, .cls-74 {
+        fill: #cfd8dc;
+      }
+
+      .cls-73, .cls-92 {
+        fill: #ff3d00;
+      }
+
+      .cls-75 {
+        fill: url(#radial-gradient-28);
+      }
+
+      .cls-76 {
+        fill: url(#radial-gradient-29);
+      }
+
+      .cls-77 {
+        font-size: 20px;
+        fill: #424242;
+      }
+
+      .cls-77, .cls-94 {
+        font-family: Rubik-Medium, Rubik;
+      }
+
+      .cls-79, .cls-88, .cls-90, .cls-92, .cls-97 {
+        stroke: #424242;
+      }
+
+      .cls-80, .cls-82 {
+        fill: #2ee6b7;
+      }
+
+      .cls-81 {
+        fill: #5a7280;
+      }
+
+      .cls-83 {
+        stroke-dasharray: 0.97 1.95;
+      }
+
+      .cls-84 {
+        fill: url(#radial-gradient-30);
+      }
+
+      .cls-85 {
+        fill: url(#radial-gradient-31);
+      }
+
+      .cls-86 {
+        stroke: #cfd8dc;
+      }
+
+      .cls-87 {
+        stroke: blue;
+      }
+
+      .cls-88 {
+        fill: blue;
+      }
+
+      .cls-89 {
+        stroke: lime;
+      }
+
+      .cls-90 {
+        fill: lime;
+      }
+
+      .cls-91 {
+        stroke: #ff3d00;
+      }
+
+      .cls-93 {
+        fill: #448aff;
+      }
+
+      .cls-94 {
+        font-size: 16px;
+      }
+
+      .cls-95 {
+        letter-spacing: -0.02em;
+      }
+
+      .cls-96 {
+        letter-spacing: -0.03em;
+      }
+    </style>
+    <radialGradient id="radial-gradient" cx="61.81" cy="23.3" r="45.79" gradientTransform="matrix(0.09, -0.99, 1.36, 0.12, -24.45, 112.46)" gradientUnits="userSpaceOnUse">
+      <stop offset="0.09" stop-color="#fff"/>
+      <stop offset="0.21" stop-color="#fff" stop-opacity="0.99"/>
+      <stop offset="0.32" stop-color="#fff" stop-opacity="0.94"/>
+      <stop offset="0.43" stop-color="#fff" stop-opacity="0.87"/>
+      <stop offset="0.53" stop-color="#fff" stop-opacity="0.77"/>
+      <stop offset="0.63" stop-color="#fff" stop-opacity="0.64"/>
+      <stop offset="0.73" stop-color="#fff" stop-opacity="0.47"/>
+      <stop offset="0.83" stop-color="#fff" stop-opacity="0.28"/>
+      <stop offset="0.93" stop-color="#fff" stop-opacity="0.07"/>
+      <stop offset="0.95" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-2" cx="26.62" cy="49.81" r="45.73" gradientTransform="translate(0 0.59)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-3" cx="115.51" cy="137.85" r="47.77" gradientTransform="matrix(0.7, -0.7, 0.96, 0.96, -181.3, 11.94)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-4" cx="44.91" cy="68.01" r="47.01" gradientTransform="translate(-20.02 112.93) rotate(-90) scale(1 0.95)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-5" cx="51.87" cy="82.21" r="43.91" gradientTransform="translate(-29.74 134.08) rotate(-90) scale(1 0.99)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-6" cx="49.16" cy="90.39" r="1.7" gradientUnits="userSpaceOnUse">
+      <stop offset="0.27" stop-color="#ff3d00"/>
+      <stop offset="1" stop-color="#ff3d00" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-7" cx="47.86" cy="76.2" r="1.7" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-8" cx="24.88" cy="69.05" r="1.7" gradientTransform="translate(63.37 -12.14) rotate(45)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-9" cx="38.49" cy="69.05" r="1.7" gradientTransform="translate(63.37 -12.14) rotate(45)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-10" cx="19.84" cy="48.18" r="1.7" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-11" cx="-14.99" cy="-1.55" r="1.7" gradientTransform="matrix(0.99, 0.12, 0.12, -0.99, 20.72, 47.16)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-12" cx="115.52" cy="137.84" r="45.79" gradientTransform="matrix(0.7, -0.7, 0.96, 0.96, -181.28, 11.96)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-13" cx="79.33" cy="81.75" r="45.79" gradientTransform="matrix(0.42, -0.9, 1.23, 0.58, -111.07, 81.26)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-14" cx="61.82" cy="23.3" r="45.79" gradientTransform="matrix(0.09, -0.99, 1.36, 0.12, -24.43, 112.47)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-15" cx="294.3" cy="171.98" r="45.79" gradientTransform="matrix(0.9, -0.42, -0.58, -1.23, -127.08, 408.59)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-16" cx="237.06" cy="192.87" r="45.79" gradientTransform="matrix(0.99, -0.09, -0.12, -1.36, -169.95, 365.46)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-17" cx="32.95" cy="-38.99" r="1.7" gradientTransform="translate(91.9 118.34) rotate(-97)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-18" cx="65.96" cy="-43.75" r="1.7" gradientTransform="translate(116.8 115.11) rotate(-117)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-19" cx="24.89" cy="69.04" r="1.7" gradientTransform="translate(63.37 -12.14) rotate(45)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-20" cx="38.5" cy="69.04" r="1.7" gradientTransform="translate(63.37 -12.14) rotate(45)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-21" cx="8.12" cy="-24.95" r="1.7" gradientTransform="matrix(0.89, 0.45, 0.45, -0.89, 23.95, 22.27)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-22" cx="-14.98" cy="-1.55" r="1.7" gradientTransform="matrix(0.99, 0.12, 0.12, -0.99, 20.72, 47.16)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-23" cx="71.17" cy="29.05" r="18.59" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-opacity="0.8"/>
+      <stop offset="0.89" stop-opacity="0.22"/>
+      <stop offset="1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-24" cx="18.02" cy="29.05" r="18.59" gradientTransform="matrix(-1, 0, 0, 1, 68.15, 0)" gradientUnits="userSpaceOnUse">
+      <stop offset="0.12" stop-color="#fff" stop-opacity="0.8"/>
+      <stop offset="0.44" stop-color="#fff" stop-opacity="0.79"/>
+      <stop offset="0.56" stop-color="#fff" stop-opacity="0.77"/>
+      <stop offset="0.64" stop-color="#fff" stop-opacity="0.72"/>
+      <stop offset="0.71" stop-color="#fff" stop-opacity="0.65"/>
+      <stop offset="0.77" stop-color="#fff" stop-opacity="0.57"/>
+      <stop offset="0.82" stop-color="#fff" stop-opacity="0.46"/>
+      <stop offset="0.87" stop-color="#fff" stop-opacity="0.33"/>
+      <stop offset="0.91" stop-color="#fff" stop-opacity="0.19"/>
+      <stop offset="0.95" stop-color="#fff" stop-opacity="0.02"/>
+      <stop offset="0.95" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-25" cx="79.93" cy="28.2" r="2" gradientTransform="matrix(0.98, 0.21, -0.21, 0.98, 5.01, -11.67)" xlink:href="#radial-gradient-6"/>
+    <radialGradient id="radial-gradient-26" cx="38.99" cy="37.34" r="2" gradientTransform="matrix(0.98, -0.21, 0.21, 0.98, -4.24, 4.12)" xlink:href="#radial-gradient-6"/>
+    <linearGradient id="linear-gradient" x1="8.38" y1="85.35" x2="8.38" y2="13" gradientUnits="userSpaceOnUse">
+      <stop offset="0"/>
+      <stop offset="0.07" stop-color="#262626"/>
+      <stop offset="0.16" stop-color="#494949"/>
+      <stop offset="0.24" stop-color="#656565"/>
+      <stop offset="0.33" stop-color="#787878"/>
+      <stop offset="0.41" stop-color="#848484"/>
+      <stop offset="0.5" stop-color="#888"/>
+      <stop offset="0.6" stop-color="#8c8c8c"/>
+      <stop offset="0.69" stop-color="#979797"/>
+      <stop offset="0.78" stop-color="#aaa"/>
+      <stop offset="0.86" stop-color="#c5c5c5"/>
+      <stop offset="0.95" stop-color="#e7e7e7"/>
+      <stop offset="1" stop-color="#fff"/>
+    </linearGradient>
+    <radialGradient id="radial-gradient-27" cx="34.15" cy="-67.39" r="12.26" gradientTransform="translate(115.95 5.03) rotate(180) scale(1.13 0.78)" gradientUnits="userSpaceOnUse">
+      <stop offset="0.16" stop-color="#fff"/>
+      <stop offset="0.31" stop-color="#fff" stop-opacity="0.99"/>
+      <stop offset="0.43" stop-color="#fff" stop-opacity="0.95"/>
+      <stop offset="0.52" stop-color="#fff" stop-opacity="0.89"/>
+      <stop offset="0.61" stop-color="#fff" stop-opacity="0.8"/>
+      <stop offset="0.7" stop-color="#fff" stop-opacity="0.69"/>
+      <stop offset="0.78" stop-color="#fff" stop-opacity="0.55"/>
+      <stop offset="0.86" stop-color="#fff" stop-opacity="0.38"/>
+      <stop offset="0.93" stop-color="#fff" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-28" cx="161.92" cy="128.88" r="49.88" gradientTransform="translate(-140.67 -196.54) scale(1.17 2)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset="0.17" stop-color="#fff" stop-opacity="0.99"/>
+      <stop offset="0.3" stop-color="#fff" stop-opacity="0.95"/>
+      <stop offset="0.42" stop-color="#fff" stop-opacity="0.88"/>
+      <stop offset="0.53" stop-color="#fff" stop-opacity="0.79"/>
+      <stop offset="0.64" stop-color="#fff" stop-opacity="0.68"/>
+      <stop offset="0.74" stop-color="#fff" stop-opacity="0.53"/>
+      <stop offset="0.84" stop-color="#fff" stop-opacity="0.36"/>
+      <stop offset="0.93" stop-color="#fff" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-29" cx="161.92" cy="113.22" r="49.88" gradientTransform="translate(-140.77 -229.01) scale(1.17 2.3)" xlink:href="#radial-gradient-28"/>
+    <radialGradient id="radial-gradient-30" cx="167.03" cy="131.79" r="34.92" gradientTransform="translate(-158.41 -196.54) scale(1.24 2)" xlink:href="#radial-gradient-28"/>
+    <radialGradient id="radial-gradient-31" cx="167.03" cy="137.63" r="34.92" gradientTransform="translate(-158.41 -242.09) scale(1.24 2.33)" xlink:href="#radial-gradient-28"/>
+  </defs>
+<g id="Layer_2" data-name="Layer 2">
+    <g id="Event_bg">
+      <rect id="Events_bg" class="cls-1" x="0.5" y="0.5" width="94" height="94" rx="12"/>
+    </g>
+    <g id="Act_bg">
+      <rect id="Actions_bg" class="cls-2" x="0.5" y="0.5" width="94" height="94" rx="12"/>
+    </g>
+    <g id="Ev_Buttons">
+      <g id="Btn2_Left">
+        <path class="cls-3" d="M31.59,41c0-.55-.39-.78-.87-.5L17.57,48.1a.53.53,0,0,0,0,1l13.15,7.58c.48.28.87.05.87-.5Z"/>
+        <path class="cls-4" d="M31.59,41c0-.55-.39-.78-.87-.5L17.57,48.1a.53.53,0,0,0,0,1l13.15,7.58c.48.28.87.05.87-.5Z"/>
+      </g>
+      <path id="Bg_Thymio" class="cls-5" d="M48.58,7.24A56.88,56.88,0,0,0,8.36,23.77a4.15,4.15,0,0,0-1.2,2.93L7.1,86.53A3.45,3.45,0,0,0,10.55,90l75.88.08a3.45,3.45,0,0,0,3.45-3.45L90,26.78a4.17,4.17,0,0,0-1.19-2.93A56.84,56.84,0,0,0,48.58,7.24Z"/>
+      <g id="ButtonsOff">
+        <circle id="Btn2_Center" class="cls-6" cx="48.53" cy="48.65" r="8.75"/>
+        <g id="Btn2_Forward">
+          <path class="cls-3" d="M40.74,31.84c-.55,0-.78-.39-.5-.87L48,17.56a.53.53,0,0,1,1,0L56.73,31c.28.48.05.87-.51.87Z"/>
+          <path class="cls-7" d="M40.74,31.84c-.55,0-.78-.39-.5-.87L48,17.56a.53.53,0,0,1,1,0L56.73,31c.28.48.05.87-.51.87Z"/>
+        </g>
+        <g id="Btn2_Backward">
+          <path class="cls-3" d="M40.74,65.45c-.55,0-.78.39-.5.87L48,79.73a.53.53,0,0,0,1,0l7.74-13.41c.28-.48.05-.87-.51-.87Z"/>
+          <path class="cls-7" d="M40.74,65.45c-.55,0-.78.39-.5.87L48,79.73a.53.53,0,0,0,1,0l7.74-13.41c.28-.48.05-.87-.51-.87Z"/>
+        </g>
+        <g id="Btn2_Right">
+          <path class="cls-3" d="M65.47,41c0-.55.39-.78.87-.5L79.48,48.1a.53.53,0,0,1,0,1L66.34,56.69c-.48.28-.87.05-.87-.5Z"/>
+          <path class="cls-7" d="M65.47,41c0-.55.39-.78.87-.5L79.48,48.1a.53.53,0,0,1,0,1L66.34,56.69c-.48.28-.87.05-.87-.5Z"/>
+        </g>
+        <g id="Btn2_Left" data-name="Btn2_Left">
+          <path class="cls-3" d="M31.59,41c0-.55-.39-.78-.87-.5L17.57,48.1a.53.53,0,0,0,0,1l13.15,7.58c.48.28.87.05.87-.5Z"/>
+          <path class="cls-7" d="M31.59,41c0-.55-.39-.78-.87-.5L17.57,48.1a.53.53,0,0,0,0,1l13.15,7.58c.48.28.87.05.87-.5Z"/>
+        </g>
+      </g>
+    </g>
+    <g id="Ev_Accel">
+      <g id="Rot360Rail">
+        <circle id="Rot360_Center" class="cls-8" cx="48.5" cy="48.48" r="39.86"/>
+        <g id="Angles">
+          <g>
+            <circle class="cls-9" cx="88.36" cy="48.57" r="1"/>
+            <circle class="cls-9" cx="8.64" cy="48.57" r="1"/>
+          </g>
+          <g>
+            <circle class="cls-9" cx="83.02" cy="28.63" r="1"/>
+            <circle class="cls-9" cx="13.98" cy="68.5" r="1"/>
+          </g>
+          <g>
+            <circle class="cls-9" cx="68.43" cy="14.04" r="1"/>
+            <circle class="cls-9" cx="28.57" cy="83.09" r="1"/>
+          </g>
+          <g>
+            <circle class="cls-9" cx="48.5" cy="8.7" r="1"/>
+            <circle class="cls-9" cx="48.5" cy="88.43" r="1"/>
+          </g>
+          <g>
+            <circle class="cls-9" cx="28.57" cy="14.04" r="1"/>
+            <circle class="cls-9" cx="68.43" cy="83.09" r="1"/>
+          </g>
+          <g>
+            <circle class="cls-9" cx="13.98" cy="28.63" r="1"/>
+            <circle class="cls-9" cx="83.02" cy="68.5" r="1"/>
+          </g>
+        </g>
+      </g>
+      <g id="Rot360">
+        <g id="Bg_Th_Profile">
+          <path class="cls-10" d="M65.05,60.67c.55.67.6,2.72,1.55,3.72a3.25,3.25,0,0,0,2.42.85,3.3,3.3,0,0,0,2.41-.85c.94-1,1-3,1.54-3.72Z"/>
+          <rect class="cls-11" x="16.5" y="36.49" width="64" height="24" rx="2"/>
+          <path class="cls-12" d="M79.5,55.67v2.76a1,1,0,0,1-1,1h-60a1,1,0,0,1-1-1V55.67Z"/>
+          <line class="cls-13" x1="68.5" y1="45.46" x2="73.58" y2="45.46"/>
+          <line class="cls-13" x1="77.95" y1="45.46" x2="80.49" y2="45.46"/>
+          <circle class="cls-11" cx="34.13" cy="52.7" r="12.83"/>
+          <path class="cls-12" d="M42.43,44.31a11.72,11.72,0,0,1,1.82,6.29,11.85,11.85,0,0,1-20.09,8.53A11.85,11.85,0,1,0,42.43,44.31Z"/>
+        </g>
+        <g id="ThymioAcc1">
+          <path class="cls-10" d="M78.83,60.48V63a1,1,0,0,1-1,1H71.27a1,1,0,0,1-1-1V60.48Z"/>
+          <path class="cls-10" d="M26.87,60.48V63a1,1,0,0,1-1,1H19.31a1,1,0,0,1-1-1V60.48Z"/>
+          <rect class="cls-11" x="16.5" y="36.48" width="64" height="24" rx="2"/>
+          <line class="cls-14" x1="59.77" y1="47.8" x2="65.77" y2="47.8"/>
+          <line class="cls-14" x1="72.78" y1="47.8" x2="77.56" y2="47.8"/>
+          <line class="cls-14" x1="37.23" y1="47.8" x2="31.23" y2="47.8"/>
+          <line class="cls-14" x1="24.22" y1="47.8" x2="19.44" y2="47.8"/>
+          <path class="cls-10" d="M44.54,60.48c.55.53.6,2.12,1.56,2.89a3.87,3.87,0,0,0,2.41.66,3.93,3.93,0,0,0,2.41-.66c.94-.78,1-2.37,1.54-2.89Z"/>
+          <line class="cls-14" x1="44.86" y1="47.8" x2="52.01" y2="47.8"/>
+          <path class="cls-12" d="M79.5,55.58v3.18a.9.9,0,0,1-.9.9H18.4a.9.9,0,0,1-.9-.9V55.58Z"/>
+        </g>
+        <g id="ThymioAcc2">
+          <path class="cls-11" d="M48.21,72.51a32.94,32.94,0,0,0,23.32-9.58,2.39,2.39,0,0,0,.69-1.7l0-34.69a2,2,0,0,0-2-2l-44,0a2,2,0,0,0-2,2l0,34.69a2.39,2.39,0,0,0,.69,1.7A33,33,0,0,0,48.21,72.51Z"/>
+          <rect class="cls-15" x="24.22" y="28.45" width="6" height="20" rx="2"/>
+          <path class="cls-12" d="M70.4,25.56H68.94v34a2.3,2.3,0,0,1-.66,1.63A31.74,31.74,0,0,1,31.68,67a31.75,31.75,0,0,0,38.9-4.58,2.3,2.3,0,0,0,.66-1.63V26.4A.84.84,0,0,0,70.4,25.56Z"/>
+          <rect class="cls-15" x="66.26" y="28.45" width="6" height="20" rx="2"/>
+        </g>
+        <g id="Rot360_Handle">
+          <line class="cls-16" x1="48.5" y1="45.48" x2="48.5" y2="8.62"/>
+          <circle class="cls-17" cx="48.5" cy="48.48" r="3"/>
+          <circle id="Btn2_HandleAcc0" class="cls-17" cx="48.5" cy="8.62" r="5"/>
+        </g>
+      </g>
+    </g>
+    <g id="Ac_Directions">
+      <g id="DirectionArrows">
+        <polygon id="Btn2_FwdDir" class="cls-18" points="44.55 25.92 44.55 16.28 40.84 16.28 48.55 2.92 56.27 16.28 52.55 16.28 52.55 25.92 44.55 25.92"/>
+        <path id="Btn2_FwdRightDir" class="cls-18" d="M60.49,27.61l.45-.68a28.22,28.22,0,0,1,6.87-7.21l-2-3.31,15.43-.14L73.69,29.7l-1.78-3A20.2,20.2,0,0,0,67,32.34l-.65,1.12Z"/>
+        <path id="Btn2_BwdRightDir" class="cls-18" d="M65.86,80.22l2-3.32a28.34,28.34,0,0,1-6.87-7.2L60.49,69l5.85-5.86L67,64.29A20.3,20.3,0,0,0,71.91,70l1.78-3,7.6,13.44Z"/>
+        <polygon id="Btn2_BwdDir" class="cls-18" points="40.84 80.34 44.55 80.34 44.55 70.71 52.55 70.71 52.55 80.34 56.27 80.34 48.55 93.71 40.84 80.34"/>
+        <path id="Btn2_BwdLeftDir" class="cls-18" d="M23.41,66.92l1.78,3a20.3,20.3,0,0,0,4.92-5.66l.65-1.13L36.61,69l-.45.68a28,28,0,0,1-6.87,7.2l1.95,3.32-15.43.14Z"/>
+        <path id="Btn2_FwdLeftDir" class="cls-18" d="M30.11,32.34a20.2,20.2,0,0,0-4.92-5.67l-1.78,3-7.6-13.43,15.43.14-1.95,3.31a27.89,27.89,0,0,1,6.87,7.21l.45.68-5.85,5.85Z"/>
+        <g id="Stop">
+          <circle id="Btn2_StopDir" class="cls-18" cx="48.56" cy="48.33" r="9"/>
+          <circle id="StopSign" class="cls-19" cx="48.53" cy="48.33" r="4"/>
+        </g>
+        <path id="Btn2_LeftDir" class="cls-18" d="M30.56,54.86l-13.82-8v4h-.57a4.16,4.16,0,1,1,2.73-7.28l5.26-6a12.15,12.15,0,1,0-8,21.31h.57v4Z"/>
+        <path id="Btn2_RightDir" class="cls-18" d="M66.3,54.86l13.82-8v4h.57A4.16,4.16,0,1,0,78,43.58l-5.26-6a12.15,12.15,0,1,1,8,21.31h-.57v4Z"/>
+      </g>
+    </g>
+    <g id="Ac_Wheels">
+      <g id="Sliders">
+        <g id="Slid_right">
+          <g id="sliderBg_R">
+            <g>
+              <line class="cls-16" x1="80.55" y1="11.52" x2="80.55" y2="85.49"/>
+              <polygon class="cls-20" points="77.06 12.54 80.55 6.5 84.04 12.54 77.06 12.54"/>
+              <polygon class="cls-20" points="77.06 84.47 80.55 90.51 84.04 84.47 77.06 84.47"/>
+            </g>
+          </g>
+          <g id="Cursor_right">
+            <circle id="CursorRight" class="cls-21" cx="80.55" cy="48.51" r="6"/>
+            <circle id="SameSpeed_R" class="cls-22" cx="80.55" cy="48.51" r="2"/>
+            <rect id="StopIndicator_R" class="cls-19" x="78.47" y="46.37" width="4.27" height="4.27"/>
+          </g>
+        </g>
+        <g id="Slid_left">
+          <g id="sliderBg_L">
+            <g>
+              <line class="cls-16" x1="16.7" y1="11.52" x2="16.7" y2="85.49"/>
+              <polygon class="cls-20" points="13.21 12.54 16.7 6.5 20.19 12.54 13.21 12.54"/>
+              <polygon class="cls-20" points="13.21 84.47 16.7 90.51 20.19 84.47 13.21 84.47"/>
+            </g>
+          </g>
+          <g id="Cursor_left">
+            <circle id="CursorLeft" class="cls-21" cx="16.7" cy="48.51" r="6"/>
+            <circle id="SameSpeed_L" class="cls-22" cx="16.7" cy="48.51" r="2"/>
+            <rect id="StopIndicator_L" class="cls-19" x="14.62" y="46.37" width="4.27" height="4.27"/>
+          </g>
+        </g>
+      </g>
+      <g id="ThymioTop_wheels_mini">
+        <path class="cls-11" d="M48.51,35.73a12.38,12.38,0,0,0-8.74,3.59.9.9,0,0,0-.26.64V53a.76.76,0,0,0,.75.75H56.74a.74.74,0,0,0,.75-.74V40a.9.9,0,0,0-.26-.64A12.31,12.31,0,0,0,48.51,35.73Z"/>
+        <g>
+          <rect class="cls-23" x="55.25" y="44.74" width="2.25" height="7.49" rx="1.12"/>
+          <rect class="cls-24" x="55.25" y="44.74" width="2.25" height="7.49" rx="1.12"/>
+        </g>
+        <g>
+          <rect class="cls-23" x="39.5" y="44.74" width="2.25" height="7.49" rx="1.12"/>
+          <rect class="cls-24" x="39.5" y="44.74" width="2.25" height="7.49" rx="1.12"/>
+        </g>
+      </g>
+    </g>
+    <g id="Color_adv">
+      <g id="Bg_Thymio_front_color">
+        <path class="cls-25" d="M76.93,84.58V87a1,1,0,0,1-1,1H69.85a1,1,0,0,1-1-1V84.58Z"/>
+        <path class="cls-25" d="M28.22,84.58V87a.94.94,0,0,1-.95,1H21.14a1,1,0,0,1-1-1V84.58Z"/>
+        <rect class="cls-10" x="18.5" y="62.08" width="60" height="22.5" rx="2"/>
+        <line class="cls-14" x1="59.06" y1="72.69" x2="64.69" y2="72.69"/>
+        <line class="cls-14" x1="71.26" y1="72.69" x2="75.74" y2="72.69"/>
+        <line class="cls-14" x1="37.94" y1="72.69" x2="32.31" y2="72.69"/>
+        <line class="cls-14" x1="25.74" y1="72.69" x2="21.26" y2="72.69"/>
+        <path class="cls-25" d="M44.79,84.58c.52.49.56,2,1.46,2.71a3.65,3.65,0,0,0,2.26.62,3.72,3.72,0,0,0,2.26-.62c.88-.73.93-2.22,1.44-2.71Z"/>
+        <line class="cls-14" x1="45.09" y1="72.69" x2="51.79" y2="72.69"/>
+      </g>
+      <rect id="Gradient_top" class="cls-26" x="19.54" y="63.08" width="57.9" height="8.46" rx="0.75"/>
+      <rect id="Gradient_bottom" class="cls-27" x="19.54" y="73.71" width="57.9" height="9.85" rx="0.75"/>
+      <g id="Sliders_rgb">
+        <g id="Slid_blue">
+          <line id="Bg_slid_blue" class="cls-21" x1="66.5" y1="51.78" x2="66.5" y2="11.78"/>
+          <circle id="Cursor_blue" class="cls-29" cx="66.5" cy="51.78" r="5"/>
+        </g>
+        <g id="Slid_green">
+          <line id="Bg_slid_green" class="cls-21" x1="48.46" y1="51.78" x2="48.46" y2="11.78"/>
+          <circle id="Cursor_green" class="cls-30" cx="48.5" cy="51.78" r="5"/>
+        </g>
+        <g id="Slid_red">
+          <line id="Bg_slid_red" class="cls-21" x1="30.5" y1="51.78" x2="30.5" y2="11.78"/>
+          <circle id="Cursor_red" class="cls-31" cx="30.5" cy="51.78" r="5"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
+</script>
+
+<title>VPL</title>
+
+<style>
+html {
+	height: 100%;
+}
+body {
+	height: 100%;
+	margin: 0;
+}
+#programCanvas {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+#src-editor {
+	height: 100%;
+}
+#editorTBCanvas {
+	width: 100%;
+	height: 100px;
+	display: block;
+}
+#editor {
+	height: 100%;
+	display: block;
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 5pt;
+	padding-right: 5pt;
+	margin: 0;
+	border: 0;
+	box-sizing: border-box;
+	tab-size: 4;
+	font-family: monospace;
+	font-size: 11pt;
+}
+pre#editor-lines {
+	background-color: silver;
+    width: 70px;
+    float: left;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 5pt;
+    text-align: right;
+    overflow: hidden;
+	user-select: none;
+}
+
+#input {
+	position: absolute;
+	z-index: 1000;
+	font-family: sans-serif;
+	font-size: 15pt;
+	top: 10px;
+	left: 10px;
+	display: none;
+}
+
+@media only screen and (max-device-width: 1024px) {
+	#editor {
+		tab-size: 2;
+		font-size: 10pt;
+	}
+}
+</style>
+
+<script>
+window["vplOnRun"] = function (code) {
+	console.info(code);
+};
+</script>
+
+<script src="a3a-ns.js"></script>
+<script src="svg.js"></script>
+<script src="svg-transform.js"></script>
+<script src="vpl-ns.js"></script>
+<script src="vpl-blocktemplate.js"></script>
+<script src="vpl-block.js"></script>
+<script src="vpl-emptyblock.js"></script>
+<script src="vpl-canvas.js"></script>
+<script src="vpl-blocklib.js"></script>
+<script src="vpl-blocklib-svg.js"></script>
+<script src="vpl-blocklib-l2.js"></script>
+<script src="vpl-eventhandler.js"></script>
+<script src="vpl-program.js"></script>
+<script src="vpl-code-aseba.js"></script>
+<script src="vpl-code-l2.js"></script>
+<script src="vpl-controlbar.js"></script>
+<script src="vpl-program-canvas.js"></script>
+<script src="vpl-error.js"></script>
+<script src="vpl-draw.js"></script>
+<script src="vpl-undo.js"></script>
+<script src="vpl-aeslfile.js"></script>
+<script src="vpl-texteditor.js"></script>
+<script src="vpl-sourceedit.js"></script>
+<script src="vpl-main.js"></script>
+
+<script src="a3a-nodebase.js"></script>
+<script src="a3a-nodeproxy.js"></script>
+
+<script src="vpl-thymio.js"></script>
+
+</head>
+
+<body>
+
+<div id="vpl-editor">
+
+<canvas id="programCanvas" width="900" height="700"></canvas>
+
+<input id="input">
+
+</div>
+
+<div id="src-editor">
+
+<canvas id="editorTBCanvas" width="900" height="100"></canvas>
+<div style="display:flex">
+<pre id="editor-lines"></pre>
+<textarea id="editor" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+</textarea>
+</div>
+
+</div>
+
+</body>
+
+</html>
