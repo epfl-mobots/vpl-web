@@ -375,7 +375,7 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 };
 
 /** Change current view
-	@param {string} view "vpl" or "src"
+	@param {string} view "vpl", "src" or "sim"
 	@param {boolean=} noVPL true to prevent vpl (default: false)
 	@return {void}
 */
@@ -383,10 +383,14 @@ A3a.vpl.Program.prototype.setView = function (view, noVPL) {
 	this.noVPL = noVPL || false;
 	document.getElementById("vpl-editor").style.display = view === "vpl" ? "block" : "none";
 	document.getElementById("src-editor").style.display = view === "src" ? "block" : "none";
+	document.getElementById("sim-view").style.display = view === "sim" ? "block" : "none";
 	switch (view) {
 	case "src":
 		window["vplEditor"].lockWithVPL(true);
 		window["vplEditor"].focus();
+		break;
+	case "sim":
+		window["vplSim"].sim.start(false);
 		break;
 	}
 };
@@ -852,7 +856,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 	controlBar.addStretch();
 
-	if (window["vplRunFunction"]) {
+	if (window["vplRun"]) {
 		this.addControl(controlBar, "run",
 			// draw
 			function (ctx, item, dx, dy) {
@@ -867,9 +871,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.8,
 					item.y + dy + canvas.dims.controlSize * 0.5);
 				ctx.closePath();
-				ctx.fillStyle = window["vplRunFunction"]["isEnabled"]() ? "white" : "#777";
+				ctx.fillStyle = window["vplRun"].isEnabled(self.currentLanguage) ? "white" : "#777";
 				ctx.fill();
-				ctx.fillStyle = window["vplRunFunction"]["isEnabled"]() ? self.uploaded ? "white" : "#44a" : "#777";
+				ctx.fillStyle = window["vplRun"].isEnabled(self.currentLanguage) ? self.uploaded ? "white" : "#44a" : "#777";
 				ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.1,
 					item.y + dy + canvas.dims.controlSize * 0.8,
 					canvas.dims.controlSize * 0.8,
@@ -877,11 +881,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			},
 			// mousedown
 			function (data, x, y, ev) {
-				if (window["vplRunFunction"]["isEnabled"]()) {
-					var code = self.getCode(self.currentLanguage);
-					window["vplRunFunction"](code);
-					self.uploaded = true;
-				}
+				var code = self.getCode(self.currentLanguage);
+				window["vplRun"].run(code, self.currentLanguage);
+				self.uploaded = true;
 				return 0;
 			},
 			// doDrop: compile code fragment and play it
@@ -890,7 +892,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 					if (draggedItem.data.eventHandlerContainer) {
 						// action from an event handler: just send it
 						var code = self.codeForBlock(/** @type {A3a.vpl.Block} */(draggedItem.data), self.currentLanguage);
-						window["vplRunFunction"](code);
+						window["vplRun"].run(code, self.currentLanguage);
 					} else {
 						// action from the templates: display in a zoomed state to set the parameters
 						// (disabled by canDrop below)
@@ -898,12 +900,12 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 					}
 				} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
 					var code = self.codeForActions(/** @type {A3a.vpl.EventHandler} */(draggedItem.data), self.currentLanguage);
-					window["vplRunFunction"](code);
+					window["vplRun"].run(code, self.currentLanguage);
 				}
 			},
 			// canDrop: accept event handler or action block in event handler or in template
 			function (targetItem, draggedItem) {
-				return window["vplRunFunction"]["isEnabled"]() &&
+				return window["vplRun"].isEnabled(self.currentLanguage) &&
 					draggedItem.data instanceof A3a.vpl.EventHandler &&
  						/** @type {A3a.vpl.EventHandler} */(draggedItem.data).hasBlockOfType(A3a.vpl.blockType.action) ||
 					draggedItem.data instanceof A3a.vpl.Block &&
@@ -912,26 +914,74 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 							A3a.vpl.blockType.action;
 			});
 
-		var stopGenCode = A3a.vpl.BlockTemplate.findByName("stop").genCode[self.currentLanguage];
-		if (stopGenCode) {
-			this.addControl(controlBar, "stop",
+		this.addControl(controlBar, "stop",
+			// draw
+			function (ctx, item, dx, dy) {
+				ctx.fillStyle = "navy";
+				ctx.fillRect(item.x + dx, item.y + dy,
+					canvas.dims.controlSize, canvas.dims.controlSize);
+				ctx.fillStyle = window["vplRun"].isEnabled(self.currentLanguage) ? "white" : "#777";
+				ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.28,
+					item.y + dy + canvas.dims.controlSize * 0.28,
+					canvas.dims.controlSize * 0.44, canvas.dims.controlSize * 0.44);
+				ctx.fill();
+			},
+			// mousedown
+			function (data, x, y, ev) {
+				window["vplRun"].stop(self.currentLanguage);
+				self.uploaded = false;
+				return 0;
+			},
+			// doDrop
+			null,
+			// canDrop
+			null);
+
+		if (window["vplSim"]) {
+			this.addControl(controlBar, "sim",
 				// draw
 				function (ctx, item, dx, dy) {
 					ctx.fillStyle = "navy";
 					ctx.fillRect(item.x + dx, item.y + dy,
 						canvas.dims.controlSize, canvas.dims.controlSize);
-					ctx.fillStyle = window["vplRunFunction"]["isEnabled"]() ? "white" : "#777";
-					ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.28,
-						item.y + dy + canvas.dims.controlSize * 0.28,
-						canvas.dims.controlSize * 0.44, canvas.dims.controlSize * 0.44);
+					ctx.save();
+					ctx.translate(item.x + dx + canvas.dims.controlSize / 2, item.y + dy + canvas.dims.controlSize * 0.35);
+					ctx.scale(0.4, 0.4);
+					ctx.rotate(0.2);
+					ctx.beginPath();
+					// middle rear
+					ctx.moveTo(0, 0.5 * canvas.dims.controlSize);
+					// right side
+					ctx.lineTo(0.5 * canvas.dims.controlSize, 0.5 * canvas.dims.controlSize);
+					ctx.lineTo(0.5 * canvas.dims.controlSize, -0.25 * canvas.dims.controlSize);
+					ctx.bezierCurveTo(0.3 * canvas.dims.controlSize, -0.5 * canvas.dims.controlSize,
+						canvas.dims.controlSize * 0.02, -0.5 * canvas.dims.controlSize,
+						0, -0.5 * canvas.dims.controlSize);
+					// left side
+					ctx.lineTo(0, -0.5 * canvas.dims.controlSize);
+					ctx.bezierCurveTo(-0.02 * canvas.dims.controlSize, -0.5 * canvas.dims.controlSize,
+						-0.3 * canvas.dims.controlSize, -0.5 * canvas.dims.controlSize,
+						-0.5 * canvas.dims.controlSize, -0.25 * canvas.dims.controlSize);
+					ctx.lineTo(-0.5 * canvas.dims.controlSize, 0.5 * canvas.dims.controlSize);
+					ctx.closePath();
+					ctx.fillStyle = "white";
 					ctx.fill();
+					ctx.beginPath();
+					ctx.arc(canvas.dims.controlSize, 0.5 * canvas.dims.controlSize, 1.4 * canvas.dims.controlSize,
+						-3.2, -3.8, true);
+					ctx.strokeStyle = "#999";
+					ctx.lineWidth = 0.2 * canvas.dims.controlSize;
+					ctx.stroke();
+					ctx.beginPath();
+					ctx.arc(canvas.dims.controlSize, 0.5 * canvas.dims.controlSize, 0.6 * canvas.dims.controlSize,
+						-3.3, -3.8, true);
+					ctx.stroke();
+
+					ctx.restore();
 				},
 				// mousedown
 				function (data, x, y, ev) {
-					if (window["vplRunFunction"]["isEnabled"]()) {
-						window["vplRunFunction"](stopGenCode(null).statement);
-						self.uploaded = false;
-					}
+					self.setView("sim");
 					return 0;
 				},
 				// doDrop

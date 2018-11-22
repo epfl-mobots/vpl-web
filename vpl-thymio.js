@@ -10,33 +10,28 @@ window["installThymio"] = function () {
 		@param {string} code source code
 		@return {void}
 	*/
-	window["vplRunFunction"] = function (code) {
-		window["vplNode"].putA3aCodeAsync(code);
-	};
-
-	/** Initialize communication with Thymio
-		@return {void}
-	*/
-	window["vplRunFunction"]["init"] = function () {
-		// initialize the list of nodes
-		try {
-			var origin = document.location.origin.slice(0, 5) !== "http:"
-				? "http://127.0.0.1:3000"
-				: document.location.origin;
-			A3a.NodeProxy.init(origin, function () {
-				window["vplNode"] = A3a.Node.getNodeList()[0];
+	window["vplRun"] = new A3a.vpl.RunGlue({
+		run: function (code) {
+			window["vplNode"].putA3aCodeAsync(code);
+		},
+		init: function () {
+			// initialize the list of nodes
+			try {
+				var origin = document.location.origin.slice(0, 5) !== "http:"
+					? "http://127.0.0.1:3000"
+					: document.location.origin;
+				A3a.NodeProxy.init(origin, function () {
+					window["vplNode"] = A3a.Node.getNodeList()[0];
+					window["vplCanvas"]["update"]();
+				});
+			} catch (e) {
+				console.info(e);
 				window["vplCanvas"]["update"]();
-			});
-		} catch (e) {
-			console.info(e);
-			window["vplCanvas"]["update"]();
-		}
-	};
-
-	/** Check if Thymio is available
-		@return {boolean}
-	*/
-	window["vplRunFunction"]["isEnabled"] = function () {
-		return window["vplNode"] != undefined;
-	};
+			}
+		},
+		isEnabled: function () {
+			return window["vplNode"] != undefined;
+		},
+		preferredLanguage: "aseba"
+	});
 };

@@ -35,6 +35,7 @@ JS = \
 	vpl-program.js \
 	vpl-code-aseba.js \
 	vpl-code-l2.js \
+	vpl-code-js.js \
 	vpl-controlbar.js \
 	vpl-program-canvas.js \
 	vpl-canvas.js \
@@ -44,12 +45,18 @@ JS = \
 	svg-transform.js \
 	vpl-blocklib-svg.js \
 	vpl-blocklib-l2.js \
+	vpl-blocklib-js.js \
 	vpl-error.js \
 	vpl-undo.js \
 	vpl-aeslfile.js \
 	vpl-texteditor.js \
 	vpl-sourceedit.js \
+	vpl-runglue.js \
 	vpl-main.js \
+	vpl-robot.js \
+	vpl-virtualthymio.js \
+	vpl-sim.js \
+	vpl-sim2d.js \
 	vpl-thymio.js
 
 .PHONY: all
