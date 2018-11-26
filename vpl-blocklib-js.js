@@ -541,7 +541,7 @@ A3a.vpl.patchJSBlocks = function () {
 						A3a.vpl.BlockTemplate.initOutputsJS
 					],
 					statement:
-						"this.set(\"sound\", {\"notes\": [" + notes.join(", ") + "], \"duration\": [" + durations.join(", ") + "]});\n"
+						"this.set(\"sound\", {\"f\": [" + notes.join(", ") + "], \"d\": [" + durations.join(", ") + "]});\n"
 				};
 			},
 			"set state": function (block) {

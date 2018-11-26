@@ -27,9 +27,12 @@ A3a.vpl.VirtualThymio = function () {
 	this.theta = 0;	// current orientation (counterclockwise, 0=going to the right)
 
 	this.state = {};
+	this.stateChangeListener = {};
 	this.clientState = {};
 	this.timers = [];
 	this.eventListeners = {};
+
+	this.audioContext = new AudioContext();
 
 	this["reset"](0);
 	this["resetEventListeners"]();
@@ -76,7 +79,40 @@ A3a.vpl.VirtualThymio.prototype["reset"] = function (t0) {
 		"leds.top": [0, 0, 0],
 		"leds.bottom.left": [0, 0, 0],
 		"leds.bottom.right": [0, 0, 0],
-		"leds.circle": [0, 0, 0, 0, 0, 0, 0, 0]
+		"leds.circle": [0, 0, 0, 0, 0, 0, 0, 0],
+
+		"sound": {}
+	};
+
+	var self = this;
+	this.stateChangeListener = {
+		"sound": function (name, val) {
+			if (!val["f"]) {
+				return;
+			}
+
+			var i = 0;
+
+			function playNote() {
+				if (i >= val["f"].length) {
+					return;
+				}
+				var oscNode = self.audioContext.createOscillator();
+				oscNode.type = 'sawtooth';
+				oscNode.frequency.value = val["f"][i];
+				var gainNode = self.audioContext.createGain();
+				gainNode.connect(self.audioContext.destination);
+				oscNode.connect(gainNode);
+				oscNode.start(0);
+				var d = val["d"][i] / 50;
+				gainNode.gain.exponentialRampToValueAtTime(0.01, self.audioContext.currentTime + d);
+				oscNode.stop(self.audioContext.currentTime + d);
+				oscNode.addEventListener("ended", playNote);
+				i++;
+			}
+
+			playNote();
+		}
 	};
 
 	this.timers = [];
@@ -116,6 +152,7 @@ A3a.vpl.VirtualThymio.prototype["setPosition"] = function (pos, theta) {
 */
 A3a.vpl.VirtualThymio.prototype["set"] = function (name, val) {
 	this.state[name] = val;
+	this.stateChangeListener[name] && this.stateChangeListener[name](name, val);
 };
 
 /**
