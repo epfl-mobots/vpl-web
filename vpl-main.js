@@ -268,6 +268,33 @@ function vplSetup(uiConfig) {
 		}
 	}, false);
 
+	// accept dropped ground files in simulator
+	if (window["vplSim"]) {
+		document.getElementById("sim-view").addEventListener('dragover', function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			e.dataTransfer.dropEffect = "copy";
+		}, false);
+		document.getElementById("sim-view").addEventListener('drop', function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			var files = e.dataTransfer.files;
+			if (files.length === 1) {
+				var file = files[0];
+				var reader = new window.FileReader();
+				reader.onload = function (event) {
+					var data = event.target.result;
+					var img = new Image();
+					img.addEventListener("load", function () {
+						window["vplSim"].sim.setGroundImage(img);
+					});
+					img.src = data;
+				};
+				reader["readAsDataURL"](file);
+			}
+		}, false);
+	}
+
 	// reload from storage
 	if (window["vplStorageGetFunction"]) {
 		window["vplStorageGetFunction"]("vpl.json",

@@ -20,21 +20,31 @@ A3a.vpl.Playground = function (width, height) {
 	@param {A3a.vpl.Robot} robot
 */
 A3a.vpl.VPLSim2DViewer = function (robot) {
+	var self = this;
+
 	this.robot = robot;
 	this.running = false;
 	this.paused = false;
 
-	this.playground = new A3a.vpl.Playground(800, 600);
-	var posMargin = 50;
+	this.playground = new A3a.vpl.Playground(10 * this.robot.robotSize, 7.07 * this.robot.robotSize);	// A4 ratio
+	var posMargin = this.robot.robotSize;
 	this.robot["setPositionLimits"](-this.playground.width / 2 + posMargin,
 		this.playground.width / 2 - posMargin,
 		-this.playground.height / 2 + posMargin,
 		this.playground.height / 2 - posMargin);
 
+	/** @type {Image} */
+	this.groundImage = null;
+	this.groundCanvas = document.createElement("canvas");
+document.getElementsByTagName("body")[0].appendChild(this.groundCanvas);
+	this.robot.onMove =
+		/** @type {A3a.vpl.VirtualThymio.OnMoveFunction} */(function () {
+			self.updateGroundSensors();
+		});
+
 	var canvasElement = document.getElementById("simCanvas");
 	this.simCanvas = new A3a.vpl.Canvas(canvasElement);
 	this.simCanvas.state = {};
-	var self = this;
 	this.simCanvas.onUpdate = function () {
 		self.render();
 	};
@@ -43,6 +53,65 @@ A3a.vpl.VPLSim2DViewer = function (robot) {
 	this.resize();
 
 	this.render();
+};
+
+/** Set or change ground image
+	@param {Image} img
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.setGroundImage = function (img) {
+	this.groundImage = img;
+	if (img) {
+		this.groundCanvas.width = img.width;
+		this.groundCanvas.height = img.height;
+		var ctx = this.groundCanvas.getContext("2d");
+		ctx.fillStyle = "white";
+		ctx.fillRect(0, 0, img.width, img.height);	// render img on a white background
+		ctx.drawImage(img, 0, 0, img.width, img.height);
+	}
+	this.render();
+};
+
+/** Get the ground value (red) at the specified position
+	@param {number} x (0 = left)
+	@param {number} y (0 = bottom)
+	@return {number} ground value, from 0 (black) to 1 (white)
+*/
+A3a.vpl.VPLSim2DViewer.prototype.groundValue = function (x, y) {
+	if (this.groundImage) {
+		// scale position to (i,j)
+		var i = Math.round(this.groundImage.width * (x + this.playground.width / 2) / this.playground.width);
+		var j = Math.round(this.groundImage.height * (this.playground.height / 2 - y) / this.playground.height);
+		var pixel = this.groundCanvas.getContext("2d").getImageData(i, j, 1, 1).data;
+		return pixel[0] / 255;
+	} else {
+		return 1;	// default: white
+	}
+};
+
+/** Update the values of the ground sensors
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.updateGroundSensors = function () {
+	// from 0 (black) to 1 (white)
+	if (this.groundImage) {
+		var g = [];
+		for (var i = 0; i < 2; i++) {
+			// ground sensor positions
+			var x = this.robot.pos[0] +
+				this.robot.groundSensorX * Math.cos(this.robot.theta) +
+				(i === 0 ? -1 : 1) * this.robot.groundSensorY * Math.sin(this.robot.theta);
+			var y = this.robot.pos[1] +
+				this.robot.groundSensorX * Math.sin(this.robot.theta) +
+				(i === 0 ? -1 : 1) * this.robot.groundSensorY * Math.cos(this.robot.theta);
+			// ground value at (x, y)
+			g.push(this.groundValue(x, y));
+		}
+		this.robot["set"]("prox.ground.delta", g);
+	} else {
+		// default: white ground
+		this.robot["set"]("prox.ground.delta", [1, 1]);
+	}
 };
 
 /** Start simulator, rendering once if suspended or continuously else
@@ -508,13 +577,17 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	playgroundView.oy = (playgroundView.height - this.playground.height * playgroundView.scale) / 2;
 
 	// draw robot and playground as a single CanvasItem
-	var robotSize = 50;
+	var robotSize = this.robot.robotSize;
 	var playgroundItem = new A3a.vpl.CanvasItem(null,
 		this.playground.width * playgroundView.scale, this.playground.height * playgroundView.scale,
 		playgroundView.x + playgroundView.ox,
 		playgroundView.y + playgroundView.oy,
 		function(ctx, item, dx, dy) {
 			ctx.save();
+
+			if (self.groundImage) {
+				ctx.drawImage(self.groundImage, item.x + dx, item.y + dy, item.width, item.height);
+			}
 
 			ctx.strokeStyle = "silver";
 			ctx.lineWidth = 3;

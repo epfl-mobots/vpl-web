@@ -84,7 +84,7 @@ A3a.vpl.patchJSBlocks = function () {
 				}
 				if (cond === "") {
 					for (var i = 1; i < 7; i++) {
-						cond += " || this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 2000";
+						cond += " || this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " && "
 				}
@@ -102,9 +102,8 @@ A3a.vpl.patchJSBlocks = function () {
 						cond += (cond.length === 0 ? "" : " && ") +
 							"this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] " +
 							(block.param[i] > 0
-								? ">= " + Math.round(7 + 33 * block.param[7])
-								: "<= " + Math.round(7 + 33 * block.param[8])) +
-							"00";
+								? ">= " + block.param[7].toFixed(2)
+								: "<= " + block.param[8].toFixed(2));
 					}
 				}
 				if (cond === "") {
@@ -127,12 +126,12 @@ A3a.vpl.patchJSBlocks = function () {
 						cond += (cond.length === 0 ? "" : " && ") +
 							"this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] " +
 							(block.param[i] > 0 ? ">= " : "< ") +
-							Math.round(7 + 33 * block.param[7]) + "00";
+							block.param[7].toFixed(2);
 					}
 				}
 				if (cond === "") {
 					for (var i = 1; i < 7; i++) {
-						cond += " || this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 2000";
+						cond += " || this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " || "
 				}
@@ -149,12 +148,12 @@ A3a.vpl.patchJSBlocks = function () {
 					if (block.param[i]) {
 						cond += (cond.length === 0 ? "" : " && ") +
 							"this.get(\"prox.ground.delta\")[" + i + "] " +
-							(block.param[i] > 0 ? ">= 450" : "<= 400");
+							(block.param[i] > 0 ? ">= 0.6" : "<= 0.4");
 					}
 				}
 				if (cond === "") {
 					for (var i = 1; i < 2; i++) {
-						cond += " || this.get(\"prox.ground.delta\")[" + i + "] >= 450";
+						cond += " || this.get(\"prox.ground.delta\")[" + i + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " || "
 				}
@@ -172,13 +171,13 @@ A3a.vpl.patchJSBlocks = function () {
 						cond += (cond.length === 0 ? "" : " && ") +
 							"this.get(\"prox.ground.delta\")[" + i + "] " +
 							(block.param[i] > 0
-								? ">= " + 25 * Math.round(40 * block.param[2])
-								: "<= " + 25 * Math.round(40 * block.param[3]));
+								? ">= " + block.param[2].toFixed(2)
+								: "<= " + block.param[3].toFixed(2));
 					}
 				}
 				if (cond === "") {
 					for (var i = 1; i < 2; i++) {
-						cond += " || this.get(\"prox.ground.delta\")[" + i + "] >= 450";
+						cond += " || this.get(\"prox.ground.delta\")[" + i + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " || "
 				}
@@ -196,12 +195,12 @@ A3a.vpl.patchJSBlocks = function () {
 						cond += (cond.length === 0 ? "" : " && ") +
 							"this.get(\"prox.ground.delta\")[" + i + "] " +
 							(block.param[i] > 0 ? ">= " : "< ") +
-							25 * Math.round(40 * block.param[2]);
+							block.param[2].toFixed(2);
 					}
 				}
 				if (cond === "") {
 					for (var i = 1; i < 2; i++) {
-						cond += " || this.get(\"prox.ground.delta\")[" + i + "] >= 450";
+						cond += " || this.get(\"prox.ground.delta\")[" + i + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " || "
 				}

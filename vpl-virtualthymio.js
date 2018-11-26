@@ -23,11 +23,17 @@ A3a.vpl.VirtualThymio = function () {
 	this.t = 0;	// current time
 	this.dt = 0.01;	// integration step in s
 	this.r = 18;	// distance between wheel and robot center in mm
-	this.pos = [0, 0];	// current position [x, y]
+	this.pos = [0, 0];	// current position [x, y] in mm
 	this.theta = 0;	// current orientation (counterclockwise, 0=going to the right)
+
+	this.robotSize = 120;	// robot width and length
+	this.groundSensorX = 80;	// distance from robot center to ground sensors along x axis
+	this.groundSensorY = 20;	// distance from robot center to ground sensors along y axis
 
 	this.state = {};
 	this.stateChangeListener = {};
+	/** @type {?A3a.vpl.VirtualThymio.OnMoveFunction} */
+	this.onMove = null;
 	this.clientState = {};
 	this.timers = [];
 	this.eventListeners = {};
@@ -39,6 +45,10 @@ A3a.vpl.VirtualThymio = function () {
 };
 A3a.vpl.VirtualThymio.prototype = Object.create(A3a.vpl.Robot.prototype);
 A3a.vpl.VirtualThymio.prototype.constructor = A3a.vpl.VirtualThymio;
+
+/** @typedef {function(this:A3a.vpl.VirtualThymio):void}
+*/
+A3a.vpl.VirtualThymio.OnMoveFunction;
 
 /** Set playground bounds (limits on robot position)
 	@param {number} xmin
@@ -72,6 +82,8 @@ A3a.vpl.VirtualThymio.prototype["reset"] = function (t0) {
 		"button.right": false,
 		"button.forward": false,
 		"button.backward": false,
+
+		"prox.ground.delta": [1, 1],
 
 		"motor.left": 0,
 		"motor.right": 0,
@@ -216,7 +228,6 @@ A3a.vpl.VirtualThymio.prototype["getTimer"] = function (id) {
 	@inheritDoc
 */
 A3a.vpl.VirtualThymio.prototype["loadCode"] = function (code) {
-console.info(code);
 	// compile code
 	var fun = new Function(code);
 	// execute it
@@ -233,27 +244,32 @@ A3a.vpl.VirtualThymio.prototype["run"] = function (tStop) {
 		// move
 		var dLeft = this.state["motor.left"] * 100 * dt;
 		var dRight = this.state["motor.right"] * 100 * dt;
-		if (Math.abs(dLeft - dRight) < 1e-6 ||
-			Math.abs(dLeft - dRight) < 1e-4 * (Math.abs(dLeft) + Math.abs(dRight))) {
-			// straight
-			this.pos = [
-				this.pos[0] + (dLeft + dRight) * 0.5 * Math.cos(this.theta),
-				this.pos[1] + (dLeft + dRight) * 0.5 * Math.sin(this.theta)
-			];
-			this["enforcePositionLimits"]();
-		} else {
-			// arc
-			var R = (dLeft + dRight) * this.r / (dLeft - dRight);	// (R+r)*phi = left, (R-r)*phi = right
-			var dTheta = (dRight - dLeft) / (2 * this.r);
-			this.pos = [
-				this.pos[0] + R * (Math.sin(this.theta) - Math.sin(this.theta + dTheta)),
-				this.pos[1] - R * (Math.cos(this.theta) - Math.cos(this.theta + dTheta))
-			];
-			this.theta += dTheta;
-			this["enforcePositionLimits"]();
+		if (dLeft !== 0 || dRight != 0) {
+			if (Math.abs(dLeft - dRight) < 1e-6 ||
+				Math.abs(dLeft - dRight) < 1e-4 * (Math.abs(dLeft) + Math.abs(dRight))) {
+				// straight
+				this.pos = [
+					this.pos[0] + (dLeft + dRight) * 0.5 * Math.cos(this.theta),
+					this.pos[1] + (dLeft + dRight) * 0.5 * Math.sin(this.theta)
+				];
+				this["enforcePositionLimits"]();
+			} else {
+				// arc
+				var R = (dLeft + dRight) * this.r / (dLeft - dRight);	// (R+r)*phi = left, (R-r)*phi = right
+				var dTheta = (dRight - dLeft) / (2 * this.r);
+				this.pos = [
+					this.pos[0] + R * (Math.sin(this.theta) - Math.sin(this.theta + dTheta)),
+					this.pos[1] - R * (Math.cos(this.theta) - Math.cos(this.theta + dTheta))
+				];
+				this.theta += dTheta;
+				this["enforcePositionLimits"]();
+			}
+			this.onMove && this.onMove.call(this);
 		}
 		// advance time
 		this.t += dt;
+		// call prox event
+		this["sendEvent"]("prox", null);
 		// call elapsed timer events
 		for (var i = 0; i < this.timers.length; i++) {
 			if (this.timers[i] > 0 && this.t >= this.t0 + this.timers[i]) {
