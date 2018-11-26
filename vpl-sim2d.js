@@ -344,7 +344,105 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			self.robot["sendEvent"]("buttons", null);	// reset "when" state
 			return 0;
 		});
-	yRobotControl += 4 * smallBtnSize + 3 * this.simCanvas.dims.stripHorMargin;
+	yRobotControl += 3.5 * smallBtnSize + 3 * this.simCanvas.dims.stripHorMargin;
+
+	// tap
+	this.simCanvas.addControl(this.simCanvas.dims.margin + 0.5 * smallBtnSize + 0.5 * this.simCanvas.dims.stripHorMargin,
+		yRobotControl,
+		smallBtnSize, smallBtnSize,
+		// draw
+		function (ctx, item, dx, dy) {
+			ctx.save();
+			ctx.fillStyle = "navy";
+			ctx.fillRect(item.x + dx, item.y + dy, smallBtnSize, smallBtnSize);
+			ctx.beginPath();
+
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
+			ctx.translate(item.x + dx + 0.6 * smallBtnSize, item.y + dy + 0.6 * smallBtnSize);
+			for (var i = 1; i <= 3; i++) {
+				ctx.beginPath();
+				ctx.arc(0, 0,
+					0.15 * smallBtnSize * i,
+					Math.PI * 0.9, Math.PI * 1.7);
+				ctx.stroke();
+			}
+			ctx.moveTo(0.3 * smallBtnSize, 0);
+			ctx.lineTo(0, 0);
+			ctx.lineTo(0, 0.3 * smallBtnSize);
+			ctx.stroke();
+			ctx.restore();
+		},
+		// mousedown
+		function (data, x, y, ev) {
+			self.robot["sendEvent"]("tap", null);
+			return 0;
+		});
+	// clap
+	this.simCanvas.addControl(this.simCanvas.dims.margin + 1.5 * smallBtnSize + 1.5 * this.simCanvas.dims.stripHorMargin,
+		yRobotControl,
+		smallBtnSize, smallBtnSize,
+		// draw
+		function (ctx, item, dx, dy) {
+			ctx.save();
+			ctx.fillStyle = "navy";
+			ctx.fillRect(item.x + dx, item.y + dy, smallBtnSize, smallBtnSize);
+			ctx.beginPath();
+
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
+			ctx.translate(item.x + dx + 0.5 * smallBtnSize, item.y + dy + 0.5 * smallBtnSize);
+			ctx.rotate(0.1);
+			for (var i = 0; i < 9; i++) {
+				ctx.beginPath();
+				ctx.moveTo(0.12 * smallBtnSize, 0);
+				ctx.lineTo(0.24 * smallBtnSize, 0);
+				ctx.moveTo(0.28 * smallBtnSize, 0);
+				ctx.lineTo(0.36 * smallBtnSize, 0);
+				ctx.stroke();
+				ctx.rotate(Math.PI / 4.5);
+			}
+			ctx.restore();
+		},
+		// mousedown
+		function (data, x, y, ev) {
+			self.robot["sendEvent"]("mic", null);
+			return 0;
+		});
+	yRobotControl += 2 * smallBtnSize;
+
+	// draw robot back side
+	var yRobotSide = yRobotControl;
+	this.simCanvas.addDecoration(function (ctx) {
+		ctx.save();
+		ctx.fillStyle = "black";
+		ctx.fillRect(self.simCanvas.dims.margin + 0.35 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotSide + 0.5 * smallBtnSize,
+			0.3 * smallBtnSize, 0.6 * smallBtnSize);
+		ctx.fillRect(self.simCanvas.dims.margin + 2.35 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotSide + 0.5 * smallBtnSize,
+			0.3 * smallBtnSize, 0.6 * smallBtnSize);
+		ctx.fillStyle = A3a.vpl.VPLSim2DViewer.color(/** @type {Array.<number>} */(self.robot["get"]("leds.top")));
+		ctx.fillRect(self.simCanvas.dims.margin + 0.3 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotSide,
+			2.4 * smallBtnSize, 0.5 * smallBtnSize);
+		ctx.fillStyle = A3a.vpl.VPLSim2DViewer.color(/** @type {Array.<number>} */(self.robot["get"]("leds.bottom.left")));
+		ctx.fillRect(self.simCanvas.dims.margin + 0.3 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotSide + 0.5 * smallBtnSize,
+			1.2 * smallBtnSize, 0.5 * smallBtnSize);
+		ctx.fillStyle = A3a.vpl.VPLSim2DViewer.color(/** @type {Array.<number>} */(self.robot["get"]("leds.bottom.right")));
+		ctx.fillRect(self.simCanvas.dims.margin + 1.5 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotSide + 0.5 * smallBtnSize,
+			1.2 * smallBtnSize, 0.5 * smallBtnSize);
+		ctx.strokeStyle = "black";
+		ctx.lineJoin = "round";
+		ctx.lineWidth = 1;
+		ctx.strokeRect(self.simCanvas.dims.margin + 0.3 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotSide,
+			2.4 * smallBtnSize, smallBtnSize);
+		ctx.restore();
+	});
+	yRobotControl += 2 * smallBtnSize;
 
 	// draw yellow arc leds
 	var ledsY0 = yRobotControl + 1.5 * smallBtnSize;
