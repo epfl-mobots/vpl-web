@@ -25,7 +25,8 @@ var SVG = function (src) {
 		style: (Object | undefined),
 		transform: (Object | undefined),
 		elementId: (string | undefined),
-		element: (Element | undefined)
+		element: (Element | undefined),
+		showBoundingBox: (boolean | undefined)
 	}}
 */
 SVG.Options;
@@ -890,6 +891,20 @@ SVG.prototype.draw = function (ctx, options) {
 			}
 		}
 
+		/** Draw bounding box for specified points
+			@param {Array.<number>} xa
+			@param {Array.<number>} ya
+			@return {void}
+		*/
+		function drawBoundingBox(xa, ya) {
+			var bnds = SVG.calcBounds({x: xa, y: ya});
+			ctx.save();
+			ctx.strokeStyle = "black";
+			ctx.lineWidth = 1;
+			ctx.strokeRect(bnds.xmin, bnds.ymin, bnds.xmax - bnds.xmin, bnds.ymax - bnds.ymin);
+			ctx.restore();
+		}
+
 		var idAttr = el.getAttribute("id");
 		/** @type {SVG.Displacement} */
 		var displacement = idAttr && options && options.displacement && options.displacement[idAttr];
@@ -900,6 +915,8 @@ SVG.prototype.draw = function (ctx, options) {
 		}
 
 		getStyle();
+
+		var ptLen0 = xa.length;
 
 		switch (el.tagName) {
 		case "svg":
@@ -1015,6 +1032,8 @@ SVG.prototype.draw = function (ctx, options) {
 
 		ctx && ctx.restore();
 		transform.restore();
+
+		ctx && options.drawBoundingBox && drawBoundingBox(xa.slice(ptLen0), ya.slice(ptLen0));
 	}
 
 	findCSS(this.root);
