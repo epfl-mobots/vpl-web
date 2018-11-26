@@ -812,6 +812,33 @@ SVG.prototype.draw = function (ctx, options) {
 			return fill;
 		}
 
+		/** Rounded rect path with circle arcs
+			@param {number} x top-left corner
+			@param {number} y top-left corner
+			@param {number} width
+			@param {number} height
+			@param {number} rx
+			@param {number} ry
+			@return {void}
+		*/
+		function roundedRect(x, y, w, h, rx, ry) {
+			if (rx <= 0 || ry <= 0) {
+				ctx.rect(x, y, w, h);
+			} else {
+				var r = Math.min((rx + ry) / 2, Math.min(w, h) / 2);
+				// clockwise path from top-right arc
+				ctx.moveTo(x + w - r, y);
+				ctx.arc(x + w - r, y + r, r, 1.5 * Math.PI, 2 * Math.PI);
+				ctx.lineTo(x + w, y + h - r);
+				ctx.arc(x + w - r, y + h - r, r, 0, 0.5 * Math.PI);
+				ctx.lineTo(x + r, y + h);
+				ctx.arc(x + r, y + h - r, r, 0.5 * Math.PI, Math.PI);
+				ctx.lineTo(x, y + r);
+				ctx.arc(x + r, y + r, r, Math.PI, 1.5 * Math.PI);
+				ctx.closePath();
+			}
+		}
+
 		/** Paint the current path in context ctx using the style defined by baseStyle and overriddenStyle
 			@return {void}
 		*/
@@ -951,11 +978,20 @@ SVG.prototype.draw = function (ctx, options) {
 			var y = getArg("y");
 			var width = getArg("width");
 			var height = getArg("height");
+			var rx = getArg("rx");
+			var ry = getArg("ry", rx);
+			rx = getArg("rx", ry);
 			ctx && ctx.save();
 			transform.save();
 			applyTransform(el.getAttribute("transform"));
-			ctx && ctx.beginPath();
-			ctx && ctx.rect(x, y, width, height);
+			if (ctx) {
+				ctx.beginPath();
+				if (rx > 0 || ry > 0) {
+					roundedRect(x, y, width, height, rx, ry);
+				} else {
+					ctx.rect(x, y, width, height);
+				}
+			}
 			paint();
 			addPoint(x, y);
 			addPoint(x, y + height);
