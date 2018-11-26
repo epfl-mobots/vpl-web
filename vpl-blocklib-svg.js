@@ -150,18 +150,23 @@ A3a.vpl.Canvas.prototype.getDisplacements = function (aux, svgFilename, param) {
 		for (var i = 0; i < aux["sliders"].length; i++) {
 			var sliderAux = aux["sliders"][i];
 			var bnds = this.clientData.svg[svgFilename].getElementBounds(sliderAux["id"]);
+			var bndsThumb = this.clientData.svg[svgFilename].getElementBounds(sliderAux["thumbId"]);
+			var x0Thumb = (bndsThumb.xmin + bndsThumb.xmax) / 2;
+			var y0Thumb = (bndsThumb.ymin + bndsThumb.ymax) / 2;
 			// reduce bounds to vertical or horizontal line
 			if (bnds.xmax - bnds.xmin < bnds.ymax - bnds.ymin) {
 				bnds.xmin = bnds.xmax = (bnds.xmin + bnds.xmax) / 2;
+				x0Thumb = bnds.xmin;	// no thumb adjustment along x axis
 			} else {
 				bnds.ymin = bnds.ymax = (bnds.ymin + bnds.ymax) / 2;
+				y0Thumb = bnds.ymin;	// no thumb adjustment along y axis
 			}
-			// calc thumb position
+			// calc thumb position between 0 and 1
 			var f = (param[i] - sliderAux["min"]) / (sliderAux["max"] - sliderAux["min"]);
 			// translate thumb
 			displacements[sliderAux["thumbId"]] = {
-				dx: bnds.xmax * (f - 0.5) + bnds.xmin * (0.5 - f),
-				dy: bnds.ymin * (f - 0.5) + bnds.ymax * (0.5 - f)
+				dx: f * (bnds.xmax - bnds.xmin) - (x0Thumb - bnds.xmin),
+				dy: f * (bnds.ymin - bnds.ymax) - (y0Thumb - bnds.ymax)
 			};
 		}
 	}
@@ -341,7 +346,8 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 			{
 				elementId: d.id,
 				style: this.getStyles(aux, block),
-				displacement: displacements
+				displacement: displacements,
+				drawBoundingBox: false // true
 			});
 	}, this);
 };

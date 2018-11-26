@@ -57,9 +57,10 @@ In json, block contain the following properties:
 
 - "sliders" (array of objects, optional): slider definitions. Each slider is described by an object with the following properties:
 
-	- "id" (string, required): id of the svg element corresponding to the slider, including the thumb. If the element's height is larger than the element's width, the slider is vertical, else it's horizontal.
+	- "id" (string, required): id of the svg element corresponding to the slider, including the thumb. If the element's height is larger than the element's width, the slider is vertical, else it's horizontal. The element bounds are used to limit the position of the middle of the thumb. In the svg, the thumb should be place at a position such that it does not overflow the slider bounding box (the middle position should be safe).
 	- "thumbId" (string, required): id of the svg element corresponding to the thumb in the slider (the part which can be moved).
-	- "min" (number, required): minimum value, stored in the block parameters.	- "max" (number, required): maximum value, stored in the block parameters.
+	- "min" (number, required): minimum value, stored in the block parameters.
+	- "max" (number, required): maximum value, stored in the block parameters.
 
 - "rotating" (array of objects, optional): rotating control definitions. Each control is described by an object with the following properties:
 
