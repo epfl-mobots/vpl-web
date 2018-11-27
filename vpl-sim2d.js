@@ -36,7 +36,6 @@ A3a.vpl.VPLSim2DViewer = function (robot) {
 	/** @type {Image} */
 	this.groundImage = null;
 	this.groundCanvas = document.createElement("canvas");
-document.getElementsByTagName("body")[0].appendChild(this.groundCanvas);
 	this.robot.onMove =
 		/** @type {A3a.vpl.VirtualThymio.OnMoveFunction} */(function () {
 			self.updateGroundSensors();
@@ -503,9 +502,20 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		ctx.fillRect(self.simCanvas.dims.margin + 1.5 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
 			yRobotSide + 0.5 * smallBtnSize,
 			1.2 * smallBtnSize, 0.5 * smallBtnSize);
-		ctx.strokeStyle = "black";
-		ctx.lineJoin = "round";
 		ctx.lineWidth = 1;
+		ctx.beginPath();
+		ctx.moveTo(self.simCanvas.dims.margin + 0.3 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotSide + 0.5 * smallBtnSize);
+		ctx.lineTo(self.simCanvas.dims.margin + 2.7 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotSide + 0.5 * smallBtnSize);
+		ctx.moveTo(self.simCanvas.dims.margin + 1.5 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotSide + 0.5 * smallBtnSize);
+		ctx.lineTo(self.simCanvas.dims.margin + 1.5 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotSide + smallBtnSize);
+		ctx.strokeStyle = "white";
+		ctx.stroke();
+		ctx.lineJoin = "round";
+		ctx.strokeStyle = "black";
 		ctx.strokeRect(self.simCanvas.dims.margin + 0.3 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
 			yRobotSide,
 			2.4 * smallBtnSize, smallBtnSize);
@@ -521,8 +531,8 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			A3a.vpl.Canvas.drawArc(ctx,
 				self.simCanvas.dims.margin + 1.5 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
 				ledsY0,
-				1.2 * smallBtnSize, 1.5 * smallBtnSize,
-				Math.PI * (0.5 - 0.07 - i * 0.25), Math.PI * (0.5 + 0.07 - i * 0.25),
+				0.9 * smallBtnSize, 1.2 * smallBtnSize,
+				Math.PI * (0.5 - 0.06 - i * 0.25), Math.PI * (0.5 + 0.06 - i * 0.25),
 				leds[i] ? "#fa0" : "white",
  				"black", self.simCanvas.dims.blockLineWidth);
 		}
@@ -633,10 +643,10 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 				ctx.lineWidth = robotSize * 0.1;
 				ctx.stroke();
 				ctx.beginPath();
-				ctx.arc(0, -robotSize, 0.1 * robotSize, 0, 2 * Math.PI);
+				ctx.arc(0, -robotSize, 0.15 * robotSize, 0, 2 * Math.PI);
 				ctx.fillStyle = self.simCanvas.state.orienting ? "navy" : "white";
-				ctx.strokeStyle = "black";
-				ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
+				ctx.strokeStyle = self.simCanvas.state.orienting ? "navy" : "#3cf";
+				ctx.lineWidth = robotSize * 0.06;
 				ctx.fill();
 				ctx.stroke();
 			}
@@ -653,13 +663,16 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 					var xHandle = robotSize * Math.cos(self.robot.theta);
 					var yHandle = robotSize * Math.sin(self.robot.theta);
 					if ((xr - xHandle) * (xr - xHandle) + (yr - yHandle) * (yr - yHandle) <
-						0.02 * robotSize * robotSize) {
+						0.1 * robotSize * robotSize) {
+						self.simCanvas.state.x = x;
+ 						self.simCanvas.state.y = y;
 						self.simCanvas.state.orienting = true;
 						return 1;
 					}
 					if (xr * xr + yr * yr < robotSize * robotSize) {
 						self.simCanvas.state.x = x;
  						self.simCanvas.state.y = y;
+						self.simCanvas.state.moving = true;
 						return 0;
 					}
 				}
@@ -675,14 +688,16 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 							self.robot.pos[1] + y - self.simCanvas.state.y
 						],
 						self.robot.theta);
-						self.simCanvas.state.x = x;
- 						self.simCanvas.state.y = y;
 					break;
 				case 1:
-					var theta = Math.atan2(y - self.robot.pos[1], x - self.robot.pos[0]);
-					self.robot["setPosition"](self.robot.pos, theta);
+					var dtheta = Math.atan2(y - self.robot.pos[1], x - self.robot.pos[0]) -
+						Math.atan2(self.simCanvas.state.y - self.robot.pos[1],
+							self.simCanvas.state.x - self.robot.pos[0]);
+					self.robot["setPosition"](self.robot.pos, self.robot.theta + dtheta);
 					break;
 				}
+				self.simCanvas.state.x = x;
+				self.simCanvas.state.y = y;
 			},
 			mouseup: function (canvas, data, dragIndex) {
 				self.simCanvas.state.moving = false;
