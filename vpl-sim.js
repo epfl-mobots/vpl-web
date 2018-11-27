@@ -27,7 +27,10 @@ window["installRobotSimulator"] = function () {
 			sim.robot["start"](t0);
 			sim.intervalId = setInterval(function () {
 				var t = A3a.vpl.VPLSim2DViewer.currentTime();
-				sim.robot["run"](t);
+				sim.robot["run"](t,
+					/** @type {A3a.vpl.Robot.TraceFun} */(function (shape, param) {
+						sim.sim.drawPen(shape, param);
+					}));
 			}, 10);
 		},
 		init: function () {

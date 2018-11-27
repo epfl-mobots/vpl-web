@@ -25,6 +25,7 @@ A3a.vpl.VPLSim2DViewer = function (robot) {
 	this.robot = robot;
 	this.running = false;
 	this.paused = false;
+	this.penDown = false;
 
 	this.playground = new A3a.vpl.Playground(10 * this.robot.robotSize, 7.07 * this.robot.robotSize);	// A4 ratio
 	var posMargin = this.robot.robotSize;
@@ -54,21 +55,65 @@ A3a.vpl.VPLSim2DViewer = function (robot) {
 	this.render();
 };
 
+/** Restore ground (clear pen traces)
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.restoreGround = function () {
+	if (this.groundImage) {
+		this.groundCanvas.width = this.groundImage.width;
+		this.groundCanvas.height = this.groundImage.height;
+		var ctx = this.groundCanvas.getContext("2d");
+		// render img on a white background
+		ctx.fillStyle = "white";
+		ctx.fillRect(0, 0, this.groundImage.width, this.groundImage.height);
+		ctx.drawImage(this.groundImage, 0, 0, this.groundImage.width, this.groundImage.height);
+	} else {
+		this.groundCanvas.width = this.simCanvas ? this.simCanvas.width : 800;
+		this.groundCanvas.height = this.groundCanvas.width * this.playground.height / this.playground.width;
+		var ctx = this.groundCanvas.getContext("2d");
+		ctx.fillStyle = "white";
+		// clear to white
+		ctx.fillRect(0, 0, this.groundCanvas.width, this.groundCanvas.height);
+	}
+	this.render();
+};
+
 /** Set or change ground image
 	@param {Image} img
 	@return {void}
 */
 A3a.vpl.VPLSim2DViewer.prototype.setGroundImage = function (img) {
 	this.groundImage = img;
-	if (img) {
-		this.groundCanvas.width = img.width;
-		this.groundCanvas.height = img.height;
+	this.restoreGround();
+};
+
+/** Draw pen trace
+	@param {A3a.vpl.Robot.TraceShape} shape
+	@param {Array.<number>} param
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.drawPen = function (shape, param) {
+	if (this.penDown) {
 		var ctx = this.groundCanvas.getContext("2d");
-		ctx.fillStyle = "white";
-		ctx.fillRect(0, 0, img.width, img.height);	// render img on a white background
-		ctx.drawImage(img, 0, 0, img.width, img.height);
+		ctx.save();
+		ctx.translate(this.groundCanvas.width / 2, this.groundCanvas.height / 2);
+		ctx.scale(this.groundCanvas.width / this.playground.width, -this.groundCanvas.height / this.playground.height);
+		ctx.beginPath();
+		switch (shape) {
+		case A3a.vpl.Robot.TraceShape.line:
+			ctx.moveTo(param[0], param[1]);
+			ctx.lineTo(param[2], param[3]);
+			break;
+		case A3a.vpl.Robot.TraceShape.arc:
+			ctx.arc(param[0], param[1], Math.abs(param[2]), param[3], param[4], param[2] < 0);
+			break;
+		}
+		ctx.strokeStyle = "#060";
+		ctx.lineCap = "round";
+		ctx.lineWidth = 0.1 * this.robot.robotSize;
+		ctx.stroke();
+		ctx.restore();
 	}
-	this.render();
 };
 
 /** Get the ground value (red) at the specified position
@@ -185,6 +230,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		},
 		// mousedown
 		function (data, x, y, ev) {
+			self.restoreGround();
 			self.robot["start"](A3a.vpl.VPLSim2DViewer.currentTime());
 			self.running = true;
 			self.paused = false;
@@ -239,6 +285,49 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 					self.render();
 				}
 			}
+			return 0;
+		},
+		// doDrop
+		null,
+		// canDrop
+		null);
+
+	controlBar.addSpace();
+
+	// pen
+	controlBar.addControl(
+		// draw
+		function (ctx, item, dx, dy) {
+			var s = self.simCanvas.dims.controlSize;
+			ctx.save();
+			ctx.fillStyle = self.penDown ? "#06f" : "navy";
+			ctx.fillRect(item.x + dx, item.y + dy, s, s);
+			ctx.fillStyle = self.penDown ? "white" : "#777";
+			ctx.fillRect(item.x + dx + s * 0.1, item.y + dy + s * 0.8, s * 0.8, s * 0.1);
+			ctx.translate(item.x + dx + s * 0.5, item.y + dy + s * (0.4 + (self.penDown ? 0.13 : 0)));
+			var th = 0.1;
+			var ln = 0.22;
+			var ln1 = 0.15;
+			ctx.beginPath();
+			ctx.moveTo(-th * ln1 / ln * s, (ln - ln1) * s);
+			ctx.lineTo(0, ln * s);
+			ctx.lineTo(th * ln1 / ln * s, (ln - ln1) * s);
+			ctx.fillStyle = "white";
+			ctx.fill();
+			ctx.beginPath();
+			ctx.moveTo(-th * s, -ln * s);
+			ctx.lineTo(-th * s, 0);
+			ctx.lineTo(0, ln * s);
+			ctx.lineTo(th * s, 0);
+			ctx.lineTo(th * s, -ln * s);
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
+			ctx.stroke();
+			ctx.restore();
+		},
+		// mousedown
+		function (data, x, y, ev) {
+			self.penDown = !self.penDown;
 			return 0;
 		},
 		// doDrop
@@ -595,9 +684,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		function(ctx, item, dx, dy) {
 			ctx.save();
 
-			if (self.groundImage) {
-				ctx.drawImage(self.groundImage, item.x + dx, item.y + dy, item.width, item.height);
-			}
+			ctx.drawImage(self.groundCanvas, item.x + dx, item.y + dy, item.width, item.height);
 
 			ctx.strokeStyle = "silver";
 			ctx.lineWidth = 3;
