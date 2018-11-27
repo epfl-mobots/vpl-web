@@ -38,7 +38,7 @@ A3a.vpl.VirtualThymio = function () {
 	this.timers = [];
 	this.eventListeners = {};
 
-	this.audioContext = new AudioContext();
+	this.audioContext = new (window["AudioContext"] || window["webkitAudioContext"]);
 
 	this["reset"](0);
 	this["resetEventListeners"]();
