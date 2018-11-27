@@ -237,8 +237,9 @@ A3a.vpl.VirtualThymio.prototype["loadCode"] = function (code) {
 /**
 	@inheritDoc
 */
-A3a.vpl.VirtualThymio.prototype["run"] = function (tStop) {
+A3a.vpl.VirtualThymio.prototype["run"] = function (tStop, traceFun) {
 	var dt = Math.max(this.dt, (tStop - this.t) / 100);
+	var posPrev = this.pos;
 	while (!this.suspended && this.t < tStop) {
 		// step (t, t+dt]
 		// move
@@ -278,6 +279,8 @@ A3a.vpl.VirtualThymio.prototype["run"] = function (tStop) {
 			}
 		}
 	}
+	traceFun && traceFun(A3a.vpl.Robot.TraceShape.line,
+		posPrev.concat(this.pos));
 };
 
 /**

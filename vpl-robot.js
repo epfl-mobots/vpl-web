@@ -106,9 +106,20 @@ A3a.vpl.Robot.prototype["loadCode"] = function (code) {
 
 /** Run robot over the specified interval (tStart, tStop]
 	@param {number} tStop final time
+	@param {A3a.vpl.Robot.TraceFun} traceFun
 	@return {void}
 */
-A3a.vpl.Robot.prototype["run"] = function (tStop) {
+A3a.vpl.Robot.prototype["run"] = function (tStop, traceFun) {
+};
+
+/** @typedef {function(A3a.vpl.Robot.TraceShape,Array.<number>):void}
+*/
+A3a.vpl.Robot.TraceFun;
+
+/** @enum {string} */
+A3a.vpl.Robot.TraceShape = {
+	line: "l",	// param: [x0,y0,x1,y1]
+	arc: "a"	// param: [x0,y0,r,a1,a2]
 };
 
 /** Suspend running
