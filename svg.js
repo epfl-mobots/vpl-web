@@ -188,9 +188,12 @@ SVG.colorDict = {
 /** @typedef {{
 		dx: (number | undefined),
 		dy: (number | undefined),
-		phi: (number | undefined)
+		phi: (number | undefined),
+		x0: (number | undefined),
+		y0: (number | undefined)
 	}}
-	Displacement of a shape (first by (dx,dy), then rotation by phi around shape center)
+	Displacement of a shape (first by (dx,dy), then rotation by phi around
+	(x0,y0) (default: shape center))
 */
 SVG.Displacement;
 
@@ -338,10 +341,14 @@ SVG.prototype.draw = function (ctx, options) {
 	*/
 	function applyDisplacement(el, displacement) {
 		if (displacement.phi && displacement.phi != 0) {
-			var p = self.draw(null, {element: el});
-			var bnds = SVG.calcBounds(p);
-			var x0 = (bnds.xmin + bnds.xmax) / 2;
-			var y0 = (bnds.ymin + bnds.ymax) / 2;
+			var x0 = displacement.x0;
+			var y0 = displacement.y0;
+			if (x0 == undefined || y0 == undefined) {
+				var p = self.draw(null, {element: el});
+				var bnds = SVG.calcBounds(p);
+				x0 = (bnds.xmin + bnds.xmax) / 2;
+				y0 = (bnds.ymin + bnds.ymax) / 2;
+			}
 			ctx.translate(x0 + (displacement.dx || 0), y0 + (displacement.dy || 0));
 			ctx.rotate(displacement.phi);
 			ctx.translate(-x0, -y0);
@@ -816,8 +823,8 @@ SVG.prototype.draw = function (ctx, options) {
 		/** Rounded rect path with circle arcs
 			@param {number} x top-left corner
 			@param {number} y top-left corner
-			@param {number} width
-			@param {number} height
+			@param {number} w
+			@param {number} h
 			@param {number} rx
 			@param {number} ry
 			@return {void}

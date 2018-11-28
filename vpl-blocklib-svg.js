@@ -175,9 +175,12 @@ A3a.vpl.Canvas.prototype.getDisplacements = function (aux, svgFilename, param) {
 		for (var i = 0; i < aux["rotating"].length; i++) {
 			var rotatingAux = aux["rotating"][i];
 			var f = rotatingAux["numSteps"] ? 2 * Math.PI / parseInt(rotatingAux["numSteps"], 10) : 1;
+			var bndsCenter = this.clientData.svg[svgFilename].getElementBounds(rotatingAux["centerId"]);
 			// rotate element
 			displacements[rotatingAux["id"]] = {
-				phi: param[i] * f
+				phi: param[i] * f,
+				x0: (bndsCenter.xmin + bndsCenter.xmax) / 2,
+				y0: (bndsCenter.ymin + bndsCenter.ymax) / 2
 			};
 		}
 	}
@@ -315,6 +318,7 @@ A3a.vpl.Canvas.prototype.mousedragSVGRotating = function (block, dragIndex, aux,
 
 A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 	var f = A3a.vpl.Canvas.decodeURI(aux["svg"][0]["uri"]).f;
+	this.loadSVG(f, uiConfig.svg[f]);
 	var displacements = this.getDisplacements(aux, f, block.param);
 	if (aux["diffwheelmotion"] && aux["diffwheelmotion"]["id"]) {
 		var dw = aux["diffwheelmotion"];
