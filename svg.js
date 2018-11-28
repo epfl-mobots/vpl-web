@@ -234,7 +234,7 @@ SVG.prototype.draw = function (ctx, options) {
 	function ellipticalArc(rx, ry, a, largeArcFlag, sweepFlag, x1, y1, x2, y2) {
 		// avoid singularities
 		if (rx === 0 || ry === 0) {
-			ctx.moveTo(x2, y2);
+			ctx.lineTo(x2, y2);
 			return new SVG.Transform.Point(x2, y2);	// degenerated, don't care
 		}
 		// rotate and scale to have a unit circle
@@ -505,7 +505,7 @@ SVG.prototype.draw = function (ctx, options) {
 				.replace(/\s*,\s*/g, ",")
 				.replace(/\s+/g, ",");
 
-			var x = 0;
+			var x = 0;	// last point
 			var y = 0;
 			var xc1 = 0;	// implicit control point for S and s
 			var yc1 = 0;
