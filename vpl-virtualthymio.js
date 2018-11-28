@@ -27,8 +27,8 @@ A3a.vpl.VirtualThymio = function () {
 	this.theta = 0;	// current orientation (counterclockwise, 0=going to the right)
 
 	this.robotSize = 120;	// robot width and length
-	this.groundSensorX = 80;	// distance from robot center to ground sensors along x axis
-	this.groundSensorY = 20;	// distance from robot center to ground sensors along y axis
+	this.groundSensorLon = 80;	// distance from robot center to ground sensors along x axis
+	this.groundSensorLat = 20;	// distance from robot center to ground sensors along y axis
 
 	this.state = {};
 	this.stateChangeListener = {};
@@ -84,6 +84,7 @@ A3a.vpl.VirtualThymio.prototype["reset"] = function (t0) {
 		"button.backward": false,
 
 		"prox.ground.delta": [1, 1],
+		"prox.horizontal": [0, 0, 0, 0, 0, 0, 0],
 
 		"motor.left": 0,
 		"motor.right": 0,
@@ -157,6 +158,7 @@ A3a.vpl.VirtualThymio.prototype["setPosition"] = function (pos, theta) {
 	this.pos = pos;
 	this.theta = theta;
 	this["enforcePositionLimits"]();
+	this.onMove && this.onMove.call(this);
 };
 
 /**
