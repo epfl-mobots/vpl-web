@@ -181,10 +181,10 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		// draw
 		function (ctx, item, dx, dy) {
 			// gray strip
-			ctx.fillStyle = "#ddd";
+			ctx.fillStyle = canvas.dims.ruleBackground;
 			ctx.fillRect(item.x + dx, item.y + dy, item.width, item.height);
 			// colon (two darker dots)
-			ctx.fillStyle = "#bbb";
+			ctx.fillStyle = canvas.dims.ruleMarks;
 			ctx.beginPath();
 			ctx.arc(actionX0 - canvas.dims.interEventActionSpace / 2 + dx,
 				y + canvas.dims.blockSize * 0.3 + dy,

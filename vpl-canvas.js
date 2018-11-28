@@ -370,7 +370,10 @@ A3a.vpl.Canvas.prototype["update"] = function () {
 		eventStyle: string,
 		stateStyle: string,
 		actionStyle: string,
-		commentStyle: string
+		commentStyle: string,
+		background: string,
+		ruleBackground: string,
+		ruleMarks: string
 	}}
 */
 A3a.vpl.Canvas.dims;
@@ -400,7 +403,10 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		eventStyle: "#f70",
 		stateStyle: "#0c0",
 		actionStyle: "#38f",
-		commentStyle: "#aaa"
+		commentStyle: "#aaa",
+		background: "",
+		ruleBackground: "#ddd",
+		ruleMarks: "#bbb"
 	};
 };
 
@@ -535,7 +541,14 @@ A3a.vpl.Canvas.prototype.clearItems = function () {
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.erase = function () {
-	this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	if (this.dims && this.dims.background) {
+		this.ctx.save();
+		this.ctx.fillStyle = this.dims.background;
+		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+		this.ctx.restore();
+	} else {
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+	}
 };
 
 /** Begin clipping rect (can be nested)

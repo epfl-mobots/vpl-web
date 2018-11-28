@@ -153,6 +153,7 @@ function vplSetup(uiConfig) {
 
 	// general settings
 	var isClassic = getQueryOption("appearance") === "classic";
+	window["vplUseLocalStorage"] = getQueryOption("storage") === "local";
 	var language = getQueryOption("language");
 	if (isClassic) {
 	 	if (A3a.vpl.patchL2Blocks) {
@@ -307,7 +308,7 @@ function vplSetup(uiConfig) {
 					}
 				} catch (e) {}
 			});
-	} else {
+	} else if (window["vplUseLocalStorage"]) {
 		try {
 			var vplJson = window.localStorage.getItem("vpl.json");
 			if (vplJson) {
@@ -389,7 +390,7 @@ console.info("vplStorageSetFunction");
 	try {
 		if (window["vplStorageSetFunction"]) {
 			window["vplStorageSetFunction"]("vpl.json", json);
-		} else {
+		} else if (window["vplUseLocalStorage"]) {
 			window.localStorage.setItem("vpl.json", json);
 		}
 	} catch (e) {}

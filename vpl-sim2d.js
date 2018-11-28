@@ -36,10 +36,11 @@ A3a.vpl.VPLSim2DViewer = function (robot) {
 
 	/** @type {Image} */
 	this.groundImage = null;
-	this.groundCanvas = document.createElement("canvas");
+	this.groundCanvas = /** @type {HTMLCanvasElement} */(document.createElement("canvas"));
 	this.robot.onMove =
 		/** @type {A3a.vpl.VirtualThymio.OnMoveFunction} */(function () {
 			self.updateGroundSensors();
+			self.updateProximitySensors();
 		});
 
 	var canvasElement = document.getElementById("simCanvas");
@@ -143,11 +144,11 @@ A3a.vpl.VPLSim2DViewer.prototype.updateGroundSensors = function () {
 		for (var i = 0; i < 2; i++) {
 			// ground sensor positions
 			var x = this.robot.pos[0] +
-				this.robot.groundSensorX * Math.cos(this.robot.theta) +
-				(i === 0 ? -1 : 1) * this.robot.groundSensorY * Math.sin(this.robot.theta);
+				this.robot.groundSensorLon * Math.cos(this.robot.theta) +
+				(i === 0 ? -1 : 1) * this.robot.groundSensorLat * Math.sin(this.robot.theta);
 			var y = this.robot.pos[1] +
-				this.robot.groundSensorX * Math.sin(this.robot.theta) +
-				(i === 0 ? -1 : 1) * this.robot.groundSensorY * Math.cos(this.robot.theta);
+				this.robot.groundSensorLon * Math.sin(this.robot.theta) -
+				(i === 0 ? -1 : 1) * this.robot.groundSensorLat * Math.cos(this.robot.theta);
 			// ground value at (x, y)
 			g.push(this.groundValue(x, y));
 		}
@@ -156,6 +157,99 @@ A3a.vpl.VPLSim2DViewer.prototype.updateGroundSensors = function () {
 		// default: white ground
 		this.robot["set"]("prox.ground.delta", [1, 1]);
 	}
+};
+
+/** Update the values of the proximity sensors
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.updateProximitySensors = function () {
+	// from 0 (nothing close) to 1 (close)
+
+	/** Distance from position to wall
+		@param {number} x sensor position along x axis
+		@param {number} y sensor position along y axis
+		@param {number} phi sensor direction (0=along x, counterclockwise)
+		@param {number} x1 position of wall extremity 1 along x axis
+		@param {number} y1 position of wall extremity 1 along y axis
+		@param {number} x2 position of wall extremity 2 along x axis
+		@param {number} y2 position of wall extremity 2 along y axis
+		@return {number} distance
+	*/
+	function distanceToWall(x, y, phi, x1, y1, x2, y2) {
+		/*
+			Let (xx,yy) be the intersection, such that
+			xx = x + p cos phi = q x1 + (1 - q) x2
+			yy = y + p sin phi = q y1 + (1 - q) y2
+			where p is the distance and q is the relative distance from p2
+			(0<=q<=1 iff the wall is intersected, p>0 if in front)
+			Hence
+			[ cos phi  x2-x1 ]   [ p ]   [ x2-x ]
+			[                ] . [   ] = [      ]
+			[ sin phi  y2-y1 ]   [ q ]   [ y2-y ]
+		*/
+		var A = [Math.cos(phi), x2 - x1, Math.sin(phi), y2 - y1];
+		var b = [x2 - x, y2 - y];
+		var det = A[0] * A[3] - A[1] * A[2];
+		var r = [
+			(A[3] * b[0] - A[1] * b[1]) / det,
+			(A[0] * b[1] - A[2] * b[0]) / det
+		];
+		return r[1] >= 0 && r[1] <= 1 && r[0] > 0
+			? r[0]
+			: Infinity;	// doesn't intersect wall
+	}
+
+	/** Distance from position to walls defined by points
+		@param {number} x sensor position along x axis
+		@param {number} y sensor position along y axis
+		@param {number} phi sensor direction (0=along x, counterclockwise)
+		@param {Array.<Array.<number>>} ptsA array of points [x,y] (at least 2)
+		@return distance
+	*/
+	function distanceToWalls(x, y, phi, ptsA) {
+		var dist = Infinity;
+		var n = ptsA.length;
+		for (var i = 0; i < ptsA.length; i++) {
+			dist = Math.min(dist, distanceToWall(x, y, phi,
+				ptsA[i][0], ptsA[i][1], ptsA[(i + 1) % n][0], ptsA[(i + 1) % n][1]));
+		}
+		return dist;
+	}
+
+	/** Mapping from distance to sensor value in [0,1]
+		@param {number} dist
+		@return {number} sensor value
+	*/
+	function sensorMapping(dist) {
+		/** @const */
+		var dmin = 100;
+		/** @const */
+		var dmax = 300;
+		/** @const */
+		var xi = 50;
+		// parabole from (dmin,1) to (dmax,0) with minimum at dmax
+		return dist < dmin ? 1 : dist > dmax ? 0 :
+			(dist - dmax) * (dist - dmax) / ((dmax - dmin) * (dmax - dmin));
+	}
+
+	/** @const */
+	var ptsA = [
+		[-this.playground.width / 2, -this.playground.height / 2],
+		[this.playground.width / 2, -this.playground.height / 2],
+		[this.playground.width / 2, this.playground.height / 2],
+		[-this.playground.width / 2, this.playground.height / 2],
+	];
+
+	var prox = [
+		0.7, 0.35, 0, -0.35, -0.7, 2.8, -2.8
+	].map(function (phi) {
+		var dist = distanceToWalls(this.robot.pos[0], this.robot.pos[1],
+			this.robot.theta + phi,
+			ptsA);
+		return sensorMapping(dist);
+	}, this);
+
+	this.robot["set"]("prox.horizontal", prox);
 };
 
 /** Start simulator, rendering once if suspended or continuously else
@@ -568,6 +662,123 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		});
 	yRobotControl += 2 * smallBtnSize;
 
+	// draw robot from top
+	var yRobotTop = yRobotControl + 3.5 * smallBtnSize;	// rear
+	this.simCanvas.addDecoration(function (ctx) {
+		ctx.save();
+		ctx.beginPath();
+		// rear left
+		ctx.moveTo(self.simCanvas.dims.margin + 0.3 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop);
+		ctx.lineTo(self.simCanvas.dims.margin + 0.3 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 1.8 * smallBtnSize);
+		ctx.bezierCurveTo(self.simCanvas.dims.margin + 0.78 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 2.4 * smallBtnSize,
+			self.simCanvas.dims.margin + 1.45 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 2.4 * smallBtnSize,
+			self.simCanvas.dims.margin + 1.5 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 2.4 * smallBtnSize);
+		// left side
+		ctx.bezierCurveTo(self.simCanvas.dims.margin + 1.55 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 2.4 * smallBtnSize,
+			self.simCanvas.dims.margin + 2.22 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 2.4 * smallBtnSize,
+			self.simCanvas.dims.margin + 2.7 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 1.8 * smallBtnSize);
+		ctx.lineTo(self.simCanvas.dims.margin + 2.7 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop);
+		ctx.closePath();
+		ctx.lineWidth = 2;
+		ctx.strokeStyle = "black";
+		ctx.stroke();
+
+		/** Draw a sensor value as a value between 0 and 1 in a pie chart
+			@param {number} x
+			@param {number} y
+			@param {number} r
+			@param {number} val
+			@param {string=} color0
+			@param {string=} color1
+		*/
+		function drawSensor(x, y, r, val, color0, color1) {
+			ctx.save();
+			ctx.translate(x, y);
+			// color0 (or light gray) background
+			ctx.beginPath();
+			ctx.arc(0, 0, r, 0, 2 * Math.PI);
+			ctx.arc(0, 0, r / 2, 2 * Math.PI, 0, true);
+			ctx.fillStyle = color0 || "#bbb";
+			ctx.fill();
+			// color1 (or dark gray) pie
+			ctx.beginPath();
+			ctx.arc(0, 0, r, (-0.5 + 2 * val) * Math.PI, -0.5 * Math.PI, true);
+			ctx.arc(0, 0, r / 2, -0.5 * Math.PI, (-0.5 + 2 * val) * Math.PI, false);
+			ctx.fillStyle = color1 || "#222";
+			ctx.fill();
+			ctx.restore();
+		}
+
+		// ground left
+		var groundSensorValues = self.robot["get"]("prox.ground.delta");
+		drawSensor(self.simCanvas.dims.margin + 1.05 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 1.8 * smallBtnSize,
+			0.4 * smallBtnSize,
+			groundSensorValues[0],
+			"#afa", "#060");
+		// ground right
+		drawSensor(self.simCanvas.dims.margin + 1.95 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 1.8 * smallBtnSize,
+			0.4 * smallBtnSize,
+			groundSensorValues[1],
+			"#9f9", "#060");
+
+		// proximity
+		var proxSensorValues = self.robot["get"](["prox.horizontal"]);
+		// front left
+		drawSensor(self.simCanvas.dims.margin + 0.05 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 2.3 * smallBtnSize,
+			0.4 * smallBtnSize,
+			proxSensorValues[0],
+			"#fcc", "#d00");
+		drawSensor(self.simCanvas.dims.margin + 0.7 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 2.8 * smallBtnSize,
+			0.4 * smallBtnSize,
+			proxSensorValues[1],
+			"#fcc", "#d00");
+		// center
+		drawSensor(self.simCanvas.dims.margin + 1.5 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 3 * smallBtnSize,
+			0.4 * smallBtnSize,
+			proxSensorValues[2],
+			"#fcc", "#d00");
+		// front right
+		drawSensor(self.simCanvas.dims.margin + 2.3 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 2.8 * smallBtnSize,
+			0.4 * smallBtnSize,
+			proxSensorValues[3],
+			"#fcc", "#d00");
+		drawSensor(self.simCanvas.dims.margin + 2.95 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop - 2.3 * smallBtnSize,
+			0.4 * smallBtnSize,
+			proxSensorValues[4],
+			"#fcc", "#d00");
+		// back left
+		drawSensor(self.simCanvas.dims.margin + 0.7 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop + 0.5 * smallBtnSize,
+			0.4 * smallBtnSize,
+			proxSensorValues[5],
+			"#fcc", "#d00");
+		// back right
+		drawSensor(self.simCanvas.dims.margin + 2.3 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+			yRobotTop + 0.5 * smallBtnSize,
+			0.4 * smallBtnSize,
+			proxSensorValues[6],
+			"#fcc", "#d00");
+
+		ctx.restore();
+	});
+	yRobotControl += 5 * smallBtnSize;
+
 	// draw robot back side
 	var yRobotSide = yRobotControl;
 	this.simCanvas.addDecoration(function (ctx) {
@@ -707,8 +918,6 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 				0.02 * robotSize, -0.8 * robotSize,
 				0, -0.8 * robotSize);
 			// left side
-			ctx.lineTo(0,
-				-0.8 * robotSize);
 			ctx.bezierCurveTo(-0.02 * robotSize, -0.8 * robotSize,
 				-0.3 * robotSize, -0.8 * robotSize,
 				-0.5 * robotSize, -0.55 * robotSize);

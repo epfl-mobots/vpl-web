@@ -79,7 +79,7 @@ A3a.vpl.patchJSBlocks = function () {
 					if (block.param[i]) {
 						cond += (cond.length === 0 ? "" : " && ") +
 							"this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] " +
-							(block.param[i] > 0 ? ">= 2" : "<= 1") + "000";
+							(block.param[i] > 0 ? ">= 0.6" : "<= 0.4");
 					}
 				}
 				if (cond === "") {
@@ -108,7 +108,7 @@ A3a.vpl.patchJSBlocks = function () {
 				}
 				if (cond === "") {
 					for (var i = 1; i < 7; i++) {
-						cond += " || this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 2000";
+						cond += " || this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " || "
 				}

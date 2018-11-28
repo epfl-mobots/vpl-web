@@ -444,7 +444,10 @@ A3a.vpl.patchSVG = function (uiConfig) {
 			eventStyle: uiConfig["styles"]["event"],
 			stateStyle: uiConfig["styles"]["state"],
 			actionStyle: uiConfig["styles"]["action"],
-			commentStyle: uiConfig["styles"]["comment"]
+			commentStyle: uiConfig["styles"]["comment"],
+			background: uiConfig["styles"]["background"] || "white",
+			ruleBackground: uiConfig["styles"]["ruleBackground"] || "#ddd",
+			ruleMarks: uiConfig["styles"]["ruleMarks"] || "#bbb"
 		};
 	};
 
