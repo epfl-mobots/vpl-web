@@ -254,8 +254,11 @@ SVG.prototype.draw = function (ctx, options) {
 		// ratio of catheti
 		var a2 = xd * xd + yd * yd;
 		var f = Math.sqrt((1 - a2) / a2);
-		// two solutions; pick the correct one
-		if (largeArcFlag === sweepFlag) {
+		if (isNaN(f)) {
+			// radius too small for a solution (possibly because of numerical inacc)
+			f = 0;
+		} else if (largeArcFlag === sweepFlag) {
+			// two solutions; pick the correct one
 			f = -f;
 		}
 		var xc = xm + f * yd;
