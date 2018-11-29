@@ -1,9 +1,12 @@
 {
 	"styles": {
-		"event": "#ff6e40",
-		"state": "#ff6e40",
-		"action": "#38f",
-		"comment": "#aaa"
+		"event": "transparent",
+		"state": "transparent",
+		"action": "transparent",
+		"comment": "#aaa",
+		"background": "",
+		"ruleBackground": "#ddd",
+		"ruleMarks": "#bbb"
 	},
 
 	"blocks": [
@@ -12,8 +15,12 @@
 			"type": "event",
 			"modes": ["basic", "advanced"],
 			"svg": [
+			   {
+					"uri": "Blocks.svg#Events_bg"
+				},
+
 				{
-					"uri": "Blocks.svg#Ev_Bg_buttons"
+					"uri": "Blocks.svg#Bg_Thymio"
 				},
 				{
 					"uri": "Blocks.svg#Ev_Buttons"
@@ -24,27 +31,27 @@
 				{
 					"id": "Btn2_Center",
 					"val": [false, true],
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				},
 				{
 					"id": "Btn2_Forward",
 					"val": [false, true],
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				},
 				{
 					"id": "Btn2_Backward",
 					"val": [false, true],
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				},
 				{
 					"id": "Btn2_Right",
 					"val": [false, true],
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				},
 				{
 					"id": "Btn2_Left",
 					"val": [false, true],
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				}
 			],
 			"aseba": {
@@ -60,10 +67,15 @@
 			}
 		},
 		{
-			"name": "yaw",
+			"name": "Thymio acc 1",
 			"type": "event",
 			"modes": ["basic", "advanced"],
 			"svg": [
+
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+
 				{
 					"uri": "Blocks.svg#Rot360Rail"
 				},
@@ -78,9 +90,9 @@
 			"rotating": [
 				{
 					"id": "Rot360",
-					"centerId": "Rot360",
+					"centerId": "RotationPivot",
 					"thumbId": "Btn2_HandleAcc0",
-					"numSteps": 24
+					"numSteps": 12
 				}
 			],
 			"aseba": {
@@ -102,10 +114,347 @@
 			}
 		},
 		{
+			"name": "Thymio acc 2",
+			"type": "event",
+			"modes": ["basic", "advanced"],
+			"svg": [
+
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+
+				{
+					"uri": "Blocks.svg#Rot360Rail"
+				},
+				{
+					"uri": "Blocks.svg#ThymioAcc2"
+				},
+				{
+					"uri": "Blocks.svg#Rot360_Handle"
+				}
+			],
+			"defaultParameters": [0],
+			"rotating": [
+				{
+					"id": "Rot360",
+					"centerId": "RotationCenter",
+					"thumbId": "Btn2_HandleAcc0",
+					"numSteps": 12
+				}
+			],
+			"aseba": {
+				"initVarDecl": [
+					"# yaw angle from accelerometer\nvar yawAngle\n"
+				],
+				"sectionBegin": "onevent acc\n",
+				"clauseInit":
+					"call math.atan2(yawAngle, acc[0], acc[1])\n",
+				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+			},
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+			}
+		},
+		{
+			"name": "Thymio acc 0",
+			"type": "event",
+			"modes": ["basic", "advanced"],
+			"svg": [
+
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+
+				{
+					"uri": "Blocks.svg#Rot360Rail"
+				},
+				{
+					"uri": "Blocks.svg#ThymioAcc0"
+				},
+				{
+					"uri": "Blocks.svg#Rot360_Handle"
+				}
+			],
+			"defaultParameters": [0],
+			"rotating": [
+				{
+					"id": "Rot360",
+					"centerId": "RotationPivot",
+					"thumbId": "Btn2_HandleAcc0",
+					"numSteps": 12
+				}
+			],
+			"aseba": {
+				"initVarDecl": [
+					"# yaw angle from accelerometer\nvar yawAngle\n"
+				],
+				"sectionBegin": "onevent acc\n",
+				"clauseInit":
+					"call math.atan2(yawAngle, acc[0], acc[1])\n",
+				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+			},
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+			}
+		},
+		{
+			"name": "start",
+			"type": "event",
+			"modes": ["basic"],
+			"svg": [
+
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+
+				{
+					"uri": "Blocks.svg#Ev_Start"
+				}
+
+			],
+			"defaultParameters": [0],
+			"aseba":{}
+		},
+		{
+			"name": "clap",
+			"type": "event",
+			"modes": ["basic"],
+			"svg": [
+
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+
+				{
+					"uri": "Blocks.svg#Ev_Clap"
+				}
+
+			],
+			"defaultParameters": [0],
+			"aseba":{}
+		},
+		{
+			"name": "Ev_Acc_fall",
+			"type": "event",
+			"modes": ["basic"],
+			"svg": [
+
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+
+				{
+					"uri": "Blocks.svg#Ev_Acc_Fall"
+				}
+
+			],
+			"defaultParameters": [0],
+			"aseba":{}
+		},
+		{
+			"name": "Ev_Acc_hit",
+			"type": "event",
+			"modes": ["basic"],
+			"svg": [
+
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+
+				{
+					"uri": "Blocks.svg#Ev_Acc_Hit"
+				}
+
+			],
+			"defaultParameters": [0],
+			"aseba":{}
+		},
+		{
+			"name": "Ev_ProxH_bas",
+			"type": "event",
+			"modes": ["basic", "advanced"],
+			"svg": [
+
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+
+				{
+					"uri": "Blocks.svg#Bg_Thymio_top"
+				},
+				{
+					"uri": "Blocks.svg#ProxZones"
+				}
+
+			],
+			"defaultParameters": [0, 0, 0, 0],
+			"buttons": [
+				{
+					"id": "Btn3_ProxFront",
+					"val": [0, 1, 2],
+					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
+				},
+				{
+					"id": "Btn3_ProxRight",
+					"val": [0, 1, 2],
+					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
+				},
+				{
+					"id": "Btn3_ProxLeft",
+					"val": [0, 1, 2],
+					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
+				},
+				{
+					"id": "Btn3_ProxBack",
+					"val": [0, 1, 2],
+					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
+				}
+				],
+			"aseba":{}
+		},
+		{
+			"name": "Remote1",
+			"type": "event",
+			"modes": ["basic"],
+			"svg": [
+			   {
+					"uri": "Blocks.svg#Events_bg"
+				},
+
+				{
+					"uri": "Blocks.svg#Ev_Remote1"
+				}
+
+			],
+			"defaultParameters": [false, false, false, false, false],
+			"buttons": [
+				{
+					"id": "Btn2_Remote1_85",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote1_80",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote1_81",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote1_86",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote1_87",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				}
+			],
+			"aseba": {}
+		},
+		{
+			"name": "Remote2",
+			"type": "event",
+			"modes": ["basic"],
+			"svg": [
+			   {
+					"uri": "Blocks.svg#Events_bg"
+				},
+
+				{
+					"uri": "Blocks.svg#Ev_Remote2"
+				}
+
+			],
+			"defaultParameters": [false, false, false, false, false, false, false, false, false, false, false, false],
+			"buttons": [
+				{
+					"id": "Btn2_Remote2_0",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote2_1",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote2_2",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote2_3",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote2_4",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote2_5",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote2_6",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote2_7",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote2_8",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote2_9",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote2_16",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				},
+				{
+					"id": "Btn2_Remote2_17",
+					"val": [false, true],
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+				}
+			],
+			"aseba": {}
+		},
+		{
 			"name": "motor",
 			"type": "action",
 			"modes": ["basic", "advanced"],
 			"svg": [
+
+			{
+					"uri": "Blocks.svg#Actions_bg"
+				},
+
 				{
 					"uri": "Blocks.svg#Ac_Wheels"
 				}
@@ -121,13 +470,13 @@
 			"defaultParameters": [0, 0],
 			"sliders": [
 				{
-					"id": "Slid_left",
+					"id": "SliderL_range",
 					"thumbId": "Cursor_left",
 					"min": -1,
 					"max": 1
 				},
 				{
-					"id": "Slid_right",
+					"id": "SliderR_range",
 					"thumbId": "Cursor_right",
 					"min": -1,
 					"max": 1
@@ -153,6 +502,10 @@
 			"type": "action",
 			"modes": ["basic", "advanced"],
 			"svg": [
+
+				{
+					"uri": "Blocks.svg#Actions_bg"
+				},
 				{
 					"uri": "Blocks.svg#Ac_Directions"
 				}
@@ -160,49 +513,49 @@
 			"defaultParameters": [0],
 			"radiobuttons": [
 				{
-					"id": "StopSign",
+					"id": "Btn2_StopDir",
 					"val": 0,
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				},
 				{
 					"id": "Btn2_FwdDir",
 					"val": 1,
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				},
 				{
 					"id": "Btn2_FwdRightDir",
 					"val": 2,
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				},
 				{
-					"id": "Btn2_TurnRightDir",
+					"id": "Btn2_RightDir",
 					"val": 3,
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				},
 				{
 					"id": "Btn2_BwdRightDir",
 					"val": 4,
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				},
 				{
 					"id": "Btn2_BwdDir",
 					"val": 5,
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				},
 				{
 					"id": "Btn2_BwdLeftDir",
 					"val": 6,
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				},
 				{
-					"id": "Btn2_TurnLeftDir",
+					"id": "Btn2_LeftDir",
 					"val": 7,
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				},
 				{
 					"id": "Btn2_FwdLeftDir",
 					"val": 8,
-					"st": ["fill:#ddd", "fill:#f33"]
+					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				}
 			],
 			"aseba": {
@@ -225,8 +578,12 @@
 			"type": "action",
 			"modes": ["basic", "advanced"],
 			"svg": [
+
 				{
-					"uri": "Blocks.svg#Color_adv"
+					"uri": "Blocks.svg#Actions_bg"
+				},
+				{
+					"uri": "Blocks.svg#Color_top_adv"
 				}
 			],
 			"defaultParameters": [0, 0, 0],
@@ -252,7 +609,7 @@
 			],
 			"styles": [
 				{
-					"id": "Gradient_top-2",
+					"id": "Gradient_top",
 					"st": "fill:#`$.map(function (c) { return Math.floor(c * 15.999).toString(16); }).join('')`"
 				}
 			],
@@ -282,8 +639,43 @@
 				"statementWithoutInit":
 					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n"
 			}
+		},
+		{
+			"name": "Ac_music",
+			"type": "action",
+			"modes": ["basic"],
+			"svg": [
+
+				{
+					"uri": "Blocks.svg#Actions_bg"
+				},
+
+				{
+					"uri": "Blocks.svg#zones_Bg"
+				},
+
+				{
+					"uri": "Blocks.svg#beat"
+				},
+				{
+					"uri": "Blocks.svg#Slider"
+				}
+
+			],
+			"defaultParameters": [0],
+			"sliders": [
+				{
+					"id": "Slider",
+					"thumbId": "Cursor",
+					"min": -1,
+					"max": 1
+				}
+				],
+			"aseba":{}
 		}
 	],
+
+
 
 	"svgFilenames": [
 		"Blocks.svg"

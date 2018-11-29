@@ -16,7 +16,10 @@
 		"event": "transparent",
 		"state": "transparent",
 		"action": "transparent",
-		"comment": "#aaa"
+		"comment": "#aaa",
+		"background": "",
+		"ruleBackground": "#ddd",
+		"ruleMarks": "#bbb"
 	},
 
 	"blocks": [
@@ -28,7 +31,7 @@
 			   {
 					"uri": "Blocks.svg#Events_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#Bg_Thymio"
 				},
@@ -81,11 +84,11 @@
 			"type": "event",
 			"modes": ["basic", "advanced"],
 			"svg": [
-			
+
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#Rot360Rail"
 				},
@@ -128,11 +131,11 @@
 			"type": "event",
 			"modes": ["basic", "advanced"],
 			"svg": [
-			
+
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#Rot360Rail"
 				},
@@ -175,11 +178,11 @@
 			"type": "event",
 			"modes": ["basic", "advanced"],
 			"svg": [
-			
+
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#Rot360Rail"
 				},
@@ -222,15 +225,15 @@
 			"type": "event",
 			"modes": ["basic"],
 			"svg": [
-			
+
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#Ev_Start"
 				}
-				
+
 			],
 			"defaultParameters": [0],
 			"aseba":{}
@@ -240,15 +243,15 @@
 			"type": "event",
 			"modes": ["basic"],
 			"svg": [
-			
+
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#Ev_Clap"
 				}
-				
+
 			],
 			"defaultParameters": [0],
 			"aseba":{}
@@ -258,15 +261,15 @@
 			"type": "event",
 			"modes": ["basic"],
 			"svg": [
-			
+
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#Ev_Acc_Fall"
 				}
-				
+
 			],
 			"defaultParameters": [0],
 			"aseba":{}
@@ -276,15 +279,15 @@
 			"type": "event",
 			"modes": ["basic"],
 			"svg": [
-			
+
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#Ev_Acc_Hit"
 				}
-				
+
 			],
 			"defaultParameters": [0],
 			"aseba":{}
@@ -294,18 +297,18 @@
 			"type": "event",
 			"modes": ["basic", "advanced"],
 			"svg": [
-			
+
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#Bg_Thymio_top"
 				},
 				{
 					"uri": "Blocks.svg#ProxZones"
 				}
-				
+
 			],
 			"defaultParameters": [0, 0, 0, 0],
 			"buttons": [
@@ -340,11 +343,11 @@
 			   {
 					"uri": "Blocks.svg#Events_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#Ev_Remote1"
 				}
-				
+
 			],
 			"defaultParameters": [false, false, false, false, false],
 			"buttons": [
@@ -384,11 +387,11 @@
 			   {
 					"uri": "Blocks.svg#Events_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#Ev_Remote2"
 				}
-				
+
 			],
 			"defaultParameters": [false, false, false, false, false, false, false, false, false, false, false, false],
 			"buttons": [
@@ -460,11 +463,11 @@
 			"type": "action",
 			"modes": ["basic", "advanced"],
 			"svg": [
-			
+
 			{
 					"uri": "Blocks.svg#Actions_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#Ac_Wheels"
 				}
@@ -512,7 +515,7 @@
 			"type": "action",
 			"modes": ["basic", "advanced"],
 			"svg": [
-			
+
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -588,7 +591,7 @@
 			"type": "action",
 			"modes": ["basic", "advanced"],
 			"svg": [
-			
+
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -655,22 +658,22 @@
 			"type": "action",
 			"modes": ["basic"],
 			"svg": [
-			
+
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
-			
+
 				{
 					"uri": "Blocks.svg#zones_Bg"
 				},
-				
+
 				{
 					"uri": "Blocks.svg#beat"
 				},
 				{
 					"uri": "Blocks.svg#Slider"
 				}
-				
+
 			],
 			"defaultParameters": [0],
 			"sliders": [
@@ -684,7 +687,7 @@
 			"aseba":{}
 		}
 	],
-	
+
 
 
 	"svgFilenames": [
@@ -1403,7 +1406,6 @@
     </g>
   </g>
 </svg>
-
 </script>
 
 <title>VPL</title>
@@ -1416,7 +1418,7 @@ body {
 	height: 100%;
 	margin: 0;
 }
-#programCanvas {
+#programCanvas, #simCanvas {
 	width: 100%;
 	height: 100%;
 	display: block;
@@ -1492,10 +1494,12 @@ window["vplOnRun"] = function (code) {
 <script src="vpl-blocklib.js"></script>
 <script src="vpl-blocklib-svg.js"></script>
 <script src="vpl-blocklib-l2.js"></script>
+<script src="vpl-blocklib-js.js"></script>
 <script src="vpl-eventhandler.js"></script>
 <script src="vpl-program.js"></script>
 <script src="vpl-code-aseba.js"></script>
 <script src="vpl-code-l2.js"></script>
+<script src="vpl-code-js.js"></script>
 <script src="vpl-controlbar.js"></script>
 <script src="vpl-program-canvas.js"></script>
 <script src="vpl-error.js"></script>
@@ -1504,12 +1508,18 @@ window["vplOnRun"] = function (code) {
 <script src="vpl-aeslfile.js"></script>
 <script src="vpl-texteditor.js"></script>
 <script src="vpl-sourceedit.js"></script>
+<script src="vpl-runglue.js"></script>
 <script src="vpl-main.js"></script>
 
 <script src="a3a-nodebase.js"></script>
 <script src="a3a-nodeproxy.js"></script>
 
 <script src="vpl-thymio.js"></script>
+
+<script src="vpl-robot.js"></script>
+<script src="vpl-virtualthymio.js"></script>
+<script src="vpl-sim.js"></script>
+<script src="vpl-sim2d.js"></script>
 
 </head>
 
