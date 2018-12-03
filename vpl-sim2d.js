@@ -481,14 +481,16 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 
 	controlBar.addStretch();
 
-	controlBar.calcLayout(this.simCanvas.dims.margin, canvasSize.width - this.simCanvas.dims.margin,
+	var smallBtnSize = this.simCanvas.dims.controlSize * 0.6;
+
+	controlBar.calcLayout(2 * this.simCanvas.dims.margin + 3 * smallBtnSize + 2 * this.simCanvas.dims.stripHorMargin,
+		canvasSize.width - this.simCanvas.dims.margin,
 		this.simCanvas.dims.controlSize,
 		this.simCanvas.dims.interBlockSpace, 2 * this.simCanvas.dims.interBlockSpace);
 	controlBar.addToCanvas();
 
 	// add buttons for events
-	var smallBtnSize = this.simCanvas.dims.controlSize * 0.6;
-	var yRobotControl = 2 * this.simCanvas.dims.margin + this.simCanvas.dims.controlSize;
+	var yRobotControl = this.simCanvas.dims.margin;
 	function drawButtonTri(ctx, x, y, rot) {
 		ctx.save();
 		ctx.fillStyle = "navy";
