@@ -23,6 +23,10 @@ A3a.vpl.patchJSBlocks = function () {
 		"this.setClientState(\"state\", [false, false, false, false]);\n";
 
 	/** @const */
+	A3a.vpl.BlockTemplate.clauseInitStateJS =
+		"var state0 = this.getClientState(\"state\");\n";
+
+	/** @const */
 	A3a.vpl.BlockTemplate.initState8DeclJS =
 		"// variable for exclusive state\n" +
 		"this.setClientState(\"state8\", 0);\n";
@@ -32,6 +36,10 @@ A3a.vpl.patchJSBlocks = function () {
 		"this.setClientState(\"state8\", 0);\n";
 
 	/** @const */
+	A3a.vpl.BlockTemplate.clauseInitState8JS =
+		"var state80 = this.getClientState(\"state8\");\n";
+
+	/** @const */
 	A3a.vpl.BlockTemplate.initCounterDeclJS =
 		"// variable for counter\n" +
 		"this.setClientState(\"counter\", 0);\n";
@@ -39,6 +47,10 @@ A3a.vpl.patchJSBlocks = function () {
 	/** @const */
 	A3a.vpl.BlockTemplate.initCounterInitJS =
 		"this.setClientState(\"counter\", 0);\n";
+
+	/** @const */
+	A3a.vpl.BlockTemplate.clauseInitCounterCmpJS =
+		"var counter0 = this.getClientState(\"counter\");\n";
 
 	/** @const */
 	A3a.vpl.BlockTemplate.resetTimerJS =
@@ -323,7 +335,7 @@ A3a.vpl.patchJSBlocks = function () {
 				for (var i = 0; i < 4; i++) {
 					if (block.param[i]) {
 						cond += (cond.length === 0 ? "" : " && ") +
-							(block.param[i] > 0 ? "" : "!") + "state[" + i + "]";
+							(block.param[i] > 0 ? "" : "!") + "state0[" + i + "]";
 					}
 				}
 				return {
@@ -333,6 +345,7 @@ A3a.vpl.patchJSBlocks = function () {
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initStatesInitJS
 					],
+					clauseInit: A3a.vpl.BlockTemplate.clauseInitStateJS,
 					clause: cond
 				};
 			},
@@ -344,11 +357,12 @@ A3a.vpl.patchJSBlocks = function () {
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initState8InitJS
 					],
-					clause: "state[0] == " + block.param[0].toString(10)
+					clauseInit: A3a.vpl.BlockTemplate.clauseInitState8JS,
+					clause: "state80 == " + block.param[0].toString(10)
 				};
 			},
 			"counter comparison": function (block) {
-					var cond = "counter " +
+					var cond = "counter0 " +
 						(block.param[0] === 0 ? "==" : block.param[0] > 0 ? ">=" : "<=") +
 						" " + block.param[1];
 					return {
@@ -358,6 +372,7 @@ A3a.vpl.patchJSBlocks = function () {
 						initCodeExec: [
 							A3a.vpl.BlockTemplate.initCounterInitJS
 						],
+						clauseInit: A3a.vpl.BlockTemplate.clauseInitCounterCmpJS,
 						clause: cond
 					};
 			},

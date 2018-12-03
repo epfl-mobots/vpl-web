@@ -16,27 +16,42 @@ A3a.vpl.BlockTemplate.initOutputs =
 
 /** @const */
 A3a.vpl.BlockTemplate.initStatesDecl =
-	"var state[4]\n";
+	"var state[4]\n" +
+	"var state0[4]\n";
 
 /** @const */
 A3a.vpl.BlockTemplate.initStatesInit =
 	"state = [0, 0, 0, 0]\n";
 
 /** @const */
+A3a.vpl.BlockTemplate.clauseInitState =
+	"state0 = state\n";
+
+/** @const */
 A3a.vpl.BlockTemplate.initState8Decl =
-	"var state8\n";
+	"var state8\n" +
+	"var state80\n";
 
 /** @const */
 A3a.vpl.BlockTemplate.initState8Init =
 	"state8 = 0\n";
 
 /** @const */
+A3a.vpl.BlockTemplate.clauseInitState8 =
+	"state80 = state8\n";
+
+/** @const */
 A3a.vpl.BlockTemplate.initCounterDecl =
-	"var counter\n";
+	"var counter\n" +
+	"var counter0\n";
 
 /** @const */
 A3a.vpl.BlockTemplate.initCounterInit =
 	"counter = 0\n";
+
+/** @const */
+A3a.vpl.BlockTemplate.clauseInitCounter =
+	"counter0 = counter\n";
 
 /** @const */
 A3a.vpl.BlockTemplate.initTopColorDecl =
@@ -1134,7 +1149,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				for (var i = 0; i < 4; i++) {
 					if (block.param[i]) {
 						cond += (cond.length === 0 ? "" : " and ") +
-							"state[" + i + "] == " + (block.param[i] > 0 ? "1" : "0");
+							"state0[" + i + "] == " + (block.param[i] > 0 ? "1" : "0");
 					}
 				}
 				return {
@@ -1144,6 +1159,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initStatesInit
 					],
+					clauseInit: A3a.vpl.BlockTemplate.clauseInitState,
 					clause: cond
 				};
 			}
@@ -1180,7 +1196,8 @@ A3a.vpl.BlockTemplate.lib =	[
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initState8Init
 					],
-					clause: "state8 == " + block.param[0].toString(10)
+					clauseInit: A3a.vpl.BlockTemplate.clauseInitState8,
+					clause: "state80 == " + block.param[0].toString(10)
 				};
 			}
 		}
@@ -1246,7 +1263,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 			genCode: {
 				"aseba": function (block) {
-					var cond = "counter " +
+					var cond = "counter0 " +
 						(block.param[0] === 0 ? "==" : block.param[0] > 0 ? ">=" : "<=") +
 						" " + block.param[1];
 					return {
@@ -1256,6 +1273,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						initCodeExec: [
 							A3a.vpl.BlockTemplate.initCounterInit
 						],
+						clauseInit: A3a.vpl.BlockTemplate.clauseInitCounter,
 						clause: cond
 					};
 				}

@@ -188,7 +188,11 @@ A3a.vpl.VirtualThymio.prototype["setClientState"] = function (name, val) {
 	@inheritDoc
 */
 A3a.vpl.VirtualThymio.prototype["getClientState"] = function (name) {
-	return this.clientState[name];
+	var val = this.clientState[name];
+	if (val instanceof Array) {
+		val = val.slice();	// make a copy to avoid corrupting state if it's changed
+	}
+	return val;
 };
 
 /**

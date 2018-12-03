@@ -21,29 +21,44 @@ A3a.vpl.patchL2Blocks = function () {
 	/** @const */
 	A3a.vpl.BlockTemplate.initStatesDecl2 =
 		"// variables for state\n" +
-		"bool state[4];\n";
+		"bool state[4];\n" +
+		"bool state0[4];\n";
 
 	/** @const */
 	A3a.vpl.BlockTemplate.initStatesInit2 =
 		"state = [false, false, false, false];\n";
 
 	/** @const */
+	A3a.vpl.BlockTemplate.clauseInitState2 =
+		"state0 = state;\n";
+
+	/** @const */
 	A3a.vpl.BlockTemplate.initState8Decl2 =
-		"// variable for exclusive state\n" +
-		"int state8;\n";
+		"// variables for exclusive state\n" +
+		"int state8;\n" +
+		"int state80;\n";
 
 	/** @const */
 	A3a.vpl.BlockTemplate.initState8Init2 =
 		"state8 = 0;\n";
 
 	/** @const */
+	A3a.vpl.BlockTemplate.clauseInitState82 =
+		"state80 = state8;\n";
+
+	/** @const */
 	A3a.vpl.BlockTemplate.initCounterDecl2 =
-		"// variable for counter\n" +
-		"int counter;\n";
+		"// variables for counter\n" +
+		"int counter;\n" +
+		"int counter0;\n";
 
 	/** @const */
 	A3a.vpl.BlockTemplate.initCounterInit2 =
 		"counter = 0;\n";
+
+	/** @const */
+	A3a.vpl.BlockTemplate.clauseInitCounter2 =
+		"counter0 = counter;\n";
 
 	/** @const */
 	A3a.vpl.BlockTemplate.initTopColorDecl2 =
@@ -367,7 +382,7 @@ A3a.vpl.patchL2Blocks = function () {
 				for (var i = 0; i < 4; i++) {
 					if (block.param[i]) {
 						cond += (cond.length === 0 ? "" : " && ") +
-							(block.param[i] > 0 ? "" : "!") + "state[" + i + "]";
+							(block.param[i] > 0 ? "" : "!") + "state0[" + i + "]";
 					}
 				}
 				return {
@@ -377,6 +392,7 @@ A3a.vpl.patchL2Blocks = function () {
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initStatesInit2
 					],
+					clauseInit: A3a.vpl.BlockTemplate.clauseInitState2,
 					clause: cond
 				};
 			},
@@ -388,11 +404,12 @@ A3a.vpl.patchL2Blocks = function () {
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initState8Init2
 					],
-					clause: "state[0] == " + block.param[0].toString(10)
+					clauseInit: A3a.vpl.BlockTemplate.clauseInitState82,
+					clause: "state80 == " + block.param[0].toString(10)
 				};
 			},
 			"counter comparison": function (block) {
-					var cond = "counter " +
+					var cond = "counter0 " +
 						(block.param[0] === 0 ? "==" : block.param[0] > 0 ? ">=" : "<=") +
 						" " + block.param[1];
 					return {
@@ -402,6 +419,7 @@ A3a.vpl.patchL2Blocks = function () {
 						initCodeExec: [
 							A3a.vpl.BlockTemplate.initCounterInit2
 						],
+						clauseInit: A3a.vpl.BlockTemplate.clauseInitCounter2,
 						clause: cond
 					};
 			},
