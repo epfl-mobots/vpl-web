@@ -33,14 +33,17 @@ window["installRobotSimulator"] = function () {
 					}));
 			}, 10);
 		},
-		init: function () {
-			var robot = new A3a.vpl.VirtualThymio();
+		init: function (language) {
+			var robot = language === "js"
+				? new A3a.vpl.VirtualThymio()
+				: new A3a.vpl.VirtualThymioVM();
 			window["vplSim"] = {
 				robot: robot,
 				sim: new A3a.vpl.VPLSim2DViewer(robot),
 				intervalId: null
 			};
 		},
-		preferredLanguage: "js"
+		preferredLanguage: "js",
+		languages: ["js", "aseba", "l2"]
 	});
 };

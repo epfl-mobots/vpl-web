@@ -181,23 +181,23 @@ function vplSetup(uiConfig) {
 		filterGrayscale = parseInt(opt, 10) / 100;
 	}
 
-	switch (getQueryOption("robot")) {
- 	case "thymio":
-		window["installThymio"]();
-		window["vplRun"] && window["vplRun"].init();
-		break;
- 	case "sim":
-		window["installRobotSimulator"]();
-		window["vplRun"] && window["vplRun"].init();
-		break;
-	default:
-		window["vplRun"] = null;
-	}
-
 	if (!language) {
 		language = window["vplRun"]
 			? window["vplRun"].preferredLanguage
 			: A3a.vpl.defaultLanguage;
+	}
+
+	switch (getQueryOption("robot")) {
+ 	case "thymio":
+		window["installThymio"]();
+		window["vplRun"] && window["vplRun"].init(language);
+		break;
+ 	case "sim":
+		window["installRobotSimulator"]();
+		window["vplRun"] && window["vplRun"].init(language);
+		break;
+	default:
+		window["vplRun"] = null;
 	}
 
 	if (!A3a.vpl.Program.generateCode[language]) {

@@ -5,7 +5,7 @@
 	For internal use only
 */
 
-/** Robot base class
+/** JavaScript-based virtual Thymio class
 	@constructor
 	@extends {A3a.vpl.Robot}
 */
@@ -40,8 +40,9 @@ A3a.vpl.VirtualThymio = function () {
 
 	this.audioContext = new (window["AudioContext"] || window["webkitAudioContext"]);
 
-	this["reset"](0);
-	this["resetEventListeners"]();
+	// remaining initialization: call VirtualThymio's methods (too early to call overridden method)
+	A3a.vpl.VirtualThymio.prototype["reset"].call(this, 0);
+	A3a.vpl.VirtualThymio.prototype["resetEventListeners"].call(this);
 };
 A3a.vpl.VirtualThymio.prototype = Object.create(A3a.vpl.Robot.prototype);
 A3a.vpl.VirtualThymio.prototype.constructor = A3a.vpl.VirtualThymio;
@@ -245,8 +246,8 @@ A3a.vpl.VirtualThymio.prototype["run"] = function (tStop, traceFun) {
 	while (!this.suspended && this.t < tStop) {
 		// step (t, t+dt]
 		// move
-		var dLeft = this.state["motor.left"] * 100 * dt;
-		var dRight = this.state["motor.right"] * 100 * dt;
+		var dLeft = this["get"]("motor.left") * 100 * dt;
+		var dRight = this["get"]("motor.right") * 100 * dt;
 		if (dLeft !== 0 || dRight != 0) {
 			if (Math.abs(dLeft - dRight) < 1e-6 ||
 				Math.abs(dLeft - dRight) < 1e-4 * (Math.abs(dLeft) + Math.abs(dRight))) {

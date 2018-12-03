@@ -14,7 +14,7 @@ window["installThymio"] = function () {
 		run: function (code) {
 			window["vplNode"].putA3aCodeAsync(code);
 		},
-		init: function () {
+		init: function (language) {
 			// initialize the list of nodes
 			try {
 				var origin = document.location.origin.slice(0, 5) !== "http:"
@@ -29,8 +29,8 @@ window["installThymio"] = function () {
 				window["vplCanvas"]["update"]();
 			}
 		},
-		isEnabled: function () {
-			return window["vplNode"] != undefined;
+		isEnabled: function (language) {
+			return language === "aseba" && window["vplNode"] != undefined;
 		},
 		preferredLanguage: "aseba"
 	});

@@ -9,7 +9,7 @@
 	@constructor
 	@param {{
 		run: (function(string):void | undefined),
-		init: (function():void | undefined),
+		init: (function(string):void | undefined),
 		isEnabled: (function():boolean | undefined),
 		languages: (Array.<string> | undefined),
 		preferredLanguage: (string | undefined)
@@ -36,11 +36,12 @@ A3a.vpl.RunGlue.prototype.isEnabled = function (language) {
 };
 
 /** Initialize the RunGlue interface
+	@param {string} language
 	@return {void}
 */
-A3a.vpl.RunGlue.prototype.init = function () {
+A3a.vpl.RunGlue.prototype.init = function (language) {
 	if (this.initFun) {
-		this.initFun();
+		this.initFun(language);
 	}
 };
 

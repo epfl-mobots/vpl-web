@@ -55,6 +55,19 @@ JS = \
 	vpl-main.js \
 	vpl-robot.js \
 	vpl-virtualthymio.js \
+	compiler-ns.js \
+	compiler-vm.js \
+	compiler.js \
+	compiler-macros.js \
+	compiler-l2.js \
+	compiler-macros-l2.js \
+	compiler-thymio.js \
+	inputbuffer.js \
+	a3a-idmapping.js \
+	a3a-com.js \
+	a3a-device.js \
+	a3a-virtual-thymio.js \
+	vpl-virtualthymio-a3a.js \
 	vpl-sim.js \
 	vpl-sim2d.js \
 	vpl-thymio.js

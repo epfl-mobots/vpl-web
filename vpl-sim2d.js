@@ -733,7 +733,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			"#9f9", "#060");
 
 		// proximity
-		var proxSensorValues = self.robot["get"](["prox.horizontal"]);
+		var proxSensorValues = self.robot["get"]("prox.horizontal");
 		// front left
 		drawSensor(self.simCanvas.dims.margin + 0.05 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
 			yRobotTop - 2.3 * smallBtnSize,
