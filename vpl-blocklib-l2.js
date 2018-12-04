@@ -370,7 +370,7 @@ A3a.vpl.patchL2Blocks = function () {
 			"timer": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.resetTimer
+						A3a.vpl.BlockTemplate.resetTimer2
 					],
 					sectionBegin: "onevent timer0 {\n",
 					sectionEnd: "}\n",
