@@ -343,6 +343,14 @@ A3a.vpl.Canvas = function (canvas) {
 	this.onUpdate = null;
 };
 
+/** Set the css filter of the canvas element
+	@param {string} filter
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.setFilter = function (filter) {
+	this.canvas["style"]["filter"] = filter;
+};
+
 /** Update
 	@return {void}
 */

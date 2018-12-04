@@ -172,6 +172,7 @@ function vplSetup(uiConfig) {
 
 	var filterBlur = 0;	// 0.1 px
 	var filterGrayscale = 0;	// %
+	var filter = "";
 	var opt = getQueryOption("blur").trim() || "";
 	if (/^\d+$/.test(opt)) {
 		filterBlur = parseInt(opt, 10) / 10;
@@ -179,6 +180,9 @@ function vplSetup(uiConfig) {
 	opt = getQueryOption("grayscale") || "";
 	if (/^\d+$/.test(opt)) {
 		filterGrayscale = parseInt(opt, 10) / 100;
+	}
+	if (filterBlur > 0 || filterGrayscale > 0) {
+		filter = "blur(" + filterBlur.toFixed(1) + "px) grayscale(" + filterGrayscale.toFixed(2) + ")";
 	}
 
 	if (!language) {
@@ -193,7 +197,7 @@ function vplSetup(uiConfig) {
 		window["vplRun"] && window["vplRun"].init(language);
 		break;
  	case "sim":
-		window["installRobotSimulator"]();
+		window["installRobotSimulator"]({canvasFilter: filter});
 		window["vplRun"] && window["vplRun"].init(language);
 		break;
 	default:
@@ -207,6 +211,7 @@ function vplSetup(uiConfig) {
 	window["vplProgram"] = new A3a.vpl.Program();
 	window["vplProgram"].currentLanguage = language;
 	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["vplProgram"].noVPL, language, window["vplRun"]);
+	window["vplEditor"].tbCanvas.setFilter(filter);
 	window["vplProgram"].getEditedSourceCodeFun = function () {
 		return window["vplEditor"].doesMatchVPL() ? null : window["vplEditor"].getCode();
 	};
@@ -237,9 +242,8 @@ function vplSetup(uiConfig) {
 	}
 
 	// apply canvas filters
-	if (filterBlur > 0 || filterGrayscale > 0) {
-		window["vplCanvas"].canvas["style"]["filter"] =
-			"blur(" + filterBlur.toFixed(1) + "px) grayscale(" + filterGrayscale.toFixed(2) + ")";
+	if (filter) {
+		window["vplCanvas"].setFilter(filter);
 	}
 
 	// accept dropped aesl files

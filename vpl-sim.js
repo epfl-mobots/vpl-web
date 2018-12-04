@@ -5,7 +5,7 @@
 	For internal use only
 */
 
-window["installRobotSimulator"] = function () {
+window["installRobotSimulator"] = function (options) {
 	/** Run code on the robot simulator
 		@param {string} code source code
 		@return {void}
@@ -37,9 +37,13 @@ window["installRobotSimulator"] = function () {
 			var robot = language === "js"
 				? new A3a.vpl.VirtualThymio()
 				: new A3a.vpl.VirtualThymioVM();
+			var sim = new A3a.vpl.VPLSim2DViewer(robot);
+			if (options && options.canvasFilter) {
+				sim.simCanvas.setFilter(options.canvasFilter);
+			}
 			window["vplSim"] = {
 				robot: robot,
-				sim: new A3a.vpl.VPLSim2DViewer(robot),
+				sim: sim,
 				intervalId: null
 			};
 		},
