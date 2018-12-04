@@ -7,7 +7,6 @@
 
 /**
 	@constructor
-	@struct
 	@param {A3a.vpl.mode=} mode
 */
 A3a.vpl.Program = function (mode) {
@@ -21,6 +20,11 @@ A3a.vpl.Program = function (mode) {
 	this.uploaded = false;
 	/** @type {?function():void} */
 	this.onUpdate = null;
+
+	/** @type {?function():?string} */
+	this.getEditedSourceCodeFun = null;
+	/** @type {?function(?string):void} */
+	this.setEditedSourceCodeFun = null;
 
 	this.undoState = new A3a.vpl.Undo();
 	/** @type {Object<string,string>} */
@@ -229,41 +233,48 @@ A3a.vpl.Program.prototype.enforceSingleTrailingEmptyEventHandler = function () {
 	@return {Object}
 */
 A3a.vpl.Program.prototype.exportToObject = function () {
-	/** @type {Array.<Array.<Object>>} */
-	var p = this.program.map(function (eventHandler) {
-		/** @type {Array.<Object>} */
-		var b = [];
-		function addBlock(block) {
-			if (block) {
-				b.push({
-					"name": block.blockTemplate.name,
-					"disabled": block.disabled,
-					"locked": block.locked,
-					"param":
-						block.blockTemplate.exportParam
-							? block.blockTemplate.exportParam(block)
-							: block.param ? block.param.slice() : null
-				});
+	var src = this.getEditedSourceCodeFun ? this.getEditedSourceCodeFun() : null;
+
+	/** @type {?Array.<Array.<Object>>} */
+	var p = null;
+
+	if (src == null) {
+		p = this.program.map(function (eventHandler) {
+			/** @type {Array.<Object>} */
+			var b = [];
+			function addBlock(block) {
+				if (block) {
+					b.push({
+						"name": block.blockTemplate.name,
+						"disabled": block.disabled,
+						"locked": block.locked,
+						"param":
+							block.blockTemplate.exportParam
+								? block.blockTemplate.exportParam(block)
+								: block.param ? block.param.slice() : null
+					});
+				}
 			}
-		}
-		eventHandler.events.forEach(function (event) {
-			addBlock(event);
+			eventHandler.events.forEach(function (event) {
+				addBlock(event);
+			});
+			eventHandler.actions.forEach(function (action) {
+				addBlock(action);
+			});
+			return {
+				"blocks": b,
+				"disabled": eventHandler.disabled,
+				"locked": eventHandler.locked
+			};
 		});
-		eventHandler.actions.forEach(function (action) {
-			addBlock(action);
-		});
-		return {
-			"blocks": b,
-			"disabled": eventHandler.disabled,
-			"locked": eventHandler.locked
-		};
-	});
+	}
 
 	return {
 		"advanced": this.mode === A3a.vpl.mode.advanced,
 		"basicBlocks": this.enabledBlocksBasic,
 		"advancedBlocks": this.enabledBlocksAdvanced,
-		"program": p
+		"program": p,
+		"code": src
 	};
 };
 
@@ -276,13 +287,14 @@ A3a.vpl.Program.prototype.exportToJSON = function () {
 
 /** Import program from an object, as created by exportToObject
 	@param {Object} obj
-	@param {function():void=} updateFun called at the end and for further
-	asynchrounous loading if necessary
+	@param {function(string):void=} updateFun called at the end and for further
+	asynchronous loading if necessary; arg is "vpl" or "src"
 	@return {void}
 */
 A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 	var self = this;
 	var importFinished = false;
+	var view = "vpl";
 	try {
 		if (obj) {
 			this.mode = obj["advanced"]
@@ -290,38 +302,49 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 				: A3a.vpl.mode.basic;
 			this.enabledBlocksBasic = obj["basicBlocks"] || A3a.vpl.Program.basicBlocks;
 			this.enabledBlocksAdvanced = obj["advancedBlocks"] || A3a.vpl.Program.advancedBlocks;
-			this.program = obj["program"].map(function (eventHandler) {
-				var eh = new A3a.vpl.EventHandler();
-				eventHandler["blocks"].forEach(function (block) {
-					var bt = A3a.vpl.BlockTemplate.findByName(block["name"]);
-					if (bt) {
-						var b = new A3a.vpl.Block(bt, null, null);
-						b.disabled = block["disabled"] || false;
-						b.locked = block["locked"] || false;
-						if (bt.importParam) {
-							bt.importParam(b, block["param"],
+			if (obj["program"]) {
+				this.program = obj["program"].map(function (eventHandler) {
+					var eh = new A3a.vpl.EventHandler();
+					eventHandler["blocks"].forEach(function (block) {
+						var bt = A3a.vpl.BlockTemplate.findByName(block["name"]);
+						if (bt) {
+							var b = new A3a.vpl.Block(bt, null, null);
+							b.disabled = block["disabled"] || false;
+							b.locked = block["locked"] || false;
+							if (bt.importParam) {
+								bt.importParam(b, block["param"],
+									function () {
+										if (importFinished && updateFun) {
+											updateFun("vpl");
+										}
+									});
+							} else {
+								b.param = block["param"];
+							}
+							eh.setBlock(b, null,
 								function () {
-									if (importFinished && updateFun) {
-										updateFun();
-									}
-								});
-						} else {
-							b.param = block["param"];
+									self.saveStateBeforeChange();
+								},
+								true);
 						}
-						eh.setBlock(b, null,
-							function () {
-								self.saveStateBeforeChange();
-							},
-							true);
-					}
+					}, this);
+					eh.disabled = eventHandler["disabled"] || false;
+					eh.locked = eventHandler["locked"] || false;
+					return eh;
 				}, this);
-				eh.disabled = eventHandler["disabled"] || false;
-				eh.locked = eventHandler["locked"] || false;
-				return eh;
-			}, this);
+			} else {
+				this.program = [];
+			}
+			if (this.setEditedSourceCodeFun) {
+				var code = obj["code"];
+				this.setEditedSourceCodeFun(obj["code"] == undefined ? null : code);
+				if (code != null) {
+					view = "src";
+				}
+			}
 		}
 	} catch (e) {}
-	updateFun && updateFun();
+	updateFun && updateFun(view);
 	importFinished = true;
 };
 

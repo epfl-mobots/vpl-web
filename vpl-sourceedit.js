@@ -59,12 +59,16 @@ A3a.vpl.VPLSourceEditor = function (noVPL, language, runGlue) {
 };
 
 /** Set the code generated from VPL
-	@param {string} code
+	@param {?string} code source code, or null to reset it
 	@return {void}
 */
 A3a.vpl.VPLSourceEditor.prototype.setCode = function (code) {
-	this.code0 = code;
-	this.textEditor.setContent(code);
+	if (code === null) {
+		this.textEditor.setContent(this.code0);
+	} else {
+		this.code0 = code;
+		this.textEditor.setContent(code);
+	}
 };
 
 /** Get the current code
@@ -193,9 +197,11 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 		// mousedown
 		function (data, x, y, ev) {
 			if (!isEditorEmpty) {
-				var src = self.getCode();
-				var aesl = A3a.vpl.Program.toAESLFile(src);
-				A3a.vpl.Program.downloadText(aesl, "code.aesl");
+				// var src = self.getCode();
+				// var aesl = A3a.vpl.Program.toAESLFile(src);
+				// A3a.vpl.Program.downloadText(aesl, "code.aesl");
+				var json = window["vplProgram"].exportToJSON();
+				A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
 			}
 			return 0;
 		},

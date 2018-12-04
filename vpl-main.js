@@ -207,6 +207,12 @@ function vplSetup(uiConfig) {
 	window["vplProgram"] = new A3a.vpl.Program();
 	window["vplProgram"].currentLanguage = language;
 	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["vplProgram"].noVPL, language, window["vplRun"]);
+	window["vplProgram"].getEditedSourceCodeFun = function () {
+		return window["vplEditor"].doesMatchVPL() ? null : window["vplEditor"].getCode();
+	};
+	window["vplProgram"].setEditedSourceCodeFun = function (code) {
+		window["vplEditor"].setCode(code);
+	};
 	var canvas = document.getElementById("programCanvas");
 	window["vplCanvas"] = new A3a.vpl.Canvas(canvas);
 	window["vplCanvas"].wheel = function (dx, dy) {
@@ -259,8 +265,11 @@ function vplSetup(uiConfig) {
 				} catch (e) {
 					// then try json
 					try {
-						window["vplProgram"].importFromJSON(data, function () {
-							window["vplCanvas"].onUpdate();
+						window["vplProgram"].importFromJSON(data, function (view) {
+							window["vplProgram"].setView(view);
+							if (view === "vpl") {
+								window["vplCanvas"].onUpdate();
+							}
 						});
 					} catch (e) {}
 				}
