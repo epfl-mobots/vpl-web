@@ -432,6 +432,8 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	controlBar.addStretch();
 
 	// vpl
+	var vplEnabled = window["vplEditor"] && window["vplEditor"].doesMatchVPL();
+		// can switch to VPL only if the code source hasn't been changed
 	controlBar.addControl(
 		// draw
 		function (ctx, item, dx, dy) {
@@ -457,7 +459,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 				item.y + dy + self.simCanvas.dims.controlSize * 0.3);
 			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
 				item.y + dy + self.simCanvas.dims.controlSize * 0.3);
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = vplEnabled ? "white" : "#777";
 			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
 			ctx.stroke();
 			ctx.fillStyle = "#99a";
@@ -471,7 +473,55 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		},
 		// mousedown
 		function (data, x, y, ev) {
-			window["vplProgram"].setView("vpl");
+			if (vplEnabled) {
+				window["vplProgram"].setView("vpl");
+			}
+			return 0;
+		},
+		// doDrop
+		null,
+		// canDrop
+		null);
+
+	// source code editor
+	controlBar.addControl(
+		// draw
+		function (ctx, item, dx, dy) {
+			ctx.fillStyle = "navy";
+			ctx.fillRect(item.x + dx, item.y + dy,
+				self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
+			ctx.beginPath();
+			ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.25,
+				item.y + dy + self.simCanvas.dims.controlSize * 0.2);
+			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.25,
+				item.y + dy + self.simCanvas.dims.controlSize * 0.8);
+			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
+				item.y + dy + self.simCanvas.dims.controlSize * 0.8);
+			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
+				item.y + dy + self.simCanvas.dims.controlSize * 0.3);
+			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
+				item.y + dy + self.simCanvas.dims.controlSize * 0.2);
+			ctx.closePath();
+			ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
+				item.y + dy + self.simCanvas.dims.controlSize * 0.2);
+			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
+				item.y + dy + self.simCanvas.dims.controlSize * 0.3);
+			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
+				item.y + dy + self.simCanvas.dims.controlSize * 0.3);
+			for (var y = 0.2; y < 0.6; y += 0.1) {
+				ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.3,
+					item.y + dy + self.simCanvas.dims.controlSize * (0.2 + y));
+				ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.7,
+					item.y + dy + self.simCanvas.dims.controlSize * (0.2 + y));
+			}
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
+			ctx.stroke();
+		},
+		// mousedown
+		function (data, x, y, ev) {
+			window["vplProgram"].setView("src",
+				{unlocked: !window["vplEditor"].isLockedWithVPL});
 			return 0;
 		},
 		// doDrop

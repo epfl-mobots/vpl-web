@@ -376,17 +376,20 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 
 /** Change current view
 	@param {string} view "vpl", "src" or "sim"
-	@param {boolean=} noVPL true to prevent vpl (default: false)
+	@param {{noVpl:(boolean|undefined),unlocked:(boolean|undefined)}=} options
+	noVpl:true to prevent vpl (default: false),
+	unlocked:true (with "src") for source code editor in unlocked state (disconnected
+	from vpl)
 	@return {void}
 */
-A3a.vpl.Program.prototype.setView = function (view, noVPL) {
-	this.noVPL = noVPL || false;
+A3a.vpl.Program.prototype.setView = function (view, options) {
+	this.noVpl = options && options.noVpl || false;
 	document.getElementById("vpl-editor").style.display = view === "vpl" ? "block" : "none";
 	document.getElementById("src-editor").style.display = view === "src" ? "block" : "none";
 	document.getElementById("sim-view").style.display = view === "sim" ? "block" : "none";
 	switch (view) {
 	case "src":
-		window["vplEditor"].lockWithVPL(true);
+		window["vplEditor"].lockWithVPL(!(options && options.unlocked));
 		window["vplEditor"].focus();
 		break;
 	case "sim":

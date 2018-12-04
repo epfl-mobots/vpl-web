@@ -327,7 +327,7 @@ function vplSetup(uiConfig) {
 	window.addEventListener("resize", vplResize, false);
 
 	if (getQueryOption("view") === "text") {
-		window["vplProgram"].setView("src", true);
+		window["vplProgram"].setView("src", {noVpl: true});
 	} else {
 		window["vplProgram"].setView("vpl");
 		window["vplProgram"].experimentalFeatures = getQueryOption("exp") === "true";

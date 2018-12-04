@@ -74,6 +74,13 @@ A3a.vpl.VPLSourceEditor.prototype.getCode = function () {
 	return document.getElementById("editor").value.trim();
 };
 
+/** Check if source code matches vpl
+	@return {boolean}
+*/
+A3a.vpl.VPLSourceEditor.prototype.doesMatchVPL = function () {
+	return this.getCode() === this.code0.trim();
+};
+
 /** Calculate the toolbar height
 	@return {number}
 */
@@ -101,6 +108,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 	controlBar.addControl(
 		// draw
 		function (ctx, item, dx, dy) {
+			var enabled = !self.isLockedWithVPL;
 			ctx.fillStyle = "navy";
 			ctx.fillRect(item.x + dx, item.y + dy,
 				self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
@@ -122,13 +130,16 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 				item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
 			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
 				item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = enabled ? "white" : "#777";
 			ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
 			ctx.stroke();
 		},
 		// mousedown
 		function (data, x, y, ev) {
-			self.textEditor.setContent("");
+			if (!self.isLockedWithVPL) {
+				self.textEditor.setContent("");
+				self.tbCanvas.redraw();
+			}
 			return 0;
 		},
 		// doDrop
@@ -199,7 +210,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 		controlBar.addControl(
 			// draw
 			function (ctx, item, dx, dy) {
-				var enabled = self.getCode() === self.code0.trim();
+				var enabled = self.doesMatchVPL();
 				ctx.save();
 				ctx.fillStyle = "navy";
 				ctx.fillRect(item.x + dx, item.y + dy,
@@ -236,7 +247,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			},
 			// mousedown
 			function (data, x, y, ev) {
-				var enabled = self.getCode() === self.code0.trim();
+				var enabled = self.doesMatchVPL();
 				if (enabled) {
 					window["vplProgram"].setView("vpl");
 				}
@@ -292,6 +303,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 	controlBar.addStretch();
 
 	if (this.runGlue) {
+		// run
 		controlBar.addControl(
 			// draw
 			function (ctx, item, dx, dy) {
@@ -320,6 +332,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			// canDrop
 			null);
 
+		// stop
 		controlBar.addControl(
 			// draw
 			function (ctx, item, dx, dy) {
@@ -345,6 +358,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 		if (window["vplSim"]) {
 			controlBar.addSpace();
 
+			// simulator view
 			controlBar.addControl(
 				// draw
 				function (ctx, item, dx, dy) {
@@ -417,6 +431,7 @@ A3a.vpl.VPLSourceEditor.prototype.lockWithVPL = function (b) {
 		this.textEditor.setContent(this.code0);
 	}
 	this.textEditor.setReadOnly(b);
+	this.toolbarRender();
 };
 
 /** Resize the source code editor
