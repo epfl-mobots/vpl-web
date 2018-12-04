@@ -185,6 +185,32 @@ function vplSetup(uiConfig) {
 		filter = "blur(" + filterBlur.toFixed(1) + "px) grayscale(" + filterGrayscale.toFixed(2) + ")";
 	}
 
+	var scale = 1;
+	var rotation = 0;
+	var mirror = false;
+	/** @type {?Array.<number>} */
+	var transform = null;
+	var opt = getQueryOption("scale").trim() || "";
+	if (/^\d+(\.\d*)?$/.test(opt)) {
+		scale = parseFloat(opt);
+	}
+	var opt = getQueryOption("rotation").trim() || "";
+	if (/^-?\d+(\.\d*)?$/.test(opt)) {
+		rotation = parseFloat(opt) * Math.PI / 180;
+	}
+	var opt = getQueryOption("mirror").trim() || "";
+	mirror = opt === "true";
+	if (scale !== 1 || rotation !== 0 || mirror) {
+		transform = [
+			scale * Math.cos(rotation) * (mirror ? -1 : 1),
+			scale * Math.sin(rotation) * (mirror ? -1 : 1),
+			-scale * Math.sin(rotation),
+			scale * Math.cos(rotation),
+			0,
+			0,
+		];
+	}
+
 	if (!language) {
 		language = window["vplRun"]
 			? window["vplRun"].preferredLanguage
@@ -241,9 +267,12 @@ function vplSetup(uiConfig) {
 		}
 	}
 
-	// apply canvas filters
+	// apply canvas filters and transforms
 	if (filter) {
 		window["vplCanvas"].setFilter(filter);
+	}
+	if (transform) {
+		window["vplCanvas"].transform = transform;
 	}
 
 	// accept dropped aesl files

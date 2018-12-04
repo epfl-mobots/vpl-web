@@ -392,7 +392,7 @@ A3a.vpl.Canvas.prototype.traces = function (dleft, dright, rw, options) {
 	@param {number} dright distance of the right wheel divided by the distance of the wheel
 	wrt the center of the differential wheel axis
 	@param {number} r half-distance between wheels, relative to block size
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {boolean}
 */
 A3a.vpl.Canvas.prototype.robotTopCheck = function (width, height, left, top, dleft, dright, r, ev) {
@@ -400,8 +400,8 @@ A3a.vpl.Canvas.prototype.robotTopCheck = function (width, height, left, top, dle
 	dleft *= dims.blockSize;
 	dright *= dims.blockSize;
 	r *= dims.blockSize;
-	var x = ev.clientX - left - width / 2;
-	var y = top + width / 2 - ev.clientY;
+	var x = ev.x - left - width / 2;
+	var y = top + width / 2 - ev.y;
 	var tr = A3a.vpl.draw.diffWheels(dleft, dright);
 	return (x - tr.x) * (x - tr.x) + (y - tr.y) * (y - tr.y) < r * r;
 };
@@ -728,12 +728,12 @@ A3a.vpl.Canvas.prototype.robotYaw = function (angle) {
 	@param {number} left left position of the block
 	@param {number} top top position of the block
 	@param {boolean=} tp true for -12..11, false for -6..6 (default: false)
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {boolean}
 */
 A3a.vpl.Canvas.prototype.accelerometerCheck = function (width, height, left, top, ev, tp) {
-	var x = ev.clientX - left - width / 2;
-	var y = top + width / 2 - ev.clientY;
+	var x = ev.x - left - width / 2;
+	var y = top + width / 2 - ev.y;
 	var r2 = (x * x + y * y) / (width * width / 4);
 	return r2 < 1 && r2 > 0.4 && (tp || y >= 0);
 };
@@ -743,13 +743,13 @@ A3a.vpl.Canvas.prototype.accelerometerCheck = function (width, height, left, top
 	@param {number} height block width
 	@param {number} left left position of the block
 	@param {number} top top position of the block
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@param {boolean=} tp true for -12..11, false for -6..6 (default: false)
 	@return {number} new value of the angle, between -6..6 or -12..11
 */
 A3a.vpl.Canvas.prototype.accelerometerDrag = function (width, height, left, top, ev, tp) {
-	var x = ev.clientX - left - width / 2;
-	var y = top + width / 2 - ev.clientY;
+	var x = ev.x - left - width / 2;
+	var y = top + width / 2 - ev.y;
 	var a = Math.round(Math.atan2(x, y) * 12 / Math.PI);
 	return tp
 		? a === 12 ? -12 : a	// -12..11
@@ -1027,12 +1027,12 @@ A3a.vpl.Canvas.prototype.drawState8Change = function () {
 	@param {number} height block width
 	@param {number} left block left position
 	@param {number} top bock top position
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {?number} shape index, or null
 */
 A3a.vpl.Canvas.prototype.buttonClick = function (shapes, width, height, left, top, ev) {
-	var x = (ev.clientX - left) / width - 0.5;
-	var y = 0.5 - (ev.clientY - top) / height;
+	var x = (ev.x - left) / width - 0.5;
+	var y = 0.5 - (ev.y - top) / height;
 	for (var i = 0; i < shapes.length; i++) {
 		var sz = shapes[i].size || 1;
 		if (Math.max(Math.abs(x - shapes[i].x), Math.abs(y - shapes[i].y)) < 0.11 * sz) {
@@ -1126,12 +1126,12 @@ A3a.vpl.Canvas.prototype.slider = function (val, pos, vert, thumbColor, levelTyp
 	@param {number} height block width
 	@param {number} left left position of the block
 	@param {number} top top position of the block
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {boolean}
 */
 A3a.vpl.Canvas.prototype.sliderCheck = function (pos, vert, width, height, left, top, ev) {
-	var x = (ev.clientX - left) / width - 0.5;
-	var y = 0.5 - (ev.clientY - top) / height;
+	var x = (ev.x - left) / width - 0.5;
+	var y = 0.5 - (ev.y - top) / height;
 	return Math.abs((vert ? x : y) - pos) < 0.1;
 };
 
@@ -1141,12 +1141,12 @@ A3a.vpl.Canvas.prototype.sliderCheck = function (pos, vert, width, height, left,
 	@param {number} height block width
 	@param {number} left left position of the block
 	@param {number} top top position of the block
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {number} new value of the slider, between 0 and 1
 */
 A3a.vpl.Canvas.prototype.sliderDrag = function (vert, width, height, left, top, ev) {
-	var x = (ev.clientX - left) / width - 0.5;
-	var y = 0.5 - (ev.clientY - top) / height;
+	var x = (ev.x - left) / width - 0.5;
+	var y = 0.5 - (ev.y - top) / height;
 	return 0.5 + (vert ? y : x) / 0.8;
 };
 
@@ -1156,12 +1156,12 @@ A3a.vpl.Canvas.prototype.sliderDrag = function (vert, width, height, left, top, 
 	@param {number} height block width
 	@param {number} left block left position
 	@param {number} top bock top position
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {?{index:number,tone:number}}} note, or null
 */
 A3a.vpl.Canvas.prototype.noteClick = function (notes, width, height, left, top, ev) {
-	var x = Math.floor(((ev.clientX - left) / width - 0.1) / (0.8 / 6));
-	var y = Math.floor((0.9 - (ev.clientY - top) / height) / 0.16);
+	var x = Math.floor(((ev.x - left) / width - 0.1) / (0.8 / 6));
+	var y = Math.floor((0.9 - (ev.y - top) / height) / 0.16);
 	return x >= 0 && x < 6 && y >= 0 && y < 5
 		? {
 			index: x,
@@ -1174,13 +1174,13 @@ A3a.vpl.Canvas.prototype.noteClick = function (notes, width, height, left, top, 
 	@param {number} height block width
 	@param {number} left left position of the block
 	@param {number} top top position of the block
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {boolean}
 */
 A3a.vpl.Canvas.prototype.timerCheck = function (width, height, left, top, ev) {
 	var r = 0.4 * width;
-	var x = ev.clientX - left - width / 2;
-	var y = top + height / 2 - ev.clientY;
+	var x = ev.x - left - width / 2;
+	var y = top + height / 2 - ev.y;
 	return x * x + y * y <= r * r;
 };
 
@@ -1191,12 +1191,12 @@ A3a.vpl.Canvas.prototype.timerCheck = function (width, height, left, top, ev) {
 	@param {number} top top position of the block
 	@param {boolean} isLog true for logarithmic time scale between 0.1 and 10,
 	false for linear time scale between 0 and 4
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {number} new value of the time, between 0 and 4
 */
 A3a.vpl.Canvas.prototype.timerDrag = function (width, height, left, top, isLog, ev) {
-	var x = ev.clientX - left - width / 2;
-	var y = top + height / 2 - ev.clientY;
+	var x = ev.x - left - width / 2;
+	var y = top + height / 2 - ev.y;
 	var time2 = (Math.PI - Math.atan2(x, -y)) / (2 * Math.PI);
 	return isLog
 		? Math.exp(time2 * Math.log(100)) / 10	// [0,1] -> [0.1,10]
@@ -1206,7 +1206,7 @@ A3a.vpl.Canvas.prototype.timerDrag = function (width, height, left, top, isLog, 
 /**	Check if a mouse event is inside a state
 	@param {number} left block left position
 	@param {number} top bock top position
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {?number} state index, or null
 */
 A3a.vpl.Canvas.prototype.stateClick = function (width, height, left, top, ev) {
@@ -1214,8 +1214,8 @@ A3a.vpl.Canvas.prototype.stateClick = function (width, height, left, top, ev) {
 	var y0 = height / 2;
 	var r = width * 0.375;
 	var thickness2 = width * 0.15;
-	var x = ev.clientX - left - x0;
-	var y = y0 - (ev.clientY - top);
+	var x = ev.x - left - x0;
+	var y = y0 - (ev.y - top);
 	if (Math.abs(Math.sqrt(x * x + y * y) - r) <= thickness2) {
 		return y >= 0 ? x < 0 ? 0 : 1 : x < 0 ? 2 : 3;
 	} else {
@@ -1226,7 +1226,7 @@ A3a.vpl.Canvas.prototype.stateClick = function (width, height, left, top, ev) {
 /**	Check if a mouse event is inside a state 8
 	@param {number} left block left position
 	@param {number} top bock top position
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {?number} state, or null
 */
 A3a.vpl.Canvas.prototype.state8Click = function (width, height, left, top, ev) {
@@ -1234,8 +1234,8 @@ A3a.vpl.Canvas.prototype.state8Click = function (width, height, left, top, ev) {
 	var y0 = height / 2;
 	var r = width * 0.375;
 	var thickness2 = width * 0.15;
-	var x = ev.clientX - left - x0;
-	var y = y0 - (ev.clientY - top);
+	var x = ev.x - left - x0;
+	var y = y0 - (ev.y - top);
 	if (Math.abs(Math.sqrt(x * x + y * y) - r) <= thickness2) {
 		var th = Math.atan2(x, y) + Math.PI / 8;
 		return Math.floor((th < 0 ? th + 2 * Math.PI : th) / (Math.PI / 4));

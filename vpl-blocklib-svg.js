@@ -79,7 +79,7 @@ A3a.vpl.Canvas.prototype.canvasToSVGCoord = function (clickX, clickY, width, hei
 
 A3a.vpl.Canvas.prototype.mousedownSVGButtons = function (block, width, height, left, top, ev,
 	svgFilename, buttons) {
-	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top, width, height);
+	var pt = this.canvasToSVGCoord(ev.x - left, ev.y - top, width, height);
 	for (var i = 0; i < buttons.length; i++) {
 		var id = buttons[i].id;
 		if (this.clientData.svg[svgFilename].isInside(id, pt.x, pt.y)) {
@@ -96,7 +96,7 @@ A3a.vpl.Canvas.prototype.mousedownSVGButtons = function (block, width, height, l
 
 A3a.vpl.Canvas.prototype.mousedownSVGRadioButtons = function (block, width, height, left, top, ev,
 	svgFilename, buttons, nButtons) {
-	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top, width, height);
+	var pt = this.canvasToSVGCoord(ev.x - left, ev.y - top, width, height);
 	for (var i = 0; i < buttons.length; i++) {
 		var id = buttons[i].id;
 		if (this.clientData.svg[svgFilename].isInside(id, pt.x, pt.y)) {
@@ -215,14 +215,14 @@ A3a.vpl.Canvas.prototype.dragSVGSlider = function (min, max, pos) {
 	@param {number} height block width
 	@param {number} left left position of the block
 	@param {number} top top position of the block
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@param {string} svgFilename
 	@param {Array.<Object>} sliders description of the sliders, as defined in the json
 	@return {?number}
 */
 A3a.vpl.Canvas.prototype.mousedownSVGSliders = function (block, width, height, left, top, ev,
 	svgFilename, sliders) {
-	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top, width, height);
+	var pt = this.canvasToSVGCoord(ev.x - left, ev.y - top, width, height);
 	for (var i = 0; i < sliders.length; i++) {
 		this.clientData.sliderAux = sliders[i];
 		var bnds = this.clientData.svg[svgFilename].getElementBounds(this.clientData.sliderAux["id"]);
@@ -247,11 +247,11 @@ A3a.vpl.Canvas.prototype.mousedownSVGSliders = function (block, width, height, l
 	@param {number} height block width
 	@param {number} left left position of the block
 	@param {number} top top position of the block
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.mousedragSVGSlider = function (block, dragIndex, aux, width, height, left, top, ev) {
-	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top, width, height);
+	var pt = this.canvasToSVGCoord(ev.x - left, ev.y - top, width, height);
 	var val = this.clientData.sliderAux["min"] +
 		(this.clientData.sliderAux["max"] - this.clientData.sliderAux["min"]) *
 			this.dragSVGSlider(this.clientData.min, this.clientData.max,
@@ -266,7 +266,7 @@ A3a.vpl.Canvas.prototype.mousedragSVGSlider = function (block, dragIndex, aux, w
 	@param {number} height block width
 	@param {number} left left position of the block
 	@param {number} top top position of the block
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@param {string} svgFilename
 	@param {Array.<Object>} rotating description of the rotating elements, as defined in the json
 	@param {Array} param
@@ -274,7 +274,7 @@ A3a.vpl.Canvas.prototype.mousedragSVGSlider = function (block, dragIndex, aux, w
 */
 A3a.vpl.Canvas.prototype.mousedownSVGRotating = function (block, width, height, left, top, ev,
 	svgFilename, rotating, param) {
-	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top, width, height);
+	var pt = this.canvasToSVGCoord(ev.x - left, ev.y - top, width, height);
 	for (var i = 0; i < rotating.length; i++) {
 		// center of rotation
 		var bnds = this.clientData.svg[svgFilename].getElementBounds(rotating[i]["centerId"]);
@@ -306,11 +306,11 @@ A3a.vpl.Canvas.prototype.mousedownSVGRotating = function (block, width, height, 
 	@param {number} height block width
 	@param {number} left left position of the block
 	@param {number} top top position of the block
-	@param {Event} ev mouse event
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.mousedragSVGRotating = function (block, dragIndex, aux, width, height, left, top, ev) {
-	var pt = this.canvasToSVGCoord(ev.clientX - left, ev.clientY - top, width, height);
+	var pt = this.canvasToSVGCoord(ev.x - left, ev.y - top, width, height);
 	var val = Math.atan2(pt.y - this.clientData.c.y, pt.x - this.clientData.c.x) - this.clientData.phi0;
 	var f = aux["rotating"][dragIndex]["numSteps"] ? 2 * Math.PI / parseInt(aux["rotating"][dragIndex]["numSteps"], 10) : 1;
 	block.param[dragIndex] = Math.round(val / f);

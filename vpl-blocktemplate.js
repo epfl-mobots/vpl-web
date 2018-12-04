@@ -102,12 +102,12 @@ A3a.vpl.BlockTemplate.genCodeFun;
 A3a.vpl.BlockTemplate.drawFun;
 
 /**
-	@typedef {function(A3a.vpl.Canvas,A3a.vpl.Block,number,number,number,number,Event):?number}
+	@typedef {function(A3a.vpl.Canvas,A3a.vpl.Block,number,number,number,number,A3a.vpl.CanvasItem.mouseEvent):?number}
 */
 A3a.vpl.BlockTemplate.mousedownFun;
 
 /**
-	@typedef {function(A3a.vpl.Canvas,A3a.vpl.Block,number,number,number,number,number,Event):void}
+	@typedef {function(A3a.vpl.Canvas,A3a.vpl.Block,number,number,number,number,number,A3a.vpl.CanvasItem.mouseEvent):void}
 */
 A3a.vpl.BlockTemplate.mousedragFun;
 

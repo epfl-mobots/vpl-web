@@ -1004,8 +1004,8 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		{
 			mousedown: function (canvas, data, width, height, left, top, ev) {
 				if (!self.running || self.paused) {
-					var x = ((ev.clientX - left) - width / 2) / playgroundView.scale;
-					var y = (height / 2 - (ev.clientY - top)) / playgroundView.scale;
+					var x = ((ev.x - left) - width / 2) / playgroundView.scale;
+					var y = (height / 2 - (ev.y - top)) / playgroundView.scale;
 					var xr = x - self.robot.pos[0];
 					var yr = y - self.robot.pos[1];
 					var xHandle = robotSize * Math.cos(self.robot.theta);
@@ -1027,8 +1027,8 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 				return null;
 			},
 			mousedrag: function (canvas, data, dragIndex, width, height, left, top, ev) {
-				var x = ((ev.clientX - left) - width / 2) / playgroundView.scale;
-				var y = (height / 2 - (ev.clientY - top)) / playgroundView.scale;
+				var x = ((ev.x - left) - width / 2) / playgroundView.scale;
+				var y = (height / 2 - (ev.y - top)) / playgroundView.scale;
 				switch (dragIndex) {
 				case 0:
 					self.robot["setPosition"]([

@@ -116,12 +116,17 @@ A3a.vpl.CanvasItem.prototype.applyClipping = function (ctx) {
 A3a.vpl.CanvasItem.draw;
 
 /**
-	@typedef {function(A3a.vpl.Canvas,*,number,number,number,number,Event):?number}
+	@typedef {{x:number,y:number,modifier:boolean}}
+*/
+A3a.vpl.CanvasItem.mouseEvent;
+
+/**
+	@typedef {function(A3a.vpl.Canvas,*,number,number,number,number,A3a.vpl.CanvasItem.mouseEvent):?number}
 */
 A3a.vpl.CanvasItem.mousedown;
 
 /**
-	@typedef {function(A3a.vpl.Canvas,*,number,number,number,number,number,Event):void}
+	@typedef {function(A3a.vpl.Canvas,*,number,number,number,number,number,A3a.vpl.CanvasItem.mouseEvent):void}
 */
 A3a.vpl.CanvasItem.mousedrag;
 
@@ -162,6 +167,8 @@ A3a.vpl.Canvas = function (canvas) {
 	this.canvas = canvas;
 	this.width = canvas.width / backingScale;
 	this.height = canvas.height / backingScale;
+	/** @type {?Array.<number>} */
+	this.transform = null;
 	/** @type {CanvasRenderingContext2D} */
 	this.ctx = this.canvas.getContext("2d");
 	/** @type {Object} */
@@ -182,14 +189,20 @@ A3a.vpl.Canvas = function (canvas) {
 
 	var self = this;
 
+	/** Handle mousedown event
+		@param {Event} downEvent
+		@return {void}
+	*/
 	function mousedown(downEvent) {
+		var mouseEvent = self.makeMouseEvent(downEvent);
+
 		function startInteraction(item) {
 			var canvasBndRect = self.canvas.getBoundingClientRect();
 			item.dragging = item.interactiveCB.mousedown(self, item.data,
 				item.width, item.height,
 				canvasBndRect.left + item.x,
 				canvasBndRect.top + item.y,
-				downEvent);
+				mouseEvent);
 			if (item.dragging !== null) {
 				// call immediately
 				item.interactiveCB.mousedrag
@@ -198,7 +211,7 @@ A3a.vpl.Canvas = function (canvas) {
 						item.width, item.height,
 						canvasBndRect.left + item.x,
 						canvasBndRect.top + item.y,
-						downEvent);
+						mouseEvent);
 				self.onUpdate && self.onUpdate();
 				// continue with window-level handler
 				A3a.vpl.dragFun = item.interactiveCB.mousedrag
@@ -209,7 +222,7 @@ A3a.vpl.Canvas = function (canvas) {
 								item.width, item.height,
 								canvasBndRect.left + item.x,
 								canvasBndRect.top + item.y,
-								e);
+								self.makeMouseEvent(e));
 							self.onUpdate && self.onUpdate();
 						} else if (item.interactiveCB.mouseup) {
 							item.interactiveCB.mouseup(self, item.data,
@@ -224,7 +237,7 @@ A3a.vpl.Canvas = function (canvas) {
 			return false;
 		}
 
-		if (self.isZoomedItemProxyClicked(downEvent)) {
+		if (self.isZoomedItemProxyClicked(mouseEvent)) {
 			var item = self.zoomedItemProxy;
 			if (item.interactiveCB) {
 				startInteraction(item);
@@ -237,7 +250,7 @@ A3a.vpl.Canvas = function (canvas) {
 			return;
 		}
 
-		var indices = self.clickedItemIndex(downEvent, true);
+		var indices = self.clickedItemIndex(mouseEvent, true);
 		if (indices.length > 0) {
 			var item = self.items[indices[0]];
 			if (self.zoomedItemIndex >= 0 && self.zoomedItemIndex !== indices[0]) {
@@ -258,11 +271,12 @@ A3a.vpl.Canvas = function (canvas) {
 				// drag item itself
 				/** @type {A3a.vpl.CanvasItem} */
 				var dropTarget = null;
-				var x0 = downEvent.clientX;
-				var y0 = downEvent.clientY;
+				var x0 = mouseEvent.x;
+				var y0 = mouseEvent.y;
 				A3a.vpl.dragFun = function (dragEvent, isUp) {
+					var mouseEvent = self.makeMouseEvent(dragEvent);
 					if (isUp) {
-						if (item.zoomOnLongPress && item === self.items[self.clickedItemIndex(dragEvent, false)[0]]
+						if (item.zoomOnLongPress && item === self.items[self.clickedItemIndex(mouseEvent, false)[0]]
 							&& Date.now() - self.clickTimestamp > 500) {
 							self.zoomedItemIndex = indices[0];
 							self.zoomedItemProxy = item.zoomOnLongPress(item);
@@ -273,7 +287,7 @@ A3a.vpl.Canvas = function (canvas) {
 						self.redraw();
 						self.canvas.style.cursor = "default";
 					} else {
-						var targetIndices = self.clickedItemIndex(dragEvent, false);
+						var targetIndices = self.clickedItemIndex(mouseEvent, false);
 						dropTarget = null;
 						var canDrop = false;
 						for (var i = 0; !canDrop && i < targetIndices.length; i++) {
@@ -286,6 +300,11 @@ A3a.vpl.Canvas = function (canvas) {
 						if (canDrop) {
 							// draw frame around target
 							ctx.save();
+							if (self.transform) {
+								ctx.translate(self.canvas.width / 2, self.canvas.height / 2);
+								CanvasRenderingContext2D.prototype.transform.apply(ctx, self.transform);
+								ctx.translate(-self.canvas.width / 2, -self.canvas.height / 2);
+							}
 							dropTarget.applyClipping(ctx);
 							ctx.lineWidth = 2 * self.dims.blockLineWidth;
 							ctx.strokeStyle = "#aaa";
@@ -293,13 +312,18 @@ A3a.vpl.Canvas = function (canvas) {
 							ctx.restore();
 						}
 						ctx.save();
+						if (self.transform) {
+							ctx.translate(self.canvas.width / 2, self.canvas.height / 2);
+							CanvasRenderingContext2D.prototype.transform.apply(ctx, self.transform);
+							ctx.translate(-self.canvas.width / 2, -self.canvas.height / 2);
+						}
 						ctx.globalAlpha = 0.5;
-						item.draw(ctx, dragEvent.clientX - x0, dragEvent.clientY - y0);
+						item.draw(ctx, mouseEvent.x - x0, mouseEvent.y - y0);
 						item.attachedItems.forEach(function (attachedItem) {
-							attachedItem.draw(ctx, dragEvent.clientX - x0, dragEvent.clientY - y0);
-							attachedItem.draw(ctx, dragEvent.clientX - x0, dragEvent.clientY - y0, true);
+							attachedItem.draw(ctx, mouseEvent.x - x0, mouseEvent.y - y0);
+							attachedItem.draw(ctx, mouseEvent.x - x0, mouseEvent.y - y0, true);
 						});
-						item.draw(ctx, dragEvent.clientX - x0, dragEvent.clientY - y0, true);
+						item.draw(ctx, mouseEvent.x - x0, mouseEvent.y - y0, true);
 						ctx.restore();
 						self.canvas.style.cursor = canDrop ? "copy" : "default";
 					}
@@ -349,6 +373,63 @@ A3a.vpl.Canvas = function (canvas) {
 */
 A3a.vpl.Canvas.prototype.setFilter = function (filter) {
 	this.canvas["style"]["filter"] = filter;
+};
+
+/** Apply transform to point
+	@param {Array.<number>} p point in R^2
+	@return {Array.<number>} transformed point in R^2
+*/
+A3a.vpl.Canvas.prototype.applyTransform = function (p) {
+	var T = this.transform;
+	return T
+ 		? [
+			T[0] * p[0] + T[2] * p[1] + T[4],
+			T[1] * p[0] + T[3] * p[1] + T[5]
+		]
+		: p;
+};
+
+/** Apply inverse transform to point
+	@param {Array.<number>} p point in R^2
+	@return {Array.<number>} inverse-transformed point in R^2
+*/
+A3a.vpl.Canvas.prototype.applyInverseTransform = function (p) {
+	var T = this.transform;
+	if (T) {
+		// T -> translate(w/2,h/2) T translate(-w/2,-h/2)
+		var w = this.canvas.width / 2;
+		var h = this.canvas.height / 2;
+		T = T.slice(0, 4).concat(
+			T[4] - w * T[0] - h * T[2] + w,
+			T[5] - w * T[1] - h * T[3] + h
+		);
+
+		var det = T[0] * T[3] - T[1] * T[2];
+		return [
+			(T[3] * p[0] - T[2] * p[1] + T[2] * T[5] - T[3] * T[4]) / det,
+			(-T[1] * p[0] + T[0] * p[1] + T[1] * T[4] - T[0] * T[5]) / det
+		];
+	} else {
+		return p;
+	}
+};
+
+/** Convert browser's mouse Event object to
+	@param {Event} e
+	@return {A3a.vpl.CanvasItem.mouseEvent}
+*/
+A3a.vpl.Canvas.prototype.makeMouseEvent = function (e) {
+	var mouseEvent = {
+		x: e.clientX,
+		y: e.clientY,
+		modifier: e.altKey
+	};
+	if (this.transform) {
+		var p1 = this.applyInverseTransform([mouseEvent.x, mouseEvent.y]);
+		mouseEvent.x = p1[0];
+		mouseEvent.y = p1[1];
+	}
+	return mouseEvent;
 };
 
 /** Update
@@ -457,14 +538,14 @@ A3a.vpl.Canvas.prototype.itemIndex = function (data) {
 };
 
 /** Get the index of the item under the position specified by a mouse event
-	@param {Event} ev
+	@param {A3a.vpl.CanvasItem.mouseEvent} mouseEvent
 	@param {boolean} clicableOnly
 	@return {Array.<number>} indices from top-most (last) element, or empty if none found
 */
-A3a.vpl.Canvas.prototype.clickedItemIndex = function (ev, clicableOnly) {
+A3a.vpl.Canvas.prototype.clickedItemIndex = function (mouseEvent, clicableOnly) {
 	var canvasBndRect = this.canvas.getBoundingClientRect();
-	var x = ev.clientX - canvasBndRect.left;
-	var y = ev.clientY - canvasBndRect.top;
+	var x = mouseEvent.x - canvasBndRect.left;
+	var y = mouseEvent.y - canvasBndRect.top;
 	/** @type {Array.<number>} */
 	var indices = [];
 	for (var i = this.items.length - 1; i >= 0; i--) {
@@ -514,16 +595,16 @@ A3a.vpl.Canvas.prototype.makeZoomedClone = function (item) {
 };
 
 /** Check if the zoomed item is under the position specified by a mouse event
-	@param {Event} ev
+	@param {A3a.vpl.CanvasItem.mouseEvent} mouseEvent
 	@return {boolean}
 */
-A3a.vpl.Canvas.prototype.isZoomedItemProxyClicked = function (ev) {
+A3a.vpl.Canvas.prototype.isZoomedItemProxyClicked = function (mouseEvent) {
 	if (this.zoomedItemProxy == null) {
 		return false;
 	}
 	var canvasBndRect = this.canvas.getBoundingClientRect();
-	var x = ev.clientX - canvasBndRect.left;
-	var y = ev.clientY - canvasBndRect.top;
+	var x = mouseEvent.x - canvasBndRect.left;
+	var y = mouseEvent.y - canvasBndRect.top;
 	return x >= this.zoomedItemProxy.x && x <= this.zoomedItemProxy.x + this.zoomedItemProxy.width
 		&& y >= this.zoomedItemProxy.y && y <= this.zoomedItemProxy.y + this.zoomedItemProxy.height;
 };
@@ -653,6 +734,12 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, width, height, draw, mouse
 */
 A3a.vpl.Canvas.prototype.redraw = function () {
 	this.erase();
+	if (this.transform) {
+		this.ctx.save();
+		this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+		CanvasRenderingContext2D.prototype.transform.apply(this.ctx, this.transform);
+		this.ctx.translate(-this.canvas.width / 2, -this.canvas.height / 2);
+	}
 	this.items.forEach(function (item) {
 		item.draw(this.ctx);
 	}, this);
@@ -662,5 +749,8 @@ A3a.vpl.Canvas.prototype.redraw = function () {
 	if (this.zoomedItemProxy) {
 		this.zoomedItemProxy.draw(this.ctx);
 		this.zoomedItemProxy.draw(this.ctx, 0, 0, true);
+	}
+	if (this.transform) {
+		this.ctx.restore();
 	}
 };
