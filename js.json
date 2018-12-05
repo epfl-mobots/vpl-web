@@ -1,0 +1,22 @@
+{
+	"blocks": [
+		{
+			"name": "button",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"buttons\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"sectionPriority": 10,
+				"clauseAnd": "`$[i] ? 'this.get(\"button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + '\")' : ''`"
+			}
+		},
+		{
+			"name": "motor",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement": "this.set(\"motor.left\", `$[0].toFixed(2)`);\nthis.set(\"motor.right\", `$[1].toFixed(2)`);\n"
+			}
+		}
+	]
+}

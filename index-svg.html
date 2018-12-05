@@ -66,18 +66,7 @@
 					"val": [false, true],
 					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				}
-			],
-			"aseba": {
-				"sectionBegin": "onevent buttons\n",
-				"sectionPriority": 10,
-				"clauseAnd": "`$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''`"
-			},
-			"l2": {
-				"sectionBegin": "onevent buttons {\n",
-				"sectionEnd": "}\n",
-				"sectionPriority": 10,
-				"clauseAnd": "`$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''`"
-			}
+			]
 		},
 		{
 			"name": "Thymio acc 1",
@@ -107,24 +96,7 @@
 					"thumbId": "Btn2_HandleAcc0",
 					"numSteps": 12
 				}
-			],
-			"aseba": {
-				"initVarDecl": [
-					"# yaw angle from accelerometer\nvar yawAngle\n"
-				],
-				"sectionBegin": "onevent acc\n",
-				"clauseInit":
-					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
-			},
-			"l2": {
-				"sectionBegin": "onevent acc {\n",
-				"sectionEnd": "}\n",
-				"sectionPriority": 1,
-				"clauseInit":
-					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
-				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
-			}
+			]
 		},
 		{
 			"name": "Thymio acc 2",
@@ -154,24 +126,7 @@
 					"thumbId": "Btn2_HandleAcc0",
 					"numSteps": 12
 				}
-			],
-			"aseba": {
-				"initVarDecl": [
-					"# yaw angle from accelerometer\nvar yawAngle\n"
-				],
-				"sectionBegin": "onevent acc\n",
-				"clauseInit":
-					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
-			},
-			"l2": {
-				"sectionBegin": "onevent acc {\n",
-				"sectionEnd": "}\n",
-				"sectionPriority": 1,
-				"clauseInit":
-					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
-				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
-			}
+			]
 		},
 		{
 			"name": "Thymio acc 0",
@@ -201,24 +156,7 @@
 					"thumbId": "Btn2_HandleAcc0",
 					"numSteps": 12
 				}
-			],
-			"aseba": {
-				"initVarDecl": [
-					"# yaw angle from accelerometer\nvar yawAngle\n"
-				],
-				"sectionBegin": "onevent acc\n",
-				"clauseInit":
-					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
-			},
-			"l2": {
-				"sectionBegin": "onevent acc {\n",
-				"sectionEnd": "}\n",
-				"sectionPriority": 1,
-				"clauseInit":
-					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
-				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
-			}
+			]
 		},
 		{
 			"name": "start",
@@ -229,14 +167,12 @@
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Ev_Start"
 				}
 
 			],
-			"defaultParameters": [0],
-			"aseba":{}
+			"defaultParameters": [0]
 		},
 		{
 			"name": "clap",
@@ -253,8 +189,7 @@
 				}
 
 			],
-			"defaultParameters": [0],
-			"aseba":{}
+			"defaultParameters": [0]
 		},
 		{
 			"name": "Ev_Acc_fall",
@@ -271,8 +206,7 @@
 				}
 
 			],
-			"defaultParameters": [0],
-			"aseba":{}
+			"defaultParameters": [0]
 		},
 		{
 			"name": "Ev_Acc_hit",
@@ -287,10 +221,8 @@
 				{
 					"uri": "Blocks.svg#Ev_Acc_Hit"
 				}
-
 			],
-			"defaultParameters": [0],
-			"aseba":{}
+			"defaultParameters": [0]
 		},
 		{
 			"name": "Ev_ProxH_bas",
@@ -332,8 +264,7 @@
 					"val": [0, 1, 2],
 					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
 				}
-				],
-			"aseba":{}
+			]
 		},
 		{
 			"name": "Remote1",
@@ -376,8 +307,7 @@
 					"val": [false, true],
 					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				}
-			],
-			"aseba": {}
+			]
 		},
 		{
 			"name": "Remote2",
@@ -455,8 +385,7 @@
 					"val": [false, true],
 					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				}
-			],
-			"aseba": {}
+			]
 		},
 		{
 			"name": "motor",
@@ -494,21 +423,7 @@
 					"min": -1,
 					"max": 1
 				}
-			],
-			"aseba": {
-				"initCodeExec": [
-					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
-				],
-				"statement":
-					"motor.left.target = `Math.round(500 * $[0])`\nmotor.right.target = `Math.round(500 * $[1])`\n"
-			},
-			"l2": {
-				"initCodeExec": [
-					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
-				],
-				"statement":
-					"motor.left.target = `Math.round(500 * $[0])`;\nmotor.right.target = `Math.round(500 * $[1])`;\n"
-			}
+			]
 		},
 		{
 			"name": "move",
@@ -570,21 +485,7 @@
 					"val": 8,
 					"st": ["fill:#90a4ae", "fill:#1de9b6"]
 				}
-			],
-			"aseba": {
-				"initCodeExec": [
-					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
-				],
-				"statement":
-					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`\n"
-			},
-			"l2": {
-				"initCodeExec": [
-					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
-				],
-				"statement":
-					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`;\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`;\n"
-			}
+			]
 		},
 		{
 			"name": "top color",
@@ -625,33 +526,7 @@
 					"id": "Gradient_top",
 					"st": "fill:#`$.map(function (c) { return Math.floor(c * 15.999).toString(16); }).join('')`"
 				}
-			],
-			"aseba": {
-				"initVarDecl": [
-					"# RGB color of the top led\nvar topColor[3]\n"
-				],
-				"initCodeExec": [
-					"topColor = [0, 0, 0]\n",
-					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
-				],
-				"statement":
-					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\ntopColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
-				"statementWithoutInit":
-					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
-			},
-			"l2": {
-				"initVarDecl": [
-					"// RGB color of the top led\nint topColor[3];\n"
-				],
-				"initCodeExec": [
-					"topColor = [0, 0, 0];\n",
-					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
-				],
-				"statement":
-					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\ntopColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`];\n",
-				"statementWithoutInit":
-					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n"
-			}
+			]
 		},
 		{
 			"name": "Ac_music",
@@ -683,15 +558,265 @@
 					"min": -1,
 					"max": 1
 				}
-				],
-			"aseba":{}
+			],
+			"score": [
+			]
 		}
 	],
 
-
-
 	"svgFilenames": [
 		"Blocks.svg"
+	],
+
+	"overlays": [
+		"aseba.json",
+		"l2.json",
+		"js.json"
+	]
+}
+</script>
+
+<script type="application/json" id="aseba.json">
+{
+	"blocks": [
+		{
+			"name": "button",
+			"aseba": {
+				"sectionBegin": "onevent buttons\n",
+				"sectionPriority": 10,
+				"clauseAnd": "`$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''`"
+			}
+		},
+		{
+			"name": "Thymio acc 1",
+			"aseba": {
+				"initVarDecl": [
+					"# yaw angle from accelerometer\nvar yawAngle\n"
+				],
+				"sectionBegin": "onevent acc\n",
+				"clauseInit":
+					"call math.atan2(yawAngle, acc[0], acc[1])\n",
+				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+			}
+		},
+		{
+			"name": "Thymio acc 2",
+			"aseba": {
+				"initVarDecl": [
+					"# yaw angle from accelerometer\nvar yawAngle\n"
+				],
+				"sectionBegin": "onevent acc\n",
+				"clauseInit":
+					"call math.atan2(yawAngle, acc[0], acc[1])\n",
+				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+			}
+		},
+		{
+			"name": "Thymio acc 0",
+			"aseba": {
+				"initVarDecl": [
+					"# yaw angle from accelerometer\nvar yawAngle\n"
+				],
+				"sectionBegin": "onevent acc\n",
+				"clauseInit":
+					"call math.atan2(yawAngle, acc[0], acc[1])\n",
+				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+			}
+		},
+		{
+			"name": "start"
+		},
+		{
+			"name": "clap"
+		},
+		{
+			"name": "Ev_Acc_fall"
+		},
+		{
+			"name": "Ev_Acc_hit"
+		},
+		{
+			"name": "Ev_ProxH_bas"
+		},
+		{
+			"name": "Remote1"
+		},
+		{
+			"name": "Remote2"
+		},
+		{
+			"name": "motor",
+			"aseba": {
+				"initCodeExec": [
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"motor.left.target = `Math.round(500 * $[0])`\nmotor.right.target = `Math.round(500 * $[1])`\n"
+			}
+		},
+		{
+			"name": "move",
+			"aseba": {
+				"initCodeExec": [
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`\n"
+			}
+		},
+		{
+			"name": "top color",
+			"aseba": {
+				"initVarDecl": [
+					"# RGB color of the top led\nvar topColor[3]\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n",
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\ntopColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
+				"statementWithoutInit":
+					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
+			}
+		},
+		{
+			"name": "Ac_music"
+		}
+	]
+}
+</script>
+
+<script type="application/json" id="l2.json">
+{
+	"blocks": [
+		{
+			"name": "button",
+			"l2": {
+				"sectionBegin": "onevent buttons {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 10,
+				"clauseAnd": "`$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''`"
+			}
+		},
+		{
+			"name": "Thymio acc 1",
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+			}
+		},
+		{
+			"name": "Thymio acc 2",
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+			}
+		},
+		{
+			"name": "Thymio acc 0",
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+			}
+		},
+		{
+			"name": "start"
+		},
+		{
+			"name": "clap"
+		},
+		{
+			"name": "Ev_Acc_fall"
+		},
+		{
+			"name": "Ev_Acc_hit"
+		},
+		{
+			"name": "Ev_ProxH_bas"
+		},
+		{
+			"name": "Remote1"
+		},
+		{
+			"name": "Remote2"
+		},
+		{
+			"name": "motor",
+			"l2": {
+				"initCodeExec": [
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"motor.left.target = `Math.round(500 * $[0])`;\nmotor.right.target = `Math.round(500 * $[1])`;\n"
+			}
+		},
+		{
+			"name": "move",
+			"l2": {
+				"initCodeExec": [
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`;\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`;\n"
+			}
+		},
+		{
+			"name": "top color",
+			"l2": {
+				"initVarDecl": [
+					"// RGB color of the top led\nint topColor[3];\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0];\n",
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\ntopColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`];\n",
+				"statementWithoutInit":
+					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n"
+			}
+		},
+		{
+			"name": "Ac_music"
+		}
+	]
+}
+</script>
+
+<script type="application/json" id="js.json">
+{
+	"blocks": [
+		{
+			"name": "button",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"buttons\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"sectionPriority": 10,
+				"clauseAnd": "`$[i] ? 'this.get(\"button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + '\")' : ''`"
+			}
+		},
+		{
+			"name": "motor",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement": "this.set(\"motor.left\", `$[0].toFixed(2)`);\nthis.set(\"motor.right\", `$[1].toFixed(2)`);\n"
+			}
+		}
 	]
 }
 </script>

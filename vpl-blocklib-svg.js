@@ -316,9 +316,15 @@ A3a.vpl.Canvas.prototype.mousedragSVGRotating = function (block, dragIndex, aux,
 	block.param[dragIndex] = Math.round(val / f);
 };
 
+/** Draw a block defined with SVG
+	@param {Object} uiConfig
+	@param {Object} aux block description in uiConfig
+	@param {A3a.vpl.Block} block
+	@return {void}
+*/
 A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 	var f = A3a.vpl.Canvas.decodeURI(aux["svg"][0]["uri"]).f;
-	this.loadSVG(f, uiConfig.svg[f]);
+	this.loadSVG(f, uiConfig.rsrc[f]);
 	var displacements = this.getDisplacements(aux, f, block.param);
 	if (aux["diffwheelmotion"] && aux["diffwheelmotion"]["id"]) {
 		var dw = aux["diffwheelmotion"];
@@ -328,7 +334,7 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 		var adjSc = dw["adjscale"] || 1;
 		var color = dw["color"] || "black";
 		var linewidth = dw["linewidth"] === undefined ? 1 : dw["linewidth"];
-		this.loadSVG(f, uiConfig.svg[f]);
+		this.loadSVG(f, uiConfig.rsrc[f]);
 		var bnds = this.clientData.svg[f].getElementBounds(robotId);
 		var r = (0.5 + dx) * (bnds.xmax - bnds.xmin) * adjSc;
 		var ixSlider = (aux["buttons"] ? aux["buttons"].length : 0) +
@@ -346,7 +352,7 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 	}
 	aux["svg"].forEach(function (el) {
 		var d = A3a.vpl.Canvas.decodeURI(el["uri"]);
-		this.drawSVG(d.f, uiConfig.svg[d.f],
+		this.drawSVG(d.f, uiConfig.rsrc[d.f],
 			{
 				elementId: d.id,
 				style: this.getStyles(aux, block),
@@ -356,6 +362,18 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 	}, this);
 };
 
+/** Handle a mousedown event in a block defined with SVG
+	@param {Object} uiConfig
+	@param {Object} aux
+	@param {A3a.vpl.Canvas} canvas
+	@param {A3a.vpl.Block} block
+	@param {number} width
+	@param {number} height
+	@param {number} left
+	@param {number} top
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev
+	@return {?number}
+*/
 A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width, height, left, top, ev) {
 	var filename = A3a.vpl.Canvas.decodeURI(aux["svg"][0]["uri"]).f;
 	var ix0 = 0;
@@ -398,6 +416,19 @@ A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width
 	return null;
 };
 
+/** Handle a mousedrag event in a block defined with SVG
+	@param {Object} uiConfig
+	@param {Object} aux
+	@param {A3a.vpl.Canvas} canvas
+	@param {A3a.vpl.Block} block
+	@param {number} dragIndex
+	@param {number} width
+	@param {number} height
+	@param {number} left
+	@param {number} top
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev
+	@return {void}
+*/
 A3a.vpl.Canvas.mousedragBlockSVG = function (uiConfig, aux,
 	canvas, block, dragIndex, width, height, left, top, ev) {
 	var ix0 = (aux["buttons"] ? aux["buttons"].length : 0) +
@@ -414,6 +445,164 @@ A3a.vpl.Canvas.mousedragBlockSVG = function (uiConfig, aux,
 		return;
 	}
 	ix0 += n;
+};
+
+/** Load blocks from uiConfig["blocks"] json description,
+	overriding existing information in lib
+	(don't override draw, mousedown and mousedrag; override code fragments as whole
+	sets for a language)
+	@param {Object} uiConfig
+	@param {Array.<Object>} blocks
+	@param {Array.<A3a.vpl.BlockTemplate>} lib
+	@return {void}
+*/
+A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
+	/** Find block specified by name in lib
+		@param {string} name
+		@return {number} index in lib, or -1 if not found
+	*/
+	function findBlock(name) {
+		for (var i = 0; i < lib.length; i++) {
+			if (lib[i].name === name) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/** Substitute inline expressions {expr} in strings of input array, where expr is a
+		JavaScript expression; variable $ contains the block parameters
+		@param {Array.<string>} fmtArray
+		@param {A3a.vpl.Block} block
+		@return {Array.<string>}
+	*/
+	function substInlineA(fmtArray, block) {
+		return fmtArray.map(function (fmt) {
+			return A3a.vpl.BlockTemplate.substInline(fmt, block);
+		});
+	}
+
+	blocks.forEach(function (b) {
+		var name = /** @type {string} */(b["name"]);
+		if (!name) {
+			throw "Missing block name";
+		}
+		var blockIndex = findBlock(name);
+		var blockTemplate0 = blockIndex >= 0 ? lib[blockIndex] : null;
+
+		var type = blockTemplate0 ? blockTemplate0.type : A3a.vpl.blockType.undef;
+		if (b["type"] || !blockTemplate0) {
+			switch (b["type"]) {
+			case "event":
+				type = A3a.vpl.blockType.event;
+				break;
+			case "action":
+				type = A3a.vpl.blockType.action;
+				break;
+			case "state":
+				type = A3a.vpl.blockType.state;
+				break;
+			case "comment":
+				type = A3a.vpl.blockType.comment;
+				break;
+			default:
+				throw "Unknown block type " + b["type"];
+			}
+		}
+
+		/** @type {Array.<A3a.vpl.mode>} */
+		var modes = blockTemplate0 ? blockTemplate0.modes : [];
+		if (b["modes"] || !blockTemplate0) {
+			b["modes"].forEach(function (m) {
+				switch (m) {
+				case "basic":
+					modes.push(A3a.vpl.mode.basic);
+					break;
+				case "advanced":
+					modes.push(A3a.vpl.mode.advanced);
+					break;
+				default:
+					throw "Unknown block mode " + m;
+				}
+			});
+		}
+
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
+		var draw = blockTemplate0
+			? blockTemplate0.draw
+			: function (canvas, block) {
+				canvas.drawBlockSVG(uiConfig, b, block);
+			};
+
+		/** @type {?A3a.vpl.BlockTemplate.mousedownFun} */
+		var mousedown = blockTemplate0
+			? blockTemplate0.mousedown
+			: function (canvas, block, width, height, left, top, ev) {
+				return A3a.vpl.Canvas.mousedownBlockSVG(uiConfig, b,
+					canvas, block, width, height, left, top, ev);
+			};
+
+		/** @type {?A3a.vpl.BlockTemplate.mousedragFun} */
+		var mousedrag = blockTemplate0
+			? blockTemplate0.mousedrag
+			: function (canvas, block, dragIndex, width, height, left, top, ev) {
+				A3a.vpl.Canvas.mousedragBlockSVG(uiConfig, b,
+					canvas, block, dragIndex, width, height, left, top, ev);
+			};
+
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		var genCode = blockTemplate0 ? blockTemplate0.genCode : {};
+		["aseba", "l2", "js"].forEach(function (lang) {
+			if (b[lang]) {
+				genCode[lang] = function (block) {
+					var c = {};
+					b[lang]["initVarDecl"] && (c.initVarDecl = substInlineA(b[lang]["initVarDecl"], block));
+					b[lang]["initCodeDecl"] && (c.initCodeDecl = substInlineA(b[lang]["initCodeDecl"], block));
+					b[lang]["initCodeExec"] && (c.initCodeExec = substInlineA(b[lang]["initCodeExec"], block));
+					b[lang]["sectionBegin"] && (c.sectionBegin = A3a.vpl.BlockTemplate.substInline(b[lang]["sectionBegin"], block));
+					b[lang]["sectionEnd"] && (c.sectionEnd = A3a.vpl.BlockTemplate.substInline(b[lang]["sectionEnd"], block));
+					c.sectionPriority = /** @type {number} */(b[lang]["sectionPriority"]) || 1;
+					b[lang]["clauseInit"] && (c.clauseInit = A3a.vpl.BlockTemplate.substInline(b[lang]["clauseInit"], block));
+					if (b[lang]["clauseAnd"]) {
+						var clause = "";
+						block.param.forEach(function (p, i) {
+							var cl = A3a.vpl.BlockTemplate.substInline(b[lang]["clauseAnd"], block, i);
+							if (cl) {
+								clause += (clause.length > 0 ? " " + A3a.vpl.Program.andOperatorCode[lang] + " " : "") + cl;
+							}
+						});
+						c.clause = /** @type {string} */(clause || "1 == 1");
+					} else if (b[lang]["clause"]) {
+		 				c.clause = A3a.vpl.BlockTemplate.substInline(b[lang]["clause"], block);
+					}
+					c.clauseOptional = /** @type {boolean} */(b[lang]["clauseOptional"]) || false;
+					b[lang]["statement"] && (c.statement = A3a.vpl.BlockTemplate.substInline(b[lang]["statement"], block));
+					b[lang]["error"] && (c.clause = A3a.vpl.BlockTemplate.substInline(b["error"]["error"], block));
+					return c;
+				};
+			}
+		});
+
+		/** @type {A3a.vpl.BlockTemplate.params} */
+		var p = {
+			name: name,
+			type: type,
+			modes: modes,
+			defaultParam: blockTemplate0
+				? blockTemplate0.defaultParam
+				: function () { return b["defaultParameters"]; },
+			draw: draw,
+			mousedown: mousedown,
+			mousedrag: mousedrag,
+			genCode: genCode
+		};
+		if (blockIndex >= 0) {
+			// replace previous blockTemplate
+			lib[blockIndex] = new A3a.vpl.BlockTemplate(p);
+		} else {
+			lib.push(new A3a.vpl.BlockTemplate(p));
+		}
+	});
 };
 
 /** Replace hard-coded blocks with blocks defined in uiConfig
@@ -451,115 +640,15 @@ A3a.vpl.patchSVG = function (uiConfig) {
 		};
 	};
 
-	/** Substitute inline expressions {expr} in strings of input array, where expr is a
-		JavaScript expression; variable $ contains the block parameters
-		@param {Array.<string>} fmtArray
-		@param {A3a.vpl.Block} block
-		@return {Array.<string>}
-	*/
-	function substInlineA(fmtArray, block) {
-		return fmtArray.map(function (fmt) {
-			return A3a.vpl.BlockTemplate.substInline(fmt, block);
-		});
-	}
-
-	// build array of block templates from definitions in uiConfig.blocks and svg in uiConfig.svg
+	// build array of block templates from definitions in uiConfig.blocks and svg in uiConfig.rsrc
 	/** @type {Array.<A3a.vpl.BlockTemplate>} */
 	var lib = [];
-	uiConfig["blocks"].forEach(function (b) {
-		var type = A3a.vpl.blockType.undef;
-		switch (b["type"]) {
-		case "event":
-			type = A3a.vpl.blockType.event;
-			break;
-		case "action":
-			type = A3a.vpl.blockType.action;
-			break;
-		case "state":
-			type = A3a.vpl.blockType.state;
-			break;
-		case "comment":
-			type = A3a.vpl.blockType.comment;
-			break;
-		default:
-			throw "Unknown block type " + b["type"];
-		}
+	A3a.vpl.loadBlockOverlay(uiConfig, uiConfig["blocks"], lib);
 
-		/** @type {Array.<A3a.vpl.mode>} */
-		var modes = [];
-		b["modes"].forEach(function (m) {
-			switch (m) {
-			case "basic":
-				modes.push(A3a.vpl.mode.basic);
-				break;
-			case "advanced":
-				modes.push(A3a.vpl.mode.advanced);
-				break;
-			default:
-				throw "Unknown block mode " + m;
-			}
-		});
-
-		/** @type {A3a.vpl.BlockTemplate.drawFun} */
-		var draw = function (canvas, block) {
-			canvas.drawBlockSVG(uiConfig, b, block);
-		};
-
-		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
-		var mousedown = function (canvas, block, width, height, left, top, ev) {
-			return A3a.vpl.Canvas.mousedownBlockSVG(uiConfig, b,
-				canvas, block, width, height, left, top, ev);
-		};
-
-		/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
-		var mousedrag = function (canvas, block, dragIndex, width, height, left, top, ev) {
-			A3a.vpl.Canvas.mousedragBlockSVG(uiConfig, b,
-				canvas, block, dragIndex, width, height, left, top, ev);
-		};
-
-		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
-		var genCode = {};
-		["aseba", "l2"].forEach(function (lang) {
-			genCode[lang] = function (block) {
-				var c = {};
-				b[lang] && b[lang]["initVarDecl"] && (c.initVarDecl = substInlineA(b[lang]["initVarDecl"], block));
-				b[lang] && b[lang]["initCodeDecl"] && (c.initCodeDecl = substInlineA(b[lang]["initCodeDecl"], block));
-				b[lang] && b[lang]["initCodeExec"] && (c.initCodeExec = substInlineA(b[lang]["initCodeExec"], block));
-				b[lang] && b[lang]["sectionBegin"] && (c.sectionBegin = A3a.vpl.BlockTemplate.substInline(b[lang]["sectionBegin"], block));
-				b[lang] && b[lang]["sectionEnd"] && (c.sectionEnd = A3a.vpl.BlockTemplate.substInline(b[lang]["sectionEnd"], block));
-				c.sectionPriority = /** @type {number} */(b[lang] && b[lang]["sectionPriority"]) || 1;
-				b[lang] && b[lang]["clauseInit"] && (c.clauseInit = A3a.vpl.BlockTemplate.substInline(b[lang]["clauseInit"], block));
-				if (b[lang] && b[lang]["clauseAnd"]) {
-					var clause = "";
-					block.param.forEach(function (p, i) {
-						var cl = A3a.vpl.BlockTemplate.substInline(b[lang]["clauseAnd"], block, i);
-						if (cl) {
-								clause += (clause.length > 0 ? " " + A3a.vpl.Program.andOperatorCode[lang] + " " : "") + cl;
-						}
-					});
-					c.clause = /** @type {string} */(clause || "1 == 1");
-				} else if (b[lang] && b[lang]["clause"]) {
-	 				c.clause = A3a.vpl.BlockTemplate.substInline(b[lang]["clause"], block);
-				}
-				c.clauseOptional = /** @type {boolean} */(b[lang] && b[lang]["clauseOptional"]) || false;
-				b[lang] && b[lang]["statement"] && (c.statement = A3a.vpl.BlockTemplate.substInline(b[lang]["statement"], block));
-				b[lang] && b[lang]["error"] && (c.clause = A3a.vpl.BlockTemplate.substInline(b["error"]["error"], block));
-				return c;
-			};
-		});
-
-		/** @type {A3a.vpl.BlockTemplate.params} */
-		var p = {
-			name: b["name"],
-			type: type,
-			modes: modes,
-			defaultParam: function () { return b["defaultParameters"]; },
-			draw: draw,
-			mousedown: mousedown,
-			mousedrag: mousedrag,
-			genCode: genCode
-		};
-		lib.push(new A3a.vpl.BlockTemplate(p));
+	// apply overlays
+	(uiConfig["overlays"] || []).forEach(function (filename) {
+		var overlay = /** @type {Object} */(JSON.parse(uiConfig.rsrc[filename]));
+		A3a.vpl.loadBlockOverlay(overlay, overlay["blocks"], lib);
 	});
 
 	A3a.vpl.BlockTemplate.lib = lib;

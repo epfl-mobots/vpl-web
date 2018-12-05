@@ -116,6 +116,10 @@ function vplLoadResourcesInScripts(rootFilename, getAuxiliaryFilenames, onLoad, 
 			txt = document.getElementById(filename).textContent;
 			rsrc[filename] = txt;
 		});
+		uiConfig["overlays"].forEach(function (filename) {
+			txt = document.getElementById(filename).textContent;
+			rsrc[filename] = txt;
+		});
 		onLoad(uiConfig, rsrc);
 	} catch (e) {
 		onError();
@@ -385,13 +389,16 @@ window.addEventListener("load", function () {
 		"ui.json",
 		function (obj) {
 			// get subfiles
-			return obj["svgFilenames"];
+			return obj["svgFilenames"].concat(obj["overlays"] || []);
 		},
 		function (uiConfig, rsrc) {
 			// success
-			uiConfig.svg = {};
+			uiConfig.rsrc = {};
 			uiConfig["svgFilenames"].forEach(function (filename) {
-				uiConfig.svg[filename] = rsrc[filename];
+				uiConfig.rsrc[filename] = rsrc[filename];
+			});
+			uiConfig["overlays"].forEach(function (filename) {
+				uiConfig.rsrc[filename] = rsrc[filename];
 			});
 			vplSetup(uiConfig);
 		},

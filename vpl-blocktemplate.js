@@ -127,14 +127,14 @@ A3a.vpl.BlockTemplate.sectionPriFun;
 		type: A3a.vpl.blockType,
 		modes: (Array.<A3a.vpl.mode>|undefined),
 		noState: (boolean|undefined),
-		defaultParam: (A3a.vpl.BlockTemplate.defaultParam|undefined),
-		exportParam: (A3a.vpl.BlockTemplate.exportParam|undefined),
-		validate: (A3a.vpl.BlockTemplate.validateFun|undefined),
-		genCode: (Object<string,A3a.vpl.BlockTemplate.genCodeFun>|undefined),
-		draw: (A3a.vpl.BlockTemplate.drawFun|undefined),
-		mousedown: (A3a.vpl.BlockTemplate.mousedownFun|undefined),
-		mousedrag: (A3a.vpl.BlockTemplate.mousedragFun|undefined),
-		changeMode: (A3a.vpl.BlockTemplate.changeModeFun|undefined),
+		defaultParam: (A3a.vpl.BlockTemplate.defaultParam|null|undefined),
+		exportParam: (A3a.vpl.BlockTemplate.exportParam|null|undefined),
+		validate: (A3a.vpl.BlockTemplate.validateFun|null|undefined),
+		genCode: (Object<string,A3a.vpl.BlockTemplate.genCodeFun>|null|undefined),
+		draw: (A3a.vpl.BlockTemplate.drawFun|null|undefined),
+		mousedown: (A3a.vpl.BlockTemplate.mousedownFun|null|undefined),
+		mousedrag: (A3a.vpl.BlockTemplate.mousedragFun|null|undefined),
+		changeMode: (A3a.vpl.BlockTemplate.changeModeFun|null|undefined),
 		sectionPriority: (A3a.vpl.BlockTemplate.sectionPriFun|undefined)
 	}}
 */
