@@ -190,15 +190,15 @@ function vplSetup(uiConfig) {
 	var mirror = false;
 	/** @type {?Array.<number>} */
 	var transform = null;
-	var opt = getQueryOption("scale").trim() || "";
+	opt = getQueryOption("scale").trim() || "";
 	if (/^\d+(\.\d*)?$/.test(opt)) {
 		scale = parseFloat(opt);
 	}
-	var opt = getQueryOption("rotation").trim() || "";
+	opt = getQueryOption("rotation").trim() || "";
 	if (/^-?\d+(\.\d*)?$/.test(opt)) {
 		rotation = parseFloat(opt) * Math.PI / 180;
 	}
-	var opt = getQueryOption("mirror").trim() || "";
+	opt = getQueryOption("mirror").trim() || "";
 	mirror = opt === "true";
 	if (scale !== 1 || rotation !== 0 || mirror) {
 		transform = [

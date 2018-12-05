@@ -301,9 +301,9 @@ A3a.vpl.Canvas = function (canvas) {
 							// draw frame around target
 							ctx.save();
 							if (self.transform) {
-								ctx.translate(self.canvas.width / 2, self.canvas.height / 2);
+								ctx.translate(self.width / 2, self.height / 2);
 								CanvasRenderingContext2D.prototype.transform.apply(ctx, self.transform);
-								ctx.translate(-self.canvas.width / 2, -self.canvas.height / 2);
+								ctx.translate(-self.width / 2, -self.height / 2);
 							}
 							dropTarget.applyClipping(ctx);
 							ctx.lineWidth = 2 * self.dims.blockLineWidth;
@@ -313,9 +313,9 @@ A3a.vpl.Canvas = function (canvas) {
 						}
 						ctx.save();
 						if (self.transform) {
-							ctx.translate(self.canvas.width / 2, self.canvas.height / 2);
+							ctx.translate(self.width / 2, self.height / 2);
 							CanvasRenderingContext2D.prototype.transform.apply(ctx, self.transform);
-							ctx.translate(-self.canvas.width / 2, -self.canvas.height / 2);
+							ctx.translate(-self.width / 2, -self.height / 2);
 						}
 						ctx.globalAlpha = 0.5;
 						item.draw(ctx, mouseEvent.x - x0, mouseEvent.y - y0);
@@ -381,12 +381,22 @@ A3a.vpl.Canvas.prototype.setFilter = function (filter) {
 */
 A3a.vpl.Canvas.prototype.applyTransform = function (p) {
 	var T = this.transform;
-	return T
- 		? [
+	if (T) {
+		// T -> translate(w/2,h/2) T translate(-w/2,-h/2)
+		var w2 = this.width / 2;
+		var h2 = this.height / 2;
+		T = T.slice(0, 4).concat(
+			T[4] - w2 * T[0] - h2 * T[2] + w2,
+			T[5] - w2 * T[1] - h2 * T[3] + h2
+		);
+
+		return [
 			T[0] * p[0] + T[2] * p[1] + T[4],
 			T[1] * p[0] + T[3] * p[1] + T[5]
-		]
-		: p;
+		];
+	} else {
+		return p;
+	}
 };
 
 /** Apply inverse transform to point
@@ -397,11 +407,11 @@ A3a.vpl.Canvas.prototype.applyInverseTransform = function (p) {
 	var T = this.transform;
 	if (T) {
 		// T -> translate(w/2,h/2) T translate(-w/2,-h/2)
-		var w = this.canvas.width / 2;
-		var h = this.canvas.height / 2;
+		var w2 = this.width / 2;
+		var h2 = this.height / 2;
 		T = T.slice(0, 4).concat(
-			T[4] - w * T[0] - h * T[2] + w,
-			T[5] - w * T[1] - h * T[3] + h
+			T[4] - w2 * T[0] - h2 * T[2] + w2,
+			T[5] - w2 * T[1] - h2 * T[3] + h2
 		);
 
 		var det = T[0] * T[3] - T[1] * T[2];
@@ -736,9 +746,9 @@ A3a.vpl.Canvas.prototype.redraw = function () {
 	this.erase();
 	if (this.transform) {
 		this.ctx.save();
-		this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+		this.ctx.translate(this.width / 2, this.height / 2);
 		CanvasRenderingContext2D.prototype.transform.apply(this.ctx, this.transform);
-		this.ctx.translate(-this.canvas.width / 2, -this.canvas.height / 2);
+		this.ctx.translate(-this.width / 2, -this.height / 2);
 	}
 	this.items.forEach(function (item) {
 		item.draw(this.ctx);
