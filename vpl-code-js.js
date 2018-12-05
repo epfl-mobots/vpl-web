@@ -13,7 +13,7 @@
 */
 A3a.vpl.Program.generateCode["js"] = function (program, runBlocks) {
 	var c = program.program.map(function (eh) {
-		return eh.generateCode("js", "&&");
+		return eh.generateCode("js");
 	});
 	/** @type {Array.<string>} */
 	var initVarDecl = ["var cond0;\nvar cond;\n"];
@@ -85,7 +85,7 @@ A3a.vpl.Program.generateCode["js"] = function (program, runBlocks) {
 		runBlocks.forEach(function (block) {
 			eh.setBlock(block, null, null);
 		});
-		runBlocksCode = eh.generateCode("l2", "&&").statement;
+		runBlocksCode = eh.generateCode("l2").statement;
 	}
 
 	// build program from fragments:
@@ -165,3 +165,5 @@ A3a.vpl.Program.generateCode["js"] = function (program, runBlocks) {
 
 	return str;
 };
+
+A3a.vpl.Program.andOperatorCode["js"] = "&&";

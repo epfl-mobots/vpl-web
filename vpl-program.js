@@ -43,6 +43,9 @@ A3a.vpl.Program = function (mode) {
 /** @type {Object<string,function(A3a.vpl.Program,Array.<A3a.vpl.Block>=):string>} */
 A3a.vpl.Program.generateCode = {};
 
+/** @type {Object<string,string>} */
+A3a.vpl.Program.andOperatorCode = {};
+
 /** @type {Array.<string>} */
 A3a.vpl.Program.basicBlocks = [];
 

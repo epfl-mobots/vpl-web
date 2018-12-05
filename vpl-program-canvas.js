@@ -496,7 +496,7 @@ A3a.vpl.Program.prototype.addControl = function (controlBar, id, draw, mousedown
 */
 A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// make sure code is up-to-date to have error info
-	this.getCode(A3a.vpl.defaultLanguage);
+	this.getCode(this.currentLanguage);
 
 	var canvasSize = canvas.getSize();
 	var renderingState = /** @type {A3a.vpl.Program.CanvasRenderingState} */(canvas.state);

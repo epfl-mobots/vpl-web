@@ -13,7 +13,7 @@
 */
 A3a.vpl.Program.generateCode["aseba"] = function (program, runBlocks) {
 	var c = program.program.map(function (eh) {
-		return eh.generateCode("aseba", "and");
+		return eh.generateCode("aseba");
 	});
 	/** @type {Array.<string>} */
 	var initVarDecl = [];
@@ -80,7 +80,7 @@ A3a.vpl.Program.generateCode["aseba"] = function (program, runBlocks) {
 		runBlocks.forEach(function (block) {
 			eh.setBlock(block, null, null);
 		});
-		var runBlocksCode = eh.generateCode("aseba", "and");
+		var runBlocksCode = eh.generateCode("aseba");
 		// check if initVarDecl and initCodeDecl are defined in the main program
 		var runBlockPrerequisite = true;
 		runBlocksCode.initVarDecl.forEach(function (fr) {
@@ -180,3 +180,5 @@ A3a.vpl.Program.generateCode["aseba"] = function (program, runBlocks) {
 
 	return str;
 };
+
+A3a.vpl.Program.andOperatorCode["aseba"] = "and";

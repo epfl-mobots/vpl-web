@@ -202,10 +202,9 @@ A3a.vpl.EventHandler.prototype.fixBlockContainerRefs = function () {
 
 /** Generate code
 	@param {string} language
-	@param {string} andOp operator for "and" ("and", "&&", etc.)
 	@return {A3a.vpl.compiledCode}
 */
-A3a.vpl.EventHandler.prototype.generateCode = function (language, andOp) {
+A3a.vpl.EventHandler.prototype.generateCode = function (language) {
 	if (this.disabled || this.isEmpty()) {
 		return {};
 	}
@@ -316,9 +315,10 @@ A3a.vpl.EventHandler.prototype.generateCode = function (language, andOp) {
 		return {error: err};
 	}
 
+	var andOp = A3a.vpl.Program.andOperatorCode["lang"];
 	var clause = clauses.length === 0 ? ""
 		: clauses.length === 1 ? clauses[0]
-		: clauses.map(function (c) { return "(" + c + ")"; }).join(" " + (andOp || "and") + " ");
+		: clauses.map(function (c) { return "(" + c + ")"; }).join(" " + andOp + " ");
 	var str = "";
 	for (var i = 0; i < this.actions.length; i++) {
 		var code = this.actions[i].generateCode(language);

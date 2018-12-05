@@ -534,7 +534,7 @@ A3a.vpl.patchSVG = function (uiConfig) {
 					block.param.forEach(function (p, i) {
 						var cl = A3a.vpl.BlockTemplate.substInline(b[lang]["clauseAnd"], block, i);
 						if (cl) {
-							clause += (clause.length > 0 ? " and " : "") + cl;
+								clause += (clause.length > 0 ? " " + A3a.vpl.Program.andOperatorCode[lang] + " " : "") + cl;
 						}
 					});
 					c.clause = /** @type {string} */(clause || "1 == 1");

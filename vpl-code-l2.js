@@ -13,7 +13,7 @@
 */
 A3a.vpl.Program.generateCode["l2"] = function (program, runBlocks) {
 	var c = program.program.map(function (eh) {
-		return eh.generateCode("l2", "&&");
+		return eh.generateCode("l2");
 	});
 	/** @type {Array.<string>} */
 	var initVarDecl = [];
@@ -80,7 +80,7 @@ A3a.vpl.Program.generateCode["l2"] = function (program, runBlocks) {
 		runBlocks.forEach(function (block) {
 			eh.setBlock(block, null, null);
 		});
-		runBlocksCode = eh.generateCode("l2", "&&").statement;
+		runBlocksCode = eh.generateCode("l2").statement;
 	}
 
 	// build program from fragments:
@@ -157,3 +157,5 @@ A3a.vpl.Program.generateCode["l2"] = function (program, runBlocks) {
 
 	return str;
 };
+
+A3a.vpl.Program.andOperatorCode["l2"] = "&&";
