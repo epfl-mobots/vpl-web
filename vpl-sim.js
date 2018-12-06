@@ -41,6 +41,9 @@ window["installRobotSimulator"] = function (options) {
 			if (options && options.canvasFilter) {
 				sim.simCanvas.setFilter(options.canvasFilter);
 			}
+			if (options && options.canvasTransform) {
+				sim.simCanvas.transform = options.canvasTransform;
+			}
 			window["vplSim"] = {
 				robot: robot,
 				sim: sim,

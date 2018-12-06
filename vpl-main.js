@@ -231,7 +231,7 @@ function vplSetup(uiConfig) {
 		window["vplRun"] && window["vplRun"].init(language);
 		break;
  	case "sim":
-		window["installRobotSimulator"]({canvasFilter: filter});
+		window["installRobotSimulator"]({canvasFilter: filter, canvasTransform: transform});
 		window["vplRun"] && window["vplRun"].init(language);
 		break;
 	default:
