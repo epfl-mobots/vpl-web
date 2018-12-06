@@ -1031,11 +1031,14 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 				var y = (height / 2 - (ev.y - top)) / playgroundView.scale;
 				switch (dragIndex) {
 				case 0:
+					var pt0 = self.robot.pos;
 					self.robot["setPosition"]([
 							self.robot.pos[0] + x - self.simCanvas.state.x,
 							self.robot.pos[1] + y - self.simCanvas.state.y
 						],
 						self.robot.theta);
+					self.drawPen(A3a.vpl.Robot.TraceShape.line,
+						[pt0[0], pt0[1], self.robot.pos[0], self.robot.pos[1]]);
 					break;
 				case 1:
 					var dtheta = Math.atan2(y - self.robot.pos[1], x - self.robot.pos[0]) -
