@@ -173,5 +173,26 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 	return str;
 };
 
+/**
+	@inheritDoc
+*/
+A3a.vpl.CodeGeneratorJS.prototype.generateMissingCodeForBlock = function (block) {
+	var code = "// missing JavaScript implementation for block " + block.blockTemplate.name + "\n";
+	switch (block.blockTemplate.type) {
+	case A3a.vpl.blockType.event:
+	case A3a.vpl.blockType.state:
+		return {
+			clauseInit: code,
+			clause: "true",
+			sectionPriority: 1
+		};
+	case A3a.vpl.blockType.action:
+		return {
+			statement: code
+		};
+	default:
+		return {};
+	}
+};
 
 A3a.vpl.Program.codeGenerator["js"] = new A3a.vpl.CodeGeneratorJS();

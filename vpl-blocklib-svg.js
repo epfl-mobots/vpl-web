@@ -568,7 +568,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 						block.param.forEach(function (p, i) {
 							var cl = A3a.vpl.BlockTemplate.substInline(b[lang]["clauseAnd"], block, i);
 							if (cl) {
-								clause += (clause.length > 0 ? " " + A3a.vpl.Program.andOperatorCode[lang] + " " : "") + cl;
+								clause += (clause.length > 0 ? " " + A3a.vpl.Program.codeGenerator[lang].andOperator + " " : "") + cl;
 							}
 						});
 						c.clause = /** @type {string} */(clause || "1 == 1");

@@ -185,3 +185,11 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 A3a.vpl.CodeGenerator.prototype.generate = function (program, runBlocks) {
 	throw "internal";	// base class method shouldn't be called
 };
+
+/** Generate code block when the implementation is missing
+	@param {A3a.vpl.Block} block
+	@return {A3a.vpl.compiledCode}
+*/
+A3a.vpl.CodeGenerator.prototype.generateMissingCodeForBlock = function (block) {
+	throw "internal";	// base class method shouldn't be called
+};

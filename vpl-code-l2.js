@@ -165,4 +165,26 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 	return str;
 };
 
+/**
+	@inheritDoc
+*/
+A3a.vpl.CodeGeneratorL2.prototype.generateMissingCodeForBlock = function (block) {
+	var code = "// missing L2 implementation for block " + block.blockTemplate.name + "\n";
+	switch (block.blockTemplate.type) {
+	case A3a.vpl.blockType.event:
+	case A3a.vpl.blockType.state:
+		return {
+			clauseInit: code,
+			clause: "true",
+			sectionPriority: 1
+		};
+	case A3a.vpl.blockType.action:
+		return {
+			statement: code
+		};
+	default:
+		return {};
+	}
+};
+
 A3a.vpl.Program.codeGenerator["l2"] = new A3a.vpl.CodeGeneratorL2();

@@ -85,5 +85,7 @@ A3a.vpl.compiledCode;
 A3a.vpl.Block.prototype.generateCode = function (language) {
 	return this.disabled
 		? {}
-		: this.blockTemplate.genCode[language](this);
+		: this.blockTemplate.genCode[language]
+			? this.blockTemplate.genCode[language](this)
+			: A3a.vpl.Program.codeGenerator[language].generateMissingCodeForBlock(this);
 };

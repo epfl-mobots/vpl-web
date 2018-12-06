@@ -188,4 +188,26 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 	return str;
 };
 
+/**
+	@inheritDoc
+*/
+A3a.vpl.CodeGeneratorA3a.prototype.generateMissingCodeForBlock = function (block) {
+	var code = "# missing Aseba implementation for block " + block.blockTemplate.name + "\n";
+	switch (block.blockTemplate.type) {
+	case A3a.vpl.blockType.event:
+	case A3a.vpl.blockType.state:
+		return {
+			clauseInit: code,
+			clause: "1 == 1",
+			sectionPriority: 1
+		};
+	case A3a.vpl.blockType.action:
+		return {
+			statement: code
+		};
+	default:
+		return {};
+	}
+};
+
 A3a.vpl.Program.codeGenerator["aseba"] = new A3a.vpl.CodeGeneratorA3a();
