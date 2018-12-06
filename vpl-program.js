@@ -40,11 +40,8 @@ A3a.vpl.Program = function (mode) {
 	this.disabledUI = [];
 };
 
-/** @type {Object<string,function(A3a.vpl.Program,Array.<A3a.vpl.Block>=):string>} */
-A3a.vpl.Program.generateCode = {};
-
-/** @type {Object<string,string>} */
-A3a.vpl.Program.andOperatorCode = {};
+/** @type {Object<string,A3a.vpl.CodeGenerator>} */
+A3a.vpl.Program.codeGenerator = {};
 
 /** @type {Array.<string>} */
 A3a.vpl.Program.basicBlocks = [];
@@ -372,7 +369,8 @@ A3a.vpl.Program.prototype.importFromJSON = function (json, updateFun) {
 */
 A3a.vpl.Program.prototype.getCode = function (language) {
 	if (typeof this.code[language] !== "string") {
-		this.code[language] = A3a.vpl.Program.generateCode[language](this);
+		var codeGenerator = A3a.vpl.Program.codeGenerator[language];
+		this.code[language] = codeGenerator.generate(this);
 	}
 	return this.code[language];
 };
@@ -383,7 +381,8 @@ A3a.vpl.Program.prototype.getCode = function (language) {
 	@return {string}
 */
 A3a.vpl.Program.prototype.codeForActions = function (eventHandler, language) {
-	return A3a.vpl.Program.generateCode[language](this, eventHandler.actions);
+	var codeGenerator = A3a.vpl.Program.codeGenerator[language];
+	return codeGenerator.generate(this, eventHandler.actions);
 };
 
 /** Generate code for the actions of an event handler
@@ -392,5 +391,6 @@ A3a.vpl.Program.prototype.codeForActions = function (eventHandler, language) {
 	@return {string}
 */
 A3a.vpl.Program.prototype.codeForBlock = function (block, language) {
-	return A3a.vpl.Program.generateCode[language](this, [block]);
+	var codeGenerator = A3a.vpl.Program.codeGenerator[language];
+	return codeGenerator.generate(this, [block]);
 };

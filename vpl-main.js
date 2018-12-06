@@ -238,7 +238,7 @@ function vplSetup(uiConfig) {
 		window["vplRun"] = null;
 	}
 
-	if (!A3a.vpl.Program.generateCode[language]) {
+	if (!A3a.vpl.Program.codeGenerator[language]) {
 		throw "Unsupported language " + language;
 	}
 

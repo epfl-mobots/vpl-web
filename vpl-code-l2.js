@@ -5,16 +5,23 @@
 	For internal use only
 */
 
-/** Generate l2 code for the whole program
-	@param {A3a.vpl.Program} program
-	@param {Array.<A3a.vpl.Block>=} runBlocks if defined, override the initialization
-	code
-	@return {string}
+/** Code generator for L2
+	@constructor
+	@extends {A3a.vpl.CodeGenerator}
 */
-A3a.vpl.Program.generateCode["l2"] = function (program, runBlocks) {
+A3a.vpl.CodeGeneratorL2 = function () {
+	A3a.vpl.CodeGenerator.call(this, "l2", "&&");
+};
+A3a.vpl.CodeGeneratorL2.prototype = Object.create(A3a.vpl.CodeGenerator.prototype);
+A3a.vpl.CodeGeneratorL2.prototype.constructor = A3a.vpl.CodeGeneratorL2;
+
+/**
+	@inheritDoc
+*/
+A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 	var c = program.program.map(function (eh) {
-		return eh.generateCode("l2");
-	});
+		return this.generateCodeForEventHandler(eh);
+	}, this);
 	/** @type {Array.<string>} */
 	var initVarDecl = [];
 	/** @type {Array.<string>} */
@@ -80,7 +87,7 @@ A3a.vpl.Program.generateCode["l2"] = function (program, runBlocks) {
 		runBlocks.forEach(function (block) {
 			eh.setBlock(block, null, null);
 		});
-		runBlocksCode = eh.generateCode("l2").statement;
+		runBlocksCode =  this.generateCodeForEventHandler(eh).statement;
 	}
 
 	// build program from fragments:
@@ -158,4 +165,4 @@ A3a.vpl.Program.generateCode["l2"] = function (program, runBlocks) {
 	return str;
 };
 
-A3a.vpl.Program.andOperatorCode["l2"] = "&&";
+A3a.vpl.Program.codeGenerator["l2"] = new A3a.vpl.CodeGeneratorL2();

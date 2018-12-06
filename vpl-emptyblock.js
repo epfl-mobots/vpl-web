@@ -18,7 +18,7 @@ A3a.vpl.EmptyBlock = function (blockType, eventHandlerContainer, positionInConta
 		eventHandlerContainer,
 		positionInContainer);
 };
-A3a.vpl.EmptyBlock.prototype = Object.create(A3a.vpl.Block);
+A3a.vpl.EmptyBlock.prototype = Object.create(A3a.vpl.Block.prototype);
 A3a.vpl.EmptyBlock.prototype.constructor = A3a.vpl.EmptyBlock;
 
 /** @const */

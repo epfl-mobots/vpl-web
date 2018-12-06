@@ -33,6 +33,7 @@ JS = \
 	vpl-emptyblock.js \
 	vpl-eventhandler.js \
 	vpl-program.js \
+	vpl-code.js \
 	vpl-code-aseba.js \
 	vpl-code-l2.js \
 	vpl-code-js.js \

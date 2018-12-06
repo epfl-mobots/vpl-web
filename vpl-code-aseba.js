@@ -5,16 +5,23 @@
 	For internal use only
 */
 
-/** Generate Aseba code for the whole program
-	@param {A3a.vpl.Program} program
-	@param {Array.<A3a.vpl.Block>=} runBlocks if defined, override the initialization
-	code
-	@return {string}
+/** Code generator for Aseba
+	@constructor
+	@extends {A3a.vpl.CodeGenerator}
 */
-A3a.vpl.Program.generateCode["aseba"] = function (program, runBlocks) {
+A3a.vpl.CodeGeneratorA3a = function () {
+	A3a.vpl.CodeGenerator.call(this, "aseba", "and");
+};
+A3a.vpl.CodeGeneratorA3a.prototype = Object.create(A3a.vpl.CodeGenerator.prototype);
+A3a.vpl.CodeGeneratorA3a.prototype.constructor = A3a.vpl.CodeGeneratorA3a;
+
+/**
+	@inheritDoc
+*/
+A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 	var c = program.program.map(function (eh) {
-		return eh.generateCode("aseba");
-	});
+		return this.generateCodeForEventHandler(eh);
+	}, this);
 	/** @type {Array.<string>} */
 	var initVarDecl = [];
 	/** @type {Array.<string>} */
@@ -80,7 +87,7 @@ A3a.vpl.Program.generateCode["aseba"] = function (program, runBlocks) {
 		runBlocks.forEach(function (block) {
 			eh.setBlock(block, null, null);
 		});
-		var runBlocksCode = eh.generateCode("aseba");
+		var runBlocksCode = this.generateCodeForEventHandler(eh);
 		// check if initVarDecl and initCodeDecl are defined in the main program
 		var runBlockPrerequisite = true;
 		runBlocksCode.initVarDecl.forEach(function (fr) {
@@ -181,4 +188,4 @@ A3a.vpl.Program.generateCode["aseba"] = function (program, runBlocks) {
 	return str;
 };
 
-A3a.vpl.Program.andOperatorCode["aseba"] = "and";
+A3a.vpl.Program.codeGenerator["aseba"] = new A3a.vpl.CodeGeneratorA3a();
