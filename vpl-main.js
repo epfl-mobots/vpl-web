@@ -112,14 +112,18 @@ function vplLoadResourcesInScripts(rootFilename, getAuxiliaryFilenames, onLoad, 
 		var txt = document.getElementById(rootFilename).textContent;
 		var uiConfig = /** @type {Object} */(JSON.parse(txt));
 		var rsrc = {};
-		uiConfig["svgFilenames"].forEach(function (filename) {
-			txt = document.getElementById(filename).textContent;
-			rsrc[filename] = txt;
-		});
-		uiConfig["overlays"].forEach(function (filename) {
-			txt = document.getElementById(filename).textContent;
-			rsrc[filename] = txt;
-		});
+		if (uiConfig["svgFilenames"]) {
+			uiConfig["svgFilenames"].forEach(function (filename) {
+				txt = document.getElementById(filename).textContent;
+				rsrc[filename] = txt;
+			});
+		}
+		if (uiConfig["overlays"]) {
+			uiConfig["overlays"].forEach(function (filename) {
+				txt = document.getElementById(filename).textContent;
+				rsrc[filename] = txt;
+			});
+		}
 		onLoad(uiConfig, rsrc);
 	} catch (e) {
 		onError();
@@ -394,12 +398,16 @@ window.addEventListener("load", function () {
 		function (uiConfig, rsrc) {
 			// success
 			uiConfig.rsrc = {};
-			uiConfig["svgFilenames"].forEach(function (filename) {
-				uiConfig.rsrc[filename] = rsrc[filename];
-			});
-			uiConfig["overlays"].forEach(function (filename) {
-				uiConfig.rsrc[filename] = rsrc[filename];
-			});
+			if (uiConfig["svgFilenames"]) {
+				uiConfig["svgFilenames"].forEach(function (filename) {
+					uiConfig.rsrc[filename] = rsrc[filename];
+				});
+			}
+			if (uiConfig["overlays"]) {
+				uiConfig["overlays"].forEach(function (filename) {
+					uiConfig.rsrc[filename] = rsrc[filename];
+				});
+			}
 			vplSetup(uiConfig);
 		},
 		function () {
