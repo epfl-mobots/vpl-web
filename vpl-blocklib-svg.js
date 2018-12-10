@@ -326,6 +326,7 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 	var f = A3a.vpl.Canvas.decodeURI(aux["svg"][0]["uri"]).f;
 	this.loadSVG(f, uiConfig.rsrc[f]);
 	var displacements = this.getDisplacements(aux, f, block.param);
+	var diffWheelMotion = null;
 	if (aux["diffwheelmotion"] && aux["diffwheelmotion"]["id"]) {
 		var dw = aux["diffwheelmotion"];
 		var robotId = dw["id"];
@@ -349,6 +350,13 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 			dy: -(tr.y * rw * s + dy * s * Math.cos(tr.phi)),
 			phi: -tr.phi
 		};
+		diffWheelMotion = {
+			dleft: dleft,
+			dright: dright,
+			rw: rw,
+			color: color,
+			linewidth: linewidth
+		};
 	}
 	aux["svg"].forEach(function (el) {
 		var d = A3a.vpl.Canvas.decodeURI(el["uri"]);
@@ -360,6 +368,14 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 				drawBoundingBox: false // true
 			});
 	}, this);
+	if (diffWheelMotion) {
+		this.traces(diffWheelMotion.dleft, diffWheelMotion.dright,
+			diffWheelMotion.rw,
+			{
+				color: diffWheelMotion.color,
+				linewidth: diffWheelMotion.linewidth
+			});
+	}
 };
 
 /** Handle a mousedown event in a block defined with SVG
