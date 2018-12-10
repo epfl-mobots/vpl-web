@@ -453,6 +453,15 @@ SVG.prototype.draw = function (ctx, options) {
 			}
 			baseStyle = (baseStyle || "") + ";" + style;
 
+			var dashArrayAttr = el.getAttribute("stroke-dasharray");
+			if (dashArrayAttr) {
+				baseStyle += ";stroke-dasharray:" + dashArrayAttr.split(",").join(" ");
+			}
+			var dashOffsetAttr = el.getAttribute("stroke-dashoffset");
+			if (dashOffsetAttr) {
+				baseStyle += ";stroke-dashoffset:" + dashOffsetAttr;
+			}
+
 			var idAttr = el.getAttribute("id");
 			if (idAttr && options && options.style && options.style.hasOwnProperty(idAttr)) {
 				overriddenStyle = (overriddenStyle || "") + ";" + options.style[idAttr];
@@ -870,6 +879,10 @@ SVG.prototype.draw = function (ctx, options) {
 					ctx.strokeStyle = style["stroke"] || "none";
 					ctx.miterLimit = style["stroke-miterlimit"] || 4;
 					ctx.lineJoin = style["stroke-linejoin"] || "miter";
+					if (style["stroke-dasharray"]) {
+						ctx.setLineDash(style["stroke-dasharray"].split(" ").map(function (s) { return parseFloat(s); }));
+						ctx.lineDashOffset = style["stroke-dashoffset"] ? parseFloat(style["stroke-dashoffset"]) : 0;
+					}
 					ctx.stroke();
 				}
 			}
