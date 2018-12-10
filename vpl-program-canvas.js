@@ -742,10 +742,29 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			self.setView("src");
 			return 0;
 		},
-		// doDrop
-		null,
-		// canDrop
-		null);
+		// doDrop: select code for block or event
+		function (targetItem, draggedItem) {
+			if (draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.eventHandlerContainer) {
+				var block = /** @type {A3a.vpl.Block} */(draggedItem.data);
+				var span = self.getCodeLocation(self.currentLanguage, block);
+				if (span) {
+					self.setView("src");
+					window["vplEditor"].selectRange(span.begin, span.end);
+				}
+			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
+				var eventHandler = /** @type {A3a.vpl.EventHandler} */(draggedItem.data);
+				var span = self.getCodeLocation(self.currentLanguage, eventHandler);
+				if (span) {
+					self.setView("src");
+					window["vplEditor"].selectRange(span.begin, span.end);
+				}
+			}
+		},
+		// canDrop: accept block in event handler or event handler
+		function (targetItem, draggedItem) {
+			return draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.eventHandlerContainer ||
+				draggedItem.data instanceof A3a.vpl.EventHandler;
+		});
 
 	controlBar.addSpace();
 

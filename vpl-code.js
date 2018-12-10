@@ -13,6 +13,127 @@
 A3a.vpl.CodeGenerator = function (language, andOperator) {
 	this.language = language;
 	this.andOperator = andOperator;
+
+	// state during code production
+	/** @type {Array.<A3a.vpl.CodeGenerator.Mark>} */
+	this.marks = [];
+};
+
+/** Mark in generated code
+	@constructor
+	@param {number} id
+	@param {Object} ref
+	@param {boolean} isBegin true for begin, false for end
+*/
+A3a.vpl.CodeGenerator.Mark = function (id, ref, isBegin) {
+	this.id = id;
+	this.ref = ref;
+	this.isBegin = isBegin;
+	if (id < 0 || id > 0xf8ff - 0xe000) {
+		throw "internal";	// unicode private use area exhausted
+	}
+	this.str = String.fromCharCode(0xe000 + id);
+	this.pos = -1;	// cached position in code
+};
+
+/** Find mark in generated code
+	@param {string} code generated code
+	@return index in generated code (before removal)
+*/
+A3a.vpl.CodeGenerator.Mark.prototype.findInCode = function (code) {
+	return code.indexOf(this.str);
+};
+
+/** Find mark positions (in code without marks) and remove them
+	@param {Array.<A3a.vpl.CodeGenerator.Mark>} a
+	@param {string} code generated code
+	@return {string} code without marks
+*/
+A3a.vpl.CodeGenerator.Mark.extract = function (a, code) {
+	// get positions once
+	a.forEach(function (mark) {
+		mark.pos = mark.findInCode(code);
+	});
+
+	// sort by position
+	a.sort(function (a, b) {
+		return a.pos - b.pos;
+	});
+
+	// adjust marks and remove them in generated code
+	for (var i = 0; i < a.length; i++) {
+		a[i].pos -= i;
+		code = code.replace(a[i].str, "");
+	}
+
+	// move marks on eols where appropriate
+	a.forEach(function (mark) {
+		/** @type {number} */
+		var i;
+		if (mark.isBegin) {
+			// move beginning of span past eol
+			while (true) {
+				for (i = mark.pos; code[i] === " " || code[i] === "\t"; i++) {}
+				if (code[i] === "\n") {
+					mark.pos = i + 1;
+				} else {
+					break;
+				}
+			}
+			// include leading spaces at beginning of line
+			if (code[mark.pos - 1] === " " || code[mark.pos - 1] === "\t") {
+				for (i = mark.pos - 1; code[i] === " " || code[i] === "\t"; i--) {}
+				if (code[i] === "\n") {
+					mark.pos = i + 1;
+				}
+			}
+		} else {
+			// exclude leading spaces
+			if (code[mark.pos - 1] === " " || code[mark.pos - 1] === "\t") {
+				for (i = mark.pos - 1; code[i] === " " || code[i] === "\t"; i--) {}
+				if (code[i] === "\n") {
+					mark.pos = i + 1;
+				}
+			}
+		}
+	});
+
+	return code;
+};
+
+/** Remove marks from string
+	@param {string} line
+	@return {string}
+*/
+A3a.vpl.CodeGenerator.Mark.remove = function (code) {
+	return code.replace(/[\ue000-\uf8ff]/g, "");
+};
+
+/** Bracket code fragment with marks
+	@param {string} code
+	@param {Object} ref
+*/
+A3a.vpl.CodeGenerator.prototype.bracket = function (code, ref) {
+	var id = this.marks.length;
+	var mark1 = new A3a.vpl.CodeGenerator.Mark(id, ref, true);
+	this.marks.push(mark1);
+	var mark2 = new A3a.vpl.CodeGenerator.Mark(id + 1, ref, false);
+	this.marks.push(mark2);
+	return mark1.str + code + mark2.str;
+};
+
+/** Find mark
+	@param {string} code
+	@param {Object} ref
+	@return {number} position, or -1 if not found
+*/
+A3a.vpl.CodeGenerator.prototype.findMark = function (ref, isBegin) {
+	for (var i = 0; i < this.marks.length; i++) {
+		if (this.marks[i].ref === ref && this.marks[i].isBegin === isBegin) {
+			return this.marks[i].pos;
+		}
+	}
+	return -1;
 };
 
 /** Generate code for an event handler
@@ -106,7 +227,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 			priEv = event;
 		}
 		if (code.clause) {
-			clauses.push(code.clause);
+			clauses.push(this.bracket(code.clause, event));
 			if (code.clauseInit) {
 				clauseInit += code.clauseInit;
 			}
@@ -136,7 +257,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 	var str = "";
 	for (var i = 0; i < eventHandler.actions.length; i++) {
 		var code = eventHandler.actions[i].generateCode(this.language);
-		str += code.statement || "";
+		str += code.statement ? this.bracket(code.statement, eventHandler.actions[i]) : "";
 		if (code.initVarDecl) {
 			code.initVarDecl.forEach(function (frag) {
 				if (initVarDecl.indexOf(frag) < 0) {
@@ -174,6 +295,13 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 	} else {
 		return {};
 	}
+};
+
+/** Reset code generation
+	@return {void}
+*/
+A3a.vpl.CodeGenerator.prototype.reset = function () {
+	this.marks = [];
 };
 
 /** Generate code for the whole program

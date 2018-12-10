@@ -19,6 +19,7 @@ A3a.vpl.CodeGeneratorJS.prototype.constructor = A3a.vpl.CodeGeneratorJS;
 	@inheritDoc
 */
 A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
+	this.reset();
 	var c = program.program.map(function (eh) {
 		return this.generateCodeForEventHandler(eh);
 	}, this);
@@ -58,6 +59,7 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 				"}\n" +
 				"cond0[" + i + "] = cond;\n";
 		}
+		statement = this.bracket(statement, program.program[i]);
 		if (evCode.sectionBegin) {
  			if (folding[evCode.sectionBegin] !== undefined) {
 				// fold evCode into c[folding[evCode.sectionBegin]]
@@ -81,7 +83,7 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 		if (program.program[i].getEventBlockByType("init")) {
 			initEventIndices.push(i);
 		}
-	});
+	}, this);
 
 	// compile runBlocks
 	var runBlocksCode = "";
@@ -141,9 +143,10 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 		.split("\n")
 		.map(function (line) { return line.trim(); })
 		.map(function (line) {
-			if (line.length > 0) {
-				var preDec = line[0] === "}";
-				var postInc = line.slice(-1) === "{";
+			var line1 = A3a.vpl.CodeGenerator.Mark.remove(line);
+			if (line1.length > 0) {
+				var preDec = line1[0] === "}";
+				var postInc = line1.slice(-1) === "{";
 				if (preDec) {
 					indent = Math.max(indent - 1, 0);
 				}
@@ -169,6 +172,9 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 			program.program[i].checkConflicts(program.program[j]);
 		}
 	}
+
+	// extract marks
+	str = A3a.vpl.CodeGenerator.Mark.extract(this.marks, str);
 
 	return str;
 };

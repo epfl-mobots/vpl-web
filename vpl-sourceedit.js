@@ -85,6 +85,14 @@ A3a.vpl.VPLSourceEditor.prototype.doesMatchVPL = function () {
 	return this.getCode() === this.code0.trim();
 };
 
+/** Select a text range
+	@param {number} begin
+	@param {number} end
+*/
+A3a.vpl.VPLSourceEditor.prototype.selectRange = function (begin, end) {
+	this.textEditor.selectRange(begin, end);
+};
+
 /** Calculate the toolbar height
 	@return {number}
 */

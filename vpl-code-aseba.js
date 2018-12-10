@@ -19,6 +19,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.constructor = A3a.vpl.CodeGeneratorA3a;
 	@inheritDoc
 */
 A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
+	this.reset();
 	var c = program.program.map(function (eh) {
 		return this.generateCodeForEventHandler(eh);
 	}, this);
@@ -53,6 +54,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 		if (evCode.clause) {
 			statement = "when " + evCode.clause + " do\n" + statement + "end\n";
 		}
+		statement = this.bracket(statement, program.program[i]);
 		if (evCode.sectionBegin) {
  			if (folding[evCode.sectionBegin] !== undefined) {
 				// fold evCode into c[folding[evCode.sectionBegin]]
@@ -76,7 +78,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 		if (program.program[i].getEventBlockByType("init")) {
 			initEventIndices.push(i);
 		}
-	});
+	}, this);
 
 	// compile runBlocks
 	var runBlocksCodeStatement = "";
@@ -148,9 +150,10 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 		.map(function (line) { return line.trim(); })
 		.map(function (line) {
 			function startsWithAnyOf(a) {
+				var line1 = A3a.vpl.CodeGenerator.Mark.remove(line);
 				for (var i = 0; i < a.length; i++) {
-					if (line.slice(0, a[i].length) === a[i]
-						&& !/^\w/.test(line.slice(a[i].length))) {
+					if (line1.slice(0, a[i].length) === a[i]
+						&& !/^\w/.test(line1.slice(a[i].length))) {
 						return true;
 					}
 				}
@@ -184,6 +187,9 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 			program.program[i].checkConflicts(program.program[j]);
 		}
 	}
+
+	// extract marks
+	str = A3a.vpl.CodeGenerator.Mark.extract(this.marks, str);
 
 	return str;
 };

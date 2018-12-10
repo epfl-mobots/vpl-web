@@ -375,6 +375,18 @@ A3a.vpl.Program.prototype.getCode = function (language) {
 	return this.code[language];
 };
 
+/** Get code location corresponding to a block or an event handler
+	@param {string} language
+	@param {Object} ref
+	@return {?{begin:number,end:number}}
+*/
+A3a.vpl.Program.prototype.getCodeLocation = function (language, ref) {
+	var codeGenerator = A3a.vpl.Program.codeGenerator[language];
+	var pos1 = codeGenerator.findMark(ref, true);
+	var pos2 = codeGenerator.findMark(ref, false);
+	return pos1 >= 0 && pos2 >= 0 ? {begin: pos1, end: pos2} : null;
+};
+
 /** Generate code for the actions of an event handler
 	@param {A3a.vpl.EventHandler} eventHandler
 	@param {string} language

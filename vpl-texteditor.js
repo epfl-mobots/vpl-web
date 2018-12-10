@@ -77,6 +77,14 @@ A3a.vpl.TextEditor.prototype.setReadOnly = function (ro) {
 	this.textarea.readOnly = ro;
 };
 
+/** Select a text range
+	@param {number} begin
+	@param {number} end
+*/
+A3a.vpl.TextEditor.prototype.selectRange = function (begin, end) {
+	this.textarea.setSelectionRange(begin, end);
+};
+
 /** Clear all breakpoints
 	@return {void}
 */
