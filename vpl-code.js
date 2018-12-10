@@ -102,7 +102,7 @@ A3a.vpl.CodeGenerator.Mark.extract = function (a, code) {
 };
 
 /** Remove marks from string
-	@param {string} line
+	@param {string} code
 	@return {string}
 */
 A3a.vpl.CodeGenerator.Mark.remove = function (code) {
@@ -123,8 +123,8 @@ A3a.vpl.CodeGenerator.prototype.bracket = function (code, ref) {
 };
 
 /** Find mark
-	@param {string} code
 	@param {Object} ref
+	@param {boolean} isBegin true for begin, false for end
 	@return {number} position, or -1 if not found
 */
 A3a.vpl.CodeGenerator.prototype.findMark = function (ref, isBegin) {

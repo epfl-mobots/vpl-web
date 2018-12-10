@@ -762,7 +762,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		},
 		// canDrop: accept block in event handler or event handler
 		function (targetItem, draggedItem) {
-			return draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.eventHandlerContainer ||
+			return draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.eventHandlerContainer != null ||
 				draggedItem.data instanceof A3a.vpl.EventHandler;
 		});
 
