@@ -54,6 +54,7 @@ A3a.vpl.VPLSim2DViewer = function (robot) {
 
 	// initial canvas resize
 	this.resize();
+	this.restoreGround();
 
 	this.render();
 };
@@ -140,15 +141,11 @@ A3a.vpl.VPLSim2DViewer.prototype.drawPen = function (shape, param) {
 	@return {number} ground value, from 0 (black) to 1 (white)
 */
 A3a.vpl.VPLSim2DViewer.prototype.groundValue = function (x, y) {
-	if (this.groundImage) {
-		// scale position to (i,j)
-		var i = Math.round(this.groundImage.width * (x + this.playground.width / 2) / this.playground.width);
-		var j = Math.round(this.groundImage.height * (this.playground.height / 2 - y) / this.playground.height);
-		var pixel = this.groundCanvas.getContext("2d").getImageData(i, j, 1, 1).data;
-		return pixel[0] / 255;
-	} else {
-		return 1;	// default: white
-	}
+	// scale position to (i,j)
+	var i = Math.round(this.groundCanvas.width * (x + this.playground.width / 2) / this.playground.width);
+	var j = Math.round(this.groundCanvas.height * (this.playground.height / 2 - y) / this.playground.height);
+	var pixel = this.groundCanvas.getContext("2d").getImageData(i, j, 1, 1).data;
+	return pixel[0] / 255;
 };
 
 /** Update the values of the ground sensors
@@ -156,24 +153,19 @@ A3a.vpl.VPLSim2DViewer.prototype.groundValue = function (x, y) {
 */
 A3a.vpl.VPLSim2DViewer.prototype.updateGroundSensors = function () {
 	// from 0 (black) to 1 (white)
-	if (this.groundImage) {
-		var g = [];
-		for (var i = 0; i < 2; i++) {
-			// ground sensor positions
-			var x = this.robot.pos[0] +
-				this.robot.groundSensorLon * Math.cos(this.robot.theta) +
-				(i === 0 ? -1 : 1) * this.robot.groundSensorLat * Math.sin(this.robot.theta);
-			var y = this.robot.pos[1] +
-				this.robot.groundSensorLon * Math.sin(this.robot.theta) -
-				(i === 0 ? -1 : 1) * this.robot.groundSensorLat * Math.cos(this.robot.theta);
-			// ground value at (x, y)
-			g.push(this.groundValue(x, y));
-		}
-		this.robot["set"]("prox.ground.delta", g);
-	} else {
-		// default: white ground
-		this.robot["set"]("prox.ground.delta", [1, 1]);
+	var g = [];
+	for (var i = 0; i < 2; i++) {
+		// ground sensor positions
+		var x = this.robot.pos[0] +
+			this.robot.groundSensorLon * Math.cos(this.robot.theta) +
+			(i === 0 ? -1 : 1) * this.robot.groundSensorLat * Math.sin(this.robot.theta);
+		var y = this.robot.pos[1] +
+			this.robot.groundSensorLon * Math.sin(this.robot.theta) -
+			(i === 0 ? -1 : 1) * this.robot.groundSensorLat * Math.cos(this.robot.theta);
+		// ground value at (x, y)
+		g.push(this.groundValue(x, y));
 	}
+	this.robot["set"]("prox.ground.delta", g);
 };
 
 /** Update the values of the proximity sensors
