@@ -1243,3 +1243,21 @@ A3a.vpl.Canvas.prototype.state8Click = function (width, height, left, top, ev) {
 		return null;
 	}
 };
+
+/** Draw hexagonal nut
+	@param {CanvasRenderingContext2D} ctx
+	@param {number} x0
+	@param {number} y0
+	@param {number} r
+	@return {void}
+*/
+A3a.vpl.Canvas.drawHexagonalNut = function (ctx, x0, y0, r) {
+	ctx.beginPath();
+	ctx.moveTo(x0 + r * Math.cos(0.1), y0 + r * Math.sin(0.2));
+	for (var i = 1; i < 6; i++) {
+		ctx.lineTo(x0 + r * Math.cos(i * Math.PI / 3 + 0.2), y0 + r * Math.sin(i * Math.PI / 3 + 0.2));
+	}
+	ctx.closePath();
+	ctx.arc(x0, y0, r * 0.5, 0, 2 * Math.PI, true);
+	ctx.fill();
+}

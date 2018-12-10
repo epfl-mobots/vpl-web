@@ -17,6 +17,10 @@ A3a.vpl.VPLSourceEditor = function (noVPL, language, runGlue) {
 	this.runGlue = runGlue || null;
 	this.code0 = "";	// from VPL, to restore when VPL lock is set
 	this.isLockedWithVPL = true;
+	this.teacherRole = false;
+	this.customizationMode = false;
+	/** @type {Array.<string>} */
+	this.disabledUI = [];
 	this.textEditor = new A3a.vpl.TextEditor("editor", "editor-lines");
 	this.textEditor.setReadOnly(this.isLockedWithVPL);
 	this.textEditor.onBreakpointChanged = function (bp) {
@@ -56,6 +60,21 @@ A3a.vpl.VPLSourceEditor = function (noVPL, language, runGlue) {
 	}, false);
 
 	this.toolbarRender();
+};
+
+/** Reset UI
+	@return {void}
+*/
+A3a.vpl.VPLSourceEditor.prototype.resetUI = function () {
+	this.disabledUI = [];
+};
+
+/** Change role
+	@param {boolean} b
+	@return {void}
+*/
+A3a.vpl.VPLSourceEditor.prototype.setTeacherRole = function (b) {
+	this.teacherRole = b;
 };
 
 /** Set the code generated from VPL
@@ -101,6 +120,43 @@ A3a.vpl.VPLSourceEditor.prototype.srcToolbarHeight = function () {
 	return dims.controlSize + 2 * dims.interBlockSpace;
 };
 
+/** Add a control button, taking care of disabled ones
+	@param {A3a.vpl.ControlBar} controlBar
+	@param {string} id
+	@param {A3a.vpl.CanvasItem.draw} draw
+	@param {?A3a.vpl.CanvasItem.mousedown=} mousedown
+	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
+	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
+	@param {boolean=} keepEnabled
+	@return {void}
+*/
+A3a.vpl.VPLSourceEditor.prototype.addControl = function (controlBar, id, draw, mousedown, doDrop, canDrop, keepEnabled) {
+	var self = this;
+	var canvas = controlBar.canvas;
+	var disabled = this.disabledUI.indexOf(id) >= 0;
+	if (this.customizationMode || !disabled) {
+		controlBar.addControl(
+			function (ctx, item, dx, dy) {
+				draw(ctx, item, dx, dy);
+				if (disabled) {
+					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.controlSize, canvas.dims.controlSize);
+				}
+			},
+			this.customizationMode && !keepEnabled
+				? function (canvas, data, width, height, x, y, downEvent) {
+					if (disabled) {
+						self.disabledUI.splice(self.disabledUI.indexOf(id), 1);
+					} else {
+						self.disabledUI.push(id);
+					}
+					self.toolbarRender();
+					return 1;
+				}
+				: mousedown,
+			doDrop, canDrop);
+	}
+};
+
 /** Render toolbar for source code editor
 	@return {void}
 */
@@ -117,7 +173,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 	var self = this;
 
 	// new
-	controlBar.addControl(
+	this.addControl(controlBar, "src:new",
 		// draw
 		function (ctx, item, dx, dy) {
 			var enabled = !self.isLockedWithVPL;
@@ -161,7 +217,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 
 	// save
 	var isEditorEmpty = this.getCode().length === 0;
-	controlBar.addControl(
+	this.addControl(controlBar, "src:save",
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.fillStyle = "navy";
@@ -221,7 +277,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 	// vpl
 	if (!this.noVPL) {
 		// switch to VPL
-		controlBar.addControl(
+		this.addControl(controlBar, "src:vpl",
 			// draw
 			function (ctx, item, dx, dy) {
 				var enabled = self.doesMatchVPL();
@@ -273,7 +329,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			null);
 
 		// locked with VPL
-		controlBar.addControl(
+		this.addControl(controlBar, "src:locked",
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.save();
@@ -318,7 +374,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 
 	if (this.runGlue) {
 		// run
-		controlBar.addControl(
+		this.addControl(controlBar, "src:run",
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
@@ -347,7 +403,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			null);
 
 		// stop
-		controlBar.addControl(
+		this.addControl(controlBar, "src:stop",
 			// draw
 			function (ctx, item, dx, dy) {
 				ctx.fillStyle = "navy";
@@ -373,7 +429,7 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			controlBar.addSpace();
 
 			// simulator view
-			controlBar.addControl(
+			this.addControl(controlBar, "src:sim",
 				// draw
 				function (ctx, item, dx, dy) {
 					ctx.fillStyle = "navy";
@@ -426,6 +482,83 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 		}
 
 		controlBar.addStretch();
+	}
+
+	if (this.teacherRole) {
+		if (self.customizationMode) {
+			this.addControl(controlBar, "src:teacher-reset",
+				// draw
+				function (ctx, item, dx, dy) {
+					ctx.fillStyle = "#a00";
+					ctx.fillRect(item.x + dx, item.y + dy,
+						self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
+					ctx.beginPath();
+					ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.25,
+						item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
+					ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.25,
+						item.y + dy + self.tbCanvas.dims.controlSize * 0.8);
+					ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
+						item.y + dy + self.tbCanvas.dims.controlSize * 0.8);
+					ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
+						item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
+					ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.65,
+						item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
+					ctx.closePath();
+					ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.65,
+						item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
+					ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.65,
+						item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
+					ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
+						item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
+					ctx.strokeStyle = "white";
+					ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
+					ctx.stroke();
+					ctx.fillStyle = "white";
+					A3a.vpl.Canvas.drawHexagonalNut(ctx,
+						item.x + dx + self.tbCanvas.dims.controlSize * 0.63,
+						item.y + dy + self.tbCanvas.dims.controlSize * 0.7,
+						self.tbCanvas.dims.controlSize * 0.2);
+				},
+				// mousedown
+				function (data, x, y, ev) {
+					self.resetUI();
+					self.toolbarRender();
+					return 0;
+				},
+				// doDrop
+				null,
+				// canDrop
+				null,
+				true);
+		}
+		this.addControl(controlBar, "src:teacher",
+			// draw
+			function (ctx, item, dx, dy) {
+				ctx.fillStyle = self.customizationMode ? "#d10" : "#a00";
+				ctx.fillRect(item.x + dx, item.y + dy,
+					self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
+				ctx.fillStyle = "white";
+				A3a.vpl.Canvas.drawHexagonalNut(ctx,
+					item.x + dx + self.tbCanvas.dims.controlSize * 0.5,
+					item.y + dy + self.tbCanvas.dims.controlSize * 0.4,
+					self.tbCanvas.dims.controlSize * 0.27);
+				ctx.fillStyle = self.customizationMode ? "white" : "#c66";
+				ctx.fillRect(item.x + dx + self.tbCanvas.dims.controlSize * 0.1,
+					item.y + dy + self.tbCanvas.dims.controlSize * 0.8,
+					self.tbCanvas.dims.controlSize * 0.8,
+					self.tbCanvas.dims.controlSize * 0.1);
+			},
+			// mousedown
+			function (data, x, y, ev) {
+				self.customizationMode = !self.customizationMode;
+				self.toolbarRender();
+				return 0;
+			},
+			// doDrop
+			null,
+			// canDrop
+			null,
+			true);
 	}
 
 	controlBar.calcLayout(this.tbCanvas.dims.margin, canvasSize.width - this.tbCanvas.dims.margin,

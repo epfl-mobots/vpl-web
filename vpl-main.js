@@ -385,7 +385,11 @@ function vplSetup(uiConfig) {
 		window["vplProgram"].renderToCanvas(window["vplCanvas"]);
 		document.getElementById("editor").textContent = window["vplProgram"].getCode(window["vplProgram"].currentLanguage);
 	}
+
+	window["vplEditor"].setTeacherRole(getQueryOption("role") === "teacher");
 	window["vplEditor"].toolbarRender();
+
+	window["vplSim"].sim.setTeacherRole(getQueryOption("role") === "teacher");
 }
 
 window.addEventListener("load", function () {
