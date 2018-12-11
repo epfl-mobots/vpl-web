@@ -11,6 +11,24 @@
 
 	"blocks": [
 		{
+			"name": "!empty event",
+			"type": "hidden",
+			"svg": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				}
+			]
+		},
+		{
+			"name": "!empty action",
+			"type": "hidden",
+			"svg": [
+				{
+					"uri": "Blocks.svg#Actions_bg"
+				}
+			]
+		},
+		{
 			"name": "button",
 			"type": "event",
 			"modes": ["basic", "advanced"],

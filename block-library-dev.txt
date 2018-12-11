@@ -8,19 +8,19 @@ Here are fragments of index-svg.html which illustrate the definition of the bloc
 <script type="application/json" id="ui.json">
 ...
 "blocks": [
-	...
-	{
-		"name": "button",
-		"main": "blocks.svg#Ev_Buttons"
-	}
-	...
+  ...
+  {
+  	"name": "button",
+  	"main": "blocks.svg#event-button"
+  }
+  ...
 ]
 ...
 </script>
 
 <script type="image/svg+xml" id="blocks.svg">
 ...
-<g id="Ev_Buttons">
+<g id="event-button">
 ...
 </g>
 ...
@@ -53,7 +53,7 @@ In json, block contain the following properties:
 
 	- "id" (string, required): id of the svg element corresponding to the button. It should be contained in the element identified by "main".
 	- "val" (number, boolean or string, required): value for the set of radio buttons.
- 	- "st" (array of strings): style strings applied to svg elements when the corresponding value in val is active. Each style is defined by a fill and/or a stroke color, with the syntax "fill:color;stroke:color", or fill/stroke swapped, or one of them skipped without semicolon.
+	- "st" (array of strings): style strings applied to svg elements when the corresponding value in val is active. Each style is defined by a fill and/or a stroke color, with the syntax "fill:color;stroke:color", or fill/stroke swapped, or one of them skipped without semicolon.
 
 - "sliders" (array of objects, optional): slider definitions. Each slider is described by an object with the following properties:
 
@@ -91,6 +91,41 @@ In json, block contain the following properties:
 	- "statement" (string, required, action block): code fragment for action.
 
 - "l2" (object, optional): code fragments to generate L2 language source code. Same properties as "aseba".
+
+Special blocks
+--------------
+
+Special blocks contain definitions for specific purposes. They cannot be manipulated by the user to build rules. Their "type" property should be "hidden", and their name start with an "!".
+
+"!empty event": contains the svg elements displayed as a hint on the left part of the rule to accept another event block.
+
+"!empty action": contains the svg elements displayed as a hint on the right part of the rule to accept another action block.
+
+"!stop": contains the code to stop the robot, executed when the Stop button is clicked.
+
+Example:
+{
+  ...
+  "blocks": [
+  	{
+  	  "name": "!empty event",
+  	  "type": "hidden",
+  	  "svg": [ { "uri": "blocks.svg#event-empty" } ]
+  	},
+  	{
+  	  "name": "!empty action",
+  	  "type": "hidden",
+  	  "svg": [ { "uri": "blocks.svg#action-empty" } ]
+  	},
+  	{
+  	  "name": "!stop",
+  	  "type": "hidden",
+  	  "aseba": { "statement": "motor.left.target = 0\nmotor.right.target = 0\n" }
+  	},
+  	...
+  ],
+  ...
+}
 
 Backtick-expressions
 --------------------

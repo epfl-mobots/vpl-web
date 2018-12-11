@@ -333,6 +333,10 @@ A3a.vpl.Canvas.prototype.mousedragSVGRotating = function (block, dragIndex, aux,
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
+	if (aux["svg"].length === 0) {
+		// nothing to draw
+		return;
+	}
 	var f = A3a.vpl.Canvas.decodeURI(aux["svg"][0]["uri"]).f;
 	this.loadSVG(f, uiConfig.rsrc[f]);
 	var displacements = this.getDisplacements(aux, f, block.param);
@@ -531,6 +535,9 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 			case "comment":
 				type = A3a.vpl.blockType.comment;
 				break;
+			case "hidden":
+				type = A3a.vpl.blockType.hidden;
+				break;
 			default:
 				throw "Unknown block type " + b["type"];
 			}
@@ -538,7 +545,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 
 		/** @type {Array.<A3a.vpl.mode>} */
 		var modes = blockTemplate0 ? blockTemplate0.modes : [];
-		if (b["modes"] || !blockTemplate0) {
+		if (b["modes"] && !blockTemplate0) {
 			b["modes"].forEach(function (m) {
 				switch (m) {
 				case "basic":

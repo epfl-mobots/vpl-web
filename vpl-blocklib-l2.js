@@ -100,7 +100,7 @@ A3a.vpl.patchL2Blocks = function () {
 	(function () {
 		/** @const */
 		var libPatchLang2 = {
-			"stop": function (block) {
+			"!stop": function (block) {
 				return {
 					statement:
 						"motor.left.target = 0\n" +
