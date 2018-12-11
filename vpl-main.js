@@ -389,7 +389,7 @@ function vplSetup(uiConfig) {
 	window["vplEditor"].setTeacherRole(getQueryOption("role") === "teacher");
 	window["vplEditor"].toolbarRender();
 
-	window["vplSim"].sim.setTeacherRole(getQueryOption("role") === "teacher");
+	window["vplSim"] && window["vplSim"].sim.setTeacherRole(getQueryOption("role") === "teacher");
 }
 
 window.addEventListener("load", function () {

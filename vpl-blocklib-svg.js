@@ -256,8 +256,18 @@ A3a.vpl.Canvas.prototype.mousedragSVGSlider = function (block, dragIndex, aux, w
 		(this.clientData.sliderAux["max"] - this.clientData.sliderAux["min"]) *
 			this.dragSVGSlider(this.clientData.min, this.clientData.max,
 				this.clientData.vert ? pt.y : pt.x);
-	block.param[dragIndex] = Math.max(this.clientData.sliderAux["min"],
-		Math.min(this.clientData.sliderAux["max"], val));
+	var min = this.clientData.sliderAux["min"];
+	var max = this.clientData.sliderAux["max"];
+	var snap = this.clientData.sliderAux["snap"];
+	snap && snap.forEach(function (s, i) {
+		if (typeof s === "string" && /^`.+`$/.test(s)) {
+			s = A3a.vpl.BlockTemplate.substInline(s, block, i);
+		}
+		if (Math.abs(val - s) < (max - min) / 10) {
+			val = s;
+		}
+	});
+	block.param[dragIndex] = Math.max(min, Math.min(max, val));
 };
 
 /** Handle mousedown event in A3a.vpl.BlockTemplate.mousedownFun for a block with rotating elements

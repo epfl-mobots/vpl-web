@@ -1,5 +1,5 @@
 Block library development
--------------------------
+=========================
 
 Blocks are defined in a script element with id "ui.json" in index-svg.html. The syntax of the script element is JSON. The appearance of blocks is defined by SVG elements specified by URI strings with syntax "filename#id", where "filename" is the id of a script element in index-svg.html which contains a complete svg file, and "id" is the svg element id in that file.
 
@@ -61,6 +61,7 @@ In json, block contain the following properties:
 	- "thumbId" (string, required): id of the svg element corresponding to the thumb in the slider (the part which can be moved).
 	- "min" (number, required): minimum value, stored in the block parameters.
 	- "max" (number, required): maximum value, stored in the block parameters.
+	- "snap" (array of numbers and/or strings, default: []): snap values to which the slider is attracted when the slider is within a relative distance of 10%. Numbers are fixed values; strings must contain a backtick-expression and are evaluated. They can refer to other parameters, typically other slider values (see "backtick-expressions" below).
 
 - "rotating" (array of objects, optional): rotating control definitions. Each control is described by an object with the following properties:
 
@@ -77,7 +78,7 @@ In json, block contain the following properties:
 	- "color" (string, optional): trace color as a css color string (default: "black")
 	- "linewidth" (number, optional): relative trace width. 1 (default) is the default line width of the block.
 
-- "aseba" (object, optional): code fragments to generate Aseba language source code. Code fragments contain Aseba source code. Except for "clause" and "clauseAnd" which contain expression fragments, they can contain muliple lines, comments, empty lines, terminated by linefeeds ("\n"). Backticks mark JavaScript expressions which are evaluated to substitute block parameters; variable whose name is a dollar character contains the block parameters, and variable "i" contains the parameter index in "clauseAnd" fragments. The object contains the following properties:
+- "aseba" (object, optional): code fragments to generate Aseba language source code. Code fragments contain Aseba source code. Except for "clause" and "clauseAnd" which contain expression fragments, they can contain muliple lines, comments, empty lines, terminated by linefeeds ("\n"). Backticks mark JavaScript expressions which are evaluated to substitute block parameters; see below. The object contains the following properties:
 	- "initVarDecl" (array of strings, optional): code fragments for (global) variable declarations. Identical fragments (after backtick-expressions evaluation) are output only once.
 	- "initCodeDecl" (array of strings, optional): code fragments for subroutine declarations. Identical fragments (after backtick-expressions evaluation) are output only once.
 	- "initCodeExec" (array of strings, optional): code fragments for initialization. Identical fragments (after backtick-expressions evaluation) are output only once.
@@ -90,3 +91,12 @@ In json, block contain the following properties:
 	- "statement" (string, required, action block): code fragment for action.
 
 - "l2" (object, optional): code fragments to generate L2 language source code. Same properties as "aseba".
+
+Backtick-expressions
+--------------------
+
+Code fragments, styles, and some other properties can contain backtick-expressions, i.e. JavaScript expressions enclosed between backticks in normal double-quoted JSON strings. The expression is evaluated and its result replaces the whole backtick-expression in the string. A string can contain multiple backtick-expressions. The following variables are defined:
+
+- $: array of block parameters
+- i: index of the parameter (used in clauseAnd code fragments and in slider's snap property)
+- rgb: function which converts an array of RGB values between 0 and 1 to an RGB value suited for representing an RGB led (saturated colors are mapped to themselves, but [0,0,0] (led switched off) is mapped to gray).
