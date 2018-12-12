@@ -899,6 +899,7 @@ SVG.prototype.draw = function (ctx, options) {
 					ctx.strokeStyle = style["stroke"] || "none";
 					ctx.miterLimit = style["stroke-miterlimit"] || 4;
 					ctx.lineJoin = style["stroke-linejoin"] || "miter";
+					ctx.lineCap = style["stroke-linecap"] || "butt";
 					if (style["stroke-dasharray"]) {
 						ctx.setLineDash(style["stroke-dasharray"].split(" ").map(function (s) { return parseFloat(s); }));
 						ctx.lineDashOffset = style["stroke-dashoffset"] ? parseFloat(style["stroke-dashoffset"]) : 0;
