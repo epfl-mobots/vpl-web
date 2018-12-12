@@ -474,6 +474,32 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		null,
 		// canDrop
 		null);
+	// clear
+	this.addControl(controlBar, "sim:clear",
+		// draw
+		function (ctx, item, dx, dy) {
+			var s = self.simCanvas.dims.controlSize;
+			ctx.save();
+			ctx.fillStyle = "navy";
+			ctx.fillRect(item.x + dx, item.y + dy, s, s);
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
+			ctx.strokeRect(item.x + dx + 0.15 * s, item.y + dy + 0.25 * s, 0.7 * s, 0.5 * s);
+			ctx.translate(item.x + dx + 0.5 * s, item.y + dy + 0.4 * s);
+			ctx.rotate(0.4);
+			ctx.fillStyle = "white";
+			ctx.fillRect(0, 0, 0.3 * s, 0.2 * s);
+			ctx.restore();
+		},
+		// mousedown
+		function (data, x, y, ev) {
+			self.restoreGround();
+			return 0;
+		},
+		// doDrop
+		null,
+		// canDrop
+		null);
 
 	controlBar.addStretch();
 
