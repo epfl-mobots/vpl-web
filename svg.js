@@ -197,6 +197,15 @@ SVG.colorDict = {
 */
 SVG.Displacement;
 
+/** @typedef {{
+		x: number,
+		y: number,
+		w: number,
+		h: number
+	}}
+*/
+SVG.ClipRect;
+
 /** Draw SVG from source code
 	@param {CanvasRenderingContext2D} ctx
 	@param {SVG.Options=} options
@@ -359,6 +368,17 @@ SVG.prototype.draw = function (ctx, options) {
 			ctx.translate(/** @type {number} */(displacement.dx),
 				/** @type {number} */(displacement.dy));
 		}
+	}
+
+	/** Apply clip
+		@param {Element} el
+		@param {SVG.ClipRect} clip
+		@return {void}
+	*/
+	function applyClip(el, clip) {
+		ctx.beginPath();
+		ctx.rect(clip.x, clip.y, clip.w, clip.h);
+		ctx.clip();
 	}
 
 	/** Decode transform parameters and apply them to canvas context ctx
@@ -931,10 +951,14 @@ SVG.prototype.draw = function (ctx, options) {
 		var idAttr = el.getAttribute("id");
 		/** @type {SVG.Displacement} */
 		var displacement = idAttr && options && options.displacement && options.displacement[idAttr];
+		var clip = idAttr && options && options.clips && options.clips[idAttr];
 		ctx && ctx.save();
 		transform.save();
 		if (displacement && ctx) {
 			applyDisplacement(el, displacement);
+		}
+		if (clip && ctx) {
+			applyClip(el, clip);
 		}
 
 		getStyle();

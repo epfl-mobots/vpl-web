@@ -188,6 +188,50 @@ A3a.vpl.Canvas.prototype.getDisplacements = function (aux, svgFilename, param) {
 	return displacements;
 };
 
+/** Make clips object for drawSVG with sliders elements ("lowerPartId")
+	@param {Object} aux description of the block containing sliders, as defined in the json
+	@param {string} svgFilename
+	@param {Array} param block parameters
+	@return {Object}
+*/
+A3a.vpl.Canvas.prototype.getClips = function (aux, svgFilename, param) {
+	var clips = {};
+
+	if (aux["sliders"] != undefined) {
+		for (var i = 0; i < aux["sliders"].length; i++) {
+			var sliderAux = aux["sliders"][i];
+			var bnds = this.clientData.svg[svgFilename].getElementBounds(sliderAux["id"]);
+			var bndsHalf = sliderAux["lowerPartId"] && this.clientData.svg[svgFilename].getElementBounds(sliderAux["lowerPartId"]);
+			if (bndsHalf) {
+				// calc thumb position between 0 and 1
+				var f = (param[i] - sliderAux["min"]) / (sliderAux["max"] - sliderAux["min"]);
+				// clip to bndsHalf shifted vertically or horizontally
+				var w = bndsHalf.xmax - bndsHalf.xmin;
+				var h = bndsHalf.ymax - bndsHalf.ymin;
+				if (bnds.xmax - bnds.xmin < bnds.ymax - bnds.ymin) {
+					// vertical slider
+					clips[sliderAux["lowerPartId"]] = {
+						x: bndsHalf.xmin - h,	// conservative margin to avoid clipping along x direction
+						y: bndsHalf.ymin,
+						w: w + 2 * h,
+						h: h * f
+					}
+				} else {
+					// horizontal slider
+					clips[sliderAux["lowerPartId"]] = {
+						x: bndsHalf.xmin,
+						y: bndsHalf.ymin - h,	// conservative margin to avoid clipping along y direction
+						w: w * f,
+						h: h + 2 * w
+					}
+				}
+			}
+		}
+	}
+
+	return clips;
+};
+
 /** Check if mouse is over slider
 	@param {number} pos slider position
 	@param {boolean} vert true if slider is vertical, false if horizontal
@@ -379,6 +423,7 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 				elementId: d.id,
 				style: this.getStyles(aux, block),
 				displacement: displacements,
+				clips: this.getClips(aux, f, block.param),
 				drawBoundingBox: false // true
 			});
 	}, this);

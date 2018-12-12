@@ -59,6 +59,7 @@ In json, block contain the following properties:
 
 	- "id" (string, required): id of the svg element corresponding to the slider, including the thumb. If the element's height is larger than the element's width, the slider is vertical, else it's horizontal. The element bounds are used to limit the position of the middle of the thumb. In the svg, the thumb should be place at a position such that it does not overflow the slider bounding box (the middle position should be safe).
 	- "thumbId" (string, required): id of the svg element corresponding to the thumb in the slider (the part which can be moved).
+	- "lowerPartId" (string, optional): id of the svg element clipped at the thumb position so that only the part on the left of, or below, the thumb is displayed. Can be used to replicate the slider element with a different color to better show the value.
 	- "min" (number, required): minimum value, stored in the block parameters.
 	- "max" (number, required): maximum value, stored in the block parameters.
 	- "snap" (array of numbers and/or strings, default: []): snap values to which the slider is attracted when the slider is within a relative distance of 10%. Numbers are fixed values; strings must contain a backtick-expression and are evaluated. They can refer to other parameters, typically other slider values (see "backtick-expressions" below).
