@@ -123,23 +123,23 @@ A3a.vpl.VPLSourceEditor.prototype.srcToolbarHeight = function () {
 /** Add a control button, taking care of disabled ones
 	@param {A3a.vpl.ControlBar} controlBar
 	@param {string} id
-	@param {A3a.vpl.CanvasItem.draw} draw
-	@param {?A3a.vpl.CanvasItem.mousedown=} mousedown
+	@param {A3a.vpl.Canvas.controlDraw} draw
+	@param {?A3a.vpl.Canvas.controlAction=} action
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 	@param {boolean=} keepEnabled
 	@return {void}
 */
-A3a.vpl.VPLSourceEditor.prototype.addControl = function (controlBar, id, draw, mousedown, doDrop, canDrop, keepEnabled) {
+A3a.vpl.VPLSourceEditor.prototype.addControl = function (controlBar, id, draw, action, doDrop, canDrop, keepEnabled) {
 	var self = this;
 	var canvas = controlBar.canvas;
 	var disabled = this.disabledUI.indexOf(id) >= 0;
 	if (this.customizationMode || !disabled) {
 		controlBar.addControl(
-			function (ctx, item, dx, dy) {
-				draw(ctx, item, dx, dy);
+			function (ctx, width, height, isDown) {
+				draw(ctx, width, height, isDown);
 				if (disabled) {
-					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.controlSize, canvas.dims.controlSize);
+					canvas.disabledMark(0, 0, canvas.dims.controlSize, canvas.dims.controlSize);
 				}
 			},
 			this.customizationMode && !keepEnabled
@@ -152,8 +152,9 @@ A3a.vpl.VPLSourceEditor.prototype.addControl = function (controlBar, id, draw, m
 					self.toolbarRender();
 					return 1;
 				}
-				: mousedown,
-			doDrop, canDrop);
+				: action,
+			doDrop, canDrop,
+			id);
 	}
 };
 
@@ -175,40 +176,41 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 	// new
 	this.addControl(controlBar, "src:new",
 		// draw
-		function (ctx, item, dx, dy) {
+		function (ctx, width, height, isDown) {
 			var enabled = !self.isLockedWithVPL;
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy,
+			ctx.fillStyle = isDown && enabled
+				? self.tbCanvas.dims.controlDownColor
+				: self.tbCanvas.dims.controlColor;
+			ctx.fillRect(0, 0,
 				self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
 			ctx.beginPath();
-			ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.25,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.25,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.65,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
+			ctx.moveTo(self.tbCanvas.dims.controlSize * 0.25,
+				self.tbCanvas.dims.controlSize * 0.2);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.25,
+				self.tbCanvas.dims.controlSize * 0.8);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.75,
+				self.tbCanvas.dims.controlSize * 0.8);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.75,
+				self.tbCanvas.dims.controlSize * 0.3);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.65,
+				self.tbCanvas.dims.controlSize * 0.2);
 			ctx.closePath();
-			ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.65,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.65,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
+			ctx.moveTo(self.tbCanvas.dims.controlSize * 0.65,
+				self.tbCanvas.dims.controlSize * 0.2);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.65,
+				self.tbCanvas.dims.controlSize * 0.3);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.75,
+				self.tbCanvas.dims.controlSize * 0.3);
 			ctx.strokeStyle = enabled ? "white" : "#777";
 			ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
 			ctx.stroke();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			if (!self.isLockedWithVPL) {
 				self.textEditor.setContent("");
 				self.tbCanvas.redraw();
 			}
-			return 0;
 		},
 		// doDrop
 		null,
@@ -219,47 +221,49 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 	var isEditorEmpty = this.getCode().length === 0;
 	this.addControl(controlBar, "src:save",
 		// draw
-		function (ctx, item, dx, dy) {
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy,
+		function (ctx, width, height, isDown) {
+			ctx.fillStyle = isDown
+				? self.tbCanvas.dims.controlDownColor
+				: self.tbCanvas.dims.controlColor;
+			ctx.fillRect(0, 0,
 				self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
 			ctx.beginPath();
-			ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.25,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.25,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.7);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.67,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.7);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.67,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.27);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.6,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
+			ctx.moveTo(self.tbCanvas.dims.controlSize * 0.25,
+				self.tbCanvas.dims.controlSize * 0.2);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.25,
+				self.tbCanvas.dims.controlSize * 0.7);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.67,
+				self.tbCanvas.dims.controlSize * 0.7);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.67,
+				self.tbCanvas.dims.controlSize * 0.27);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.6,
+				self.tbCanvas.dims.controlSize * 0.2);
 			ctx.closePath();
-			ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.6,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.6,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.27);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.67,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.27);
+			ctx.moveTo(self.tbCanvas.dims.controlSize * 0.6,
+				self.tbCanvas.dims.controlSize * 0.2);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.6,
+				self.tbCanvas.dims.controlSize * 0.27);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.67,
+				self.tbCanvas.dims.controlSize * 0.27);
 			ctx.strokeStyle = isEditorEmpty ? "#777" : "white";
 			ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
 			ctx.stroke();
 			ctx.lineWidth = 2 * self.tbCanvas.dims.blockLineWidth;
 			ctx.beginPath();
-			ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.8,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.5);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.8,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.8);
-			ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.7,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.7);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.8,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.9,
-				item.y + dy + self.tbCanvas.dims.controlSize * 0.7);
+			ctx.moveTo(self.tbCanvas.dims.controlSize * 0.8,
+				self.tbCanvas.dims.controlSize * 0.5);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.8,
+				self.tbCanvas.dims.controlSize * 0.8);
+			ctx.moveTo(self.tbCanvas.dims.controlSize * 0.7,
+				self.tbCanvas.dims.controlSize * 0.7);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.8,
+				self.tbCanvas.dims.controlSize * 0.8);
+			ctx.lineTo(self.tbCanvas.dims.controlSize * 0.9,
+				self.tbCanvas.dims.controlSize * 0.7);
 			ctx.stroke();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			if (!isEditorEmpty) {
 				// var src = self.getCode();
 				// var aesl = A3a.vpl.Program.toAESLFile(src);
@@ -267,7 +271,6 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 				var json = window["vplProgram"].exportToJSON();
 				A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
 			}
-			return 0;
 		},
 		// doDrop
 		null,
@@ -279,49 +282,50 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 		// switch to VPL
 		this.addControl(controlBar, "src:vpl",
 			// draw
-			function (ctx, item, dx, dy) {
+			function (ctx, width, height, isDown) {
 				var enabled = self.doesMatchVPL();
 				ctx.save();
-				ctx.fillStyle = "navy";
-				ctx.fillRect(item.x + dx, item.y + dy,
+				ctx.fillStyle = isDown
+					? self.tbCanvas.dims.controlDownColor
+					: self.tbCanvas.dims.controlColor;
+				ctx.fillRect(0, 0,
 					self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
 				ctx.beginPath();
-				ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.25,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
-				ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.25,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.8);
-				ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.8);
-				ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
-				ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.65,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
+				ctx.moveTo(self.tbCanvas.dims.controlSize * 0.25,
+					self.tbCanvas.dims.controlSize * 0.2);
+				ctx.lineTo(self.tbCanvas.dims.controlSize * 0.25,
+					self.tbCanvas.dims.controlSize * 0.8);
+				ctx.lineTo(self.tbCanvas.dims.controlSize * 0.75,
+					self.tbCanvas.dims.controlSize * 0.8);
+				ctx.lineTo(self.tbCanvas.dims.controlSize * 0.75,
+					self.tbCanvas.dims.controlSize * 0.3);
+				ctx.lineTo(self.tbCanvas.dims.controlSize * 0.65,
+					self.tbCanvas.dims.controlSize * 0.2);
 				ctx.closePath();
-				ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.65,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
-				ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.65,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
-				ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
+				ctx.moveTo(self.tbCanvas.dims.controlSize * 0.65,
+					self.tbCanvas.dims.controlSize * 0.2);
+				ctx.lineTo(self.tbCanvas.dims.controlSize * 0.65,
+					self.tbCanvas.dims.controlSize * 0.3);
+				ctx.lineTo(self.tbCanvas.dims.controlSize * 0.75,
+					self.tbCanvas.dims.controlSize * 0.3);
 				ctx.strokeStyle = enabled ? "white" : "#777";
 				ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
 				ctx.stroke();
 				ctx.fillStyle = "#99a";
 				for (var y = 0.15; y < 0.6; y += 0.15) {
-					ctx.fillRect(item.x + dx + self.tbCanvas.dims.controlSize * 0.3,
-						item.y + dy + self.tbCanvas.dims.controlSize * (0.2 + y),
+					ctx.fillRect(self.tbCanvas.dims.controlSize * 0.3,
+						self.tbCanvas.dims.controlSize * (0.2 + y),
 						self.tbCanvas.dims.controlSize * 0.4,
 						self.tbCanvas.dims.controlSize * 0.10);
 				}
 				ctx.restore();
 			},
-			// mousedown
-			function (data, x, y, ev) {
+			// action
+			function (ev) {
 				var enabled = self.doesMatchVPL();
 				if (enabled) {
 					window["vplProgram"].setView("vpl");
 				}
-				return 0;
 			},
 			// doDrop
 			null,
@@ -331,38 +335,41 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 		// locked with VPL
 		this.addControl(controlBar, "src:locked",
 			// draw
-			function (ctx, item, dx, dy) {
+			function (ctx, width, height, isDown) {
 				ctx.save();
-	            ctx.fillStyle = self.isLockedWithVPL ? "#06f" : "navy";
-				ctx.fillRect(item.x + dx, item.y + dy,
+				ctx.fillStyle = isDown
+					? self.tbCanvas.dims.controlDownColor
+					: self.isLockedWithVPL
+						? self.tbCanvas.dims.controlActiveColor
+						: self.tbCanvas.dims.controlColor;
+				ctx.fillRect(0, 0,
 					self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
 				ctx.strokeStyle = "white";
 				ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
 				ctx.fillStyle = self.isLockedWithVPL ? "#ddf" : "#99a";
 				for (var y = 0.15; y < 0.6; y += 0.15) {
-					ctx.fillRect(item.x + dx + self.tbCanvas.dims.controlSize * 0.15,
-						item.y + dy + self.tbCanvas.dims.controlSize * (0 + y),
+					ctx.fillRect(self.tbCanvas.dims.controlSize * 0.15,
+						self.tbCanvas.dims.controlSize * (0 + y),
 						self.tbCanvas.dims.controlSize * 0.4,
 						self.tbCanvas.dims.controlSize * 0.10);
 				}
 				A3a.vpl.Canvas.lock(ctx,
-					item.x + dx + self.tbCanvas.dims.controlSize * 0.77,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.36,
+					self.tbCanvas.dims.controlSize * 0.77,
+					self.tbCanvas.dims.controlSize * 0.36,
 					self.tbCanvas.dims.controlSize * 0.06,
 					"white",
 					!self.isLockedWithVPL);
-	            ctx.fillStyle = self.isLockedWithVPL ? "white" : "#44a";
-	            ctx.fillRect(item.x + dx + self.tbCanvas.dims.controlSize * 0.1,
-	                item.y + dy + self.tbCanvas.dims.controlSize * 0.8,
+	            ctx.fillStyle = self.isLockedWithVPL || isDown ? "white" : "#44a";
+	            ctx.fillRect(self.tbCanvas.dims.controlSize * 0.1,
+	                self.tbCanvas.dims.controlSize * 0.8,
 	                self.tbCanvas.dims.controlSize * 0.8,
 	                self.tbCanvas.dims.controlSize * 0.1);
 				ctx.restore();
 			},
-			// mousedown
-			function (data, x, y, ev) {
+			// action
+			function (ev) {
 				self.lockWithVPL(!self.isLockedWithVPL);
 				self.tbCanvas.redraw();
-				return 0;
 			},
 			// doDrop
 			null,
@@ -376,26 +383,27 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 		// run
 		this.addControl(controlBar, "src:run",
 			// draw
-			function (ctx, item, dx, dy) {
-				ctx.fillStyle = "navy";
-				ctx.fillRect(item.x + dx, item.y + dy,
+			function (ctx, width, height, isDown) {
+				ctx.fillStyle = isDown
+					? self.tbCanvas.dims.controlDownColor
+					: self.tbCanvas.dims.controlColor;
+				ctx.fillRect(0, 0,
 					self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
 				ctx.beginPath();
-				ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.3,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.25);
-				ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.3,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.75);
-				ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.8,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.5);
+				ctx.moveTo(self.tbCanvas.dims.controlSize * 0.3,
+					self.tbCanvas.dims.controlSize * 0.25);
+				ctx.lineTo(self.tbCanvas.dims.controlSize * 0.3,
+					self.tbCanvas.dims.controlSize * 0.75);
+				ctx.lineTo(self.tbCanvas.dims.controlSize * 0.8,
+					self.tbCanvas.dims.controlSize * 0.5);
 				ctx.closePath();
 				ctx.fillStyle = self.runGlue.isEnabled(self.language) ? "white" : "#777";
 				ctx.fill();
 			},
-			// mousedown
-			function (data, x, y, ev) {
+			// action
+			function (ev) {
 				var code = self.getCode();
 				self.runGlue.run(code, self.language);
-				return 0;
 			},
 			// doDrop
 			null,
@@ -405,20 +413,21 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 		// stop
 		this.addControl(controlBar, "src:stop",
 			// draw
-			function (ctx, item, dx, dy) {
-				ctx.fillStyle = "navy";
-				ctx.fillRect(item.x + dx, item.y + dy,
+			function (ctx, width, height, isDown) {
+				ctx.fillStyle = isDown
+					? self.tbCanvas.dims.controlDownColor
+					: self.tbCanvas.dims.controlColor;
+				ctx.fillRect(0, 0,
 					self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
 				ctx.fillStyle = self.runGlue.isEnabled(self.language) ? "white" : "#777";
-				ctx.fillRect(item.x + dx + self.tbCanvas.dims.controlSize * 0.28,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.28,
+				ctx.fillRect(self.tbCanvas.dims.controlSize * 0.28,
+					self.tbCanvas.dims.controlSize * 0.28,
 					self.tbCanvas.dims.controlSize * 0.44, self.tbCanvas.dims.controlSize * 0.44);
 				ctx.fill();
 			},
-			// mousedown
-			function (data, x, y, ev) {
+			// action
+			function (ev) {
 				self.runGlue.stop(self.language);
-				return 0;
 			},
 			// doDrop
 			null,
@@ -431,12 +440,14 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			// simulator view
 			this.addControl(controlBar, "src:sim",
 				// draw
-				function (ctx, item, dx, dy) {
-					ctx.fillStyle = "navy";
-					ctx.fillRect(item.x + dx, item.y + dy,
+				function (ctx, width, height, isDown) {
+					ctx.fillStyle = isDown
+						? self.tbCanvas.dims.controlDownColor
+						: self.tbCanvas.dims.controlColor;
+					ctx.fillRect(0, 0,
 						self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
 					ctx.save();
-					ctx.translate(item.x + dx + self.tbCanvas.dims.controlSize / 2, item.y + dy + self.tbCanvas.dims.controlSize * 0.35);
+					ctx.translate(self.tbCanvas.dims.controlSize / 2, self.tbCanvas.dims.controlSize * 0.35);
 					ctx.scale(0.4, 0.4);
 					ctx.rotate(0.2);
 					ctx.beginPath();
@@ -470,10 +481,9 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 
 					ctx.restore();
 				},
-				// mousedown
-				function (data, x, y, ev) {
+				// action
+				function (ev) {
 					window["vplProgram"].setView("sim");
-					return 0;
 				},
 				// doDrop
 				null,
@@ -488,42 +498,41 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 		if (self.customizationMode) {
 			this.addControl(controlBar, "src:teacher-reset",
 				// draw
-				function (ctx, item, dx, dy) {
+				function (ctx, width, height, isDown) {
 					ctx.fillStyle = "#a00";
-					ctx.fillRect(item.x + dx, item.y + dy,
+					ctx.fillRect(0, 0,
 						self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
 					ctx.beginPath();
-					ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.25,
-						item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
-					ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.25,
-						item.y + dy + self.tbCanvas.dims.controlSize * 0.8);
-					ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
-						item.y + dy + self.tbCanvas.dims.controlSize * 0.8);
-					ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
-						item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
-					ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.65,
-						item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
+					ctx.moveTo(self.tbCanvas.dims.controlSize * 0.25,
+						self.tbCanvas.dims.controlSize * 0.2);
+					ctx.lineTo(self.tbCanvas.dims.controlSize * 0.25,
+						self.tbCanvas.dims.controlSize * 0.8);
+					ctx.lineTo(self.tbCanvas.dims.controlSize * 0.75,
+						self.tbCanvas.dims.controlSize * 0.8);
+					ctx.lineTo(self.tbCanvas.dims.controlSize * 0.75,
+						self.tbCanvas.dims.controlSize * 0.3);
+					ctx.lineTo(self.tbCanvas.dims.controlSize * 0.65,
+						self.tbCanvas.dims.controlSize * 0.2);
 					ctx.closePath();
-					ctx.moveTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.65,
-						item.y + dy + self.tbCanvas.dims.controlSize * 0.2);
-					ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.65,
-						item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
-					ctx.lineTo(item.x + dx + self.tbCanvas.dims.controlSize * 0.75,
-						item.y + dy + self.tbCanvas.dims.controlSize * 0.3);
+					ctx.moveTo(self.tbCanvas.dims.controlSize * 0.65,
+						self.tbCanvas.dims.controlSize * 0.2);
+					ctx.lineTo(self.tbCanvas.dims.controlSize * 0.65,
+						self.tbCanvas.dims.controlSize * 0.3);
+					ctx.lineTo(self.tbCanvas.dims.controlSize * 0.75,
+						self.tbCanvas.dims.controlSize * 0.3);
 					ctx.strokeStyle = "white";
 					ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
 					ctx.stroke();
 					ctx.fillStyle = "white";
 					A3a.vpl.Canvas.drawHexagonalNut(ctx,
-						item.x + dx + self.tbCanvas.dims.controlSize * 0.63,
-						item.y + dy + self.tbCanvas.dims.controlSize * 0.7,
+						self.tbCanvas.dims.controlSize * 0.63,
+						self.tbCanvas.dims.controlSize * 0.7,
 						self.tbCanvas.dims.controlSize * 0.2);
 				},
-				// mousedown
-				function (data, x, y, ev) {
+				// action
+				function (ev) {
 					self.resetUI();
 					self.toolbarRender();
-					return 0;
 				},
 				// doDrop
 				null,
@@ -533,26 +542,27 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 		}
 		this.addControl(controlBar, "src:teacher",
 			// draw
-			function (ctx, item, dx, dy) {
-				ctx.fillStyle = self.customizationMode ? "#d10" : "#a00";
-				ctx.fillRect(item.x + dx, item.y + dy,
+			function (ctx, width, height, isDown) {
+				ctx.fillStyle = isDown
+					? self.customizationMode ? "#f50" : "#d00"
+					: self.customizationMode ? "#d10" : "#a00";
+				ctx.fillRect(0, 0,
 					self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
 				ctx.fillStyle = "white";
 				A3a.vpl.Canvas.drawHexagonalNut(ctx,
-					item.x + dx + self.tbCanvas.dims.controlSize * 0.5,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.4,
+					self.tbCanvas.dims.controlSize * 0.5,
+					self.tbCanvas.dims.controlSize * 0.4,
 					self.tbCanvas.dims.controlSize * 0.27);
-				ctx.fillStyle = self.customizationMode ? "white" : "#c66";
-				ctx.fillRect(item.x + dx + self.tbCanvas.dims.controlSize * 0.1,
-					item.y + dy + self.tbCanvas.dims.controlSize * 0.8,
+				ctx.fillStyle = self.customizationMode || isDown ? "white" : "#c66";
+				ctx.fillRect(self.tbCanvas.dims.controlSize * 0.1,
+					self.tbCanvas.dims.controlSize * 0.8,
 					self.tbCanvas.dims.controlSize * 0.8,
 					self.tbCanvas.dims.controlSize * 0.1);
 			},
-			// mousedown
-			function (data, x, y, ev) {
+			// action
+			function (ev) {
 				self.customizationMode = !self.customizationMode;
 				self.toolbarRender();
-				return 0;
 			},
 			// doDrop
 			null,

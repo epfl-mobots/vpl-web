@@ -21,8 +21,9 @@
 	}=} interactiveCB
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
+	@param {string=} id identifier
 */
-A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, doDrop, canDrop) {
+A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, doDrop, canDrop, id) {
 	this.data = data;
 	this.width = width;
 	this.height = height;
@@ -40,6 +41,7 @@ A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, d
 	this.interactiveCB = interactiveCB || null;
 	this.doDrop = doDrop || null;
 	this.canDrop = canDrop || null;
+	this.id = id || "";
 	/** @type {?function(A3a.vpl.CanvasItem):A3a.vpl.CanvasItem} */
 	this.zoomOnLongPress = null;
 	/** @type {?function():void} */
@@ -66,7 +68,8 @@ A3a.vpl.CanvasItem.prototype.clone = function () {
 		this.drawContent,
 		this.interactiveCB,
 		this.doDrop,
-		this.canDrop);
+		this.canDrop,
+		this.id);
 	c.drawOverlay = this.drawOverlay;
 	return c;
 };
@@ -180,6 +183,9 @@ A3a.vpl.Canvas = function (canvas) {
 	this.zoomedItemIndex = -1;
 	/** @type {A3a.vpl.CanvasItem} */
 	this.zoomedItemProxy = null;
+
+	/** @type {{id:(string|undefined),rect:({x:number,y:number,w:number,h:number}|undefined),isInside:(boolean|undefined)}} */
+	this.downControl = {};
 
 	this.clientData = {};	// can be used to store client data
 
@@ -461,6 +467,9 @@ A3a.vpl.Canvas.prototype["update"] = function () {
 		interRowSpace: number,
 		interEventActionSpace: number,
 		interBlockSpace: number,
+		controlColor: string,
+		controlDownColor: string,
+		controlActiveColor: string,
 		controlSize: number,
 		controlFont: string,
 		topControlSpace: number,
@@ -494,6 +503,9 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		interRowSpace: Math.round(blockSize / 2),
 		interEventActionSpace: blockSize / 2,
 		interBlockSpace: Math.round(blockSize / 6),
+		controlColor: "navy",
+		controlDownColor: "#37f",
+		controlActiveColor: "#06f",
 		controlSize: controlSize,
 		controlFont: "bold 15px sans-serif",
 		topControlSpace: 2 * controlSize,
@@ -717,24 +729,79 @@ A3a.vpl.Canvas.prototype.addDecoration = function (fun) {
 	this.setItem(item);
 };
 
-/** Draw active control
+/** Function drawing control button with origin at (0,0); args are ctx, width, height, isDown
+	@typedef {function(CanvasRenderingContext2D,number,number,boolean):void}
+*/
+A3a.vpl.Canvas.controlDraw;
+
+/** Function implementung the control button action
+	@typedef {function(A3a.vpl.CanvasItem.mouseEvent):void}
+*/
+A3a.vpl.Canvas.controlAction;
+
+/** Add active control (new)
 	@param {number} x
 	@param {number} y
 	@param {number} width
 	@param {number} height
-	@param {A3a.vpl.CanvasItem.draw} draw
-	@param {?A3a.vpl.CanvasItem.mousedown=} mousedown
+	@param {A3a.vpl.Canvas.controlDraw} draw
+	@param {?A3a.vpl.Canvas.controlAction=} action
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
+	@param {string=} id
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.addControl = function (x, y, width, height, draw, mousedown, doDrop, canDrop) {
+A3a.vpl.Canvas.prototype.addControl = function (x, y, width, height, draw, action, doDrop, canDrop, id) {
+	/** @type {A3a.vpl.CanvasItem.mouseEvent} */
+	var downEvent;
+	var self = this;
 	var item = new A3a.vpl.CanvasItem(null,
 		width, height, x, y,
-		draw,
-		mousedown ? {mousedown: mousedown} : null,
+		/** @type {A3a.vpl.CanvasItem.draw} */
+		(function (ctx, item, dx, dy) {
+			ctx.save();
+			ctx.translate(item.x + dx, item.y + dy);
+			draw(ctx, item.width, item.height,
+				self.downControl.id === id && /** @type {boolean} */(self.downControl.isInside));
+			ctx.restore();
+		}),
+		action ? {
+			/** @type {A3a.vpl.CanvasItem.mousedown} */
+			mousedown: function (canvas, data, width, height, left, top, ev) {
+				self.downControl = {
+					id: id,
+					rect: {
+						x: x,
+						y: y,
+						w: width,
+						h: height
+					},
+					isInside: true
+				};
+				downEvent = ev;
+				self.redraw();
+				return 0;
+			},
+			/** @type {A3a.vpl.CanvasItem.mousedrag} */
+			mousedrag: function (canvas, data, dragIndex, width, height, left, top, ev) {
+				self.downControl.isInside = ev.x >= self.downControl.rect.x &&
+					ev.x < self.downControl.rect.x + self.downControl.rect.w &&
+					ev.y >= self.downControl.rect.y &&
+					ev.y < self.downControl.rect.y + self.downControl.rect.h;
+				canvas.redraw();
+			},
+			/** @type {A3a.vpl.CanvasItem.mouseup} */
+			mouseup: function (canvas, data, dragIndex) {
+				if (self.downControl.isInside) {
+					action(downEvent);
+				}
+				self.downControl = {};
+				self.redraw();
+			}
+		} : null,
 		doDrop,
-		canDrop);
+		canDrop,
+		id);
 	item.draggable = false;
 	this.setItem(item);
 };

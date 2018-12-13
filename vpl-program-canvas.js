@@ -457,27 +457,27 @@ A3a.vpl.Program.blockLayout = function (pMin, pMax, itemSize, gap, separatorGap,
 /** Add a control button, taking care of disabled ones
 	@param {A3a.vpl.ControlBar} controlBar
 	@param {string} id
-	@param {A3a.vpl.CanvasItem.draw} draw
-	@param {?A3a.vpl.CanvasItem.mousedown=} mousedown
+	@param {A3a.vpl.Canvas.controlDraw} draw
+	@param {?A3a.vpl.Canvas.controlAction=} action
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 	@param {boolean=} keepEnabled
 	@return {void}
 */
-A3a.vpl.Program.prototype.addControl = function (controlBar, id, draw, mousedown, doDrop, canDrop, keepEnabled) {
+A3a.vpl.Program.prototype.addControl = function (controlBar, id, draw, action, doDrop, canDrop, keepEnabled) {
 	var self = this;
 	var canvas = controlBar.canvas;
 	var disabled = this.disabledUI.indexOf(id) >= 0;
 	if (this.customizationMode || !disabled) {
 		controlBar.addControl(
-			function (ctx, item, dx, dy) {
-				draw(ctx, item, dx, dy);
+			function (ctx, width, height, isDown) {
+				draw(ctx, width, height, isDown);
 				if (disabled) {
-					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.controlSize, canvas.dims.controlSize);
+					canvas.disabledMark(0, 0, width, height);
 				}
 			},
 			this.customizationMode && !keepEnabled
-				? function (canvas, data, width, height, x, y, downEvent) {
+				? function (downEvent) {
 					if (disabled) {
 						self.disabledUI.splice(self.disabledUI.indexOf(id), 1);
 					} else {
@@ -485,8 +485,8 @@ A3a.vpl.Program.prototype.addControl = function (controlBar, id, draw, mousedown
 					}
 					return 1;
 				}
-				: mousedown,
-			doDrop, canDrop);
+				: action,
+			doDrop, canDrop, id);
 	}
 };
 
@@ -552,36 +552,37 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// new
 	this.addControl(controlBar, "new",
 		// draw
-		function (ctx, item, dx, dy) {
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy,
+		function (ctx, width, height, isDown) {
+			ctx.fillStyle = isDown
+				? canvas.dims.controlDownColor
+				: canvas.dims.controlColor;
+			ctx.fillRect(0, 0,
 				canvas.dims.controlSize, canvas.dims.controlSize);
 			ctx.beginPath();
-			ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.25,
-				item.y + dy + canvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.25,
-				item.y + dy + canvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
-				item.y + dy + canvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
-				item.y + dy + canvas.dims.controlSize * 0.3);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.65,
-				item.y + dy + canvas.dims.controlSize * 0.2);
+			ctx.moveTo(canvas.dims.controlSize * 0.25,
+				canvas.dims.controlSize * 0.2);
+			ctx.lineTo(canvas.dims.controlSize * 0.25,
+				canvas.dims.controlSize * 0.8);
+			ctx.lineTo(canvas.dims.controlSize * 0.75,
+				canvas.dims.controlSize * 0.8);
+			ctx.lineTo(canvas.dims.controlSize * 0.75,
+				canvas.dims.controlSize * 0.3);
+			ctx.lineTo(canvas.dims.controlSize * 0.65,
+				canvas.dims.controlSize * 0.2);
 			ctx.closePath();
-			ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.65,
-				item.y + dy + canvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.65,
-				item.y + dy + canvas.dims.controlSize * 0.3);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
-				item.y + dy + canvas.dims.controlSize * 0.3);
+			ctx.moveTo(canvas.dims.controlSize * 0.65,
+				canvas.dims.controlSize * 0.2);
+			ctx.lineTo(canvas.dims.controlSize * 0.65,
+				canvas.dims.controlSize * 0.3);
+			ctx.lineTo(canvas.dims.controlSize * 0.75,
+				canvas.dims.controlSize * 0.3);
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = canvas.dims.blockLineWidth;
 			ctx.stroke();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.new();
-			return 0;
 		},
 		// doDrop
 		null,
@@ -591,54 +592,56 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// save
 	this.addControl(controlBar, "save",
 		// draw
-		function (ctx, item, dx, dy) {
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy,
+		function (ctx, width, height, isDown) {
+			var disabled = self.isEmpty();
+			ctx.fillStyle = isDown && !disabled
+				? canvas.dims.controlDownColor
+				: canvas.dims.controlColor;
+			ctx.fillRect(0, 0,
 				canvas.dims.controlSize, canvas.dims.controlSize);
 			ctx.beginPath();
-			ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.25,
-				item.y + dy + canvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.25,
-				item.y + dy + canvas.dims.controlSize * 0.7);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.67,
-				item.y + dy + canvas.dims.controlSize * 0.7);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.67,
-				item.y + dy + canvas.dims.controlSize * 0.27);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.6,
-				item.y + dy + canvas.dims.controlSize * 0.2);
+			ctx.moveTo(canvas.dims.controlSize * 0.25,
+				canvas.dims.controlSize * 0.2);
+			ctx.lineTo(canvas.dims.controlSize * 0.25,
+				canvas.dims.controlSize * 0.7);
+			ctx.lineTo(canvas.dims.controlSize * 0.67,
+				canvas.dims.controlSize * 0.7);
+			ctx.lineTo(canvas.dims.controlSize * 0.67,
+				canvas.dims.controlSize * 0.27);
+			ctx.lineTo(canvas.dims.controlSize * 0.6,
+				canvas.dims.controlSize * 0.2);
 			ctx.closePath();
-			ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.6,
-				item.y + dy + canvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.6,
-				item.y + dy + canvas.dims.controlSize * 0.27);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.67,
-				item.y + dy + canvas.dims.controlSize * 0.27);
-			ctx.strokeStyle = self.isEmpty() ? "#777" : "white";
+			ctx.moveTo(canvas.dims.controlSize * 0.6,
+				canvas.dims.controlSize * 0.2);
+			ctx.lineTo(canvas.dims.controlSize * 0.6,
+				canvas.dims.controlSize * 0.27);
+			ctx.lineTo(canvas.dims.controlSize * 0.67,
+				canvas.dims.controlSize * 0.27);
+			ctx.strokeStyle = disabled ? "#777" : "white";
 			ctx.lineWidth = canvas.dims.blockLineWidth;
 			ctx.stroke();
 			ctx.lineWidth = 2 * canvas.dims.blockLineWidth;
 			ctx.beginPath();
-			ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.8,
-				item.y + dy + canvas.dims.controlSize * 0.5);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.8,
-				item.y + dy + canvas.dims.controlSize * 0.8);
-			ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.7,
-				item.y + dy + canvas.dims.controlSize * 0.7);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.8,
-				item.y + dy + canvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.9,
-				item.y + dy + canvas.dims.controlSize * 0.7);
+			ctx.moveTo(canvas.dims.controlSize * 0.8,
+				canvas.dims.controlSize * 0.5);
+			ctx.lineTo(canvas.dims.controlSize * 0.8,
+				canvas.dims.controlSize * 0.8);
+			ctx.moveTo(canvas.dims.controlSize * 0.7,
+				canvas.dims.controlSize * 0.7);
+			ctx.lineTo(canvas.dims.controlSize * 0.8,
+				canvas.dims.controlSize * 0.8);
+			ctx.lineTo(canvas.dims.controlSize * 0.9,
+				canvas.dims.controlSize * 0.7);
 			ctx.stroke();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			if (!self.isEmpty()) {
 				// var aesl = self.exportAsAESLFile();
 				// A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
 				var json = self.exportToJSON();
 				A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
 			}
-			return 0;
 		},
 		// doDrop
 		null,
@@ -649,52 +652,53 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		// upload
 		this.addControl(controlBar, "upload",
 			// draw
-			function (ctx, item, dx, dy) {
-				ctx.fillStyle = "navy";
-				ctx.fillRect(item.x + dx, item.y + dy,
+			function (ctx, width, height, isDown) {
+				ctx.fillStyle = isDown
+					? canvas.dims.controlDownColor
+					: canvas.dims.controlColor;
+				ctx.fillRect(0, 0,
 					canvas.dims.controlSize, canvas.dims.controlSize);
 				ctx.beginPath();
-				ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.25,
-					item.y + dy + canvas.dims.controlSize * 0.3);
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.25,
-					item.y + dy + canvas.dims.controlSize * 0.8);
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.67,
-					item.y + dy + canvas.dims.controlSize * 0.8);
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.67,
-					item.y + dy + canvas.dims.controlSize * 0.37);
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.6,
-					item.y + dy + canvas.dims.controlSize * 0.3);
+				ctx.moveTo(canvas.dims.controlSize * 0.25,
+					canvas.dims.controlSize * 0.3);
+				ctx.lineTo(canvas.dims.controlSize * 0.25,
+					canvas.dims.controlSize * 0.8);
+				ctx.lineTo(canvas.dims.controlSize * 0.67,
+					canvas.dims.controlSize * 0.8);
+				ctx.lineTo(canvas.dims.controlSize * 0.67,
+					canvas.dims.controlSize * 0.37);
+				ctx.lineTo(canvas.dims.controlSize * 0.6,
+					canvas.dims.controlSize * 0.3);
 				ctx.closePath();
-				ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.6,
-					item.y + dy + canvas.dims.controlSize * 0.3);
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.6,
-					item.y + dy + canvas.dims.controlSize * 0.37);
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.67,
-					item.y + dy + canvas.dims.controlSize * 0.37);
+				ctx.moveTo(canvas.dims.controlSize * 0.6,
+					canvas.dims.controlSize * 0.3);
+				ctx.lineTo(canvas.dims.controlSize * 0.6,
+					canvas.dims.controlSize * 0.37);
+				ctx.lineTo(canvas.dims.controlSize * 0.67,
+					canvas.dims.controlSize * 0.37);
 				ctx.strokeStyle = self.isEmpty() ? "#777" : "white";
 				ctx.lineWidth = canvas.dims.blockLineWidth;
 				ctx.stroke();
 				ctx.lineWidth = 2 * canvas.dims.blockLineWidth;
 				ctx.beginPath();
-				ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.8,
-					item.y + dy + canvas.dims.controlSize * 0.5);
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.8,
-					item.y + dy + canvas.dims.controlSize * 0.2);
-				ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.7,
-					item.y + dy + canvas.dims.controlSize * 0.3);
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.8,
-					item.y + dy + canvas.dims.controlSize * 0.2);
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.9,
-					item.y + dy + canvas.dims.controlSize * 0.3);
+				ctx.moveTo(canvas.dims.controlSize * 0.8,
+					canvas.dims.controlSize * 0.5);
+				ctx.lineTo(canvas.dims.controlSize * 0.8,
+					canvas.dims.controlSize * 0.2);
+				ctx.moveTo(canvas.dims.controlSize * 0.7,
+					canvas.dims.controlSize * 0.3);
+				ctx.lineTo(canvas.dims.controlSize * 0.8,
+					canvas.dims.controlSize * 0.2);
+				ctx.lineTo(canvas.dims.controlSize * 0.9,
+					canvas.dims.controlSize * 0.3);
 				ctx.stroke();
 			},
-			// mousedown
-			function (data, x, y, ev) {
+			// action
+			function (ev) {
 				if (!self.isEmpty()) {
 					var aesl = self.exportAsAESLFile();
 					A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
 				}
-				return 0;
 			},
 			// doDrop
 			null,
@@ -705,42 +709,43 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// source code editor
 	this.addControl(controlBar, "text",
 		// draw
-		function (ctx, item, dx, dy) {
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy,
+		function (ctx, width, height, isDown) {
+			ctx.fillStyle = isDown
+				? canvas.dims.controlDownColor
+				: canvas.dims.controlColor;
+			ctx.fillRect(0, 0,
 				canvas.dims.controlSize, canvas.dims.controlSize);
 			ctx.beginPath();
-			ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.25,
-				item.y + dy + canvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.25,
-				item.y + dy + canvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
-				item.y + dy + canvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
-				item.y + dy + canvas.dims.controlSize * 0.3);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.65,
-				item.y + dy + canvas.dims.controlSize * 0.2);
+			ctx.moveTo(canvas.dims.controlSize * 0.25,
+				canvas.dims.controlSize * 0.2);
+			ctx.lineTo(canvas.dims.controlSize * 0.25,
+				canvas.dims.controlSize * 0.8);
+			ctx.lineTo(canvas.dims.controlSize * 0.75,
+				canvas.dims.controlSize * 0.8);
+			ctx.lineTo(canvas.dims.controlSize * 0.75,
+				canvas.dims.controlSize * 0.3);
+			ctx.lineTo(canvas.dims.controlSize * 0.65,
+				canvas.dims.controlSize * 0.2);
 			ctx.closePath();
-			ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.65,
-				item.y + dy + canvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.65,
-				item.y + dy + canvas.dims.controlSize * 0.3);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
-				item.y + dy + canvas.dims.controlSize * 0.3);
+			ctx.moveTo(canvas.dims.controlSize * 0.65,
+				canvas.dims.controlSize * 0.2);
+			ctx.lineTo(canvas.dims.controlSize * 0.65,
+				canvas.dims.controlSize * 0.3);
+			ctx.lineTo(canvas.dims.controlSize * 0.75,
+				canvas.dims.controlSize * 0.3);
 			for (var y = 0.2; y < 0.6; y += 0.1) {
-				ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.3,
-					item.y + dy + canvas.dims.controlSize * (0.2 + y));
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.7,
-					item.y + dy + canvas.dims.controlSize * (0.2 + y));
+				ctx.moveTo(canvas.dims.controlSize * 0.3,
+					canvas.dims.controlSize * (0.2 + y));
+				ctx.lineTo(canvas.dims.controlSize * 0.7,
+					canvas.dims.controlSize * (0.2 + y));
 			}
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = canvas.dims.blockLineWidth;
 			ctx.stroke();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.setView("src");
-			return 0;
 		},
 		// doDrop: select code for block or event
 		function (targetItem, draggedItem) {
@@ -771,33 +776,36 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// advanced mode (toggle)
 	this.addControl(controlBar, "advanced",
 		// draw
-        function (ctx, item, dx, dy) {
+        function (ctx, width, height, isDown) {
             var isOn = self.mode === A3a.vpl.mode.advanced;
-            ctx.fillStyle = isOn ? "#06f" : "navy";
-            ctx.fillRect(item.x + dx, item.y + dy,
+			ctx.fillStyle = isDown
+				? canvas.dims.controlDownColor
+				: isOn
+					? canvas.dims.controlActiveColor
+					: canvas.dims.controlColor;
+            ctx.fillRect(0, 0,
                 canvas.dims.controlSize, canvas.dims.controlSize);
             ctx.fillStyle = "white";
             for (var i = 0; i < 4; i++) {
                 for (var j = 0; j < 5; j++) {
-                    ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.1 * (1 + i) +
+                    ctx.fillRect(canvas.dims.controlSize * 0.1 * (1 + i) +
                             (i < 2 ? 0 : canvas.dims.controlSize * 0.43),
-                        item.y + dy + canvas.dims.controlSize * 0.1 * (2 + j),
+                        canvas.dims.controlSize * 0.1 * (2 + j),
                         canvas.dims.controlSize * 0.07,
                         canvas.dims.controlSize * 0.07);
                 }
             }
-            ctx.fillStyle = isOn ? "white" : "#44a";
-            ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.1,
-                item.y + dy + canvas.dims.controlSize * 0.8,
+            ctx.fillStyle = isOn || isDown ? "white" : "#44a";
+            ctx.fillRect(canvas.dims.controlSize * 0.1,
+                canvas.dims.controlSize * 0.8,
                 canvas.dims.controlSize * 0.8,
                 canvas.dims.controlSize * 0.1);
         },
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.setMode(self.mode === A3a.vpl.mode.basic
 				? A3a.vpl.mode.advanced
 				: A3a.vpl.mode.basic);
-			return 0;
 		},
 		// doDrop
 		null,
@@ -810,15 +818,18 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		@param {number} y
 		@param {boolean} flipped
 		@param {boolean} enabled
+		@param {boolean} isDown
 		@return {void}
 	*/
-	function drawUndo(ctx, x, y, flipped, enabled) {
+	function drawUndo(ctx, x, y, flipped, enabled, isDown) {
 		ctx.save();
 		if (flipped) {
 			ctx.scale(-1, 1);
 			ctx.translate(-2 * x - canvas.dims.controlSize, 0);
 		}
-		ctx.fillStyle = "navy";
+		ctx.fillStyle = isDown && enabled
+			? canvas.dims.controlDownColor
+			: canvas.dims.controlColor;
 		ctx.fillRect(x, y,
 			canvas.dims.controlSize, canvas.dims.controlSize);
 		ctx.fillStyle = enabled ? "white" : "#777";
@@ -847,13 +858,12 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// undo
 	this.addControl(controlBar, "undo",
 		// draw
-		function (ctx, item, dx, dy) {
-			drawUndo(ctx, item.x + dx, item.y + dy, false, self.undoState.canUndo());
+		function (ctx, width, height, isDown) {
+			drawUndo(ctx, 0, 0, false, self.undoState.canUndo(), isDown);
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.undo(function () { self.renderToCanvas(canvas); });
-			return 0;
 		},
 		// doDrop
 		null,
@@ -863,13 +873,12 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// redo
 	this.addControl(controlBar, "redo",
 		// draw
-		function (ctx, item, dx, dy) {
-			drawUndo(ctx, item.x + dx, item.y + dy, true, self.undoState.canRedo());
+		function (ctx, width, height, isDown) {
+			drawUndo(ctx, 0, 0, true, self.undoState.canRedo(), isDown);
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.redo(function () { self.renderToCanvas(canvas); });
-			return 0;
 		},
 		// doDrop
 		null,
@@ -881,32 +890,34 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	if (window["vplRun"]) {
 		this.addControl(controlBar, "run",
 			// draw
-			function (ctx, item, dx, dy) {
-				ctx.fillStyle = "navy";
-				ctx.fillRect(item.x + dx, item.y + dy,
+			function (ctx, width, height, isDown) {
+				var enabled = window["vplRun"].isEnabled(self.currentLanguage);
+				ctx.fillStyle = isDown && enabled
+					? canvas.dims.controlDownColor
+					: canvas.dims.controlColor;
+				ctx.fillRect(0, 0,
 					canvas.dims.controlSize, canvas.dims.controlSize);
 				ctx.beginPath();
-				ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.3,
-					item.y + dy + canvas.dims.controlSize * 0.25);
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.3,
-					item.y + dy + canvas.dims.controlSize * 0.75);
-				ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.8,
-					item.y + dy + canvas.dims.controlSize * 0.5);
+				ctx.moveTo(canvas.dims.controlSize * 0.3,
+					canvas.dims.controlSize * 0.25);
+				ctx.lineTo(canvas.dims.controlSize * 0.3,
+					canvas.dims.controlSize * 0.75);
+				ctx.lineTo(canvas.dims.controlSize * 0.8,
+					canvas.dims.controlSize * 0.5);
 				ctx.closePath();
-				ctx.fillStyle = window["vplRun"].isEnabled(self.currentLanguage) ? "white" : "#777";
+				ctx.fillStyle = enabled ? "white" : "#777";
 				ctx.fill();
-				ctx.fillStyle = window["vplRun"].isEnabled(self.currentLanguage) ? self.uploaded ? "white" : "#44a" : "#777";
-				ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.1,
-					item.y + dy + canvas.dims.controlSize * 0.8,
+				ctx.fillStyle = enabled ? self.uploaded || isDown ? "white" : "#44a" : "#777";
+				ctx.fillRect(canvas.dims.controlSize * 0.1,
+					canvas.dims.controlSize * 0.8,
 					canvas.dims.controlSize * 0.8,
 					canvas.dims.controlSize * 0.1);
 			},
-			// mousedown
-			function (data, x, y, ev) {
+			// action
+			function (ev) {
 				var code = self.getCode(self.currentLanguage);
 				window["vplRun"].run(code, self.currentLanguage);
 				self.uploaded = true;
-				return 0;
 			},
 			// doDrop: compile code fragment and play it
 			function (targetItem, draggedItem) {
@@ -938,21 +949,22 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 		this.addControl(controlBar, "stop",
 			// draw
-			function (ctx, item, dx, dy) {
-				ctx.fillStyle = "navy";
-				ctx.fillRect(item.x + dx, item.y + dy,
+			function (ctx, width, height, isDown) {
+				ctx.fillStyle = isDown
+					? canvas.dims.controlDownColor
+					: canvas.dims.controlColor;
+				ctx.fillRect(0, 0,
 					canvas.dims.controlSize, canvas.dims.controlSize);
 				ctx.fillStyle = window["vplRun"].isEnabled(self.currentLanguage) ? "white" : "#777";
-				ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.28,
-					item.y + dy + canvas.dims.controlSize * 0.28,
+				ctx.fillRect(canvas.dims.controlSize * 0.28,
+					canvas.dims.controlSize * 0.28,
 					canvas.dims.controlSize * 0.44, canvas.dims.controlSize * 0.44);
 				ctx.fill();
 			},
-			// mousedown
-			function (data, x, y, ev) {
+			// action
+			function (ev) {
 				window["vplRun"].stop(self.currentLanguage);
 				self.uploaded = false;
-				return 0;
 			},
 			// doDrop
 			null,
@@ -962,12 +974,14 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		if (window["vplSim"]) {
 			this.addControl(controlBar, "sim",
 				// draw
-				function (ctx, item, dx, dy) {
-					ctx.fillStyle = "navy";
-					ctx.fillRect(item.x + dx, item.y + dy,
+				function (ctx, width, height, isDown) {
+					ctx.fillStyle = isDown
+						? canvas.dims.controlDownColor
+						: canvas.dims.controlColor;
+					ctx.fillRect(0, 0,
 						canvas.dims.controlSize, canvas.dims.controlSize);
 					ctx.save();
-					ctx.translate(item.x + dx + canvas.dims.controlSize / 2, item.y + dy + canvas.dims.controlSize * 0.35);
+					ctx.translate(canvas.dims.controlSize / 2, canvas.dims.controlSize * 0.35);
 					ctx.scale(0.4, 0.4);
 					ctx.rotate(0.2);
 					ctx.beginPath();
@@ -1001,10 +1015,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 					ctx.restore();
 				},
-				// mousedown
-				function (data, x, y, ev) {
+				// action
+				function (ev) {
 					self.setView("sim");
-					return 0;
 				},
 				// doDrop
 				null,
@@ -1018,20 +1031,22 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
     // duplicate
 	this.addControl(controlBar, "duplicate",
         // draw
-        function (ctx, item, dx, dy) {
-            ctx.fillStyle = "navy";
-            ctx.fillRect(item.x + dx, item.y + dy,
+        function (ctx, width, height, isDown) {
+            ctx.fillStyle = isDown
+				? canvas.dims.controlDownColor
+				: canvas.dims.controlColor;
+            ctx.fillRect(0, 0,
                 canvas.dims.controlSize, canvas.dims.controlSize);
             ctx.strokeStyle = "white";
             ctx.lineWidth = canvas.dims.blockLineWidth;
-            ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
-                item.y + dy + canvas.dims.controlSize * 0.3,
+            ctx.strokeRect(canvas.dims.controlSize * 0.3,
+                canvas.dims.controlSize * 0.3,
                 canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.15);
-            ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
-                item.y + dy + canvas.dims.controlSize * 0.55,
+            ctx.strokeRect(canvas.dims.controlSize * 0.3,
+                canvas.dims.controlSize * 0.55,
                 canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.15);
         },
-        // mousedown
+        // action
         null,
         // doDrop: duplicate event handler
         function (targetItem, draggedItem) {
@@ -1052,23 +1067,25 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// disable
 	this.addControl(controlBar, "disable",
 		// draw
-		function (ctx, item, dx, dy) {
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy,
+		function (ctx, width, height, isDown) {
+			ctx.fillStyle = isDown
+				? canvas.dims.controlDownColor
+				: canvas.dims.controlColor;
+			ctx.fillRect(0, 0,
 				canvas.dims.controlSize, canvas.dims.controlSize);
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = canvas.dims.blockLineWidth;
-			ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
-				item.y + dy + canvas.dims.controlSize * 0.3,
+			ctx.strokeRect(canvas.dims.controlSize * 0.3,
+				canvas.dims.controlSize * 0.3,
 				canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.4);
 			ctx.beginPath();
-			ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.2,
-				item.y + dy + canvas.dims.controlSize * 0.6);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.8,
-				item.y + dy + canvas.dims.controlSize * 0.4);
+			ctx.moveTo(canvas.dims.controlSize * 0.2,
+				canvas.dims.controlSize * 0.6);
+			ctx.lineTo(canvas.dims.controlSize * 0.8,
+				canvas.dims.controlSize * 0.4);
 			ctx.stroke();
 		},
-		// mousedown
+		// action
 		null,
 		// doDrop: disable or reenable block or event handler
 		function (targetItem, draggedItem) {
@@ -1093,23 +1110,25 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			// lock
 			this.addControl(controlBar, "lock",
 				// draw
-				function (ctx, item, dx, dy) {
-					ctx.fillStyle = "navy";
-					ctx.fillRect(item.x + dx, item.y + dy,
+				function (ctx, width, height, isDown) {
+					ctx.fillStyle = isDown
+						? canvas.dims.controlDownColor
+						: canvas.dims.controlColor;
+					ctx.fillRect(0, 0,
 						canvas.dims.controlSize, canvas.dims.controlSize);
 					ctx.strokeStyle = "white";
 					ctx.fillStyle = "white";
 					ctx.lineWidth = canvas.dims.blockLineWidth;
-					ctx.strokeRect(item.x + dx + canvas.dims.controlSize * 0.3,
-						item.y + dy + canvas.dims.controlSize * 0.3,
+					ctx.strokeRect(canvas.dims.controlSize * 0.3,
+						canvas.dims.controlSize * 0.3,
 						canvas.dims.controlSize * 0.4, canvas.dims.controlSize * 0.4);
 					A3a.vpl.Canvas.lock(ctx,
-						item.x + dx + canvas.dims.controlSize * 0.5,
-						item.y + dy + canvas.dims.controlSize * 0.52,
+						canvas.dims.controlSize * 0.5,
+						canvas.dims.controlSize * 0.52,
 						canvas.dims.controlSize * 0.04,
 						"white");
 				},
-				// mousedown
+				// action
 				null,
 				// doDrop: lock or unlock block or event handler
 				function (targetItem, draggedItem) {
@@ -1134,25 +1153,27 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// trashcan
 	this.addControl(controlBar, "trashcan",
 		// draw
-		function (ctx, item, dx, dy) {
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy,
+		function (ctx, width, height, isDown) {
+			ctx.fillStyle = isDown
+				? canvas.dims.controlDownColor
+				: canvas.dims.controlColor;
+			ctx.fillRect(0, 0,
 				canvas.dims.controlSize, canvas.dims.controlSize);
 			ctx.beginPath();
-			ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.25,
-				item.y + dy + canvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.32,
-				item.y + dy + canvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.68,
-				item.y + dy + canvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
-				item.y + dy + canvas.dims.controlSize * 0.2);
+			ctx.moveTo(canvas.dims.controlSize * 0.25,
+				canvas.dims.controlSize * 0.2);
+			ctx.lineTo(canvas.dims.controlSize * 0.32,
+				canvas.dims.controlSize * 0.8);
+			ctx.lineTo(canvas.dims.controlSize * 0.68,
+				canvas.dims.controlSize * 0.8);
+			ctx.lineTo(canvas.dims.controlSize * 0.75,
+				canvas.dims.controlSize * 0.2);
 			ctx.closePath();
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = canvas.dims.blockLineWidth;
 			ctx.stroke();
 		},
-		// mousedown
+		// action
 		null,
 		// doDrop: remove block or event handler
 		function (targetItem, draggedItem) {
@@ -1184,43 +1205,42 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		if (self.customizationMode) {
 			this.addControl(controlBar, "teacher-reset",
 				// draw
-				function (ctx, item, dx, dy) {
-					ctx.fillStyle = "#a00";
-					ctx.fillRect(item.x + dx, item.y + dy,
+				function (ctx, width, height, isDown) {
+					ctx.fillStyle = isDown ? "#d00" : "#a00";
+					ctx.fillRect(0, 0,
 						canvas.dims.controlSize, canvas.dims.controlSize);
 					ctx.beginPath();
-					ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.25,
-						item.y + dy + canvas.dims.controlSize * 0.2);
-					ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.25,
-						item.y + dy + canvas.dims.controlSize * 0.8);
-					ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
-						item.y + dy + canvas.dims.controlSize * 0.8);
-					ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
-						item.y + dy + canvas.dims.controlSize * 0.3);
-					ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.65,
-						item.y + dy + canvas.dims.controlSize * 0.2);
+					ctx.moveTo(canvas.dims.controlSize * 0.25,
+						canvas.dims.controlSize * 0.2);
+					ctx.lineTo(canvas.dims.controlSize * 0.25,
+						canvas.dims.controlSize * 0.8);
+					ctx.lineTo(canvas.dims.controlSize * 0.75,
+						canvas.dims.controlSize * 0.8);
+					ctx.lineTo(canvas.dims.controlSize * 0.75,
+						canvas.dims.controlSize * 0.3);
+					ctx.lineTo(canvas.dims.controlSize * 0.65,
+						canvas.dims.controlSize * 0.2);
 					ctx.closePath();
-					ctx.moveTo(item.x + dx + canvas.dims.controlSize * 0.65,
-						item.y + dy + canvas.dims.controlSize * 0.2);
-					ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.65,
-						item.y + dy + canvas.dims.controlSize * 0.3);
-					ctx.lineTo(item.x + dx + canvas.dims.controlSize * 0.75,
-						item.y + dy + canvas.dims.controlSize * 0.3);
+					ctx.moveTo(canvas.dims.controlSize * 0.65,
+						canvas.dims.controlSize * 0.2);
+					ctx.lineTo(canvas.dims.controlSize * 0.65,
+						canvas.dims.controlSize * 0.3);
+					ctx.lineTo(canvas.dims.controlSize * 0.75,
+						canvas.dims.controlSize * 0.3);
 					ctx.strokeStyle = "white";
 					ctx.lineWidth = canvas.dims.blockLineWidth;
 					ctx.stroke();
 					ctx.fillStyle = "white";
 					A3a.vpl.Canvas.drawHexagonalNut(ctx,
-						item.x + dx + canvas.dims.controlSize * 0.63,
-						item.y + dy + canvas.dims.controlSize * 0.7,
+						canvas.dims.controlSize * 0.63,
+						canvas.dims.controlSize * 0.7,
 						canvas.dims.controlSize * 0.2);
 				},
-				// mousedown
-				function (data, x, y, ev) {
+				// action
+				function (ev) {
 					A3a.vpl.Program.resetBlockLib();
 					self.new();
 					self.resetUI();
-					return 0;
 				},
 				// doDrop
 				null,
@@ -1230,25 +1250,26 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		}
 		this.addControl(controlBar, "teacher",
 			// draw
-			function (ctx, item, dx, dy) {
-				ctx.fillStyle = self.customizationMode ? "#d10" : "#a00";
-				ctx.fillRect(item.x + dx, item.y + dy,
+			function (ctx, width, height, isDown) {
+				ctx.fillStyle = isDown
+					? self.customizationMode ? "#f50" : "#d00"
+					: self.customizationMode ? "#d10" : "#a00";
+				ctx.fillRect(0, 0,
 					canvas.dims.controlSize, canvas.dims.controlSize);
 				ctx.fillStyle = "white";
 				A3a.vpl.Canvas.drawHexagonalNut(ctx,
-					item.x + dx + canvas.dims.controlSize * 0.5,
-					item.y + dy + canvas.dims.controlSize * 0.4,
+					canvas.dims.controlSize * 0.5,
+					canvas.dims.controlSize * 0.4,
 					canvas.dims.controlSize * 0.27);
-				ctx.fillStyle = self.customizationMode ? "white" : "#c66";
-				ctx.fillRect(item.x + dx + canvas.dims.controlSize * 0.1,
-					item.y + dy + canvas.dims.controlSize * 0.8,
+				ctx.fillStyle = self.customizationMode || isDown ? "white" : "#c66";
+				ctx.fillRect(canvas.dims.controlSize * 0.1,
+					canvas.dims.controlSize * 0.8,
 					canvas.dims.controlSize * 0.8,
 					canvas.dims.controlSize * 0.1);
 			},
-			// mousedown
-			function (data, x, y, ev) {
+			// action
+			function (ev) {
 				self.customizationMode = !self.customizationMode;
-				return 0;
 			},
 			// doDrop
 			null,

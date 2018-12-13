@@ -458,7 +458,7 @@ A3a.vpl.Canvas.prototype.tap = function (scale) {
 	var dims = this.dims;
 	ctx.save();
 	ctx.lineWidth = dims.blockLineWidth;
-	ctx.strokeStyle = "width";
+	ctx.strokeStyle = "white";
 	for (var i = 1; i <= 3; i++) {
 		ctx.beginPath();
 		ctx.arc((0.5 - 0.45 * (scale || 1)) * dims.blockSize,
@@ -605,7 +605,7 @@ A3a.vpl.Canvas.prototype.microphone = function () {
 		dims.blockSize * 0.6);
 	ctx.lineTo(dims.blockSize * 0.8,
 		dims.blockSize * 0.95);
-	ctx.strokeStype = "white";
+	ctx.strokeStyle = "white";
 	ctx.lineWidth = 0.13 * dims.blockSize;
 	ctx.stroke();
 	ctx.lineWidth = 1.5 * dims.blockLineWidth;

@@ -292,37 +292,36 @@ A3a.vpl.VPLSim2DViewer.color = function (rgb) {
 /** Add a control button, taking care of disabled ones
 	@param {A3a.vpl.ControlBar} controlBar
 	@param {string} id
-	@param {A3a.vpl.CanvasItem.draw} draw
-	@param {?A3a.vpl.CanvasItem.mousedown=} mousedown
+	@param {A3a.vpl.Canvas.controlDraw} draw
+	@param {?A3a.vpl.Canvas.controlAction=} action
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 	@param {boolean=} keepEnabled
 	@return {void}
 */
-A3a.vpl.VPLSim2DViewer.prototype.addControl = function (controlBar, id, draw, mousedown, doDrop, canDrop, keepEnabled) {
+A3a.vpl.VPLSim2DViewer.prototype.addControl = function (controlBar, id, draw, action, doDrop, canDrop, keepEnabled) {
 	var self = this;
 	var canvas = controlBar.canvas;
 	var disabled = this.disabledUI.indexOf(id) >= 0;
 	if (this.customizationMode || !disabled) {
 		controlBar.addControl(
-			function (ctx, item, dx, dy) {
-				draw(ctx, item, dx, dy);
+			function (ctx, width, height, isDown) {
+				draw(ctx, width, height, isDown);
 				if (disabled) {
-					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.controlSize, canvas.dims.controlSize);
+					canvas.disabledMark(0, 0, width, height);
 				}
 			},
 			this.customizationMode && !keepEnabled
-				? function (canvas, data, width, height, x, y, downEvent) {
+				? function (downEvent) {
 					if (disabled) {
 						self.disabledUI.splice(self.disabledUI.indexOf(id), 1);
 					} else {
 						self.disabledUI.push(id);
 					}
 					self.render();
-					return 1;
 				}
-				: mousedown,
-			doDrop, canDrop);
+				: action,
+			doDrop, canDrop, id);
 	}
 };
 
@@ -351,31 +350,31 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	// start
 	this.addControl(controlBar, "sim:restart",
 		// draw
-		function (ctx, item, dx, dy) {
+		function (ctx, width, height, isDown) {
 			ctx.save();
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy,
-				self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0, width, height);
 			ctx.beginPath();
-			ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.3,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.25);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.3,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.75);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.8,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.5);
+			ctx.moveTo(self.simCanvas.dims.controlSize * 0.3,
+				self.simCanvas.dims.controlSize * 0.25);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.3,
+				self.simCanvas.dims.controlSize * 0.75);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.8,
+				self.simCanvas.dims.controlSize * 0.5);
 			ctx.closePath();
 			ctx.fillStyle = "white";
 			ctx.fill();
 			ctx.restore();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.restoreGround();
 			self.robot["start"](A3a.vpl.VPLSim2DViewer.currentTime());
 			self.running = true;
 			self.paused = false;
 			self.render();
-			return 0;
 		},
 		// doDrop
 		null,
@@ -385,37 +384,41 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	// pause
 	this.addControl(controlBar, "sim:pause",
 		// draw
-		function (ctx, item, dx, dy) {
+		function (ctx, width, height, isDown) {
 			ctx.save();
-			ctx.fillStyle = self.paused ? "#06f" : "navy";
-			ctx.fillRect(item.x + dx, item.y + dy,
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: self.paused
+					? self.simCanvas.dims.controlActiveColor
+					: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0,
 				self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
 			ctx.fillStyle = self.running ? "white" : "#777";
-			ctx.fillRect(item.x + dx + self.simCanvas.dims.controlSize * 0.28,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.28,
+			ctx.fillRect(self.simCanvas.dims.controlSize * 0.28,
+				self.simCanvas.dims.controlSize * 0.28,
 				self.simCanvas.dims.controlSize * 0.15, self.simCanvas.dims.controlSize * 0.44);
 			if (self.paused) {
 				ctx.beginPath();
-				ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.54,
-					item.y + dy + self.simCanvas.dims.controlSize * 0.28);
-				ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.62,
-					item.y + dy + self.simCanvas.dims.controlSize * 0.28);
-				ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
-					item.y + dy + self.simCanvas.dims.controlSize * 0.5);
-				ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.62,
-					item.y + dy + self.simCanvas.dims.controlSize * 0.72);
-				ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.54,
-					item.y + dy + self.simCanvas.dims.controlSize * 0.72);
+				ctx.moveTo(self.simCanvas.dims.controlSize * 0.54,
+					self.simCanvas.dims.controlSize * 0.28);
+				ctx.lineTo(self.simCanvas.dims.controlSize * 0.62,
+					self.simCanvas.dims.controlSize * 0.28);
+				ctx.lineTo(self.simCanvas.dims.controlSize * 0.75,
+					self.simCanvas.dims.controlSize * 0.5);
+				ctx.lineTo(self.simCanvas.dims.controlSize * 0.62,
+					self.simCanvas.dims.controlSize * 0.72);
+				ctx.lineTo(self.simCanvas.dims.controlSize * 0.54,
+					self.simCanvas.dims.controlSize * 0.72);
 				ctx.fill();
 			} else {
-				ctx.fillRect(item.x + dx + self.simCanvas.dims.controlSize * 0.57,
-					item.y + dy + self.simCanvas.dims.controlSize * 0.28,
+				ctx.fillRect(self.simCanvas.dims.controlSize * 0.57,
+					self.simCanvas.dims.controlSize * 0.28,
 					self.simCanvas.dims.controlSize * 0.15, self.simCanvas.dims.controlSize * 0.44);
 			}
 			ctx.restore();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			if (self.running) {
 				self.paused = !self.paused;
 				if (self.paused) {
@@ -425,7 +428,6 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 					self.render();
 				}
 			}
-			return 0;
 		},
 		// doDrop
 		null,
@@ -437,14 +439,18 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	// pen
 	this.addControl(controlBar, "sim:pen",
 		// draw
-		function (ctx, item, dx, dy) {
+		function (ctx, width, height, isDown) {
 			var s = self.simCanvas.dims.controlSize;
 			ctx.save();
-			ctx.fillStyle = self.penDown ? "#06f" : "navy";
-			ctx.fillRect(item.x + dx, item.y + dy, s, s);
-			ctx.fillStyle = self.penDown ? "white" : "#777";
-			ctx.fillRect(item.x + dx + s * 0.1, item.y + dy + s * 0.8, s * 0.8, s * 0.1);
-			ctx.translate(item.x + dx + s * 0.5, item.y + dy + s * (0.4 + (self.penDown ? 0.13 : 0)));
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: self.penDown
+					? self.simCanvas.dims.controlActiveColor
+					: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0, s, s);
+			ctx.fillStyle = self.penDown || isDown ? "white" : "#777";
+			ctx.fillRect(s * 0.1, s * 0.8, s * 0.8, s * 0.1);
+			ctx.translate(s * 0.5, s * (0.4 + (self.penDown ? 0.13 : 0)));
 			var th = 0.1;
 			var ln = 0.22;
 			var ln1 = 0.15;
@@ -465,36 +471,36 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			ctx.stroke();
 			ctx.restore();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.penDown = !self.penDown;
-			return 0;
 		},
 		// doDrop
 		null,
 		// canDrop
 		null);
-	// clear
+	// clear pen traces
 	this.addControl(controlBar, "sim:clear",
 		// draw
-		function (ctx, item, dx, dy) {
+		function (ctx, width, height, isDown) {
 			var s = self.simCanvas.dims.controlSize;
 			ctx.save();
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy, s, s);
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0, s, s);
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
-			ctx.strokeRect(item.x + dx + 0.15 * s, item.y + dy + 0.25 * s, 0.7 * s, 0.5 * s);
-			ctx.translate(item.x + dx + 0.5 * s, item.y + dy + 0.4 * s);
+			ctx.strokeRect(0.15 * s, 0.25 * s, 0.7 * s, 0.5 * s);
+			ctx.translate(0.5 * s, 0.4 * s);
 			ctx.rotate(0.4);
 			ctx.fillStyle = "white";
 			ctx.fillRect(0, 0, 0.3 * s, 0.2 * s);
 			ctx.restore();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.restoreGround();
-			return 0;
 		},
 		// doDrop
 		null,
@@ -508,47 +514,48 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		// can switch to VPL only if the code source hasn't been changed
 	this.addControl(controlBar, "sim:vpl",
 		// draw
-		function (ctx, item, dx, dy) {
+		function (ctx, width, height, isDown) {
 			ctx.save();
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy,
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0,
 				self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
 			ctx.beginPath();
-			ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.25,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.25,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.3);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.2);
+			ctx.moveTo(self.simCanvas.dims.controlSize * 0.25,
+				self.simCanvas.dims.controlSize * 0.2);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.25,
+				self.simCanvas.dims.controlSize * 0.8);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.75,
+				self.simCanvas.dims.controlSize * 0.8);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.75,
+				self.simCanvas.dims.controlSize * 0.3);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.65,
+				self.simCanvas.dims.controlSize * 0.2);
 			ctx.closePath();
-			ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.3);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.3);
+			ctx.moveTo(self.simCanvas.dims.controlSize * 0.65,
+				self.simCanvas.dims.controlSize * 0.2);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.65,
+				self.simCanvas.dims.controlSize * 0.3);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.75,
+				self.simCanvas.dims.controlSize * 0.3);
 			ctx.strokeStyle = vplEnabled ? "white" : "#777";
 			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
 			ctx.stroke();
 			ctx.fillStyle = "#99a";
 			for (var y = 0.15; y < 0.6; y += 0.15) {
-				ctx.fillRect(item.x + dx + self.simCanvas.dims.controlSize * 0.3,
-					item.y + dy + self.simCanvas.dims.controlSize * (0.2 + y),
+				ctx.fillRect(self.simCanvas.dims.controlSize * 0.3,
+					self.simCanvas.dims.controlSize * (0.2 + y),
 					self.simCanvas.dims.controlSize * 0.4,
 					self.simCanvas.dims.controlSize * 0.10);
 			}
 			ctx.restore();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			if (vplEnabled) {
 				window["vplProgram"].setView("vpl");
 			}
-			return 0;
 		},
 		// doDrop
 		null,
@@ -558,43 +565,44 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	// source code editor
 	this.addControl(controlBar, "sim:text",
 		// draw
-		function (ctx, item, dx, dy) {
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy,
+		function (ctx, width, height, isDown) {
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0,
 				self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
 			ctx.beginPath();
-			ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.25,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.25,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.8);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.3);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.2);
+			ctx.moveTo(self.simCanvas.dims.controlSize * 0.25,
+				self.simCanvas.dims.controlSize * 0.2);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.25,
+				self.simCanvas.dims.controlSize * 0.8);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.75,
+				self.simCanvas.dims.controlSize * 0.8);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.75,
+				self.simCanvas.dims.controlSize * 0.3);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.65,
+				self.simCanvas.dims.controlSize * 0.2);
 			ctx.closePath();
-			ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.2);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.3);
-			ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
-				item.y + dy + self.simCanvas.dims.controlSize * 0.3);
+			ctx.moveTo(self.simCanvas.dims.controlSize * 0.65,
+				self.simCanvas.dims.controlSize * 0.2);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.65,
+				self.simCanvas.dims.controlSize * 0.3);
+			ctx.lineTo(self.simCanvas.dims.controlSize * 0.75,
+				self.simCanvas.dims.controlSize * 0.3);
 			for (var y = 0.2; y < 0.6; y += 0.1) {
-				ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.3,
-					item.y + dy + self.simCanvas.dims.controlSize * (0.2 + y));
-				ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.7,
-					item.y + dy + self.simCanvas.dims.controlSize * (0.2 + y));
+				ctx.moveTo(self.simCanvas.dims.controlSize * 0.3,
+					self.simCanvas.dims.controlSize * (0.2 + y));
+				ctx.lineTo(self.simCanvas.dims.controlSize * 0.7,
+					self.simCanvas.dims.controlSize * (0.2 + y));
 			}
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
 			ctx.stroke();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			window["vplProgram"].setView("src",
 				{unlocked: !window["vplEditor"].isLockedWithVPL});
-			return 0;
 		},
 		// doDrop
 		null,
@@ -607,42 +615,41 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		if (self.customizationMode) {
 			this.addControl(controlBar, "src:teacher-reset",
 				// draw
-				function (ctx, item, dx, dy) {
+				function (ctx, width, height, isDown) {
 					ctx.fillStyle = "#a00";
-					ctx.fillRect(item.x + dx, item.y + dy,
+					ctx.fillRect(0, 0,
 						self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
 					ctx.beginPath();
-					ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.25,
-						item.y + dy + self.simCanvas.dims.controlSize * 0.2);
-					ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.25,
-						item.y + dy + self.simCanvas.dims.controlSize * 0.8);
-					ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
-						item.y + dy + self.simCanvas.dims.controlSize * 0.8);
-					ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
-						item.y + dy + self.simCanvas.dims.controlSize * 0.3);
-					ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
-						item.y + dy + self.simCanvas.dims.controlSize * 0.2);
+					ctx.moveTo(self.simCanvas.dims.controlSize * 0.25,
+						self.simCanvas.dims.controlSize * 0.2);
+					ctx.lineTo(self.simCanvas.dims.controlSize * 0.25,
+						self.simCanvas.dims.controlSize * 0.8);
+					ctx.lineTo(self.simCanvas.dims.controlSize * 0.75,
+						self.simCanvas.dims.controlSize * 0.8);
+					ctx.lineTo(self.simCanvas.dims.controlSize * 0.75,
+						self.simCanvas.dims.controlSize * 0.3);
+					ctx.lineTo(self.simCanvas.dims.controlSize * 0.65,
+						self.simCanvas.dims.controlSize * 0.2);
 					ctx.closePath();
-					ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
-						item.y + dy + self.simCanvas.dims.controlSize * 0.2);
-					ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
-						item.y + dy + self.simCanvas.dims.controlSize * 0.3);
-					ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
-						item.y + dy + self.simCanvas.dims.controlSize * 0.3);
+					ctx.moveTo(self.simCanvas.dims.controlSize * 0.65,
+						self.simCanvas.dims.controlSize * 0.2);
+					ctx.lineTo(self.simCanvas.dims.controlSize * 0.65,
+						self.simCanvas.dims.controlSize * 0.3);
+					ctx.lineTo(self.simCanvas.dims.controlSize * 0.75,
+						self.simCanvas.dims.controlSize * 0.3);
 					ctx.strokeStyle = "white";
 					ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
 					ctx.stroke();
 					ctx.fillStyle = "white";
 					A3a.vpl.Canvas.drawHexagonalNut(ctx,
-						item.x + dx + self.simCanvas.dims.controlSize * 0.63,
-						item.y + dy + self.simCanvas.dims.controlSize * 0.7,
+						self.simCanvas.dims.controlSize * 0.63,
+						self.simCanvas.dims.controlSize * 0.7,
 						self.simCanvas.dims.controlSize * 0.2);
 				},
-				// mousedown
-				function (data, x, y, ev) {
+				// action
+				function (ev) {
 					self.resetUI();
 					self.render();
-					return 0;
 				},
 				// doDrop
 				null,
@@ -652,26 +659,27 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		}
 		this.addControl(controlBar, "src:teacher",
 			// draw
-			function (ctx, item, dx, dy) {
-				ctx.fillStyle = self.customizationMode ? "#d10" : "#a00";
-				ctx.fillRect(item.x + dx, item.y + dy,
+			function (ctx, width, height, isDown) {
+				ctx.fillStyle = isDown
+					? self.customizationMode ? "#f50" : "#d00"
+					: self.customizationMode ? "#d10" : "#a00";
+				ctx.fillRect(0, 0,
 					self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
 				ctx.fillStyle = "white";
 				A3a.vpl.Canvas.drawHexagonalNut(ctx,
-					item.x + dx + self.simCanvas.dims.controlSize * 0.5,
-					item.y + dy + self.simCanvas.dims.controlSize * 0.4,
+					self.simCanvas.dims.controlSize * 0.5,
+					self.simCanvas.dims.controlSize * 0.4,
 					self.simCanvas.dims.controlSize * 0.27);
-				ctx.fillStyle = self.customizationMode ? "white" : "#c66";
-				ctx.fillRect(item.x + dx + self.simCanvas.dims.controlSize * 0.1,
-					item.y + dy + self.simCanvas.dims.controlSize * 0.8,
+				ctx.fillStyle = self.customizationMode || isDown ? "white" : "#c66";
+				ctx.fillRect(self.simCanvas.dims.controlSize * 0.1,
+					self.simCanvas.dims.controlSize * 0.8,
 					self.simCanvas.dims.controlSize * 0.8,
 					self.simCanvas.dims.controlSize * 0.1);
 			},
-			// mousedown
-			function (data, x, y, ev) {
+			// action
+			function (ev) {
 				self.customizationMode = !self.customizationMode;
 				self.render();
-				return 0;
 			},
 			// doDrop
 			null,
@@ -690,9 +698,11 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 
 	// add buttons for events
 	var yRobotControl = this.simCanvas.dims.margin;
-	function drawButtonTri(ctx, x, y, rot) {
+	function drawButtonTri(ctx, x, y, rot, isDown) {
 		ctx.save();
-		ctx.fillStyle = "navy";
+		ctx.fillStyle = isDown
+			? self.simCanvas.dims.controlDownColor
+			: self.simCanvas.dims.controlColor;
 		ctx.fillRect(x, y, smallBtnSize, smallBtnSize);
 		ctx.translate(x + smallBtnSize / 2, y + smallBtnSize / 2);
 		ctx.rotate(-rot * Math.PI / 2);
@@ -713,89 +723,96 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, item, dx, dy) {
-			drawButtonTri(ctx, item.x + dx, item.y + dy, 1);
+		function (ctx, width, height, isDown) {
+			drawButtonTri(ctx, 0, 0, 1, isDown);
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.robot["set"]("button.forward", true);
 			self.robot["sendEvent"]("buttons", null);
 			self.robot["set"]("button.forward", false);
 			self.robot["sendEvent"]("buttons", null);	// reset "when" state
-			return 0;
-		});
+		},
+		null, null,
+		"button.forward");
 	// left
 	this.simCanvas.addControl(this.simCanvas.dims.margin,
 		yRobotControl + smallBtnSize + this.simCanvas.dims.stripHorMargin,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, item, dx, dy) {
-			drawButtonTri(ctx, item.x + dx, item.y + dy, 2);
+		function (ctx, width, height, isDown) {
+			drawButtonTri(ctx, 0, 0, 2, isDown);
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.robot["set"]("button.left", true);
 			self.robot["sendEvent"]("buttons", null);
 			self.robot["set"]("button.left", false);
 			self.robot["sendEvent"]("buttons", null);	// reset "when" state
-			return 0;
-		});
+		},
+		null, null,
+		"button.left");
 	// center
 	this.simCanvas.addControl(this.simCanvas.dims.margin + smallBtnSize + this.simCanvas.dims.stripHorMargin,
 		yRobotControl + smallBtnSize + this.simCanvas.dims.stripHorMargin,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, item, dx, dy) {
+		function (ctx, width, height, isDown) {
 			ctx.save();
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy, smallBtnSize, smallBtnSize);
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0, smallBtnSize, smallBtnSize);
 			ctx.beginPath();
-			ctx.arc(item.x + dx + 0.5 * smallBtnSize, item.y + dy + 0.5 * smallBtnSize, 0.25 * smallBtnSize, 0, 2 * Math.PI);
+			ctx.arc(0.5 * smallBtnSize, 0.5 * smallBtnSize, 0.25 * smallBtnSize, 0, 2 * Math.PI);
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
 			ctx.stroke();
 			ctx.restore();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.robot["set"]("button.center", true);
 			self.robot["sendEvent"]("buttons", null);
 			self.robot["set"]("button.center", false);
 			self.robot["sendEvent"]("buttons", null);	// reset "when" state
-			return 0;
-		});
+		},
+		null, null,
+		"button.center");
 	// right
 	this.simCanvas.addControl(this.simCanvas.dims.margin + 2 * smallBtnSize + 2 * this.simCanvas.dims.stripHorMargin,
 		yRobotControl + smallBtnSize + this.simCanvas.dims.stripHorMargin,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, item, dx, dy) {
-			drawButtonTri(ctx, item.x + dx, item.y + dy, 0);
+		function (ctx, width, height, isDown) {
+			drawButtonTri(ctx, 0, 0, 0, isDown);
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.robot["set"]("button.right", true);
 			self.robot["sendEvent"]("buttons", null);
 			self.robot["set"]("button.right", false);
 			self.robot["sendEvent"]("buttons", null);	// reset "when" state
-			return 0;
-		});
+		},
+		null, null,
+		"button.right");
 	// backward
 	this.simCanvas.addControl(this.simCanvas.dims.margin + smallBtnSize + this.simCanvas.dims.stripHorMargin,
 		yRobotControl + 2 * smallBtnSize + 2 * this.simCanvas.dims.stripHorMargin,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, item, dx, dy) {
-			drawButtonTri(ctx, item.x + dx, item.y + dy, 3);
+		function (ctx, width, height, isDown) {
+			drawButtonTri(ctx, 0, 0, 3, isDown);
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.robot["set"]("button.backward", true);
 			self.robot["sendEvent"]("buttons", null);
 			self.robot["set"]("button.backward", false);
 			self.robot["sendEvent"]("buttons", null);	// reset "when" state
-			return 0;
-		});
+		},
+		null, null,
+		"button.backward");
 	yRobotControl += 3.5 * smallBtnSize + 3 * this.simCanvas.dims.stripHorMargin;
 
 	// tap
@@ -803,15 +820,17 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, item, dx, dy) {
+		function (ctx, width, height, isDown) {
 			ctx.save();
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy, smallBtnSize, smallBtnSize);
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0, smallBtnSize, smallBtnSize);
 			ctx.beginPath();
 
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
-			ctx.translate(item.x + dx + 0.6 * smallBtnSize, item.y + dy + 0.6 * smallBtnSize);
+			ctx.translate(0.6 * smallBtnSize, 0.6 * smallBtnSize);
 			for (var i = 1; i <= 3; i++) {
 				ctx.beginPath();
 				ctx.arc(0, 0,
@@ -825,25 +844,28 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			ctx.stroke();
 			ctx.restore();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.robot["sendEvent"]("tap", null);
-			return 0;
-		});
+		},
+		null, null,
+		"tap");
 	// clap
 	this.simCanvas.addControl(this.simCanvas.dims.margin + 1.5 * smallBtnSize + 1.5 * this.simCanvas.dims.stripHorMargin,
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, item, dx, dy) {
+		function (ctx, width, height, isDown) {
 			ctx.save();
-			ctx.fillStyle = "navy";
-			ctx.fillRect(item.x + dx, item.y + dy, smallBtnSize, smallBtnSize);
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0, smallBtnSize, smallBtnSize);
 			ctx.beginPath();
 
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
-			ctx.translate(item.x + dx + 0.5 * smallBtnSize, item.y + dy + 0.5 * smallBtnSize);
+			ctx.translate(0.5 * smallBtnSize, 0.5 * smallBtnSize);
 			ctx.rotate(0.1);
 			for (var i = 0; i < 9; i++) {
 				ctx.beginPath();
@@ -856,11 +878,12 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			}
 			ctx.restore();
 		},
-		// mousedown
-		function (data, x, y, ev) {
+		// action
+		function (ev) {
 			self.robot["sendEvent"]("mic", null);
-			return 0;
-		});
+		},
+		null, null,
+		"clap");
 	yRobotControl += 2 * smallBtnSize;
 
 	// draw robot from top

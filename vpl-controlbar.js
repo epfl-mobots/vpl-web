@@ -12,8 +12,8 @@
 A3a.vpl.ControlBar = function (canvas) {
 	this.canvas = canvas;
 	/** @type {Array.<{
-		draw: A3a.vpl.CanvasItem.draw,
-		mousedown: ?A3a.vpl.CanvasItem.mousedown,
+		draw: A3a.vpl.Canvas.controlDraw,
+		action: ?A3a.vpl.Canvas.controlAction,
 		doDrop: ?A3a.vpl.CanvasItem.doDrop,
 		canDrop: ?A3a.vpl.CanvasItem.canDrop,
 		pos: number
@@ -32,18 +32,20 @@ A3a.vpl.ControlBar.prototype.reset = function () {
 };
 
 /** Add the definition of a control button
-	@param {A3a.vpl.CanvasItem.draw} draw
-	@param {?A3a.vpl.CanvasItem.mousedown=} mousedown
+	@param {A3a.vpl.Canvas.controlDraw} draw
+	@param {?A3a.vpl.Canvas.controlAction=} action
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
+	@param {string=} id
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addControl = function (draw, mousedown, doDrop, canDrop) {
+A3a.vpl.ControlBar.prototype.addControl = function (draw, action, doDrop, canDrop, id) {
 	this.controls.push({
 		draw: draw,
-		mousedown: mousedown || null,
+		action: action || null,
 		doDrop: doDrop || null,
 		canDrop: canDrop || null,
+		id: id || "",
 		pos: 0
 	});
 	this.layout += "X";
@@ -148,6 +150,8 @@ A3a.vpl.ControlBar.prototype.addToCanvas = function () {
 	for (var i = 0; i < this.controls.length; i++) {
 		this.canvas.addControl(this.controls[i].pos, this.canvas.dims.margin,
 			this.canvas.dims.controlSize, this.canvas.dims.controlSize,
-			this.controls[i].draw, this.controls[i].mousedown, this.controls[i].doDrop, this.controls[i].canDrop);
+			this.controls[i].draw, this.controls[i].action,
+			this.controls[i].doDrop, this.controls[i].canDrop,
+			this.controls[i].id);
 	}
 };
