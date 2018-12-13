@@ -170,7 +170,23 @@ A3a.vpl.BlockTemplate.substInline = function (fmt, block, i) {
 		if (r == null) {
 			break;
 		}
-		var result = new Function("$", "i", "return " + r[1] + ";")(block.param, i);
+		var result = new Function("$", "i", "rgb",
+			"return " + r[1] + ";"
+		)(
+			block.param,
+			i,
+			function (rgb) {
+				rgb = [
+					rgb[0],
+					Math.max(0.2 + 0.8 * rgb[1], rgb[2] / 2),
+					rgb[2]
+				];
+				var max = Math.max(rgb[0], Math.max(rgb[1], rgb[2]));
+				return rgb.map(function (x) {
+					return 0.88 * (1 - max) + (0.12 + 0.88 * max) * x;
+				});
+			}
+		);
 		fmt = fmt.slice(0, r.index) + result + fmt.slice(r.index + r[0].length);
 	}
 	return fmt;

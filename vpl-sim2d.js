@@ -22,6 +22,8 @@ A3a.vpl.Playground = function (width, height) {
 A3a.vpl.VPLSim2DViewer = function (robot) {
 	var self = this;
 
+	this.disabledUI = [];
+
 	this.robot = robot;
 	this.running = false;
 	this.paused = false;
@@ -52,8 +54,24 @@ A3a.vpl.VPLSim2DViewer = function (robot) {
 
 	// initial canvas resize
 	this.resize();
+	this.restoreGround();
 
 	this.render();
+};
+
+/** Reset UI
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.resetUI = function () {
+	this.disabledUI = [];
+};
+
+/** Change role
+	@param {boolean} b
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.setTeacherRole = function (b) {
+	this.teacherRole = b;
 };
 
 /** Restore ground (clear pen traces)
@@ -123,15 +141,11 @@ A3a.vpl.VPLSim2DViewer.prototype.drawPen = function (shape, param) {
 	@return {number} ground value, from 0 (black) to 1 (white)
 */
 A3a.vpl.VPLSim2DViewer.prototype.groundValue = function (x, y) {
-	if (this.groundImage) {
-		// scale position to (i,j)
-		var i = Math.round(this.groundImage.width * (x + this.playground.width / 2) / this.playground.width);
-		var j = Math.round(this.groundImage.height * (this.playground.height / 2 - y) / this.playground.height);
-		var pixel = this.groundCanvas.getContext("2d").getImageData(i, j, 1, 1).data;
-		return pixel[0] / 255;
-	} else {
-		return 1;	// default: white
-	}
+	// scale position to (i,j)
+	var i = Math.round(this.groundCanvas.width * (x + this.playground.width / 2) / this.playground.width);
+	var j = Math.round(this.groundCanvas.height * (this.playground.height / 2 - y) / this.playground.height);
+	var pixel = this.groundCanvas.getContext("2d").getImageData(i, j, 1, 1).data;
+	return pixel[0] / 255;
 };
 
 /** Update the values of the ground sensors
@@ -139,24 +153,19 @@ A3a.vpl.VPLSim2DViewer.prototype.groundValue = function (x, y) {
 */
 A3a.vpl.VPLSim2DViewer.prototype.updateGroundSensors = function () {
 	// from 0 (black) to 1 (white)
-	if (this.groundImage) {
-		var g = [];
-		for (var i = 0; i < 2; i++) {
-			// ground sensor positions
-			var x = this.robot.pos[0] +
-				this.robot.groundSensorLon * Math.cos(this.robot.theta) +
-				(i === 0 ? -1 : 1) * this.robot.groundSensorLat * Math.sin(this.robot.theta);
-			var y = this.robot.pos[1] +
-				this.robot.groundSensorLon * Math.sin(this.robot.theta) -
-				(i === 0 ? -1 : 1) * this.robot.groundSensorLat * Math.cos(this.robot.theta);
-			// ground value at (x, y)
-			g.push(this.groundValue(x, y));
-		}
-		this.robot["set"]("prox.ground.delta", g);
-	} else {
-		// default: white ground
-		this.robot["set"]("prox.ground.delta", [1, 1]);
+	var g = [];
+	for (var i = 0; i < 2; i++) {
+		// ground sensor positions
+		var x = this.robot.pos[0] +
+			this.robot.groundSensorLon * Math.cos(this.robot.theta) +
+			(i === 0 ? -1 : 1) * this.robot.groundSensorLat * Math.sin(this.robot.theta);
+		var y = this.robot.pos[1] +
+			this.robot.groundSensorLon * Math.sin(this.robot.theta) -
+			(i === 0 ? -1 : 1) * this.robot.groundSensorLat * Math.cos(this.robot.theta);
+		// ground value at (x, y)
+		g.push(this.groundValue(x, y));
 	}
+	this.robot["set"]("prox.ground.delta", g);
 };
 
 /** Update the values of the proximity sensors
@@ -280,6 +289,43 @@ A3a.vpl.VPLSim2DViewer.color = function (rgb) {
 		")";
 };
 
+/** Add a control button, taking care of disabled ones
+	@param {A3a.vpl.ControlBar} controlBar
+	@param {string} id
+	@param {A3a.vpl.CanvasItem.draw} draw
+	@param {?A3a.vpl.CanvasItem.mousedown=} mousedown
+	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
+	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
+	@param {boolean=} keepEnabled
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.addControl = function (controlBar, id, draw, mousedown, doDrop, canDrop, keepEnabled) {
+	var self = this;
+	var canvas = controlBar.canvas;
+	var disabled = this.disabledUI.indexOf(id) >= 0;
+	if (this.customizationMode || !disabled) {
+		controlBar.addControl(
+			function (ctx, item, dx, dy) {
+				draw(ctx, item, dx, dy);
+				if (disabled) {
+					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.controlSize, canvas.dims.controlSize);
+				}
+			},
+			this.customizationMode && !keepEnabled
+				? function (canvas, data, width, height, x, y, downEvent) {
+					if (disabled) {
+						self.disabledUI.splice(self.disabledUI.indexOf(id), 1);
+					} else {
+						self.disabledUI.push(id);
+					}
+					self.render();
+					return 1;
+				}
+				: mousedown,
+			doDrop, canDrop);
+	}
+};
+
 /** Render viewer
 	@return {void}
 */
@@ -303,7 +349,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	controlBar.addStretch();
 
 	// start
-	controlBar.addControl(
+	this.addControl(controlBar, "sim:restart",
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.save();
@@ -337,7 +383,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		null);
 
 	// pause
-	controlBar.addControl(
+	this.addControl(controlBar, "sim:pause",
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.save();
@@ -389,7 +435,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	controlBar.addSpace();
 
 	// pen
-	controlBar.addControl(
+	this.addControl(controlBar, "sim:pen",
 		// draw
 		function (ctx, item, dx, dy) {
 			var s = self.simCanvas.dims.controlSize;
@@ -428,13 +474,39 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		null,
 		// canDrop
 		null);
+	// clear
+	this.addControl(controlBar, "sim:clear",
+		// draw
+		function (ctx, item, dx, dy) {
+			var s = self.simCanvas.dims.controlSize;
+			ctx.save();
+			ctx.fillStyle = "navy";
+			ctx.fillRect(item.x + dx, item.y + dy, s, s);
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
+			ctx.strokeRect(item.x + dx + 0.15 * s, item.y + dy + 0.25 * s, 0.7 * s, 0.5 * s);
+			ctx.translate(item.x + dx + 0.5 * s, item.y + dy + 0.4 * s);
+			ctx.rotate(0.4);
+			ctx.fillStyle = "white";
+			ctx.fillRect(0, 0, 0.3 * s, 0.2 * s);
+			ctx.restore();
+		},
+		// mousedown
+		function (data, x, y, ev) {
+			self.restoreGround();
+			return 0;
+		},
+		// doDrop
+		null,
+		// canDrop
+		null);
 
 	controlBar.addStretch();
 
 	// vpl
 	var vplEnabled = window["vplEditor"] && window["vplEditor"].doesMatchVPL();
 		// can switch to VPL only if the code source hasn't been changed
-	controlBar.addControl(
+	this.addControl(controlBar, "sim:vpl",
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.save();
@@ -484,7 +556,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		null);
 
 	// source code editor
-	controlBar.addControl(
+	this.addControl(controlBar, "sim:text",
 		// draw
 		function (ctx, item, dx, dy) {
 			ctx.fillStyle = "navy";
@@ -530,6 +602,83 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		null);
 
 	controlBar.addStretch();
+
+	if (this.teacherRole) {
+		if (self.customizationMode) {
+			this.addControl(controlBar, "src:teacher-reset",
+				// draw
+				function (ctx, item, dx, dy) {
+					ctx.fillStyle = "#a00";
+					ctx.fillRect(item.x + dx, item.y + dy,
+						self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
+					ctx.beginPath();
+					ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.25,
+						item.y + dy + self.simCanvas.dims.controlSize * 0.2);
+					ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.25,
+						item.y + dy + self.simCanvas.dims.controlSize * 0.8);
+					ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
+						item.y + dy + self.simCanvas.dims.controlSize * 0.8);
+					ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
+						item.y + dy + self.simCanvas.dims.controlSize * 0.3);
+					ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
+						item.y + dy + self.simCanvas.dims.controlSize * 0.2);
+					ctx.closePath();
+					ctx.moveTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
+						item.y + dy + self.simCanvas.dims.controlSize * 0.2);
+					ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.65,
+						item.y + dy + self.simCanvas.dims.controlSize * 0.3);
+					ctx.lineTo(item.x + dx + self.simCanvas.dims.controlSize * 0.75,
+						item.y + dy + self.simCanvas.dims.controlSize * 0.3);
+					ctx.strokeStyle = "white";
+					ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
+					ctx.stroke();
+					ctx.fillStyle = "white";
+					A3a.vpl.Canvas.drawHexagonalNut(ctx,
+						item.x + dx + self.simCanvas.dims.controlSize * 0.63,
+						item.y + dy + self.simCanvas.dims.controlSize * 0.7,
+						self.simCanvas.dims.controlSize * 0.2);
+				},
+				// mousedown
+				function (data, x, y, ev) {
+					self.resetUI();
+					self.render();
+					return 0;
+				},
+				// doDrop
+				null,
+				// canDrop
+				null,
+				true);
+		}
+		this.addControl(controlBar, "src:teacher",
+			// draw
+			function (ctx, item, dx, dy) {
+				ctx.fillStyle = self.customizationMode ? "#d10" : "#a00";
+				ctx.fillRect(item.x + dx, item.y + dy,
+					self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
+				ctx.fillStyle = "white";
+				A3a.vpl.Canvas.drawHexagonalNut(ctx,
+					item.x + dx + self.simCanvas.dims.controlSize * 0.5,
+					item.y + dy + self.simCanvas.dims.controlSize * 0.4,
+					self.simCanvas.dims.controlSize * 0.27);
+				ctx.fillStyle = self.customizationMode ? "white" : "#c66";
+				ctx.fillRect(item.x + dx + self.simCanvas.dims.controlSize * 0.1,
+					item.y + dy + self.simCanvas.dims.controlSize * 0.8,
+					self.simCanvas.dims.controlSize * 0.8,
+					self.simCanvas.dims.controlSize * 0.1);
+			},
+			// mousedown
+			function (data, x, y, ev) {
+				self.customizationMode = !self.customizationMode;
+				self.render();
+				return 0;
+			},
+			// doDrop
+			null,
+			// canDrop
+			null,
+			true);
+	}
 
 	var smallBtnSize = this.simCanvas.dims.controlSize * 0.6;
 

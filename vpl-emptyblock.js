@@ -27,21 +27,37 @@ A3a.vpl.EmptyBlock.templates = {
 		name: "empty e",
 		type: A3a.vpl.blockType.event,
 		draw: function (canvas, block) {
-			canvas.clearBlockBackground();
+			var blockTemplate = A3a.vpl.BlockTemplate.findByName("!empty event");
+			if (blockTemplate) {
+				blockTemplate.draw(canvas, block);
+			} else {
+				canvas.clearBlockBackground();
+			}
 		}
 	}),
 	"a": new A3a.vpl.BlockTemplate({
 		name: "empty a",
 		type: A3a.vpl.blockType.action,
 		draw: function (canvas, block) {
-			canvas.clearBlockBackground();
+			var blockTemplate = A3a.vpl.BlockTemplate.findByName("!empty action");
+			if (blockTemplate) {
+				blockTemplate.draw(canvas, block);
+			} else {
+				canvas.clearBlockBackground();
+			}
 		}
 	}),
 	"s": new A3a.vpl.BlockTemplate({
 		name: "empty s",
 		type: A3a.vpl.blockType.state,
 		draw: function (canvas, block) {
-			canvas.clearBlockBackground();
+			var blockTemplate = A3a.vpl.BlockTemplate.findByName("!empty state") ||
+				A3a.vpl.BlockTemplate.findByName("!empty event");
+			if (blockTemplate) {
+				blockTemplate.draw(canvas, block);
+			} else {
+				canvas.clearBlockBackground();
+			}
 		}
 	})
 };

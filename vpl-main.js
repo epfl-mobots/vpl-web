@@ -268,7 +268,7 @@ function vplSetup(uiConfig) {
 	window["vplProgram"].addEventHandler(true);
 
 	if (window["vplRun"]) {
-		var stopBlock = A3a.vpl.BlockTemplate.findByName("stop");
+		var stopBlock = A3a.vpl.BlockTemplate.findByName("!stop");
 		var stopGenCode = stopBlock && stopBlock.genCode[language];
 		if (stopGenCode) {
 			window["vplRun"].setStopCode(stopGenCode(null).statement, language);
@@ -385,7 +385,11 @@ function vplSetup(uiConfig) {
 		window["vplProgram"].renderToCanvas(window["vplCanvas"]);
 		document.getElementById("editor").textContent = window["vplProgram"].getCode(window["vplProgram"].currentLanguage);
 	}
+
+	window["vplEditor"].setTeacherRole(getQueryOption("role") === "teacher");
 	window["vplEditor"].toolbarRender();
+
+	window["vplSim"] && window["vplSim"].sim.setTeacherRole(getQueryOption("role") === "teacher");
 }
 
 window.addEventListener("load", function () {

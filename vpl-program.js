@@ -61,6 +61,13 @@ A3a.vpl.Program.resetBlockLib = function () {
 		.map(function (b) { return b.name; });
 };
 
+/** Reset UI
+	@return {void}
+*/
+A3a.vpl.Program.prototype.resetUI = function () {
+	this.disabledUI = [];
+};
+
 /** Clear program
 	@return {void}
 */
@@ -68,7 +75,6 @@ A3a.vpl.Program.prototype.new = function () {
 	this.mode = A3a.vpl.mode.basic;
 	this.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
 	this.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
-	this.disabledUI = [];
 	this.program = [];
 	this.undoState.reset();
 	this.code = {};

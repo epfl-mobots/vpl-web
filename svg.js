@@ -197,6 +197,15 @@ SVG.colorDict = {
 */
 SVG.Displacement;
 
+/** @typedef {{
+		x: number,
+		y: number,
+		w: number,
+		h: number
+	}}
+*/
+SVG.ClipRect;
+
 /** Draw SVG from source code
 	@param {CanvasRenderingContext2D} ctx
 	@param {SVG.Options=} options
@@ -361,6 +370,17 @@ SVG.prototype.draw = function (ctx, options) {
 		}
 	}
 
+	/** Apply clip
+		@param {Element} el
+		@param {SVG.ClipRect} clip
+		@return {void}
+	*/
+	function applyClip(el, clip) {
+		ctx.beginPath();
+		ctx.rect(clip.x, clip.y, clip.w, clip.h);
+		ctx.clip();
+	}
+
 	/** Decode transform parameters and apply them to canvas context ctx
 		@param {string} tr value of attribute "transform"
 		@return {void}
@@ -452,6 +472,15 @@ SVG.prototype.draw = function (ctx, options) {
 				style = cssDict[classAttr] + ";" + style;
 			}
 			baseStyle = (baseStyle || "") + ";" + style;
+
+			var dashArrayAttr = el.getAttribute("stroke-dasharray");
+			if (dashArrayAttr) {
+				baseStyle += ";stroke-dasharray:" + dashArrayAttr.split(",").join(" ");
+			}
+			var dashOffsetAttr = el.getAttribute("stroke-dashoffset");
+			if (dashOffsetAttr) {
+				baseStyle += ";stroke-dashoffset:" + dashOffsetAttr;
+			}
 
 			var idAttr = el.getAttribute("id");
 			if (idAttr && options && options.style && options.style.hasOwnProperty(idAttr)) {
@@ -870,6 +899,11 @@ SVG.prototype.draw = function (ctx, options) {
 					ctx.strokeStyle = style["stroke"] || "none";
 					ctx.miterLimit = style["stroke-miterlimit"] || 4;
 					ctx.lineJoin = style["stroke-linejoin"] || "miter";
+					ctx.lineCap = style["stroke-linecap"] || "butt";
+					if (style["stroke-dasharray"]) {
+						ctx.setLineDash(style["stroke-dasharray"].split(" ").map(function (s) { return parseFloat(s); }));
+						ctx.lineDashOffset = style["stroke-dashoffset"] ? parseFloat(style["stroke-dashoffset"]) : 0;
+					}
 					ctx.stroke();
 				}
 			}
@@ -918,10 +952,14 @@ SVG.prototype.draw = function (ctx, options) {
 		var idAttr = el.getAttribute("id");
 		/** @type {SVG.Displacement} */
 		var displacement = idAttr && options && options.displacement && options.displacement[idAttr];
+		var clip = idAttr && options && options.clips && options.clips[idAttr];
 		ctx && ctx.save();
 		transform.save();
 		if (displacement && ctx) {
 			applyDisplacement(el, displacement);
+		}
+		if (clip && ctx) {
+			applyClip(el, clip);
 		}
 
 		getStyle();

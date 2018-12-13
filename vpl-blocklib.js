@@ -87,7 +87,23 @@ A3a.vpl.BlockTemplate.resetTimer =
 */
 A3a.vpl.BlockTemplate.lib =	[
 	new A3a.vpl.BlockTemplate({
-		name: "stop",
+		name: "!empty event",
+		type: A3a.vpl.blockType.hidden,
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.clearBlockBackground();
+		}
+	}),
+	new A3a.vpl.BlockTemplate({
+		name: "!empty action",
+		type: A3a.vpl.blockType.hidden,
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.clearBlockBackground();
+		}
+	}),
+	new A3a.vpl.BlockTemplate({
+		name: "!stop",
 		type: A3a.vpl.blockType.hidden,
 		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 		genCode: {

@@ -1179,17 +1179,6 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				: !draggedItem.data.locked;
 		});
 
-	function drawHexagonalNut(ctx, x0, y0, r) {
-		ctx.beginPath();
-		ctx.moveTo(x0 + r * Math.cos(0.1), y0 + r * Math.sin(0.2));
-		for (var i = 1; i < 6; i++) {
-			ctx.lineTo(x0 + r * Math.cos(i * Math.PI / 3 + 0.2), y0 + r * Math.sin(i * Math.PI / 3 + 0.2));
-		}
-		ctx.closePath();
-		ctx.arc(x0, y0, r * 0.5, 0, 2 * Math.PI, true);
-		ctx.fill();
-	}
-
 	if (this.teacherRole) {
 		controlBar.addStretch();
 		if (self.customizationMode) {
@@ -1221,7 +1210,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 					ctx.lineWidth = canvas.dims.blockLineWidth;
 					ctx.stroke();
 					ctx.fillStyle = "white";
-					drawHexagonalNut(ctx,
+					A3a.vpl.Canvas.drawHexagonalNut(ctx,
 						item.x + dx + canvas.dims.controlSize * 0.63,
 						item.y + dy + canvas.dims.controlSize * 0.7,
 						canvas.dims.controlSize * 0.2);
@@ -1230,6 +1219,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				function (data, x, y, ev) {
 					A3a.vpl.Program.resetBlockLib();
 					self.new();
+					self.resetUI();
 					return 0;
 				},
 				// doDrop
@@ -1245,7 +1235,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				ctx.fillRect(item.x + dx, item.y + dy,
 					canvas.dims.controlSize, canvas.dims.controlSize);
 				ctx.fillStyle = "white";
-				drawHexagonalNut(ctx,
+				A3a.vpl.Canvas.drawHexagonalNut(ctx,
 					item.x + dx + canvas.dims.controlSize * 0.5,
 					item.y + dy + canvas.dims.controlSize * 0.4,
 					canvas.dims.controlSize * 0.27);

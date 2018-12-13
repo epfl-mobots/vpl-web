@@ -24,6 +24,24 @@
 
 	"blocks": [
 		{
+			"name": "!empty event",
+			"type": "hidden",
+			"svg": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				}
+			]
+		},
+		{
+			"name": "!empty action",
+			"type": "hidden",
+			"svg": [
+				{
+					"uri": "Blocks.svg#Actions_bg"
+				}
+			]
+		},
+		{
 			"name": "button",
 			"type": "event",
 			"modes": ["basic", "advanced"],
@@ -392,13 +410,21 @@
 			"type": "action",
 			"modes": ["basic", "advanced"],
 			"svg": [
-
-			{
+				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Ac_Wheels"
+				}
+			],
+			"styles": [
+				{
+					"id": "SameSpeed_R",
+					"st": "fill:`Math.abs($[0])===Math.abs($[1])?'black':'transparent'`"
+				},
+				{
+					"id": "SameSpeed_L",
+					"st": "fill:`Math.abs($[0])===Math.abs($[1])?'black':'transparent'`"
 				}
 			],
 			"diffwheelmotion": {
@@ -415,13 +441,23 @@
 					"id": "SliderL_range",
 					"thumbId": "Cursor_left",
 					"min": -1,
-					"max": 1
+					"max": 1,
+					"snap": [
+						0,
+						"`$[1]`",
+						"`-$[1]`"
+					]
 				},
 				{
 					"id": "SliderR_range",
 					"thumbId": "Cursor_right",
 					"min": -1,
-					"max": 1
+					"max": 1,
+					"snap": [
+						0,
+						"`$[0]`",
+						"`-$[0]`"
+					]
 				}
 			]
 		},
@@ -505,18 +541,21 @@
 				{
 					"id": "Slid_red",
 					"thumbId": "Cursor_red",
+					"lowerPartId": "Slid_red_value",
 					"min": 0,
 					"max": 1
 				},
 				{
 					"id": "Slid_green",
 					"thumbId": "Cursor_green",
+					"lowerPartId": "Slid_green_value",
 					"min": 0,
 					"max": 1
 				},
 				{
 					"id": "Slid_blue",
 					"thumbId": "Cursor_blue",
+					"lowerPartId": "Slid_blue_value",
 					"min": 0,
 					"max": 1
 				}
@@ -524,7 +563,7 @@
 			"styles": [
 				{
 					"id": "Gradient_top",
-					"st": "fill:#`$.map(function (c) { return Math.floor(c * 15.999).toString(16); }).join('')`"
+					"st": "fill:#`rgb($).map(function (c) { return Math.floor(c * 15.999).toString(16); }).join('')`"
 				}
 			]
 		},

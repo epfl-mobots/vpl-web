@@ -60,7 +60,7 @@ A3a.vpl.patchJSBlocks = function () {
 	(function () {
 		/** @const */
 		var libPatchJS = {
-			"stop": function (block) {
+			"!stop": function (block) {
 				return {
 					statement:
 						"this.set(\"motor.left\", 0);\n" +
