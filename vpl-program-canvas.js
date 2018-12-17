@@ -82,6 +82,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x, y, opts
 			!block.blockTemplate.mousedown
 			? opts && opts.mousedown
 				? {
+					/** @type {A3a.vpl.CanvasItem.mousedown} */
 					mousedown: opts.mousedown
 				}
 				: null
@@ -142,6 +143,7 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 			notDropTarget: true,
 			scale: canvas.dims.templateScale,
 			disabled: disabled,
+			/** @type {?A3a.vpl.CanvasItem.mousedown} */
 			mousedown: this.customizationMode
 				? function (canvas, data, width, height, x, y, downEvent) {
 					var a = self.mode === A3a.vpl.mode.basic ? self.enabledBlocksBasic : self.enabledBlocksAdvanced;
@@ -1354,13 +1356,15 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		null,
 		scrollingTotalHeight > scrollingAreaH
 			? {
+				/** @type {A3a.vpl.CanvasItem.mousedown} */
 				mousedown: function (canvas, data, width, height, x, y, downEvent) {
-					renderingState.y0 = downEvent.clientY;
+					renderingState.y0 = downEvent.y;
 					return 0;
 				},
+				/** @type {A3a.vpl.CanvasItem.mousedrag} */
 				mousedrag: function (canvas, data, dragging, width, height, x, y, dragEvent) {
 					var delta = Math.max(Math.min(
-						dragEvent.clientY - renderingState.y0,	// mouse-specified shift
+						dragEvent.y - renderingState.y0,	// mouse-specified shift
 						renderingState.vertScroll),	// min
 						renderingState.vertScroll - scrollingTotalHeight + scrollingAreaH);	// max
 					renderingState.vertScroll -= delta;
