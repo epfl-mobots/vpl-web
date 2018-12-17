@@ -337,7 +337,7 @@ function vplSetup(uiConfig) {
 					var data = event.target.result;
 					var img = new Image();
 					img.addEventListener("load", function () {
-						window["vplSim"].sim.setGroundImage(img);
+						window["vplSim"].sim.setImage(img);
 					});
 					img.src = data;
 				};

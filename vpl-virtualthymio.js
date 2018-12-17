@@ -22,7 +22,7 @@ A3a.vpl.VirtualThymio = function () {
 	this.t0 = 0;	// time origin, set upon reset
 	this.t = 0;	// current time
 	this.dt = 0.01;	// integration step in s
-	this.r = 18;	// distance between wheel and robot center in mm
+	this.r = 70;	// distance between wheel and robot center in mm
 	this.pos = [0, 0];	// current position [x, y] in mm
 	this.theta = 0;	// current orientation (counterclockwise, 0=going to the right)
 
@@ -86,6 +86,7 @@ A3a.vpl.VirtualThymio.prototype["reset"] = function (t0) {
 
 		"prox.ground.delta": [1, 1],
 		"prox.horizontal": [0, 0, 0, 0, 0, 0, 0],
+		"acc": [0, 0, 1],
 
 		"motor.left": 0,
 		"motor.right": 0,

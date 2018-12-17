@@ -83,6 +83,9 @@ A3a.vpl.VirtualThymioVM.prototype["set"] = function (name, val) {
 	case "prox.horizontal":
 		this.setVMVar("prox.horizontal", val.map(function (x) { return 2000 * x; }));
 		break;
+	case "acc":
+		this.setVMVar("acc", val.map(function (x) { return 22 * x; }));
+		break;
 	default:
 		throw "Unknown variable " + name;
 	}

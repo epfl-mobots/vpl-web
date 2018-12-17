@@ -29,6 +29,8 @@ A3a.vpl.VPLSim2DViewer = function (robot) {
 	this.paused = false;
 	this.penDown = false;
 
+	this.currentMap = A3a.vpl.VPLSim2DViewer.playgroundMap.ground;
+
 	this.playground = new A3a.vpl.Playground(10 * this.robot.robotSize, 7.07 * this.robot.robotSize);	// A4 ratio
 	var posMargin = this.robot.robotSize;
 	this.robot["setPositionLimits"](-this.playground.width / 2 + posMargin,
@@ -39,10 +41,16 @@ A3a.vpl.VPLSim2DViewer = function (robot) {
 	/** @type {Image} */
 	this.groundImage = null;
 	this.groundCanvas = /** @type {HTMLCanvasElement} */(document.createElement("canvas"));
+	/** @type {Image} */
+	this.heightImage = null;
+	this.heightCanvas = /** @type {HTMLCanvasElement} */(document.createElement("canvas"));
+	/** @type {Image} */
+	this.obstacleImage = null;
 	this.robot.onMove =
 		/** @type {A3a.vpl.VirtualThymio.OnMoveFunction} */(function () {
 			self.updateGroundSensors();
 			self.updateProximitySensors();
+			self.updateAccelerometers();
 		});
 
 	var canvasElement = document.getElementById("simCanvas");
@@ -57,6 +65,14 @@ A3a.vpl.VPLSim2DViewer = function (robot) {
 	this.restoreGround();
 
 	this.render();
+};
+
+/** @enum {string}
+*/
+A3a.vpl.VPLSim2DViewer.playgroundMap = {
+	ground: "ground",
+	obstacle: "obstacle",
+	height: "height"
 };
 
 /** Reset UI
@@ -135,6 +151,28 @@ A3a.vpl.VPLSim2DViewer.prototype.drawPen = function (shape, param) {
 	}
 };
 
+/** Set or change height image
+	@param {Image} img
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.setHeightImage = function (img) {
+	this.heightImage = img;
+	if (this.heightImage) {
+		this.heightCanvas.width = this.heightImage.width;
+		this.heightCanvas.height = this.heightImage.height;
+		var ctx = this.heightCanvas.getContext("2d");
+		// render img on a white background
+		ctx.fillStyle = "white";
+		ctx.fillRect(0, 0, this.heightImage.width, this.heightImage.height);
+		ctx.drawImage(this.heightImage, 0, 0, this.heightImage.width, this.heightImage.height);
+	} else {
+		this.heightCanvas.width = 1;
+		this.heightCanvas.height = 1;
+	}
+	this.updateAccelerometers();
+	this.render();
+};
+
 /** Get the ground value (red) at the specified position
 	@param {number} x (0 = left)
 	@param {number} y (0 = bottom)
@@ -146,6 +184,23 @@ A3a.vpl.VPLSim2DViewer.prototype.groundValue = function (x, y) {
 	var j = Math.round(this.groundCanvas.height * (this.playground.height / 2 - y) / this.playground.height);
 	var pixel = this.groundCanvas.getContext("2d").getImageData(i, j, 1, 1).data;
 	return pixel[0] / 255;
+};
+
+/** Get the height value (minus mean rgb) at the specified position
+	@param {number} x (0 = left)
+	@param {number} y (0 = bottom)
+	@return {number} height value, from 0 (black) to -1 (white)
+*/
+A3a.vpl.VPLSim2DViewer.prototype.heightValue = function (x, y) {
+	if (this.heightImage == null) {
+		// no height image: flat ground
+		return 0;
+	}
+	// scale position to (i,j)
+	var i = Math.round(this.heightCanvas.width * (x + this.playground.width / 2) / this.playground.width);
+	var j = Math.round(this.heightCanvas.height * (this.playground.height / 2 - y) / this.playground.height);
+	var pixel = this.heightCanvas.getContext("2d").getImageData(i, j, 1, 1).data;
+	return -(pixel[0] + pixel[1] + pixel[2]) / 765;
 };
 
 /** Update the values of the ground sensors
@@ -261,6 +316,66 @@ A3a.vpl.VPLSim2DViewer.prototype.updateProximitySensors = function () {
 	this.robot["set"]("prox.horizontal", prox);
 };
 
+/** Update the values of the proximity sensors
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.updateAccelerometers = function () {
+	// relative ground contact positions (assume small angles)
+	var lonContact = [
+		0,	// left
+		0,	// right
+		this.robot.r	// front
+	];
+	var latContact = [
+		-this.robot.r,	// left
+		this.robot.r,	// right
+		0	// front
+	];
+	// from 0 (black) to 1 (white)
+	var h = [];
+	for (var i = 0; i < 3; i++) {
+		// ground contact positions
+		var x = this.robot.pos[0] +
+			lonContact[i] * Math.cos(this.robot.theta) +
+			latContact[i] * Math.sin(this.robot.theta);
+		var y = this.robot.pos[1] +
+			lonContact[i] * Math.sin(this.robot.theta) -
+			latContact[i] * Math.cos(this.robot.theta);
+		// height value at (x, y)
+		h.push(this.heightValue(x, y));	// white=low, black=high
+	}
+	// console.info("h: " + h);
+	// convert 3 heights to roll and pitch angles
+	var gain = 200;
+	var roll = gain * (h[1] - h[0]) / (2 * this.robot.r);
+	var pitch = gain * (h[2] - (h[0] + h[1]) / 2) / this.robot.groundSensorLon;
+	// convert roll and pitch to accelerations along x (left), y (forward), z (down) (g=1)
+	var acc = [
+		roll,
+		pitch,
+		Math.sqrt(1 - roll * roll - pitch * pitch)
+	];
+	this.robot["set"]("acc", acc);
+};
+
+/** Set or change playground image for the currently-selected type (ground, height or obstacles)
+	@param {Image} img
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.setImage = function (img) {
+	switch (this.currentMap) {
+	case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
+		this.setGroundImage(img);
+		break;
+	case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
+		this.setHeightImage(img);
+		break;
+	case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
+		// this.setObstacleImage(img);
+		break;
+	}
+};
+
 /** Start simulator, rendering once if suspended or continuously else
 	@param {boolean} suspended
 	@return {void}
@@ -356,6 +471,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 				? self.simCanvas.dims.controlDownColor
 				: self.simCanvas.dims.controlColor;
 			ctx.fillRect(0, 0, width, height);
+/*
 			ctx.beginPath();
 			ctx.moveTo(self.simCanvas.dims.controlSize * 0.3,
 				self.simCanvas.dims.controlSize * 0.25);
@@ -366,6 +482,17 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			ctx.closePath();
 			ctx.fillStyle = "white";
 			ctx.fill();
+*/
+			var s = self.simCanvas.dims.controlSize;
+			ctx.lineWidth = 0.08 * s;
+			A3a.vpl.Canvas.drawArcArrow(ctx, 0.5 * s, 0.5 * s, 0.28 * s,
+				0.1,
+				-0.1,
+				{
+					arrowAtStart: false,
+					arrowSize: 0.2 * s,
+					style: "white"
+				});
 			ctx.restore();
 		},
 		// action
@@ -434,7 +561,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		// canDrop
 		null);
 
-	controlBar.addSpace();
+	controlBar.addStretch();
 
 	// pen
 	this.addControl(controlBar, "sim:pen",
@@ -501,6 +628,164 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		// action
 		function (ev) {
 			self.restoreGround();
+		},
+		// doDrop
+		null,
+		// canDrop
+		null);
+
+	controlBar.addStretch();
+
+	// ground, height and obstacle maps
+	this.addControl(controlBar, "sim:map-kind",
+		// draw
+		function (ctx, width, height, isDown) {
+			var s = self.simCanvas.dims.controlSize;
+			var lineWidth = self.simCanvas.dims.blockLineWidth;
+			ctx.save();
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0,
+				self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
+			ctx.lineWidth = lineWidth;
+			ctx.strokeStyle = "white";
+			ctx.fillStyle = "white";
+			var i0 = [
+				A3a.vpl.VPLSim2DViewer.playgroundMap.ground,
+				A3a.vpl.VPLSim2DViewer.playgroundMap.height,
+				A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle
+ 			].indexOf(self.currentMap);
+			for (var i = 0; i < 3; i++) {
+				var phi = 2 * (i + 0.25) / 3 * Math.PI;
+				if (i === i0) {
+					ctx.fillRect(
+						s * (0.5 - 0.15 + 0.25 * Math.cos(phi)), s * (0.5 - 0.11 + 0.25 * Math.sin(phi)),
+						0.3 * s, 0.22 * s);
+				} else {
+					 ctx.strokeRect(
+						s * (0.5 - 0.15 + 0.25 * Math.cos(phi)), s * (0.5 - 0.11 + 0.25 * Math.sin(phi)),
+						0.3 * s, 0.22 * s);
+				}
+				A3a.vpl.Canvas.drawArcArrow(ctx, 0.5 * s, 0.5 * s, 0.36 * s,
+					phi - Math.PI * 0.42,
+					phi - Math.PI * 0.22,
+					{
+						arrowAtStart: false,
+						arrowSize: 3 * lineWidth,
+						style: "white"
+					});
+			}
+			ctx.restore();
+		},
+		// action
+		function (ev) {
+			switch (self.currentMap) {
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
+				self.currentMap = A3a.vpl.VPLSim2DViewer.playgroundMap.height;
+				break;
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
+				self.currentMap = A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle;
+				break;
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
+				self.currentMap = A3a.vpl.VPLSim2DViewer.playgroundMap.ground;
+				break;
+			}
+		},
+		// doDrop
+		null,
+		// canDrop
+		null);
+	this.addControl(controlBar, "sim:map",
+		// draw
+		function (ctx, width, height, isDown) {
+			/** Calculate the height for the specified coordinates
+				@param {number} x
+				@param {number} y
+				@return {number}
+			*/
+			function calcHeight(x, y) {
+				return 0.2 * Math.cos(5 * x + 2 * y - 3) - (y - 0.9) * (y - 0.9) / 3;
+			}
+
+			var isOn = false;
+			switch (self.currentMap) {
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
+				isOn = self.groundImage != null;
+				break;
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
+				isOn = self.heightImage != null;
+				break;
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
+				isOn = self.obstacleImage != null;
+				break;
+			}
+			var s = self.simCanvas.dims.controlSize;
+			ctx.save();
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: isOn
+					? self.simCanvas.dims.controlActiveColor
+					: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0,
+				self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
+			ctx.fillStyle = isOn || isDown ? "white" : "#777";
+			ctx.fillRect(s * 0.1, s * 0.8, s * 0.8, s * 0.1);
+			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
+			ctx.strokeStyle = self.currentMap !== A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle ? "white" : "#777";
+			ctx.strokeRect(0.15 * s, 0.15 * s, 0.7 * s, 0.5 * s);
+			switch (self.currentMap) {
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
+				ctx.lineWidth = s * 0.08;
+				ctx.beginPath();
+				ctx.arc(0.6 * s, 0.4 * s, 0.15 * s, -0.5 * Math.PI, 0.5 * Math.PI);
+				ctx.lineTo(0.4 * s, 0.55 * s);
+				ctx.arc(0.4 * s, 0.4 * s, 0.15 * s, 0.5 * Math.PI, 1.5 * Math.PI);
+				ctx.closePath();
+				ctx.stroke();
+				break;
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
+				for (var y = 0; y <= 0.75; y += 0.25) {
+					for (var x = 0; x <= 1; x += 0.1) {
+						var z = calcHeight(x, y);
+						var xd = s * (0.2 + 0.5 * x + 0.15 * y);
+						var yd = s * (0.5 - 0.3 * y - 0.2 * z);
+						if (x === 0) {
+							ctx.moveTo(xd, yd);
+						} else {
+							ctx.lineTo(xd, yd);
+						}
+					}
+				}
+				for (var x = 0; x <= 1; x += 0.25) {
+					for (var y = 0; y <= 0.75; y += 0.15) {
+						var z = calcHeight(x, y);
+						var xd = s * (0.2 + 0.5 * x + 0.15 * y);
+						var yd = s * (0.5 - 0.3 * y - 0.2 * z);
+						if (y === 0) {
+							ctx.moveTo(xd, yd);
+						} else {
+							ctx.lineTo(xd, yd);
+						}
+					}
+				}
+				ctx.stroke();
+				break;
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
+				ctx.strokeRect(0.2 * s, 0.2 * s, 0.6 * s, 0.4 * s);
+				ctx.beginPath();
+				ctx.moveTo(0.4 * s, 0.2 * s);
+				ctx.lineTo(0.4 * s, 0.43 * s);
+				ctx.moveTo(0.6 * s, 0.6 * s);
+				ctx.lineTo(0.6 * s, 0.37 * s);
+				ctx.stroke();
+				break;
+			}
+			ctx.restore();
+		},
+		// action
+		function (ev) {
+			self.setImage(null);
 		},
 		// doDrop
 		null,
@@ -1004,7 +1289,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	yRobotControl += 5 * smallBtnSize;
 
 	// draw robot back side
-	var yRobotSide = yRobotControl;
+	var yRobotSide = yRobotControl;	// top
 	this.simCanvas.addDecoration(function (ctx) {
 		ctx.save();
 		ctx.fillStyle = "black";
@@ -1047,8 +1332,99 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	});
 	yRobotControl += 2 * smallBtnSize;
 
+	// draw accelerometers
+	var accY0 = yRobotControl + smallBtnSize;	// center
+	this.simCanvas.addDecoration(function (ctx) {
+		var acc = self.robot["get"]("acc");
+		var angles = [
+			Math.atan2(acc[0], acc[1]),
+			-Math.atan2(acc[1], acc[2]),
+			-Math.atan2(acc[0], acc[2])
+		];
+		// console.info("acc: " + acc);
+		// console.info("angles: " + angles);
+		ctx.save();
+		ctx.strokeStyle = "black";
+		ctx.lineWidth = 0.7 * self.simCanvas.dims.blockLineWidth;
+		for (var i = 0; i < 3; i++) {
+			ctx.save();
+			ctx.translate(self.simCanvas.dims.margin + self.simCanvas.dims.stripHorMargin + (0.5 + i) * smallBtnSize,
+				accY0);
+
+			// cross
+			ctx.save();
+			ctx.strokeStyle = "silver";
+			ctx.beginPath();
+			ctx.moveTo(-0.4 * smallBtnSize, 0);
+			ctx.lineTo(0.4 * smallBtnSize, 0);
+			ctx.moveTo(0, -0.4 * smallBtnSize);
+			ctx.lineTo(0, 0.4 * smallBtnSize);
+			ctx.stroke();
+			ctx.restore();
+
+			ctx.rotate(angles[i]);
+			switch (i) {
+			case 0:	// yaw, display from top
+				var sz = 0.2 * smallBtnSize;
+				ctx.translate(0, 1.2 * sz);
+				ctx.beginPath();
+				// rear left
+				ctx.moveTo(-1.2 * sz,
+					0);
+				ctx.lineTo(-1.2 * sz,
+					-1.8 * sz);
+				ctx.bezierCurveTo(-0.72 * sz,
+					-2.4 * sz,
+					-0.05 * sz,
+					-2.4 * sz,
+					0,
+					-2.4 * sz);
+				// left side
+				ctx.bezierCurveTo(0.05 * sz,
+					-2.4 * sz,
+					0.72 * sz,
+					-2.4 * sz,
+					1.2 * sz,
+					-1.8 * sz);
+				ctx.lineTo(1.2 * sz,
+					0);
+				ctx.closePath();
+				ctx.lineWidth = 2;
+				ctx.strokeStyle = "black";
+				ctx.stroke();
+				break;
+			case 1:	// pitch, display from right
+				ctx.strokeRect(-0.4 * smallBtnSize, -0.15 * smallBtnSize,
+					0.8 * smallBtnSize, 0.3 * smallBtnSize);
+				ctx.beginPath();
+				ctx.arc(-0.2 * smallBtnSize, 0.05 * smallBtnSize,
+					0.15 * smallBtnSize,
+					0, 2 * Math.PI);
+				ctx.fillStyle = "white";
+				ctx.fill();
+				ctx.lineWidth = 0.07 * smallBtnSize;
+				ctx.stroke();
+				break;
+			case 2:	// roll, display from back
+				ctx.strokeRect(-0.4 * smallBtnSize, -0.15 * smallBtnSize,
+					0.8 * smallBtnSize, 0.3 * smallBtnSize);
+				ctx.fillStyle = "black";
+				ctx.fillRect(-0.35 * smallBtnSize, 0.15 * smallBtnSize,
+					0.15 * smallBtnSize,
+					0.08 * smallBtnSize);
+				ctx.fillRect(0.2 * smallBtnSize, 0.15 * smallBtnSize,
+					0.15 * smallBtnSize,
+					0.08 * smallBtnSize);
+				break;
+			}
+			ctx.restore();
+		}
+		ctx.restore();
+	});
+	yRobotControl += 2 * smallBtnSize;
+
 	// draw yellow arc leds
-	var ledsY0 = yRobotControl + 1.5 * smallBtnSize;
+	var ledsY0 = yRobotControl + 1.5 * smallBtnSize;	// center
 	this.simCanvas.addDecoration(function (ctx) {
 		var leds = self.robot["get"]("leds.circle");
 		for (var i = 0; i < 8; i++) {
@@ -1064,7 +1440,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	yRobotControl += 4 * smallBtnSize;
 
 	// draw timer 0
-	var timerY0 = yRobotControl + smallBtnSize;
+	var timerY0 = yRobotControl + smallBtnSize;	// center
 	this.simCanvas.addDecoration(function (ctx) {
 		var x0 = self.simCanvas.dims.margin + 1.5 * smallBtnSize + self.simCanvas.dims.stripHorMargin;
 		var y0 = timerY0;
@@ -1119,7 +1495,16 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		function(ctx, item, dx, dy) {
 			ctx.save();
 
-			ctx.drawImage(self.groundCanvas, item.x + dx, item.y + dy, item.width, item.height);
+			switch (self.currentMap) {
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
+				ctx.drawImage(self.groundCanvas, item.x + dx, item.y + dy, item.width, item.height);
+				break;
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
+				if (self.heightImage != null) {
+					ctx.drawImage(self.heightCanvas, item.x + dx, item.y + dy, item.width, item.height);
+				}
+				break;
+			}
 
 			ctx.strokeStyle = "silver";
 			ctx.lineWidth = 3;
