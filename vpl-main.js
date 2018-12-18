@@ -160,7 +160,7 @@ function vplSetup(uiConfig) {
 	}
 
 	// general settings
-	var isClassic = getQueryOption("appearance") === "classic";
+	var isClassic = uiConfig == undefined || getQueryOption("appearance") === "classic";
 	window["vplUseLocalStorage"] = getQueryOption("storage") === "local";
 	var language = getQueryOption("language");
 	if (isClassic) {
