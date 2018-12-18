@@ -1338,8 +1338,8 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		var acc = self.robot["get"]("acc");
 		var angles = [
 			Math.atan2(acc[0], acc[1]),
-			-Math.atan2(acc[1], acc[2]),
-			-Math.atan2(acc[0], acc[2])
+			Math.atan2(acc[1], acc[2]),
+			Math.atan2(acc[0], acc[2])
 		];
 		// console.info("acc: " + acc);
 		// console.info("angles: " + angles);
@@ -1362,10 +1362,10 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			ctx.stroke();
 			ctx.restore();
 
-			ctx.rotate(angles[i]);
+			ctx.rotate(-angles[i]);
 			switch (i) {
 			case 0:	// yaw, display from top
-				var sz = 0.2 * smallBtnSize;
+				var sz = 0.25 * smallBtnSize;
 				ctx.translate(0, 1.2 * sz);
 				ctx.beginPath();
 				// rear left
