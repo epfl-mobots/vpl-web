@@ -275,9 +275,10 @@ A3a.vpl.Canvas.prototype.mousedownSVGSliders = function (block, width, height, l
 		this.clientData.max = this.clientData.vert ? bnds.ymin : bnds.xmax;
 		var x0 = (bnds.xmin + bnds.xmax) / 2;
 		var y0 = (bnds.ymin + bnds.ymax) / 2;
+		var thumbBnds = this.clientData.svg[svgFilename].getElementBounds(this.clientData.sliderAux["thumbId"]);
 		if (this.checkSVGSlider(this.clientData.vert ? x0 : y0,
 			this.clientData.vert,
-			this.clientData.vert ? bnds.xmax - bnds.xmin : bnds.ymax - bnds.ymin,
+			this.clientData.vert ? thumbBnds.xmax - thumbBnds.xmin : thumbBnds.ymax - thumbBnds.ymin,
 			pt)) {
 			block.prepareChange();
 			return i;
