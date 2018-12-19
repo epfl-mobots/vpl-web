@@ -43,10 +43,24 @@
 			}
 		},
 		{
-			"name": "start"
+			"name": "start",
+			"l2": {
+				"sectionBegin": "// init block\n",
+				"sectionPriority": 10000
+			}
 		},
 		{
-			"name": "clap"
+			"name": "clap",
+			"l2": {
+				"initCodeExec": [
+					"// setup threshold for detecting claps\nmic.threshold = 250\n"
+				],
+				"sectionBegin": "onevent mic {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clause": "mic.intensity > mic.threshold",
+				"clauseOptional": true
+			}
 		},
 		{
 			"name": "Ev_Acc_fall"
@@ -81,6 +95,20 @@
 				],
 				"statement":
 					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`;\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`;\n"
+			}
+		},
+		{
+			"name": "top_color_basic",
+			"l2": {
+				"initVarDecl": [
+					"// RGB color of the top led\nint topColor[3];\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0];\n",
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"topColor = [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`];\nleds.top(topColor);\n"
 			}
 		},
 		{

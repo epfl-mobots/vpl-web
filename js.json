@@ -10,13 +10,86 @@
 			}
 		},
 		{
+			"name": "Thymio acc 1"
+		},
+		{
+			"name": "Thymio acc 2"
+		},
+		{
+			"name": "Thymio acc 0"
+		},
+		{
+			"name": "start",
+			"js": {
+				"sectionBegin": "// init block\n",
+				"sectionPriority": 10000
+			}
+		},
+		{
+			"name": "clap",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"mic\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"sectionPriority": 1
+			}
+		},
+		{
+			"name": "Ev_Acc_fall"
+		},
+		{
+			"name": "Ev_Acc_hit"
+		},
+		{
+			"name": "Ev_ProxH_bas"
+		},
+		{
+			"name": "Remote1"
+		},
+		{
+			"name": "Remote2"
+		},
+		{
 			"name": "motor",
 			"js": {
 				"initCodeExec": [
 					"this.set(\"leds.top\", [0, 0, 0]);\n"
 				],
-				"statement": "this.set(\"motor.left\", `$[0].toFixed(2)`);\nthis.set(\"motor.right\", `$[1].toFixed(2)`);\n"
+				"statement":
+					"this.set(\"motor.left\", `$[0].toFixed(2)`);\nthis.set(\"motor.right\", `$[1].toFixed(2)`);\n"
 			}
+		},
+		{
+			"name": "move",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"motor.left\", `[0, 0.2, 0.25, 0.1, -1.5, -0.2, -0.25, -0.1, 0.15][$[0]].toFixed(2)`);\nthis.set(\"motor.right\", `[0, 0.2, 0.15, -0.1, -0.25, -0.2, -0.15, 0.1, 0.25][$[0]].toFixed(2)`);\n"
+			}
+		},
+		{
+			"name": "top_color_basic",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.top\", [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`]);\n"
+			}
+		},
+		{
+			"name": "top color",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.top\", [`$.map(function (x) { return x.toFixed(2); }).join(', ')`]);\n"
+			}
+		},
+		{
+			"name": "Ac_music"
 		}
 	]
 }

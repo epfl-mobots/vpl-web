@@ -587,6 +587,12 @@
 					"val": 7,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				}
+			],
+			"styles": [
+				{
+					"id": "Gradient_Top_basic",
+					"st": "fill:`['transparent','#3f0','cyan','blue','magenta','red','yellow','white'][$[0]]`"
+				}
 			]
 		},
 		{
@@ -729,10 +735,23 @@
 			}
 		},
 		{
-			"name": "start"
+			"name": "start",
+			"aseba": {
+				"sectionBegin": "# initialization\n",
+				"sectionPriority": 10000
+			}
 		},
 		{
-			"name": "clap"
+			"name": "clap",
+			"aseba": {
+				"initCodeExec": [
+					"# setup threshold for detecting claps\nmic.threshold = 250\n"
+				],
+				"sectionBegin": "onevent mic\n",
+				"sectionPriority": 1,
+				"clause": "mic.intensity > mic.threshold",
+				"clauseOptional": true
+			}
 		},
 		{
 			"name": "Ev_Acc_fall"
@@ -767,6 +786,20 @@
 				],
 				"statement":
 					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`\n"
+			}
+		},
+		{
+			"name": "top_color_basic",
+			"aseba": {
+				"initVarDecl": [
+					"# RGB color of the top led\nvar topColor[3]\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n",
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"topColor = [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`]\ncall leds.top(topColor)\n"
 			}
 		},
 		{
@@ -838,10 +871,24 @@
 			}
 		},
 		{
-			"name": "start"
+			"name": "start",
+			"l2": {
+				"sectionBegin": "// init block\n",
+				"sectionPriority": 10000
+			}
 		},
 		{
-			"name": "clap"
+			"name": "clap",
+			"l2": {
+				"initCodeExec": [
+					"// setup threshold for detecting claps\nmic.threshold = 250\n"
+				],
+				"sectionBegin": "onevent mic {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clause": "mic.intensity > mic.threshold",
+				"clauseOptional": true
+			}
 		},
 		{
 			"name": "Ev_Acc_fall"
@@ -876,6 +923,20 @@
 				],
 				"statement":
 					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`;\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`;\n"
+			}
+		},
+		{
+			"name": "top_color_basic",
+			"l2": {
+				"initVarDecl": [
+					"// RGB color of the top led\nint topColor[3];\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0];\n",
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"topColor = [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`];\nleds.top(topColor);\n"
 			}
 		},
 		{
@@ -914,13 +975,86 @@
 			}
 		},
 		{
+			"name": "Thymio acc 1"
+		},
+		{
+			"name": "Thymio acc 2"
+		},
+		{
+			"name": "Thymio acc 0"
+		},
+		{
+			"name": "start",
+			"js": {
+				"sectionBegin": "// init block\n",
+				"sectionPriority": 10000
+			}
+		},
+		{
+			"name": "clap",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"mic\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"sectionPriority": 1
+			}
+		},
+		{
+			"name": "Ev_Acc_fall"
+		},
+		{
+			"name": "Ev_Acc_hit"
+		},
+		{
+			"name": "Ev_ProxH_bas"
+		},
+		{
+			"name": "Remote1"
+		},
+		{
+			"name": "Remote2"
+		},
+		{
 			"name": "motor",
 			"js": {
 				"initCodeExec": [
 					"this.set(\"leds.top\", [0, 0, 0]);\n"
 				],
-				"statement": "this.set(\"motor.left\", `$[0].toFixed(2)`);\nthis.set(\"motor.right\", `$[1].toFixed(2)`);\n"
+				"statement":
+					"this.set(\"motor.left\", `$[0].toFixed(2)`);\nthis.set(\"motor.right\", `$[1].toFixed(2)`);\n"
 			}
+		},
+		{
+			"name": "move",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"motor.left\", `[0, 0.2, 0.25, 0.1, -1.5, -0.2, -0.25, -0.1, 0.15][$[0]].toFixed(2)`);\nthis.set(\"motor.right\", `[0, 0.2, 0.15, -0.1, -0.25, -0.2, -0.15, 0.1, 0.25][$[0]].toFixed(2)`);\n"
+			}
+		},
+		{
+			"name": "top_color_basic",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.top\", [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`]);\n"
+			}
+		},
+		{
+			"name": "top color",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.top\", [`$.map(function (x) { return x.toFixed(2); }).join(', ')`]);\n"
+			}
+		},
+		{
+			"name": "Ac_music"
 		}
 	]
 }
@@ -1114,7 +1248,7 @@
       .BlueGrey300{
       fill:#90a4ae;
       }
-      
+
     </style>
     <radialGradient id="radial-gradient" cx="162.42" cy="129.38" r="49.88" gradientTransform="translate(-140.75 -197.04) scale(1.17 2)" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#cfd8dc"/>
@@ -1584,7 +1718,6 @@
     </g>
   </g>
 </svg>
-
 </script>
 
 <title>VPL</title>
@@ -1710,6 +1843,7 @@ window["vplOnRun"] = function (code) {
 <script src="a3a-device.js"></script>
 <script src="a3a-virtual-thymio.js"></script>
 <script src="vpl-virtualthymio-a3a.js"></script>
+<script src="vpl-obstacles.js"></script>
 <script src="vpl-sim.js"></script>
 <script src="vpl-sim2d.js"></script>
 

@@ -4,8 +4,8 @@
 		"state": "transparent",
 		"action": "transparent",
 		"comment": "#aaa",
-		"background": "",
-		"ruleBackground": "#ddd",
+		"background": "#fcfdfe",
+		"ruleBackground": "#eceff1",
 		"ruleMarks": "#bbb"
 	},
 
@@ -49,34 +49,34 @@
 				{
 					"id": "Btn2_Center",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Forward",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Backward",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Right",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Left",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				}
 			]
 		},
 		{
 			"name": "Thymio acc 1",
 			"type": "event",
-			"modes": ["basic", "advanced"],
+			"modes": ["advanced"],
 			"svg": [
 
 				{
@@ -106,7 +106,7 @@
 		{
 			"name": "Thymio acc 2",
 			"type": "event",
-			"modes": ["basic", "advanced"],
+			"modes": ["advanced"],
 			"svg": [
 
 				{
@@ -127,7 +127,7 @@
 			"rotating": [
 				{
 					"id": "Rot360",
-					"centerId": "RotationCenter",
+					"centerId": "RotationPivot",
 					"thumbId": "Btn2_HandleAcc0",
 					"numSteps": 12
 				}
@@ -136,7 +136,7 @@
 		{
 			"name": "Thymio acc 0",
 			"type": "event",
-			"modes": ["basic", "advanced"],
+			"modes": ["advanced"],
 			"svg": [
 
 				{
@@ -232,7 +232,7 @@
 		{
 			"name": "Ev_ProxH_bas",
 			"type": "event",
-			"modes": ["basic", "advanced"],
+			"modes": ["basic"],
 			"svg": [
 
 				{
@@ -252,29 +252,29 @@
 				{
 					"id": "Btn3_ProxFront",
 					"val": [0, 1, 2],
-					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_ProxRight",
 					"val": [0, 1, 2],
-					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_ProxLeft",
 					"val": [0, 1, 2],
-					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_ProxBack",
 					"val": [0, 1, 2],
-					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
 				}
 			]
 		},
 		{
 			"name": "Remote1",
 			"type": "event",
-			"modes": ["basic"],
+			"modes": ["advanced"],
 			"svg": [
 			   {
 					"uri": "Blocks.svg#Events_bg"
@@ -290,34 +290,34 @@
 				{
 					"id": "Btn2_Remote1_85",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_80",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_81",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_86",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_87",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				}
 			]
 		},
 		{
 			"name": "Remote2",
 			"type": "event",
-			"modes": ["basic"],
+			"modes": ["advanced"],
 			"svg": [
 			   {
 					"uri": "Blocks.svg#Events_bg"
@@ -333,71 +333,71 @@
 				{
 					"id": "Btn2_Remote2_0",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_1",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_2",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_3",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_4",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_5",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_6",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_7",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_8",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_9",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_16",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_17",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				}
 			]
 		},
 		{
 			"name": "motor",
 			"type": "action",
-			"modes": ["basic", "advanced"],
+			"modes": ["advanced"],
 			"svg": [
-			{
+				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
 				{
@@ -451,7 +451,7 @@
 		{
 			"name": "move",
 			"type": "action",
-			"modes": ["basic", "advanced"],
+			"modes": ["basic"],
 			"svg": [
 
 				{
@@ -466,54 +466,126 @@
 				{
 					"id": "Btn2_StopDir",
 					"val": 0,
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_FwdDir",
 					"val": 1,
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_FwdRightDir",
 					"val": 2,
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_RightDir",
 					"val": 3,
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_BwdRightDir",
 					"val": 4,
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_BwdDir",
 					"val": 5,
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_BwdLeftDir",
 					"val": 6,
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_LeftDir",
 					"val": 7,
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_FwdLeftDir",
 					"val": 8,
-					"st": ["fill:#90a4ae", "fill:#1de9b6"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
+				}
+			]
+		},
+		{
+			"name": "top_color_basic",
+			"type": "action",
+			"modes": ["basic"],
+			"svg": [
+
+				{
+					"uri": "Blocks.svg#Actions_bg"
+				},
+				{
+					"uri": "Blocks.svg#ColorPalette"
+				},
+				{
+					"uri": "Blocks.svg#Bg_Thymio_front_color"
+				},
+				{
+					"uri": "Blocks.svg#Gradient_Top_basic"
+				},
+				{
+					"uri": "Blocks.svg#SelectedColors"
+				}
+			],
+			"defaultParameters": [0],
+			"radiobuttons": [
+				{
+					"id": "Btn2_SelectedNone",
+					"val": 0,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedGreen",
+					"val": 1,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedCyan",
+					"val": 2,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedBlue",
+					"val": 3,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedMagenta",
+					"val": 4,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedRed",
+					"val": 5,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedYel",
+					"val": 6,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedWhite",
+					"val": 7,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				}
+			],
+			"styles": [
+				{
+					"id": "Gradient_Top_basic",
+					"st": "fill:`['transparent','#3f0','cyan','blue','magenta','red','yellow','white'][$[0]]`"
 				}
 			]
 		},
 		{
 			"name": "top color",
 			"type": "action",
-			"modes": ["basic", "advanced"],
+			"modes": ["advanced"],
 			"svg": [
 
 				{
@@ -557,7 +629,7 @@
 		{
 			"name": "Ac_music",
 			"type": "action",
-			"modes": ["basic"],
+			"modes": ["basic", "advanced"],
 			"svg": [
 
 				{
