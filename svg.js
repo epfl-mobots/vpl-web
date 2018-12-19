@@ -26,7 +26,11 @@ var SVG = function (src) {
 		transform: (Object | undefined),
 		elementId: (string | undefined),
 		element: (Element | undefined),
-		showBoundingBox: (boolean | undefined)
+		showBoundingBox: (boolean | undefined),
+		cb: ({
+			line: (function(Array.<number>,Array.<number>,boolean):void | undefined),
+			circle: (function(number,number,number):void | undefined)
+		} | undefined)
 	}}
 */
 SVG.Options;
@@ -542,6 +546,13 @@ SVG.prototype.draw = function (ctx, options) {
 			var xc1 = 0;	// implicit control point for S and s
 			var yc1 = 0;
 
+			// collection of points for polyline or polygon
+			/** @type {Array.<number>} */
+			var polyX = [];
+			/** @type {Array.<number>} */
+			var polyY = [];
+			var polyDoCollect = true;
+
 			ctx && ctx.beginPath();
 			d.slice(1).split(";")
 				.forEach(function (c) {
@@ -556,11 +567,23 @@ SVG.prototype.draw = function (ctx, options) {
 							x = args[0];
 							y = args[1];
 							ctx && ctx.moveTo(x, y);
+							addPoint(x, y);
+
+							if (polyDoCollect && polyX.length > 1 && options && options.cb && options.cb.line) {
+								// cb for previous polyline
+								options.cb.line(polyX, polyY, false);
+							}
+							polyDoCollect = true;
+							polyX = xa.slice(-1);
+							polyY = ya.slice(-1);
+
 							for (var i = 2; i + 1 < args.length; i += 2) {
 								x = args[i];
 								y = args[i + 1];
 								ctx && ctx.lineTo(x, y);
 								addPoint(x, y);
+								polyX.push(xa[xa.length - 1]);
+								polyY.push(ya[ya.length - 1]);
 							}
 							xc1 = x;
 							yc1 = y;
@@ -572,11 +595,22 @@ SVG.prototype.draw = function (ctx, options) {
 							y += args[1];
 							ctx && ctx.moveTo(x, y);
 							addPoint(x, y);
+
+							if (polyDoCollect && polyX.length > 1 && options && options.cb && options.cb.line) {
+								// cb for previous polyline
+								options.cb.line(polyX, polyY, false);
+							}
+							polyDoCollect = true;
+							polyX = xa.slice(-1);
+							polyY = ya.slice(-1);
+
 							for (var i = 2; i + 1 < args.length; i += 2) {
 								x += args[i];
 								y += args[i + 1]
 								ctx && ctx.lineTo(x, y);
 								addPoint(x, y);
+								polyX.push(xa[xa.length - 1]);
+								polyY.push(ya[ya.length - 1]);
 							}
 						}
 						xc1 = x;
@@ -588,6 +622,8 @@ SVG.prototype.draw = function (ctx, options) {
 							y = args[i + 1];
 							ctx && ctx.lineTo(x, y);
 							addPoint(x, y);
+							polyX.push(xa[xa.length - 1]);
+							polyY.push(ya[ya.length - 1]);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -598,6 +634,8 @@ SVG.prototype.draw = function (ctx, options) {
 							y += args[i + 1];
 							ctx && ctx.lineTo(x, y);
 							addPoint(x, y);
+							polyX.push(xa[xa.length - 1]);
+							polyY.push(ya[ya.length - 1]);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -607,6 +645,8 @@ SVG.prototype.draw = function (ctx, options) {
 							x = args[i];
 							ctx && ctx.lineTo(x, y);
 							addPoint(x, y);
+							polyX.push(xa[xa.length - 1]);
+							polyY.push(ya[ya.length - 1]);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -616,6 +656,8 @@ SVG.prototype.draw = function (ctx, options) {
 							x += args[i];
 							ctx && ctx.lineTo(x, y);
 							addPoint(x, y);
+							polyX.push(xa[xa.length - 1]);
+							polyY.push(ya[ya.length - 1]);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -625,6 +667,8 @@ SVG.prototype.draw = function (ctx, options) {
 							y = args[i];
 							ctx && ctx.lineTo(x, y);
 							addPoint(x, y);
+							polyX.push(xa[xa.length - 1]);
+							polyY.push(ya[ya.length - 1]);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -634,6 +678,8 @@ SVG.prototype.draw = function (ctx, options) {
 							y += args[i];
 							ctx && ctx.lineTo(x, y);
 							addPoint(x, y);
+							polyX.push(xa[xa.length - 1]);
+							polyY.push(ya[ya.length - 1]);
 						}
 						xc1 = x;
 						yc1 = y;
@@ -650,6 +696,7 @@ SVG.prototype.draw = function (ctx, options) {
 							y = y1;
 							addPoint(p.x, p.y);
 							addPoint(x, y);
+							polyDoCollect = false;
 						}
 						xc1 = x;
 						yc1 = y;
@@ -666,6 +713,7 @@ SVG.prototype.draw = function (ctx, options) {
 							y = y1;
 							addPoint(p.x, p.y);
 							addPoint(x, y);
+							polyDoCollect = false;
 						}
 						xc1 = x;
 						yc1 = y;
@@ -680,6 +728,7 @@ SVG.prototype.draw = function (ctx, options) {
 							xc1 = 2 * x - args[i + 2];
 							yc1 = 2 * y - args[i + 3];
 							addPoint(x, y);
+							polyDoCollect = false;
 						}
 						break;
 					case "c":
@@ -692,6 +741,7 @@ SVG.prototype.draw = function (ctx, options) {
 							x += args[i + 4];
 							y += args[i + 5];
 							addPoint(x, y);
+							polyDoCollect = false;
 						}
 						break;
 					case "S":
@@ -704,6 +754,7 @@ SVG.prototype.draw = function (ctx, options) {
 							xc1 = 2 * x - args[i];
 							yc1 = 2 * y - args[i + 1];
 							addPoint(x, y);
+							polyDoCollect = false;
 						}
 						break;
 					case "s":
@@ -716,6 +767,7 @@ SVG.prototype.draw = function (ctx, options) {
 							x += args[i + 2];
 							y += args[i + 3];
 							addPoint(x, y);
+							polyDoCollect = false;
 						}
 						break;
 					case "Q":
@@ -727,6 +779,7 @@ SVG.prototype.draw = function (ctx, options) {
 							xc1 = 2 * x - args[i];
 							yc1 = 2 * y - args[i + 1];
 							addPoint(x, y);
+							polyDoCollect = false;
 						}
 						break;
 					case "q":
@@ -738,16 +791,29 @@ SVG.prototype.draw = function (ctx, options) {
 							x += args[i + 2];
 							y += args[i + 3];
 							addPoint(x, y);
+							polyDoCollect = false;
 						}
 						break;
 					case "Z":
 					case "z":
 						ctx && ctx.closePath();
+						if (polyDoCollect && polyX.length > 1 && options && options.cb && options.cb.line) {
+							// cb for previous polygon
+							options.cb.line(polyX, polyY, true);
+						}
+						polyDoCollect = true;
+						polyX = [];
+						polyY = [];
 						break;
 					default:
 						throw "unimplemented path command: " + cmd;
 					}
 				});
+
+				if (polyDoCollect && polyX.length > 1 && options && options.cb && options.cb.line) {
+					// cb for last polyline
+					options.cb.line(polyX, polyY, false);
+				}
 		}
 
 		/** Convert fill style to something compatible with fillStyle 2d context property
@@ -1002,6 +1068,9 @@ SVG.prototype.draw = function (ctx, options) {
 			paint();
 			addPoint(x, y);
 			addPoint(x2, y2);
+			if (options && options.cb && options.cb.line) {
+				options.cb.line([x, x2], [y, y2], false);
+			}
 			ctx && ctx.restore();
 			transform.restore();
 			break;
@@ -1023,6 +1092,9 @@ SVG.prototype.draw = function (ctx, options) {
 					addPoint(points[i], points[i + 1]);
 				}
 				paint();
+				if (options && options.cb && options.cb.line) {
+					options.cb.line(xa.slice(-points.length / 2), ya.slice(-points.length / 2), false);
+				}
 				ctx && ctx.restore();
 				transform.restore();
 			}
@@ -1041,6 +1113,18 @@ SVG.prototype.draw = function (ctx, options) {
 			addPoint(x - r, y + r);
 			addPoint(x + r, y - r);
 			addPoint(x + r, y + r);
+			if (options && options.cb && options.cb.circle) {
+				// check that last 4 points in xa,ya make a square (parallelogram is guarranteed)
+				var x4 = xa.slice(-4);
+				var y4 = ya.slice(-4);
+				var diag12 = (x4[3] - x4[0]) * (x4[3] - x4[0]) + (y4[3] - y4[0]) * (y4[3] - y4[0]);
+				var diag22 = (x4[2] - x4[1]) * (x4[2] - x4[1]) + (y4[2] - y4[1]) * (y4[2] - y4[1]);
+				// diagonals have same length and are perpendicular
+				if (Math.abs(diag12 - diag22) / (diag12 + diag22) < 1e-3 &&
+					((x4[3] - x4[0]) * (x4[2] - x4[1]) + (y4[3] - y4[0]) * (y4[2] - y4[1])) / diag12 < 1e-3) {
+					options.cb.circle((x4[0] + x4[2]) / 2, (y4[0] + y4[2]) / 2, Math.sqrt(diag12 / 8));
+				}
+			}
 			ctx && ctx.restore();
 			transform.restore();
 			break;

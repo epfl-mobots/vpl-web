@@ -333,15 +333,23 @@ function vplSetup(uiConfig) {
 			if (files.length === 1) {
 				var file = files[0];
 				var reader = new window.FileReader();
-				reader.onload = function (event) {
-					var data = event.target.result;
-					var img = new Image();
-					img.addEventListener("load", function () {
-						window["vplSim"].sim.setImage(img);
-					});
-					img.src = data;
-				};
-				reader["readAsDataURL"](file);
+				if (window["vplSim"].sim.wantsSVG()) {
+					reader.onload = function (event) {
+						var data = event.target.result;
+						window["vplSim"].sim.setSVG(data);
+					};
+					reader["readAsText"](file);
+				} else {
+					reader.onload = function (event) {
+						var data = event.target.result;
+						var img = new Image();
+						img.addEventListener("load", function () {
+							window["vplSim"].sim.setImage(img);
+						});
+						img.src = data;
+					};
+					reader["readAsDataURL"](file);
+				}
 			}
 		}, false);
 	}

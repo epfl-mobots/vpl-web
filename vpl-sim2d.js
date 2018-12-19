@@ -40,12 +40,22 @@ A3a.vpl.VPLSim2DViewer = function (robot) {
 
 	/** @type {Image} */
 	this.groundImage = null;
+	/** @type {Image} */
+	this.disabledGroundImage = null;
 	this.groundCanvas = /** @type {HTMLCanvasElement} */(document.createElement("canvas"));
 	/** @type {Image} */
 	this.heightImage = null;
-	this.heightCanvas = /** @type {HTMLCanvasElement} */(document.createElement("canvas"));
 	/** @type {Image} */
-	this.obstacleImage = null;
+	this.disabledHeightImage = null;
+	this.heightCanvas = /** @type {HTMLCanvasElement} */(document.createElement("canvas"));
+	/** @type {A3a.vpl.Obstacles} */
+	this.obstacles = new A3a.vpl.Obstacles();
+	this.hasObstacles = false;
+	/** @type {?string} */
+	this.obstacleSVG = null;
+	/** @type {?string} */
+	this.disabledObstacleSVG = null;
+	this.setPlaygroundLimits();
 	this.robot.onMove =
 		/** @type {A3a.vpl.VirtualThymio.OnMoveFunction} */(function () {
 			self.updateGroundSensors();
@@ -120,6 +130,8 @@ A3a.vpl.VPLSim2DViewer.prototype.restoreGround = function () {
 A3a.vpl.VPLSim2DViewer.prototype.setGroundImage = function (img) {
 	this.groundImage = img;
 	this.restoreGround();
+	this.updateGroundSensors();
+	this.render();
 };
 
 /** Draw pen trace
@@ -170,6 +182,73 @@ A3a.vpl.VPLSim2DViewer.prototype.setHeightImage = function (img) {
 		this.heightCanvas.height = 1;
 	}
 	this.updateAccelerometers();
+	this.render();
+};
+
+/** Initialize obstacles to playground limits
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.setPlaygroundLimits = function () {
+	this.obstacles.clear();
+
+	// playground limits
+	this.obstacles.add(new A3a.vpl.ObstaclePoly(
+		[
+			-this.playground.width / 2,
+			this.playground.width / 2,
+			this.playground.width / 2,
+			-this.playground.width / 2
+		],
+		[
+			-this.playground.height / 2,
+			-this.playground.height / 2,
+			this.playground.height / 2,
+			this.playground.height / 2
+		],
+		true));
+};
+
+/** Set or change obstacle image
+	@param {?string} svgSrc
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.setObstacleImage = function (svgSrc) {
+	this.setPlaygroundLimits();
+
+//this.obstacles.add(new A3a.vpl.ObstaclePoly([0, 0], [-100, 100], false));
+//this.obstacles.add(new A3a.vpl.ObstacleCylinder(0, 0, 100));
+//return;
+
+	// add svg
+	this.obstacleSVG = svgSrc;
+	if (svgSrc) {
+		var svg = new SVG(svgSrc);
+		// scaling from svg.viewBox ([xmin,ymin,width,height]) to centered this.playground
+		var scx = this.playground.width / svg.viewBox[2];
+		var ox = -this.playground.width * (0.5 + svg.viewBox[0] / svg.viewBox[2]);
+		var scy = -this.playground.height / svg.viewBox[3];	// positive y upward
+		var oy = this.playground.height * (0.5 + svg.viewBox[1] / svg.viewBox[3]);
+		var self = this;
+		svg.draw(null, {
+			cb: {
+				line: function (x, y, isPolygon) {
+					self.obstacles.add(new A3a.vpl.ObstaclePoly(
+						x.map(function (x1) { return ox + scx * x1; }),
+						y.map(function (y1) { return oy + scy * y1; }),
+						isPolygon));
+				},
+				circle: function (x, y, r) {
+					self.obstacles.add(new A3a.vpl.ObstacleCylinder(
+						ox + scx * x,
+						oy + scy * y,
+						(scx - scy) / 2 * r));
+				}
+			}
+		});
+	}
+	this.hasObstacles = svgSrc != null;
+
+	this.updateProximitySensors();
 	this.render();
 };
 
@@ -229,57 +308,6 @@ A3a.vpl.VPLSim2DViewer.prototype.updateGroundSensors = function () {
 A3a.vpl.VPLSim2DViewer.prototype.updateProximitySensors = function () {
 	// from 0 (nothing close) to 1 (close)
 
-	/** Distance from position to wall
-		@param {number} x sensor position along x axis
-		@param {number} y sensor position along y axis
-		@param {number} phi sensor direction (0=along x, counterclockwise)
-		@param {number} x1 position of wall extremity 1 along x axis
-		@param {number} y1 position of wall extremity 1 along y axis
-		@param {number} x2 position of wall extremity 2 along x axis
-		@param {number} y2 position of wall extremity 2 along y axis
-		@return {number} distance
-	*/
-	function distanceToWall(x, y, phi, x1, y1, x2, y2) {
-		/*
-			Let (xx,yy) be the intersection, such that
-			xx = x + p cos phi = q x1 + (1 - q) x2
-			yy = y + p sin phi = q y1 + (1 - q) y2
-			where p is the distance and q is the relative distance from p2
-			(0<=q<=1 iff the wall is intersected, p>0 if in front)
-			Hence
-			[ cos phi  x2-x1 ]   [ p ]   [ x2-x ]
-			[                ] . [   ] = [      ]
-			[ sin phi  y2-y1 ]   [ q ]   [ y2-y ]
-		*/
-		var A = [Math.cos(phi), x2 - x1, Math.sin(phi), y2 - y1];
-		var b = [x2 - x, y2 - y];
-		var det = A[0] * A[3] - A[1] * A[2];
-		var r = [
-			(A[3] * b[0] - A[1] * b[1]) / det,
-			(A[0] * b[1] - A[2] * b[0]) / det
-		];
-		return r[1] >= 0 && r[1] <= 1 && r[0] > 0
-			? r[0]
-			: Infinity;	// doesn't intersect wall
-	}
-
-	/** Distance from position to walls defined by points
-		@param {number} x sensor position along x axis
-		@param {number} y sensor position along y axis
-		@param {number} phi sensor direction (0=along x, counterclockwise)
-		@param {Array.<Array.<number>>} ptsA array of points [x,y] (at least 2)
-		@return distance
-	*/
-	function distanceToWalls(x, y, phi, ptsA) {
-		var dist = Infinity;
-		var n = ptsA.length;
-		for (var i = 0; i < ptsA.length; i++) {
-			dist = Math.min(dist, distanceToWall(x, y, phi,
-				ptsA[i][0], ptsA[i][1], ptsA[(i + 1) % n][0], ptsA[(i + 1) % n][1]));
-		}
-		return dist;
-	}
-
 	/** Mapping from distance to sensor value in [0,1]
 		@param {number} dist
 		@return {number} sensor value
@@ -296,20 +324,21 @@ A3a.vpl.VPLSim2DViewer.prototype.updateProximitySensors = function () {
 			(dist - dmax) * (dist - dmax) / ((dmax - dmin) * (dmax - dmin));
 	}
 
-	/** @const */
-	var ptsA = [
-		[-this.playground.width / 2, -this.playground.height / 2],
-		[this.playground.width / 2, -this.playground.height / 2],
-		[this.playground.width / 2, this.playground.height / 2],
-		[-this.playground.width / 2, this.playground.height / 2],
-	];
-
+	var costh = Math.cos(this.robot.theta);
+	var sinth = Math.sin(this.robot.theta);
 	var prox = [
-		0.7, 0.35, 0, -0.35, -0.7, 2.8, -2.8
-	].map(function (phi) {
-		var dist = distanceToWalls(this.robot.pos[0], this.robot.pos[1],
-			this.robot.theta + phi,
-			ptsA);
+		{lon: 70, lat: 60, phi: 0.7},
+		{lon: 85, lat: 30, phi: 0.35},
+		{lon: 95, lat: 0, phi: 0},
+		{lon: 85, lat: -30, phi: -0.35},
+		{lon: 70, lat: -60, phi: -0.7},
+		{lon: -25, lat: 35, phi: 2.8},
+		{lon: -25, lat: -35, phi: -2.8}
+	].map(function (p) {
+		var dist = this.obstacles.distance(
+			this.robot.pos[0] + p.lon * costh - p.lat * sinth,
+			this.robot.pos[1] + p.lon * sinth + p.lat * costh,
+			this.robot.theta + p.phi);
 		return sensorMapping(dist);
 	}, this);
 
@@ -344,7 +373,6 @@ A3a.vpl.VPLSim2DViewer.prototype.updateAccelerometers = function () {
 		// height value at (x, y)
 		h.push(this.heightValue(x, y));	// white=low, black=high
 	}
-	// console.info("h: " + h);
 	// convert 3 heights to roll and pitch angles
 	var gain = 200;
 	var roll = gain * (h[1] - h[0]) / (2 * this.robot.r);
@@ -358,6 +386,13 @@ A3a.vpl.VPLSim2DViewer.prototype.updateAccelerometers = function () {
 	this.robot["set"]("acc", acc);
 };
 
+/** Whether simulator requests dragged files as images or svg text
+	@return {boolean} true for svg text
+*/
+A3a.vpl.VPLSim2DViewer.prototype.wantsSVG = function () {
+	return this.currentMap === A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle;
+};
+
 /** Set or change playground image for the currently-selected type (ground, height or obstacles)
 	@param {Image} img
 	@return {void}
@@ -365,13 +400,25 @@ A3a.vpl.VPLSim2DViewer.prototype.updateAccelerometers = function () {
 A3a.vpl.VPLSim2DViewer.prototype.setImage = function (img) {
 	switch (this.currentMap) {
 	case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
+		this.disabledGroundImage = img == null ? this.groundImage : null;
 		this.setGroundImage(img);
 		break;
 	case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
+		this.disabledHeightImage = img == null ? this.heightImage : null;
 		this.setHeightImage(img);
 		break;
+	}
+};
+
+/** Set or change playground svg image for the obstacles
+	@param {?string} svgSrc
+	@return {void}
+*/
+A3a.vpl.VPLSim2DViewer.prototype.setSVG = function (svgSrc) {
+	switch (this.currentMap) {
 	case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
-		// this.setObstacleImage(img);
+		this.disabledObstacleSVG = svgSrc == null ? this.obstacleSVG : null;
+		this.setObstacleImage(svgSrc);
 		break;
 	}
 };
@@ -717,7 +764,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 				isOn = self.heightImage != null;
 				break;
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
-				isOn = self.obstacleImage != null;
+				isOn = self.hasObstacles;
 				break;
 			}
 			var s = self.simCanvas.dims.controlSize;
@@ -732,7 +779,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			ctx.fillStyle = isOn || isDown ? "white" : "#777";
 			ctx.fillRect(s * 0.1, s * 0.8, s * 0.8, s * 0.1);
 			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
-			ctx.strokeStyle = self.currentMap !== A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle ? "white" : "#777";
+			ctx.strokeStyle = "white";
 			ctx.strokeRect(0.15 * s, 0.15 * s, 0.7 * s, 0.5 * s);
 			switch (self.currentMap) {
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
@@ -785,7 +832,20 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		},
 		// action
 		function (ev) {
-			self.setImage(null);
+			switch (self.currentMap) {
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
+				// toggle between null and disabled ground image
+				self.setImage(self.groundImage == null ? self.disabledGroundImage : null);
+				break;
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
+				// toggle between null and disabled height image
+				self.setImage(self.heightImage == null ? self.disabledHeightImage : null);
+				break;
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
+				// toggle between null and disabled obstacle svg
+				self.setSVG(self.hasObstacles ? null : self.disabledObstacleSVG);
+				break;
+			}
 		},
 		// doDrop
 		null,
@@ -1330,7 +1390,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			2.4 * smallBtnSize, smallBtnSize);
 		ctx.restore();
 	});
-	yRobotControl += 2 * smallBtnSize;
+	yRobotControl += 1.5 * smallBtnSize;
 
 	// draw accelerometers
 	var accY0 = yRobotControl + smallBtnSize;	// center
@@ -1341,8 +1401,6 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			Math.atan2(acc[1], acc[2]),
 			Math.atan2(acc[0], acc[2])
 		];
-		// console.info("acc: " + acc);
-		// console.info("angles: " + angles);
 		ctx.save();
 		ctx.strokeStyle = "black";
 		ctx.lineWidth = 0.7 * self.simCanvas.dims.blockLineWidth;
@@ -1503,6 +1561,14 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 				if (self.heightImage != null) {
 					ctx.drawImage(self.heightCanvas, item.x + dx, item.y + dy, item.width, item.height);
 				}
+				break;
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
+				ctx.save();
+				// map self.playground to item.x+dx,item.y+dy,item.width,item.height
+				ctx.translate(item.x + dx + item.width / 2, item.y + dy + item.height / 2);
+				ctx.scale(playgroundView.scale, -playgroundView.scale);	// upside-down
+				self.obstacles.draw(ctx);
+				ctx.restore();
 				break;
 			}
 

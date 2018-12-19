@@ -70,6 +70,7 @@ JS = \
 	a3a-virtual-thymio.js \
 	vpl-virtualthymio-a3a.js \
 	vpl-sim.js \
+	vpl-obstacles.js \
 	vpl-sim2d.js \
 	vpl-thymio.js
 
