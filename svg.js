@@ -247,7 +247,7 @@ SVG.prototype.draw = function (ctx, options) {
 	function ellipticalArc(rx, ry, a, largeArcFlag, sweepFlag, x1, y1, x2, y2) {
 		// avoid singularities
 		if (rx === 0 || ry === 0) {
-			ctx.lineTo(x2, y2);
+			ctx && ctx.lineTo(x2, y2);
 			return new SVG.Transform.Point(x2, y2);	// degenerated, don't care
 		}
 		// rotate and scale to have a unit circle
