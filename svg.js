@@ -968,10 +968,16 @@ SVG.prototype.draw = function (ctx, options) {
 
 		switch (el.tagName) {
 		case "svg":
+			transform.save();
+			applyTransform(el.getAttribute("transform"));
 			drawChildren();
+			transform.restore();
 			break;
 		case "g":
+			transform.save();
+			applyTransform(el.getAttribute("transform"));
 			drawChildren();
+			transform.restore();
 			break;
 		case "path":
 			ctx && ctx.save();
