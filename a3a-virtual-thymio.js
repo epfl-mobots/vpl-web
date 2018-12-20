@@ -606,8 +606,8 @@ A3a.Device.VirtualThymio = function (nodeId) {
 						{name: "l7", size: 1}
 					],
 					fun: function (device, args) {
-						device.state = device.state || {};
-						device.state.ledsCircle = args.map(function (a) { return a[0]; });
+						device.state["leds.circle"] = args.map(function (a) { return a[0]; });
+						device.onStateChanged && device.onStateChanged("leds.circle");
 					}
 				},
 				{
@@ -619,8 +619,8 @@ A3a.Device.VirtualThymio = function (nodeId) {
 						{name: "b", size: 1}
 					],
 					fun: function (device, args) {
-						device.state = device.state || {};
-						device.state.ledsTop = args.map(function (a) { return a[0]; });
+						device.state["leds.top"] = args.map(function (a) { return a[0]; });
+						device.onStateChanged && device.onStateChanged("leds.top");
 					}
 				},
 				{
@@ -632,8 +632,8 @@ A3a.Device.VirtualThymio = function (nodeId) {
 						{name: "b", size: 1}
 					],
 					fun: function (device, args) {
-						device.state = device.state || {};
-						device.state.ledsBottomLeft = args.map(function (a) { return a[0]; });
+						device.state["leds.bottom.left"] = args.map(function (a) { return a[0]; });
+						device.onStateChanged && device.onStateChanged("leds.bottom.left");
 					}
 				},
 				{
@@ -645,13 +645,16 @@ A3a.Device.VirtualThymio = function (nodeId) {
 						{name: "b", size: 1}
 					],
 					fun: function (device, args) {
-						device.state = device.state || {};
-						device.state.ledsBottomRight = args.map(function (a) { return a[0]; });
+						device.state["leds.bottom.right"] = args.map(function (a) { return a[0]; });
+						device.onStateChanged && device.onStateChanged("leds.bottom.right");
 					}
 				},
 			],
 			variableSize: 620
 		});
+	this.state = {};
+	/** @type {?function(string):void} */
+	this.onStateChanged = null;
 };
 A3a.Device.VirtualThymio.prototype = Object.create(A3a.Device.prototype);
 A3a.Device.VirtualThymio.prototype.constructor = A3a.Device.VirtualThymio;

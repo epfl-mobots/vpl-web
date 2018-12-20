@@ -39,6 +39,8 @@ A3a.vpl.VirtualThymio = function () {
 	this.timers = [];	// trigger times
 	this.eventListeners = {};
 
+	this.ledsCircleUsed = false;
+
 	this.audioContext = new (window["AudioContext"] || window["webkitAudioContext"]);
 
 	// remaining initialization: call VirtualThymio's methods (too early to call overridden method)
@@ -100,8 +102,14 @@ A3a.vpl.VirtualThymio.prototype["reset"] = function (t0) {
 		"sound": {}
 	};
 
+	this.ledsCircleUsed = false;
+
 	var self = this;
 	this.stateChangeListener = {
+		"leds.circle": function (name, val) {
+			self.ledsCircleUsed = true;
+		},
+
 		"sound": function (name, val) {
 			if (!val["f"]) {
 				return;

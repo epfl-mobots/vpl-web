@@ -15,6 +15,14 @@ A3a.vpl.VirtualThymioVM = function () {
 	// instantiate emulated Thymio
 	this.vthymio = new A3a.Device.VirtualThymio(9999);
 
+	// forward state change notifications from vthymio to this
+	var self = this;
+	this.vthymio.onStateChanged = function (name) {
+		self.stateChangeListener[name] &&
+			self.stateChangeListener[name](name, self.vthymio.state[name]);
+		console.info(name);
+	};
+
 	// get description of Thymio (variables, events, native functions)
 	this.asebaNode = new A3a.A3aNode(A3a.thymioDescr);
 };
@@ -103,16 +111,16 @@ A3a.vpl.VirtualThymioVM.prototype["get"] = function (name) {
 	var varDescr;
 	switch (name) {
 	case "leds.top":
-		return (this.vthymio.state && this.vthymio.state.ledsTop || [0, 0, 0])
+		return (this.vthymio.state && this.vthymio.state["leds.top"] || [0, 0, 0])
 			.map(function (x) { return x >= 32 ? 1 : x <= 0 ? 0 : x / 32; });
 	case "leds.bottom.left":
-		return (this.vthymio.state && this.vthymio.state.ledsBottomLeft || [0, 0, 0])
+		return (this.vthymio.state && this.vthymio.state["leds.bottom.left"] || [0, 0, 0])
 			.map(function (x) { return x >= 32 ? 1 : x <= 0 ? 0 : x / 32; });
 	case "leds.bottom.right":
-		return (this.vthymio.state && this.vthymio.state.ledsBottomRight || [0, 0, 0])
+		return (this.vthymio.state && this.vthymio.state["leds.bottom.right"] || [0, 0, 0])
 			.map(function (x) { return x >= 32 ? 1 : x <= 0 ? 0 : x / 32; });
 	case "leds.circle":
-		return (this.vthymio.state && this.vthymio.state.ledsCircle || [0, 0, 0, 0, 0, 0, 0, 0])
+		return (this.vthymio.state && this.vthymio.state["leds.circle"] || [0, 0, 0, 0, 0, 0, 0, 0])
 			.map(function (x) { return x >= 16 ? 1 : 0; });
 	case "motor.left":
 		return this.getVMVar("motor.left.target")

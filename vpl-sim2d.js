@@ -1484,20 +1484,22 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	}
 
 	// draw yellow arc leds
-	var ledsY0 = yRobotControl + 1.5 * smallBtnSize;	// center
-	this.simCanvas.addDecoration(function (ctx) {
-		var leds = self.robot["get"]("leds.circle");
-		for (var i = 0; i < 8; i++) {
-			A3a.vpl.Canvas.drawArc(ctx,
-				self.simCanvas.dims.margin + 1.5 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
-				ledsY0,
-				0.9 * smallBtnSize, 1.2 * smallBtnSize,
-				Math.PI * (0.5 - 0.06 - i * 0.25), Math.PI * (0.5 + 0.06 - i * 0.25),
-				leds[i] ? "#fa0" : "white",
- 				"black", self.simCanvas.dims.blockLineWidth);
-		}
-	});
-	yRobotControl += 4 * smallBtnSize;
+	if (this.robot.ledsCircleUsed) {
+		var ledsY0 = yRobotControl + 1.5 * smallBtnSize;	// center
+		this.simCanvas.addDecoration(function (ctx) {
+			var leds = self.robot["get"]("leds.circle");
+			for (var i = 0; i < 8; i++) {
+				A3a.vpl.Canvas.drawArc(ctx,
+					self.simCanvas.dims.margin + 1.5 * smallBtnSize + self.simCanvas.dims.stripHorMargin,
+					ledsY0,
+					0.9 * smallBtnSize, 1.2 * smallBtnSize,
+					Math.PI * (0.5 - 0.06 - i * 0.25), Math.PI * (0.5 + 0.06 - i * 0.25),
+					leds[i] ? "#fa0" : "white",
+	 				"black", self.simCanvas.dims.blockLineWidth);
+			}
+		});
+		yRobotControl += 4 * smallBtnSize;
+	}
 
 	// draw timer 0
 	var timerY0 = yRobotControl + smallBtnSize;	// center
