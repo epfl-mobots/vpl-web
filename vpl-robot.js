@@ -104,6 +104,15 @@ A3a.vpl.Robot.prototype["getTimer"] = function (id) {
 A3a.vpl.Robot.prototype["loadCode"] = function (code) {
 };
 
+/** Check if should run "continuously" (at screen refresh rate)
+	@return {boolean} true if method "run" should be called frequently
+	(typically at the display refresh rate to handle motion, timers etc.),
+	false if method "run" should be called only upon external events
+*/
+A3a.vpl.Robot.prototype["shouldRunContinuously"] = function () {
+	return false;
+};
+
 /** Run robot over the specified interval (tStart, tStop]
 	@param {number} tStop final time
 	@param {A3a.vpl.Robot.TraceFun} traceFun

@@ -1685,7 +1685,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 
 	this.simCanvas.redraw();
 
-	if (!this.paused) {
+	if (!this.paused && this.robot["shouldRunContinuously"]()) {
 		window.requestAnimationFrame(function () {
 			self.render();
 		});

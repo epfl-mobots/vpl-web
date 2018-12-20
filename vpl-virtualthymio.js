@@ -35,7 +35,8 @@ A3a.vpl.VirtualThymio = function () {
 	/** @type {?A3a.vpl.VirtualThymio.OnMoveFunction} */
 	this.onMove = null;
 	this.clientState = {};
-	this.timers = [];
+	/** @type {Array.<number>} */
+	this.timers = [];	// trigger times
 	this.eventListeners = {};
 
 	this.audioContext = new (window["AudioContext"] || window["webkitAudioContext"]);
@@ -240,6 +241,27 @@ A3a.vpl.VirtualThymio.prototype["loadCode"] = function (code) {
 	var fun = new Function(code);
 	// execute it
 	fun.call(this);
+};
+
+/**
+	@inheritDoc
+*/
+A3a.vpl.VirtualThymio.prototype["shouldRunContinuously"] = function () {
+	if (this.suspended) {
+		return false;
+	}
+	if (this["get"]("motor.left") !== 0 || this["get"]("motor.right") !== 0) {
+		return true;
+	}
+
+	// check timers
+	for (var i = 0; i < this.timers.length; i++) {
+		if (this.timers[i] > 0) {
+			return true;
+		}
+	}
+
+	return false;
 };
 
 /**
