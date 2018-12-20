@@ -1392,94 +1392,96 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	});
 	yRobotControl += 1.5 * smallBtnSize;
 
-	// draw accelerometers
-	var accY0 = yRobotControl + smallBtnSize;	// center
-	this.simCanvas.addDecoration(function (ctx) {
-		var acc = self.robot["get"]("acc");
-		var angles = [
-			Math.atan2(acc[0], acc[1]),
-			Math.atan2(acc[1], acc[2]),
-			Math.atan2(acc[0], acc[2])
-		];
-		ctx.save();
-		ctx.strokeStyle = "black";
-		ctx.lineWidth = 0.7 * self.simCanvas.dims.blockLineWidth;
-		for (var i = 0; i < 3; i++) {
+	// draw accelerometers if there is a height map
+	if (self.heightImage != null) {
+		var accY0 = yRobotControl + smallBtnSize;	// center
+		this.simCanvas.addDecoration(function (ctx) {
+			var acc = self.robot["get"]("acc");
+			var angles = [
+				Math.atan2(acc[0], acc[1]),
+				Math.atan2(acc[1], acc[2]),
+				Math.atan2(acc[0], acc[2])
+			];
 			ctx.save();
-			ctx.translate(self.simCanvas.dims.margin + self.simCanvas.dims.stripHorMargin + (0.5 + i) * smallBtnSize,
-				accY0);
+			ctx.strokeStyle = "black";
+			ctx.lineWidth = 0.7 * self.simCanvas.dims.blockLineWidth;
+			for (var i = 0; i < 3; i++) {
+				ctx.save();
+				ctx.translate(self.simCanvas.dims.margin + self.simCanvas.dims.stripHorMargin + (0.5 + i) * smallBtnSize,
+					accY0);
 
-			// cross
-			ctx.save();
-			ctx.strokeStyle = "silver";
-			ctx.beginPath();
-			ctx.moveTo(-0.4 * smallBtnSize, 0);
-			ctx.lineTo(0.4 * smallBtnSize, 0);
-			ctx.moveTo(0, -0.4 * smallBtnSize);
-			ctx.lineTo(0, 0.4 * smallBtnSize);
-			ctx.stroke();
-			ctx.restore();
+				// cross
+				ctx.save();
+				ctx.strokeStyle = "silver";
+				ctx.beginPath();
+				ctx.moveTo(-0.4 * smallBtnSize, 0);
+				ctx.lineTo(0.4 * smallBtnSize, 0);
+				ctx.moveTo(0, -0.4 * smallBtnSize);
+				ctx.lineTo(0, 0.4 * smallBtnSize);
+				ctx.stroke();
+				ctx.restore();
 
-			ctx.rotate(-angles[i]);
-			switch (i) {
-			case 0:	// yaw, display from top
-				var sz = 0.25 * smallBtnSize;
-				ctx.translate(0, 1.2 * sz);
-				ctx.beginPath();
-				// rear left
-				ctx.moveTo(-1.2 * sz,
-					0);
-				ctx.lineTo(-1.2 * sz,
-					-1.8 * sz);
-				ctx.bezierCurveTo(-0.72 * sz,
-					-2.4 * sz,
-					-0.05 * sz,
-					-2.4 * sz,
-					0,
-					-2.4 * sz);
-				// left side
-				ctx.bezierCurveTo(0.05 * sz,
-					-2.4 * sz,
-					0.72 * sz,
-					-2.4 * sz,
-					1.2 * sz,
-					-1.8 * sz);
-				ctx.lineTo(1.2 * sz,
-					0);
-				ctx.closePath();
-				ctx.lineWidth = 2;
-				ctx.strokeStyle = "black";
-				ctx.stroke();
-				break;
-			case 1:	// pitch, display from right
-				ctx.strokeRect(-0.4 * smallBtnSize, -0.15 * smallBtnSize,
-					0.8 * smallBtnSize, 0.3 * smallBtnSize);
-				ctx.beginPath();
-				ctx.arc(-0.2 * smallBtnSize, 0.05 * smallBtnSize,
-					0.15 * smallBtnSize,
-					0, 2 * Math.PI);
-				ctx.fillStyle = "white";
-				ctx.fill();
-				ctx.lineWidth = 0.07 * smallBtnSize;
-				ctx.stroke();
-				break;
-			case 2:	// roll, display from back
-				ctx.strokeRect(-0.4 * smallBtnSize, -0.15 * smallBtnSize,
-					0.8 * smallBtnSize, 0.3 * smallBtnSize);
-				ctx.fillStyle = "black";
-				ctx.fillRect(-0.35 * smallBtnSize, 0.15 * smallBtnSize,
-					0.15 * smallBtnSize,
-					0.08 * smallBtnSize);
-				ctx.fillRect(0.2 * smallBtnSize, 0.15 * smallBtnSize,
-					0.15 * smallBtnSize,
-					0.08 * smallBtnSize);
-				break;
+				ctx.rotate(-angles[i]);
+				switch (i) {
+				case 0:	// yaw, display from top
+					var sz = 0.25 * smallBtnSize;
+					ctx.translate(0, 1.2 * sz);
+					ctx.beginPath();
+					// rear left
+					ctx.moveTo(-1.2 * sz,
+						0);
+					ctx.lineTo(-1.2 * sz,
+						-1.8 * sz);
+					ctx.bezierCurveTo(-0.72 * sz,
+						-2.4 * sz,
+						-0.05 * sz,
+						-2.4 * sz,
+						0,
+						-2.4 * sz);
+					// left side
+					ctx.bezierCurveTo(0.05 * sz,
+						-2.4 * sz,
+						0.72 * sz,
+						-2.4 * sz,
+						1.2 * sz,
+						-1.8 * sz);
+					ctx.lineTo(1.2 * sz,
+						0);
+					ctx.closePath();
+					ctx.lineWidth = 2;
+					ctx.strokeStyle = "black";
+					ctx.stroke();
+					break;
+				case 1:	// pitch, display from right
+					ctx.strokeRect(-0.4 * smallBtnSize, -0.15 * smallBtnSize,
+						0.8 * smallBtnSize, 0.3 * smallBtnSize);
+					ctx.beginPath();
+					ctx.arc(-0.2 * smallBtnSize, 0.05 * smallBtnSize,
+						0.15 * smallBtnSize,
+						0, 2 * Math.PI);
+					ctx.fillStyle = "white";
+					ctx.fill();
+					ctx.lineWidth = 0.07 * smallBtnSize;
+					ctx.stroke();
+					break;
+				case 2:	// roll, display from back
+					ctx.strokeRect(-0.4 * smallBtnSize, -0.15 * smallBtnSize,
+						0.8 * smallBtnSize, 0.3 * smallBtnSize);
+					ctx.fillStyle = "black";
+					ctx.fillRect(-0.35 * smallBtnSize, 0.15 * smallBtnSize,
+						0.15 * smallBtnSize,
+						0.08 * smallBtnSize);
+					ctx.fillRect(0.2 * smallBtnSize, 0.15 * smallBtnSize,
+						0.15 * smallBtnSize,
+						0.08 * smallBtnSize);
+					break;
+				}
+				ctx.restore();
 			}
 			ctx.restore();
-		}
-		ctx.restore();
-	});
-	yRobotControl += 2 * smallBtnSize;
+		});
+		yRobotControl += 2 * smallBtnSize;
+	}
 
 	// draw yellow arc leds
 	var ledsY0 = yRobotControl + 1.5 * smallBtnSize;	// center
