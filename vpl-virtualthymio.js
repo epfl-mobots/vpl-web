@@ -26,6 +26,8 @@ A3a.vpl.VirtualThymio = function () {
 	this.pos = [0, 0];	// current position [x, y] in mm
 	this.theta = 0;	// current orientation (counterclockwise, 0=going to the right)
 
+	this.hasNoise = false;	// add noise on sensors, motors and timers
+
 	this.robotSize = 120;	// robot width and length
 	this.groundSensorLon = 80;	// distance from robot center to ground sensors along x axis
 	this.groundSensorLat = 20;	// distance from robot center to ground sensors along y axis
@@ -272,6 +274,18 @@ A3a.vpl.VirtualThymio.prototype["shouldRunContinuously"] = function () {
 	return false;
 };
 
+/** Produce normally-distributed noise with specified standard deviation
+	(or 0 if hasNoise is false)
+	@param {number} s standard deviation
+	@return {number}
+*/
+A3a.vpl.VirtualThymio.prototype.noise = function (s) {
+	return this.hasNoise
+		? s * Math.sqrt(-2 * Math.log(Math.random())) *
+			Math.sin(2 * Math.PI * Math.random())
+		: 0;
+};
+
 /**
 	@inheritDoc
 */
@@ -292,8 +306,8 @@ A3a.vpl.VirtualThymio.prototype["run"] = function (tStop, traceFun) {
 		// step (t, min(t+dt,tStop)]
 		dt = Math.min(dt, tStop - this.t);
 		// move
-		var dLeft = this["get"]("motor.left") * 100 * dt;
-		var dRight = this["get"]("motor.right") * 100 * dt;
+		var dLeft = (this["get"]("motor.left") * 100 + this.noise(1)) * dt;
+		var dRight = (this["get"]("motor.right") * 100 + this.noise(1)) * dt;
 		if (dLeft !== 0 || dRight != 0) {
 			if (Math.abs(dLeft - dRight) < 1e-6 ||
 				Math.abs(dLeft - dRight) < 1e-4 * (Math.abs(dLeft) + Math.abs(dRight))) {
@@ -322,7 +336,7 @@ A3a.vpl.VirtualThymio.prototype["run"] = function (tStop, traceFun) {
 		this["sendEvent"]("prox", null);
 		// call elapsed timer events
 		for (var i = 0; i < this.timers.length; i++) {
-			if (this.timers[i] > 0 && this.t >= this.t0 + this.timers[i]) {
+			if (this.timers[i] > 0 && this.t >= this.t0 + this.timers[i] + this.noise(0.01)) {
 				this.timers[i] = -1;
 				this["sendEvent"]("timer" + i.toString(10), null);
 			}

@@ -297,7 +297,7 @@ A3a.vpl.VPLSim2DViewer.prototype.updateGroundSensors = function () {
 			this.robot.groundSensorLon * Math.sin(this.robot.theta) -
 			(i === 0 ? -1 : 1) * this.robot.groundSensorLat * Math.cos(this.robot.theta);
 		// ground value at (x, y)
-		g.push(this.groundValue(x, y));
+		g.push(this.groundValue(x, y) + this.robot.noise(0.01));
 	}
 	this.robot["set"]("prox.ground.delta", g);
 };
@@ -339,7 +339,7 @@ A3a.vpl.VPLSim2DViewer.prototype.updateProximitySensors = function () {
 			this.robot.pos[0] + p.lon * costh - p.lat * sinth,
 			this.robot.pos[1] + p.lon * sinth + p.lat * costh,
 			this.robot.theta + p.phi);
-		return sensorMapping(dist);
+		return sensorMapping(dist + this.robot.noise(0.01 * this.robot.r));
 	}, this);
 
 	this.robot["set"]("prox.horizontal", prox);
@@ -379,9 +379,9 @@ A3a.vpl.VPLSim2DViewer.prototype.updateAccelerometers = function () {
 	var pitch = gain * (h[2] - (h[0] + h[1]) / 2) / this.robot.groundSensorLon;
 	// convert roll and pitch to accelerations along x (left), y (forward), z (down) (g=1)
 	var acc = [
-		roll,
-		pitch,
-		Math.sqrt(1 - roll * roll - pitch * pitch)
+		roll + this.robot.noise(0.01),
+		pitch + this.robot.noise(0.01),
+		Math.sqrt(1 - roll * roll - pitch * pitch) + this.robot.noise(0.01)
 	];
 	this.robot["set"]("acc", acc);
 };
@@ -633,7 +633,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 					self.simCanvas.dims.controlSize * 0.5 / 2);
 				ctx.closePath();
 			}
-				ctx.fill();
+			ctx.fill();
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
 			ctx.font = "bold " + Math.round(self.simCanvas.dims.controlSize / 3).toString(10) + "px sans-serif";
@@ -648,6 +648,52 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			/** @const */
 			var s = [0.5, 1, 2, 5, 10];
 			self.robot.setSpeedupFactor(s[(s.indexOf(self.robot.speedupFactor) + 1) % s.length]);
+		},
+		// doDrop
+		null,
+		// canDrop
+		null);
+
+	// noise
+	this.addControl(controlBar, "sim:noise",
+		// draw
+		function (ctx, width, height, isDown) {
+			ctx.save();
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: self.robot.speedupFactor !== 1
+					? self.simCanvas.dims.controlActiveColor
+					: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0,
+				self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
+			ctx.beginPath();
+			/**
+				@const
+				fprintf('%.2f, ', sin(linspace(1,8,20))+0.5*randn(1,20))
+			*/
+			var noise = [
+				0.58, 1.48, 0.96, 0.39, 1.36, 0.09, -0.75, -1.58, -0.32, -1.36,
+				-1.39, -0.94, -1.10, -1.04, -0.10, 0.93, 1.22, 0.60, 0.89, 0.61
+			];
+			ctx.moveTo(0.1 * self.simCanvas.dims.controlSize,
+				(0.4 + 0.1 * noise[0]) * self.simCanvas.dims.controlSize);
+			for (var i = 1; i < noise.length; i++) {
+				ctx.lineTo((0.1 + 0.8 / (noise.length - 1) * i) * self.simCanvas.dims.controlSize,
+					(0.4 + 0.1 * noise[i]) * self.simCanvas.dims.controlSize);
+			}
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = self.simCanvas.dims.blockLineWidth;
+			ctx.stroke();
+			ctx.fillStyle = self.robot.hasNoise || isDown ? "white" : "#777";
+			ctx.fillRect(self.simCanvas.dims.controlSize * 0.1,
+				self.simCanvas.dims.controlSize * 0.8,
+ 				self.simCanvas.dims.controlSize * 0.8,
+				self.simCanvas.dims.controlSize * 0.1);
+			ctx.restore();
+		},
+		// action
+		function (ev) {
+			self.robot.hasNoise = !self.robot.hasNoise;
 		},
 		// doDrop
 		null,
