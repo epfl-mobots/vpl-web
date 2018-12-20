@@ -276,10 +276,21 @@ A3a.vpl.VirtualThymio.prototype["shouldRunContinuously"] = function () {
 	@inheritDoc
 */
 A3a.vpl.VirtualThymio.prototype["run"] = function (tStop, traceFun) {
-	var dt = Math.max(this.dt, (tStop - this.t) / 100);
+	// real time: simulate from this.t to tStop
+	// sim time: simulate from this.t-this.t0 to this.t-this.t0+(tStop-this.t)f
+	// therefore adjust this.t and this.t0 to lengthen simulation time by f while
+	// keeping the same initial simulation time and end real time tStop:
+	// this.t0 -= (f - 1)(tStop - this.t)
+	// this.t -= (f - 1)(tStop - this.t)
+	if (this.speedupFactor !== 1) {
+		this.t0 -= (this.speedupFactor - 1) * (tStop - this.t);
+		this.t = this.speedupFactor * (this.t - tStop) + tStop;
+	}
+	var dt = Math.max(this.dt, (tStop - this.t) / 10);
 	var posPrev = this.pos;
 	while (!this.suspended && this.t < tStop) {
-		// step (t, t+dt]
+		// step (t, min(t+dt,tStop)]
+		dt = Math.min(dt, tStop - this.t);
 		// move
 		var dLeft = this["get"]("motor.left") * 100 * dt;
 		var dRight = this["get"]("motor.right") * 100 * dt;

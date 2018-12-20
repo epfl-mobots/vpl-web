@@ -608,6 +608,52 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		// canDrop
 		null);
 
+	controlBar.addSpace();
+
+	// speedup
+	this.addControl(controlBar, "sim:speedup",
+		// draw
+		function (ctx, width, height, isDown) {
+			ctx.save();
+			ctx.fillStyle = isDown
+				? self.simCanvas.dims.controlDownColor
+				: self.robot.speedupFactor !== 1
+					? self.simCanvas.dims.controlActiveColor
+					: self.simCanvas.dims.controlColor;
+			ctx.fillRect(0, 0,
+				self.simCanvas.dims.controlSize, self.simCanvas.dims.controlSize);
+			ctx.fillStyle = "white";
+			ctx.beginPath();
+			for (var i = 0; i < 2; i++) {
+				ctx.moveTo(self.simCanvas.dims.controlSize * (0.3 + 0.22 * i),
+					self.simCanvas.dims.controlSize * 0.25 / 2);
+				ctx.lineTo(self.simCanvas.dims.controlSize * (0.3 + 0.22 * i),
+					self.simCanvas.dims.controlSize * 0.75 / 2);
+				ctx.lineTo(self.simCanvas.dims.controlSize * (0.3 + 0.2 + 0.22 * i),
+					self.simCanvas.dims.controlSize * 0.5 / 2);
+				ctx.closePath();
+			}
+				ctx.fill();
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.font = "bold " + Math.round(self.simCanvas.dims.controlSize / 3).toString(10) + "px sans-serif";
+			ctx.fillText(self.robot.speedupFactor >= 1
+				? "\u00d7" + self.robot.speedupFactor.toString(10)
+				: "\u00f7" + Math.round(1 / self.robot.speedupFactor).toString(10),
+				self.simCanvas.dims.controlSize * 0.5, self.simCanvas.dims.controlSize * 0.7);
+			ctx.restore();
+		},
+		// action
+		function (ev) {
+			/** @const */
+			var s = [0.5, 1, 2, 5, 10];
+			self.robot.setSpeedupFactor(s[(s.indexOf(self.robot.speedupFactor) + 1) % s.length]);
+		},
+		// doDrop
+		null,
+		// canDrop
+		null);
+
 	controlBar.addStretch();
 
 	// pen
@@ -681,7 +727,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		// canDrop
 		null);
 
-	controlBar.addStretch();
+	controlBar.addSpace();
 
 	// ground, height and obstacle maps
 	this.addControl(controlBar, "sim:map-kind",

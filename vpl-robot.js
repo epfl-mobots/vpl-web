@@ -9,6 +9,7 @@
 	@constructor
 */
 A3a.vpl.Robot = function () {
+	this.speedupFactor = 1;
 };
 
 /** Reset robot
@@ -16,6 +17,14 @@ A3a.vpl.Robot = function () {
 	@return {void}
 */
 A3a.vpl.Robot.prototype["reset"] = function (t0) {
+};
+
+/** Change the speedup factor
+	@param {number} f
+	@return {void}
+*/
+A3a.vpl.Robot.prototype.setSpeedupFactor = function (f) {
+	this.speedupFactor = f;
 };
 
 /** Reset event listeners
