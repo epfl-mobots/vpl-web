@@ -11,12 +11,12 @@ window["installRobotSimulator"] = function (options) {
 		@return {void}
 	*/
 	window["vplRun"] = new A3a.vpl.RunGlue({
- 		run: function (code) {
+ 		run: function (language, code) {
 			var sim = window["vplSim"];
 
 			// load code
 			sim.robot["reset"](0);
-			sim.robot["loadCode"](code);
+			sim.robot["loadCode"](language, code);
 
 			// (re)launch real-time simulator
 			if (sim.intervalId !== null) {
@@ -34,9 +34,7 @@ window["installRobotSimulator"] = function (options) {
 			}, 10);
 		},
 		init: function (language) {
-			var robot = language === "js"
-				? new A3a.vpl.VirtualThymio()
-				: new A3a.vpl.VirtualThymioVM();
+			var robot = new A3a.vpl.VirtualThymioVM();
 			var sim = new A3a.vpl.VPLSim2DViewer(robot);
 			if (options && options.canvasFilter) {
 				sim.simCanvas.setFilter(options.canvasFilter);

@@ -12,6 +12,9 @@
 A3a.vpl.VirtualThymioVM = function () {
 	A3a.vpl.VirtualThymio.call(this);
 
+	// whether use VM or js base class implementation (for js code)
+	this.useVM = true;
+
 	// instantiate emulated Thymio
 	this.vthymio = new A3a.Device.VirtualThymio(9999);
 
@@ -73,61 +76,69 @@ A3a.vpl.VirtualThymioVM.prototype.setVMVar = function (name, val) {
 	@inheritDoc
 */
 A3a.vpl.VirtualThymioVM.prototype["set"] = function (name, val) {
-	// set value to this (call base class method)
-	A3a.vpl.VirtualThymio.prototype["set"].call(this, name, val);
+	if (this.useVM) {
+		// set value to this (call base class method)
+		A3a.vpl.VirtualThymio.prototype["set"].call(this, name, val);
 
-	// propagate value to Thymio VM, with type and range conversion
-	switch (name) {
-	case "button.backward":
-	case "button.left":
-	case "button.center":
-	case "button.forward":
-	case "button.right":
-		this.setVMVar(name, [val ? 1 : 0]);
-		break;
-	case "prox.ground.delta":
-		this.setVMVar("prox.ground.delta", val.map(function (x) { return 2000 * x; }));
-		break;
-	case "prox.horizontal":
-		this.setVMVar("prox.horizontal", val.map(function (x) { return 2000 * x; }));
-		break;
-	case "acc":
-		this.setVMVar("acc", val.map(function (x) { return 22 * x; }));
-		break;
-	default:
-		throw "Unknown variable " + name;
+		// propagate value to Thymio VM, with type and range conversion
+		switch (name) {
+		case "button.backward":
+		case "button.left":
+		case "button.center":
+		case "button.forward":
+		case "button.right":
+			this.setVMVar(name, [val ? 1 : 0]);
+			break;
+		case "prox.ground.delta":
+			this.setVMVar("prox.ground.delta", val.map(function (x) { return 2000 * x; }));
+			break;
+		case "prox.horizontal":
+			this.setVMVar("prox.horizontal", val.map(function (x) { return 2000 * x; }));
+			break;
+		case "acc":
+			this.setVMVar("acc", val.map(function (x) { return 22 * x; }));
+			break;
+		default:
+			throw "Unknown variable " + name;
+		}
+
+		this.stateChangeListener[name] && this.stateChangeListener[name](name, val);
+	} else {
+		A3a.vpl.VirtualThymio.prototype["set"].call(this, name, val);
 	}
-
-	this.stateChangeListener[name] && this.stateChangeListener[name](name, val);
 };
 
 /**
 	@inheritDoc
 */
 A3a.vpl.VirtualThymioVM.prototype["get"] = function (name) {
-	// get value from this.vthymio, with type and range conversion
-	/** @type {Array.<number>} */
-	var val;
-	var varDescr;
-	switch (name) {
-	case "leds.top":
-		return (this.vthymio.state && this.vthymio.state["leds.top"] || [0, 0, 0])
-			.map(function (x) { return x >= 32 ? 1 : x <= 0 ? 0 : x / 32; });
-	case "leds.bottom.left":
-		return (this.vthymio.state && this.vthymio.state["leds.bottom.left"] || [0, 0, 0])
-			.map(function (x) { return x >= 32 ? 1 : x <= 0 ? 0 : x / 32; });
-	case "leds.bottom.right":
-		return (this.vthymio.state && this.vthymio.state["leds.bottom.right"] || [0, 0, 0])
-			.map(function (x) { return x >= 32 ? 1 : x <= 0 ? 0 : x / 32; });
-	case "leds.circle":
-		return (this.vthymio.state && this.vthymio.state["leds.circle"] || [0, 0, 0, 0, 0, 0, 0, 0])
-			.map(function (x) { return x >= 16 ? 1 : 0; });
-	case "motor.left":
-		return this.getVMVar("motor.left.target")[0] / 200;	// scalar
-	case "motor.right":
-		return this.getVMVar("motor.right.target")[0] / 200;	// scalar
-	default:
-		// base class method
+	if (this.useVM) {
+		// get value from this.vthymio, with type and range conversion
+		/** @type {Array.<number>} */
+		var val;
+		var varDescr;
+		switch (name) {
+		case "leds.top":
+			return (this.vthymio.state && this.vthymio.state["leds.top"] || [0, 0, 0])
+				.map(function (x) { return x >= 32 ? 1 : x <= 0 ? 0 : x / 32; });
+		case "leds.bottom.left":
+			return (this.vthymio.state && this.vthymio.state["leds.bottom.left"] || [0, 0, 0])
+				.map(function (x) { return x >= 32 ? 1 : x <= 0 ? 0 : x / 32; });
+		case "leds.bottom.right":
+			return (this.vthymio.state && this.vthymio.state["leds.bottom.right"] || [0, 0, 0])
+				.map(function (x) { return x >= 32 ? 1 : x <= 0 ? 0 : x / 32; });
+		case "leds.circle":
+			return (this.vthymio.state && this.vthymio.state["leds.circle"] || [0, 0, 0, 0, 0, 0, 0, 0])
+				.map(function (x) { return x >= 16 ? 1 : 0; });
+		case "motor.left":
+			return this.getVMVar("motor.left.target")[0] / 200;	// scalar
+		case "motor.right":
+			return this.getVMVar("motor.right.target")[0] / 200;	// scalar
+		default:
+			// base class method
+			return A3a.vpl.VirtualThymio.prototype["get"].call(this, name);
+		}
+	} else {
 		return A3a.vpl.VirtualThymio.prototype["get"].call(this, name);
 	}
 };
@@ -136,36 +147,48 @@ A3a.vpl.VirtualThymioVM.prototype["get"] = function (name) {
 	@inheritDoc
 */
 A3a.vpl.VirtualThymioVM.prototype["sendEvent"] = function (name, val) {
-	if (val != null) {
-		throw "Event arguments not implemented";
+	if (this.useVM) {
+		if (val != null) {
+			throw "Event arguments not implemented";
+		}
+		var eventId = this.asebaNode.eventNameToId(name);
+		this.vthymio.setupEvent(eventId);
+		this.runVM();
+	} else {
+		A3a.vpl.VirtualThymio.prototype["sendEvent"].call(this, name, val);
 	}
-	var eventId = this.asebaNode.eventNameToId(name);
-	this.vthymio.setupEvent(eventId);
-	this.runVM();
 };
 
 /**
 	@inheritDoc
 */
-A3a.vpl.VirtualThymioVM.prototype["loadCode"] = function (src) {
-	// detect syntax (A3a or L2) automatically
-	var l2 = A3a.Compiler.L2.isL2(src);
+A3a.vpl.VirtualThymioVM.prototype["loadCode"] = function (language, src) {
+	if (language === "js") {
+		// base class
+		A3a.vpl.VirtualThymio.prototype["loadCode"].call(this, language, src);
+		this.useVM = false;
+	} else {
+		// detect syntax (A3a or L2) automatically
+		var l2 = A3a.Compiler.L2.isL2(src);
 
-	// compile code
-	var c = l2
-		? new A3a.Compiler.L2(this.asebaNode, src)
-		: new A3a.Compiler(this.asebaNode, src);
-	c.functionLib = l2 ? A3a.A3aNode.stdMacrosL2 : A3a.A3aNode.stdMacros;
-	var bytecode = c.compile();
+		// compile code
+		var c = l2
+			? new A3a.Compiler.L2(this.asebaNode, src)
+			: new A3a.Compiler(this.asebaNode, src);
+		c.functionLib = l2 ? A3a.A3aNode.stdMacrosL2 : A3a.A3aNode.stdMacros;
+		var bytecode = c.compile();
 
-	// load it on virtual Thymio
-	this.vthymio.setBytecode(bytecode);
+		// load it on virtual Thymio
+		this.vthymio.setBytecode(bytecode);
 
-	// reset vm and send init event
-	this.vthymio.reset();
+		// reset vm and send init event
+		this.vthymio.reset();
 
-	// run init event
-	this.runVM();
+		// run init event
+		this.runVM();
+
+		this.useVM = true;
+	}
 };
 
 /** @const */

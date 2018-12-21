@@ -8,7 +8,7 @@
 /** Interface to run a program on a robot or a simulator
 	@constructor
 	@param {{
-		run: (function(string):void | undefined),
+		run: (function(string,string):void | undefined),
 		init: (function(string):void | undefined),
 		isEnabled: (function():boolean | undefined),
 		languages: (Array.<string> | undefined),
@@ -52,7 +52,7 @@ A3a.vpl.RunGlue.prototype.init = function (language) {
 */
 A3a.vpl.RunGlue.prototype.run = function (code, language) {
 	if (this.isEnabled(language)) {
-		this.runFun(code);
+		this.runFun(language, code);
 	}
 };
 
@@ -71,6 +71,6 @@ A3a.vpl.RunGlue.prototype.setStopCode = function (code, language) {
 */
 A3a.vpl.RunGlue.prototype.stop = function (language) {
 	if (this.isEnabled(language) && this.stopCode[language]) {
-		this.runFun(this.stopCode[language]);
+		this.runFun(language, this.stopCode[language]);
 	}
 };

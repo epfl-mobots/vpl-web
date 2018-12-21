@@ -107,10 +107,11 @@ A3a.vpl.Robot.prototype["getTimer"] = function (id) {
 };
 
 /** Load source code
+	@param {string} language
 	@param {string} code
 	@return {void}
 */
-A3a.vpl.Robot.prototype["loadCode"] = function (code) {
+A3a.vpl.Robot.prototype["loadCode"] = function (language, code) {
 };
 
 /** Check if should run "continuously" (at screen refresh rate)

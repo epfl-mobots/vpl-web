@@ -246,7 +246,10 @@ A3a.vpl.VirtualThymio.prototype["getTimer"] = function (id) {
 /**
 	@inheritDoc
 */
-A3a.vpl.VirtualThymio.prototype["loadCode"] = function (code) {
+A3a.vpl.VirtualThymio.prototype["loadCode"] = function (language, code) {
+	if (language !== "js") {
+		throw "unsupported language " + language;
+	}
 	// compile code
 	var fun = new Function(code);
 	// execute it
