@@ -297,7 +297,7 @@ A3a.vpl.VPLSim2DViewer.prototype.updateGroundSensors = function () {
 			this.robot.groundSensorLon * Math.sin(this.robot.theta) -
 			(i === 0 ? -1 : 1) * this.robot.groundSensorLat * Math.cos(this.robot.theta);
 		// ground value at (x, y)
-		g.push(this.groundValue(x, y) + this.robot.noise(0.01));
+		g.push(this.groundValue(x, y) + this.robot.noise(0.05));
 	}
 	this.robot["set"]("prox.ground.delta", g);
 };
@@ -379,9 +379,9 @@ A3a.vpl.VPLSim2DViewer.prototype.updateAccelerometers = function () {
 	var pitch = gain * (h[2] - (h[0] + h[1]) / 2) / this.robot.groundSensorLon;
 	// convert roll and pitch to accelerations along x (left), y (forward), z (down) (g=1)
 	var acc = [
-		roll + this.robot.noise(0.01),
-		pitch + this.robot.noise(0.01),
-		Math.sqrt(1 - roll * roll - pitch * pitch) + this.robot.noise(0.01)
+		roll + this.robot.noise(0.02),
+		pitch + this.robot.noise(0.02),
+		Math.sqrt(1 - roll * roll - pitch * pitch) + this.robot.noise(0.02)
 	];
 	this.robot["set"]("acc", acc);
 };
@@ -661,7 +661,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			ctx.save();
 			ctx.fillStyle = isDown
 				? self.simCanvas.dims.controlDownColor
-				: self.robot.speedupFactor !== 1
+				: self.robot.hasNoise
 					? self.simCanvas.dims.controlActiveColor
 					: self.simCanvas.dims.controlColor;
 			ctx.fillRect(0, 0,
