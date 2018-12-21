@@ -17,6 +17,8 @@ A3a.vpl.VPLSourceEditor = function (noVPL, language, runGlue) {
 	this.runGlue = runGlue || null;
 	this.code0 = "";	// from VPL, to restore when VPL lock is set
 	this.isLockedWithVPL = true;
+	/** @type {?function():{language:string,code:string}} */
+	this.changeLanguage = null;
 	this.teacherRole = false;
 	this.customizationMode = false;
 	/** @type {Array.<string>} */
@@ -370,6 +372,58 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			function (ev) {
 				self.lockWithVPL(!self.isLockedWithVPL);
 				self.tbCanvas.redraw();
+			},
+			// doDrop
+			null,
+			// canDrop
+			null);
+	}
+
+	if (this.changeLanguage != null) {
+		controlBar.addSpace();
+		// change language
+		this.addControl(controlBar, "src:language",
+			// draw
+			function (ctx, width, height, isDown) {
+				/** @const */
+				var languageAbbr = {"aseba": "Aa", "l2": "l2", "js": "js"};
+				var s = self.tbCanvas.dims.controlSize;
+				ctx.save();
+				ctx.fillStyle = isDown
+					? self.tbCanvas.dims.controlDownColor
+					: self.tbCanvas.dims.controlColor;
+				ctx.fillRect(0, 0, s, s);
+				ctx.beginPath();
+				for (var i = 0; i < 3; i++) {
+					ctx.moveTo(s * 0.2, s * (0.2 + 0.1 * i));
+					ctx.lineTo(s * 0.5, s * (0.2 + 0.1 * i));
+				}
+				ctx.strokeStyle = "white";
+				ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
+				ctx.stroke();
+				for (var i = 0; i < 3; i++) {
+					var phi = 2 * (i + 0.25) / 3 * Math.PI;
+					A3a.vpl.Canvas.drawArcArrow(ctx, 0.75 * s, 0.3 * s, 0.15 * s,
+						phi - Math.PI * 0.3,
+						phi + Math.PI * 0.3,
+						{
+							arrowAtStart: false,
+							arrowSize: 3 * self.tbCanvas.dims.blockLineWidth,
+							style: "white"
+						});
+				}
+				ctx.textAlign = "center";
+				ctx.textBaseline = "middle";
+				ctx.font = "bold " + Math.round(s / 3).toString(10) + "px sans-serif";
+				ctx.fillStyle = "white";
+				ctx.fillText(languageAbbr[self.language], s * 0.5, s * 0.7);
+				ctx.restore();
+			},
+			// action
+			function (ev) {
+				var r = self.changeLanguage();
+				self.language = r.language;
+				self.setCode(r.code);
 			},
 			// doDrop
 			null,

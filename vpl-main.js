@@ -244,7 +244,9 @@ function vplSetup(uiConfig) {
 
 	window["vplProgram"] = new A3a.vpl.Program();
 	window["vplProgram"].currentLanguage = language;
-	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["vplProgram"].noVPL, language, window["vplRun"]);
+	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["vplProgram"].noVPL,
+		language,
+		window["vplRun"]);
 	window["vplEditor"].tbCanvas.setFilter(filter);
 	window["vplProgram"].getEditedSourceCodeFun = function () {
 		return window["vplEditor"].doesMatchVPL() ? null : window["vplEditor"].getCode();
@@ -384,17 +386,31 @@ function vplSetup(uiConfig) {
 	// resize canvas
 	window.addEventListener("resize", vplResize, false);
 
+	var experimentalFeatures = getQueryOption("exp") === "true";
 	if (getQueryOption("view") === "text") {
 		window["vplProgram"].setView("src", {noVpl: true});
 	} else {
 		window["vplProgram"].setView("vpl");
-		window["vplProgram"].experimentalFeatures = getQueryOption("exp") === "true";
+		window["vplProgram"].experimentalFeatures = experimentalFeatures;
 		window["vplProgram"].setTeacherRole(getQueryOption("role") === "teacher");
 		window["vplProgram"].renderToCanvas(window["vplCanvas"]);
 		document.getElementById("editor").textContent = window["vplProgram"].getCode(window["vplProgram"].currentLanguage);
 	}
 
 	window["vplEditor"].setTeacherRole(getQueryOption("role") === "teacher");
+	/** @const */
+	var languageList = ["aseba", "l2", "js"];
+	if (experimentalFeatures && languageList.indexOf(language) >= 0) {
+		/** @const */
+		window["vplEditor"].changeLanguage = function () {
+			language = languageList[(languageList.indexOf(language) + 1) % languageList.length];
+			var code = window["vplProgram"].getCode(language);
+			return {
+				language: language,
+				code: code
+			};
+		};
+	}
 	window["vplEditor"].toolbarRender();
 
 	window["vplSim"] && window["vplSim"].sim.setTeacherRole(getQueryOption("role") === "teacher");
