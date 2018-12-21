@@ -175,6 +175,8 @@ function vplSetup(gui) {
 			A3a.vpl.patchSVG(gui);
 		} catch (e) {}
 	}
+	var advancedFeatures = getQueryOption("adv") === "true";
+	var experimentalFeatures = getQueryOption("exp") === "true";
 
 	A3a.vpl.Program.resetBlockLib();
 
@@ -243,7 +245,7 @@ function vplSetup(gui) {
 	}
 
 	var uiConfig = new A3a.vpl.UIConfig();
-	uiConfig.setDisabledFeatures(["src:language"]);
+	uiConfig.setDisabledFeatures(advancedFeatures ? [] : ["src:language"]);
 
 	window["vplProgram"] = new A3a.vpl.Program(A3a.vpl.mode.basic, uiConfig);
 	window["vplProgram"].currentLanguage = language;
@@ -394,7 +396,6 @@ function vplSetup(gui) {
 	// resize canvas
 	window.addEventListener("resize", vplResize, false);
 
-	var experimentalFeatures = getQueryOption("exp") === "true";
 	if (getQueryOption("view") === "text") {
 		window["vplProgram"].setView("src", {noVpl: true});
 	} else {
