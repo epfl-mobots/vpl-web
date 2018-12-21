@@ -1236,9 +1236,15 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 				},
 				// action
 				function (ev) {
-					A3a.vpl.Program.resetBlockLib();
-					self.new();
-					self.resetUI();
+					if (ev.modifier) {
+						A3a.vpl.Program.enableAllBlocks(self.mode);
+						self.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
+						self.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
+					} else {
+						A3a.vpl.Program.resetBlockLib();
+						self.new();
+						self.resetUI();
+					}
 				},
 				// doDrop
 				null,

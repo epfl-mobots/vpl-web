@@ -62,6 +62,22 @@ A3a.vpl.Program.resetBlockLib = function () {
 		.map(function (b) { return b.name; });
 };
 
+/** Enable all blocks in the specified mode
+	@param {A3a.vpl.mode} mode
+	@return {void}
+*/
+A3a.vpl.Program.enableAllBlocks = function (mode) {
+	var blocks = A3a.vpl.BlockTemplate.lib.map(function (b) { return b.name; });
+	switch (mode) {
+	case A3a.vpl.mode.basic:
+		A3a.vpl.Program.basicBlocks = blocks;
+		break;
+	case A3a.vpl.mode.advanced:
+		A3a.vpl.Program.advancedBlocks = blocks;
+		break;
+	}
+};
+
 /** Reset UI
 	@return {void}
 */

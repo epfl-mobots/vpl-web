@@ -438,7 +438,7 @@ A3a.vpl.Canvas.prototype.makeMouseEvent = function (e) {
 	var mouseEvent = {
 		x: e.clientX,
 		y: e.clientY,
-		modifier: e.altKey
+		modifier: e.ctrlKey
 	};
 	if (this.transform) {
 		var p1 = this.applyInverseTransform([mouseEvent.x, mouseEvent.y]);
