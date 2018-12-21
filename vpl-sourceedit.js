@@ -22,7 +22,7 @@ A3a.vpl.VPLSourceEditor = function (noVPL, language, runGlue) {
 	this.teacherRole = false;
 	this.customizationMode = false;
 	/** @type {Array.<string>} */
-	this.disabledUI = [];
+	this.disabledUI = ["src:language"];
 	this.textEditor = new A3a.vpl.TextEditor("editor", "editor-lines");
 	this.textEditor.setReadOnly(this.isLockedWithVPL);
 	this.textEditor.onBreakpointChanged = function (bp) {

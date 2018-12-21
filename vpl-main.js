@@ -400,7 +400,7 @@ function vplSetup(uiConfig) {
 	window["vplEditor"].setTeacherRole(getQueryOption("role") === "teacher");
 	/** @const */
 	var languageList = ["aseba", "l2", "js"];
-	if (experimentalFeatures && languageList.indexOf(language) >= 0) {
+	if (languageList.indexOf(language) >= 0) {
 		/** @const */
 		window["vplEditor"].changeLanguage = function () {
 			language = languageList[(languageList.indexOf(language) + 1) % languageList.length];
