@@ -18,11 +18,12 @@ A3a.vpl.Playground = function (width, height) {
 /** 2D viewer for robot simulator
 	@constructor
 	@param {A3a.vpl.Robot} robot
+	@param {?A3a.vpl.UIConfig=} uiConfig
 */
-A3a.vpl.VPLSim2DViewer = function (robot) {
+A3a.vpl.VPLSim2DViewer = function (robot, uiConfig) {
 	var self = this;
 
-	this.disabledUI = [];
+	this.uiConfig = uiConfig || new A3a.vpl.UIConfig();
 
 	this.robot = robot;
 	this.running = false;
@@ -89,7 +90,7 @@ A3a.vpl.VPLSim2DViewer.playgroundMap = {
 	@return {void}
 */
 A3a.vpl.VPLSim2DViewer.prototype.resetUI = function () {
-	this.disabledUI = [];
+	this.uiConfig.reset();
 };
 
 /** Change role
@@ -464,7 +465,7 @@ A3a.vpl.VPLSim2DViewer.color = function (rgb) {
 A3a.vpl.VPLSim2DViewer.prototype.addControl = function (controlBar, id, draw, action, doDrop, canDrop, keepEnabled) {
 	var self = this;
 	var canvas = controlBar.canvas;
-	var disabled = this.disabledUI.indexOf(id) >= 0;
+	var disabled = this.uiConfig.isDisabled(id);
 	if (this.customizationMode || !disabled) {
 		controlBar.addControl(
 			function (ctx, width, height, isDown) {
@@ -475,11 +476,7 @@ A3a.vpl.VPLSim2DViewer.prototype.addControl = function (controlBar, id, draw, ac
 			},
 			this.customizationMode && !keepEnabled
 				? function (downEvent) {
-					if (disabled) {
-						self.disabledUI.splice(self.disabledUI.indexOf(id), 1);
-					} else {
-						self.disabledUI.push(id);
-					}
+					self.uiConfig.toggle(id);
 					self.render();
 				}
 				: action,
@@ -1050,7 +1047,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 
 	if (this.teacherRole) {
 		if (self.customizationMode) {
-			this.addControl(controlBar, "src:teacher-reset",
+			this.addControl(controlBar, "sim:teacher-reset",
 				// draw
 				function (ctx, width, height, isDown) {
 					ctx.fillStyle = "#a00";
@@ -1094,7 +1091,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 				null,
 				true);
 		}
-		this.addControl(controlBar, "src:teacher",
+		this.addControl(controlBar, "sim:teacher",
 			// draw
 			function (ctx, width, height, isDown) {
 				ctx.fillStyle = isDown

@@ -8,8 +8,9 @@
 /**
 	@constructor
 	@param {A3a.vpl.mode=} mode
+	@param {?A3a.vpl.UIConfig=} uiConfig
 */
-A3a.vpl.Program = function (mode) {
+A3a.vpl.Program = function (mode, uiConfig) {
 	/** @type {A3a.vpl.mode} */
 	this.mode = mode || A3a.vpl.mode.basic;
 	this.noVPL = false;	// true for source code editor without vpl counterpart
@@ -36,8 +37,8 @@ A3a.vpl.Program = function (mode) {
 	this.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
 	/** @type {Array.<string>} */
 	this.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
-	/** @type {Array.<string>} */
-	this.disabledUI = [];
+	/** @type {A3a.vpl.UIConfig} */
+	this.uiConfig = uiConfig || new A3a.vpl.UIConfig();
 };
 
 /** @type {Object<string,A3a.vpl.CodeGenerator>} */
@@ -65,7 +66,7 @@ A3a.vpl.Program.resetBlockLib = function () {
 	@return {void}
 */
 A3a.vpl.Program.prototype.resetUI = function () {
-	this.disabledUI = [];
+	this.uiConfig.reset();
 };
 
 /** Clear program
@@ -236,9 +237,19 @@ A3a.vpl.Program.prototype.enforceSingleTrailingEmptyEventHandler = function () {
 };
 
 /** Export program to a plain object which can be serialized
+	@param {boolean=} noProgram true to export only the block lib & ui settings
 	@return {Object}
 */
-A3a.vpl.Program.prototype.exportToObject = function () {
+A3a.vpl.Program.prototype.exportToObject = function (noProgram) {
+	if (noProgram) {
+		return {
+			"advanced": this.mode === A3a.vpl.mode.advanced,
+			"basicBlocks": this.enabledBlocksBasic,
+			"advancedBlocks": this.enabledBlocksAdvanced,
+			"disabledUI": this.uiConfig.disabledUI
+		};
+	}
+
 	var src = this.getEditedSourceCodeFun ? this.getEditedSourceCodeFun() : null;
 
 	/** @type {?Array.<Array.<Object>>} */
@@ -279,16 +290,19 @@ A3a.vpl.Program.prototype.exportToObject = function () {
 		"advanced": this.mode === A3a.vpl.mode.advanced,
 		"basicBlocks": this.enabledBlocksBasic,
 		"advancedBlocks": this.enabledBlocksAdvanced,
+		"disabledUI": this.uiConfig.disabledUI,
 		"program": p,
 		"code": src
 	};
 };
 
 /** Export program to JSON
+	@param {boolean=} noProgram true to export only the block lib & ui settings
+	(default: false)
 	@return {string}
 */
-A3a.vpl.Program.prototype.exportToJSON = function () {
-	return JSON.stringify(this.exportToObject());
+A3a.vpl.Program.prototype.exportToJSON = function (noProgram) {
+	return JSON.stringify(this.exportToObject(noProgram), null, "\t");
 };
 
 /** Import program from an object, as created by exportToObject
@@ -306,6 +320,9 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 			this.mode = obj["advanced"]
 				? A3a.vpl.mode.advanced
 				: A3a.vpl.mode.basic;
+			if (obj["disabledUI"]) {
+				this.uiConfig.setDisabledFeatures(obj["disabledUI"]);
+			}
 			this.enabledBlocksBasic = obj["basicBlocks"] || A3a.vpl.Program.basicBlocks;
 			this.enabledBlocksAdvanced = obj["advancedBlocks"] || A3a.vpl.Program.advancedBlocks;
 			if (obj["program"]) {

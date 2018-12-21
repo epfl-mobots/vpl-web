@@ -6,7 +6,7 @@
 .PHONY: main
 main:	all
 
-COPYRIGHT = /* Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE - js author Yves Piguet - svg author Maria Beltran */
+COPYRIGHT = /* Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE - author Yves Piguet */
 
 # Default closure compiler in current directory, used if closure-compiler isn't found
 # Update here or build with "make CLOSURECOMPILER=path" to match your environment
@@ -32,6 +32,7 @@ JS = \
 	vpl-block.js \
 	vpl-emptyblock.js \
 	vpl-eventhandler.js \
+	vpl-uiconfig.js \
 	vpl-program.js \
 	vpl-code.js \
 	vpl-code-aseba.js \

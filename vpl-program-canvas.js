@@ -469,7 +469,7 @@ A3a.vpl.Program.blockLayout = function (pMin, pMax, itemSize, gap, separatorGap,
 A3a.vpl.Program.prototype.addControl = function (controlBar, id, draw, action, doDrop, canDrop, keepEnabled) {
 	var self = this;
 	var canvas = controlBar.canvas;
-	var disabled = this.disabledUI.indexOf(id) >= 0;
+	var disabled = this.uiConfig.isDisabled(id);
 	if (this.customizationMode || !disabled) {
 		controlBar.addControl(
 			function (ctx, width, height, isDown) {
@@ -480,11 +480,7 @@ A3a.vpl.Program.prototype.addControl = function (controlBar, id, draw, action, d
 			},
 			this.customizationMode && !keepEnabled
 				? function (downEvent) {
-					if (disabled) {
-						self.disabledUI.splice(self.disabledUI.indexOf(id), 1);
-					} else {
-						self.disabledUI.push(id);
-					}
+					self.uiConfig.toggle(id);
 					return 1;
 				}
 				: action,
@@ -1243,6 +1239,69 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 					A3a.vpl.Program.resetBlockLib();
 					self.new();
 					self.resetUI();
+				},
+				// doDrop
+				null,
+				// canDrop
+				null,
+				true);
+
+			// teacher-save
+			this.addControl(controlBar, "teacher-save",
+				// draw
+				function (ctx, width, height, isDown) {
+					ctx.fillStyle = isDown ? "#d00" : "#a00";
+					ctx.fillRect(0, 0,
+						canvas.dims.controlSize, canvas.dims.controlSize);
+					ctx.strokeStyle = "white";
+					ctx.beginPath();
+					ctx.moveTo(canvas.dims.controlSize * 0.25,
+						canvas.dims.controlSize * 0.2);
+					ctx.lineTo(canvas.dims.controlSize * 0.25,
+						canvas.dims.controlSize * 0.7);
+					ctx.lineTo(canvas.dims.controlSize * 0.67,
+						canvas.dims.controlSize * 0.7);
+					ctx.lineTo(canvas.dims.controlSize * 0.67,
+						canvas.dims.controlSize * 0.27);
+					ctx.lineTo(canvas.dims.controlSize * 0.6,
+						canvas.dims.controlSize * 0.2);
+					ctx.closePath();
+					ctx.moveTo(canvas.dims.controlSize * 0.6,
+						canvas.dims.controlSize * 0.2);
+					ctx.lineTo(canvas.dims.controlSize * 0.6,
+						canvas.dims.controlSize * 0.27);
+					ctx.lineTo(canvas.dims.controlSize * 0.67,
+						canvas.dims.controlSize * 0.27);
+					ctx.lineWidth = canvas.dims.blockLineWidth;
+					ctx.stroke();
+					ctx.lineWidth = 2 * canvas.dims.blockLineWidth;
+					ctx.beginPath();
+					ctx.moveTo(canvas.dims.controlSize * 0.8,
+						canvas.dims.controlSize * 0.5);
+					ctx.lineTo(canvas.dims.controlSize * 0.8,
+						canvas.dims.controlSize * 0.8);
+					ctx.moveTo(canvas.dims.controlSize * 0.7,
+						canvas.dims.controlSize * 0.7);
+					ctx.lineTo(canvas.dims.controlSize * 0.8,
+						canvas.dims.controlSize * 0.8);
+					ctx.lineTo(canvas.dims.controlSize * 0.9,
+						canvas.dims.controlSize * 0.7);
+					ctx.stroke();
+					ctx.fillStyle = "white";
+					A3a.vpl.Canvas.drawHexagonalNut(ctx,
+						canvas.dims.controlSize * 0.46,
+						canvas.dims.controlSize * 0.45,
+						canvas.dims.controlSize * 0.2);
+				},
+				// action
+				function (ev) {
+					/*
+					A3a.vpl.Program.resetBlockLib();
+					self.new();
+					self.resetUI();
+					*/
+					var json = self.exportToJSON(true);
+					A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
 				},
 				// doDrop
 				null,

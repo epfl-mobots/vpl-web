@@ -61,8 +61,8 @@ function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, on
 	xhr.addEventListener("load", function () {
 		if (xhr.status === 200) {
 			rsrc[rootFilename] = xhr.responseText;
-			var uiConfig = /** @type {Object} */(JSON.parse(xhr.responseText));
-			var auxFiles = getAuxiliaryFilenames(uiConfig);
+			var gui = /** @type {Object} */(JSON.parse(xhr.responseText));
+			var auxFiles = getAuxiliaryFilenames(gui);
 			var nRemaining = auxFiles.length;
 			var error = false;
 			auxFiles.forEach(function (f) {
@@ -72,7 +72,7 @@ function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, on
 						rsrc[f] = xhr.responseText;
 						nRemaining--;
 						if (!error && nRemaining === 0) {
-							onLoad(uiConfig, rsrc);
+							onLoad(gui, rsrc);
 						}
 					} else if (!error) {
 						error = true;
@@ -110,31 +110,31 @@ function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, on
 function vplLoadResourcesInScripts(rootFilename, getAuxiliaryFilenames, onLoad, onError) {
 	try {
 		var txt = document.getElementById(rootFilename).textContent;
-		var uiConfig = /** @type {Object} */(JSON.parse(txt));
+		var gui = /** @type {Object} */(JSON.parse(txt));
 		var rsrc = {};
-		if (uiConfig["svgFilenames"]) {
-			uiConfig["svgFilenames"].forEach(function (filename) {
+		if (gui["svgFilenames"]) {
+			gui["svgFilenames"].forEach(function (filename) {
 				txt = document.getElementById(filename).textContent;
 				rsrc[filename] = txt;
 			});
 		}
-		if (uiConfig["overlays"]) {
-			uiConfig["overlays"].forEach(function (filename) {
+		if (gui["overlays"]) {
+			gui["overlays"].forEach(function (filename) {
 				txt = document.getElementById(filename).textContent;
 				rsrc[filename] = txt;
 			});
 		}
-		onLoad(uiConfig, rsrc);
+		onLoad(gui, rsrc);
 	} catch (e) {
 		onError();
 	}
 }
 
 /** Setup everything for vpl
-	@param {Object=} uiConfig
+	@param {Object=} gui
 	@return {void}
 */
-function vplSetup(uiConfig) {
+function vplSetup(gui) {
 	/** Get value corresponding to key in the URI query
 		@param {string} key
 		@return {string}
@@ -160,7 +160,7 @@ function vplSetup(uiConfig) {
 	}
 
 	// general settings
-	var isClassic = uiConfig == undefined || getQueryOption("appearance") === "classic";
+	var isClassic = gui == undefined || getQueryOption("appearance") === "classic";
 	window["vplUseLocalStorage"] = getQueryOption("storage") === "local";
 	var language = getQueryOption("language");
 	if (isClassic) {
@@ -170,9 +170,9 @@ function vplSetup(uiConfig) {
 	 	if (A3a.vpl.patchJSBlocks) {
 			A3a.vpl.patchJSBlocks();
 		}
-	} else if (uiConfig) {
+	} else if (gui) {
 		try {
-			A3a.vpl.patchSVG(uiConfig);
+			A3a.vpl.patchSVG(gui);
 		} catch (e) {}
 	}
 
@@ -242,10 +242,14 @@ function vplSetup(uiConfig) {
 		throw "Unsupported language " + language;
 	}
 
-	window["vplProgram"] = new A3a.vpl.Program();
+	var uiConfig = new A3a.vpl.UIConfig();
+	uiConfig.setDisabledFeatures(["src:language"]);
+
+	window["vplProgram"] = new A3a.vpl.Program(A3a.vpl.mode.basic, uiConfig);
 	window["vplProgram"].currentLanguage = language;
 	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["vplProgram"].noVPL,
 		language,
+		uiConfig,
 		window["vplRun"]);
 	window["vplEditor"].tbCanvas.setFilter(filter);
 	window["vplProgram"].getEditedSourceCodeFun = function () {
@@ -321,8 +325,12 @@ function vplSetup(uiConfig) {
 		}
 	}, false);
 
-	// accept dropped ground files in simulator
+	// configure simulator
 	if (window["vplSim"]) {
+		// shared configuration
+		window["vplSim"].uiConfig = uiConfig;
+
+		// accept dropped ground files in simulator
 		document.getElementById("sim-view").addEventListener('dragover', function(e) {
 			e.stopPropagation();
 			e.preventDefault();
@@ -423,20 +431,20 @@ window.addEventListener("load", function () {
 			// get subfiles
 			return obj["svgFilenames"].concat(obj["overlays"] || []);
 		},
-		function (uiConfig, rsrc) {
+		function (gui, rsrc) {
 			// success
-			uiConfig.rsrc = {};
-			if (uiConfig["svgFilenames"]) {
-				uiConfig["svgFilenames"].forEach(function (filename) {
-					uiConfig.rsrc[filename] = rsrc[filename];
+			gui.rsrc = {};
+			if (gui["svgFilenames"]) {
+				gui["svgFilenames"].forEach(function (filename) {
+					gui.rsrc[filename] = rsrc[filename];
 				});
 			}
-			if (uiConfig["overlays"]) {
-				uiConfig["overlays"].forEach(function (filename) {
-					uiConfig.rsrc[filename] = rsrc[filename];
+			if (gui["overlays"]) {
+				gui["overlays"].forEach(function (filename) {
+					gui.rsrc[filename] = rsrc[filename];
 				});
 			}
-			vplSetup(uiConfig);
+			vplSetup(gui);
 		},
 		function () {
 			// error

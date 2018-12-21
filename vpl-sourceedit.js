@@ -9,9 +9,10 @@
 	@constructor
 	@param {boolean} noVPL true if only text editor without VPL
 	@param {string=} language
+	@param {?A3a.vpl.UIConfig=} uiConfig
 	@param {?A3a.vpl.RunGlue=} runGlue
 */
-A3a.vpl.VPLSourceEditor = function (noVPL, language, runGlue) {
+A3a.vpl.VPLSourceEditor = function (noVPL, language, uiConfig, runGlue) {
 	this.noVPL = noVPL;
 	this.language = language || A3a.vpl.defaultLanguage;
 	this.runGlue = runGlue || null;
@@ -21,8 +22,7 @@ A3a.vpl.VPLSourceEditor = function (noVPL, language, runGlue) {
 	this.changeLanguage = null;
 	this.teacherRole = false;
 	this.customizationMode = false;
-	/** @type {Array.<string>} */
-	this.disabledUI = ["src:language"];
+	this.uiConfig = uiConfig || new A3a.vpl.UIConfig();
 	this.textEditor = new A3a.vpl.TextEditor("editor", "editor-lines");
 	this.textEditor.setReadOnly(this.isLockedWithVPL);
 	this.textEditor.onBreakpointChanged = function (bp) {
@@ -68,7 +68,7 @@ A3a.vpl.VPLSourceEditor = function (noVPL, language, runGlue) {
 	@return {void}
 */
 A3a.vpl.VPLSourceEditor.prototype.resetUI = function () {
-	this.disabledUI = [];
+	this.uiConfig.reset();
 };
 
 /** Change role
@@ -135,7 +135,7 @@ A3a.vpl.VPLSourceEditor.prototype.srcToolbarHeight = function () {
 A3a.vpl.VPLSourceEditor.prototype.addControl = function (controlBar, id, draw, action, doDrop, canDrop, keepEnabled) {
 	var self = this;
 	var canvas = controlBar.canvas;
-	var disabled = this.disabledUI.indexOf(id) >= 0;
+	var disabled = this.uiConfig.isDisabled(id);
 	if (this.customizationMode || !disabled) {
 		controlBar.addControl(
 			function (ctx, width, height, isDown) {
@@ -146,11 +146,7 @@ A3a.vpl.VPLSourceEditor.prototype.addControl = function (controlBar, id, draw, a
 			},
 			this.customizationMode && !keepEnabled
 				? function (canvas, data, width, height, x, y, downEvent) {
-					if (disabled) {
-						self.disabledUI.splice(self.disabledUI.indexOf(id), 1);
-					} else {
-						self.disabledUI.push(id);
-					}
+					self.uiConfig.toggle(id);
 					self.toolbarRender();
 					return 1;
 				}
