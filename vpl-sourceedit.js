@@ -419,7 +419,9 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			function (ev) {
 				var r = self.changeLanguage();
 				self.language = r.language;
-				self.setCode(r.code);
+				if (self.isLockedWithVPL) {
+					self.setCode(r.code);
+				}
 			},
 			// doDrop
 			null,
