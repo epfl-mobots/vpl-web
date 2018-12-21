@@ -24,9 +24,9 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 		return this.generateCodeForEventHandler(eh);
 	}, this);
 	/** @type {Array.<string>} */
-	var initVarDecl = ["var cond0;\nvar cond;\n"];
+	var initVarDecl = [];
 	/** @type {Array.<string>} */
-	var initCodeExec = ["cond0 = [];\n"];
+	var initCodeExec = [];
 	/** @type {Array.<string>} */
 	var initCodeDecl = [];
 	/** @dict */
@@ -34,6 +34,7 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 		// folding[sectionBegin] = index in c fragments with same sectionBegin are folded into
 	/** @type {Array.<number>} */
 	var initEventIndices = [];
+	var usesCond = false;
 	c.forEach(function (evCode, i) {
 		evCode.initVarDecl && evCode.initVarDecl.forEach(function (fr) {
 			if (initVarDecl.indexOf(fr) < 0) {
@@ -58,6 +59,7 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 				statement +
 				"}\n" +
 				"cond0[" + i + "] = cond;\n";
+			usesCond = true;
 		}
 		statement = this.bracket(statement, program.program[i]);
 		if (evCode.sectionBegin) {
@@ -95,6 +97,11 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 			eh.setBlock(block, null, null);
 		});
 		runBlocksCode = this.generateCodeForEventHandler(eh).statement;
+	}
+
+	if (usesCond) {
+		initVarDecl.unshift("var cond0;\nvar cond;\n");
+		initCodeExec.unshift("cond0 = [];\n");
 	}
 
 	// build program from fragments:
