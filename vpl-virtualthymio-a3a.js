@@ -123,11 +123,9 @@ A3a.vpl.VirtualThymioVM.prototype["get"] = function (name) {
 		return (this.vthymio.state && this.vthymio.state["leds.circle"] || [0, 0, 0, 0, 0, 0, 0, 0])
 			.map(function (x) { return x >= 16 ? 1 : 0; });
 	case "motor.left":
-		return this.getVMVar("motor.left.target")
-			.map(function (x) { return x / 200; });
+		return this.getVMVar("motor.left.target")[0] / 200;	// scalar
 	case "motor.right":
-		return this.getVMVar("motor.right.target")
-			.map(function (x) { return x / 200; });
+		return this.getVMVar("motor.right.target")[0] / 200;	// scalar
 	default:
 		// base class method
 		return A3a.vpl.VirtualThymio.prototype["get"].call(this, name);
