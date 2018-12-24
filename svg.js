@@ -827,42 +827,24 @@ SVG.prototype.draw = function (ctx, options) {
 			@return {(string|CanvasGradient)}
 		*/
 		function decodeFillStyle(fill) {
-			/** Fill radialGradient prop object with element attributes
-				@param {Element} el
-				@param {Object} props
-				@return {Object}
+			/** Decode stops array
+				@param {NodeList<!Element>} stopEl
+				@return {void}
 			*/
-			function fillRadialGradientProps(el, props) {
-				// follow link
-				if (el.attributes["xlink:href"]) {
-					var href = el.getAttribute("xlink:href");
-					if (href[0] === "#") {
-						var targetEl = self.dom.getElementById(href.slice(1));
-						if (targetEl) {
-							props = fillRadialGradientProps(targetEl, props);
-						}
-					}
-				}
-
-				// local attributes
-				props.cx = el.attributes["cx"] ? parseFloat(el.getAttribute("cx")) : props.cx || 0;
-				props.cy = el.attributes["cy"] ? parseFloat(el.getAttribute("cy")) : props.cy || 0;
-				props.r = el.attributes["r"] ? parseFloat(el.getAttribute("r")) : props.r || 0;
-
-				// local children
-				props.stops = props.stops || [];
-				var stopEl = el.getElementsByTagName("stop");
+			function fillStopArray(stops, stopEl) {
 				if (stopEl.length > 0) {
-					props.stops = [];
+					stops.splice(0, stops.length);
 					for (var i = 0; i < stopEl.length; i++) {
 						var str = (stopEl[i].getAttribute("offset") || "0").trim();
 						var offset = /%$/.test(str) ? parseFloat(str.slice(0, -1)) / 100 : parseFloat(str);
-						if (!isNaN(offset) && stopEl[i].attributes["stop-color"]) {
-							var color = stopEl[i].getAttribute("stop-color") || "#000";
+						var style = stopEl[i].getAttribute("style");
+						var styleDict = style ? parseStyle(style) : {};
+						if (!isNaN(offset) && (stopEl[i].attributes["stop-color"] || styleDict["stop-color"])) {
+							var color = stopEl[i].getAttribute("stop-color") || styleDict["stop-color"] || "#000";
 							if (SVG.colorDict.hasOwnProperty(color)) {
 								color = SVG.colorDict[color];
 							}
-							str = (stopEl[i].getAttribute("stop-opacity") || "1").trim();
+							str = (stopEl[i].getAttribute("stop-opacity") || styleDict["stop-opacity"] || "1").trim();
 							var opacity = /%$/.test(str) ? parseFloat(str.slice(0, -1)) / 100 : parseFloat(str);
 							if (opacity !== 1) {
 								// convert color and opacity to a single css rgba(...) or hsla(...) spec
@@ -894,13 +876,72 @@ SVG.prototype.draw = function (ctx, options) {
 										"," + opacity.toFixed(2) + ")";
 								}
 							}
-							props.stops.push({
+							stops.push({
 								offset: offset,
 								color: color
 							});
 						}
 					}
 				}
+			}
+
+			/** Fill linearGradient prop object with element attributes
+				@param {Element} el
+				@param {Object} props
+				@return {Object}
+			*/
+			function fillLinearGradientProps(el, props) {
+				// follow link
+				if (el.attributes["xlink:href"]) {
+					var href = el.getAttribute("xlink:href");
+					if (href[0] === "#") {
+						var targetEl = self.dom.getElementById(href.slice(1));
+						if (targetEl) {
+							props = fillLinearGradientProps(targetEl, props);
+						}
+					}
+				}
+
+				// local attributes
+				props.x1 = el.attributes["x1"] ? parseFloat(el.getAttribute("x1")) : props.x1 || 0;
+				props.y1 = el.attributes["y1"] ? parseFloat(el.getAttribute("y1")) : props.y1 || 0;
+				props.x2 = el.attributes["x2"] ? parseFloat(el.getAttribute("x2")) : props.x2 || 0;
+				props.y2 = el.attributes["y2"] ? parseFloat(el.getAttribute("y2")) : props.y2 || 0;
+
+				// local children
+				props.stops = props.stops || [];
+				var stopEl = el.getElementsByTagName("stop");
+				fillStopArray(props.stops, stopEl);
+
+				return props;
+			}
+
+			/** Fill radialGradient prop object with element attributes
+				@param {Element} el
+				@param {Object} props
+				@return {Object}
+			*/
+			function fillRadialGradientProps(el, props) {
+				// follow link
+				if (el.attributes["xlink:href"]) {
+					var href = el.getAttribute("xlink:href");
+					if (href[0] === "#") {
+						var targetEl = self.dom.getElementById(href.slice(1));
+						if (targetEl) {
+							props = fillRadialGradientProps(targetEl, props);
+						}
+					}
+				}
+
+				// local attributes
+				props.cx = el.attributes["cx"] ? parseFloat(el.getAttribute("cx")) : props.cx || 0;
+				props.cy = el.attributes["cy"] ? parseFloat(el.getAttribute("cy")) : props.cy || 0;
+				props.r = el.attributes["r"] ? parseFloat(el.getAttribute("r")) : props.r || 0;
+
+				// local children
+				props.stops = props.stops || [];
+				var stopEl = el.getElementsByTagName("stop");
+				fillStopArray(props.stops, stopEl);
 
 				return props;
 			}
@@ -911,6 +952,13 @@ SVG.prototype.draw = function (ctx, options) {
 				var targetEl = self.dom.getElementById(id[1]);
 				if (targetEl) {
 					switch (targetEl.tagName) {
+					case "linearGradient":
+						var lg = fillLinearGradientProps(targetEl, {});
+						var linearGradient = ctx.createLinearGradient(lg.x1, lg.y1, lg.x2, lg.y2);
+						for (var i = 0; i < lg.stops.length; i++) {
+							linearGradient.addColorStop(lg.stops[i].offset, lg.stops[i].color);
+						}
+						return linearGradient;
 					case "radialGradient":
 						var rg = fillRadialGradientProps(targetEl, {});
 						var radialGradient = ctx.createRadialGradient(rg.cx, rg.cy, 0, rg.cx, rg.cy, rg.r);
@@ -1177,7 +1225,7 @@ SVG.prototype.draw = function (ctx, options) {
 		ctx && ctx.restore();
 		transform.restore();
 
-		ctx && options.drawBoundingBox && drawBoundingBox(xa.slice(ptLen0), ya.slice(ptLen0));
+		ctx && options && options.drawBoundingBox && drawBoundingBox(xa.slice(ptLen0), ya.slice(ptLen0));
 	}
 
 	findCSS(this.root);
@@ -1189,7 +1237,7 @@ SVG.prototype.draw = function (ctx, options) {
 		element = options.element;
 	}
 	if (element) {
-		if (options.globalTransform) {
+		if (options && options.globalTransform) {
 			options.globalTransform(ctx, this.viewBox);
 		}
 
