@@ -1316,6 +1316,20 @@ SVG.prototype.isInside = function (elementId, x, y) {
 	return x >= bnds.xmin && x <= bnds.xmax && y >= bnds.ymin && y <= bnds.ymax;
 };
 
+/** Draw to an image
+	@return {Image}
+*/
+SVG.prototype.toImage = function () {
+	var canvas = document.createElement("canvas");
+	canvas.width = this.viewBox[2];
+	canvas.height = this.viewBox[3];
+	var ctx = canvas.getContext("2d");
+	this.draw(ctx);
+	var img = new Image();
+	img.src = canvas.toDataURL();
+	return img;
+};
+
 /** Draw SVG to canvas 2d context from uri
 	@param {string} uri
 	@param {CanvasRenderingContext2D} ctx

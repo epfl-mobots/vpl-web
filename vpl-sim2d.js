@@ -893,18 +893,6 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 						}
 					}
 				}
-				for (var x = 0; x <= 1; x += 0.25) {
-					for (var y = 0; y <= 0.75; y += 0.15) {
-						var z = calcHeight(x, y);
-						var xd = s * (0.2 + 0.5 * x + 0.15 * y);
-						var yd = s * (0.5 - 0.3 * y - 0.2 * z);
-						if (y === 0) {
-							ctx.moveTo(xd, yd);
-						} else {
-							ctx.lineTo(xd, yd);
-						}
-					}
-				}
 				ctx.stroke();
 				break;
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
@@ -1587,7 +1575,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	 				"black", self.simCanvas.dims.blockLineWidth);
 			}
 		});
-		yRobotControl += 4 * smallBtnSize;
+		yRobotControl += 3.5 * smallBtnSize;
 	}
 
 	// draw timer 0
