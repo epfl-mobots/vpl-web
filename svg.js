@@ -414,14 +414,20 @@ SVG.prototype.draw = function (ctx, options) {
 							ctx.translate(-x0, -y0);
 							ctx.rotate(a);
 							ctx.translate(x0, y0);
-							transform.translate(-x0, -y0);
-							transform.rotate(a);
-							transform.translate(x0, y0);
 						}
+						transform.translate(-x0, -y0);
+						transform.rotate(a);
+						transform.translate(x0, y0);
 					} else {
 						ctx && ctx.rotate(a);
 						transform.rotate(a);
 					}
+					break;
+				case "scale":
+					var scx = args[0] || 1;
+					var scy = args[1] || scx;
+					ctx && ctx.scale(scx, scy);
+					transform.scale(scx, scy);
 					break;
 				default:
 					throw "transform not implemented: " + c;
