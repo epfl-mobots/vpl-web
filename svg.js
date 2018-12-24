@@ -502,7 +502,7 @@ SVG.prototype.draw = function (ctx, options) {
 			if (length == null || length == "") {
 				return def;
 			}
-			var r = /^\s*(-?[0-9.]+)\s*([a-z%]+)\s*$/i.exec(length);
+			var r = /^\s*(-?[0-9.]+)\s*([a-z%]*)\s*$/i.exec(length);
 			var x = parseFloat(r[1]);
 			var mm = 3;	// mm/px
 			switch (r[2] || "px") {
