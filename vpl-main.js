@@ -420,6 +420,7 @@ function vplSetup(gui) {
 		/** @const */
 		window["vplEditor"].changeLanguage = function () {
 			language = languageList[(languageList.indexOf(language) + 1) % languageList.length];
+			window["vplProgram"].currentLanguage = language;
 			var code = window["vplProgram"].getCode(language);
 			return {
 				language: language,
