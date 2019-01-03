@@ -50,8 +50,8 @@ A3a.Device.VirtualThymio = function (nodeId) {
 				{name: "prox.ground.delta", val: [0, 0]},
 				{name: "motor.left.target", val: [0]},
 				{name: "motor.right.target", val: [0]},
-				{name: "_vbat", val: [0]},
-				{name: "_imot", val: [0]},
+				{name: "_vbat", val: [0, 0]},
+				{name: "_imot", val: [0, 0]},
 				{name: "motor.left.speed", val: [0]},
 				{name: "motor.right.speed", val: [0]},
 				{name: "motor.left.pwm", val: [0]},
@@ -649,6 +649,126 @@ A3a.Device.VirtualThymio = function (nodeId) {
 						device.onStateChanged && device.onStateChanged("leds.bottom.right");
 					}
 				},
+				{
+					name: "sound.freq",
+					description: "Play frequency",
+					params: [
+						{name: "Hz", size: 1},
+						{name: "ds", size: 1}
+					],
+					fun: function (device, args) {
+						console.info(args);
+					}
+				},
+				{
+					name: "leds.buttons",
+					description: "Set buttons leds",
+					params: [
+						{name: "led 0", size: 1},
+						{name: "led 1", size: 1},
+						{name: "led 2", size: 1},
+						{name: "led 3", size: 1}
+					]
+				},
+				{
+					name: "leds.prox.h",
+					description: "Set horizontal proximity leds",
+					params: [
+						{name: "led 0", size: 1},
+						{name: "led 1", size: 1},
+						{name: "led 2", size: 1},
+						{name: "led 3", size: 1},
+						{name: "led 4", size: 1},
+						{name: "led 5", size: 1},
+						{name: "led 6", size: 1},
+						{name: "led 7", size: 1}
+					]
+				},
+				{
+					name: "leds.prox.v",
+					description: "Set vertical proximity leds",
+					params: [
+						{name: "led 0", size: 1},
+						{name: "led 1", size: 1}
+					]
+				},
+				{
+					name: "leds.rc",
+					description: "Set rc led",
+					params: [
+						{name: "led", size: 1}
+					]
+				},
+				{
+					name: "leds.sound",
+					description: "Set sound led",
+					params: [
+						{name: "led", size: 1}
+					]
+				},
+				{
+					name: "leds.temperature",
+					description: "Set ntc led",
+					params: [
+						{name: "red", size: 1},
+						{name: "blue", size: 1}
+					]
+				},
+				{
+					name: "sound.wave",
+					description: "Set the primary wave of the tone generator",
+					params: [
+						{name: "wave", size: 142}
+					],
+					fun: function (device, args) {
+						// ignore
+					}
+				},
+				{
+					name: "prox.comm.enable",
+					description: "Enable or disable the proximity communication",
+					params: [
+						{name: "state", size: 1}
+					]
+				},
+				{
+					name: "sd.open",
+					description: "Open a file on the SD card",
+					params: [
+						{name: "number", size: 1},
+						{name: "status", size: 1}
+					]
+				},
+				{
+					name: "sd.write",
+					description: "Write data to the opened file",
+					params: [
+						{name: "data", size: -1},
+						{name: "written", size: 1}
+					]
+				},
+				{
+					name: "sd.read",
+					description: "Read data from the opened file",
+					params: [
+						{name: "data", size: -1},
+						{name: "read", size: 1}
+					]
+				},
+				{
+					name: "sd.seek",
+					description: "Seek the opened file",
+					params: [
+						{name: "position", size: 1},
+						{name: "status", size: 1}
+					]
+				},
+				{
+					name: "_rf.nodeid"
+				},
+				{
+					name: "_poweroff"
+				}
 			],
 			variableSize: 620
 		});

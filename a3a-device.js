@@ -140,8 +140,7 @@ A3a.Device.prototype.setVariableData = function (varOffset, varData) {
 				&& this.variables[i].offset < varOffset + varData.length) {
 				for (var j = 0; j < this.variables[i].val.length; j++) {
 					if (this.variables[i].offset + j - varOffset >= 0
-						&& this.variables[i].offset + j - varOffset < varData.length
-						&& this.varData[this.variables[i].offset + j] !== varData[this.variables[i].offset + j - varOffset]) {
+						&& this.variables[i].offset + j - varOffset < varData.length) {
 						this.onVarChanged(this.variables[i].name, j,
 							varData[this.variables[i].offset + j - varOffset],
 							this.varData[this.variables[i].offset + j]);
@@ -396,7 +395,7 @@ A3a.Device.prototype.step = function () {
 		this.stack.push(this.varData[opl]);
 		break;
 	case A3a.VM.op.store:
-		this.varData[opl] = this.stack.pop();
+		this.setVariableData(opl, [this.stack.pop()]);
 		break;
 	case A3a.VM.op.loadIndirect:
 		this.pc++;
@@ -415,7 +414,7 @@ A3a.Device.prototype.step = function () {
 		if (i >= size) {
 			throw "Index out of bounds";
 		} else {
-			this.varData[opl + i] = this.stack.pop();
+			this.setVariableData(opl + i, [this.stack.pop()]);
 		}
 		break;
 	case A3a.VM.op.jump:

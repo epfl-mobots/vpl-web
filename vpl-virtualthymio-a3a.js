@@ -23,7 +23,15 @@ A3a.vpl.VirtualThymioVM = function () {
 	this.vthymio.onStateChanged = function (name) {
 		self.stateChangeListener[name] &&
 			self.stateChangeListener[name](name, self.vthymio.state[name]);
-		console.info(name);
+	};
+
+	// forward variable change notifications from vthymio to this
+	this.vthymio.onVarChanged = function (name, index, newValue, oldValue) {
+		switch (name) {
+		case "timer.period":
+			self["setTimer"](index, newValue * 0.001);
+			break;
+		}
 	};
 
 	// get description of Thymio (variables, events, native functions)
