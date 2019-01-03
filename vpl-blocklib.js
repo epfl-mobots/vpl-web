@@ -1119,7 +1119,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.resetTimer
 					],
-					sectionBegin: "onevent timer0\n",
+					sectionBegin: "onevent timer0\ntimer.period[0] = 0\n",
 					sectionPriority: 1000
 				};
 			}
