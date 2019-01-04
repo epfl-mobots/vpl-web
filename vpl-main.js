@@ -428,6 +428,33 @@ function vplSetup(gui) {
 			};
 		};
 	}
+
+	var asebaNode = new A3a.A3aNode(A3a.thymioDescr);
+	if (advancedFeatures) {
+		window["vplEditor"].disass = function (language, src) {
+			/** @type {A3a.Compiler}*/
+			var c;
+			try {
+				switch (language) {
+				case "aseba":
+					c = new A3a.Compiler(asebaNode, src);
+					c.functionLib = A3a.A3aNode.stdMacros;
+					break;
+				case "l2":
+					c = new A3a.Compiler.L2(asebaNode, src);
+					c.functionLib = A3a.A3aNode.stdMacrosL2;
+					break;
+				default:
+					return null;
+				}
+				var bytecode = c.compile();
+				return A3a.vm.disToListing(bytecode);
+			} catch (e) {
+				return "; " + e;
+			}
+		};
+	}
+
 	window["vplEditor"].toolbarRender();
 
 	window["vplSim"] && window["vplSim"].sim.setTeacherRole(getQueryOption("role") === "teacher");

@@ -59,6 +59,7 @@ JS = \
 	vpl-virtualthymio.js \
 	compiler-ns.js \
 	compiler-vm.js \
+	compiler-dis.js \
 	compiler.js \
 	compiler-macros.js \
 	compiler-l2.js \

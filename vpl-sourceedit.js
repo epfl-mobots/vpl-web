@@ -20,6 +20,10 @@ A3a.vpl.VPLSourceEditor = function (noVPL, language, uiConfig, runGlue) {
 	this.isLockedWithVPL = true;
 	/** @type {?function():{language:string,code:string}} */
 	this.changeLanguage = null;
+	/** @type {?function(string,string):?string} */
+	this.disass = null;
+	/** @type {?string} */
+	this.srcForAsm = null;	// null if source code is displayed, src if asm
 	this.teacherRole = false;
 	this.customizationMode = false;
 	this.uiConfig = uiConfig || new A3a.vpl.UIConfig();
@@ -81,14 +85,18 @@ A3a.vpl.VPLSourceEditor.prototype.setTeacherRole = function (b) {
 
 /** Set the code generated from VPL
 	@param {?string} code source code, or null to reset it
+	@param {boolean=} isAsm true if code is assembly, false if source code
 	@return {void}
 */
-A3a.vpl.VPLSourceEditor.prototype.setCode = function (code) {
+A3a.vpl.VPLSourceEditor.prototype.setCode = function (code, isAsm) {
 	if (code === null) {
 		this.textEditor.setContent(this.code0);
 	} else {
 		this.code0 = code;
 		this.textEditor.setContent(code);
+	}
+	if (!isAsm) {
+		this.srcForAsm = null;
 	}
 };
 
@@ -335,16 +343,19 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			// draw
 			function (ctx, width, height, isDown) {
 				ctx.save();
-				ctx.fillStyle = isDown
-					? self.tbCanvas.dims.controlDownColor
-					: self.isLockedWithVPL
-						? self.tbCanvas.dims.controlActiveColor
-						: self.tbCanvas.dims.controlColor;
+				ctx.fillStyle = self.srcForAsm !== null
+ 					? self.tbCanvas.dims.controlColor
+					: isDown
+						? self.tbCanvas.dims.controlDownColor
+						: self.isLockedWithVPL
+							? self.tbCanvas.dims.controlActiveColor
+							: self.tbCanvas.dims.controlColor;
 				ctx.fillRect(0, 0,
 					self.tbCanvas.dims.controlSize, self.tbCanvas.dims.controlSize);
-				ctx.strokeStyle = "white";
+				ctx.strokeStyle = self.srcForAsm !== null ? "#777" : "white";
 				ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
-				ctx.fillStyle = self.isLockedWithVPL ? "#ddf" : "#99a";
+				ctx.fillStyle = self.srcForAsm !== null ? "#777" :
+					self.isLockedWithVPL ? "#ddf" : "#99a";
 				for (var y = 0.15; y < 0.6; y += 0.15) {
 					ctx.fillRect(self.tbCanvas.dims.controlSize * 0.15,
 						self.tbCanvas.dims.controlSize * (0 + y),
@@ -355,9 +366,10 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 					self.tbCanvas.dims.controlSize * 0.77,
 					self.tbCanvas.dims.controlSize * 0.36,
 					self.tbCanvas.dims.controlSize * 0.06,
-					"white",
+					self.srcForAsm !== null ? "#777" : "white",
 					!self.isLockedWithVPL);
-	            ctx.fillStyle = self.isLockedWithVPL || isDown ? "white" : "#44a";
+	            ctx.fillStyle = self.srcForAsm !== null ? "#777" :
+					self.isLockedWithVPL || isDown ? "white" : "#44a";
 	            ctx.fillRect(self.tbCanvas.dims.controlSize * 0.1,
 	                self.tbCanvas.dims.controlSize * 0.8,
 	                self.tbCanvas.dims.controlSize * 0.8,
@@ -366,8 +378,10 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			},
 			// action
 			function (ev) {
-				self.lockWithVPL(!self.isLockedWithVPL);
-				self.tbCanvas.redraw();
+				if (self.srcForAsm === null) {
+					self.lockWithVPL(!self.isLockedWithVPL);
+					self.tbCanvas.redraw();
+				}
 			},
 			// doDrop
 			null,
@@ -385,16 +399,18 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 				var languageAbbr = {"aseba": "Aa", "l2": "l2", "js": "js"};
 				var s = self.tbCanvas.dims.controlSize;
 				ctx.save();
-				ctx.fillStyle = isDown
-					? self.tbCanvas.dims.controlDownColor
-					: self.tbCanvas.dims.controlColor;
+				ctx.fillStyle = self.srcForAsm !== null
+ 					? self.tbCanvas.dims.controlColor
+					: isDown
+						? self.tbCanvas.dims.controlDownColor
+						: self.tbCanvas.dims.controlColor;
 				ctx.fillRect(0, 0, s, s);
 				ctx.beginPath();
 				for (var i = 0; i < 3; i++) {
 					ctx.moveTo(s * 0.2, s * (0.2 + 0.1 * i));
 					ctx.lineTo(s * 0.5, s * (0.2 + 0.1 * i));
 				}
-				ctx.strokeStyle = "white";
+				ctx.strokeStyle = self.srcForAsm !== null ? "#777" : "white";
 				ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
 				ctx.stroke();
 				for (var i = 0; i < 3; i++) {
@@ -405,23 +421,80 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 						{
 							arrowAtStart: false,
 							arrowSize: 3 * self.tbCanvas.dims.blockLineWidth,
-							style: "white"
+							style: self.srcForAsm !== null ? "#777" : "white"
 						});
 				}
 				ctx.textAlign = "center";
 				ctx.textBaseline = "middle";
 				ctx.font = "bold " + Math.round(s / 3).toString(10) + "px sans-serif";
-				ctx.fillStyle = "white";
+				ctx.fillStyle = self.srcForAsm !== null ? "#777" : "white";
 				ctx.fillText(languageAbbr[self.language], s * 0.5, s * 0.7);
 				ctx.restore();
 			},
 			// action
 			function (ev) {
-				var r = self.changeLanguage();
-				self.language = r.language;
-				if (self.isLockedWithVPL) {
-					self.setCode(r.code);
+				if (self.srcForAsm === null) {
+					var r = self.changeLanguage();
+					self.language = r.language;
+					if (self.isLockedWithVPL) {
+						self.setCode(r.code);
+					}
 				}
+			},
+			// doDrop
+			null,
+			// canDrop
+			null);
+	}
+
+	if (this.disass !== null) {
+		// display disassembly
+		this.addControl(controlBar, "src:disass",
+			// draw
+			function (ctx, width, height, isDown) {
+				var isEnabled = self.disass(self.language, "") !== null;
+				var s = self.tbCanvas.dims.controlSize;
+				ctx.save();
+				ctx.fillStyle = isEnabled && isDown
+					? self.tbCanvas.dims.controlDownColor
+					: self.srcForAsm !== null
+						? self.tbCanvas.dims.controlActiveColor
+						: self.tbCanvas.dims.controlColor;
+				ctx.fillRect(0, 0, s, s);
+				ctx.beginPath();
+				ctx.moveTo(s * 0.2, s * 0.2);
+				ctx.lineTo(s * 0.3, s * 0.2);
+				for (var i = 0; i < 5; i++) {
+					ctx.moveTo(s * 0.4, s * (0.2 + 0.1 * i));
+					ctx.lineTo(s * 0.45, s * (0.2 + 0.1 * i));
+					ctx.moveTo(s * 0.55, s * (0.2 + 0.1 * i));
+					ctx.lineTo(s * 0.65, s * (0.2 + 0.1 * i));
+				}
+				ctx.strokeStyle = "white";
+				ctx.lineWidth = self.tbCanvas.dims.blockLineWidth;
+				ctx.stroke();
+				ctx.fillStyle = self.srcForAsm !== null || isDown ? "white" : "#44a";
+	            ctx.fillRect(self.tbCanvas.dims.controlSize * 0.1,
+	                self.tbCanvas.dims.controlSize * 0.8,
+	                self.tbCanvas.dims.controlSize * 0.8,
+	                self.tbCanvas.dims.controlSize * 0.1);
+				ctx.restore();
+			},
+			// action
+			function (ev) {
+				if (self.srcForAsm !== null) {
+					self.setCode(/** @type {string} */(self.srcForAsm));
+					self.textEditor.setReadOnly(self.isLockedWithVPL);
+				} else {
+					var src = self.getCode();
+					var dis = self.disass(self.language, src);
+					if (dis !== null) {
+						self.setCode(/** @type {string} */(dis), true);
+						self.textEditor.setReadOnly(true);
+						self.srcForAsm = src;
+					}
+				}
+				self.toolbarRender();
 			},
 			// doDrop
 			null,
