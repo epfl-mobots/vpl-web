@@ -95,7 +95,7 @@ A3a.vpl.patchJSBlocks = function () {
 					}
 				}
 				if (cond === "") {
-					for (var i = 1; i < 7; i++) {
+					for (var i = 0; i < 7; i++) {
 						cond += " || this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " && "
@@ -119,7 +119,7 @@ A3a.vpl.patchJSBlocks = function () {
 					}
 				}
 				if (cond === "") {
-					for (var i = 1; i < 7; i++) {
+					for (var i = 0; i < 7; i++) {
 						cond += " || this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " || "
@@ -142,7 +142,7 @@ A3a.vpl.patchJSBlocks = function () {
 					}
 				}
 				if (cond === "") {
-					for (var i = 1; i < 7; i++) {
+					for (var i = 0; i < 7; i++) {
 						cond += " || this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " || "
@@ -164,7 +164,7 @@ A3a.vpl.patchJSBlocks = function () {
 					}
 				}
 				if (cond === "") {
-					for (var i = 1; i < 2; i++) {
+					for (var i = 0; i < 2; i++) {
 						cond += " || this.get(\"prox.ground.delta\")[" + i + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " || "
@@ -188,7 +188,7 @@ A3a.vpl.patchJSBlocks = function () {
 					}
 				}
 				if (cond === "") {
-					for (var i = 1; i < 2; i++) {
+					for (var i = 0; i < 2; i++) {
 						cond += " || this.get(\"prox.ground.delta\")[" + i + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " || "
@@ -211,7 +211,7 @@ A3a.vpl.patchJSBlocks = function () {
 					}
 				}
 				if (cond === "") {
-					for (var i = 1; i < 2; i++) {
+					for (var i = 0; i < 2; i++) {
 						cond += " || this.get(\"prox.ground.delta\")[" + i + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " || "

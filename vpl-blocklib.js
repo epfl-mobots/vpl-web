@@ -246,8 +246,8 @@ A3a.vpl.BlockTemplate.lib =	[
 						}
 					}
 					if (cond === "") {
-						for (var i = 1; i < 7; i++) {
-							cond += " or prox.horizontal[" + buttons[i] + "] >= 2000";
+						for (var i = 0; i < 7; i++) {
+							cond += " or prox.horizontal[" + buttons[i].str + "] >= 2000";
 						}
 						cond = cond.slice(4);	// crop initial " or "
 					}
@@ -361,7 +361,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						}
 					}
 					if (cond === "") {
-						for (var i = 1; i < 7; i++) {
+						for (var i = 0; i < 7; i++) {
 							cond += " or prox.horizontal[" + buttons[i].str + "] >= 2000";
 						}
 						cond = cond.slice(5);	// crop initial " or "
@@ -468,7 +468,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						}
 					}
 					if (cond === "") {
-						for (var i = 1; i < 7; i++) {
+						for (var i = 0; i < 7; i++) {
 							cond += " or prox.horizontal[" + buttons[i].str + "] >= 2000";
 						}
 						cond = cond.slice(5);	// crop initial " or "
@@ -542,8 +542,8 @@ A3a.vpl.BlockTemplate.lib =	[
 						}
 					}
 					if (cond === "") {
-						for (var i = 1; i < 2; i++) {
-							cond += " or prox.ground.delta[" + buttons[i] + "] >= 450";
+						for (var i = 0; i < 2; i++) {
+							cond += " or prox.ground.delta[" + buttons[i].str + "] >= 450";
 						}
 						cond = cond.slice(4);	// crop initial " or "
 					}
@@ -649,8 +649,8 @@ A3a.vpl.BlockTemplate.lib =	[
 						}
 					}
 					if (cond === "") {
-						for (var i = 1; i < 2; i++) {
-							cond += " or prox.ground.delta[" + buttons[i] + "] >= 450";
+						for (var i = 0; i < 2; i++) {
+							cond += " or prox.ground.delta[" + buttons[i].str + "] >= 450";
 						}
 						cond = cond.slice(4);	// crop initial " or "
 					}
@@ -750,8 +750,8 @@ A3a.vpl.BlockTemplate.lib =	[
 						}
 					}
 					if (cond === "") {
-						for (var i = 1; i < 2; i++) {
-							cond += " or prox.ground.delta[" + buttons[i] + "] >= 450";
+						for (var i = 0; i < 2; i++) {
+							cond += " or prox.ground.delta[" + buttons[i].str + "] >= 450";
 						}
 						cond = cond.slice(4);	// crop initial " or "
 					}

@@ -135,7 +135,7 @@ A3a.vpl.patchL2Blocks = function () {
 					}
 				}
 				if (cond === "") {
-					for (var i = 1; i < 7; i++) {
+					for (var i = 0; i < 7; i++) {
 						cond += " || prox.horizontal[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 2000";
 					}
 					cond = cond.slice(4);	// crop initial " && "
@@ -160,7 +160,7 @@ A3a.vpl.patchL2Blocks = function () {
 					}
 				}
 				if (cond === "") {
-					for (var i = 1; i < 7; i++) {
+					for (var i = 0; i < 7; i++) {
 						cond += " || prox.horizontal[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 2000";
 					}
 					cond = cond.slice(4);	// crop initial " || "
@@ -183,7 +183,7 @@ A3a.vpl.patchL2Blocks = function () {
 					}
 				}
 				if (cond === "") {
-					for (var i = 1; i < 7; i++) {
+					for (var i = 0; i < 7; i++) {
 						cond += " || prox.horizontal[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 2000";
 					}
 					cond = cond.slice(4);	// crop initial " || "
@@ -205,7 +205,7 @@ A3a.vpl.patchL2Blocks = function () {
 					}
 				}
 				if (cond === "") {
-					for (var i = 1; i < 2; i++) {
+					for (var i = 0; i < 2; i++) {
 						cond += " || prox.ground.delta[" + i + "] >= 450";
 					}
 					cond = cond.slice(4);	// crop initial " || "
@@ -229,7 +229,7 @@ A3a.vpl.patchL2Blocks = function () {
 					}
 				}
 				if (cond === "") {
-					for (var i = 1; i < 2; i++) {
+					for (var i = 0; i < 2; i++) {
 						cond += " || prox.ground.delta[" + i + "] >= 450";
 					}
 					cond = cond.slice(4);	// crop initial " || "
@@ -252,7 +252,7 @@ A3a.vpl.patchL2Blocks = function () {
 					}
 				}
 				if (cond === "") {
-					for (var i = 1; i < 2; i++) {
+					for (var i = 0; i < 2; i++) {
 						cond += " || prox.ground.delta[" + i + "] >= 450";
 					}
 					cond = cond.slice(4);	// crop initial " || "
