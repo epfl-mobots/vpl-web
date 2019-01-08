@@ -282,8 +282,7 @@ A3a.vpl.Canvas = function (canvas) {
 				A3a.vpl.dragFun = function (dragEvent, isUp) {
 					var mouseEvent = self.makeMouseEvent(dragEvent);
 					if (isUp) {
-						if (item.zoomOnLongPress && item === self.items[self.clickedItemIndex(mouseEvent, false)[0]]
-							&& Date.now() - self.clickTimestamp > 500) {
+						if (item.zoomOnLongPress && item === self.items[self.clickedItemIndex(mouseEvent, false)[0]]) {
 							self.zoomedItemIndex = indices[0];
 							self.zoomedItemProxy = item.zoomOnLongPress(item);
 						} else if (dropTarget && dropTarget.doDrop

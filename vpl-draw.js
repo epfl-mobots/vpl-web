@@ -9,33 +9,11 @@
 	@param {A3a.vpl.blockType} blockType
 	@param {boolean} doesZoomOnLongPress true to display hint that a long
 	press is needed to zoom the block before control widgets can be manipulated
+	(currently ignored)
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.blockBackground = function (blockType, doesZoomOnLongPress) {
 	this.ctx.save();
-	if (doesZoomOnLongPress) {
-		// rounded corner clip
-		var f = 0.2;
-		this.ctx.beginPath();
-		this.ctx.moveTo(0, this.dims.blockSize * f);
-		this.ctx.lineTo(0, this.dims.blockSize * (1 - f));
-		this.ctx.arc(this.dims.blockSize * f, this.dims.blockSize * (1 - f),
-			this.dims.blockSize * f,
-			Math.PI * 1, Math.PI * 0.5, true);
-		this.ctx.lineTo(this.dims.blockSize * (1 - f), this.dims.blockSize);
-		this.ctx.arc(this.dims.blockSize * (1 - f), this.dims.blockSize * (1 - f),
-			this.dims.blockSize * f,
-			Math.PI * 0.5, Math.PI * 0, true);
-		this.ctx.lineTo(this.dims.blockSize, this.dims.blockSize * f);
-		this.ctx.arc(this.dims.blockSize * (1 - f), this.dims.blockSize * f,
-			this.dims.blockSize * f,
-			Math.PI * 0, Math.PI * 1.5, true);
-		this.ctx.lineTo(this.dims.blockSize * f, 0);
-		this.ctx.arc(this.dims.blockSize * f, this.dims.blockSize * f,
-			this.dims.blockSize * f,
-			Math.PI * 1.5, Math.PI * 1, true);
-		this.ctx.clip();
-	}
 	this.ctx.fillStyle = {
 		"e": this.dims.eventStyle,
 		"a": this.dims.actionStyle,

@@ -112,8 +112,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x, y, opts
 		}
 	);
 	var canvasSize = canvas.getSize();
-	if (!(opts && opts.notInteractive || !block.blockTemplate.mousedown)
-		&& canvas.dims.blockSize < 60) {
+	if (!(opts && opts.notInteractive || !block.blockTemplate.mousedown) && self.zoomBlocks) {
 		item.zoomOnLongPress = function (zoomedItem) {
 			return canvas.makeZoomedClone(zoomedItem);
 		};
@@ -183,8 +182,13 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		// draw
 		function (ctx, item, dx, dy) {
 			// gray strip
-			ctx.fillStyle = canvas.dims.ruleBackground;
-			ctx.fillRect(item.x + dx, item.y + dy, item.width, item.height);
+			if (self.zoomBlocks) {
+				ctx.strokeStyle = canvas.dims.ruleMarks;
+				ctx.strokeRect(item.x + dx, item.y + dy, item.width, item.height);
+			} else {
+				ctx.fillStyle = canvas.dims.ruleBackground;
+				ctx.fillRect(item.x + dx, item.y + dy, item.width, item.height);
+			}
 			// colon (two darker dots)
 			ctx.fillStyle = canvas.dims.ruleMarks;
 			ctx.beginPath();
@@ -527,6 +531,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		canvas.dims.blockSize * nMaxEventHandlerELength +
 		canvas.dims.interBlockSpace * (nMaxEventHandlerELength - 1) +
 		canvas.dims.interEventActionSpace;
+
+	// zoom blocks if too small
+	this.zoomBlocks = canvas.dims.blockSize < 60;
 
 	// start with an empty canvas
 	canvas.clearItems();
