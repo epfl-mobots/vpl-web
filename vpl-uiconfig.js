@@ -11,6 +11,7 @@
 A3a.vpl.UIConfig = function () {
 	/** @type {Array.<string>} */
 	this.disabledUI = [];
+	this.customizationMode = false;
 };
 
 /** Reset UI

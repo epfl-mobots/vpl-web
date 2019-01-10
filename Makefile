@@ -38,7 +38,11 @@ JS = \
 	vpl-code-aseba.js \
 	vpl-code-l2.js \
 	vpl-code-js.js \
+	vpl-cmd.js \
+	vpl-cmd-vpl.js \
 	vpl-controlbar.js \
+	vpl-buttons-js.js \
+	vpl-controlbar-btn.js \
 	vpl-program-canvas.js \
 	vpl-canvas.js \
 	vpl-draw.js \
@@ -53,6 +57,7 @@ JS = \
 	vpl-aeslfile.js \
 	vpl-texteditor.js \
 	vpl-sourceedit.js \
+	vpl-cmd-src.js \
 	vpl-runglue.js \
 	vpl-main.js \
 	vpl-robot.js \
@@ -74,6 +79,7 @@ JS = \
 	vpl-sim.js \
 	vpl-obstacles.js \
 	vpl-sim2d.js \
+	vpl-cmd-sim.js \
 	vpl-thymio.js
 
 .PHONY: all

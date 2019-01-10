@@ -247,6 +247,8 @@ function vplSetup(gui) {
 	var uiConfig = new A3a.vpl.UIConfig();
 	uiConfig.setDisabledFeatures(advancedFeatures ? [] : ["src:language"]);
 
+	window["vplCommands"] = new A3a.vpl.Commands();
+
 	window["vplProgram"] = new A3a.vpl.Program(A3a.vpl.mode.basic, uiConfig);
 	window["vplProgram"].currentLanguage = language;
 	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["vplProgram"].noVPL,
@@ -274,6 +276,10 @@ function vplSetup(gui) {
 		window["vplEditor"].setCode(window["vplProgram"].getCode(window["vplProgram"].currentLanguage));
 	};
 	window["vplProgram"].addEventHandler(true);
+
+	window["vplProgram"].addVPLCommands(window["vplCommands"], window["vplCanvas"], window["vplEditor"], window["vplRun"]);
+	window["vplEditor"].addSrcCommands(window["vplCommands"], window["vplRun"]);
+	window["vplSim"] && window["vplSim"].sim.addSim2DCommands(window["vplCommands"], window["vplEditor"]);
 
 	if (window["vplRun"]) {
 		var stopBlock = A3a.vpl.BlockTemplate.findByName("!stop");
@@ -396,13 +402,6 @@ function vplSetup(gui) {
 		} catch (e) {}
 	}
 
-	// initial canvas resize
-	vplResize();
-	window["vplCanvas"].onUpdate();
-
-	// resize canvas
-	window.addEventListener("resize", vplResize, false);
-
 	if (getQueryOption("view") === "text") {
 		window["vplProgram"].setView("src", {noVpl: true});
 	} else {
@@ -454,6 +453,14 @@ function vplSetup(gui) {
 			}
 		};
 	}
+
+	// initial canvas resize
+	vplResize();
+	window["vplCanvas"].onUpdate();
+	window["vplEditor"].resize();
+
+	// resize canvas
+	window.addEventListener("resize", vplResize, false);
 
 	window["vplEditor"].toolbarRender();
 

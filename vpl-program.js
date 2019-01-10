@@ -32,7 +32,6 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.code = {};
 	this.currentLanguage = A3a.vpl.defaultLanguage;
 
-	this.customizationMode = false;
 	/** @type {Array.<string>} */
 	this.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
 	/** @type {Array.<string>} */
