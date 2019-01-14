@@ -669,6 +669,7 @@
 	"overlays": [
 		"aseba.json",
 		"l2.json",
-		"js.json"
+		"js.json",
+		"toolbars.json"
 	]
 }

@@ -159,6 +159,33 @@ function vplSetup(gui) {
 		return "";
 	}
 
+	// handle overlays in gui
+	if (gui && gui["overlays"]) {
+		gui["blocks"] = gui["blocks"] || [];
+		gui["overlays"].forEach(function (filename) {
+			var overlay = JSON.parse(gui.rsrc[filename]);
+			for (var key in overlay) {
+				if (overlay.hasOwnProperty(key)) {
+					switch (key) {
+					case "blocks":
+						// concat arrays
+						gui[key] = gui[key].concat(overlay[key]);
+						break;
+					case "toolbars":
+						// merge objects
+						for (var key2 in overlay[key]) {
+							if (overlay[key].hasOwnProperty(key2)) {
+								gui[key] = gui[key] || {};	// ensure gui[key] exists
+								gui[key][key2] = overlay[key][key2];
+							}
+						}
+						break;
+					}
+				}
+			}
+		});
+	}
+
 	// general settings
 	var isClassic = gui == undefined || getQueryOption("appearance") === "classic";
 	window["vplUseLocalStorage"] = getQueryOption("storage") === "local";
@@ -172,7 +199,10 @@ function vplSetup(gui) {
 		}
 	} else if (gui) {
 		try {
-			A3a.vpl.patchSVG(gui);
+			A3a.vpl.patchUISVG(gui);
+		} catch (e) {}
+		try {
+			A3a.vpl.patchBlocksSVG(gui);
 		} catch (e) {}
 	}
 	var advancedFeatures = getQueryOption("adv") === "true";
@@ -278,8 +308,17 @@ function vplSetup(gui) {
 	window["vplProgram"].addEventHandler(true);
 
 	window["vplProgram"].addVPLCommands(window["vplCommands"], window["vplCanvas"], window["vplEditor"], window["vplRun"]);
+	if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["vpl"]) {
+		window["vplProgram"].toolbarConfig = gui["toolbars"]["vpl"];
+	}
 	window["vplEditor"].addSrcCommands(window["vplCommands"], window["vplRun"]);
+	if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["editor"]) {
+		window["vplEditor"].toolbarConfig = gui["toolbars"]["editor"];
+	}
 	window["vplSim"] && window["vplSim"].sim.addSim2DCommands(window["vplCommands"], window["vplEditor"]);
+	if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["simulator"]) {
+		window["vplSim"].toolbarConfig = gui["toolbars"]["simulator"];
+	}
 
 	if (window["vplRun"]) {
 		var stopBlock = A3a.vpl.BlockTemplate.findByName("!stop");

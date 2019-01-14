@@ -58,6 +58,7 @@ JS = \
 	vpl-texteditor.js \
 	vpl-sourceedit.js \
 	vpl-cmd-src.js \
+	vpl-ui-svg.js \
 	vpl-runglue.js \
 	vpl-main.js \
 	vpl-robot.js \

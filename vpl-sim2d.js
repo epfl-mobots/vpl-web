@@ -504,27 +504,27 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 
 	// top controls
 	var controlBar = new A3a.vpl.ControlBar(this.simCanvas);
-
-	var self = this;
-
-	controlBar.addStretch();
-	controlBar.addButton(this.uiConfig, "sim:restart");
-	controlBar.addButton(this.uiConfig, "sim:pause");
-	controlBar.addSpace();
-	controlBar.addButton(this.uiConfig, "sim:speedup");
-	controlBar.addButton(this.uiConfig, "sim:noise");
-	controlBar.addStretch();
-	controlBar.addButton(this.uiConfig, "sim:pen");
-	controlBar.addButton(this.uiConfig, "sim:clear");
-	controlBar.addSpace();
-	controlBar.addButton(this.uiConfig, "sim:map-kind");
-	controlBar.addButton(this.uiConfig, "sim:map");
-	controlBar.addStretch();
-	controlBar.addButton(this.uiConfig, "sim:vpl");
-	controlBar.addButton(this.uiConfig, "sim:text");
-	controlBar.addStretch();
-	controlBar.addButton(this.uiConfig, "sim:teacher-reset");
-	controlBar.addButton(this.uiConfig, "sim:teacher");
+	controlBar.setButtons(this.uiConfig,
+		this.tollbarConfig || [
+			"!stretch",
+			"sim:restart",
+			"sim:pause",
+			"!space",
+			"sim:speedup",
+			"sim:noise",
+			"!stretch",
+			"sim:pen",
+			"sim:clear",
+			"!space",
+			"sim:map-kind",
+			"sim:map",
+			"!stretch",
+			"sim:vpl",
+			"sim:text",
+			"!stretch",
+			"sim:teacher-reset",
+			"sim:teacher"
+		]);
 
 	var smallBtnSize = this.simCanvas.dims.controlSize * 0.6;
 
@@ -535,6 +535,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	controlBar.addToCanvas();
 
 	// add buttons for events
+	var self = this;
 	var yRobotControl = this.simCanvas.dims.margin;
 	function drawButtonTri(ctx, x, y, rot, isDown) {
 		ctx.save();

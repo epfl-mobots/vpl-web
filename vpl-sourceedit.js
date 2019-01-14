@@ -32,10 +32,13 @@ A3a.vpl.VPLSourceEditor = function (noVPL, language, uiConfig, runGlue) {
 		window["vplBreakpointsFunction"] && window["vplBreakpointsFunction"](bp);
 	};
 
+	var self = this;
+
 	var canvasElement = document.getElementById("editorTBCanvas");
 	this.tbCanvas = new A3a.vpl.Canvas(canvasElement);
-
-	var self = this;
+	this.tbCanvas.onUpdate = function () {
+		self.toolbarRender();
+	};
 
 	// editor control update
 	document.getElementById("editor").addEventListener("input",
@@ -136,24 +139,24 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 
 	// top controls
 	var controlBar = new A3a.vpl.ControlBar(this.tbCanvas);
-
-	var self = this;
-
-	controlBar.addButton(this.uiConfig, "src:new");
-	controlBar.addButton(this.uiConfig, "src:save");
-	controlBar.addButton(this.uiConfig, "src:vpl");
-	controlBar.addButton(this.uiConfig, "src:locked");
-	controlBar.addSpace();
-	controlBar.addButton(this.uiConfig, "src:language");
-	controlBar.addButton(this.uiConfig, "src:disass");
-	controlBar.addStretch();
-	controlBar.addButton(this.uiConfig, "src:run");
-	controlBar.addButton(this.uiConfig, "src:stop");
-	controlBar.addSpace();
-	controlBar.addButton(this.uiConfig, "src:sim");
-	controlBar.addStretch();
-	controlBar.addButton(this.uiConfig, "src:teacher-reset");
-	controlBar.addButton(this.uiConfig, "src:teacher");
+	controlBar.setButtons(this.uiConfig,
+		this.toolbarConfig || [
+			"src:new",
+			"src:save",
+			"src:vpl",
+			"src:locked",
+			"!space",
+			"src:language",
+			"src:disass",
+			"!stretch",
+			"src:run",
+			"src:stop",
+			"!space",
+			"src:sim",
+			"!stretch",
+			"src:teacher-reset",
+			"src:teacher"
+		]);
 
 	controlBar.calcLayout(this.tbCanvas.dims.margin, canvasSize.width - this.tbCanvas.dims.margin,
 		this.tbCanvas.dims.controlSize,

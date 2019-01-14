@@ -149,8 +149,8 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 			srcEditor.uiConfig.customizationMode = !srcEditor.uiConfig.customizationMode;
 			srcEditor.toolbarRender();
 		},
-		isEnabled: function (srcEditor) {
-			return !srcEditor.isLockedWithVPL;
+		isSelected: function (srcEditor) {
+			return srcEditor.uiConfig.customizationMode;
 		},
 		object: this,
 		keep: true,

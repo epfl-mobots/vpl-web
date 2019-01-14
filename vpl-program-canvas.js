@@ -521,30 +521,31 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 	// top controls
 	var controlBar = new A3a.vpl.ControlBar(canvas);
-
-	controlBar.addButton(this.uiConfig, "vpl:new");
-	controlBar.addButton(this.uiConfig, "vpl:save");
-	controlBar.addButton(this.uiConfig, "vpl:upload");
-	controlBar.addButton(this.uiConfig, "vpl:text");
-	controlBar.addSpace();
-	controlBar.addButton(this.uiConfig, "vpl:advanced");
-	controlBar.addStretch();
-	controlBar.addButton(this.uiConfig, "vpl:undo");
-	controlBar.addButton(this.uiConfig, "vpl:redo");
-	controlBar.addStretch();
-	controlBar.addButton(this.uiConfig, "vpl:run");
-	controlBar.addButton(this.uiConfig, "vpl:stop");
-	controlBar.addButton(this.uiConfig, "vpl:sim");
-	controlBar.addStretch();
-	controlBar.addButton(this.uiConfig, "vpl:duplicate");
-	controlBar.addButton(this.uiConfig, "vpl:disable");
-	controlBar.addButton(this.uiConfig, "vpl:lock");
-	controlBar.addButton(this.uiConfig, "vpl:trashcan");
-	controlBar.addStretch();
-	controlBar.addButton(this.uiConfig, "vpl:teacher-reset");
-	controlBar.addButton(this.uiConfig, "vpl:teacher-save");
-	controlBar.addButton(this.uiConfig, "vpl:teacher");
-
+	controlBar.setButtons(this.uiConfig,
+		this.toolbarConfig || [
+			"vpl:new",
+			"vpl:save",
+			"vpl:upload",
+			"vpl:text",
+			"!space",
+			"vpl:advanced",
+			"!stretch",
+			"vpl:undo",
+			"vpl:redo",
+			"!stretch",
+			"vpl:run",
+			"vpl:stop",
+			"vpl:sim",
+			"!stretch",
+			"vpl:duplicate",
+			"vpl:disable",
+			"vpl:lock",
+			"vpl:trashcan",
+			"!stretch",
+			"vpl:teacher-reset",
+			"vpl:teacher-save",
+			"vpl:teacher",
+		]);
 	controlBar.calcLayout(canvas.dims.margin, canvasSize.width - canvas.dims.margin,
 		canvas.dims.controlSize,
 		canvas.dims.interBlockSpace, 2 * canvas.dims.interBlockSpace);

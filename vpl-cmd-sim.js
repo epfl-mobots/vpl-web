@@ -157,8 +157,8 @@ A3a.vpl.VPLSim2DViewer.prototype.addSim2DCommands = function (commands, editor) 
 			sim2d.uiConfig.customizationMode = !sim2d.uiConfig.customizationMode;
 			sim2d.render();
 		},
-		isEnabled: function (sim2d) {
-			return !sim2d.isLockedWithVPL;
+		isSelected: function (sim2d) {
+			return sim2d.uiConfig.customizationMode;
 		},
 		object: this,
 		keep: true,

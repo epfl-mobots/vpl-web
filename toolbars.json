@@ -1,0 +1,60 @@
+{
+	"toolbars": {
+		"vpl": [
+			"vpl:new",
+			"vpl:save",
+			"vpl:text",
+			"!space",
+			"vpl:advanced",
+			"!stretch",
+			"vpl:undo",
+			"vpl:redo",
+			"!stretch",
+			"vpl:run",
+			"vpl:stop",
+			"vpl:sim",
+			"!stretch",
+			"vpl:trashcan",
+			"!stretch",
+			"vpl:teacher-reset",
+			"vpl:teacher-save",
+			"vpl:teacher"
+		],
+		"editor": [
+			"src:new",
+			"src:save",
+			"src:vpl",
+			"src:locked",
+			"!space",
+			"src:language",
+			"!stretch",
+			"src:run",
+			"src:stop",
+			"!space",
+			"src:sim",
+			"!stretch",
+			"src:teacher-reset",
+			"src:teacher"
+		],
+		"simulator": [
+			"!stretch",
+			"sim:restart",
+			"sim:pause",
+			"!space",
+			"sim:speedup",
+			"sim:noise",
+			"!stretch",
+			"sim:pen",
+			"sim:clear",
+			"!space",
+			"sim:map-kind",
+			"sim:map",
+			"!stretch",
+			"sim:vpl",
+			"sim:text",
+			"!stretch",
+			"sim:teacher-reset",
+			"sim:teacher"
+		]
+	}
+}

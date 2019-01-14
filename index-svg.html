@@ -682,7 +682,8 @@
 	"overlays": [
 		"aseba.json",
 		"l2.json",
-		"js.json"
+		"js.json",
+		"toolbars.json"
 	]
 }
 </script>
@@ -1057,6 +1058,69 @@
 			"name": "Ac_music"
 		}
 	]
+}
+</script>
+
+<script type="application/json" id="toolbars.json">
+{
+	"toolbars": {
+		"vpl": [
+			"vpl:new",
+			"vpl:save",
+			"vpl:text",
+			"!space",
+			"vpl:advanced",
+			"!stretch",
+			"vpl:undo",
+			"vpl:redo",
+			"!stretch",
+			"vpl:run",
+			"vpl:stop",
+			"vpl:sim",
+			"!stretch",
+			"vpl:trashcan",
+			"!stretch",
+			"vpl:teacher-reset",
+			"vpl:teacher-save",
+			"vpl:teacher"
+		],
+		"editor": [
+			"src:new",
+			"src:save",
+			"src:vpl",
+			"src:locked",
+			"!space",
+			"src:language",
+			"!stretch",
+			"src:run",
+			"src:stop",
+			"!space",
+			"src:sim",
+			"!stretch",
+			"src:teacher-reset",
+			"src:teacher"
+		],
+		"simulator": [
+			"!stretch",
+			"sim:restart",
+			"sim:pause",
+			"!space",
+			"sim:speedup",
+			"sim:noise",
+			"!stretch",
+			"sim:pen",
+			"sim:clear",
+			"!space",
+			"sim:map-kind",
+			"sim:map",
+			"!stretch",
+			"sim:vpl",
+			"sim:text",
+			"!stretch",
+			"sim:teacher-reset",
+			"sim:teacher"
+		]
+	}
 }
 </script>
 
@@ -1827,6 +1891,7 @@ window["vplOnRun"] = function (code) {
 <script src="vpl-texteditor.js"></script>
 <script src="vpl-sourceedit.js"></script>
 <script src="vpl-cmd-src.js"></script>
+<script src="vpl-ui-svg.js"></script>
 <script src="vpl-runglue.js"></script>
 <script src="vpl-main.js"></script>
 

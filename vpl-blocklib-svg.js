@@ -691,7 +691,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 	@param {Object} uiConfig
 	@return {void}
 */
-A3a.vpl.patchSVG = function (uiConfig) {
+A3a.vpl.patchBlocksSVG = function (uiConfig) {
 	A3a.vpl.BlockTemplate.uiConfig = uiConfig;
 
 	// general ui parameters
@@ -729,12 +729,6 @@ A3a.vpl.patchSVG = function (uiConfig) {
 	/** @type {Array.<A3a.vpl.BlockTemplate>} */
 	var lib = [];
 	A3a.vpl.loadBlockOverlay(uiConfig, uiConfig["blocks"], lib);
-
-	// apply overlays
-	(uiConfig["overlays"] || []).forEach(function (filename) {
-		var overlay = /** @type {Object} */(JSON.parse(uiConfig.rsrc[filename]));
-		A3a.vpl.loadBlockOverlay(overlay, overlay["blocks"], lib);
-	});
 
 	A3a.vpl.BlockTemplate.lib = lib;
 };

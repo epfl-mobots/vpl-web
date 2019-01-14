@@ -54,3 +54,25 @@ A3a.vpl.ControlBar.prototype.addButton = function (uiConfig, id) {
 			id);
 	}
 };
+
+/** Set all the buttons
+	@param {A3a.vpl.UIConfig} uiConfig
+	@param {Array.<string>} buttons button id, "!space" for space, "!stretch" for stretch
+	@return {void}
+*/
+A3a.vpl.ControlBar.prototype.setButtons = function (uiConfig, buttons) {
+	this.reset();
+	for (var i = 0; i < buttons.length; i++) {
+		switch (buttons[i]) {
+		case "!space":
+			this.addSpace();
+			break;
+		case "!stretch":
+			this.addStretch();
+			break;
+		default:
+			this.addButton(uiConfig, buttons[i]);
+			break;
+		}
+	}
+};
