@@ -620,7 +620,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	// scroll region
 	var scrollingAreaX = 2 * canvas.dims.margin - canvas.dims.interBlockSpace +
 		step * evCol;
-	var scrollingAreaW = canvasSize.width - 2 * scrollingAreaX + (evCol - acCol) * step;
+	var scrollingAreaW = canvasSize.width - 2 * scrollingAreaX + (evCol - acCol) * step - canvas.dims.scrollbarWidth;
 	var scrollingTotalHeight = this.program.length
 		* (canvas.dims.blockSize + canvas.dims.interRowSpace);
 	renderingState.vertScroll = Math.max(0, Math.min(renderingState.vertScroll, scrollingTotalHeight - scrollingAreaH));
@@ -647,8 +647,8 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			: null,
 		null,
 		null);
-	eventX0 += (evCol - acCol) * step / 2;
-	actionX0 += (evCol - acCol) * step / 2;
+	eventX0 += (evCol - acCol) * step / 2 - canvas.dims.scrollbarWidth / 2;
+	actionX0 += (evCol - acCol) * step / 2 - canvas.dims.scrollbarWidth / 2;
 	scrollingAreaItem.draggable = false;
 	canvas.setItem(scrollingAreaItem);
 	if (scrollingTotalHeight > scrollingAreaH) {
@@ -660,12 +660,12 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			var scrollbarRelMotion = renderingState.vertScroll / (scrollingTotalHeight - scrollingAreaH);
 			var scrollbarMotion = scrollbarRelMotion * scrollbarMaxMotion;
 			ctx.save();
-			ctx.fillStyle = "#ccc";
+			ctx.fillStyle = canvas.dims.scrollbarBackgroundColor;
 			ctx.fillRect(scrollingAreaX + scrollingAreaW + 2, scrollingAreaY,
-				5, scrollingAreaH);
-			ctx.fillStyle = "navy";
+				canvas.dims.scrollbarWidth, scrollingAreaH);
+			ctx.fillStyle = canvas.dims.scrollbarThumbColor;
 			ctx.fillRect(scrollingAreaX + scrollingAreaW + 2, scrollingAreaY + scrollbarMotion,
-				5, scrollbarAbsLength);
+				canvas.dims.scrollbarWidth, scrollbarAbsLength);
 			ctx.restore();
 		});
 	}

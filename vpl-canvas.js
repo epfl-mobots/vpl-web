@@ -472,6 +472,9 @@ A3a.vpl.Canvas.prototype["update"] = function () {
 		controlSize: number,
 		controlFont: string,
 		topControlSpace: number,
+		scrollbarThumbColor: string,
+		scrollbarBackgroundColor: string,
+		scrollbarWidth: number,
 		stripHorMargin: number,
 		stripVertMargin: number,
 		eventStyle: string,
@@ -480,7 +483,8 @@ A3a.vpl.Canvas.prototype["update"] = function () {
 		commentStyle: string,
 		background: string,
 		ruleBackground: string,
-		ruleMarks: string
+		ruleMarks: string,
+
 	}}
 */
 A3a.vpl.Canvas.dims;
@@ -508,6 +512,9 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		controlSize: controlSize,
 		controlFont: "bold 15px sans-serif",
 		topControlSpace: 2 * controlSize,
+		scrollbarThumbColor: "navy",
+		scrollbarBackgroundColor: "#ccc",
+		scrollbarWidth: 5,
 		stripHorMargin: Math.min(Math.max(blockSize / 15, 2), 6),
 		stripVertMargin: Math.min(Math.max(blockSize / 15, 2), 6),
 		eventStyle: "#f70",

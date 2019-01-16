@@ -714,7 +714,10 @@ A3a.vpl.patchBlocksSVG = function (uiConfig) {
 			commentStyle: uiConfig["styles"]["comment"],
 			background: uiConfig["styles"]["background"] || "white",
 			ruleBackground: uiConfig["styles"]["ruleBackground"] || "#ddd",
-			ruleMarks: uiConfig["styles"]["ruleMarks"] || "#bbb"
+			ruleMarks: uiConfig["styles"]["ruleMarks"] || "#bbb",
+			scrollbarThumbColor: uiConfig["styles"]["scrollbarThumbColor"] || "navy",
+			scrollbarBackgroundColor: uiConfig["styles"]["scrollbarBackgroundColor"] || "#ccc",
+			scrollbarWidth: uiConfig["styles"]["scrollbarWidth"] || 5
 		};
 	};
 
