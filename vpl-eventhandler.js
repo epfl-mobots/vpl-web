@@ -242,16 +242,35 @@ A3a.vpl.EventHandler.prototype.checkConflicts = function (otherEventHandler) {
         return true;
     }
 
+    /** Check if all event blocks in an event handler are disabled
+        @param {A3a.vpl.EventHandler} eventHandler
+        @return {boolean}
+    */
+	function areEventBlocksDisabled(eventHandler) {
+		for (var i = 0; i < eventHandler.events.length; i++) {
+			if (!eventHandler.events[i].disabled) {
+				return false;
+			}
+		}
+		return true;
+	}
+
     // ok if event handlers are disabled
     if (this.disabled || otherEventHandler.disabled) {
         return false;
     }
+
+	// ok if all event blocks are disabled
+	if (areEventBlocksDisabled(this) || areEventBlocksDisabled(otherEventHandler)) {
+		return false;
+	}
 
     // ok if events are missing or in different number
     if (this.events.length === 0 ||
         otherEventHandler.events.length !== this.events.length) {
         return false;
     }
+
     // ok if events are different
     var eSorted = this.events.slice().sort(compareEvents);
     var eOtherSorted = otherEventHandler.events.slice().sort(compareEvents);
