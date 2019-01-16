@@ -900,3 +900,19 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		dr(ctx, dims, width, height, isEnabled, isSelected, isDown, obj);
 	}
 };
+
+/** Get button bounds
+	@param {string} id
+	@param {A3a.vpl.Canvas.dims} dims
+	@param {Object=} obj
+	@return {A3a.vpl.ControlBar.Bounds}
+*/
+A3a.vpl.Commands.getButtonBoundsJS = function (id, dims, obj) {
+	// fixed size
+	return {
+		xmin: 0,
+		xmax: dims.controlSize,
+		ymin: 0,
+		ymax: dims.controlSize
+	};
+};

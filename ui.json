@@ -670,6 +670,7 @@
 		"aseba.json",
 		"l2.json",
 		"js.json",
-		"toolbars.json"
+		"toolbars.json",
+		"buttons.json"
 	]
 }

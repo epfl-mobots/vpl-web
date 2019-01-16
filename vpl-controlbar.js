@@ -16,12 +16,21 @@ A3a.vpl.ControlBar = function (canvas) {
 		action: ?A3a.vpl.Canvas.controlAction,
 		doDrop: ?A3a.vpl.CanvasItem.doDrop,
 		canDrop: ?A3a.vpl.CanvasItem.canDrop,
-		pos: number
+		bounds: A3a.vpl.ControlBar.Bounds
 	}>} */
 	this.controls = [];
 	/** layout description: "X" = item, " " = separator, "s" = stretch */
 	this.layout = "";
 };
+
+/** @typedef {{
+		xmin: number,
+		xmax: number,
+		ymin: number,
+		ymax: number
+	}}
+*/
+A3a.vpl.ControlBar.Bounds;
 
 /** Reset control bar
 	@return {void}
@@ -33,19 +42,21 @@ A3a.vpl.ControlBar.prototype.reset = function () {
 
 /** Add the definition of a control button
 	@param {A3a.vpl.Canvas.controlDraw} draw
+	@param {A3a.vpl.ControlBar.Bounds} bounds
 	@param {?A3a.vpl.Canvas.controlAction=} action
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 	@param {string=} id
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addControl = function (draw, action, doDrop, canDrop, id) {
+A3a.vpl.ControlBar.prototype.addControl = function (draw, bounds, action, doDrop, canDrop, id) {
 	this.controls.push({
 		draw: draw,
 		action: action || null,
 		doDrop: doDrop || null,
 		canDrop: canDrop || null,
 		id: id || "",
+		bounds: bounds,
 		pos: 0
 	});
 	this.layout += "X";
@@ -67,14 +78,12 @@ A3a.vpl.ControlBar.prototype.addStretch = function () {
 
 /** Calculate block position based on a layout with items, fixed intervals, separators,
 	and stretch elements
-	@param {number} pMin min position (left margin)
-	@param {number} pMax max position (right margin)
-	@param {number} itemSize item size
+	@param {A3a.vpl.ControlBar.Bounds} pos
 	@param {number} gap normal gap
 	@param {number} separatorGap large gap used for separators
  	@return {void}
 */
-A3a.vpl.ControlBar.prototype.calcLayout = function (pMin, pMax, itemSize, gap, separatorGap) {
+A3a.vpl.ControlBar.prototype.calcLayout = function (pos, gap, separatorGap) {
 	// remove duplicate spaces and stretches
 	var layout = this.layout
 		.trim()
@@ -82,14 +91,17 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (pMin, pMax, itemSize, gap, s
 		.replace(/s +/g, "s").replace(/ +s/g, "s")
 		.replace(/s+/g, "s");
 	// calc. sum of fixed sizes and count stretches
-	var itemCount = 0;
+	var itemsTotalWidth = 0;
 	var gapCount = 0;
 	var sepCount = 0;
 	var stretchCount = 0;
+	var controlIx = 0;
 	for (var i = 0; i < layout.length; i++) {
 		switch (layout[i]) {
 		case "X":
-			itemCount++;
+			var bounds = this.controls[controlIx].bounds;
+			itemsTotalWidth += bounds.xmax - bounds.xmin;
+			controlIx++;
 			if (layout[i - 1] === "X") {
 				gapCount++;
 			}
@@ -103,14 +115,14 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (pMin, pMax, itemSize, gap, s
 		}
 	}
 	var stretchSize = 0;
-	if (itemSize * itemCount >= pMax - pMin) {
+	if (itemsTotalWidth >= pos.xmax - pos.xmin) {
 		// not enough room for controls without spacing
 		gap = 0;
 		separatorGap = 0;
 	} else {
 		while (true) {
-			var s = itemSize * itemCount + gap * gapCount + separatorGap * sepCount;
-			stretchSize = (pMax - pMin - s) / stretchCount;
+			var s = itemsTotalWidth + gap * gapCount + separatorGap * sepCount;
+			stretchSize = (pos.xmax - pos.xmin - s) / stretchCount;
 			if (stretchSize >= separatorGap) {
 				break;
 			}
@@ -120,18 +132,20 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (pMin, pMax, itemSize, gap, s
 	}
 	// calc. stretch size
 	// calc. positions
-	var controlIx = 0;
-	var p = pMin;
+	controlIx = 0;
+	var p = pos.xmin;
 	for (var i = 0; i < layout.length; i++) {
 		switch (layout[i]) {
 		case "X":
+			var control = this.controls[controlIx++];
 			if (layout[i - 1] === "X") {
-				this.controls[controlIx++].pos = p + gap;
-				p += gap + itemSize;
+				control.x = p + gap;
+				p += gap + control.bounds.xmax - control.bounds.xmin;
 			} else {
-				this.controls[controlIx++].pos = p;
-				p += itemSize;
+				control.x = p;
+				p += control.bounds.xmax - control.bounds.xmin;
 			}
+			control.y = (pos.ymin + pos.ymax) / 2 - (control.bounds.ymax - control.bounds.ymin) / 2;
 			break;
 		case " ":
 			p += separatorGap;
@@ -147,11 +161,20 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (pMin, pMax, itemSize, gap, s
 	@return {void}
 */
 A3a.vpl.ControlBar.prototype.addToCanvas = function () {
-	for (var i = 0; i < this.controls.length; i++) {
-		this.canvas.addControl(this.controls[i].pos, this.canvas.dims.margin,
-			this.canvas.dims.controlSize, this.canvas.dims.controlSize,
-			this.controls[i].draw, this.controls[i].action,
-			this.controls[i].doDrop, this.controls[i].canDrop,
-			this.controls[i].id);
-	}
+	this.controls.forEach(function (control) {
+		this.canvas.addControl(control.x, control.y,
+			control.bounds.xmax - control.bounds.xmin,
+			control.bounds.ymax - control.bounds.ymin,
+			control.bounds.xmin !== 0 || control.bounds.ymin !== 0
+				? function (ctx, width, height, isDown) {
+					ctx.save();
+					ctx.translate(-control.bounds.xmin, -control.bounds.ymin);
+					control.draw(ctx, width, height, isDown);
+					ctx.restore();
+				}
+				: control.draw,
+			control.action,
+			control.doDrop, control.canDrop,
+			control.id);
+	}, this);
 };

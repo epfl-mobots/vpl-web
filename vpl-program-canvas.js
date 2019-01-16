@@ -544,10 +544,17 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			"!stretch",
 			"vpl:teacher-reset",
 			"vpl:teacher-save",
-			"vpl:teacher",
-		]);
-	controlBar.calcLayout(canvas.dims.margin, canvasSize.width - canvas.dims.margin,
-		canvas.dims.controlSize,
+			"vpl:teacher"
+		],
+		this.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
+		this.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
+	var controlBarPos = {
+		xmin: canvas.dims.margin,
+		xmax: canvasSize.width - canvas.dims.margin,
+		ymin: canvas.dims.margin,
+		ymax: canvas.dims.margin + canvas.dims.controlSize
+	};
+	controlBar.calcLayout(controlBarPos,
 		canvas.dims.interBlockSpace, 2 * canvas.dims.interBlockSpace);
 	controlBar.addToCanvas();
 

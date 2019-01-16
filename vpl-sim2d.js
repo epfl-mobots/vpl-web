@@ -448,38 +448,6 @@ A3a.vpl.VPLSim2DViewer.color = function (rgb) {
 		")";
 };
 
-/** Add a control button, taking care of disabled ones
-	@param {A3a.vpl.ControlBar} controlBar
-	@param {string} id
-	@param {A3a.vpl.Canvas.controlDraw} draw
-	@param {?A3a.vpl.Canvas.controlAction=} action
-	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
-	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
-	@param {boolean=} keepEnabled
-	@return {void}
-*/
-A3a.vpl.VPLSim2DViewer.prototype.addControl = function (controlBar, id, draw, action, doDrop, canDrop, keepEnabled) {
-	var self = this;
-	var canvas = controlBar.canvas;
-	var disabled = this.uiConfig.isDisabled(id);
-	if (this.uiConfig.customizationMode || !disabled) {
-		controlBar.addControl(
-			function (ctx, width, height, isDown) {
-				draw(ctx, width, height, isDown);
-				if (disabled) {
-					canvas.disabledMark(0, 0, width, height);
-				}
-			},
-			this.uiConfig.customizationMode && !keepEnabled
-				? function (downEvent) {
-					self.uiConfig.toggle(id);
-					self.render();
-				}
-				: action,
-			doDrop, canDrop, id);
-	}
-};
-
 /** Render viewer
 	@return {void}
 */
@@ -524,13 +492,19 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			"!stretch",
 			"sim:teacher-reset",
 			"sim:teacher"
-		]);
+		],
+		this.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
+		this.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
 
 	var smallBtnSize = this.simCanvas.dims.controlSize * 0.6;
 
-	controlBar.calcLayout(2 * this.simCanvas.dims.margin + 3 * smallBtnSize + 2 * this.simCanvas.dims.stripHorMargin,
-		canvasSize.width - this.simCanvas.dims.margin,
-		this.simCanvas.dims.controlSize,
+	var controlBarPos = {
+		xmin: 2 * this.simCanvas.dims.margin + 3 * smallBtnSize + 2 * this.simCanvas.dims.stripHorMargin,
+		xmax: canvasSize.width - this.simCanvas.dims.margin,
+		ymin: this.simCanvas.dims.margin,
+		ymax: this.simCanvas.dims.margin + this.simCanvas.dims.controlSize
+	};
+	controlBar.calcLayout(controlBarPos,
 		this.simCanvas.dims.interBlockSpace, 2 * this.simCanvas.dims.interBlockSpace);
 	controlBar.addToCanvas();
 

@@ -1,0 +1,40 @@
+{
+	"buttons": [
+		{
+			"name": "vpl:new",
+			"state": ["pressed"],
+			"svg": [
+				{
+					"uri": "Blocks.svg#HandBack"
+				}
+			]
+		},
+		{
+			"name": "vpl:new",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Blocks.svg#HandFront"
+				}
+			]
+		},
+		{
+			"name": "vpl:run",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Blocks.svg#right"
+				}
+			]
+		},
+		{
+			"name": "vpl:stop",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Blocks.svg#center"
+				}
+			]
+		}
+	]
+}

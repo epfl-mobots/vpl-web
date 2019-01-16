@@ -162,12 +162,14 @@ function vplSetup(gui) {
 	// handle overlays in gui
 	if (gui && gui["overlays"]) {
 		gui["blocks"] = gui["blocks"] || [];
+		gui["buttons"] = gui["buttons"] || [];
 		gui["overlays"].forEach(function (filename) {
 			var overlay = JSON.parse(gui.rsrc[filename]);
 			for (var key in overlay) {
 				if (overlay.hasOwnProperty(key)) {
 					switch (key) {
 					case "blocks":
+					case "buttons":
 						// concat arrays
 						gui[key] = gui[key].concat(overlay[key]);
 						break;
@@ -190,6 +192,10 @@ function vplSetup(gui) {
 	var isClassic = gui == undefined || getQueryOption("appearance") === "classic";
 	window["vplUseLocalStorage"] = getQueryOption("storage") === "local";
 	var language = getQueryOption("language");
+	/** @type {A3a.vpl.ControlBar.drawButton} */
+	var drawButton = A3a.vpl.Commands.drawButtonJS;
+	/** @type {A3a.vpl.ControlBar.getButtonBounds} */
+	var getButtonBounds = A3a.vpl.Commands.getButtonBoundsJS;
 	if (isClassic) {
 	 	if (A3a.vpl.patchL2Blocks) {
 			A3a.vpl.patchL2Blocks();
@@ -198,9 +204,8 @@ function vplSetup(gui) {
 			A3a.vpl.patchJSBlocks();
 		}
 	} else if (gui) {
-		try {
-			A3a.vpl.patchUISVG(gui);
-		} catch (e) {}
+		drawButton = A3a.vpl.drawButtonSVGFunction(gui);
+		getButtonBounds = A3a.vpl.getButtonBoundsSVGFunction(gui);
 		try {
 			A3a.vpl.patchBlocksSVG(gui);
 		} catch (e) {}
@@ -317,8 +322,14 @@ function vplSetup(gui) {
 	}
 	window["vplSim"] && window["vplSim"].sim.addSim2DCommands(window["vplCommands"], window["vplEditor"]);
 	if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["simulator"]) {
-		window["vplSim"].toolbarConfig = gui["toolbars"]["simulator"];
+		window["vplSim"].sim.toolbarConfig = gui["toolbars"]["simulator"];
 	}
+	window["vplProgram"].toolbarDrawButton = drawButton;
+	window["vplProgram"].toolbarGetButtonBounds = getButtonBounds;
+	window["vplEditor"].toolbarDrawButton = drawButton;
+	window["vplEditor"].toolbarGetButtonBounds = getButtonBounds;
+	window["vplSim"].sim.toolbarDrawButton = drawButton;
+	window["vplSim"].sim.toolbarGetButtonBounds = getButtonBounds;
 
 	if (window["vplRun"]) {
 		var stopBlock = A3a.vpl.BlockTemplate.findByName("!stop");
@@ -516,9 +527,11 @@ window.addEventListener("load", function () {
 		function (gui, rsrc) {
 			// success
 			gui.rsrc = {};
+			gui.svg = {};
 			if (gui["svgFilenames"]) {
 				gui["svgFilenames"].forEach(function (filename) {
 					gui.rsrc[filename] = rsrc[filename];
+					gui.svg[filename] = new SVG(rsrc[filename]);
 				});
 			}
 			if (gui["overlays"]) {

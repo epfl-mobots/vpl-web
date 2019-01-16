@@ -156,10 +156,17 @@ A3a.vpl.VPLSourceEditor.prototype.toolbarRender = function () {
 			"!stretch",
 			"src:teacher-reset",
 			"src:teacher"
-		]);
+		],
+		this.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
+		this.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
 
-	controlBar.calcLayout(this.tbCanvas.dims.margin, canvasSize.width - this.tbCanvas.dims.margin,
-		this.tbCanvas.dims.controlSize,
+	var controlBarPos = {
+		xmin: this.tbCanvas.dims.margin,
+		xmax: canvasSize.width - this.tbCanvas.dims.margin,
+		ymin: this.tbCanvas.dims.margin,
+		ymax: this.tbCanvas.dims.margin + this.tbCanvas.dims.controlSize
+	};
+	controlBar.calcLayout(controlBarPos,
 		this.tbCanvas.dims.interBlockSpace, 2 * this.tbCanvas.dims.interBlockSpace);
 	controlBar.addToCanvas();
 	this.tbCanvas.redraw();

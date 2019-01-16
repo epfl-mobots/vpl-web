@@ -11,8 +11,11 @@ Here are fragments of index-svg.html which illustrate the definition of the bloc
   ...
   {
   	"name": "button",
-  	"main": "blocks.svg#event-button"
-  }
+    "svg": [
+      {
+        "uri": "blocks.svg#event-button"
+      }
+    ],
   ...
 ]
 ...
@@ -136,3 +139,81 @@ Code fragments, styles, and some other properties can contain backtick-expressio
 - $: array of block parameters
 - i: index of the parameter (used in clauseAnd code fragments and in slider's snap property)
 - rgb: function which converts an array of RGB values between 0 and 1 to an RGB value suited for representing an RGB led (saturated colors are mapped to themselves, but [0,0,0] (led switched off) is mapped to gray).
+
+Toolbars
+--------
+
+Toolbars can also be defined with SVG elements. Buttons are identified with a string id, such as "vpl:new" for the button which resets the VPL program in the VPL view. Redefining toolbars is the result of two independent things:
+
+- toolbar elements, as an array of button identifies + spacing for each toolbar (currently "vpl", "editor" and "simulator");
+- button appearance, defined as sets of SVG elements for the different button states (normal, pressed, selected, disabled, or any combination).
+
+Toolbars and buttons can be defined either directly in the main ui.json file (top-level property "toolbars" and "buttons", respectively), or in overlay json files referenced in the top-level property "overlays" of ui.json. SVG files must always be enumerated in ui.json, in the top-level property "svgFilenames".
+
+Toolbar definitions
+-------------------
+
+Property "toolbars" is an object with one property per toolbar, with name "vpl", "editor" or "simulator". Property values are arrays of strings. Each string corresponds either to a button id or to one of the following special values:
+
+- "!space", a fixed space slightly larger than the usual space, used to indicate subgroups in groups of related actions;
+- "!stretch", a larger space calculated so that the whole toolbar fills the available horizontal space. All "!stretch" spaces have the same length. They're used to separate groups of unrelated items.
+
+Buttons for actions which are permanently disabled, such as "vpl:run" when neither the robot nor the simulator is available, or "vpl:teacher" when the user has a student role, are not displayed.
+
+Here is the list of button ids for the VPL view:
+
+- "vpl:new": reset VPL program to start a new program
+- "vpl:save": download the VPL program
+- "vpl:upload": upload VPL program to the central repository (to the teacher computer)
+- "vpl:text": switch to the text programming language editor (Aseba, L2 or JavaScript)
+- "vpl:advanced": toggle between basic and advanced VPL mode
+- "vpl:undo": undo last change
+- "vpl:redo": redo last undone change
+- "vpl:run": run the VPL program with the Thymio or the simulator
+- "vpl:stop": stop the VPL program
+- "vpl:sim": switch to the simulator view
+- "vpl:duplicate": duplicate a rule (drag target)
+- "vpl:disable": toggle a rule or block between disabled and enabled states (drag target)
+- "vpl:lock": toggle a rule or block between disabled and enabled states (drag target, not implemented)
+- "vpl:trashcan": delete a rule or block (drag target)
+- "vpl:teacher": toggle between the normal and the customization states
+- "vpl:teacher-reset": reset the available toolbar buttons and VPL blocks to the standard sets
+- "vpl:teacher-save": download customized state (like "vpl:save", but without the VPL program)
+
+Here is the list of button ids for the Editor view:
+
+- "src:new": clear the text program
+- "src:save": download the text program
+- "src:vpl": switch to the VPL view
+- "src:locked": toggle between the locked state where the text program corresponds to the VPL program and cannot be edited, and the unlocked state where the text program can be modified
+- "src:language": switch to the next programming language (Aseba, L2 or JavaScript); no support to implement multiple-state buttons in SVG yet
+- "src:disass": toggle between the text programming language and the bytecode disassembly (for Aseba and L2)
+- "src:run": run the text program with the Thymio or the simulator
+- "src:stop": stop the text program
+- "src:sim": switch to the simulator view
+- "src:teacher": toggle between the normal and the customization states
+- "src:teacher-reset": reset the available toolbar buttons and VPL blocks to the standard sets
+
+Here is the list of button ids for the Simulator view:
+
+- "sim:restart": restart the program with the robot in the middle of the playground
+- "sim:pause": toggle the simulation between the execution state and the suspended state
+- "sim:speedup": change the speedup factor between x1 (real-time), x2, x5, x10 (accelerated), :2 (slowed down); no support to implement multiple-state buttons in SVG yet
+- "sim:noise": toggle simulated noise for sensor measurements
+- "sim:pen": toggle pen between up and down
+- "sim:clear": clear the pen trace (revert to the ground map)
+- "sim:map-kind": change the map being displayed between ground (for ground sensor, combined with pen traces), obstacles (for proximity sensors) and height (for acceleration sensors)
+- "sim:map": toggle the map being displayed between on and off
+- "sim:vpl": switch to the VPL view
+- "sim:text": switch to text programming language editor
+- "sim:teacher": toggle between the normal and the customization states
+- "sim:teacher-reset": reset the available toolbar buttons and VPL blocks to the standard sets
+
+SVG buttons
+-----------
+
+Property "buttons" is an array with one element per button appearance. Each button appearance is an object with the following properties:
+
+- "name": button name (see "Toolbar definitions" above)
+- "state": array of strings which restricts when the appearance is used: "pressed" (the button is being clicked or tapped), "unpressed" (the button is not being clicked or tapped), "selected" (the button corresponds to a state which is ON), "unselected" (the button corresponds to a state which is OFF), "disabled" (the action is disabled), "enabled" (the action is enabled). The first appearance match is used; typically appearance with "state" set to ["disabled"], ["pressed"], ["selected"] (for toggle buttons only), and [] (normal appearance) are defined in that order.
+- "svg": array of objects containing a "uri" property, like for blocks (see above). SVG elements are rendered starting with the first one, with the last one in the foreground.
