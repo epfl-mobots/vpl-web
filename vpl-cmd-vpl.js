@@ -175,7 +175,8 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 			}
 		},
 		canDrop: function (program, draggedItem) {
-            return draggedItem.data instanceof A3a.vpl.EventHandler;
+            return draggedItem.data instanceof A3a.vpl.EventHandler &&
+				!/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty();
 		},
 		object: this
 	});
@@ -193,9 +194,11 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 			}
 		},
 		canDrop: function (program, draggedItem) {
-			// accept event handler or block in event handler
-			return !(draggedItem.data instanceof A3a.vpl.Block)
-				|| draggedItem.data.eventHandlerContainer !== null;
+			// accept non-empty event handler or block in event handler
+			return draggedItem.data instanceof A3a.vpl.EventHandler
+				? !/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty()
+				: draggedItem.data instanceof A3a.vpl.Block &&
+					draggedItem.data.eventHandlerContainer !== null;
 		},
 		object: this
 	});
@@ -213,9 +216,11 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 			}
 		},
 		canDrop: function (program, draggedItem) {
-			// accept event handler or block in event handler
-			return !(draggedItem.data instanceof A3a.vpl.Block)
-				|| draggedItem.data.eventHandlerContainer !== null;
+			// accept non-empty event handler or block in event handler
+			return draggedItem.data instanceof A3a.vpl.EventHandler
+				? !/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty()
+				: draggedItem.data instanceof A3a.vpl.Block &&
+					draggedItem.data.eventHandlerContainer !== null;
 		},
 		object: this,
 		isAvailable: function (program) {
@@ -242,10 +247,12 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 			}
 		},
 		canDrop: function (program, draggedItem) {
-			// accept unlocked event handler or block in event handler
+			// accept non-empty unlocked event handler or block in event handler
 			return draggedItem.data instanceof A3a.vpl.Block
 				? draggedItem.data.eventHandlerContainer !== null && !draggedItem.data.locked
-				: !draggedItem.data.locked;
+				: draggedItem.data instanceof A3a.vpl.EventHandler &&
+					!/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty() &&
+ 					!/** @type {A3a.vpl.EventHandler} */(draggedItem.data).locked;
 		},
 		object: this
 	});
