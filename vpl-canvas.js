@@ -83,19 +83,22 @@ A3a.vpl.CanvasItem.prototype.clone = function () {
 	@return {void}
 */
 A3a.vpl.CanvasItem.prototype.draw = function (ctx, dx, dy, overlay) {
-	if (this.clippingRect && dx === undefined) {
+	var clipped = this.clippingRect && dx === undefined;
+	if (clipped) {
 		ctx.save();
 		ctx.beginPath();
 		ctx.rect(this.clippingRect.x, this.clippingRect.y,
 			this.clippingRect.w, this.clippingRect.h);
 		ctx.clip();
+		dx = this.clippingRect.xOffset;
+		dy = this.clippingRect.yOffset;
 	}
 	if (overlay) {
 		this.drawOverlay && this.drawOverlay(ctx, this, dx || 0, dy || 0);
 	} else {
 		this.drawContent && this.drawContent(ctx, this, dx || 0, dy || 0);
 	}
-	if (this.clippingRect && dx === undefined) {
+	if (clipped) {
 		ctx.restore();
 	}
 };
@@ -549,7 +552,7 @@ A3a.vpl.Canvas.prototype.resize = function (width, height) {
 	this.dims = A3a.vpl.Canvas.calcDims(blockSize, controlSize);
 };
 
-/** @typedef {{x:number,y:number,w:number,h:number}} */
+/** @typedef {{x:number,y:number,w:number,h:number,xOffset:number,yOffset:number}} */
 A3a.vpl.Canvas.ClippingRect;
 
 /** Get the index of the item specified by its data
@@ -673,9 +676,13 @@ A3a.vpl.Canvas.prototype.erase = function () {
 	@param {number} y
 	@param {number} width
 	@param {number} height
+	@param {number=} xOffset
+	@param {number=} yOffset
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.beginClip = function (x, y, width, height) {
+A3a.vpl.Canvas.prototype.beginClip = function (x, y, width, height, xOffset, yOffset) {
+	xOffset = xOffset || 0;
+	yOffset = yOffset || 0;
 	if (this.clipStack.length > 0) {
 		// intersect with previous clip
 		var c0 = this.clipStack[this.clipStack.length - 1];
@@ -693,8 +700,10 @@ A3a.vpl.Canvas.prototype.beginClip = function (x, y, width, height) {
 		if (c0.y + c0.h < y + height) {
 			height = c0.y + c0.h - y;
 		}
+		xOffset += c0.xOffset;
+		yOffset += c0.yOffset;
 	}
-	this.clipStack.push({x: x, y: y, w: width, h: height});
+	this.clipStack.push({x: x, y: y, w: width, h: height, xOffset: xOffset, yOffset: yOffset});
 };
 
 /** End clipping rect (should match beginClip)
@@ -727,8 +736,9 @@ A3a.vpl.Canvas.prototype.setItem = function (item, index) {
 A3a.vpl.Canvas.prototype.addDecoration = function (fun) {
 	var item = new A3a.vpl.CanvasItem(null,
 		-1, -1, 0, 0,
-		function(ctx) {
+		function(ctx, item, dx, dy) {
 			ctx.save();
+			ctx.translate(dx, dy);
 			fun(ctx);
 			ctx.restore();
 		});

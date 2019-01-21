@@ -670,15 +670,15 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		});
 	}
 	canvas.beginClip(scrollingAreaX, scrollingAreaY,
-		scrollingAreaW, scrollingAreaH);
+		scrollingAreaW, scrollingAreaH,
+		0, -renderingState.vertScroll);
 	var errorMsg = "";
 	this.program.forEach(function (eventHandler, i) {
 		self.addEventHandlerToCanvas(canvas, eventHandler,
 			displaySingleEvent,
 			eventX0, actionX0, eventWidth,
 			canvas.dims.margin + canvas.dims.topControlSpace
-				+ (canvas.dims.blockSize + canvas.dims.interRowSpace) * i
-				- renderingState.vertScroll);
+				+ (canvas.dims.blockSize + canvas.dims.interRowSpace) * i);
 		if (eventHandler.error !== null && errorMsg === "") {
 			errorMsg = eventHandler.error.msg;
 			if (eventHandler.error.conflictEventHandler !== null) {
@@ -687,11 +687,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 						self.addEventHandlerConflictLinkToCanvas(canvas,
 							eventX0,
 							canvas.dims.margin + canvas.dims.topControlSpace
-								+ (canvas.dims.blockSize + canvas.dims.interRowSpace) * i
-								- renderingState.vertScroll,
+								+ (canvas.dims.blockSize + canvas.dims.interRowSpace) * i,
 							canvas.dims.margin + canvas.dims.topControlSpace
-								+ (canvas.dims.blockSize + canvas.dims.interRowSpace) * j
-								- renderingState.vertScroll);
+								+ (canvas.dims.blockSize + canvas.dims.interRowSpace) * j);
 						break;
 					}
 				}
