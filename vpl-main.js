@@ -320,16 +320,18 @@ function vplSetup(gui) {
 	if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["editor"]) {
 		window["vplEditor"].toolbarConfig = gui["toolbars"]["editor"];
 	}
-	window["vplSim"] && window["vplSim"].sim.addSim2DCommands(window["vplCommands"], window["vplEditor"]);
-	if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["simulator"]) {
-		window["vplSim"].sim.toolbarConfig = gui["toolbars"]["simulator"];
-	}
 	window["vplProgram"].toolbarDrawButton = drawButton;
 	window["vplProgram"].toolbarGetButtonBounds = getButtonBounds;
 	window["vplEditor"].toolbarDrawButton = drawButton;
 	window["vplEditor"].toolbarGetButtonBounds = getButtonBounds;
-	window["vplSim"].sim.toolbarDrawButton = drawButton;
-	window["vplSim"].sim.toolbarGetButtonBounds = getButtonBounds;
+	if (window["vplSim"] != null) {
+	 	window["vplSim"].sim.addSim2DCommands(window["vplCommands"], window["vplEditor"]);
+		if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["simulator"]) {
+			window["vplSim"].sim.toolbarConfig = gui["toolbars"]["simulator"];
+		}
+		window["vplSim"].sim.toolbarDrawButton = drawButton;
+		window["vplSim"].sim.toolbarGetButtonBounds = getButtonBounds;
+	}
 
 	if (window["vplRun"]) {
 		var stopBlock = A3a.vpl.BlockTemplate.findByName("!stop");
