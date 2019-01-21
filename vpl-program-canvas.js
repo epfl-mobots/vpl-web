@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -513,7 +513,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		ctx.textAlign = "start";
 		ctx.textBaseline = "bottom";
 		ctx.rotate(-Math.PI / 2);
-		ctx.fillText("EPFL 2018",
+		ctx.fillText("EPFL 2018-2019",
 			-canvasSize.height + canvas.dims.blockLineWidth,
 			canvasSize.width - canvas.dims.blockLineWidth);
 		ctx.restore();

@@ -1,4 +1,4 @@
-#	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+#	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 #	Miniature Mobile Robots group, Switzerland
 #	Author: Yves Piguet
 #	For internal use only
@@ -6,7 +6,7 @@
 .PHONY: main
 main:	all
 
-COPYRIGHT = /* Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE - author Yves Piguet */
+COPYRIGHT = /* Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE - author Yves Piguet */
 
 # Default closure compiler in current directory, used if closure-compiler isn't found
 # Update here or build with "make CLOSURECOMPILER=path" to match your environment
