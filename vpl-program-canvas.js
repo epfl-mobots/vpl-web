@@ -10,8 +10,7 @@
 	@struct
 */
 A3a.vpl.Program.CanvasRenderingState = function () {
-	this.vertScroll = 0;	// scroll up
-	this.y0 = 0;	// mousedown vertical position, to calculate vertical movements
+	this.programScroll = new A3a.vpl.VertScrollArea(1);
 };
 
 /** Add a block to a canvas
@@ -618,60 +617,15 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 	// program
 	// scroll region
-	var scrollingAreaX = 2 * canvas.dims.margin - canvas.dims.interBlockSpace +
-		step * evCol;
-	var scrollingAreaW = canvasSize.width - 2 * scrollingAreaX + (evCol - acCol) * step - canvas.dims.scrollbarWidth;
-	var scrollingTotalHeight = this.program.length
-		* (canvas.dims.blockSize + canvas.dims.interRowSpace);
-	renderingState.vertScroll = Math.max(0, Math.min(renderingState.vertScroll, scrollingTotalHeight - scrollingAreaH));
-	var scrollingAreaItem = new A3a.vpl.CanvasItem(null,
-		scrollingAreaW, scrollingAreaH, scrollingAreaX, scrollingAreaY,
-		null,
-		scrollingTotalHeight > scrollingAreaH
-			? {
-				/** @type {A3a.vpl.CanvasItem.mousedown} */
-				mousedown: function (canvas, data, width, height, x, y, downEvent) {
-					renderingState.y0 = downEvent.y;
-					return 0;
-				},
-				/** @type {A3a.vpl.CanvasItem.mousedrag} */
-				mousedrag: function (canvas, data, dragging, width, height, x, y, dragEvent) {
-					var delta = Math.max(Math.min(
-						dragEvent.y - renderingState.y0,	// mouse-specified shift
-						renderingState.vertScroll),	// min
-						renderingState.vertScroll - scrollingTotalHeight + scrollingAreaH);	// max
-					renderingState.vertScroll -= delta;
-					renderingState.y0 += delta;
-				}
-			}
-			: null,
-		null,
-		null);
+	renderingState.programScroll.setTotalHeight(this.program.length
+		* (canvas.dims.blockSize + canvas.dims.interRowSpace));
+	var scrollingAreaX = 2 * canvas.dims.margin - canvas.dims.interBlockSpace + step * evCol;
+	renderingState.programScroll.resize(scrollingAreaX, scrollingAreaY,
+		canvasSize.width - 2 * scrollingAreaX + (evCol - acCol) * step - canvas.dims.scrollbarWidth,
+		scrollingAreaH);
+	renderingState.programScroll.begin(canvas);
 	eventX0 += (evCol - acCol) * step / 2 - canvas.dims.scrollbarWidth / 2;
 	actionX0 += (evCol - acCol) * step / 2 - canvas.dims.scrollbarWidth / 2;
-	scrollingAreaItem.draggable = false;
-	canvas.setItem(scrollingAreaItem);
-	if (scrollingTotalHeight > scrollingAreaH) {
-		canvas.addDecoration(function (ctx) {
-			var scrollbarRelLength = scrollingAreaH / scrollingTotalHeight;
-			var scrollbarAbsLength = Math.max(scrollbarRelLength * scrollingAreaH,
-				Math.min(20, scrollingAreaH));
-			var scrollbarMaxMotion = scrollingAreaH - scrollbarAbsLength;
-			var scrollbarRelMotion = renderingState.vertScroll / (scrollingTotalHeight - scrollingAreaH);
-			var scrollbarMotion = scrollbarRelMotion * scrollbarMaxMotion;
-			ctx.save();
-			ctx.fillStyle = canvas.dims.scrollbarBackgroundColor;
-			ctx.fillRect(scrollingAreaX + scrollingAreaW + 2, scrollingAreaY,
-				canvas.dims.scrollbarWidth, scrollingAreaH);
-			ctx.fillStyle = canvas.dims.scrollbarThumbColor;
-			ctx.fillRect(scrollingAreaX + scrollingAreaW + 2, scrollingAreaY + scrollbarMotion,
-				canvas.dims.scrollbarWidth, scrollbarAbsLength);
-			ctx.restore();
-		});
-	}
-	canvas.beginClip(scrollingAreaX, scrollingAreaY,
-		scrollingAreaW, scrollingAreaH,
-		0, -renderingState.vertScroll);
 	var errorMsg = "";
 	this.program.forEach(function (eventHandler, i) {
 		self.addEventHandlerToCanvas(canvas, eventHandler,
@@ -696,7 +650,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			}
 		}
 	});
-	canvas.endClip();
+	renderingState.programScroll.end();
 	if (errorMsg) {
 		// display first error message
 		canvas.addDecoration(function (ctx) {
@@ -721,5 +675,5 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 */
 A3a.vpl.Program.prototype.scrollCanvas = function (canvas, dy) {
 	var renderingState = /** @type {A3a.vpl.Program.CanvasRenderingState} */(canvas.state);
-	renderingState.vertScroll += dy;
+	renderingState.programScroll.scrollCanvas(dy);
 };

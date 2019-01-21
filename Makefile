@@ -45,6 +45,7 @@ JS = \
 	vpl-controlbar-btn.js \
 	vpl-program-canvas.js \
 	vpl-canvas.js \
+	vpl-canvas-scroll.js \
 	vpl-draw.js \
 	vpl-blocklib.js \
 	svg.js \
