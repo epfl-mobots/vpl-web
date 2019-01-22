@@ -667,7 +667,8 @@
 	],
 
 	"svgFilenames": [
-		"Blocks.svg"
+		"Blocks.svg",
+		"Icons.svg"
 	],
 
 	"overlays": [

@@ -13,16 +13,38 @@
 <script type="application/json" id="ui.json">
 {
 	"styles": {
-		"event": "#ffccbc",
+		"event": "transparent",
 		"state": "transparent",
-		"action": "#a4c6ff",
+		"action": "transparent",
 		"comment": "#aaa",
-		"background": "#f4f4f4",
-		"ruleBackground": "#fafafa",
-		"ruleMarks": "#bbb"
+		"background": "#fcfdfe",
+		"ruleBackground": "#eceff1",
+		"ruleMarks": "#bbb",
+		"scrollbarThumbColor": "navy",
+		"scrollbarBackgroundColor": "#ccc",
+		"scrollbarWidth": 5,
+		"scrollingBlockLib": true
 	},
 
 	"blocks": [
+		{
+			"name": "!empty event",
+			"type": "hidden",
+			"svg": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				}
+			]
+		},
+		{
+			"name": "!empty action",
+			"type": "hidden",
+			"svg": [
+				{
+					"uri": "Blocks.svg#Actions_bg"
+				}
+			]
+		},
 		{
 			"name": "button",
 			"type": "event",
@@ -44,27 +66,27 @@
 				{
 					"id": "Btn2_Center",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Forward",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Backward",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Right",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Left",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				}
 			]
 		},
@@ -161,7 +183,7 @@
 		{
 			"name": "start",
 			"type": "event",
-			"modes": ["basic", "advanced"],
+			"modes": ["basic"],
 			"svg": [
 
 				{
@@ -177,7 +199,7 @@
 		{
 			"name": "clap",
 			"type": "event",
-			"modes": ["basic", "advanced"],
+			"modes": ["basic"],
 			"svg": [
 
 				{
@@ -247,22 +269,22 @@
 				{
 					"id": "Btn3_ProxFront",
 					"val": [0, 1, 2],
-					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_ProxRight",
 					"val": [0, 1, 2],
-					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_ProxLeft",
 					"val": [0, 1, 2],
-					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_ProxBack",
 					"val": [0, 1, 2],
-					"st": ["fill:#90a4ae", "fill:#ffffff", "fill:#000000"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
 				}
 			]
 		},
@@ -285,27 +307,27 @@
 				{
 					"id": "Btn2_Remote1_85",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_80",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_81",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_86",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_87",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				}
 			]
 		},
@@ -328,62 +350,62 @@
 				{
 					"id": "Btn2_Remote2_0",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_1",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_2",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_3",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_4",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_5",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_6",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_7",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_8",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_9",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_16",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_17",
 					"val": [false, true],
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				}
 			]
 		},
@@ -392,13 +414,21 @@
 			"type": "action",
 			"modes": ["advanced"],
 			"svg": [
-
-			{
+				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Ac_Wheels"
+				}
+			],
+			"styles": [
+				{
+					"id": "SameSpeed_R",
+					"st": "fill:`Math.abs($[0])===Math.abs($[1])?'black':'transparent'`"
+				},
+				{
+					"id": "SameSpeed_L",
+					"st": "fill:`Math.abs($[0])===Math.abs($[1])?'black':'transparent'`"
 				}
 			],
 			"diffwheelmotion": {
@@ -415,13 +445,23 @@
 					"id": "SliderL_range",
 					"thumbId": "Cursor_left",
 					"min": -1,
-					"max": 1
+					"max": 1,
+					"snap": [
+						0,
+						"`$[1]`",
+						"`-$[1]`"
+					]
 				},
 				{
 					"id": "SliderR_range",
 					"thumbId": "Cursor_right",
 					"min": -1,
-					"max": 1
+					"max": 1,
+					"snap": [
+						0,
+						"`$[0]`",
+						"`-$[0]`"
+					]
 				}
 			]
 		},
@@ -443,47 +483,119 @@
 				{
 					"id": "Btn2_StopDir",
 					"val": 0,
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_FwdDir",
 					"val": 1,
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_FwdRightDir",
 					"val": 2,
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_RightDir",
 					"val": 3,
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_BwdRightDir",
 					"val": 4,
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_BwdDir",
 					"val": 5,
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_BwdLeftDir",
 					"val": 6,
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_LeftDir",
 					"val": 7,
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_FwdLeftDir",
 					"val": 8,
-					"st": ["fill:#90a4ae", "fill:#1de9b6;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
+				}
+			]
+		},
+		{
+			"name": "top_color_basic",
+			"type": "action",
+			"modes": ["basic"],
+			"svg": [
+
+				{
+					"uri": "Blocks.svg#Actions_bg"
+				},
+				{
+					"uri": "Blocks.svg#ColorPalette"
+				},
+				{
+					"uri": "Blocks.svg#Bg_Thymio_front_color"
+				},
+				{
+					"uri": "Blocks.svg#Gradient_Top_basic"
+				},
+				{
+					"uri": "Blocks.svg#SelectedColors"
+				}
+			],
+			"defaultParameters": [0],
+			"radiobuttons": [
+				{
+					"id": "Btn2_SelectedNone",
+					"val": 0,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedGreen",
+					"val": 1,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedCyan",
+					"val": 2,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedBlue",
+					"val": 3,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedMagenta",
+					"val": 4,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedRed",
+					"val": 5,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedYel",
+					"val": 6,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
+					"id": "Btn2_SelectedWhite",
+					"val": 7,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				}
+			],
+			"styles": [
+				{
+					"id": "Gradient_Top_basic",
+					"st": "fill:`['transparent','#3f0','cyan','blue','magenta','red','yellow','white'][$[0]]`"
 				}
 			]
 		},
@@ -505,18 +617,21 @@
 				{
 					"id": "Slid_red",
 					"thumbId": "Cursor_red",
+					"lowerPartId": "Slid_red_value",
 					"min": 0,
 					"max": 1
 				},
 				{
 					"id": "Slid_green",
 					"thumbId": "Cursor_green",
+					"lowerPartId": "Slid_green_value",
 					"min": 0,
 					"max": 1
 				},
 				{
 					"id": "Slid_blue",
 					"thumbId": "Cursor_blue",
+					"lowerPartId": "Slid_blue_value",
 					"min": 0,
 					"max": 1
 				}
@@ -524,7 +639,7 @@
 			"styles": [
 				{
 					"id": "Gradient_top",
-					"st": "fill:#`$.map(function (c) { return Math.floor(c * 15.999).toString(16); }).join('')`"
+					"st": "fill:#`rgb($).map(function (c) { return Math.floor(c * 15.999).toString(16); }).join('')`"
 				}
 			]
 		},
@@ -547,21 +662,10 @@
 				},
 				{
 					"uri": "Blocks.svg#Slider"
-				},
-				{
-					"uri": "Blocks.svg#notes"
 				}
 
 			],
-		"defaultParameters": [false, false, false, false, false, false, false, false, false, false, false, false],
-			"buttons": [
-				{
-					"id": "Btn3_note1",
-					"val": [0, 1, 2],
-					"st": ["fill:#000000" , "fill:#ffffff", "fill:transparent"]
-				}
-				
-				],
+			"defaultParameters": [0],
 			"sliders": [
 				{
 					"id": "Slider",
@@ -582,7 +686,9 @@
 	"overlays": [
 		"aseba.json",
 		"l2.json",
-		"js.json"
+		"js.json",
+		"toolbars.json",
+		"buttons.json"
 	]
 }
 </script>
@@ -635,10 +741,23 @@
 			}
 		},
 		{
-			"name": "start"
+			"name": "start",
+			"aseba": {
+				"sectionBegin": "# initialization\n",
+				"sectionPriority": 10000
+			}
 		},
 		{
-			"name": "clap"
+			"name": "clap",
+			"aseba": {
+				"initCodeExec": [
+					"# setup threshold for detecting claps\nmic.threshold = 250\n"
+				],
+				"sectionBegin": "onevent mic\n",
+				"sectionPriority": 1,
+				"clause": "mic.intensity > mic.threshold",
+				"clauseOptional": true
+			}
 		},
 		{
 			"name": "Ev_Acc_fall"
@@ -673,6 +792,20 @@
 				],
 				"statement":
 					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`\n"
+			}
+		},
+		{
+			"name": "top_color_basic",
+			"aseba": {
+				"initVarDecl": [
+					"# RGB color of the top led\nvar topColor[3]\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n",
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"call leds.top(`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`)\ntopColor = [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`]\n"
 			}
 		},
 		{
@@ -744,10 +877,24 @@
 			}
 		},
 		{
-			"name": "start"
+			"name": "start",
+			"l2": {
+				"sectionBegin": "// init block\n",
+				"sectionPriority": 10000
+			}
 		},
 		{
-			"name": "clap"
+			"name": "clap",
+			"l2": {
+				"initCodeExec": [
+					"// setup threshold for detecting claps\nmic.threshold = 250\n"
+				],
+				"sectionBegin": "onevent mic {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clause": "mic.intensity > mic.threshold",
+				"clauseOptional": true
+			}
 		},
 		{
 			"name": "Ev_Acc_fall"
@@ -782,6 +929,20 @@
 				],
 				"statement":
 					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`;\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`;\n"
+			}
+		},
+		{
+			"name": "top_color_basic",
+			"l2": {
+				"initVarDecl": [
+					"// RGB color of the top led\nint topColor[3];\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0];\n",
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"leds.top(`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`);\ntopColor = [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`];\n"
 			}
 		},
 		{
@@ -820,16 +981,365 @@
 			}
 		},
 		{
+			"name": "Thymio acc 1"
+		},
+		{
+			"name": "Thymio acc 2"
+		},
+		{
+			"name": "Thymio acc 0"
+		},
+		{
+			"name": "start",
+			"js": {
+				"sectionBegin": "// init block\n",
+				"sectionPriority": 10000
+			}
+		},
+		{
+			"name": "clap",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"mic\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"sectionPriority": 1
+			}
+		},
+		{
+			"name": "Ev_Acc_fall"
+		},
+		{
+			"name": "Ev_Acc_hit"
+		},
+		{
+			"name": "Ev_ProxH_bas"
+		},
+		{
+			"name": "Remote1"
+		},
+		{
+			"name": "Remote2"
+		},
+		{
 			"name": "motor",
 			"js": {
 				"initCodeExec": [
 					"this.set(\"leds.top\", [0, 0, 0]);\n"
 				],
-				"statement": "this.set(\"motor.left\", `$[0].toFixed(2)`);\nthis.set(\"motor.right\", `$[1].toFixed(2)`);\n"
+				"statement":
+					"this.set(\"motor.left\", `$[0].toFixed(2)`);\nthis.set(\"motor.right\", `$[1].toFixed(2)`);\n"
 			}
+		},
+		{
+			"name": "move",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"motor.left\", `[0, 0.2, 0.25, 0.1, -1.5, -0.2, -0.25, -0.1, 0.15][$[0]].toFixed(2)`);\nthis.set(\"motor.right\", `[0, 0.2, 0.15, -0.1, -0.25, -0.2, -0.15, 0.1, 0.25][$[0]].toFixed(2)`);\n"
+			}
+		},
+		{
+			"name": "top_color_basic",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.top\", [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`]);\n"
+			}
+		},
+		{
+			"name": "top color",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.top\", [`$.map(function (x) { return x.toFixed(2); }).join(', ')`]);\n"
+			}
+		},
+		{
+			"name": "Ac_music"
 		}
 	]
 }
+</script>
+
+<script type="application/json" id="toolbars.json">
+{
+	"toolbars": {
+		"vpl": [
+			"vpl:new",
+			"vpl:save",
+			"vpl:text",
+			"!space",
+			"vpl:advanced",
+			"!stretch",
+			"vpl:undo",
+			"vpl:redo",
+			"!stretch",
+			"vpl:run",
+			"vpl:stop",
+			"vpl:sim",
+			"!stretch",
+			"vpl:trashcan",
+			"!stretch",
+			"vpl:teacher-reset",
+			"vpl:teacher-save",
+			"vpl:teacher"
+		],
+		"editor": [
+			"src:new",
+			"src:save",
+			"src:vpl",
+			"src:locked",
+			"!space",
+			"src:language",
+			"!stretch",
+			"src:run",
+			"src:stop",
+			"!space",
+			"src:sim",
+			"!stretch",
+			"src:teacher-reset",
+			"src:teacher"
+		],
+		"simulator": [
+			"!stretch",
+			"sim:restart",
+			"sim:pause",
+			"!space",
+			"sim:speedup",
+			"sim:noise",
+			"!stretch",
+			"sim:pen",
+			"sim:clear",
+			"!space",
+			"sim:map-kind",
+			"sim:map",
+			"!stretch",
+			"sim:vpl",
+			"sim:text",
+			"!stretch",
+			"sim:teacher-reset",
+			"sim:teacher"
+		]
+	}
+}
+</script>
+
+<script type="application/json" id="buttons.json">
+{
+	"buttons": [
+		{
+			"name": "vpl:new",
+			"state": ["pressed"],
+			"svg": [
+				{
+					"uri": "Icons.svg#new_Path",
+					"alpha": 0.9
+				}
+			]
+		},
+		{
+			"name": "vpl:new",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Blocks.svg#new_Path"
+				}
+			]
+		},
+		{
+			"name": "vpl:run",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Blocks.svg#right"
+				}
+			]
+		},
+		{
+			"name": "vpl:stop",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Blocks.svg#center"
+				}
+			]
+		}
+	]
+}
+</script>
+<!--appearance of interface icons -->
+<script type="image/svg+xml" id="Icons.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 49 49">
+  <defs>
+    <style>
+      .cls-1 {
+        isolation: isolate;
+      }
+
+      .cls-2 {
+        opacity: 0.2;
+        mix-blend-mode: multiply;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-4 {
+        fill: #263238;
+      }
+
+      .cls-5 {
+        fill: #84edcf;
+      }
+
+      .cls-6 {
+        fill: #ff5252;
+      }
+
+      .cls-7 {
+        fill: #ffd740;
+      }
+
+      .cls-8 {
+        fill: #ffd600;
+      }
+
+      .cls-9 {
+        fill: #ff1744;
+      }
+
+      .cls-10 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <title>Icons</title>
+  <g class="cls-1">
+    <g id="Layer_2" data-name="Layer 2">
+      <g id="Pressed_bg">
+        <g>
+          <image class="cls-2" width="49" height="48" transform="translate(0 1)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADEAAAAwCAYAAAC4wJK5AAAACXBIWXMAAAsSAAALEgHS3X78AAADuUlEQVRoQ92aXU8TQRSGn9m2EqzRRBLFBDAkSvTCG4zx2vi7DdfGyI0XEjQhUAxiglHCR6Cwx4szpzs73W1LgXbXN2mm0Mnu+/Sc+dgzdSLCdeScc/Z2YMd+CYBc1wDgxr2GN58ATWAGaDE6iABd4Ay4ANLrwFwZIjDfAtrAQ2AeuI8CDQMR1Pgh8BP4DRyjUGPBjAxRYH4OWAKeAy+Ax2hERtEZsA9sAN+AHeCAMWFGgnDOmfl75M2/8u0iGolW2TUiddFIdFCIL+RhjoCuiKSlVwg0FMI51wBmgUfAMrBCZn4JhWoz3pg4Rk3vkMFsAlvAL+BURC7LLmIaCBEALACrwFvgJfCUvPmE0QFMAqTkYbaBr8BHYB3YZQSQZtkHAcAi8AZ4B7wGnqBpNa55kwMaDJ8kOs65gSCFEAUA7327ANzleuZjxTAzqK8k6DMQpA/CD2JLoRBgkQzgNmQwbfReoQTYdc6dFA32HISfRlvoIF5FU2gSAKES9F4GkqLryjnwwzl3Hk+/cSQSNN+X0UH8mnwKTUoGskC2MO4Df4E/QC6tesaCKMyh0+hLdBBPGsBkIE9QLyuot1awX+t1DN+30enzlW/vMR0Ak2VG6KlN5CmBvig88685rraA3YZKfYXRSII2jkIf8ZQ01FviiZroQlOlKJiKovEQaFo0jGYGXSlfoPuhqkTBZNFYQj3OE+yYbeVtoUv9Y7LdaBWiYBro0b5t63SH6gGYSj3GKVNF87H6PFYp76+i0sWuDrKZ9A7B83zdIBroVuSBbxtQLwjbqs+is9Ms0HD+2aEuEnT3eoruak+BSxGROkGAQpygW/IT/3et0gmywtu5bwX6IYYXoaYvIfJpEFYHOvdtFWFKPSbBh/YIeBh3qoAGerRInKHF3Q20GneMPqBXRSnqaQf1+BP1DEDiKwcXaHX6u38dUJ1oWBQOyPz9Bi6s6mGRMNJttB66TXWiMdRbAr3Tmpi2CtEo9RXWnsIptoj4iOlGI0U9DMyQHkQUjU20Or2HrozTAEnRe++hXjYpiAL0VwCNfAstr1t1epJlTMgAdoHPqJctSjIjByEi4pzrogcc6+Sr05MCMYAO8AlYQ738oiAKUFAVF5HUOXeKfgvxo+BtlPZNQj4Cn4APvrXDlsK0LjyfEJFLD9IJ/m3V6Zs6ZDGZ+S6aLntoCq2hAB2GnBaVnhRFILYgHlLB467//+Cx16nuR8AmX/c0mPodxocqgKnPzyJiBTBN6vYDlVjBYceoACYBbuSnQv8A5X3ZLRr2L/oAAAAASUVORK5CYII="/>
+          <circle class="cls-3" cx="24" cy="24" r="21"/>
+        </g>
+      </g>
+      <g id="ic_new">
+        <path id="new_Path" class="cls-4" d="M33,23H25V15a1,1,0,0,0-2,0v8H15a1,1,0,0,0,0,2h8v8a1,1,0,0,0,2,0V25h8a1,1,0,0,0,0-2Z"/>
+      </g>
+      <g id="ic_download">
+        <g id="download_Path">
+          <path class="cls-4" d="M31.78,25.22a1,1,0,0,0-1.41,0L25,30.59V13a1,1,0,0,0-2,0V30.58l-5.36-5.36a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l7.07,7.08a1,1,0,0,0,1.42,0l7.07-7.08A1,1,0,0,0,31.78,25.22Z"/>
+          <rect class="cls-4" x="12" y="36" width="24" height="2" rx="1"/>
+        </g>
+      </g>
+      <g id="ic_open">
+        <g id="open_Path">
+          <path class="cls-4" d="M16.22,24.78a1,1,0,0,0,1.41,0L23,19.41V37a1,1,0,0,0,2,0V19.41l5.36,5.37a1,1,0,0,0,1.42-1.42l-7.07-7.07a1,1,0,0,0-1.42,0l-7.07,7.07A1,1,0,0,0,16.22,24.78Z"/>
+          <rect class="cls-4" x="12" y="12" width="24" height="2" rx="1" transform="translate(48 26) rotate(180)"/>
+        </g>
+      </g>
+      <g id="ic_TextMode">
+        <g id="textMode_Path">
+          <path class="cls-4" d="M19.58,30,14.29,24.7a1,1,0,0,1,0-1.42L19.58,18A1,1,0,0,1,21,18h0a1,1,0,0,1,0,1.41L16.41,24,21,28.57A1,1,0,0,1,21,30h0A1,1,0,0,1,19.58,30Z"/>
+          <path class="cls-4" d="M27,30h0a1,1,0,0,1,0-1.42L31.59,24,27,19.41A1,1,0,0,1,27,18h0a1,1,0,0,1,1.42,0l5.29,5.29A1,1,0,0,1,34,24a1.05,1.05,0,0,1-.29.71L28.42,30A1,1,0,0,1,27,30Z"/>
+        </g>
+      </g>
+      <g id="ic_play">
+        <g id="play_Path">
+          <g>
+            <circle class="cls-5" cx="24" cy="24" r="19"/>
+            <path class="cls-4" d="M24,5A19,19,0,1,1,5,24,19,19,0,0,1,24,5m0-2A21,21,0,1,0,45,24,21,21,0,0,0,24,3Z"/>
+          </g>
+          <g>
+            <polygon class="cls-3" points="30.1 23.99 20 17.78 20 30.21 30.1 23.99"/>
+            <path class="cls-4" d="M19,33a1,1,0,0,1-.49-.13A1,1,0,0,1,18,32V16a1,1,0,0,1,.51-.87,1,1,0,0,1,1,0l13,8A1,1,0,0,1,33,24a1,1,0,0,1-.48.85l-13,8A1,1,0,0,1,19,33Zm1-15.22V30.21L30.1,24Z"/>
+          </g>
+        </g>
+      </g>
+      <g id="ic_Stop">
+        <g id="stop_Path">
+          <g>
+            <circle class="cls-6" cx="24" cy="24" r="19"/>
+            <path class="cls-4" d="M24,5A19,19,0,1,1,5,24,19,19,0,0,1,24,5m0-2A21,21,0,1,0,45,24,21,21,0,0,0,24,3Z"/>
+          </g>
+          <g>
+            <rect class="cls-3" x="17.5" y="17.5" width="13" height="13"/>
+            <path class="cls-4" d="M30.5,32.5h-13a2,2,0,0,1-2-2v-13a2,2,0,0,1,2-2h13a2,2,0,0,1,2,2v13A2,2,0,0,1,30.5,32.5Zm-13-15h0v13h13v-13Z"/>
+          </g>
+        </g>
+      </g>
+      <g id="ic_reloadProgram">
+        <g id="reload_Path">
+          <g>
+            <circle class="cls-7" cx="24" cy="24" r="19"/>
+            <path class="cls-4" d="M24,5A19,19,0,1,1,5,24,19,19,0,0,1,24,5m0-2A21,21,0,1,0,45,24,21,21,0,0,0,24,3Z"/>
+          </g>
+          <path class="cls-4" d="M34,23a1,1,0,0,0-1,1,9,9,0,1,1-9-9,8.88,8.88,0,0,1,5.65,2H28a1,1,0,0,0,0,2h4a1,1,0,0,0,1-1V14a1,1,0,0,0-2,0v1.52A11,11,0,1,0,24,35,11,11,0,0,0,35,24,1,1,0,0,0,34,23Z"/>
+        </g>
+      </g>
+      <g id="ic_connect">
+        <g id="connect_Path">
+          <path class="cls-4" d="M36,22H12a2,2,0,0,0-2,2v9a2,2,0,0,0,2,2h2a6.29,6.29,0,0,0,1.54,1.71l.06,0c.19.14.38.26.58.38l.06,0a6.63,6.63,0,0,0,1.37.58l.19,0a3.35,3.35,0,0,0,.55.11l.21,0a5.73,5.73,0,0,0,1.51,0l.21,0a3.57,3.57,0,0,0,.55-.11l.19,0a6.63,6.63,0,0,0,1.37-.58l.06,0a5.25,5.25,0,0,0,.58-.38l.06,0A6.29,6.29,0,0,0,24.65,35H36a2,2,0,0,0,2-2V24A2,2,0,0,0,36,22ZM22.89,34a1.88,1.88,0,0,1-.16.23,4.16,4.16,0,0,1-.32.39l-.13.14a4.77,4.77,0,0,1-.54.45l-.12.08c-.2.12-.4.23-.61.33l-.05,0a4.91,4.91,0,0,1-.71.22l-.15,0a3.7,3.7,0,0,1-1.53,0l-.16,0a5.19,5.19,0,0,1-.7-.22l-.05,0a5.92,5.92,0,0,1-.61-.33l-.12-.09a3.34,3.34,0,0,1-.54-.44.86.86,0,0,1-.13-.14,4.16,4.16,0,0,1-.32-.39,1.88,1.88,0,0,1-.16-.23,4.13,4.13,0,0,1-.67-2.25,4.23,4.23,0,1,1,8.45,0A4.16,4.16,0,0,1,22.89,34ZM36,33H25.44a7.1,7.1,0,0,0,.12-1.22,6.23,6.23,0,1,0-12.45,0A7.1,7.1,0,0,0,13.23,33H12V24H36Z"/>
+          <rect class="cls-4" x="14" y="12.99" width="20" height="2"/>
+          <circle class="cls-4" cx="34" cy="13.99" r="2"/>
+          <circle class="cls-4" cx="14" cy="13.99" r="2"/>
+        </g>
+      </g>
+      <g id="ic_disconnect">
+        <g id="disconnect_Path">
+          <path class="cls-4" d="M20.11,18.06a1,1,0,0,0,1.42,0L24,15.59l2.48,2.47a1,1,0,0,0,1.41-1.41l-2.47-2.48,2.47-2.47a1,1,0,0,0,0-1.42,1,1,0,0,0-1.41,0L24,12.76l-2.47-2.48a1,1,0,1,0-1.42,1.42l2.48,2.47-2.48,2.48A1,1,0,0,0,20.11,18.06Z"/>
+          <path class="cls-4" d="M36,22H12a2,2,0,0,0-2,2v9a2,2,0,0,0,2,2h2a6.33,6.33,0,0,0,1.54,1.72l.06,0a5.25,5.25,0,0,0,.58.38l.06,0a6.13,6.13,0,0,0,1.37.58l.19,0,.55.11.21,0a5.73,5.73,0,0,0,1.51,0l.21,0,.55-.11.19,0a6.13,6.13,0,0,0,1.37-.58l.06,0a5.25,5.25,0,0,0,.58-.38l.06,0A6.33,6.33,0,0,0,24.65,35H36a2,2,0,0,0,2-2V24A2,2,0,0,0,36,22ZM22.89,34a1.88,1.88,0,0,1-.16.23,4.16,4.16,0,0,1-.32.39.86.86,0,0,1-.13.14,4.77,4.77,0,0,1-.54.45l-.12.08a5.15,5.15,0,0,1-.61.33l-.05,0a3.26,3.26,0,0,1-.71.22l-.15,0a3.7,3.7,0,0,1-1.53,0l-.16,0a3.35,3.35,0,0,1-.7-.22l-.05,0a4.47,4.47,0,0,1-.61-.33l-.12-.08a4,4,0,0,1-.54-.45.86.86,0,0,1-.13-.14,4.16,4.16,0,0,1-.32-.39,1.88,1.88,0,0,1-.16-.23,4.13,4.13,0,0,1-.67-2.25,4.23,4.23,0,0,1,8.45,0A4.13,4.13,0,0,1,22.89,34ZM36,33H25.44a7,7,0,0,0,.12-1.22,6.23,6.23,0,0,0-12.45,0A7,7,0,0,0,13.23,33H12V24H36Z"/>
+        </g>
+      </g>
+      <g id="ic_UI_disable">
+        <g id="disable_Path">
+          <path class="cls-4" d="M13.27,30.48l1.41-1.41a14.59,14.59,0,0,1-3.49-4.32,1.63,1.63,0,0,1,0-1.52A14.44,14.44,0,0,1,27.74,16l1.6-1.6a16.26,16.26,0,0,0-5.34-.9A16.51,16.51,0,0,0,9.42,22.29a3.65,3.65,0,0,0,0,3.4A16.56,16.56,0,0,0,13.27,30.48Z"/>
+          <path class="cls-4" d="M38.58,22.29a16.49,16.49,0,0,0-5.46-6l2.9-2.9A1,1,0,1,0,34.6,12l-3.26,3.27h0l-1.49,1.5h0L28.18,18.4h0l-1.43,1.44h0l-6.91,6.91h0L18.4,28.17h0l-2.08,2.09h0L14.88,31.7h0L12,34.59A1,1,0,0,0,12,36a1,1,0,0,0,.7.29A1,1,0,0,0,13.4,36l3.27-3.28A16.26,16.26,0,0,0,24,34.47a16.51,16.51,0,0,0,14.58-8.78A3.65,3.65,0,0,0,38.58,22.29ZM29,24a5,5,0,0,1-5,5,4.92,4.92,0,0,1-2.74-.83l6.9-6.9A5,5,0,0,1,29,24Zm7.82.76a14.47,14.47,0,0,1-18.64,6.49l1.66-1.66A6.86,6.86,0,0,0,24,31a7,7,0,0,0,7-7,6.86,6.86,0,0,0-1.4-4.17l2.09-2.09a14.46,14.46,0,0,1,5.13,5.5A1.63,1.63,0,0,1,36.81,24.75Z"/>
+          <path class="cls-4" d="M24,19a5.05,5.05,0,0,1,.68.06l1.66-1.65A7,7,0,0,0,17,24a6.73,6.73,0,0,0,.41,2.34l1.65-1.66A5.05,5.05,0,0,1,19,24,5,5,0,0,1,24,19Z"/>
+        </g>
+      </g>
+      <g id="ic_duplicate">
+        <g id="ic_duplicate-2" data-name="ic_duplicate">
+          <path class="cls-4" d="M35,17H31V13a2,2,0,0,0-2-2H13a2,2,0,0,0-2,2V29a2,2,0,0,0,2,2h4v4a2,2,0,0,0,2,2H35a2,2,0,0,0,2-2V19A2,2,0,0,0,35,17ZM13,29V13H29V29H13Zm22,6H19V31H29a2,2,0,0,0,2-2V19h4Z"/>
+        </g>
+      </g>
+      <g id="ic_delete">
+        <g id="icon_delete">
+          <path class="cls-4" d="M32.17,15H16a2,2,0,0,0-1.45.63A2,2,0,0,0,14,17.17L15.4,37.11a2,2,0,0,0,2,1.89H30.77a2,2,0,0,0,2-1.89l1.39-19.94a2.09,2.09,0,0,0-.54-1.54A2,2,0,0,0,32.17,15Zm0,2-1.4,20L17.39,37,16,17H32.17Z"/>
+          <path class="cls-4" d="M15,12H33a1,1,0,0,0,0-2H15a1,1,0,0,0,0,2Z"/>
+        </g>
+      </g>
+      <g id="ic_undo">
+        <path class="cls-4" d="M24,23H13.41l5.37-5.37a1,1,0,0,0,0-1.41,1,1,0,0,0-1.42,0l-7.07,7.07A1,1,0,0,0,10,24a1,1,0,0,0,.29.71l7.07,7.07a1,1,0,0,0,1.42-1.42L13.41,25H24c8,0,12,3,12,9a1,1,0,0,0,2,0C38,29,35.57,23,24,23Z"/>
+      </g>
+      <g id="ic_redo">
+        <path class="cls-4" d="M20,23H35l-8.38-8.38A1,1,0,1,1,28,13.21l9.37,9.37a2,2,0,0,1,0,2.83L28,34.79a1,1,0,0,1-1.42,0,1,1,0,0,1,0-1.41L35,25H20a9,9,0,0,0-9,9,1,1,0,0,1-2,0A11,11,0,0,1,20,23Z"/>
+      </g>
+      <g id="Warning">
+        <g>
+          <path class="cls-8" d="M24,13.11,35.6,34H12.4L24,13.11m0-3.06a1,1,0,0,0-.87.51L9.82,34.51A1,1,0,0,0,10.7,36H37.3a1,1,0,0,0,.88-1.49L24.88,10.56a1,1,0,0,0-.88-.51Z"/>
+          <circle class="cls-8" cx="24" cy="30.98" r="1"/>
+          <rect class="cls-8" x="22.99" y="18.02" width="2" height="10" rx="1"/>
+        </g>
+      </g>
+      <g id="Error">
+        <g>
+          <circle class="cls-9" cx="24" cy="29.46" r="1"/>
+          <rect class="cls-9" x="22.99" y="16.5" width="2" height="10" rx="1"/>
+          <path class="cls-9" d="M24,11A12,12,0,1,1,12,23,12,12,0,0,1,24,11m0-2A14,14,0,1,0,38,23,14,14,0,0,0,24,9Z"/>
+        </g>
+      </g>
+      <g id="frame">
+        <rect id="frame-2" data-name="frame" class="cls-10" width="48" height="48"/>
+      </g>
+    </g>
+  </g>
+</svg>
 </script>
 
 <!-- appearance of the blocks -->
@@ -850,11 +1360,11 @@
         stroke: #a4c6ff;
       }
 
-      .cls-10, .cls-11, .cls-14, .cls-15, .cls-19, .cls-26, .cls-3, .cls-36, .cls-4, .cls-43, .cls-45 {
+      .cls-10, .cls-11, .cls-14, .cls-15, .cls-19, .cls-26, .cls-3, .cls-36, .cls-37, .cls-4, .cls-43 {
         stroke-miterlimit: 10;
       }
 
-      .cls-15, .cls-19, .cls-20, .cls-22, .cls-26, .cls-4, .cls-40, .cls-45, .cls-46, .cls-48, .cls-50, .cls-55, .cls-7 {
+      .cls-15, .cls-19, .cls-20, .cls-22, .cls-26, .cls-39, .cls-4, .cls-43, .cls-44, .cls-46, .cls-48, .cls-53, .cls-7 {
         fill: none;
       }
 
@@ -862,11 +1372,11 @@
         stroke: #ffc0ac;
       }
 
-      .cls-10, .cls-11, .cls-14, .cls-15, .cls-16, .cls-17, .cls-19, .cls-20, .cls-24, .cls-25, .cls-26, .cls-36, .cls-38, .cls-4, .cls-40, .cls-43, .cls-45, .cls-46, .cls-47, .cls-48, .cls-49, .cls-5, .cls-50, .cls-51, .cls-55, .cls-56, .cls-57, .cls-58, .cls-7 {
+      .cls-10, .cls-11, .cls-14, .cls-15, .cls-16, .cls-17, .cls-19, .cls-20, .cls-24, .cls-25, .cls-26, .cls-36, .cls-37, .cls-39, .cls-4, .cls-43, .cls-44, .cls-45, .cls-46, .cls-47, .cls-48, .cls-49, .cls-5, .cls-53, .cls-54, .cls-55, .cls-56, .cls-7 {
         stroke-width: 2px;
       }
 
-      .cls-24, .cls-25, .cls-5, .cls-6 {
+      .cls-25, .cls-5, .cls-6 {
         fill: #90a4ae;
       }
 
@@ -874,11 +1384,11 @@
         stroke: #607d8b;
       }
 
-      .cls-15, .cls-19, .cls-20, .cls-45, .cls-46, .cls-48, .cls-5, .cls-50, .cls-7 {
+      .cls-15, .cls-19, .cls-20, .cls-43, .cls-44, .cls-46, .cls-48, .cls-5, .cls-7 {
         stroke-linecap: round;
       }
 
-      .cls-16, .cls-17, .cls-20, .cls-24, .cls-25, .cls-38, .cls-40, .cls-46, .cls-47, .cls-48, .cls-49, .cls-5, .cls-50, .cls-51, .cls-55, .cls-56, .cls-57, .cls-58, .cls-7 {
+      .cls-16, .cls-17, .cls-20, .cls-24, .cls-25, .cls-39, .cls-44, .cls-45, .cls-46, .cls-47, .cls-48, .cls-49, .cls-5, .cls-53, .cls-54, .cls-55, .cls-56, .cls-7 {
         stroke-linejoin: round;
       }
 
@@ -894,11 +1404,11 @@
         fill: #eceff1;
       }
 
-      .cls-10, .cls-11, .cls-14, .cls-16, .cls-17, .cls-19, .cls-20, .cls-24, .cls-26, .cls-36, .cls-38, .cls-43, .cls-47, .cls-49, .cls-51, .cls-55, .cls-56, .cls-57, .cls-58 {
+      .cls-10, .cls-11, .cls-14, .cls-16, .cls-17, .cls-19, .cls-20, .cls-24, .cls-26, .cls-36, .cls-37, .cls-45, .cls-47, .cls-49, .cls-53, .cls-54, .cls-55, .cls-56 {
         stroke: #263238;
       }
 
-      .cls-11, .cls-35, .cls-57 {
+      .cls-11, .cls-35, .cls-55 {
         fill: #fff;
       }
 
@@ -906,8 +1416,8 @@
         fill: #263238;
       }
 
-      .cls-14, .cls-38, .cls-41 {
-        fill: #1de9b6;
+      .cls-14, .cls-24, .cls-40 {
+        fill: #84edcf;
       }
 
       .cls-15 {
@@ -943,7 +1453,7 @@
       }
 
       .cls-30 {
-        fill: #00eaff;
+        fill: #00e5ff;
       }
 
       .cls-31 {
@@ -958,71 +1468,71 @@
         fill: #cfd8dc;
       }
 
-      .cls-34, .cls-51 {
+      .cls-34, .cls-49 {
         fill: #ff3d00;
       }
 
       .cls-37 {
-        fill: url(#radial-gradient);
-      }
-
-      .cls-39 {
-        fill: #7c8491;
-      }
-
-      .cls-40, .cls-45 {
-        stroke: #405359;
-      }
-
-      .cls-42 {
-        fill: url(#radial-gradient-2);
-      }
-
-      .cls-43 {
         fill: #e7ebed;
       }
 
-      .cls-44 {
+      .cls-38 {
+        fill: url(#radial-gradient);
+      }
+
+      .cls-39, .cls-43 {
+        stroke: #405359;
+      }
+
+      .cls-41 {
+        fill: url(#radial-gradient-2);
+      }
+
+      .cls-42 {
         fill: url(#radial-gradient-3);
       }
 
-      .cls-46 {
+      .cls-44 {
         stroke: blue;
       }
 
-      .cls-47 {
+      .cls-45 {
         fill: blue;
       }
 
-      .cls-48 {
+      .cls-46 {
         stroke: #00e676;
       }
 
-      .cls-49 {
+      .cls-47 {
         fill: #00e676;
       }
 
-      .cls-50 {
+      .cls-48 {
         stroke: #ff3d00;
       }
 
-      .cls-52 {
+      .cls-50 {
         fill: url(#radial-gradient-4);
       }
 
-      .cls-53 {
+      .cls-51 {
         fill: url(#radial-gradient-5);
       }
 
-      .cls-54 {
+      .cls-52 {
         fill: #448aff;
       }
 
-      .cls-58 {
+      .cls-56 {
         fill: #84edcf;
       }
+      .BlueGrey300{
+      fill:#90a4ae;
+      }
+
     </style>
-    <radialGradient id="radial-gradient" cx="162.42" cy="113.72" r="49.88" gradientTransform="translate(-140.86 -229.66) scale(1.17 2.3)" gradientUnits="userSpaceOnUse">
+    <radialGradient id="radial-gradient" cx="162.42" cy="129.38" r="49.88" gradientTransform="translate(-140.75 -197.04) scale(1.17 2)" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#cfd8dc"/>
       <stop offset="0.1" stop-color="#cfd8dc" stop-opacity="0.97"/>
       <stop offset="0.24" stop-color="#cfd8dc" stop-opacity="0.88"/>
@@ -1036,7 +1546,7 @@
     <radialGradient id="radial-gradient-4" cx="48.5" cy="66.45" r="28" gradientTransform="matrix(1, 0, 0, 1, 0, 0)" xlink:href="#radial-gradient"/>
     <radialGradient id="radial-gradient-5" cx="48.49" cy="29.71" r="34.09" gradientTransform="translate(-6.42 -15.38) scale(1.13 1.36)" xlink:href="#radial-gradient"/>
   </defs>
-  <title>Asset 500Blocks</title>
+  <title>Asset 502Blocks</title>
   <g id="Layer_2" data-name="Layer 2">
     <g id="Event_bg">
       <g id="Events_bg">
@@ -1281,6 +1791,8 @@
           </g>
         </g>
         <g id="Rot360_Handle">
+          <line class="cls-20" x1="48.5" y1="45.48" x2="48.5" y2="8.62"/>
+          <circle id="RotationCenter" class="cls-13" cx="48.5" cy="48.48" r="3"/>
           <circle id="Btn2_HandleAcc0" class="cls-24" cx="48.5" cy="8.62" r="5"/>
         </g>
       </g>
@@ -1302,59 +1814,41 @@
         <path class="cls-23" d="M33.51,51.43v1.78a.89.89,0,0,1-1.78,0V51.43a.89.89,0,0,1,1.78,0Zm0,5.33v1.77a.89.89,0,0,1-1.78,0V56.76a.89.89,0,0,1,1.78,0Zm0,5.32v1.78a.89.89,0,0,1-1.78,0V62.08a.89.89,0,0,1,1.78,0Zm-4.69,3.16h1.77a.89.89,0,1,1,0,1.78H28.82a.89.89,0,1,1,0-1.78Zm0-17.78h1.77a.89.89,0,0,1,0,1.78H28.82a.89.89,0,0,1,0-1.78Z"/>
       </g>
     </g>
-    <g id="ColorBottom_basic">
+    <g id="ColorTop_basic">
       <g id="ColorPalette">
-        <rect id="Btn2_Green" class="cls-27" x="12.5" y="52.57" width="17.96" height="17.96"/>
-        <rect id="Btn2_Blue" class="cls-28" x="30.46" y="52.57" width="17.96" height="17.96"/>
-        <rect id="Btn2_Red" class="cls-29" x="48.43" y="52.57" width="17.96" height="17.96"/>
-        <rect id="Btn2_Yellow" class="cls-30" x="12.5" y="70.53" width="17.96" height="17.96"/>
-        <rect id="Btn2_Cyan" class="cls-31" x="48.43" y="70.53" width="17.96" height="17.96"/>
-        <rect id="Btn2_Magenta" class="cls-32" x="30.46" y="70.53" width="17.96" height="17.96"/>
-        <g id="Btn2_NoColor">
-          <rect class="cls-33" x="66.39" y="70.53" width="17.96" height="17.96"/>
-          <polygon class="cls-34" points="67.8 88.5 66.39 88.5 66.39 87.08 82.94 70.53 84.35 70.53 84.35 71.95 67.8 88.5"/>
+        <rect id="Green" class="cls-27" x="12.5" y="8.56" width="17.96" height="17.96"/>
+        <rect id="Blue" class="cls-28" x="30.46" y="8.56" width="17.96" height="17.96"/>
+        <rect id="Red" class="cls-29" x="48.43" y="8.56" width="17.96" height="17.96"/>
+        <rect id="Yellow" class="cls-30" x="12.5" y="26.53" width="17.96" height="17.96"/>
+        <rect id="Cyan" class="cls-31" x="48.43" y="26.53" width="17.96" height="17.96"/>
+        <rect id="Magenta" class="cls-32" x="30.46" y="26.53" width="17.96" height="17.96"/>
+        <g id="NoColor">
+          <rect class="BlueGrey300" x="66.39" y="26.53" width="17.96" height="17.96"/>
+          <polygon class="cls-34" points="67.8 44.49 66.39 44.49 66.39 43.08 82.94 26.53 84.35 26.52 84.35 27.94 67.8 44.49"/>
         </g>
-        <rect id="Btn2_White_Select" class="cls-35" x="66.39" y="52.57" width="17.96" height="17.96"/>
+        <rect id="White" class="cls-35" x="66.39" y="8.56" width="17.96" height="17.96"/>
       </g>
       <g id="Bg_Thymio_front_color">
-        <path class="cls-36" d="M86.41,39.41v3.18a1.27,1.27,0,0,1-1.28,1.27H77a1.28,1.28,0,0,1-1.28-1.27V39.42Z"/>
-        <path class="cls-36" d="M21.46,39.41v3.18a1.27,1.27,0,0,1-1.27,1.27H12a1.27,1.27,0,0,1-1.28-1.27V39.42Z"/>
-        <rect class="cls-10" x="8.5" y="9.42" width="80" height="30" rx="2"/>
-        <line class="cls-19" x1="62.58" y1="23.57" x2="70.09" y2="23.57"/>
-        <line class="cls-19" x1="78.85" y1="23.57" x2="84.82" y2="23.57"/>
-        <line class="cls-19" x1="34.42" y1="23.57" x2="26.91" y2="23.57"/>
-        <line class="cls-19" x1="18.15" y1="23.57" x2="12.18" y2="23.57"/>
-        <path class="cls-36" d="M43.55,39.42c.69.65.75,2.65,2,3.61a4.86,4.86,0,0,0,3,.83,5,5,0,0,0,3-.83c1.17-1,1.23-3,1.92-3.61Z"/>
-        <line class="cls-19" x1="43.95" y1="23.57" x2="52.88" y2="23.57"/>
+        <path class="cls-36" d="M86.41,84.44v3.17a1.28,1.28,0,0,1-1.28,1.28H77a1.28,1.28,0,0,1-1.28-1.28V84.45Z"/>
+        <path class="cls-36" d="M21.46,84.44v3.17a1.27,1.27,0,0,1-1.27,1.28H12a1.28,1.28,0,0,1-1.28-1.28V84.45Z"/>
+        <rect class="cls-37" x="8.5" y="54.45" width="80" height="30" rx="2"/>
+        <path class="cls-13" d="M70.09,69.59H62.58a1,1,0,0,1,0-2h7.51a1,1,0,0,1,0,2Z"/>
+        <path class="cls-13" d="M84.82,69.59h-6a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z"/>
+        <path class="cls-13" d="M34.42,69.59H26.91a1,1,0,1,1,0-2h7.51a1,1,0,0,1,0,2Z"/>
+        <path class="cls-13" d="M18.15,69.59h-6a1,1,0,0,1,0-2h6a1,1,0,1,1,0,2Z"/>
+        <path class="cls-36" d="M43.55,84.45c.69.65.75,2.64,2,3.61a4.82,4.82,0,0,0,3,.82,5,5,0,0,0,3-.82c1.17-1,1.23-3,1.92-3.61Z"/>
+        <path class="cls-13" d="M52.88,69.59H44a1,1,0,0,1,0-2h8.93a1,1,0,0,1,0,2Z"/>
       </g>
-      <rect id="Gradient_Bottom_basic" class="cls-37" x="9.48" y="24.59" width="78.04" height="13.9" rx="1"/>
-      <g id="SelectedColors_bottom">
-        <rect id="Btn2_SelectedWhite" class="cls-22" x="66.46" y="52.56" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedRed" class="cls-22" x="48.5" y="52.56" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedBlue" class="cls-22" x="30.54" y="52.56" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedGreen" class="cls-22" x="12.57" y="52.56" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedNone" class="cls-22" x="66.46" y="70.53" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedYel" class="cls-22" x="48.5" y="70.53" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedMagenta" class="cls-22" x="30.54" y="70.53" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedCyan" class="cls-22" x="12.57" y="70.53" width="17.96" height="17.97"/>
-      </g>
-    </g>
-    <g id="EvCounter">
-      <path class="cls-13" d="M84,74.47a8.87,8.87,0,0,0-9.12,8.87H73.11a.49.49,0,0,0-.34.84l2.75,2.76a.5.5,0,0,0,.7,0L79,84.18a.49.49,0,0,0-.35-.84H76.85a6.9,6.9,0,0,1,7-6.9,7,7,0,0,1,6.8,6.8,6.91,6.91,0,0,1-6.9,7,6.77,6.77,0,0,1-4.22-1.46,1,1,0,0,0-1.3.08h0a1,1,0,0,0,.08,1.48,8.87,8.87,0,0,0,14.31-7.26A9,9,0,0,0,84,74.47Z"/>
-      <rect id="Mask_ListOperators" class="cls-9" x="-16.23" y="34.08" width="74" height="28.8" rx="1" transform="translate(69.25 27.71) rotate(90)"/>
-      <rect id="Bg_Selected" class="cls-38" x="33.82" y="9.46" width="24" height="77.36" rx="1" transform="translate(93.96 2.33) rotate(90)"/>
-      <g id="List_operators">
-        <path class="cls-13" d="M23.67,24.7l-6.76-3.2a1,1,0,0,1-.45-.34.86.86,0,0,1-.13-.48V20.1a.81.81,0,0,1,.13-.49,1,1,0,0,1,.45-.35l6.76-3.2a1.14,1.14,0,0,1,.42-.12.38.38,0,0,1,.29.11.4.4,0,0,1,.11.29v1.18a.74.74,0,0,1-.52.72l-4.8,2.14L24,22.54a.73.73,0,0,1,.52.72v1.18a.38.38,0,0,1-.12.29.43.43,0,0,1-.28.11A.9.9,0,0,1,23.67,24.7Zm-7.2,3.88a.45.45,0,0,1-.14-.34V27.16a.42.42,0,0,1,.14-.35.45.45,0,0,1,.34-.13H24a.48.48,0,0,1,.35.13.48.48,0,0,1,.13.35v1.08a.53.53,0,0,1-.13.34.48.48,0,0,1-.35.14h-7.2A.46.46,0,0,1,16.47,28.58Z"/>
-        <path class="cls-13" d="M16.71,76a.37.37,0,0,1-.12-.29V74.48a.73.73,0,0,1,.52-.72l4.8-2.16-4.8-2.14a.71.71,0,0,1-.52-.72V67.56a.38.38,0,0,1,.12-.29.44.44,0,0,1,.3-.11,1.23,1.23,0,0,1,.4.12l6.78,3.2a1.7,1.7,0,0,1,.44.36.78.78,0,0,1,.14.48v.58a.77.77,0,0,1-.14.47,1.24,1.24,0,0,1-.44.35l-6.78,3.2a.8.8,0,0,1-.4.14A.4.4,0,0,1,16.71,76Zm0,3.85a.42.42,0,0,1-.14-.34V78.38a.43.43,0,0,1,.14-.35.49.49,0,0,1,.34-.13h7.22a.48.48,0,0,1,.48.48v1.08a.46.46,0,0,1-.14.34.45.45,0,0,1-.34.14H17.07A.42.42,0,0,1,16.73,79.8Z"/>
-        <path class="cls-13" d="M16.32,46.73a.44.44,0,0,1-.14-.34V45.27a.43.43,0,0,1,.14-.35.45.45,0,0,1,.34-.13h7.76a.49.49,0,0,1,.34.14.48.48,0,0,1,.14.34v1.12a.48.48,0,0,1-.14.34.49.49,0,0,1-.34.14H16.66A.46.46,0,0,1,16.32,46.73Zm0,5a.44.44,0,0,1-.14-.34V50.27a.43.43,0,0,1,.14-.35.45.45,0,0,1,.34-.13h7.76a.49.49,0,0,1,.34.14.48.48,0,0,1,.14.34v1.12a.48.48,0,0,1-.14.34.49.49,0,0,1-.34.14H16.66A.46.46,0,0,1,16.32,51.73Z"/>
-      </g>
-      <g id="ValueButtons">
-        <polygon id="ValueDown" class="cls-24" points="53.23 67.09 68.7 67.09 60.96 78.7 53.23 67.09"/>
-        <polygon id="ValueUp" class="cls-24" points="53.23 29.87 60.96 18.26 68.7 29.87 53.23 29.87"/>
-      </g>
-      <rect id="text_value" class="cls-22" x="47.51" y="37.48" width="26.91" height="21.33"/>
-      <g id="Rounded">
-        <path class="cls-39" d="M80.91,84.75l1.42-1.41-1.42-1.42a1,1,0,0,1,0-1.41h0a1,1,0,0,1,1.42,0l1.41,1.41,1.41-1.41a1,1,0,0,1,1.42,0h0a1,1,0,0,1,0,1.41l-1.42,1.42,1.42,1.41a1,1,0,0,1,0,1.42h0a1,1,0,0,1-1.42,0l-1.41-1.42-1.41,1.42a1,1,0,0,1-1.42,0h0A1,1,0,0,1,80.91,84.75Z"/>
+      <rect id="Gradient_Top_basic" class="cls-38" x="9.49" y="55.45" width="77.99" height="12.09" rx="0.75"/>
+      <g id="SelectedColors">
+        <rect id="Btn2_SelectedWhite" class="cls-2" x="65.9" y="8.07" width="18.94" height="18.95"/>
+        <rect id="Btn2_SelectedRed" class="cls-2" x="47.91" y="8.04" width="19" height="19"/>
+        <rect id="Btn2_SelectedBlue" class="cls-2" x="29.97" y="8.07" width="18.94" height="18.95"/>
+        <rect id="Btn2_SelectedGreen" class="cls-2" x="11.98" y="8.04" width="19" height="19"/>
+        <rect id="Btn2_SelectedNone" class="cls-2" x="65.87" y="26.01" width="19" height="19"/>
+        <rect id="Btn2_SelectedYel" class="cls-2" x="47.91" y="26.01" width="19" height="19"/>
+        <rect id="Btn2_SelectedMagenta" class="cls-2" x="29.94" y="26.01" width="19" height="19"/>
+        <rect id="Btn2_SelectedCyan" class="cls-2" x="11.98" y="26.01" width="19" height="19"/>
       </g>
     </g>
     <g id="Ac_Directions">
@@ -1378,12 +1872,12 @@
         <g id="Slid_right">
           <g id="sliderBg_R">
             <line id="SliderR_range" class="cls-22" x1="80.55" y1="19.51" x2="80.55" y2="77.51"/>
-            <line class="cls-40" x1="80.55" y1="13.53" x2="80.55" y2="83.49"/>
+            <line class="cls-39" x1="80.55" y1="13.53" x2="80.55" y2="83.49"/>
             <polygon class="cls-21" points="77.06 13.53 80.55 7.48 84.04 13.53 77.06 13.53"/>
             <polygon class="cls-21" points="77.06 83.49 80.55 89.53 84.04 83.49 77.06 83.49"/>
           </g>
           <g id="Cursor_right">
-            <circle id="CursorRight" class="cls-38" cx="80.55" cy="48.51" r="6"/>
+            <circle id="CursorRight" class="cls-24" cx="80.55" cy="48.51" r="6"/>
             <circle id="SameSpeed_R" class="cls-13" cx="80.55" cy="48.51" r="2"/>
           </g>
           <rect id="StopIndicator_R" class="cls-34" x="78.47" y="46.37" width="4.27" height="4.27"/>
@@ -1391,12 +1885,12 @@
         <g id="Slid_left">
           <g id="sliderBg_L">
             <line id="SliderL_range" class="cls-22" x1="16.7" y1="19.51" x2="16.7" y2="77.51"/>
-            <line class="cls-40" x1="16.7" y1="13.53" x2="16.7" y2="83.49"/>
+            <line class="cls-39" x1="16.7" y1="13.53" x2="16.7" y2="83.49"/>
             <polygon class="cls-21" points="13.23 13.53 16.72 7.48 20.21 13.53 13.23 13.53"/>
             <polygon class="cls-21" points="13.21 83.49 16.7 89.53 20.19 83.49 13.21 83.49"/>
           </g>
           <g id="Cursor_left">
-            <circle id="CursorLeft" class="cls-38" cx="16.7" cy="48.51" r="6"/>
+            <circle id="CursorLeft" class="cls-24" cx="16.7" cy="48.51" r="6"/>
             <circle id="SameSpeed_L" class="cls-13" cx="16.7" cy="48.51" r="2"/>
           </g>
           <rect id="StopIndicator_L" class="cls-34" x="14.62" y="46.37" width="4.27" height="4.27"/>
@@ -1405,21 +1899,21 @@
       <g id="ThymioTop_wheels_mini">
         <path class="cls-11" d="M48.51,35.73a12.38,12.38,0,0,0-8.74,3.59.9.9,0,0,0-.26.64V53a.76.76,0,0,0,.75.75H56.74a.74.74,0,0,0,.75-.74V40a.9.9,0,0,0-.26-.64A12.31,12.31,0,0,0,48.51,35.73Z"/>
         <g>
-          <rect class="cls-41" x="54.57" y="44.74" width="2.93" height="7.49" rx="1.12"/>
+          <rect class="cls-40" x="54.57" y="44.74" width="2.93" height="7.49" rx="1.12"/>
           <path class="cls-13" d="M56.38,52.74H55.7a1.5,1.5,0,0,1-.52-.09.5.5,0,1,1,.32-.94.64.64,0,0,0,.2,0h.68a.5.5,0,0,1,.5.5A.5.5,0,0,1,56.38,52.74Zm1.12-1.47a.5.5,0,0,1-.5-.5V49.72a.5.5,0,0,1,1,0v1.05A.5.5,0,0,1,57.5,51.27Zm-2.93-.35a.51.51,0,0,1-.5-.5V49.37a.5.5,0,0,1,.5-.5.5.5,0,0,1,.5.5v1.05A.5.5,0,0,1,54.57,50.92Zm2.93-2.8a.5.5,0,0,1-.5-.5v-1a.5.5,0,1,1,1,0v1A.5.5,0,0,1,57.5,48.12Zm-2.93-.35a.51.51,0,0,1-.5-.5V46.22a.5.5,0,0,1,.5-.5.5.5,0,0,1,.5.5v1.05A.5.5,0,0,1,54.57,47.77Zm2.17-2.47a.44.44,0,0,1-.16,0,.71.71,0,0,0-.2,0H55.7a.5.5,0,0,1,0-1h.7a1.54,1.54,0,0,1,.52.09.51.51,0,0,1,.31.64A.5.5,0,0,1,56.74,45.3Z"/>
         </g>
         <g>
-          <rect class="cls-41" x="39.5" y="44.74" width="2.93" height="7.49" rx="1.12"/>
+          <rect class="cls-40" x="39.5" y="44.74" width="2.93" height="7.49" rx="1.12"/>
           <path class="cls-13" d="M41.31,52.74h-.69a1.48,1.48,0,0,1-.51-.09.49.49,0,0,1-.32-.63.51.51,0,0,1,.64-.31.63.63,0,0,0,.19,0h.68a.5.5,0,0,1,.51.5A.5.5,0,0,1,41.31,52.74Zm1.12-1.47a.5.5,0,0,1-.5-.5V49.72a.5.5,0,0,1,.5-.5.51.51,0,0,1,.5.5v1.05A.5.5,0,0,1,42.43,51.27Zm-2.93-.35a.5.5,0,0,1-.5-.5V49.37a.5.5,0,0,1,1,0v1.05A.5.5,0,0,1,39.5,50.92Zm2.93-2.8a.5.5,0,0,1-.5-.5v-1a.5.5,0,0,1,.5-.5.51.51,0,0,1,.5.5v1A.5.5,0,0,1,42.43,48.12Zm-2.93-.35a.5.5,0,0,1-.5-.5V46.22a.5.5,0,0,1,1,0v1.05A.5.5,0,0,1,39.5,47.77Zm2.17-2.47a.41.41,0,0,1-.16,0,.78.78,0,0,0-.21,0h-.68a.5.5,0,1,1,.06-1h.62a1.6,1.6,0,0,1,.53.09.51.51,0,0,1,.31.64A.5.5,0,0,1,41.67,45.3Z"/>
         </g>
       </g>
     </g>
     <g id="Color_top_adv">
-      <circle id="Bg_gradient_top" class="cls-42" cx="48.5" cy="30.54" r="28"/>
+      <circle id="Bg_gradient_top" class="cls-41" cx="48.5" cy="30.54" r="28"/>
       <g id="Bg_Thymio_front_color-2" data-name="Bg_Thymio_front_color">
         <path class="cls-36" d="M82.62,87.1V90a1.15,1.15,0,0,1-1.15,1.15H74.11A1.14,1.14,0,0,1,73,90V87.1Z"/>
         <path class="cls-36" d="M24.17,87.1V90A1.15,1.15,0,0,1,23,91.1H15.67A1.14,1.14,0,0,1,14.52,90V87.1Z"/>
-        <rect class="cls-43" x="12.5" y="60.1" width="72" height="27" rx="2"/>
+        <rect class="cls-37" x="12.5" y="60.1" width="72" height="27" rx="2"/>
         <path class="cls-13" d="M67.93,73.83H61.18a1,1,0,1,1,0-2h6.75a1,1,0,0,1,0,2Z"/>
         <path class="cls-13" d="M81.19,73.83H75.81a1,1,0,0,1,0-2h5.38a1,1,0,0,1,0,2Z"/>
         <path class="cls-13" d="M35.82,73.83H29.07a1,1,0,0,1,0-2h6.75a1,1,0,1,1,0,2Z"/>
@@ -1427,31 +1921,31 @@
         <path class="cls-36" d="M44.05,87.1c.62.59.67,2.38,1.75,3.25a4.31,4.31,0,0,0,2.71.74,4.48,4.48,0,0,0,2.72-.74c1.05-.88,1.11-2.67,1.72-3.25Z"/>
         <path class="cls-13" d="M52.45,73.83h-8a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
       </g>
-      <rect id="Gradient_top" class="cls-44" x="13.52" y="61.13" width="69.95" height="10.68" rx="0.75"/>
+      <rect id="Gradient_top" class="cls-42" x="13.52" y="61.13" width="69.95" height="10.68" rx="0.75"/>
       <g id="Sliders_rgb">
         <g id="Slid_blue">
-          <line id="Bg_slid_blue" class="cls-45" x1="20.5" y1="48.54" x2="76.5" y2="48.54"/>
-          <line id="Slid_blue_value" class="cls-46" x1="20.5" y1="48.54" x2="76.5" y2="48.54"/>
-          <circle id="Cursor_blue" class="cls-47" cx="48.5" cy="48.5" r="5"/>
+          <line id="Bg_slid_blue" class="cls-43" x1="20.5" y1="48.54" x2="76.5" y2="48.54"/>
+          <line id="Slid_blue_value" class="cls-44" x1="20.5" y1="48.54" x2="76.5" y2="48.54"/>
+          <circle id="Cursor_blue" class="cls-45" cx="48.5" cy="48.5" r="5"/>
         </g>
         <g id="Slid_green">
-          <line id="Bg_slid_green" class="cls-45" x1="20.5" y1="30.5" x2="76.5" y2="30.5"/>
-          <line id="Slid_green_value" class="cls-48" x1="20.5" y1="30.54" x2="76.5" y2="30.54"/>
-          <circle id="Cursor_green" class="cls-49" cx="48.5" cy="30.54" r="5"/>
+          <line id="Bg_slid_green" class="cls-43" x1="20.5" y1="30.5" x2="76.5" y2="30.5"/>
+          <line id="Slid_green_value" class="cls-46" x1="20.5" y1="30.54" x2="76.5" y2="30.54"/>
+          <circle id="Cursor_green" class="cls-47" cx="48.5" cy="30.54" r="5"/>
         </g>
         <g id="Slid_red">
-          <line id="Bg_slid_red" class="cls-45" x1="20.5" y1="12.54" x2="76.5" y2="12.54"/>
-          <line id="Slid_red_value" class="cls-50" x1="20.5" y1="12.54" x2="76.5" y2="12.54"/>
-          <circle id="Cursor_red" class="cls-51" cx="48.5" cy="12.54" r="5"/>
+          <line id="Bg_slid_red" class="cls-43" x1="20.5" y1="12.54" x2="76.5" y2="12.54"/>
+          <line id="Slid_red_value" class="cls-48" x1="20.5" y1="12.54" x2="76.5" y2="12.54"/>
+          <circle id="Cursor_red" class="cls-49" cx="48.5" cy="12.54" r="5"/>
         </g>
       </g>
     </g>
     <g id="Color_bot_adv_copy" data-name="Color_bot_adv copy">
-      <circle id="Bg_gradient_bottom" class="cls-52" cx="48.5" cy="66.45" r="28"/>
+      <circle id="Bg_gradient_bottom" class="cls-50" cx="48.5" cy="66.45" r="28"/>
       <g id="Bg_Thymio_front_color_bot">
         <path class="cls-36" d="M82.62,32.11V35a1.15,1.15,0,0,1-1.15,1.15H74.11A1.14,1.14,0,0,1,73,35V32.11Z"/>
         <path class="cls-36" d="M24.17,32.11V35A1.15,1.15,0,0,1,23,36.11H15.67A1.14,1.14,0,0,1,14.52,35V32.11Z"/>
-        <rect class="cls-43" x="12.5" y="5.11" width="72" height="27" rx="2"/>
+        <rect class="cls-37" x="12.5" y="5.11" width="72" height="27" rx="2"/>
         <path class="cls-13" d="M67.93,18.84H61.18a1,1,0,0,1,0-2h6.75a1,1,0,0,1,0,2Z"/>
         <path class="cls-13" d="M81.19,18.84H75.81a1,1,0,0,1,0-2h5.38a1,1,0,0,1,0,2Z"/>
         <path class="cls-13" d="M35.82,18.84H29.07a1,1,0,0,1,0-2h6.75a1,1,0,0,1,0,2Z"/>
@@ -1459,44 +1953,44 @@
         <path class="cls-36" d="M44.05,32.11c.62.59.67,2.38,1.75,3.25a4.31,4.31,0,0,0,2.71.74,4.48,4.48,0,0,0,2.72-.74c1.05-.88,1.11-2.66,1.72-3.25Z"/>
         <path class="cls-13" d="M52.45,18.84h-8a1,1,0,0,1,0-2h8a1,1,0,0,1,0,2Z"/>
       </g>
-      <rect id="Gradient_bottom" class="cls-53" x="13.52" y="18.86" width="69.95" height="12.27" rx="0.75"/>
+      <rect id="Gradient_bottom" class="cls-51" x="13.52" y="18.86" width="69.95" height="12.27" rx="0.75"/>
       <g id="Sliders_rgb_bot">
         <g id="Slid_blue_bot">
-          <line id="Bg_slid_blue_bot" class="cls-45" x1="20.5" y1="84.43" x2="76.5" y2="84.43"/>
-          <line id="Slid_blue_value_bot" class="cls-46" x1="20.5" y1="84.43" x2="76.5" y2="84.43"/>
-          <circle id="Cursor_blue_bot" class="cls-47" cx="48.5" cy="84.39" r="5"/>
+          <line id="Bg_slid_blue_bot" class="cls-43" x1="20.5" y1="84.43" x2="76.5" y2="84.43"/>
+          <line id="Slid_blue_value_bot" class="cls-44" x1="20.5" y1="84.43" x2="76.5" y2="84.43"/>
+          <circle id="Cursor_blue_bot" class="cls-45" cx="48.5" cy="84.39" r="5"/>
         </g>
         <g id="Slid_green_bot">
-          <line id="Bg_slid_green_bot" class="cls-45" x1="20.5" y1="66.4" x2="76.5" y2="66.4"/>
-          <line id="Slid_green_value_bot" class="cls-48" x1="20.5" y1="66.43" x2="76.5" y2="66.43"/>
-          <circle id="Cursor_green_bot" class="cls-49" cx="48.5" cy="66.43" r="5"/>
+          <line id="Bg_slid_green_bot" class="cls-43" x1="20.5" y1="66.4" x2="76.5" y2="66.4"/>
+          <line id="Slid_green_value_bot" class="cls-46" x1="20.5" y1="66.43" x2="76.5" y2="66.43"/>
+          <circle id="Cursor_green_bot" class="cls-47" cx="48.5" cy="66.43" r="5"/>
         </g>
         <g id="Slid_red_bot">
-          <line id="Bg_slid_red_bot" class="cls-45" x1="20.5" y1="48.43" x2="76.5" y2="48.43"/>
-          <line id="Slid_red_value_bot" class="cls-50" x1="20.5" y1="48.43" x2="76.5" y2="48.43"/>
-          <circle id="Cursor_red_bot" class="cls-51" cx="48.5" cy="48.43" r="5"/>
+          <line id="Bg_slid_red_bot" class="cls-43" x1="20.5" y1="48.43" x2="76.5" y2="48.43"/>
+          <line id="Slid_red_value_bot" class="cls-48" x1="20.5" y1="48.43" x2="76.5" y2="48.43"/>
+          <circle id="Cursor_red_bot" class="cls-49" cx="48.5" cy="48.43" r="5"/>
         </g>
       </g>
     </g>
     <g id="Ac_Music_med">
       <g id="zones_Bg">
-        <rect class="cls-54" x="11.78" y="74.95" width="72" height="10"/>
-        <rect class="cls-54" x="11.78" y="62.93" width="72" height="10"/>
-        <rect class="cls-54" x="11.78" y="50.91" width="72" height="10"/>
-        <rect class="cls-54" x="11.78" y="38.89" width="72" height="10"/>
-        <rect class="cls-54" x="11.78" y="26.87" width="72" height="10"/>
+        <rect class="cls-52" x="11.78" y="74.95" width="72" height="10"/>
+        <rect class="cls-52" x="11.78" y="62.93" width="72" height="10"/>
+        <rect class="cls-52" x="11.78" y="50.91" width="72" height="10"/>
+        <rect class="cls-52" x="11.78" y="38.89" width="72" height="10"/>
+        <rect class="cls-52" x="11.78" y="26.87" width="72" height="10"/>
       </g>
       <g id="notes">
-        <circle id="Btn3_note1" class="cls-55" cx="18.09" cy="79.95" r="5"/>
-        <circle id="Btn3_note2" class="cls-56" cx="29.7" cy="67.93" r="5"/>
-        <circle id="Btn3_note3" class="cls-57" cx="41.31" cy="55.91" r="5"/>
-        <circle id="Btn3_note4" class="cls-57" cx="52.92" cy="43.89" r="5"/>
-        <circle id="Btn3_note5" class="cls-57" cx="64.53" cy="31.87" r="5"/>
-        <circle id="Btn3_note6" class="cls-57" cx="76.14" cy="43.89" r="5"/>
+        <circle id="Btn3_note1" class="cls-53" cx="18.09" cy="79.95" r="5"/>
+        <circle id="Btn3_note2" class="cls-54" cx="29.7" cy="67.93" r="5"/>
+        <circle id="Btn3_note3" class="cls-55" cx="41.31" cy="55.91" r="5"/>
+        <circle id="Btn3_note4" class="cls-55" cx="52.92" cy="43.89" r="5"/>
+        <circle id="Btn3_note5" class="cls-55" cx="64.53" cy="31.87" r="5"/>
+        <circle id="Btn3_note6" class="cls-55" cx="76.14" cy="43.89" r="5"/>
       </g>
       <g id="Slider">
         <line id="slid_off" class="cls-20" x1="84.52" y1="13.33" x2="26.39" y2="13.33"/>
-        <circle id="cursor" class="cls-58" cx="55.45" cy="13.33" r="5"/>
+        <circle id="cursor" class="cls-56" cx="55.45" cy="13.33" r="5"/>
       </g>
       <g id="beat">
         <path class="cls-13" d="M23.61,11.36a.28.28,0,0,1,.08.2v.82a.3.3,0,0,1-.08.2.28.28,0,0,1-.21.08H19.71a.28.28,0,0,1-.21-.07.32.32,0,0,1-.08-.21v-.82a.28.28,0,0,1,.08-.2.29.29,0,0,1,.21-.09H23.4A.29.29,0,0,1,23.61,11.36Z"/>
@@ -1506,8 +2000,6 @@
     </g>
   </g>
 </svg>
-
-
 </script>
 
 <title>VPL</title>
@@ -1593,17 +2085,23 @@ window["vplOnRun"] = function (code) {
 <script src="vpl-block.js"></script>
 <script src="vpl-emptyblock.js"></script>
 <script src="vpl-canvas.js"></script>
+<script src="vpl-canvas-scroll.js"></script>
 <script src="vpl-blocklib.js"></script>
 <script src="vpl-blocklib-svg.js"></script>
 <script src="vpl-blocklib-l2.js"></script>
 <script src="vpl-blocklib-js.js"></script>
 <script src="vpl-eventhandler.js"></script>
+<script src="vpl-uiconfig.js"></script>
 <script src="vpl-program.js"></script>
 <script src="vpl-code.js"></script>
 <script src="vpl-code-aseba.js"></script>
 <script src="vpl-code-l2.js"></script>
 <script src="vpl-code-js.js"></script>
+<script src="vpl-cmd.js"></script>
+<script src="vpl-cmd-vpl.js"></script>
 <script src="vpl-controlbar.js"></script>
+<script src="vpl-buttons-js.js"></script>
+<script src="vpl-controlbar-btn.js"></script>
 <script src="vpl-program-canvas.js"></script>
 <script src="vpl-error.js"></script>
 <script src="vpl-draw.js"></script>
@@ -1611,6 +2109,8 @@ window["vplOnRun"] = function (code) {
 <script src="vpl-aeslfile.js"></script>
 <script src="vpl-texteditor.js"></script>
 <script src="vpl-sourceedit.js"></script>
+<script src="vpl-cmd-src.js"></script>
+<script src="vpl-ui-svg.js"></script>
 <script src="vpl-runglue.js"></script>
 <script src="vpl-main.js"></script>
 
@@ -1622,6 +2122,7 @@ window["vplOnRun"] = function (code) {
 <script src="vpl-virtualthymio.js"></script>
 <script src="compiler-ns.js"></script>
 <script src="compiler-vm.js"></script>
+<script src="compiler-dis.js"></script>
 <script src="compiler.js"></script>
 <script src="compiler-macros.js"></script>
 <script src="compiler-l2.js"></script>
@@ -1633,8 +2134,10 @@ window["vplOnRun"] = function (code) {
 <script src="a3a-device.js"></script>
 <script src="a3a-virtual-thymio.js"></script>
 <script src="vpl-virtualthymio-a3a.js"></script>
+<script src="vpl-obstacles.js"></script>
 <script src="vpl-sim.js"></script>
 <script src="vpl-sim2d.js"></script>
+<script src="vpl-cmd-sim.js"></script>
 
 </head>
 
