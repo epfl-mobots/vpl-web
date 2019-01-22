@@ -92,6 +92,10 @@ A3a.vpl.VertScrollArea.prototype.begin = function (canvas) {
 		null,
 		null);
 	item.draggable = false;
+	item.doScroll = function (dx, dy) {
+		self.scrollCanvas(dy);
+		canvas.onUpdate();
+	};
 	canvas.setItem(item);
 
 	// background

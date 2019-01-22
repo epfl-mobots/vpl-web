@@ -24,7 +24,7 @@ A3a.vpl.Program.CanvasRenderingState = function () {
 	@param {{
 		notInteractive:(boolean|undefined),
 		notDropTarget:(boolean|undefined),
-		notClicable:(boolean|undefined),
+		notClickable:(boolean|undefined),
 		notDraggable:(boolean|undefined),
 		scale:(number|undefined),
 		disabled: (boolean|undefined)
@@ -119,7 +119,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, x, y, opts
 			return canvas.makeZoomedClone(zoomedItem);
 		};
 	}
-	item.clicable = !(opts && opts.notClicable);
+	item.clickable = !(opts && opts.notClickable);
 	item.draggable = !(opts && opts.notDraggable);
 	var index = canvas.itemIndex(block);
 	canvas.setItem(item, index);
@@ -266,7 +266,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				y,
 				{
 					notInteractive: eventHandler.disabled,
-					notClicable: eventHandler.disabled
+					notClickable: eventHandler.disabled
 				});
 		} else {
 			childItem = this.addBlockToCanvas(canvas,
@@ -276,7 +276,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				y,
 				{
 					notDropTarget: eventHandler.disabled,
-					notClicable: true,
+					notClickable: true,
 					notDraggable: true
 				});
 		}
@@ -293,7 +293,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				y,
 				{
 					notInteractive: eventHandler.disabled,
-					notClicable: eventHandler.disabled
+					notClickable: eventHandler.disabled
 				});
 		} else {
 			childItem = this.addBlockToCanvas(canvas,
@@ -301,7 +301,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 					{eventSide: false, index: j}),
 				actionX0 + step * j,
 				y,
-				{notDropTarget: false, notClicable: true, notDraggable: true});
+				{notDropTarget: false, notClickable: true, notDraggable: true});
 		}
 		item.attachItem(childItem);
 	}, this);

@@ -36,11 +36,13 @@ A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, d
 	this.drawContent = draw;
 	/** @type {?A3a.vpl.CanvasItem.draw} */
 	this.drawOverlay = null;
-	this.clicable = true;
+	this.clickable = true;
 	this.draggable = true;
 	this.interactiveCB = interactiveCB || null;
 	this.doDrop = doDrop || null;
 	this.canDrop = canDrop || null;
+	/** @type {?A3a.vpl.CanvasItem.doScroll} */
+	this.doScroll = null;
 	this.id = id || "";
 	/** @type {?function(A3a.vpl.CanvasItem):A3a.vpl.CanvasItem} */
 	this.zoomOnLongPress = null;
@@ -151,6 +153,11 @@ A3a.vpl.CanvasItem.doDrop;
 	@typedef {function(*,*):boolean} (arguments: target, dropped data)
 */
 A3a.vpl.CanvasItem.canDrop;
+
+/**
+	@typedef {function(number,number):void} (arguments: dx, dy)
+*/
+A3a.vpl.CanvasItem.doScroll;
 
 /** Check if position is inside the clipping rect
 	@param {number} x
@@ -354,16 +361,32 @@ A3a.vpl.Canvas = function (canvas) {
 		}
 	}, false);
 
-	canvas.addEventListener("wheel", function (event) {
-		if (self.wheel) {
-			event.preventDefault();
-			var dx = event["deltaMode"] === 0 ? event["deltaX"]
-				: event["deltaMode"] === 1 ? event["deltaX"] * 10
-				: event["deltaX"] * 50;
-			var dy = event["deltaMode"] === 0 ? event["deltaY"]
-				: event["deltaMode"] === 1 ? event["deltaY"] * 10
-				: event["deltaY"] * 50;
-			self.wheel(dx, dy);
+	canvas.addEventListener("wheel", function (wheelEvent) {
+		function doScroll(item) {
+			if (item.doScroll) {
+				wheelEvent.preventDefault();
+				var dx = wheelEvent["deltaMode"] === 0 ? wheelEvent["deltaX"]
+					: wheelEvent["deltaMode"] === 1 ? wheelEvent["deltaX"] * 10
+					: wheelEvent["deltaX"] * 30;
+				var dy = wheelEvent["deltaMode"] === 0 ? wheelEvent["deltaY"]
+					: wheelEvent["deltaMode"] === 1 ? wheelEvent["deltaY"] * 10
+					: wheelEvent["deltaY"] * 30;
+				item.doScroll(dx, dy);
+			}
+		}
+
+		var mouseEvent = self.makeMouseEvent(wheelEvent);
+		if (self.isZoomedItemProxyClicked(mouseEvent)) {
+			self.zoomedItemProxy && doScroll(self.zoomedItemProxy);
+		} else if (self.zoomedItemIndex < 0) {
+			var indices = self.clickedItemIndex(mouseEvent, true);
+			// pick the top-most item with doScroll
+			for (var i = 0; i < indices.length; i++) {
+				if (self.items[indices[i]].doScroll != null) {
+					doScroll(self.items[indices[i]]);
+					break;
+				}
+			}
 		}
 	}, false);
 
@@ -572,17 +595,17 @@ A3a.vpl.Canvas.prototype.itemIndex = function (data) {
 
 /** Get the index of the item under the position specified by a mouse event
 	@param {A3a.vpl.CanvasItem.mouseEvent} mouseEvent
-	@param {boolean} clicableOnly
+	@param {boolean} clickableOnly
 	@return {Array.<number>} indices from top-most (last) element, or empty if none found
 */
-A3a.vpl.Canvas.prototype.clickedItemIndex = function (mouseEvent, clicableOnly) {
+A3a.vpl.Canvas.prototype.clickedItemIndex = function (mouseEvent, clickableOnly) {
 	var canvasBndRect = this.canvas.getBoundingClientRect();
 	var x = mouseEvent.x - canvasBndRect.left;
 	var y = mouseEvent.y - canvasBndRect.top;
 	/** @type {Array.<number>} */
 	var indices = [];
 	for (var i = this.items.length - 1; i >= 0; i--) {
-		if ((!clicableOnly || this.items[i].clicable) &&
+		if ((!clickableOnly || this.items[i].clickable) &&
 			x >= this.items[i].x && x <= this.items[i].x + this.items[i].width &&
 			y >= this.items[i].y && y <= this.items[i].y + this.items[i].height &&
 			this.items[i].isInClip(x, y)) {
