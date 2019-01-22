@@ -391,7 +391,7 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 		var adjSc = dw["adjscale"] || 1;
 		var color = dw["color"] || "black";
 		var linewidth = dw["linewidth"] === undefined ? 1 : dw["linewidth"];
-		var bnds = this.clientData.svg[f].getElementBounds(robotId);
+		var bnds = uiConfig.svg[f].getElementBounds(robotId);
 		var r = (0.5 + dx) * (bnds.xmax - bnds.xmin) * adjSc;
 		var ixSlider = (aux["buttons"] ? aux["buttons"].length : 0) +
 			(aux["radiobuttons"] ? 1 : 0);
@@ -709,10 +709,10 @@ A3a.vpl.patchBlocksSVG = function (uiConfig) {
 			topControlSpace: 2 * controlSize,
 			stripHorMargin: Math.min(Math.max(blockSize / 15, 2), 6),
 			stripVertMargin: Math.min(Math.max(blockSize / 15, 2), 6),
-			eventStyle: uiConfig["styles"]["event"],
-			stateStyle: uiConfig["styles"]["state"],
-			actionStyle: uiConfig["styles"]["action"],
-			commentStyle: uiConfig["styles"]["comment"],
+			eventStyle: uiConfig["styles"]["event"] || "#f70",
+			stateStyle: uiConfig["styles"]["state"] || "#0c0",
+			actionStyle: uiConfig["styles"]["action"] || "#38f",
+			commentStyle: uiConfig["styles"]["comment"] || "#aaa",
 			background: uiConfig["styles"]["background"] || "white",
 			ruleBackground: uiConfig["styles"]["ruleBackground"] || "#ddd",
 			ruleMarks: uiConfig["styles"]["ruleMarks"] || "#bbb",

@@ -217,3 +217,24 @@ Property "buttons" is an array with one element per button appearance. Each butt
 - "name": button name (see "Toolbar definitions" above)
 - "state": array of strings which restricts when the appearance is used: "pressed" (the button is being clicked or tapped), "unpressed" (the button is not being clicked or tapped), "selected" (the button corresponds to a state which is ON), "unselected" (the button corresponds to a state which is OFF), "disabled" (the action is disabled), "enabled" (the action is enabled). The first appearance match is used; typically appearance with "state" set to ["disabled"], ["pressed"], ["selected"] (for toggle buttons only), and [] (normal appearance) are defined in that order.
 - "svg": array of objects containing a "uri" property, like for blocks (see above). SVG elements are rendered starting with the first one, with the last one in the foreground.
+
+
+Global style settings
+---------------------
+
+Some global style settings can be specified in a top-level object named "style". Here is the list of properties it can contain, their type and their default values.
+
+- "event" (string, default: "#f70"): color of event blocks
+- "state" (string, default: "#0c0"): color of state blocks
+- "action" (string, default: "#38f"): color of action block
+- "comment" (string, default: "#aaa"): color of comment blocks
+- "background" (string, default: "white"): background color
+- "ruleBackground" (string, default: "#ddd"): background color of rules
+- "ruleMarks" (string, default: "#bbb"): color of rule marks (colon dots)
+- "scrollbarThumbColor" (string, default: "navy"): color of scrollbar thumbs
+- "scrollbarBackgroundColor" (string, default: "#ccc"): color of scrollbar background (rectangular shape behind the thumb)
+- "scrollbarWidth" (number, default: 5): scrollbar width in css pixels
+- "scrollingBlockLib" (boolean, default: false): true for single-column sets of event and action blocks, scrolling if required; or false for as many columns as required
+- "controlColor" (string, default: "navy"): color of control buttons in normal state
+- "controlDownColor" (string, default: "#37f"): color of control buttons in pressed state
+- "controlActiveColor" (string, default: "#06f"): color of control buttons in active (selected) state
