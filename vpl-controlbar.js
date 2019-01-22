@@ -84,9 +84,10 @@ A3a.vpl.ControlBar.prototype.addStretch = function () {
  	@return {void}
 */
 A3a.vpl.ControlBar.prototype.calcLayout = function (pos, gap, separatorGap) {
-	// remove duplicate spaces and stretches
+	// remove leading and duplicate spaces and stretches
 	var layout = this.layout
-		.trim()
+		.replace(/^[s ]+/, "")
+		.replace(/[s ]+$/, "")
 		.replace(/ +/g, " ")
 		.replace(/s +/g, "s").replace(/ +s/g, "s")
 		.replace(/s+/g, "s");
