@@ -24,6 +24,11 @@ A3a.vpl.VertScrollArea = function (hTotal, x, y, w, hView) {
 	/** @type {number} */
 	this.hView = hView || 0;
 
+	// options
+	this.leftScrollbar = false;
+	this.backgroundStyle = "";
+
+	// state
 	this.vertScroll = 0;
 	this.y0 = 0;
 	/** @type {A3a.vpl.Canvas} */
@@ -89,6 +94,16 @@ A3a.vpl.VertScrollArea.prototype.begin = function (canvas) {
 	item.draggable = false;
 	canvas.setItem(item);
 
+	// background
+	if (this.backgroundStyle) {
+		canvas.addDecoration(function (ctx) {
+			ctx.save();
+			ctx.fillStyle = self.backgroundStyle;
+			ctx.fillRect(self.x, self.y, self.w, self.hView);
+			ctx.restore();
+		});
+	}
+
 	// scrollbar
 	if (this.hTotal > this.hView) {
 		canvas.addDecoration(function (ctx) {
@@ -100,10 +115,12 @@ A3a.vpl.VertScrollArea.prototype.begin = function (canvas) {
 			var scrollbarMotion = scrollbarRelMotion * scrollbarMaxMotion;
 			ctx.save();
 			ctx.fillStyle = canvas.dims.scrollbarBackgroundColor;
-			ctx.fillRect(self.x + self.w + 2, self.y,
+			ctx.fillRect(self.leftScrollbar ? self.x - 2 - canvas.dims.scrollbarWidth : self.x + self.w + 2,
+				self.y,
 				canvas.dims.scrollbarWidth, self.hView);
 			ctx.fillStyle = canvas.dims.scrollbarThumbColor;
-			ctx.fillRect(self.x + self.w + 2, self.y + scrollbarMotion,
+			ctx.fillRect(self.leftScrollbar ? self.x - 2 - canvas.dims.scrollbarWidth : self.x + self.w + 2,
+				self.y + scrollbarMotion,
 				canvas.dims.scrollbarWidth, scrollbarAbsLength);
 			ctx.restore();
 		});
