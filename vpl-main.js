@@ -52,7 +52,7 @@ document.addEventListener("touchend", function (e) {
 	@param {function(Object,Object):void} onLoad function called asynchronously once
 	everything has been loaded; first arg is the parsed ui json file, second arg is an
 	object with properties for all resources (key=filename, value=text content)
-	@param {function():void} onError function called asynchronously upon error
+	@param {function(*):void} onError function called asynchronously upon error
 	@return {void}
 */
 function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, onError) {
@@ -76,13 +76,13 @@ function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, on
 						}
 					} else if (!error) {
 						error = true;
-						onError();
+						onError("HTTP error " + xhr.status);
 					}
 				});
 				xhr.addEventListener("error", function () {
 					if (!error) {
 						error = true;
-						onError();
+						onError("XMLHttpRequest error for " + rootFilename);
 					}
 				});
 				xhr.open("GET", f);
@@ -126,7 +126,7 @@ function vplLoadResourcesInScripts(rootFilename, getAuxiliaryFilenames, onLoad, 
 		}
 		onLoad(gui, rsrc);
 	} catch (e) {
-		onError();
+		onError(e);
 	}
 }
 
@@ -208,7 +208,9 @@ function vplSetup(gui) {
 		getButtonBounds = A3a.vpl.getButtonBoundsSVGFunction(gui);
 		try {
 			A3a.vpl.patchBlocksSVG(gui);
-		} catch (e) {}
+		} catch (e) {
+			window["console"] && window["console"]["error"](e);
+		}
 	}
 	var advancedFeatures = getQueryOption("adv") === "true";
 	var experimentalFeatures = getQueryOption("exp") === "true";
@@ -539,8 +541,9 @@ window.addEventListener("load", function () {
 			}
 			vplSetup(gui);
 		},
-		function () {
+		function (e) {
 			// error
+			window["console"] && window["console"]["error"](e);
 			vplSetup();
 		}
 	);
