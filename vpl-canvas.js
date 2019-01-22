@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -465,6 +465,7 @@ A3a.vpl.Canvas.prototype["update"] = function () {
 		blockFont: string,
 		blockLargeFont: string,
 		templateScale: number,
+		scrollingBlockLib: boolean,
 		margin: number,
 		interRowSpace: number,
 		interEventActionSpace: number,
@@ -505,6 +506,7 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		blockFont: Math.round(blockSize / 4).toString(10) + "px sans-serif",
 		blockLargeFont: Math.round(blockSize / 3).toString(10) + "px sans-serif",
 		templateScale: Math.max(0.666, 32 / blockSize),
+		scrollingBlockLib: false,
 		margin: Math.min(Math.round(blockSize / 4), 20),
 		interRowSpace: Math.round(blockSize / 2),
 		interEventActionSpace: blockSize / 2,

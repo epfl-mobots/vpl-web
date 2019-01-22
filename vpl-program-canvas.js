@@ -11,6 +11,9 @@
 */
 A3a.vpl.Program.CanvasRenderingState = function () {
 	this.programScroll = new A3a.vpl.VertScrollArea(1);
+	this.eventScroll = new A3a.vpl.VertScrollArea(1);
+	this.eventScroll.leftScrollbar = true;
+	this.actionScroll = new A3a.vpl.VertScrollArea(1);
 };
 
 /** Add a block to a canvas
@@ -493,7 +496,9 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	var eventWidth = ((nMaxEventHandlerELength + nMaxEventHandlerALength) * canvas.dims.blockSize
 		+ canvas.dims.interEventActionSpace
 		+ (nMaxEventHandlerELength + nMaxEventHandlerALength - 2) * canvas.dims.interBlockSpace);
+	// position of first event block in program (will be adjusted to make room for lists of events and actions)
 	var eventX0 = (canvasSize.width - eventWidth) / 2;
+	// position of first action block in program (will be adjusted to make room for lists of events and actions)
 	var actionX0 = eventX0 +
 		canvas.dims.blockSize * nMaxEventHandlerELength +
 		canvas.dims.interBlockSpace * (nMaxEventHandlerELength - 1) +
@@ -583,49 +588,102 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	}, this);
 	var step = canvas.dims.blockSize * canvas.dims.templateScale +
 		canvas.dims.interBlockSpace;
-	var evCol = Math.ceil(nEvTemplates * step / scrollingAreaH);
-	var acCol = Math.ceil(nAcTemplates * step / scrollingAreaH);
-	var colLen = Math.ceil(nEvTemplates / evCol);
-	var row = 0;
-	A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
-		if ((blockTemplate.type === A3a.vpl.blockType.event ||
-				blockTemplate.type === A3a.vpl.blockType.state) &&
-			(this.uiConfig.customizationMode ||
-				(self.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
-					.indexOf(blockTemplate.name) >= 0)) {
-			var x = canvas.dims.margin + Math.floor(row / colLen) * step;
-			var y = canvas.dims.margin + canvas.dims.topControlSpace + step * (row % colLen);
-			self.addBlockTemplateToCanvas(canvas, blockTemplate, x, y);
-			row++;
-		}
-	}, this);
-	colLen = Math.ceil(nAcTemplates / acCol);
-	row = 0;
-	A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
-		if ((blockTemplate.type === A3a.vpl.blockType.action ||
-				blockTemplate.type === A3a.vpl.blockType.comment) &&
-			(this.uiConfig.customizationMode ||
-				(self.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
-					.indexOf(blockTemplate.name) >= 0)) {
-			var x = canvasSize.width - canvas.dims.margin + canvas.dims.interBlockSpace -
-				(acCol - Math.floor(row / colLen)) * step;
-			var y = canvas.dims.margin + canvas.dims.topControlSpace + step * (row % colLen);
-			self.addBlockTemplateToCanvas(canvas, blockTemplate, x, y);
-			row++;
-		}
-	}, this);
+	var eventLibWidth = 0;
+	var actionLibWidth = 0;
+	if (canvas.dims.scrollingBlockLib) {
+		eventLibWidth = canvas.dims.blockSize * canvas.dims.templateScale + canvas.dims.interBlockSpace;
+		renderingState.eventScroll.setTotalHeight(nEvTemplates * step - canvas.dims.interBlockSpace);
+		renderingState.eventScroll.resize(canvas.dims.margin,
+			canvas.dims.margin + canvas.dims.topControlSpace,
+			eventLibWidth,
+			scrollingAreaH);
+		renderingState.eventScroll.begin(canvas);
+		var row = 0;
+		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
+			if ((blockTemplate.type === A3a.vpl.blockType.event ||
+					blockTemplate.type === A3a.vpl.blockType.state) &&
+				(this.uiConfig.customizationMode ||
+					(self.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
+						.indexOf(blockTemplate.name) >= 0)) {
+				self.addBlockTemplateToCanvas(canvas, blockTemplate,
+					canvas.dims.margin + canvas.dims.interBlockSpace,
+					canvas.dims.topControlSpace + canvas.dims.margin + row * step);
+				row++;
+			}
+		}, this);
+		renderingState.eventScroll.end();
+
+		actionLibWidth = canvas.dims.blockSize * canvas.dims.templateScale + canvas.dims.interBlockSpace;
+		renderingState.actionScroll.setTotalHeight(nAcTemplates * step - canvas.dims.interBlockSpace);
+		renderingState.actionScroll.resize(canvasSize.width - canvas.dims.margin - actionLibWidth,
+			canvas.dims.margin + canvas.dims.topControlSpace,
+			actionLibWidth,
+			scrollingAreaH);
+		renderingState.actionScroll.begin(canvas);
+		row = 0;
+		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
+			if ((blockTemplate.type === A3a.vpl.blockType.action ||
+					blockTemplate.type === A3a.vpl.blockType.comment) &&
+				(this.uiConfig.customizationMode ||
+					(self.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
+						.indexOf(blockTemplate.name) >= 0)) {
+				self.addBlockTemplateToCanvas(canvas, blockTemplate,
+					canvasSize.width - actionLibWidth - canvas.dims.margin,
+					canvas.dims.topControlSpace + canvas.dims.margin + row * step);
+				row++;
+			}
+		}, this);
+		renderingState.actionScroll.end();
+	} else {
+		var evCol = Math.ceil(nEvTemplates * step / scrollingAreaH);
+		var acCol = Math.ceil(nAcTemplates * step / scrollingAreaH);
+
+		eventLibWidth = evCol * step - canvas.dims.interBlockSpace;
+		var colLen = Math.ceil(nEvTemplates / evCol);
+		var row = 0;
+		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
+			if ((blockTemplate.type === A3a.vpl.blockType.event ||
+					blockTemplate.type === A3a.vpl.blockType.state) &&
+				(this.uiConfig.customizationMode ||
+					(self.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
+						.indexOf(blockTemplate.name) >= 0)) {
+				var x = canvas.dims.margin + Math.floor(row / colLen) * step;
+				var y = canvas.dims.margin + canvas.dims.topControlSpace + step * (row % colLen);
+				self.addBlockTemplateToCanvas(canvas, blockTemplate, x, y);
+				row++;
+			}
+		}, this);
+
+		actionLibWidth = acCol * step - canvas.dims.interBlockSpace;
+		colLen = Math.ceil(nAcTemplates / acCol);
+		row = 0;
+		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
+			if ((blockTemplate.type === A3a.vpl.blockType.action ||
+					blockTemplate.type === A3a.vpl.blockType.comment) &&
+				(this.uiConfig.customizationMode ||
+					(self.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
+						.indexOf(blockTemplate.name) >= 0)) {
+				var x = canvasSize.width - canvas.dims.margin + canvas.dims.interBlockSpace -
+					(acCol - Math.floor(row / colLen)) * step;
+				var y = canvas.dims.margin + canvas.dims.topControlSpace + step * (row % colLen);
+				self.addBlockTemplateToCanvas(canvas, blockTemplate, x, y);
+				row++;
+			}
+		}, this);
+	}
 
 	// program
 	// scroll region
 	renderingState.programScroll.setTotalHeight(this.program.length
 		* (canvas.dims.blockSize + canvas.dims.interRowSpace));
-	var scrollingAreaX = 2 * canvas.dims.margin - canvas.dims.interBlockSpace + step * evCol;
+	var scrollingAreaX = 2 * canvas.dims.margin + eventLibWidth;
+	var scrollingAreaWidth = canvasSize.width - eventLibWidth - actionLibWidth - canvas.dims.scrollbarWidth - 4 * canvas.dims.margin;
 	renderingState.programScroll.resize(scrollingAreaX, scrollingAreaY,
-		canvasSize.width - 2 * scrollingAreaX + (evCol - acCol) * step - canvas.dims.scrollbarWidth,
+		scrollingAreaWidth,
 		scrollingAreaH);
 	renderingState.programScroll.begin(canvas);
-	eventX0 += (evCol - acCol) * step / 2 - canvas.dims.scrollbarWidth / 2;
-	actionX0 += (evCol - acCol) * step / 2 - canvas.dims.scrollbarWidth / 2;
+	eventX0 += (eventLibWidth - actionLibWidth) * step / 2 - canvas.dims.scrollbarWidth / 2;
+	actionX0 += (eventLibWidth - actionLibWidth) * step / 2 - canvas.dims.scrollbarWidth / 2;
 	var errorMsg = "";
 	this.program.forEach(function (eventHandler, i) {
 		self.addEventHandlerToCanvas(canvas, eventHandler,
