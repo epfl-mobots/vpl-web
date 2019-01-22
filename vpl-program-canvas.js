@@ -682,8 +682,8 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		scrollingAreaWidth,
 		scrollingAreaH);
 	renderingState.programScroll.begin(canvas);
-	eventX0 += (eventLibWidth - actionLibWidth) * step / 2 - canvas.dims.scrollbarWidth / 2;
-	actionX0 += (eventLibWidth - actionLibWidth) * step / 2 - canvas.dims.scrollbarWidth / 2;
+	eventX0 += (eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
+	actionX0 += (eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
 	var errorMsg = "";
 	this.program.forEach(function (eventHandler, i) {
 		self.addEventHandlerToCanvas(canvas, eventHandler,
