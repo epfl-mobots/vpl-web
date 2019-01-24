@@ -145,7 +145,7 @@ Toolbars
 
 Toolbars can also be defined with SVG elements. Buttons are identified with a string id, such as "vpl:new" for the button which resets the VPL program in the VPL view. Redefining toolbars is the result of two independent things:
 
-- toolbar elements, as an array of button identifies + spacing for each toolbar (currently "vpl", "editor" and "simulator");
+- toolbar elements, as an array of button identifies + spacing for each toolbar (currently "vpl", "vpl2", "editor" and "simulator");
 - button appearance, defined as sets of SVG elements for the different button states (normal, pressed, selected, disabled, or any combination).
 
 Toolbars and buttons can be defined either directly in the main ui.json file (top-level property "toolbars" and "buttons", respectively), or in overlay json files referenced in the top-level property "overlays" of ui.json. SVG files must always be enumerated in ui.json, in the top-level property "svgFilenames".
@@ -153,14 +153,14 @@ Toolbars and buttons can be defined either directly in the main ui.json file (to
 Toolbar definitions
 -------------------
 
-Property "toolbars" is an object with one property per toolbar, with name "vpl", "editor" or "simulator". Property values are arrays of strings. Each string corresponds either to a button id or to one of the following special values:
+Property "toolbars" is an object with one property per toolbar, with name "vpl" (main toolbar at top of vpl view), "vpl2" (optional toolbar at bottom of vpl view between the event and action blocs), "editor" (source code editor view) or "simulator" (simulator view). Property values are arrays of strings. Each string corresponds either to a button id or to one of the following special values:
 
 - "!space", a fixed space slightly larger than the usual space, used to indicate subgroups in groups of related actions;
 - "!stretch", a larger space calculated so that the whole toolbar fills the available horizontal space. All "!stretch" spaces have the same length. They're used to separate groups of unrelated items.
 
 Buttons for actions which are permanently disabled, such as "vpl:run" when neither the robot nor the simulator is available, or "vpl:teacher" when the user has a student role, are not displayed.
 
-Here is the list of button ids for the VPL view:
+Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 
 - "vpl:new": reset VPL program to start a new program
 - "vpl:save": download the VPL program

@@ -311,8 +311,13 @@ function vplSetup(gui) {
 	window["vplProgram"].addEventHandler(true);
 
 	window["vplProgram"].addVPLCommands(window["vplCommands"], window["vplCanvas"], window["vplEditor"], window["vplRun"]);
-	if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["vpl"]) {
-		window["vplProgram"].toolbarConfig = gui["toolbars"]["vpl"];
+	if (!isClassic && gui && gui["toolbars"]) {
+		if (gui["toolbars"]["vpl"]) {
+			window["vplProgram"].toolbarConfig = gui["toolbars"]["vpl"];
+		}
+		if (gui["toolbars"]["vpl2"]) {
+			window["vplProgram"].toolbar2Config = gui["toolbars"]["vpl2"];
+		}
 	}
 	window["vplEditor"].addSrcCommands(window["vplCommands"], window["vplRun"]);
 	if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["editor"]) {

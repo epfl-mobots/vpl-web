@@ -672,12 +672,34 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		}, this);
 	}
 
-	// program
-	// scroll region
+	// program scroll region
 	renderingState.programScroll.setTotalHeight(this.program.length
 		* (canvas.dims.blockSize + canvas.dims.interRowSpace));
 	var scrollingAreaX = 2 * canvas.dims.margin + eventLibWidth;
 	var scrollingAreaWidth = canvasSize.width - eventLibWidth - actionLibWidth - canvas.dims.scrollbarWidth - 4 * canvas.dims.margin;
+
+	// 2nd toolbar at bottom between templates
+	var toolbar2Config = this.toolbar2Config || [
+	];
+	if (toolbar2Config.length > 0) {
+		var controlBar2 = new A3a.vpl.ControlBar(canvas);
+		controlBar2.setButtons(this.uiConfig,
+			toolbar2Config,
+			this.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
+			this.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
+		var controlBar2Pos = {
+			xmin: scrollingAreaX,
+			xmax: scrollingAreaX + scrollingAreaWidth,
+			ymin: scrollingAreaY + scrollingAreaH - canvas.dims.controlSize,
+			ymax: scrollingAreaY + scrollingAreaH
+		};
+		scrollingAreaH -= canvas.dims.controlSize + canvas.dims.margin;
+		controlBar2.calcLayout(controlBar2Pos,
+			canvas.dims.interBlockSpace, 2 * canvas.dims.interBlockSpace);
+		controlBar2.addToCanvas();
+	}
+
+	// program
 	renderingState.programScroll.resize(scrollingAreaX, scrollingAreaY,
 		scrollingAreaWidth,
 		scrollingAreaH);
