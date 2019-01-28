@@ -87,11 +87,15 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 */
 A3a.vpl.getButtonBoundsSVGFunction = function (gui) {
 	return /** @type {A3a.vpl.ControlBar.getButtonBounds} */(function (id, dims, obj) {
-		// find definition
+		// find definition with neither "pressed", "selected", nor "disabled"
 		if (gui["buttons"]) {
 			for (var i = 0; i < gui["buttons"].length; i++) {
-				if (gui["buttons"][i]["name"] === id) {
-					var el = gui["buttons"][i]["svg"][0];	// first SVG element
+				var b = gui["buttons"][i];
+				if (b["name"] === id &&
+					(b["state"] == undefined ||
+						(b["state"].indexOf("pressed") < 0 && b["state"].indexOf("selected") < 0 &&
+							b["state"].indexOf("disabled") < 0))) {
+					var el = b["svg"][0];	// first SVG element
 					var d = A3a.vpl.Canvas.decodeURI(el["uri"]);
 					var bnds = gui.svg[d.f].getElementBounds(d.id);
 					return bnds;
