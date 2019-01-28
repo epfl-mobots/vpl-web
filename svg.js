@@ -839,7 +839,7 @@ SVG.prototype.draw = function (ctx, options) {
 						var offset = /%$/.test(str) ? parseFloat(str.slice(0, -1)) / 100 : parseFloat(str);
 						var style = stopEl[i].getAttribute("style");
 						var styleDict = style ? parseStyle(style) : {};
-						if (!isNaN(offset) && (stopEl[i].attributes["stop-color"] || styleDict["stop-color"])) {
+						if (!isNaN(offset)) {
 							var color = stopEl[i].getAttribute("stop-color") || styleDict["stop-color"] || "#000";
 							if (SVG.colorDict.hasOwnProperty(color)) {
 								color = SVG.colorDict[color];
