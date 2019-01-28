@@ -10,7 +10,7 @@
 	@return {A3a.vpl.ControlBar.drawButton}
 */
 A3a.vpl.drawButtonSVGFunction = function (gui) {
-	return /** @type {A3a.vpl.ControlBar.drawButton} */(function (id, ctx, dims, width, height, isEnabled, isSelected, isDown, obj) {
+	return /** @type {A3a.vpl.ControlBar.drawButton} */(function (id, ctx, dims, width, height, isEnabled, isSelected, isPressed, obj) {
 		/** Check if the requested state match the state in the definition
 			@param {Array.<string>} state
 			@return {boolean}
@@ -22,12 +22,12 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 			for (var i = 0; i < state.length; i++) {
 				switch (state[i]) {
 				case "pressed":
-					if (!isDown) {
+					if (!isPressed) {
 						return false;
 					}
 					break;
 				case "unpressed":
-					if (isDown) {
+					if (isPressed) {
 						return false;
 					}
 					break;

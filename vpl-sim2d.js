@@ -511,9 +511,9 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 	// add buttons for events
 	var self = this;
 	var yRobotControl = this.simCanvas.dims.margin;
-	function drawButtonTri(ctx, x, y, rot, isDown) {
+	function drawButtonTri(ctx, x, y, rot, isPressed) {
 		ctx.save();
-		ctx.fillStyle = isDown
+		ctx.fillStyle = isPressed
 			? self.simCanvas.dims.controlDownColor
 			: self.simCanvas.dims.controlColor;
 		ctx.fillRect(x, y, smallBtnSize, smallBtnSize);
@@ -536,8 +536,8 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, width, height, isDown) {
-			drawButtonTri(ctx, 0, 0, 1, isDown);
+		function (ctx, width, height, isPressed) {
+			drawButtonTri(ctx, 0, 0, 1, isPressed);
 		},
 		// action
 		function (ev) {
@@ -553,8 +553,8 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		yRobotControl + smallBtnSize + this.simCanvas.dims.stripHorMargin,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, width, height, isDown) {
-			drawButtonTri(ctx, 0, 0, 2, isDown);
+		function (ctx, width, height, isPressed) {
+			drawButtonTri(ctx, 0, 0, 2, isPressed);
 		},
 		// action
 		function (ev) {
@@ -570,9 +570,9 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		yRobotControl + smallBtnSize + this.simCanvas.dims.stripHorMargin,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, width, height, isDown) {
+		function (ctx, width, height, isPressed) {
 			ctx.save();
-			ctx.fillStyle = isDown
+			ctx.fillStyle = isPressed
 				? self.simCanvas.dims.controlDownColor
 				: self.simCanvas.dims.controlColor;
 			ctx.fillRect(0, 0, smallBtnSize, smallBtnSize);
@@ -597,8 +597,8 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		yRobotControl + smallBtnSize + this.simCanvas.dims.stripHorMargin,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, width, height, isDown) {
-			drawButtonTri(ctx, 0, 0, 0, isDown);
+		function (ctx, width, height, isPressed) {
+			drawButtonTri(ctx, 0, 0, 0, isPressed);
 		},
 		// action
 		function (ev) {
@@ -614,8 +614,8 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		yRobotControl + 2 * smallBtnSize + 2 * this.simCanvas.dims.stripHorMargin,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, width, height, isDown) {
-			drawButtonTri(ctx, 0, 0, 3, isDown);
+		function (ctx, width, height, isPressed) {
+			drawButtonTri(ctx, 0, 0, 3, isPressed);
 		},
 		// action
 		function (ev) {
@@ -633,9 +633,9 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, width, height, isDown) {
+		function (ctx, width, height, isPressed) {
 			ctx.save();
-			ctx.fillStyle = isDown
+			ctx.fillStyle = isPressed
 				? self.simCanvas.dims.controlDownColor
 				: self.simCanvas.dims.controlColor;
 			ctx.fillRect(0, 0, smallBtnSize, smallBtnSize);
@@ -668,9 +668,9 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
-		function (ctx, width, height, isDown) {
+		function (ctx, width, height, isPressed) {
 			ctx.save();
-			ctx.fillStyle = isDown
+			ctx.fillStyle = isPressed
 				? self.simCanvas.dims.controlDownColor
 				: self.simCanvas.dims.controlColor;
 			ctx.fillRect(0, 0, smallBtnSize, smallBtnSize);

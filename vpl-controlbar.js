@@ -167,10 +167,10 @@ A3a.vpl.ControlBar.prototype.addToCanvas = function () {
 			control.bounds.xmax - control.bounds.xmin,
 			control.bounds.ymax - control.bounds.ymin,
 			control.bounds.xmin !== 0 || control.bounds.ymin !== 0
-				? function (ctx, width, height, isDown) {
+				? function (ctx, width, height, isPressed) {
 					ctx.save();
 					ctx.translate(-control.bounds.xmin, -control.bounds.ymin);
-					control.draw(ctx, width, height, isDown);
+					control.draw(ctx, width, height, isPressed);
 					ctx.restore();
 				}
 				: control.draw,

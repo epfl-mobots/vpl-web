@@ -17,7 +17,7 @@
 		boolean,
 		Object): void}
 	Function to draw buttons (arguments: id, ctx, dims, width, height, isEnabled,
-	isSelected, isDown, obj)
+	isSelected, isPressed, obj)
 */
 A3a.vpl.ControlBar.drawButton;
 
@@ -47,11 +47,11 @@ A3a.vpl.ControlBar.prototype.addButton = function (uiConfig, id, drawButton, but
 		var obj = cmd.obj;
 
 		this.addControl(
-			function (ctx, width, height, isDown) {
+			function (ctx, width, height, isPressed) {
 				drawButton(id, ctx, canvas.dims, width, height,
 					window["vplCommands"].isEnabled(id),
 					window["vplCommands"].isSelected(id),
-					isDown,
+					isPressed,
 					obj);
 				if (disabled) {
 					canvas.disabledMark(0, 0, width, height);

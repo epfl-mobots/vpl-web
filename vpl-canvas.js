@@ -41,6 +41,8 @@ A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, d
 	this.interactiveCB = interactiveCB || null;
 	this.doDrop = doDrop || null;
 	this.canDrop = canDrop || null;
+	this.noDropHint = false;	// true to avoid drawing a gray rect upon canDrop
+	this.dropTarget = false;	// true when canDrop, when a hint would be drawn if !noDropHint
 	/** @type {?A3a.vpl.CanvasItem.doScroll} */
 	this.doScroll = null;
 	this.id = id || "";
@@ -286,7 +288,7 @@ A3a.vpl.Canvas = function (canvas) {
 			if (item.draggable) {
 				// drag item itself
 				/** @type {A3a.vpl.CanvasItem} */
-				var dropTarget = null;
+				var dropTargetItem = null;
 				var x0 = mouseEvent.x;
 				var y0 = mouseEvent.y;
 				A3a.vpl.dragFun = function (dragEvent, isUp) {
@@ -295,24 +297,30 @@ A3a.vpl.Canvas = function (canvas) {
 						if (item.zoomOnLongPress && item === self.items[self.clickedItemIndex(mouseEvent, false)[0]]) {
 							self.zoomedItemIndex = indices[0];
 							self.zoomedItemProxy = item.zoomOnLongPress(item);
-						} else if (dropTarget && dropTarget.doDrop
-							&& (!dropTarget.canDrop || dropTarget.canDrop(dropTarget, item))) {
-							dropTarget.doDrop(dropTarget, item);
+						} else if (dropTargetItem && dropTargetItem.doDrop
+							&& (!dropTargetItem.canDrop || dropTargetItem.canDrop(dropTargetItem, item))) {
+							dropTargetItem.doDrop(dropTargetItem, item);
 						}
 						self.redraw();
 						self.canvas.style.cursor = "default";
 					} else {
 						var targetIndices = self.clickedItemIndex(mouseEvent, false);
-						dropTarget = null;
+						dropTargetItem = null;
 						var canDrop = false;
 						for (var i = 0; !canDrop && i < targetIndices.length; i++) {
-							dropTarget = self.items[targetIndices[i]];
-							canDrop = dropTarget.doDrop
-								&& (!dropTarget.canDrop || dropTarget.canDrop(dropTarget, item));
+							dropTargetItem = self.items[targetIndices[i]];
+							canDrop = dropTargetItem.doDrop
+								&& (!dropTargetItem.canDrop || dropTargetItem.canDrop(dropTargetItem, item));
 						}
-						self.redraw();
+						if (dropTargetItem != null) {
+							dropTargetItem.dropTarget = true;
+							self.redraw();
+							dropTargetItem.dropTarget = false;
+						} else {
+							self.redraw();
+						}
 						var ctx = self.ctx;
-						if (canDrop) {
+						if (canDrop && !dropTargetItem.noDropHint) {
 							// draw frame around target
 							ctx.save();
 							if (self.transform) {
@@ -320,10 +328,10 @@ A3a.vpl.Canvas = function (canvas) {
 								CanvasRenderingContext2D.prototype.transform.apply(ctx, self.transform);
 								ctx.translate(-self.width / 2, -self.height / 2);
 							}
-							dropTarget.applyClipping(ctx);
+							dropTargetItem.applyClipping(ctx);
 							ctx.lineWidth = 2 * self.dims.blockLineWidth;
 							ctx.strokeStyle = "#aaa";
-							ctx.strokeRect(dropTarget.x, dropTarget.y, dropTarget.width, dropTarget.height);
+							ctx.strokeRect(dropTargetItem.x, dropTargetItem.y, dropTargetItem.width, dropTargetItem.height);
 							ctx.restore();
 						}
 						ctx.save();
@@ -770,7 +778,7 @@ A3a.vpl.Canvas.prototype.addDecoration = function (fun) {
 	this.setItem(item);
 };
 
-/** Function drawing control button with origin at (0,0); args are ctx, width, height, isDown
+/** Function drawing control button with origin at (0,0); args are ctx, width, height, isPressed
 	@typedef {function(CanvasRenderingContext2D,number,number,boolean):void}
 */
 A3a.vpl.Canvas.controlDraw;
@@ -803,7 +811,8 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, width, height, draw, actio
 			ctx.save();
 			ctx.translate(item.x + dx, item.y + dy);
 			draw(ctx, item.width, item.height,
-				self.downControl.id === id && /** @type {boolean} */(self.downControl.isInside));
+				(self.downControl.id === id && /** @type {boolean} */(self.downControl.isInside)) ||
+					item.dropTarget);
 			ctx.restore();
 		}),
 		action ? {
@@ -844,6 +853,7 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, width, height, draw, actio
 		canDrop,
 		id);
 	item.draggable = false;
+	item.noDropHint = true;	// drawn with isPressed=true for better control on appearance
 	this.setItem(item);
 };
 
