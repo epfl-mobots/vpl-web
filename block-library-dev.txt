@@ -186,7 +186,7 @@ Here is the list of button ids for the Editor view:
 - "src:save": download the text program
 - "src:vpl": switch to the VPL view
 - "src:locked": toggle between the locked state where the text program corresponds to the VPL program and cannot be edited, and the unlocked state where the text program can be modified
-- "src:language": switch to the next programming language (Aseba, L2 or JavaScript); no support to implement multiple-state buttons in SVG yet
+- "src:language": switch to the next programming language (Aseba, L2 or JavaScript); state is "aseba", "l2" or "js"
 - "src:disass": toggle between the text programming language and the bytecode disassembly (for Aseba and L2)
 - "src:run": run the text program with the Thymio or the simulator
 - "src:stop": stop the text program
@@ -198,11 +198,11 @@ Here is the list of button ids for the Simulator view:
 
 - "sim:restart": restart the program with the robot in the middle of the playground
 - "sim:pause": toggle the simulation between the execution state and the suspended state
-- "sim:speedup": change the speedup factor between x1 (real-time), x2, x5, x10 (accelerated), :2 (slowed down); no support to implement multiple-state buttons in SVG yet
+- "sim:speedup": change the speedup factor between x1 (real-time), x2, x5, x10 (accelerated), :2 (slowed down); state is the acceleration factor (0.5, 1, 2, 5, or 10)
 - "sim:noise": toggle simulated noise for sensor measurements
 - "sim:pen": toggle pen between up and down
 - "sim:clear": clear the pen trace (revert to the ground map)
-- "sim:map-kind": change the map being displayed between ground (for ground sensor, combined with pen traces), obstacles (for proximity sensors) and height (for acceleration sensors)
+- "sim:map-kind": change the map being displayed between ground (for ground sensor, combined with pen traces), obstacles (for proximity sensors) and height (for acceleration sensors); state is "ground", "obstacles" or "height"
 - "sim:map": toggle the map being displayed between on and off
 - "sim:vpl": switch to the VPL view
 - "sim:text": switch to text programming language editor
@@ -215,7 +215,7 @@ SVG buttons
 Property "buttons" is an array with one element per button appearance. Each button appearance is an object with the following properties:
 
 - "name": button name (see "Toolbar definitions" above)
-- "state": array of strings which restricts when the appearance is used: "pressed" (the button is being clicked or tapped, or the target of a drop), "unpressed" (the button is not being clicked or tapped, nor the target of a drop), "selected" (the button corresponds to a state which is ON), "unselected" (the button corresponds to a state which is OFF), "disabled" (the action is disabled), "enabled" (the action is enabled). The first appearance match is used; typically appearance with "state" set to ["disabled"], ["pressed"], ["selected"] (for toggle buttons only), and [] (normal appearance) are defined in that order.
+- "state": array of strings which restricts when the appearance is used: "pressed" (the button is being clicked or tapped, or the target of a drop), "unpressed" (the button is not being clicked or tapped, nor the target of a drop), "selected" (the button corresponds to a state which is ON), "unselected" (the button corresponds to a state which is OFF), "disabled" (the action is disabled), "enabled" (the action is enabled). In addition, strings starting with "=" specify which state to select for multi-state buttons such as "src:language" or "sim:map"; for example "=aseba" for the "src:language" button would be used when the Aseba language is selected. The first appearance match is used; typically appearance with "state" set to ["disabled"], ["pressed"], ["selected"] (for toggle buttons only), and [] (normal appearance) are defined in that order.
 - "svg": array of objects containing a "uri" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent). SVG elements are rendered starting with the first one, with the last one in the foreground.
 
 

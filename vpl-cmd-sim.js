@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -50,6 +50,9 @@ A3a.vpl.VPLSim2DViewer.prototype.addSim2DCommands = function (commands, editor) 
 		isSelected: function (sim2d) {
 			return sim2d.robot.speedupFactor !== 1;
 		},
+		getState: function (sim2d) {
+			return sim2d.robot.speedupFactor;
+		},
 		object: this
 	});
 	commands.add("sim:noise", {
@@ -90,6 +93,18 @@ A3a.vpl.VPLSim2DViewer.prototype.addSim2DCommands = function (commands, editor) 
 				break;
 			}
 		},
+		getState: function (sim2d) {
+			switch (sim2d.currentMap) {
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
+				return "ground";
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
+				return "height";
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
+				return "obstacles";
+			default:
+				return "ground";
+			}
+		},
 		object: this
 	});
 	commands.add("sim:map", {
@@ -119,6 +134,18 @@ A3a.vpl.VPLSim2DViewer.prototype.addSim2DCommands = function (commands, editor) 
 				return sim2d.hasObstacles;
 			}
 			throw "internal";
+		},
+		getState: function (sim2d) {
+			switch (sim2d.currentMap) {
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
+				return "ground";
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
+				return "height";
+			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
+				return "obstacles";
+			default:
+				return "ground";
+			}
 		},
 		object: this
 	});

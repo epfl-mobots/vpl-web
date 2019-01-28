@@ -10,17 +10,17 @@
 	@return {A3a.vpl.ControlBar.drawButton}
 */
 A3a.vpl.drawButtonSVGFunction = function (gui) {
-	return /** @type {A3a.vpl.ControlBar.drawButton} */(function (id, ctx, dims, width, height, isEnabled, isSelected, isPressed, obj) {
+	return /** @type {A3a.vpl.ControlBar.drawButton} */(function (id, ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
 		/** Check if the requested state match the state in the definition
-			@param {Array.<string>} state
+			@param {Array.<string>} prop
 			@return {boolean}
 		*/
-		function checkState(state) {
-			if (state == undefined) {
+		function checkState(prop) {
+			if (prop == undefined) {
 				return true;
 			}
-			for (var i = 0; i < state.length; i++) {
-				switch (state[i]) {
+			for (var i = 0; i < prop.length; i++) {
+				switch (prop[i]) {
 				case "pressed":
 					if (!isPressed) {
 						return false;
@@ -48,6 +48,11 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 					break;
 				case "enabled":
 					if (!isEnabled) {
+						return false;
+					}
+					break;
+				default:
+					if (prop[i][0] === "=" && state.toString() !== prop[i].slice(1)) {
 						return false;
 					}
 					break;
@@ -81,7 +86,7 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 	});
 };
 
-/** Make a function which get the bounds of buttons defined in SVG
+/** Make a function which gets the bounds of buttons defined in SVG
 	@param {Object} gui
 	@return {A3a.vpl.ControlBar.getButtonBounds}
 */

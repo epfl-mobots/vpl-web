@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -72,6 +72,9 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 		},
 		isEnabled: function (srcEditor) {
 			return srcEditor.srcForAsm === null;
+		},
+		getState: function (srcEditor) {
+			return srcEditor.language;
 		},
 		object: this,
 		isAvailable: function (srcEditor) {

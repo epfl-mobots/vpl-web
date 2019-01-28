@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -52,7 +52,7 @@ A3a.vpl.ControlBar.prototype.addButton = function (uiConfig, id, drawButton, but
 					window["vplCommands"].isEnabled(id),
 					window["vplCommands"].isSelected(id),
 					isPressed,
-					obj);
+					window["vplCommands"].getState(id));
 				if (disabled) {
 					canvas.disabledMark(0, 0, width, height);
 				}

@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -14,10 +14,10 @@
 	@param {boolean} isEnabled
 	@param {boolean} isSelected
 	@param {boolean} isPressed
-	@param {Object=} obj
+	@param {*=} state state for multi-value buttons
 	@return {void}
 */
-A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnabled, isSelected, isPressed, obj) {
+A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
 
 	/** Draw control for undo (back arrow) or redo (flipped)
 		@param {number} x
@@ -545,7 +545,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
                 dims.controlSize * 0.1);
 			ctx.restore();
 		},
-		"src:language": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, obj) {
+		"src:language": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
 			/** @const */
 			var languageAbbr = {"aseba": "Aa", "l2": "l2", "js": "js"};
 			var s = dims.controlSize;
@@ -579,7 +579,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.textBaseline = "middle";
 			ctx.font = "bold " + Math.round(s / 3).toString(10) + "px sans-serif";
 			ctx.fillStyle = isEnabled ? "white" : "#777";
-			ctx.fillText(languageAbbr[obj.language], s * 0.5, s * 0.7);
+			ctx.fillText(languageAbbr[state], s * 0.5, s * 0.7);
 			ctx.restore();
 		},
 		"src:disass": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
@@ -668,7 +668,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			}
 			ctx.restore();
 		},
-		"sim:speedup": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, sim2d) {
+		"sim:speedup": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
 			ctx.save();
 			ctx.fillStyle = isPressed
 				? dims.controlDownColor
@@ -692,9 +692,9 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
 			ctx.font = "bold " + Math.round(dims.controlSize / 3).toString(10) + "px sans-serif";
-			ctx.fillText(sim2d.robot.speedupFactor >= 1
-				? "\u00d7" + sim2d.robot.speedupFactor.toString(10)
-				: "\u00f7" + Math.round(1 / sim2d.robot.speedupFactor).toString(10),
+			ctx.fillText(state >= 1
+				? "\u00d7" + state.toString(10)
+				: "\u00f7" + Math.round(1 / state).toString(10),
 				dims.controlSize * 0.5, dims.controlSize * 0.7);
 			ctx.restore();
 		},
@@ -780,7 +780,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.fillRect(0, 0, 0.3 * s, 0.2 * s);
 			ctx.restore();
 		},
-		"sim:map-kind": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, sim2d) {
+		"sim:map-kind": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
 			var s = dims.controlSize;
 			var lineWidth = dims.blockLineWidth;
 			ctx.save();
@@ -792,11 +792,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.lineWidth = lineWidth;
 			ctx.strokeStyle = "white";
 			ctx.fillStyle = "white";
-			var i0 = [
-				A3a.vpl.VPLSim2DViewer.playgroundMap.ground,
-				A3a.vpl.VPLSim2DViewer.playgroundMap.height,
-				A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle
- 			].indexOf(sim2d.currentMap);
+			var i0 = ["ground", "height", "obstacles"].indexOf(state);
 			for (var i = 0; i < 3; i++) {
 				var phi = 2 * (i + 0.25) / 3 * Math.PI;
 				if (i === i0) {
@@ -819,7 +815,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			}
 			ctx.restore();
 		},
-		"sim:map": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, sim2d) {
+		"sim:map": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
 			/** Calculate the height for the specified coordinates
 				@param {number} x
 				@param {number} y
@@ -843,8 +839,8 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.strokeStyle = "white";
 			ctx.strokeRect(0.15 * s, 0.15 * s, 0.7 * s, 0.5 * s);
-			switch (sim2d.currentMap) {
-			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
+			switch (state) {
+			case "ground":
 				ctx.lineWidth = s * 0.08;
 				ctx.beginPath();
 				ctx.arc(0.6 * s, 0.4 * s, 0.15 * s, -0.5 * Math.PI, 0.5 * Math.PI);
@@ -853,7 +849,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				ctx.closePath();
 				ctx.stroke();
 				break;
-			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
+			case "height":
 				for (var y = 0; y <= 0.75; y += 0.25) {
 					for (var x = 0; x <= 1; x += 0.1) {
 						var z = calcHeight(x, y);
@@ -868,7 +864,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				}
 				ctx.stroke();
 				break;
-			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
+			case "obstacles":
 				ctx.strokeRect(0.2 * s, 0.2 * s, 0.6 * s, 0.4 * s);
 				ctx.beginPath();
 				ctx.moveTo(0.4 * s, 0.2 * s);
@@ -897,7 +893,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 
 	var dr = draw[id];
 	if (dr) {
-		dr(ctx, dims, width, height, isEnabled, isSelected, isPressed, obj);
+		dr(ctx, dims, width, height, isEnabled, isSelected, isPressed, state);
 	}
 };
 

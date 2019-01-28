@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -35,6 +35,10 @@ A3a.vpl.Commands.isEnabled;
 */
 A3a.vpl.Commands.isSelected;
 
+/** @typedef {function(Object): *}
+*/
+A3a.vpl.Commands.getState;
+
 /** @typedef {function(Object, (boolean | undefined)): void}
 */
 A3a.vpl.Commands.action;
@@ -54,6 +58,7 @@ A3a.vpl.Commands.isAvailable;
 /** @typedef {{
 		isEnabled: (?A3a.vpl.Commands.isEnabled | undefined),
 		isSelected: (?A3a.vpl.Commands.isSelected | undefined),
+		getState: (?A3a.vpl.Commands.getState | undefined),
 		action: (?A3a.vpl.Commands.action | undefined),
 		doDrop: (?A3a.vpl.Commands.doDrop | undefined),
 		canDrop: (?A3a.vpl.Commands.canDrop | undefined),
@@ -134,6 +139,15 @@ A3a.vpl.Commands.prototype.isSelected = function (name) {
 	return cmd != null && cmd.isSelected();
 };
 
+/** Get command state (for multi-state buttons)
+	@param {string} name
+	@return {*}
+*/
+A3a.vpl.Commands.prototype.getState = function (name) {
+	var cmd = this.find(name);
+	return cmd != null ? cmd.getState() : 0;
+};
+
 /** Command definition
 	@constructor
 	@param {string} name
@@ -145,6 +159,8 @@ A3a.vpl.Commands.Command = function (name, opt) {
 	this.isEnabledFun = opt.isEnabled || null;
 	/** @type {?A3a.vpl.Commands.isSelected} */
 	this.isSelectedFun = opt.isSelected || null;
+	/** @type {?A3a.vpl.Commands.getState} */
+	this.getStateFun = opt.getState || null;
 	/** @type {?A3a.vpl.Commands.action} */
 	this.actionFun = opt.action || null;
 	/** @type {?A3a.vpl.Commands.doDrop} */
@@ -198,6 +214,13 @@ A3a.vpl.Commands.Command.prototype.isEnabled = function () {
 */
 A3a.vpl.Commands.Command.prototype.isSelected = function () {
 	return this.isSelectedFun != null && this.isSelectedFun(this.obj);
+};
+
+/** Get command state (for multi-state buttons)
+	@return {*}
+*/
+A3a.vpl.Commands.Command.prototype.getState = function () {
+	return this.getStateFun != null ? this.getStateFun(this.obj) : 0;
 };
 
 /** Check if command is available (if its button should be displayed)
