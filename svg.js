@@ -1006,6 +1006,9 @@ SVG.prototype.draw = function (ctx, options) {
 			if (ctx) {
 				var styleStr = (baseStyle || "") + ";" + (overriddenStyle || "");
 				var style = parseStyle(styleStr);
+				if (style["opacity"]) {
+					ctx.globalAlpha *= parseFloat(style["opacity"]);
+				}
 				if (style["fill"] && style["fill"] !== "none") {
 					ctx.fillStyle = style["fill"] === "white" || style["fill"] === "#fff" || style["fill"] === "#ffffff"
 						? "white"
