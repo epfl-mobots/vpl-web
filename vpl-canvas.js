@@ -161,6 +161,12 @@ A3a.vpl.CanvasItem.canDrop;
 */
 A3a.vpl.CanvasItem.doScroll;
 
+A3a.vpl.CanvasItem.prototype.getTranslation = function () {
+	return this.clippingRect
+		? {dx: this.clippingRect.xOffset, dy: this.clippingRect.yOffset}
+		: {dx: 0, dy: 0};
+};
+
 /** Check if position is inside the clipping rect
 	@param {number} x
 	@param {number} y
@@ -289,8 +295,9 @@ A3a.vpl.Canvas = function (canvas) {
 				// drag item itself
 				/** @type {A3a.vpl.CanvasItem} */
 				var dropTargetItem = null;
-				var x0 = mouseEvent.x;
-				var y0 = mouseEvent.y;
+				var d = item.getTranslation();
+				var x0 = mouseEvent.x - d.dx;
+				var y0 = mouseEvent.y - d.dy;
 				A3a.vpl.dragFun = function (dragEvent, isUp) {
 					var mouseEvent = self.makeMouseEvent(dragEvent);
 					if (isUp) {
@@ -331,7 +338,9 @@ A3a.vpl.Canvas = function (canvas) {
 							dropTargetItem.applyClipping(ctx);
 							ctx.lineWidth = 2 * self.dims.blockLineWidth;
 							ctx.strokeStyle = "#aaa";
-							ctx.strokeRect(dropTargetItem.x, dropTargetItem.y, dropTargetItem.width, dropTargetItem.height);
+							var d = dropTargetItem.getTranslation();
+							ctx.strokeRect(dropTargetItem.x + d.dx, dropTargetItem.y + d.dy,
+								dropTargetItem.width, dropTargetItem.height);
 							ctx.restore();
 						}
 						ctx.save();
@@ -613,9 +622,10 @@ A3a.vpl.Canvas.prototype.clickedItemIndex = function (mouseEvent, clickableOnly)
 	/** @type {Array.<number>} */
 	var indices = [];
 	for (var i = this.items.length - 1; i >= 0; i--) {
+		var d = this.items[i].getTranslation();
 		if ((!clickableOnly || this.items[i].clickable) &&
-			x >= this.items[i].x && x <= this.items[i].x + this.items[i].width &&
-			y >= this.items[i].y && y <= this.items[i].y + this.items[i].height &&
+			x >= this.items[i].x + d.dx && x <= this.items[i].x + d.dx + this.items[i].width &&
+			y >= this.items[i].y + d.dy && y <= this.items[i].y + d.dy + this.items[i].height &&
 			this.items[i].isInClip(x, y)) {
 			indices.push(i);
 		}
