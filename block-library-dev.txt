@@ -224,17 +224,31 @@ Global style settings
 
 Some global style settings can be specified in a top-level object named "style". Here is the list of properties it can contain, their type and their default values.
 
+- "background" (string, default: "white"): background color
+- "margin" (number, default: min(blockSize / 4, 20)): margin between content and window
+
+- "scrollbarThumbColor" (string, default: "navy"): color of scrollbar thumbs
+- "scrollbarBackgroundColor" (string, default: "#ccc"): color of scrollbar background (rectangular shape behind the thumb)
+- "scrollbarWidth" (number, default: 5): scrollbar width in css pixels
+
 - "event" (string, default: "#f70"): color of event blocks
 - "state" (string, default: "#0c0"): color of state blocks
 - "action" (string, default: "#38f"): color of action block
 - "comment" (string, default: "#aaa"): color of comment blocks
-- "background" (string, default: "white"): background color
+- "blockLineWidth" (number, default: based on block size): line width used in blocks
+- "templateScale" (number, default: 0.666): reduction factor to get size of blocks in libraries
+- "minTemplateSize" (number, default: 32): minimum block size in libraries
+- "stripHorMargin" (number, default: blockSize / 15): margin on left and right of rules
+- "stripVertsMargin" (number, default: blockSize / 15): margin on top and bottom of rules
+
 - "ruleBackground" (string, default: "#ddd"): background color of rules
 - "ruleMarks" (string, default: "#bbb"): color of rule marks (colon dots)
-- "scrollbarThumbColor" (string, default: "navy"): color of scrollbar thumbs
-- "scrollbarBackgroundColor" (string, default: "#ccc"): color of scrollbar background (rectangular shape behind the thumb)
-- "scrollbarWidth" (number, default: 5): scrollbar width in css pixels
+- "interRowSpace" (number, default: blockSize / 2): space between rules
+- "interBlockSpace" (number, default: blockSize / 6): space between event blocks or action blocks
+- "interEventActionSpace" (number, default: blockSize / 2): space between events and actions in rules
+
 - "scrollingBlockLib" (boolean, default: false): true for single-column sets of event and action blocks, scrolling if required; or false for as many columns as required
+
 - "controlColor" (string, default: "navy"): color of control buttons in normal state
 - "controlDownColor" (string, default: "#37f"): color of control buttons in pressed state
 - "controlActiveColor" (string, default: "#06f"): color of control buttons in active (selected) state
