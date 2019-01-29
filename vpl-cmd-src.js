@@ -113,6 +113,14 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 			var code = srcEditor.getCode();
 			srcEditor.runGlue.run(code, srcEditor.language);
 		},
+		getState: function (srcEditor) {
+			var code = srcEditor.getCode();
+			if (code.length === 0) {
+				return "empty";
+			} else {
+				return "canLoad";
+			}
+		},
 		object: this,
 		isAvailable: function (srcEditor) {
 			return srcEditor.runGlue != null;

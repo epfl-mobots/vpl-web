@@ -169,7 +169,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:advanced": toggle between basic and advanced VPL mode
 - "vpl:undo": undo last change
 - "vpl:redo": redo last undone change
-- "vpl:run": run the VPL program with the Thymio or the simulator
+- "vpl:run": run the VPL program with the Thymio or the simulator (state is "empty", "canLoad", "running", or "canReload" depending on the VPL program and whether it's been run and modified)
 - "vpl:stop": stop the VPL program
 - "vpl:sim": switch to the simulator view
 - "vpl:duplicate": duplicate a rule (drag target)
@@ -188,7 +188,7 @@ Here is the list of button ids for the Editor view:
 - "src:locked": toggle between the locked state where the text program corresponds to the VPL program and cannot be edited, and the unlocked state where the text program can be modified
 - "src:language": switch to the next programming language (Aseba, L2 or JavaScript); state is "aseba", "l2" or "js"
 - "src:disass": toggle between the text programming language and the bytecode disassembly (for Aseba and L2)
-- "src:run": run the text program with the Thymio or the simulator
+- "src:run": run the text program with the Thymio or the simulator (state is "empty" or "canLoad" depending on the source code)
 - "src:stop": stop the text program
 - "src:sim": switch to the simulator view
 - "src:teacher": toggle between the normal and the customization states

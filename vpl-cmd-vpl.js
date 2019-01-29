@@ -105,12 +105,24 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 			var code = program.getCode(program.currentLanguage);
 			runglue.run(code, program.currentLanguage);
 			program.uploaded = true;
+			program.notUploadedYet = false;
 		},
 		isEnabled: function (program) {
 			return runglue.isEnabled(program.currentLanguage);
 		},
 		isSelected: function (program) {
 			return program.uploaded;
+		},
+		getState: function (program) {
+			if (program.program.length === 0) {
+				return "empty";
+			} else if (program.uploaded) {
+				return "running";
+			} else if (program.notUploadedYet) {
+				return "canLoad";
+			} else {
+				return "canReload";
+			}
 		},
 		doDrop: function (program, draggedItem) {
 			if (draggedItem.data instanceof A3a.vpl.Block) {

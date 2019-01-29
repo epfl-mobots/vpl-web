@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -18,7 +18,8 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.experimentalFeatures = false;
 	/** @type {Array.<A3a.vpl.EventHandler>} */
 	this.program = [];
-	this.uploaded = false;
+	this.uploaded = false;	// program matches what's running
+	this.notUploadedYet = true;	// program has never been loaded since last this.new()
 	/** @type {?function():void} */
 	this.onUpdate = null;
 
@@ -94,6 +95,7 @@ A3a.vpl.Program.prototype.new = function () {
 	this.program = [];
 	this.undoState.reset();
 	this.code = {};
+	this.notUploadedYet = true;
 };
 
 /** Check if empty (no non-empty event handler)
