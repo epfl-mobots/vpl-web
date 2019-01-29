@@ -19,7 +19,8 @@ A3a.vpl.ControlBar = function (canvas) {
 		bounds: A3a.vpl.ControlBar.Bounds
 	}>} */
 	this.controls = [];
-	/** layout description: "X" = item, " " = separator, "s" = stretch */
+	/** layout description: "X" = item, " " = separator, "s" = stretch,
+ 		"_" amd "S" = non-discardable sep and stretch respectively */
 	this.layout = "";
 };
 
@@ -63,17 +64,19 @@ A3a.vpl.ControlBar.prototype.addControl = function (draw, bounds, action, doDrop
 };
 
 /** Add a small space
+	@param {boolean=} nonDiscardable
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addSpace = function () {
-	this.layout += " ";
+A3a.vpl.ControlBar.prototype.addSpace = function (nonDiscardable) {
+	this.layout += nonDiscardable ? "_" : " ";
 };
 
 /** Add a stretching space, evenly distributed to fill the horizontal space
+	@param {boolean=} nonDiscardable
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addStretch = function () {
-	this.layout += "s";
+A3a.vpl.ControlBar.prototype.addStretch = function (nonDiscardable) {
+	this.layout += nonDiscardable ? "S" : "s";
 };
 
 /** Calculate block position based on a layout with items, fixed intervals, separators,
@@ -84,7 +87,7 @@ A3a.vpl.ControlBar.prototype.addStretch = function () {
  	@return {void}
 */
 A3a.vpl.ControlBar.prototype.calcLayout = function (pos, gap, separatorGap) {
-	// remove leading and duplicate spaces and stretches
+	// remove leading and duplicate optional spaces and stretches
 	var layout = this.layout
 		.replace(/^[s ]+/, "")
 		.replace(/[s ]+$/, "")
@@ -108,9 +111,11 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (pos, gap, separatorGap) {
 			}
 			break;
 		case " ":
+		case "_":
 			sepCount++;
 			break;
 		case "s":
+		case "S":
 			stretchCount++;
 			break;
 		}
@@ -149,9 +154,11 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (pos, gap, separatorGap) {
 			control.y = (pos.ymin + pos.ymax) / 2 - (control.bounds.ymax - control.bounds.ymin) / 2;
 			break;
 		case " ":
+		case "_":
 			p += separatorGap;
 			break;
 		case "s":
+		case "S":
 			p += stretchSize;
 			break;
 		}

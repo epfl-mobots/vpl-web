@@ -98,8 +98,14 @@ A3a.vpl.ControlBar.prototype.setButtons = function (uiConfig, buttons, drawButto
 		case "!space":
 			this.addSpace();
 			break;
+		case "!!space":
+			this.addSpace(true);
+			break;
 		case "!stretch":
 			this.addStretch();
+			break;
+		case "!!stretch":
+			this.addStretch(true);
 			break;
 		default:
 			this.addButton(uiConfig, buttons[i], drawButton,

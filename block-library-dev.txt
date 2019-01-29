@@ -156,7 +156,11 @@ Toolbar definitions
 Property "toolbars" is an object with one property per toolbar, with name "vpl" (main toolbar at top of vpl view), "vpl2" (optional toolbar at bottom of vpl view between the event and action blocs), "editor" (source code editor view) or "simulator" (simulator view). Property values are arrays of strings. Each string corresponds either to a button id or to one of the following special values:
 
 - "!space", a fixed space slightly larger than the usual space, used to indicate subgroups in groups of related actions;
-- "!stretch", a larger space calculated so that the whole toolbar fills the available horizontal space. All "!stretch" spaces have the same length. They're used to separate groups of unrelated items.
+- "!stretch", a larger space calculated so that the whole toolbar fills the available horizontal space. All "!stretch" spaces have the same length. They're used to separate groups of unrelated items;
+- "!!space", like "!space" but never discarded (see below)
+- "!!stretch", like "!stretch" but never discarded (see below)
+
+When toolbars are customized by hiding some buttons, multiple "!space" and "!stretch" items may appear in sequences. They're collapsed into a single "!stretch", or a single "!space" for sequences of multiple "!space" items only. Leading and trailing sequences of "!space" and "!stretch" are entirely removed. When spaces should be preserved (e.g. a leading stretch to flush buttons to the right), "!!space" and "!!stretch" items should be used instead.
 
 Buttons for actions which are permanently disabled, such as "vpl:run" when neither the robot nor the simulator is available, or "vpl:teacher" when the user has a student role, are not displayed.
 
