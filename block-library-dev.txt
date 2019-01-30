@@ -260,6 +260,7 @@ Some global style settings can be specified in a top-level object named "style".
 - "minTemplateSize" (number, default: 32): minimum block size in libraries
 - "stripHorMargin" (number, default: blockSize / 15): margin on left and right of rules
 - "stripVertsMargin" (number, default: blockSize / 15): margin on top and bottom of rules
+- "minInteractiveBlockSize" (number, default: 60): minimum block size where direct manipulation of interactive controls (buttons, sliders etc.) is possible; if smaller, a zoomed version is displayed when the block is clicked or touched
 
 - "ruleBackground" (string, default: "#ddd"): background color of rules
 - "ruleMarks" (string, default: "#bbb"): color of rule marks (colon dots)

@@ -748,6 +748,7 @@ A3a.vpl.patchBlocksSVG = function (uiConfig) {
 	A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		return {
 			blockSize: blockSize,
+			minInteractiveBlockSize: uiConfig["styles"]["minInteractiveBlockSize"] === undefined ? 60 : uiConfig["styles"]["minInteractiveBlockSize"],
 			blockLineWidth: uiConfig["styles"]["blockLineWidth"] === undefined ? Math.max(1, Math.min(3, blockSize / 40)) : uiConfig["styles"]["blockLineWidth"],
 			thinLineWidth: 1,
 			blockFont: Math.round(blockSize / 4).toString(10) + "px sans-serif",

@@ -489,7 +489,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		separatorWidth;
 
 	// zoom blocks if too small
-	this.zoomBlocks = canvas.dims.blockSize < 60;
+	this.zoomBlocks = canvas.dims.blockSize < canvas.dims.minInteractiveBlockSize;
 
 	// start with an empty canvas
 	canvas.clearItems();
