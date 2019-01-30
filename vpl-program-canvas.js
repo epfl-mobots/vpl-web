@@ -191,18 +191,12 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				ctx.fillStyle = canvas.dims.ruleBackground;
 				ctx.fillRect(item.x + dx, item.y + dy, item.width, item.height);
 			}
-			// colon (two darker dots)
-			ctx.fillStyle = canvas.dims.ruleMarks;
-			ctx.beginPath();
-			ctx.arc(actionX0 - canvas.dims.interEventActionSpace / 2 + dx,
-				y + canvas.dims.blockSize * 0.3 + dy,
-				canvas.dims.interEventActionSpace / 6,
-				0, 2 * Math.PI);
-			ctx.arc(actionX0 - canvas.dims.interEventActionSpace / 2 + dx,
-				y + canvas.dims.blockSize * 0.7 + dy,
-				canvas.dims.interEventActionSpace / 6,
-				0, 2 * Math.PI);
-			ctx.fill();
+			// event/action separator
+			var separatorBounds = canvas.getWidgetBounds("vpl:then");
+			var separatorWidth = separatorBounds.xmax - separatorBounds.xmin;
+			canvas.drawWidget("vpl:then",
+				actionX0 - separatorWidth / 2 + dx,
+				y + canvas.dims.blockSize * 0.5 + dy);
 			if (eventHandler.locked) {
 				canvas.lockedMark(item.x, item.y, item.width, item.height,
 					false, eventHandler.disabled ? "#ddd" : "");
@@ -309,24 +303,12 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	// error marks
 	canvas.addDecoration(function (ctx) {
 		if (eventHandler.error !== null) {
-			// pink circled question mark
-			var xc = x - canvas.dims.stripHorMargin -
-				canvas.dims.blockSize * 0.3;
-			var yc = y + canvas.dims.blockSize * 0.5;
-			ctx.fillStyle = "white";
+			canvas.drawWidget(eventHandler.error.isWarning ? "vpl:warning" : "vpl:error",
+				x - canvas.dims.stripHorMargin - canvas.dims.blockSize * 0.3,
+				y + canvas.dims.blockSize * 0.5);
+
 			ctx.strokeStyle = "#f88";
 			ctx.lineWidth = canvas.dims.blockSize * 0.05;
-			ctx.beginPath();
-			ctx.arc(xc, yc,
-				canvas.dims.blockSize * 0.2,
-				0, 2 * Math.PI);
-			ctx.fill();
-			ctx.stroke();
-			ctx.fillStyle = "#f88";
-			ctx.font = Math.round(canvas.dims.blockSize * 0.3).toString() + "px sans-serif";
-			ctx.textAlign = "center";
-			ctx.textBaseline = "middle";
-			ctx.fillText(eventHandler.error.isWarning ? "!" : "?", xc, yc);
 			ctx.beginPath();
 			var ya = y + canvas.dims.blockSize + canvas.dims.stripVertMargin + canvas.dims.interRowSpace * 0.2;
 			if (eventHandler.error.eventError) {
@@ -493,8 +475,10 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	if (displaySingleEvent) {
 		nMaxEventHandlerELength = 1;
 	}
+	var separatorBounds = canvas.getWidgetBounds("vpl:then");
+	var separatorWidth = separatorBounds.xmax - separatorBounds.xmin;
 	var eventWidth = ((nMaxEventHandlerELength + nMaxEventHandlerALength) * canvas.dims.blockSize
-		+ canvas.dims.interEventActionSpace
+		+ separatorWidth
 		+ (nMaxEventHandlerELength + nMaxEventHandlerALength - 2) * canvas.dims.interBlockSpace);
 	// position of first event block in program (will be adjusted to make room for lists of events and actions)
 	var eventX0 = (canvasSize.width - eventWidth) / 2;
@@ -502,7 +486,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	var actionX0 = eventX0 +
 		canvas.dims.blockSize * nMaxEventHandlerELength +
 		canvas.dims.interBlockSpace * (nMaxEventHandlerELength - 1) +
-		canvas.dims.interEventActionSpace;
+		separatorWidth;
 
 	// zoom blocks if too small
 	this.zoomBlocks = canvas.dims.blockSize < 60;

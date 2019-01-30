@@ -222,6 +222,22 @@ Property "buttons" is an array with one element per button appearance. Each butt
 - "state": array of strings which restricts when the appearance is used: "pressed" (the button is being clicked or tapped, or the target of a drop), "unpressed" (the button is not being clicked or tapped, nor the target of a drop), "selected" (the button corresponds to a state which is ON), "unselected" (the button corresponds to a state which is OFF), "disabled" (the action is disabled), "enabled" (the action is enabled). In addition, strings starting with "=" specify which state to select for multi-state buttons such as "src:language" or "sim:map"; for example "=aseba" for the "src:language" button would be used when the Aseba language is selected. The first appearance match is used; typically appearance with "state" set to ["disabled"], ["pressed"], ["selected"] (for toggle buttons only), and [] (normal appearance) are defined in that order.
 - "svg": array of objects containing a "uri" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent). SVG elements are rendered starting with the first one, with the last one in the foreground.
 
+SVG widgets
+-----------
+
+Property "widgets" is an array with one element per widget. A widget is a static graphical element used in the graphical user interface. They're identified by one of the following names:
+
+- "vpl:block0": size reference, never displayed; see below
+- "vpl:then": placed between events and actions (colon in VPL1)
+- "vpl:error": error marker displayed close to rules with errors (question mark in a circle in VPL1)
+- "vpl:warning": warning marker displayed closed to rules with warnings (minor issues which still permit to run the program)
+
+Widgets are scaled. The size reference is given by a widget definition whose name is "vpl:block0" and whose size should correspond to a VPL block as it's drawn in a VPL program (in other words, draw an SVG square any size you want, define a widget "vpl:block0" with it, and draw all the other widgets so that they have the correct relative size with respect to the square; or reuse an existing block).
+
+Each widget appearance is an object with the following properties:
+
+- "name": widget name (see above)
+- "svg": array of objects containing a "uri" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent). SVG elements are rendered starting with the first one, with the last one in the foreground.
 
 Global style settings
 ---------------------

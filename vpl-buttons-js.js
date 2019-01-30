@@ -900,10 +900,9 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 /** Get button bounds
 	@param {string} id
 	@param {A3a.vpl.Canvas.dims} dims
-	@param {Object=} obj
 	@return {A3a.vpl.ControlBar.Bounds}
 */
-A3a.vpl.Commands.getButtonBoundsJS = function (id, dims, obj) {
+A3a.vpl.Commands.getButtonBoundsJS = function (id, dims) {
 	// fixed size
 	return {
 		xmin: 0,

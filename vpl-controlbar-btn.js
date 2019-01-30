@@ -24,10 +24,9 @@ A3a.vpl.ControlBar.drawButton;
 /**
 	@typedef {function (
 		string,
-		A3a.vpl.Canvas.dims,
-		Object
+		A3a.vpl.Canvas.dims
 	): A3a.vpl.ControlBar.Bounds}
-	Function to get button width (arguments: id, dims, obj)
+	Function to get button width (arguments: id, dims)
 */
 A3a.vpl.ControlBar.getButtonBounds;
 

@@ -89,7 +89,7 @@ function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, on
 				xhr.send();
 			});
 		} else {
-			onError();
+			onError("HTTP error " + xhr.status);
 		}
 	});
 	xhr.addEventListener("error", onError);
@@ -104,7 +104,7 @@ function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, on
 	@param {function(Object,Object):void} onLoad function called synchronously once
 	everything has been loaded; first arg is the parsed ui json file, second arg is an
 	object with properties for all resources (key=filename, value=text content)
-	@param {function():void} onError function called synchronously upon error
+	@param {function(*):void} onError function called synchronously upon error
 	@return {void}
 */
 function vplLoadResourcesInScripts(rootFilename, getAuxiliaryFilenames, onLoad, onError) {
@@ -163,6 +163,7 @@ function vplSetup(gui) {
 	if (gui && gui["overlays"]) {
 		gui["blocks"] = gui["blocks"] || [];
 		gui["buttons"] = gui["buttons"] || [];
+		gui["widgets"] = gui["widgets"] || [];
 		gui["overlays"].forEach(function (filename) {
 			var overlay = JSON.parse(gui.rsrc[filename]);
 			for (var key in overlay) {
@@ -170,6 +171,7 @@ function vplSetup(gui) {
 					switch (key) {
 					case "blocks":
 					case "buttons":
+					case "widgets":
 						// concat arrays
 						gui[key] = gui[key].concat(overlay[key]);
 						break;
@@ -196,6 +198,8 @@ function vplSetup(gui) {
 	var drawButton = A3a.vpl.Commands.drawButtonJS;
 	/** @type {A3a.vpl.ControlBar.getButtonBounds} */
 	var getButtonBounds = A3a.vpl.Commands.getButtonBoundsJS;
+	/** @type {Object.<string,A3a.vpl.Canvas.Widget>} */
+	var widgets = A3a.vpl.widgetsJS;
 	if (isClassic) {
 	 	if (A3a.vpl.patchL2Blocks) {
 			A3a.vpl.patchL2Blocks();
@@ -206,6 +210,7 @@ function vplSetup(gui) {
 	} else if (gui) {
 		drawButton = A3a.vpl.drawButtonSVGFunction(gui);
 		getButtonBounds = A3a.vpl.getButtonBoundsSVGFunction(gui);
+		widgets = A3a.vpl.makeSVGWidgets(gui);
 		try {
 			A3a.vpl.patchBlocksSVG(gui);
 		} catch (e) {
@@ -308,6 +313,7 @@ function vplSetup(gui) {
 		window["vplProgram"].renderToCanvas(window["vplCanvas"]);
 		window["vplEditor"].setCode(window["vplProgram"].getCode(window["vplProgram"].currentLanguage));
 	};
+	window["vplCanvas"].widgets = widgets;
 	window["vplProgram"].addEventHandler(true);
 
 	window["vplProgram"].addVPLCommands(window["vplCommands"], window["vplCanvas"], window["vplEditor"], window["vplRun"]);

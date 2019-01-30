@@ -211,6 +211,9 @@ A3a.vpl.Canvas = function (canvas) {
 	this.dims = /** @type {A3a.vpl.Canvas.dims} */(null);
 	this.resize(this.width, this.height);	// force set this.dims
 
+	/** @type {Object.<string,A3a.vpl.Canvas.Widget>} */
+	this.widgets = {};
+
 	var self = this;
 
 	/** Handle mousedown event
@@ -865,6 +868,48 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, width, height, draw, actio
 	item.draggable = false;
 	item.noDropHint = true;	// drawn with isPressed=true for better control on appearance
 	this.setItem(item);
+};
+
+/** @typedef {function(CanvasRenderingContext2D,string,A3a.vpl.Canvas.dims):void}
+*/
+A3a.vpl.Canvas.drawWidget;
+
+/** @typedef {function(string,A3a.vpl.Canvas.dims):{xmin:number,xmax:number,ymin:number,ymax:number}}
+*/
+A3a.vpl.Canvas.getWidgetBounds;
+
+/** @typedef {{
+		draw: A3a.vpl.Canvas.drawWidget,
+		bounds: A3a.vpl.Canvas.getWidgetBounds
+	}}
+*/
+A3a.vpl.Canvas.Widget;
+
+/** Draw a widget
+	@param {string} id
+	@param {number} x
+	@param {number} y
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.drawWidget = function (id, x, y) {
+	var w = this.widgets[id];
+	if (w != undefined) {
+		this.ctx.save();
+		this.ctx.translate(x, y);
+		w.draw(this.ctx, id, this.dims);
+		this.ctx.restore();
+	}
+};
+
+/** Get widget bounds
+	@param {string} id
+	@return {{xmin:number,xmax:number,ymin:number,ymax:number}}
+*/
+A3a.vpl.Canvas.prototype.getWidgetBounds = function (id) {
+	var w = this.widgets[id];
+	return w
+		? w.bounds(id, this.dims)
+		: {xmin: 0, xmax: 0, ymin: 0, ymax: 0};
 };
 
 /** Redraw the underlying canvas with all the items

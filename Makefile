@@ -43,6 +43,7 @@ JS = \
 	vpl-controlbar.js \
 	vpl-buttons-js.js \
 	vpl-controlbar-btn.js \
+	vpl-widgets-js.js \
 	vpl-program-canvas.js \
 	vpl-canvas.js \
 	vpl-canvas-scroll.js \

@@ -1,0 +1,87 @@
+/*
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Miniature Mobile Robots group, Switzerland
+	Author: Yves Piguet
+	For internal use only
+*/
+
+/** @const
+	@type {Object.<string,A3a.vpl.Canvas.Widget>}
+*/
+A3a.vpl.widgetsJS = {
+	"vpl:then": {
+		draw: /** @type {A3a.vpl.Canvas.drawWidget} */(function (ctx, id, dims) {
+			ctx.fillStyle = dims.ruleMarks;
+			ctx.beginPath();
+			ctx.arc(0, -0.2 * dims.blockSize,
+				0.17 * dims.interEventActionSpace,
+				0, 2 * Math.PI);
+			ctx.arc(0, 0.2 * dims.blockSize,
+				0.17 * dims.interEventActionSpace,
+				0, 2 * Math.PI);
+			ctx.fill();
+		}),
+		bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
+			return {
+				xmin: -0.5 * dims.interEventActionSpace,
+				xmax: 0.5 * dims.interEventActionSpace,
+				ymin: -0.2 * dims.blockSize - 0.3 * dims.interEventActionSpace,
+				ymax: 0.2 * dims.blockSize + 0.3 * dims.interEventActionSpace
+			}
+		})
+	},
+	"vpl:error": {
+		draw: /** @type {A3a.vpl.Canvas.drawWidget} */(function (ctx, id, dims) {
+			// pink circled question mark
+			ctx.fillStyle = "white";
+			ctx.strokeStyle = "#f88";
+			ctx.lineWidth = dims.blockSize * 0.05;
+			ctx.beginPath();
+			ctx.arc(0, 0,
+				dims.blockSize * 0.2,
+				0, 2 * Math.PI);
+			ctx.fill();
+			ctx.stroke();
+			ctx.fillStyle = "#f88";
+			ctx.font = "bold " + Math.round(dims.blockSize * 0.3).toString() + "px sans-serif";
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.fillText("?", 0, dims.blockSize * 0.02);
+		}),
+		bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
+			return {
+				xmin: -0.2 * dims.blockSize,
+				xmax: 0.2 * dims.blockSize,
+				ymin: -0.2 * dims.blockSize,
+				ymax: 0.2 * dims.blockSize
+			}
+		})
+	},
+	"vpl:warning": {
+		draw: /** @type {A3a.vpl.Canvas.drawWidget} */(function (ctx, id, dims) {
+			// pink circled exclamation mark
+			ctx.fillStyle = "white";
+			ctx.strokeStyle = "#f88";
+			ctx.lineWidth = dims.blockSize * 0.05;
+			ctx.beginPath();
+			ctx.arc(0, 0,
+				dims.blockSize * 0.2,
+				0, 2 * Math.PI);
+			ctx.fill();
+			ctx.stroke();
+			ctx.fillStyle = "#f88";
+			ctx.font = "bold " + Math.round(dims.blockSize * 0.3).toString() + "px sans-serif";
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.fillText("!", 0, dims.blockSize * 0.02);
+		}),
+		bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
+			return {
+				xmin: -0.2 * dims.blockSize,
+				xmax: 0.2 * dims.blockSize,
+				ymin: -0.2 * dims.blockSize,
+				ymax: 0.2 * dims.blockSize
+			}
+		})
+	}
+};
