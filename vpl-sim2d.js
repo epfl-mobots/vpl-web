@@ -44,6 +44,7 @@ A3a.vpl.VPLSim2DViewer = function (robot, uiConfig) {
 	/** @type {Image} */
 	this.disabledGroundImage = null;
 	this.groundCanvas = /** @type {HTMLCanvasElement} */(document.createElement("canvas"));
+	this.groundCanvasDirty = false;
 	/** @type {Image} */
 	this.heightImage = null;
 	/** @type {Image} */
@@ -117,6 +118,7 @@ A3a.vpl.VPLSim2DViewer.prototype.restoreGround = function () {
 		// clear to white
 		ctx.fillRect(0, 0, this.groundCanvas.width, this.groundCanvas.height);
 	}
+	this.groundCanvasDirty = false;
 	this.render();
 };
 
@@ -157,6 +159,7 @@ A3a.vpl.VPLSim2DViewer.prototype.drawPen = function (shape, param) {
 		ctx.lineWidth = 0.1 * this.robot.robotSize;
 		ctx.stroke();
 		ctx.restore();
+		this.groundCanvasDirty = true;
 	}
 };
 

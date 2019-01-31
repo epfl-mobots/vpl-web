@@ -771,12 +771,12 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				? dims.controlDownColor
 				: dims.controlColor;
 			ctx.fillRect(0, 0, s, s);
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.strokeRect(0.15 * s, 0.25 * s, 0.7 * s, 0.5 * s);
 			ctx.translate(0.5 * s, 0.4 * s);
 			ctx.rotate(0.4);
-			ctx.fillStyle = "white";
+			ctx.fillStyle = isEnabled ? "white" : "#777";
 			ctx.fillRect(0, 0, 0.3 * s, 0.2 * s);
 			ctx.restore();
 		},

@@ -77,6 +77,9 @@ A3a.vpl.VPLSim2DViewer.prototype.addSim2DCommands = function (commands, editor) 
 		action: function (sim2d, modifier) {
 			sim2d.restoreGround();
 		},
+		isEnabled: function (sim2d) {
+			return sim2d.groundCanvasDirty;
+		},
 		object: this
 	});
 	commands.add("sim:map-kind", {
