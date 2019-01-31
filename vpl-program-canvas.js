@@ -193,7 +193,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			}
 			// event/action separator
 			var separatorBounds = canvas.getWidgetBounds("vpl:then");
-			var separatorWidth = separatorBounds.xmax - separatorBounds.xmin;
+			var separatorWidth = (separatorBounds.xmax - separatorBounds.xmin) ||
+				canvas.dims.interEventActionSpace;
 			canvas.drawWidget("vpl:then",
 				actionX0 - separatorWidth / 2 + dx,
 				y + canvas.dims.blockSize * 0.5 + dy);
@@ -476,7 +477,8 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		nMaxEventHandlerELength = 1;
 	}
 	var separatorBounds = canvas.getWidgetBounds("vpl:then");
-	var separatorWidth = separatorBounds.xmax - separatorBounds.xmin;
+	var separatorWidth = (separatorBounds.xmax - separatorBounds.xmin) ||
+		canvas.dims.interEventActionSpace;
 	var eventWidth = ((nMaxEventHandlerELength + nMaxEventHandlerALength) * canvas.dims.blockSize
 		+ separatorWidth
 		+ (nMaxEventHandlerELength + nMaxEventHandlerALength - 2) * canvas.dims.interBlockSpace);

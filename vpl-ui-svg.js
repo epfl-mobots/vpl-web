@@ -142,6 +142,9 @@ A3a.vpl.makeSVGWidgets = function (gui) {
 
 	// reference size: "vpl:block0"
 	var block0 = find("vpl:block0");
+	if (block0 == null) {
+		return {};
+	}
 	var block0DecURI = A3a.vpl.Canvas.decodeURI(block0["svg"][0]["uri"]);
 	var block0Bnds = gui.svg[block0DecURI.f].getElementBounds(block0DecURI.id);
 	var block0Size = Math.max(block0Bnds.xmax - block0Bnds.xmin, block0Bnds.ymax - block0Bnds.ymin);
