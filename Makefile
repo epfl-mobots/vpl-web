@@ -38,6 +38,7 @@ JS = \
 	vpl-code-aseba.js \
 	vpl-code-l2.js \
 	vpl-code-js.js \
+	vpl-code-python.js \
 	vpl-cmd.js \
 	vpl-cmd-vpl.js \
 	vpl-controlbar.js \
@@ -54,6 +55,7 @@ JS = \
 	vpl-blocklib-svg.js \
 	vpl-blocklib-l2.js \
 	vpl-blocklib-js.js \
+	vpl-blocklib-python.js \
 	vpl-error.js \
 	vpl-undo.js \
 	vpl-aeslfile.js \

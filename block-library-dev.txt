@@ -190,7 +190,7 @@ Here is the list of button ids for the Editor view:
 - "src:save": download the text program
 - "src:vpl": switch to the VPL view
 - "src:locked": toggle between the locked state where the text program corresponds to the VPL program and cannot be edited, and the unlocked state where the text program can be modified
-- "src:language": switch to the next programming language (Aseba, L2 or JavaScript); state is "aseba", "l2" or "js"
+- "src:language": switch to the next programming language (Aseba, L2, JavaScript or Python); state is "aseba", "l2", "js" or "python"
 - "src:disass": toggle between the text programming language and the bytecode disassembly (for Aseba and L2)
 - "src:run": run the text program with the Thymio or the simulator (state is "empty" or "canLoad" depending on the source code)
 - "src:stop": stop the text program

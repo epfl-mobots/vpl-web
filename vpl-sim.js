@@ -49,6 +49,6 @@ window["installRobotSimulator"] = function (options) {
 			};
 		},
 		preferredLanguage: "js",
-		languages: ["js", "aseba", "l2"]
+		languages: ["js", "aseba", "l2", "python"]
 	});
 };

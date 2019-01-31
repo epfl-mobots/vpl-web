@@ -684,7 +684,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 
 		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 		var genCode = blockTemplate0 ? blockTemplate0.genCode : {};
-		["aseba", "l2", "js"].forEach(function (lang) {
+		["aseba", "l2", "js", "python"].forEach(function (lang) {
 			if (b[lang]) {
 				genCode[lang] = function (block) {
 					var c = {};

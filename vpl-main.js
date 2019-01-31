@@ -207,6 +207,9 @@ function vplSetup(gui) {
 	 	if (A3a.vpl.patchJSBlocks) {
 			A3a.vpl.patchJSBlocks();
 		}
+	 	if (A3a.vpl.patchPythonBlocks) {
+			A3a.vpl.patchPythonBlocks();
+		}
 	} else if (gui) {
 		drawButton = A3a.vpl.drawButtonSVGFunction(gui);
 		getButtonBounds = A3a.vpl.getButtonBoundsSVGFunction(gui);
@@ -475,7 +478,7 @@ function vplSetup(gui) {
 
 	window["vplEditor"].setTeacherRole(getQueryOption("role") === "teacher");
 	/** @const */
-	var languageList = ["aseba", "l2", "js"];
+	var languageList = ["aseba", "l2", "js", "python"];
 	if (languageList.indexOf(language) >= 0) {
 		/** @const */
 		window["vplEditor"].changeLanguage = function () {
