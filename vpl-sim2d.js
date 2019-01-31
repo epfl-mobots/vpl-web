@@ -1018,6 +1018,7 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 
 	// draw robot and playground as a single CanvasItem
 	var robotSize = this.robot.robotSize;
+	var temporaryPause = false;
 	var playgroundItem = new A3a.vpl.CanvasItem(null,
 		this.playground.width * playgroundView.scale, this.playground.height * playgroundView.scale,
 		playgroundView.x + playgroundView.ox,
@@ -1098,26 +1099,32 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 		},
 		{
 			mousedown: function (canvas, data, width, height, left, top, ev) {
-				if (!self.running || self.paused) {
-					var x = ((ev.x - left) - width / 2) / playgroundView.scale;
-					var y = (height / 2 - (ev.y - top)) / playgroundView.scale;
-					var xr = x - self.robot.pos[0];
-					var yr = y - self.robot.pos[1];
-					var xHandle = robotSize * Math.cos(self.robot.theta);
-					var yHandle = robotSize * Math.sin(self.robot.theta);
-					if ((xr - xHandle) * (xr - xHandle) + (yr - yHandle) * (yr - yHandle) <
-						0.1 * robotSize * robotSize) {
-						self.simCanvas.state.x = x;
- 						self.simCanvas.state.y = y;
-						self.simCanvas.state.orienting = true;
-						return 1;
+				var x = ((ev.x - left) - width / 2) / playgroundView.scale;
+				var y = (height / 2 - (ev.y - top)) / playgroundView.scale;
+				var xr = x - self.robot.pos[0];
+				var yr = y - self.robot.pos[1];
+				var xHandle = robotSize * Math.cos(self.robot.theta);
+				var yHandle = robotSize * Math.sin(self.robot.theta);
+				if ((!self.running || self.paused) &&
+					(xr - xHandle) * (xr - xHandle) + (yr - yHandle) * (yr - yHandle) <
+					0.1 * robotSize * robotSize) {
+					self.simCanvas.state.x = x;
+						self.simCanvas.state.y = y;
+					self.simCanvas.state.orienting = true;
+					return 1;
+				}
+				if (xr * xr + yr * yr < robotSize * robotSize) {
+					if (!self.paused) {
+						// suspend during drag
+						self.robot["suspend"]();
+						temporaryPause = true;
+					} else {
+						temporaryPause = false;
 					}
-					if (xr * xr + yr * yr < robotSize * robotSize) {
-						self.simCanvas.state.x = x;
- 						self.simCanvas.state.y = y;
-						self.simCanvas.state.moving = true;
-						return 0;
-					}
+					self.simCanvas.state.x = x;
+					self.simCanvas.state.y = y;
+					self.simCanvas.state.moving = true;
+					return 0;
 				}
 				return null;
 			},
@@ -1148,6 +1155,9 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 			mouseup: function (canvas, data, dragIndex) {
 				self.simCanvas.state.moving = false;
 				self.simCanvas.state.orienting = false;
+				if (temporaryPause) {
+					self.robot["resume"](A3a.vpl.VPLSim2DViewer.currentTime());
+				}
 			}
 		});
 	playgroundItem.draggable = false;
