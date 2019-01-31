@@ -2,23 +2,27 @@
 	"toolbars": {
 		"vpl": [
 			"vpl:new",
-			"vpl:save",
-			"vpl:text",
 			"!space",
-			"vpl:advanced",
-			"!stretch",
-			"vpl:undo",
-			"vpl:redo",
+			"vpl:upload",
+			"vpl:save",
 			"!stretch",
 			"vpl:run",
 			"vpl:stop",
+			"vpl:advanced",
 			"vpl:sim",
-			"!stretch",
-			"vpl:trashcan",
+			"vpl:text",
 			"!stretch",
 			"vpl:teacher-reset",
 			"vpl:teacher-save",
 			"vpl:teacher"
+		],
+		"vpl2": [
+			"!!stretch",
+			"vpl:undo",
+			"vpl:redo",
+			"vpl:duplicate",
+			"vpl:disable",
+			"vpl:trashcan"
 		],
 		"editor": [
 			"src:new",

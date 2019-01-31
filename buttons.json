@@ -5,7 +5,10 @@
 			"state": ["pressed"],
 			"svg": [
 				{
-					"uri": "Blocks.svg#HandBack"
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#new_highlight"
 				}
 			]
 		},
@@ -14,7 +17,106 @@
 			"state": [],
 			"svg": [
 				{
-					"uri": "Blocks.svg#HandFront"
+					"uri": "Icons.svg#new_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:upload",
+			"state": ["pressed"],
+			"svg": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+
+				},
+				{
+					"uri": "Icons.svg#open_highlight"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:upload",
+			"state": [],
+			"svg": [
+				{
+
+					"uri": "Icons.svg#open_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:save",
+			"state": ["pressed"],
+			"svg": [
+				{
+					"uri": "Icons.svg#Pressed_bg",
+					"alpha": 1.0
+				},
+				{
+					"uri": "Icons.svg#download_highlight"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:save",
+			"state": [],
+			"svg": [
+
+				{
+
+					"uri": "Icons.svg#download_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:text",
+			"state": ["pressed"],
+			"svg": [
+				{
+					"uri": "Icons.svg#Pressed_bg",
+					"alpha": 1.0
+				},
+				{
+					"uri": "Icons.svg#textMode_highlight"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:text",
+			"state": ["selected"],
+			"svg": [
+				{
+					"uri": "Icons.svg#Selected_bg",
+					"alpha": 1.0
+				},
+				{
+					"uri": "Icons.svg#textMode_highlight"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:text",
+			"state": [],
+			"svg": [
+
+				{
+
+					"uri": "Icons.svg#textMode_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:run",
+			"state": ["pressed"],
+			"svg": [
+
+				{
+					"uri": "Icons.svg#play_highlight"
+
 				}
 			]
 		},
@@ -23,7 +125,31 @@
 			"state": [],
 			"svg": [
 				{
-					"uri": "Blocks.svg#right"
+					"uri": "Icons.svg#play_default"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:run",
+			"state": ["disabled"],
+			"svg": [
+
+				{
+					"uri": "Icons.svg#play_default",
+					"alpha": 0.5
+
+				}
+			]
+		},
+		{
+			"name": "vpl:stop",
+			"state": ["pressed"],
+			"svg": [
+
+				{
+					"uri": "Icons.svg#stop_highlight"
+
 				}
 			]
 		},
@@ -32,7 +158,242 @@
 			"state": [],
 			"svg": [
 				{
-					"uri": "Blocks.svg#center"
+					"uri": "Icons.svg#stop_default"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:stop",
+			"state": ["disabled"],
+			"svg": [
+				{
+					"uri": "Icons.svg#stop_default",
+					"alpha": 0.5
+
+				}
+			]
+		},
+		{
+			"name": "vpl:undo",
+			"state": ["disabled"],
+			"svg": [
+				{
+					"uri": "Icons.svg#undo_default",
+					"alpha": 0.5
+
+				}
+			]
+		},
+		{
+			"name": "vpl:undo",
+			"state": ["pressed"],
+			"svg": [
+				{
+					"uri": "Icons.svg#undo_highlight"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:undo",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#undo_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:redo",
+			"state": ["pressed"],
+			"svg": [
+				{
+					"uri": "Icons.svg#redo_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:redo",
+			"state": ["disabled"],
+			"svg": [
+				{
+					"uri": "Icons.svg#redo_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:redo",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#redo_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:duplicate",
+			"state": ["selected"],
+			"svg": [
+				{
+					"uri": "Icons.svg#duplicate_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:duplicate",
+			"state": ["disabled"],
+			"svg": [
+				{
+					"uri": "Icons.svg#duplicate_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:duplicate",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#duplicate_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:disable",
+			"state": ["selected"],
+			"svg": [
+
+				{
+					"uri": "Icons.svg#disable_highlight"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:disable",
+			"state": ["disabled"],
+			"svg": [
+				{
+					"uri": "Icons.svg#disable_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:disable",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#disable_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:trashcan",
+			"state": ["pressed"],
+			"svg": [
+
+				{
+					"uri": "Icons.svg#delete_highlight"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:trashcan",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#delete_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:run",
+			"state": ["disabled"],
+			"svg": [
+				{
+					"uri": "Icons.svg#undo_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:sim",
+			"state": ["pressed"],
+			"svg": [
+				{
+					"uri": "Icons.svg#Circle_bg"
+				},
+				{
+					"uri": "Icons.svg#simulator_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:sim",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#simulator_default"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:advanced",
+			"state": ["unselected"],
+			"svg": [
+			{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#basicMode_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:advanced",
+			"state": ["selected"],
+			"svg": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#mediumMode_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:advanced",
+			"state": ["pressed"],
+			"svg": [
+				{
+					"uri": "Icons.svg#Selected_bg"
+				}
+			]
+		},
+		{
+			"name": "src:sim",
+			"state": ["pressed"],
+			"svg": [
+				{
+					"uri": "Icons.svg#Circle_bg"
+				},
+				{
+					"uri": "Icons.svg#simulator_highlight"
+				}
+			]
+		},
+		{
+			"name": "src:sim",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#simulator_default"
+
 				}
 			]
 		}

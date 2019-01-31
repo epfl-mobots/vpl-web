@@ -5,11 +5,11 @@
 		"action": "transparent",
 		"comment": "#aaa",
 		"background": "#fcfdfe",
-		"ruleBackground": "#eceff1",
+		"ruleBackground": "#f4f5f7",
 		"ruleMarks": "#bbb",
-		"scrollbarThumbColor": "navy",
-		"scrollbarBackgroundColor": "#ccc",
-		"scrollbarWidth": 5,
+		"scrollbarThumbColor": "#b0bec5",
+		"scrollbarBackgroundColor": "transparent",
+		"scrollbarWidth": 2,
 		"scrollingBlockLib": true
 	},
 
@@ -19,7 +19,7 @@
 			"type": "hidden",
 			"svg": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_empty"
 				}
 			]
 		},
@@ -28,7 +28,7 @@
 			"type": "hidden",
 			"svg": [
 				{
-					"uri": "Blocks.svg#Actions_bg"
+					"uri": "Blocks.svg#Action_empty"
 				}
 			]
 		},
@@ -181,7 +181,7 @@
 				}
 
 			],
-			"defaultParameters": [0]
+			"defaultParameters": []
 		},
 		{
 			"name": "clap",
@@ -198,7 +198,7 @@
 				}
 
 			],
-			"defaultParameters": [0]
+			"defaultParameters": []
 		},
 		{
 			"name": "Ev_Acc_fall",
@@ -215,10 +215,10 @@
 				}
 
 			],
-			"defaultParameters": [0]
+			"defaultParameters": []
 		},
 		{
-			"name": "Ev_Acc_hit",
+			"name": "tap",
 			"type": "event",
 			"modes": ["basic"],
 			"svg": [
@@ -231,7 +231,7 @@
 					"uri": "Blocks.svg#Ev_Acc_Hit"
 				}
 			],
-			"defaultParameters": [0]
+			"defaultParameters": []
 		},
 		{
 			"name": "Ev_ProxH_bas",
@@ -661,14 +661,65 @@
 					"max": 1
 				}
 			],
-			"score": [
+			"score": {
+				"id": "notes"
+			}
+		},
+		{
+			"name": "Ev_ProxH_Front_med",
+			"type": "event",
+			"modes": ["advanced"],
+			"svg": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#ProxSignals"
+				},
+				{
+					"uri": "Blocks.svg#Bg_Thymio_top-2"
+				},
+				{
+					"uri": "Blocks.svg#ProxOff-2"
+				},
+				{
+					"uri": "Blocks.svg#ProxLed"
+				}
+			],
+			"defaultParameters": [0, 0, 0, 0, 0],
+			"buttons": [
+				{
+					"id": "Btn3_Prox0",
+					"val": [0, 1, 2],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox1",
+					"val": [0, 1, 2],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox2",
+					"val": [0, 1, 2],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox3",
+					"val": [0, 1, 2],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox4",
+					"val": [0, 1, 2],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
+				}
 			]
 		}
 	],
 
 	"svgFilenames": [
-		"Blocks.svg",
-		"Icons.svg"
+		"Icons.svg",
+		"Blocks.svg"
 	],
 
 	"overlays": [
