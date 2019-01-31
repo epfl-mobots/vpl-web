@@ -122,8 +122,8 @@ A3a.vpl.patchPythonBlocks = function () {
 						cond += (cond.length === 0 ? "" : " and ") +
 							"self.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] " +
 							(block.param[i] > 0
-								? ">= " + block.param[7].toFixed(2)
-								: "<= " + block.param[8].toFixed(2));
+								? ">= " + toFixed2(block.param[7])
+								: "<= " + toFixed2(block.param[8]));
 					}
 				}
 				if (cond === "") {
@@ -146,7 +146,7 @@ A3a.vpl.patchPythonBlocks = function () {
 						cond += (cond.length === 0 ? "" : " and ") +
 							"self.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] " +
 							(block.param[i] > 0 ? ">= " : "< ") +
-							block.param[7].toFixed(2);
+							toFixed2(block.param[7]);
 					}
 				}
 				if (cond === "") {
@@ -191,8 +191,8 @@ A3a.vpl.patchPythonBlocks = function () {
 						cond += (cond.length === 0 ? "" : " and ") +
 							"self.get(\"prox.ground.delta\")[" + i + "] " +
 							(block.param[i] > 0
-								? ">= " + block.param[2].toFixed(2)
-								: "<= " + block.param[3].toFixed(2));
+								? ">= " + toFixed2(block.param[2])
+								: "<= " + toFixed2(block.param[3]));
 					}
 				}
 				if (cond === "") {
@@ -215,7 +215,7 @@ A3a.vpl.patchPythonBlocks = function () {
 						cond += (cond.length === 0 ? "" : " and ") +
 							"self.get(\"prox.ground.delta\")[" + i + "] " +
 							(block.param[i] > 0 ? ">= " : "< ") +
-							block.param[2].toFixed(2);
+							toFixed2(block.param[2]);
 					}
 				}
 				if (cond === "") {
@@ -254,12 +254,12 @@ A3a.vpl.patchPythonBlocks = function () {
 					/** @type {string} */
 					var cond;
 					if (a <= -6) {
-						cond = name + "Angle < " + (Math.PI / 12 * (a + 0.5)).toFixed(2);
+						cond = name + "Angle < " + toFixed2(Math.PI / 12 * (a + 0.5));
 					} else if (a >= 6) {
-						cond = name + "Angle >= " + (Math.PI / 12 * (a - 0.5)).toFixed(2);
+						cond = name + "Angle >= " + toFixed2(Math.PI / 12 * (a - 0.5));
 					} else {
-						cond = name + "Angle >= " + (Math.PI / 12 * (a - 0.5)).toFixed(2) +
-							" and " + name + "Angle < " + (Math.PI / 12 * (a + 0.5)).toFixed(2);
+						cond = name + "Angle >= " + toFixed2(Math.PI / 12 * (a - 0.5)) +
+							" and " + name + "Angle < " + toFixed2(Math.PI / 12 * (a + 0.5));
 					}
 					return {
 						sectionBegin: "def event_acc(self):\n",
@@ -283,8 +283,8 @@ A3a.vpl.patchPythonBlocks = function () {
 					clauseInit:
 						"rollAngle = math.atan2(acc[0], acc[2])\n",
 					clause:
-						"rollAngle >= " + (Math.PI / 12 * (a - 0.5)).toFixed(2) +
-						" and rollAngle < " + (Math.PI / 12 * (a + 0.5)).toFixed(2)
+						"rollAngle >= " + toFixed2(Math.PI / 12 * (a - 0.5)) +
+						" and rollAngle < " + toFixed2(Math.PI / 12 * (a + 0.5))
 				};
 			},
 			"pitch": function (block) {
@@ -297,8 +297,8 @@ A3a.vpl.patchPythonBlocks = function () {
 					clauseInit:
 						"pitchAngle = math.atan2(acc[1], acc[2])\n",
 					clause:
-						"pitchAngle >= " + (Math.PI / 12 * (a - 0.5)).toFixed(2) +
-						" and pitchAngle < " + (Math.PI / 12 * (a + 0.5)).toFixed(2)
+						"pitchAngle >= " + toFixed2(Math.PI / 12 * (a - 0.5)) +
+						" and pitchAngle < " + toFixed2(Math.PI / 12 * (a + 0.5))
 				};
 			},
 			"yaw": function (block) {
@@ -311,8 +311,8 @@ A3a.vpl.patchPythonBlocks = function () {
 					clauseInit:
 						"yawAngle = math.atan2(acc[0], acc[1])\n",
 					clause:
-						"yawAngle >= " + (Math.PI / 12 * (a - 0.5)).toFixed(2) +
-						" and yawAngle < " + (Math.PI / 12 * (a + 0.5)).toFixed(2)
+						"yawAngle >= " + toFixed2(Math.PI / 12 * (a - 0.5)) +
+						" and yawAngle < " + toFixed2(Math.PI / 12 * (a + 0.5))
 				};
 			},
 			"clap": function (block) {
@@ -428,8 +428,8 @@ A3a.vpl.patchPythonBlocks = function () {
 						A3a.vpl.BlockTemplate.initOutputsPython
 					],
 					statement:
-						"self.set(\"motor.left\", " + block.param[0].toFixed(2) + ")\n" +
-						"self.set(\"motor.right\", " + block.param[1].toFixed(2) + ")\n"
+						"self.set(\"motor.left\", " + toFixed2(block.param[0]) + ")\n" +
+						"self.set(\"motor.right\", " + toFixed2(block.param[1]) + ")\n"
 				};
 			},
 			"move": function (block) {
@@ -443,9 +443,9 @@ A3a.vpl.patchPythonBlocks = function () {
 					],
 					statement:
 						"self.set(\"motor.left\", " +
-							[0, sp, -sp, sp-spt, sp+spt, -sp, sp][block.param[0]].toFixed(2) + ")\n" +
+							toFixed2([0, sp, -sp, sp-spt, sp+spt, -sp, sp][block.param[0]]) + ")\n" +
 						"self.set(\"motor.right\", " +
-							[0, sp, -sp, sp+spt, sp-spt, sp, -sp][block.param[0]].toFixed(2) + ")\n"
+							toFixed2([0, sp, -sp, sp+spt, sp-spt, sp, -sp][block.param[0]]) + ")\n"
 				};
 			},
 			"top color": function (block) {
