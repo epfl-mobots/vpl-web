@@ -34,7 +34,7 @@ A3a.vpl.widgetsJS = {
 		draw: /** @type {A3a.vpl.Canvas.drawWidget} */(function (ctx, id, dims) {
 			// pink circled question mark
 			ctx.fillStyle = "white";
-			ctx.strokeStyle = "#f88";
+			ctx.strokeStyle = dims.errorColor;
 			ctx.lineWidth = dims.blockSize * 0.05;
 			ctx.beginPath();
 			ctx.arc(0, 0,
@@ -42,7 +42,7 @@ A3a.vpl.widgetsJS = {
 				0, 2 * Math.PI);
 			ctx.fill();
 			ctx.stroke();
-			ctx.fillStyle = "#f88";
+			ctx.fillStyle = dims.errorColor;
 			ctx.font = "bold " + Math.round(dims.blockSize * 0.3).toString() + "px sans-serif";
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
@@ -61,7 +61,7 @@ A3a.vpl.widgetsJS = {
 		draw: /** @type {A3a.vpl.Canvas.drawWidget} */(function (ctx, id, dims) {
 			// pink circled exclamation mark
 			ctx.fillStyle = "white";
-			ctx.strokeStyle = "#f88";
+			ctx.strokeStyle = dims.errorColor;
 			ctx.lineWidth = dims.blockSize * 0.05;
 			ctx.beginPath();
 			ctx.arc(0, 0,
@@ -69,7 +69,7 @@ A3a.vpl.widgetsJS = {
 				0, 2 * Math.PI);
 			ctx.fill();
 			ctx.stroke();
-			ctx.fillStyle = "#f88";
+			ctx.fillStyle = dims.errorColor;
 			ctx.font = "bold " + Math.round(dims.blockSize * 0.3).toString() + "px sans-serif";
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";

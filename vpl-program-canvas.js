@@ -307,7 +307,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				x - canvas.dims.stripHorMargin - canvas.dims.blockSize * 0.3,
 				y + canvas.dims.blockSize * 0.5);
 
-			ctx.strokeStyle = "#f88";
+			ctx.strokeStyle = canvas.dims.errorColor;
 			ctx.lineWidth = canvas.dims.blockSize * 0.05;
 			ctx.beginPath();
 			var ya = y + canvas.dims.blockSize + canvas.dims.stripVertMargin + canvas.dims.interRowSpace * 0.2;
@@ -348,7 +348,7 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 			canvas.dims.blockSize * 0.3;
 		var yc1 = y1 + canvas.dims.blockSize * 0.5 + canvas.dims.blockSize * 0.2;
 		var yc2 = y2 + canvas.dims.blockSize * 0.5 - canvas.dims.blockSize * 0.2;
-		ctx.strokeStyle = "#f88";
+		ctx.strokeStyle = canvas.dims.errorColor;
 		ctx.lineWidth = canvas.dims.blockSize * 0.05;
 		ctx.setLineDash([canvas.dims.blockSize * 0.2, canvas.dims.blockSize * 0.1]);
 		ctx.beginPath();
@@ -719,7 +719,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 		// display first error message
 		canvas.addDecoration(function (ctx) {
 			ctx.save();
-			ctx.fillStyle = "#f88";
+			ctx.fillStyle = canvas.dims.errorColor;
 			ctx.font = Math.round(canvas.dims.blockSize * 0.22).toString() + "px sans-serif";
 			ctx.textAlign = "left";
 			ctx.textBaseline = "bottom";

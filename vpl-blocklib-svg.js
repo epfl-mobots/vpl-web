@@ -771,6 +771,7 @@ A3a.vpl.patchBlocksSVG = function (uiConfig) {
 			stateStyle: uiConfig["styles"]["state"] || "#0c0",
 			actionStyle: uiConfig["styles"]["action"] || "#38f",
 			commentStyle: uiConfig["styles"]["comment"] || "#aaa",
+			errorColor: uiConfig["styles"]["errorColor"] || "#f88",
 			background: uiConfig["styles"]["background"] || "white",
 			ruleBackground: uiConfig["styles"]["ruleBackground"] || "#ddd",
 			ruleMarks: uiConfig["styles"]["ruleMarks"] || "#bbb",

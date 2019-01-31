@@ -503,6 +503,7 @@ A3a.vpl.Canvas.prototype["update"] = function () {
 /**
 	@typedef {{
 		blockSize: number,
+		minInteractiveBlockSize: number,
 		blockLineWidth: number,
 		thinLineWidth: number,
 		blockFont: string,
@@ -528,6 +529,7 @@ A3a.vpl.Canvas.prototype["update"] = function () {
 		stateStyle: string,
 		actionStyle: string,
 		commentStyle: string,
+		errorColor: string,
 		background: string,
 		ruleBackground: string,
 		ruleMarks: string,
@@ -544,6 +546,7 @@ A3a.vpl.Canvas.dims;
 A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 	return {
 		blockSize: blockSize,
+		minInteractiveBlockSize: 60,
 		blockLineWidth: Math.max(1, Math.min(3, blockSize / 40)),
 		thinLineWidth: 1,
 		blockFont: Math.round(blockSize / 4).toString(10) + "px sans-serif",
@@ -569,6 +572,7 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		stateStyle: "#0c0",
 		actionStyle: "#38f",
 		commentStyle: "#aaa",
+		errorColor: "#f88",
 		background: "",
 		ruleBackground: "#ddd",
 		ruleMarks: "#bbb"
