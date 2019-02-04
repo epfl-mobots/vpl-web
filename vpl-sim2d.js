@@ -29,6 +29,7 @@ A3a.vpl.VPLSim2DViewer = function (robot, uiConfig) {
 	this.running = false;
 	this.paused = false;
 	this.penDown = false;
+	this.renderingPending = false;
 
 	this.currentMap = A3a.vpl.VPLSim2DViewer.playgroundMap.ground;
 
@@ -1168,8 +1169,10 @@ A3a.vpl.VPLSim2DViewer.prototype.render = function () {
 
 	this.simCanvas.redraw();
 
-	if (!this.paused && this.robot["shouldRunContinuously"]()) {
+	if (!this.paused && this.robot["shouldRunContinuously"]() && !this.renderingPending) {
+		this.renderingPending = true;
 		window.requestAnimationFrame(function () {
+			self.renderingPending = false;
 			self.render();
 		});
 	}
