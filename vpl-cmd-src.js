@@ -36,7 +36,7 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 	});
 	commands.add("src:vpl", {
 		action: function (srcEditor, modifier) {
-			window["vplProgram"].setView("vpl");
+			A3a.vpl.Program.setView("vpl");
 		},
 		isEnabled: function (srcEditor) {
 			return srcEditor.doesMatchVPL();
@@ -137,7 +137,7 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 	});
 	commands.add("src:sim", {
 		action: function (srcEditor, modifier) {
-			window["vplProgram"].setView("sim");
+			A3a.vpl.Program.setView("sim");
 		},
 		object: this,
 		isAvailable: function (srcEditor) {

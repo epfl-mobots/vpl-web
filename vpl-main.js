@@ -190,6 +190,11 @@ function vplSetup(gui) {
 		});
 	}
 
+	// canvas
+	var canvasEl = document.getElementById("programCanvas");
+	window["vplCanvas"] = new A3a.vpl.Canvas(canvasEl);
+	window["vplCanvas"].state = {view: "vpl"};
+
 	// general settings
 	var isClassic = gui == undefined || getQueryOption("appearance") === "classic";
 	window["vplUseLocalStorage"] = getQueryOption("storage") === "local";
@@ -278,6 +283,7 @@ function vplSetup(gui) {
 		window["vplRun"] && window["vplRun"].init(language);
 		break;
  	case "sim":
+		window["simCanvas"] = new A3a.vpl.Canvas(canvasEl);
 		window["installRobotSimulator"]({canvasFilter: filter, canvasTransform: transform});
 		window["vplRun"] && window["vplRun"].init(language);
 		break;
@@ -307,15 +313,7 @@ function vplSetup(gui) {
 	window["vplProgram"].setEditedSourceCodeFun = function (code) {
 		window["vplEditor"].setCode(code);
 	};
-	var canvas = document.getElementById("programCanvas");
-	window["vplCanvas"] = new A3a.vpl.Canvas(canvas);
-	window["vplCanvas"].state = new A3a.vpl.Program.CanvasRenderingState();
-	window["vplCanvas"].onUpdate = function () {
-		window["vplProgram"].invalidateCode();
-		window["vplProgram"].enforceSingleTrailingEmptyEventHandler();
-		window["vplProgram"].renderToCanvas(window["vplCanvas"]);
-		window["vplEditor"].setCode(window["vplProgram"].getCode(window["vplProgram"].currentLanguage));
-	};
+	window["vplCanvas"].state.vpl = new A3a.vpl.Program.CanvasRenderingState();
 	window["vplCanvas"].widgets = widgets;
 	window["vplProgram"].addEventHandler(true);
 
@@ -362,66 +360,42 @@ function vplSetup(gui) {
 	}
 
 	// accept dropped aesl files
-	document.getElementsByTagName("body")[0].addEventListener('dragover', function(e) {
+	document.getElementsByTagName("body")[0].addEventListener("dragover", function(e) {
 		e.stopPropagation();
 		e.preventDefault();
 		e.dataTransfer.dropEffect = "copy";
 	}, false);
-	document.getElementsByTagName("body")[0].addEventListener('drop', function(e) {
+	document.getElementsByTagName("body")[0].addEventListener("drop", function(e) {
 		e.stopPropagation();
 		e.preventDefault();
 		var files = e.dataTransfer.files;
 		if (files.length === 1) {
 			var file = files[0];
 			var reader = new window.FileReader();
-			reader.onload = function (event) {
-				var data = event.target.result;
-				var filename = file.name;
-				try {
-					// try aesl first
-					window["vplProgram"].importFromAESLFile(data);
-					window["vplCanvas"].onUpdate();
-				} catch (e) {
-					// then try json
+			switch (window["vplCanvas"].state.view) {
+			case "vpl":
+				reader.onload = function (event) {
+					var data = event.target.result;
+					var filename = file.name;
 					try {
-						window["vplProgram"].importFromJSON(data, function (view) {
-							window["vplProgram"].setView(view);
-							if (view === "vpl") {
-								window["vplCanvas"].onUpdate();
-							}
-						});
-					} catch (e) {}
-				}
-			};
-			reader["readAsText"](file);
-		}
-	}, false);
-
-	// configure simulator
-	if (window["vplSim"]) {
-		// shared configuration
-		window["vplSim"].uiConfig = uiConfig;
-
-		// default maps
-		window["vplSim"].sim.disabledGroundImage = new SVG('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><defs><linearGradient id="gradient" x1="-1000" y1="0" x2="-800" y2="0" gradientUnits="userSpaceOnUse"><stop style="stop-color:#000;stop-opacity:1;" offset="0" /><stop style="stop-color:#000;stop-opacity:0;" offset="1" /></linearGradient></defs><g transform="translate(0,-308)"><rect style="fill:url(#gradient);stroke:none" width="319" height="687" x="-1027" y="336" transform="scale(-1,1)" /><path style="fill:none;stroke:#000;stroke-width:30;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" d="M 114,592 C 102,417 750,306 778,532 806,757 674,675 559,622 444,568 259,567 278,664 296,762 726,730 778,808 829,887 725,955 616,936 507,917 144,1083 129,837 Z" /></g></svg>')
-			.toImage();
-		window["vplSim"].sim.disabledHeightImage = new SVG('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><defs><radialGradient id="gradient" cx="400" cy="650" fx="400" fy="650" r="230" gradientTransform="matrix(1.6,0,0,1.16,-113,-75)" gradientUnits="userSpaceOnUse"><stop style="stop-color:#000;stop-opacity:1;" offset="0" /><stop style="stop-color:#000;stop-opacity:0;" offset="1" /></radialGradient></defs><g transform="translate(0,-308)"><rect style="fill:url(#gradient);fill-opacity:1;stroke:none" width="939" height="650" x="54" y="357" /></g></svg>')
-			.toImage();
-		window["vplSim"].sim.disabledObstacleSVG = '<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><g transform="translate(0,-308)"><path style="fill:none;stroke:#000;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter" d="M 172,928 137,420 763,371 905,688 708,981 Z" /><path style="fill:none;stroke:#949494;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter" d="m 402,754 168,91 101,-142" /><circle style="fill:none;stroke:#000;stroke-width:6" cx="531" cy="550" r="59" /></g></svg>';
-
-		// accept dropped ground files in simulator
-		document.getElementById("sim-view").addEventListener('dragover', function(e) {
-			e.stopPropagation();
-			e.preventDefault();
-			e.dataTransfer.dropEffect = "copy";
-		}, false);
-		document.getElementById("sim-view").addEventListener('drop', function(e) {
-			e.stopPropagation();
-			e.preventDefault();
-			var files = e.dataTransfer.files;
-			if (files.length === 1) {
-				var file = files[0];
-				var reader = new window.FileReader();
+						// try aesl first
+						window["vplProgram"].importFromAESLFile(data);
+						window["vplCanvas"].onUpdate();
+					} catch (e) {
+						// then try json
+						try {
+							window["vplProgram"].importFromJSON(data, function (view) {
+								A3a.vpl.Program.setView(view);
+								if (view === "vpl") {
+									window["vplCanvas"].onUpdate();
+								}
+							});
+						} catch (e) {}
+					}
+				};
+				reader["readAsText"](file);
+				break;
+			case "sim":
 				if (window["vplSim"].sim.wantsSVG()) {
 					reader.onload = function (event) {
 						var data = event.target.result;
@@ -439,8 +413,22 @@ function vplSetup(gui) {
 					};
 					reader["readAsDataURL"](file);
 				}
+				break;
 			}
-		}, false);
+		}
+	}, false);
+
+	// configure simulator
+	if (window["vplSim"]) {
+		// shared configuration
+		window["vplSim"].uiConfig = uiConfig;
+
+		// default maps
+		window["vplSim"].sim.disabledGroundImage = new SVG('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><defs><linearGradient id="gradient" x1="-1000" y1="0" x2="-800" y2="0" gradientUnits="userSpaceOnUse"><stop style="stop-color:#000;stop-opacity:1;" offset="0" /><stop style="stop-color:#000;stop-opacity:0;" offset="1" /></linearGradient></defs><g transform="translate(0,-308)"><rect style="fill:url(#gradient);stroke:none" width="319" height="687" x="-1027" y="336" transform="scale(-1,1)" /><path style="fill:none;stroke:#000;stroke-width:30;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" d="M 114,592 C 102,417 750,306 778,532 806,757 674,675 559,622 444,568 259,567 278,664 296,762 726,730 778,808 829,887 725,955 616,936 507,917 144,1083 129,837 Z" /></g></svg>')
+			.toImage();
+		window["vplSim"].sim.disabledHeightImage = new SVG('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><defs><radialGradient id="gradient" cx="400" cy="650" fx="400" fy="650" r="230" gradientTransform="matrix(1.6,0,0,1.16,-113,-75)" gradientUnits="userSpaceOnUse"><stop style="stop-color:#000;stop-opacity:1;" offset="0" /><stop style="stop-color:#000;stop-opacity:0;" offset="1" /></radialGradient></defs><g transform="translate(0,-308)"><rect style="fill:url(#gradient);fill-opacity:1;stroke:none" width="939" height="650" x="54" y="357" /></g></svg>')
+			.toImage();
+		window["vplSim"].sim.disabledObstacleSVG = '<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><g transform="translate(0,-308)"><path style="fill:none;stroke:#000;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter" d="M 172,928 137,420 763,371 905,688 708,981 Z" /><path style="fill:none;stroke:#949494;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter" d="m 402,754 168,91 101,-142" /><circle style="fill:none;stroke:#000;stroke-width:6" cx="531" cy="550" r="59" /></g></svg>';
 	}
 
 	// reload from storage
@@ -467,9 +455,9 @@ function vplSetup(gui) {
 	}
 
 	if (getQueryOption("view") === "text") {
-		window["vplProgram"].setView("src", {noVpl: true});
+		A3a.vpl.Program.setView("src", {noVpl: true});
 	} else {
-		window["vplProgram"].setView("vpl");
+		A3a.vpl.Program.setView("vpl");
 		window["vplProgram"].experimentalFeatures = experimentalFeatures;
 		window["vplProgram"].setTeacherRole(getQueryOption("role") === "teacher");
 		window["vplProgram"].renderToCanvas(window["vplCanvas"]);
@@ -529,6 +517,10 @@ function vplSetup(gui) {
 	window["vplEditor"].toolbarRender();
 
 	window["vplSim"] && window["vplSim"].sim.setTeacherRole(getQueryOption("role") === "teacher");
+
+	var view = getQueryOption("view");
+	A3a.vpl.Program.setView(["sim", "vpl+sim", "sim+vpl"].indexOf(view) >= 0 ? view : "vpl");
+	vplResize();
 }
 
 window.addEventListener("load", function () {
@@ -572,18 +564,26 @@ function vplResize() {
 		height = bnd.height;
 	}
 
-	// vpl
+	// vpl and simulator
 	window["vplCanvas"].resize(width, height);
-	window["vplProgram"].renderToCanvas(window["vplCanvas"]);
+	if (window["vplSim"]) {
+		window["vplSim"].sim.simCanvas.resize(width, height);
+	}
+	window["vplCanvas"].state.view.split("+").forEach(function (view) {
+		switch (view) {
+		case "vpl":
+			window["vplProgram"].renderToCanvas(window["vplCanvas"]);
+			break;
+		case "sim":
+			if (window["vplSim"]) {
+				window["vplSim"].sim.render(window["vplCanvas"]);
+			}
+			break;
+		}
+	});
 
 	// editor
 	window["vplEditor"].resize();
-
-	// sim
-	if (window["vplSim"]) {
-		window["vplSim"].sim.simCanvas.resize(width, height);
-		window["vplSim"].sim.render();
-	}
 }
 
 // remember state across reload

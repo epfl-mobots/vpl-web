@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -46,21 +46,21 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 	});
 	commands.add("vpl:text", {
 		action: function (program, modifier) {
-			program.setView("src");
+			A3a.vpl.Program.setView("src");
 		},
 		doDrop: function (program, draggedItem) {
 			if (draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.eventHandlerContainer) {
 				var block = /** @type {A3a.vpl.Block} */(draggedItem.data);
 				var span = program.getCodeLocation(program.currentLanguage, block);
 				if (span) {
-					program.setView("src");
+					A3a.vpl.Program.setView("src");
 					editor.selectRange(span.begin, span.end);
 				}
 			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
 				var eventHandler = /** @type {A3a.vpl.EventHandler} */(draggedItem.data);
 				var span = program.getCodeLocation(program.currentLanguage, eventHandler);
 				if (span) {
-					program.setView("src");
+					A3a.vpl.Program.setView("src");
 					editor.selectRange(span.begin, span.end);
 				}
 			}
@@ -169,11 +169,12 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 	});
 	commands.add("vpl:sim", {
 		action: function (program, modifier) {
-			program.setView("sim");
+			A3a.vpl.Program.setView("sim");
 		},
 		object: this,
 		isAvailable: function (program) {
-			return runglue != null && window["vplSim"] != null;
+			return runglue != null && window["vplSim"] != null &&
+				window["vplCanvas"].state.view.split("+").indexOf("sim") < 0;
 		}
 	});
 	commands.add("vpl:duplicate", {

@@ -365,30 +365,6 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 	});
 };
 
-/** Change current view
-	@param {string} view "vpl", "src" or "sim"
-	@param {{noVpl:(boolean|undefined),unlocked:(boolean|undefined)}=} options
-	noVpl:true to prevent vpl (default: false),
-	unlocked:true (with "src") for source code editor in unlocked state (disconnected
-	from vpl)
-	@return {void}
-*/
-A3a.vpl.Program.prototype.setView = function (view, options) {
-	this.noVpl = options && options.noVpl || false;
-	document.getElementById("vpl-editor").style.display = view === "vpl" ? "block" : "none";
-	document.getElementById("src-editor").style.display = view === "src" ? "block" : "none";
-	document.getElementById("sim-view").style.display = view === "sim" ? "block" : "none";
-	switch (view) {
-	case "src":
-		window["vplEditor"].lockWithVPL(!(options && options.unlocked));
-		window["vplEditor"].focus();
-		break;
-	case "sim":
-		window["vplSim"].sim.start(false);
-		break;
-	}
-};
-
 /** Calculate block position based on a layout with items, fixed intervals, separators,
 	and stretch elements
 	@param {number} pMin min position (left margin)
@@ -454,7 +430,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	this.getCode(this.currentLanguage);
 
 	var canvasSize = canvas.getSize();
-	var renderingState = /** @type {A3a.vpl.Program.CanvasRenderingState} */(canvas.state);
+	var renderingState = /** @type {A3a.vpl.Program.CanvasRenderingState} */(canvas.state.vpl);
 	var self = this;
 	var showState = this.mode === A3a.vpl.mode.advanced;
 
@@ -740,6 +716,6 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 	@return {void}
 */
 A3a.vpl.Program.prototype.scrollCanvas = function (canvas, dy) {
-	var renderingState = /** @type {A3a.vpl.Program.CanvasRenderingState} */(canvas.state);
+	var renderingState = /** @type {A3a.vpl.Program.CanvasRenderingState} */(canvas.state.vpl);
 	renderingState.programScroll.scrollCanvas(dy);
 };

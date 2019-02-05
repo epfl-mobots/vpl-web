@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -17,10 +17,11 @@ A3a.vpl.Playground = function (width, height) {
 
 /** 2D viewer for robot simulator
 	@constructor
+	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.Robot} robot
 	@param {?A3a.vpl.UIConfig=} uiConfig
 */
-A3a.vpl.VPLSim2DViewer = function (robot, uiConfig) {
+A3a.vpl.VPLSim2DViewer = function (canvas, robot, uiConfig) {
 	var self = this;
 
 	this.uiConfig = uiConfig || new A3a.vpl.UIConfig();
@@ -66,8 +67,7 @@ A3a.vpl.VPLSim2DViewer = function (robot, uiConfig) {
 			self.updateAccelerometers();
 		});
 
-	var canvasElement = document.getElementById("simCanvas");
-	this.simCanvas = new A3a.vpl.Canvas(canvasElement);
+	this.simCanvas = canvas;
 	this.simCanvas.state = {};
 	this.simCanvas.onUpdate = function () {
 		self.render();
@@ -456,8 +456,7 @@ A3a.vpl.VPLSim2DViewer.color = function (rgb) {
 	@return {void}
 */
 A3a.vpl.VPLSim2DViewer.prototype.render = function () {
-	// abort if hidden
-	if (document.getElementById("sim-view").style.display === "none") {
+	if (!this.simCanvas.visible) {
 		return;
 	}
 

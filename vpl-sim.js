@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -35,7 +35,7 @@ window["installRobotSimulator"] = function (options) {
 		},
 		init: function (language) {
 			var robot = new A3a.vpl.VirtualThymioVM();
-			var sim = new A3a.vpl.VPLSim2DViewer(robot);
+			var sim = new A3a.vpl.VPLSim2DViewer(window["simCanvas"], robot);
 			if (options && options.canvasFilter) {
 				sim.simCanvas.setFilter(options.canvasFilter);
 			}

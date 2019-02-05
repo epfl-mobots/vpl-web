@@ -154,19 +154,20 @@ A3a.vpl.VPLSim2DViewer.prototype.addSim2DCommands = function (commands, editor) 
 	});
 	commands.add("sim:vpl", {
 		action: function (sim2d, modifier) {
-			window["vplProgram"].setView("vpl");
+			A3a.vpl.Program.setView("vpl");
 		},
 		isEnabled: function (sim2d) {
 			return editor == null || editor.doesMatchVPL();
 		},
 		object: this,
 		isAvailable: function (srcEditor) {
-			return editor == null || !editor.noVPL;
+			return (editor == null || !editor.noVPL) &&
+				window["vplCanvas"].state.view.split("+").indexOf("vpl") < 0;
 		}
 	});
 	commands.add("sim:text", {
 		action: function (sim2d, modifier) {
-			window["vplProgram"].setView("src",
+			A3a.vpl.Program.setView("src",
 				{unlocked: !window["vplEditor"].isLockedWithVPL});
 		},
 		object: this

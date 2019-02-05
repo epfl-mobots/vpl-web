@@ -739,6 +739,7 @@
 		"aseba.json",
 		"l2.json",
 		"js.json",
+		"python.json",
 		"toolbars.json",
 		"buttons.json"
 	]
@@ -815,7 +816,7 @@
 			"name": "Ev_Acc_fall"
 		},
 		{
-			"name": "Ev_Acc_hit"
+			"name": "tap"
 		},
 		{
 			"name": "Ev_ProxH_bas"
@@ -952,7 +953,7 @@
 			"name": "Ev_Acc_fall"
 		},
 		{
-			"name": "Ev_Acc_hit"
+			"name": "tap"
 		},
 		{
 			"name": "Ev_ProxH_bas"
@@ -1060,7 +1061,105 @@
 			"name": "Ev_Acc_fall"
 		},
 		{
-			"name": "Ev_Acc_hit"
+			"name": "tap"
+		},
+		{
+			"name": "Ev_ProxH_bas"
+		},
+		{
+			"name": "Remote1"
+		},
+		{
+			"name": "Remote2"
+		},
+		{
+			"name": "motor",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"motor.left\", `$[0].toFixed(2)`);\nthis.set(\"motor.right\", `$[1].toFixed(2)`);\n"
+			}
+		},
+		{
+			"name": "move",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"motor.left\", `[0, 0.2, 0.25, 0.1, -1.5, -0.2, -0.25, -0.1, 0.15][$[0]].toFixed(2)`);\nthis.set(\"motor.right\", `[0, 0.2, 0.15, -0.1, -0.25, -0.2, -0.15, 0.1, 0.25][$[0]].toFixed(2)`);\n"
+			}
+		},
+		{
+			"name": "top_color_basic",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.top\", [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`]);\n"
+			}
+		},
+		{
+			"name": "top color",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.top\", [`$.map(function (x) { return x.toFixed(2); }).join(', ')`]);\n"
+			}
+		},
+		{
+			"name": "Ac_music"
+		}
+	]
+}
+</script>
+
+<script type="application/json" id="python.json">
+{
+	"blocks": [
+		{
+			"name": "button",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"buttons\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"sectionPriority": 10,
+				"clauseAnd": "`$[i] ? 'this.get(\"button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + '\")' : ''`"
+			}
+		},
+		{
+			"name": "Thymio acc 1"
+		},
+		{
+			"name": "Thymio acc 2"
+		},
+		{
+			"name": "Thymio acc 0"
+		},
+		{
+			"name": "start",
+			"js": {
+				"sectionBegin": "// init block\n",
+				"sectionPriority": 10000
+			}
+		},
+		{
+			"name": "clap",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"mic\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"sectionPriority": 1
+			}
+		},
+		{
+			"name": "Ev_Acc_fall"
+		},
+		{
+			"name": "tap"
 		},
 		{
 			"name": "Ev_ProxH_bas"
@@ -2873,6 +2972,7 @@ window["vplOnRun"] = function (code) {
 <script src="vpl-cmd-src.js"></script>
 <script src="vpl-ui-svg.js"></script>
 <script src="vpl-runglue.js"></script>
+<script src="vpl-app.js"></script>
 <script src="vpl-main.js"></script>
 
 <script src="a3a-nodebase.js"></script>
@@ -2921,10 +3021,6 @@ window["vplOnRun"] = function (code) {
 </textarea>
 </div>
 
-</div>
-
-<div id="sim-view">
-<canvas id="simCanvas" width="900" height="700"></canvas>
 </div>
 
 </body>
