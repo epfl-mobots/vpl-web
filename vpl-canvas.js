@@ -199,8 +199,6 @@ A3a.vpl.Canvas = function (canvas, relativeArea) {
 	this.ctx = this.canvas.getContext("2d");
 	/** @type {Object} */
 	this.state = null;	// client data used by callbacks (scroll positions etc.)
-	/** @type {?function(number,number):void} */
-	this.wheel = null;
 
 	this.clickTimestamp = 0;
 	this.zoomedItemIndex = -1;
@@ -226,6 +224,10 @@ A3a.vpl.Canvas = function (canvas, relativeArea) {
 		@return {void}
 	*/
 	function mousedown(downEvent) {
+		if (!self.visible) {
+			return;
+		}
+
 		var mouseEvent = self.makeMouseEvent(downEvent);
 
 		function startInteraction(item) {
@@ -394,6 +396,10 @@ A3a.vpl.Canvas = function (canvas, relativeArea) {
 	}, false);
 
 	canvas.addEventListener("wheel", function (wheelEvent) {
+		if (!self.visible) {
+			return;
+		}
+
 		function doScroll(item) {
 			if (item.doScroll) {
 				wheelEvent.preventDefault();
@@ -772,14 +778,14 @@ A3a.vpl.Canvas.prototype.erase = function () {
 		this.ctx.fillStyle = this.dims.background;
 		this.ctx.fillRect(this.canvasWidth * this.relativeArea.xmin,
 			this.canvasHeight * this.relativeArea.ymin,
-			this.canvasWidth * this.relativeArea.xmax,
-			this.canvasHeight * this.relativeArea.ymax);
+			this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin),
+			this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin));
 		this.ctx.restore();
 	} else {
 		this.ctx.clearRect(this.canvasWidth * this.relativeArea.xmin,
 			this.canvasHeight * this.relativeArea.ymin,
-			this.canvasWidth * this.relativeArea.xmax,
-			this.canvasHeight * this.relativeArea.ymax);
+			this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin),
+			this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin));
 	}
 };
 

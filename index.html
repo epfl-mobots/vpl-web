@@ -19,18 +19,16 @@ body {
 	height: 100%;
 	margin: 0;
 }
-#programCanvas, #simCanvas {
+#programCanvas {
 	width: 100%;
 	height: 100%;
 	display: block;
+	z-index: 10;
 }
 #src-editor {
-	height: 100%;
-}
-#editorTBCanvas {
 	width: 100%;
-	height: 100px;
-	display: block;
+	position: fixed;
+	z-index: 20;
 }
 #editor {
 	height: 100%;
@@ -163,18 +161,9 @@ window["vplOnRun"] = function (code) {
 </div>
 
 <div id="src-editor">
-
-<canvas id="editorTBCanvas" width="900" height="100"></canvas>
-<div style="display:flex">
 <pre id="editor-lines"></pre>
 <textarea id="editor" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 </textarea>
-</div>
-
-</div>
-
-<div id="sim-view">
-<canvas id="simCanvas" width="900" height="700"></canvas>
 </div>
 
 </body>

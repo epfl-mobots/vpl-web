@@ -43,7 +43,8 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 		},
 		object: this,
 		isAvailable: function (srcEditor) {
-			return !srcEditor.noVPL;
+			return !srcEditor.noVPL
+				&& window["vplCanvas"].state.view.split("+").indexOf("vpl") < 0;
 		}
 	});
 	commands.add("src:locked", {
@@ -103,6 +104,9 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 		isSelected: function (srcEditor) {
 			return srcEditor.srcForAsm !== null;
 		},
+		getState: function (srcEditor) {
+			return srcEditor.language;
+		},
 		object: this,
 		isAvailable: function (srcEditor) {
 			return srcEditor.disass !== null;
@@ -141,7 +145,8 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 		},
 		object: this,
 		isAvailable: function (srcEditor) {
-			return srcEditor.runGlue != null && window["vplSim"] != null;
+			return srcEditor.runGlue != null && window["vplSim"] != null &&
+				window["vplCanvas"].state.view.split("+").indexOf("sim") < 0;
 		}
 	});
 	commands.add("src:teacher-reset", {

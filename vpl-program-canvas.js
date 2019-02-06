@@ -365,62 +365,6 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 	});
 };
 
-/** Calculate block position based on a layout with items, fixed intervals, separators,
-	and stretch elements
-	@param {number} pMin min position (left margin)
-	@param {number} pMax max position (right margin)
-	@param {number} itemSize item size
-	@param {number} gap normal gap
-	@param {number} separatorGap large gap used for separators
-	@param {string} layout layout description: "X" = item, " " = separator, "s" = stretch
- 	@return {Array.<number>} array of item positions (length: number of "X" in layout)
-*/
-A3a.vpl.Program.blockLayout = function (pMin, pMax, itemSize, gap, separatorGap, layout) {
-	// calc. sum of fixed sizes and count stretches
-	var totalFixedSize = 0;
-	var stretchCount = 0;
-	var s = 0;
-	for (var i = 0; i < layout.length; i++) {
-		switch (layout[i]) {
-		case "X":
-			s += layout[i - 1] === "X" ? gap + itemSize : itemSize;
-			break;
-		case " ":
-			s += separatorGap;
-			break;
-		case "s":
-			stretchCount++;
-			break;
-		}
-	}
-	// calc. stretch size
-	var stretchSize = (pMax - pMin - s) / stretchCount;
-	// calc. positions
-	/** @type {Array.<number>} */
-	var pos = [];
-	var p = pMin;
-	for (var i = 0; i < layout.length; i++) {
-		switch (layout[i]) {
-		case "X":
-			if (layout[i - 1] === "X") {
-				pos.push(p + gap);
-				p += gap + itemSize;
-			} else {
-				pos.push(p);
-				p += itemSize;
-			}
-			break;
-		case " ":
-			p += separatorGap;
-			break;
-		case "s":
-			p += stretchSize;
-			break;
-		}
-	}
-	return pos;
-};
-
 /** Render the program to a single canvas
 	@param {A3a.vpl.Canvas} canvas
 	@return {void}
@@ -642,6 +586,7 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 	// 2nd toolbar at bottom between templates
 	var toolbar2Config = this.toolbar2Config || [
+		// empty by default
 	];
 	if (toolbar2Config.length > 0) {
 		var controlBar2 = new A3a.vpl.ControlBar(canvas);
@@ -708,14 +653,4 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 
 	this.onUpdate && this.onUpdate();
 	canvas.redraw();
-};
-
-/** Scroll canvas, typically because of wheel or keyboard event
-	@param {A3a.vpl.Canvas} canvas
-	@param {number} dy
-	@return {void}
-*/
-A3a.vpl.Program.prototype.scrollCanvas = function (canvas, dy) {
-	var renderingState = /** @type {A3a.vpl.Program.CanvasRenderingState} */(canvas.state.vpl);
-	renderingState.programScroll.scrollCanvas(dy);
 };

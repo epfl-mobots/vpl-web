@@ -31,7 +31,6 @@ A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
 		parseInt(taStyle.paddingLeft, 10) - parseInt(taStyle.paddingRight, 10);
 
     this.textarea.style.width = taWidth + "px";
-    this.textarea.style["float"] = "right";
     this.textarea.style.border = "0px";
     this.textarea.style.outline = "none";
     this.textarea.style.resize = "none";
@@ -52,9 +51,6 @@ A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
     this.textarea.addEventListener("input", function (e) {
         self.updateLineNumbers();
     }, false);
-	window.addEventListener("resize", function (e) {
-		self.resize();
-	}, true);
 
 	/** @type {Array.<number>} */
 	this.breakpoints = [];
@@ -64,6 +60,15 @@ A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
 	this.onBreakpointChanged = null;
 
 	this.updateLineNumbers();
+};
+
+/** Set window resize listener to resize this
+	@return {void}
+*/
+A3a.vpl.TextEditor.prototype.addResizeListener = function () {
+	window.addEventListener("resize", function (e) {
+		self.resize();
+	}, true);
 };
 
 /** @typedef {function(Array.<number>):void} */
@@ -112,8 +117,9 @@ A3a.vpl.TextEditor.prototype.toggleBreakpoint = function (line) {
 	@return {void}
 */
 A3a.vpl.TextEditor.prototype.resize = function () {
+	var parentBB = this.div.getBoundingClientRect();
     // style
-    var width = window.innerWidth - this.leftMargin;
+    var width = parentBB.width - this.leftMargin;
 	var height = window.innerHeight - this.topMargin;
     var taStyle = window.getComputedStyle(this.textarea);
 	var taWidth = width - this.pre.getBoundingClientRect().width - 10 -
@@ -121,6 +127,7 @@ A3a.vpl.TextEditor.prototype.resize = function () {
 
     this.textarea.style.width = taWidth + "px";
     this.pre.style.height = height + "px";
+    this.pre.style.maxHeight = height + "px";
 };
 
 /** Update the line number text in the pre element

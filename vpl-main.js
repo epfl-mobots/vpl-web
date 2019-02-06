@@ -302,11 +302,13 @@ function vplSetup(gui) {
 
 	window["vplProgram"] = new A3a.vpl.Program(A3a.vpl.mode.basic, uiConfig);
 	window["vplProgram"].currentLanguage = language;
-	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["vplProgram"].noVPL,
+	window["editorCanvas"] = new A3a.vpl.Canvas(canvasEl);
+	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["editorCanvas"],
+		window["vplProgram"].noVPL,
 		language,
 		uiConfig,
 		window["vplRun"]);
-	window["vplEditor"].tbCanvas.setFilter(filter);
+	window["editorCanvas"].setFilter(filter);
 	window["vplProgram"].getEditedSourceCodeFun = function () {
 		return window["vplEditor"].doesMatchVPL() ? null : window["vplEditor"].getCode();
 	};
@@ -455,7 +457,7 @@ function vplSetup(gui) {
 	}
 
 	if (getQueryOption("view") === "text") {
-		A3a.vpl.Program.setView("src", {noVpl: true});
+		A3a.vpl.Program.setView("src", {noVPL: true});
 	} else {
 		A3a.vpl.Program.setView("vpl");
 		window["vplProgram"].experimentalFeatures = experimentalFeatures;
@@ -508,18 +510,40 @@ function vplSetup(gui) {
 
 	// initial canvas resize
 	vplResize();
-	window["vplCanvas"].onUpdate();
-	window["vplEditor"].resize();
+	window["vplCanvas"].update();
 
 	// resize canvas
 	window.addEventListener("resize", vplResize, false);
 
-	window["vplEditor"].toolbarRender();
-
 	window["vplSim"] && window["vplSim"].sim.setTeacherRole(getQueryOption("role") === "teacher");
 
 	var view = getQueryOption("view");
-	A3a.vpl.Program.setView(["sim", "vpl+sim", "sim+vpl"].indexOf(view) >= 0 ? view : "vpl");
+	if (view === "text") {
+		// special case for source code editor without VPL
+		A3a.vpl.Program.setView("src", {noVPL: true});
+	} else {
+		// enforce 1-3 unique views among vpl, src and sim; otherwise just vpl
+		var views = view.split("+");
+		/** @const */
+		var allowedViews = ["vpl", "src", "sim"];
+		if (views.length < 1 || views.length > 3 || view === "") {
+			view = "vpl";	// invalid, default to vpl
+		} else {
+			for (var i = 0; i < views.length; i++) {
+				if (!allowedViews.indexOf(views[i]) < 0) {
+					view = "vpl";	// invalid, default to vpl
+					break;
+				}
+				for (var j = 0; j < i; j++) {
+					if (views[i] === views[j]) {
+						view = "vpl";	// invalid, default to vpl
+						break;	// inner loop only, don't care
+					}
+				}
+			}
+		}
+		A3a.vpl.Program.setView(view);
+	}
 	vplResize();
 }
 
@@ -564,7 +588,8 @@ function vplResize() {
 		height = bnd.height;
 	}
 
-	// vpl and simulator
+	// vpl, editor and simulator
+	window["vplEditor"].resize();
 	window["vplCanvas"].resize(width, height);
 	if (window["vplSim"]) {
 		window["vplSim"].sim.simCanvas.resize(width, height);
@@ -574,6 +599,9 @@ function vplResize() {
 		case "vpl":
 			window["vplProgram"].renderToCanvas(window["vplCanvas"]);
 			break;
+		case "src":
+			window["editorCanvas"].redraw();
+			break;
 		case "sim":
 			if (window["vplSim"]) {
 				window["vplSim"].sim.render(window["vplCanvas"]);
@@ -581,9 +609,6 @@ function vplResize() {
 			break;
 		}
 	});
-
-	// editor
-	window["vplEditor"].resize();
 }
 
 // remember state across reload

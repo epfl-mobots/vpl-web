@@ -69,7 +69,10 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 			return draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.eventHandlerContainer != null ||
 				draggedItem.data instanceof A3a.vpl.EventHandler;
 		},
-		object: this
+		object: this,
+		isAvailable: function (program) {
+			return window["vplCanvas"].state.view.split("+").indexOf("src") < 0;
+		}
 	});
 	commands.add("vpl:advanced", {
 		action: function (program, modifier) {
