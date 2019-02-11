@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -52,6 +52,8 @@ A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
         self.updateLineNumbers();
     }, false);
 
+	this.breakpointsEnabled = false;
+
 	/** @type {Array.<number>} */
 	this.breakpoints = [];
 	this.currentLine = -1;
@@ -66,6 +68,7 @@ A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
 	@return {void}
 */
 A3a.vpl.TextEditor.prototype.addResizeListener = function () {
+	var self = this;
 	window.addEventListener("resize", function (e) {
 		self.resize();
 	}, true);
@@ -150,9 +153,11 @@ A3a.vpl.TextEditor.prototype.updateLineNumbers = function () {
     txt.forEach(function (t, i) {
 		var el = document.createElement("span");
 		el.textContent = t + "\n";
-		el.addEventListener("click", function () {
-			self.toggleBreakpoint(i + 1);
-		});
+		if (this.breakpointsEnabled) {
+			el.addEventListener("click", function () {
+				self.toggleBreakpoint(i + 1);
+			});
+		}
 		this.pre.appendChild(el);
 	}, this);
 }
