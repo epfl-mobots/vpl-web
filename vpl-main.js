@@ -277,14 +277,22 @@ function vplSetup(gui) {
 			: A3a.vpl.defaultLanguage;
 	}
 
-	switch (getQueryOption("robot")) {
+	var view = getQueryOption("view");
+	var views = view.split("+");
+	var robot = getQueryOption("robot");
+
+	if (views.indexOf("sim") >= 0 || robot === "sim") {
+		window["simCanvas"] = new A3a.vpl.Canvas(canvasEl);
+		window["installRobotSimulator"]({canvasFilter: filter, canvasTransform: transform});
+		robot = "sim";
+	}
+
+	switch (robot) {
  	case "thymio":
 		window["installThymio"]();
 		window["vplRun"] && window["vplRun"].init(language);
 		break;
  	case "sim":
-		window["simCanvas"] = new A3a.vpl.Canvas(canvasEl);
-		window["installRobotSimulator"]({canvasFilter: filter, canvasTransform: transform});
 		window["vplRun"] && window["vplRun"].init(language);
 		break;
 	default:
@@ -517,13 +525,11 @@ function vplSetup(gui) {
 
 	window["vplSim"] && window["vplSim"].sim.setTeacherRole(getQueryOption("role") === "teacher");
 
-	var view = getQueryOption("view");
 	if (view === "text") {
 		// special case for source code editor without VPL
 		A3a.vpl.Program.setView("src", {noVPL: true});
 	} else {
 		// enforce 1-3 unique views among vpl, src and sim; otherwise just vpl
-		var views = view.split("+");
 		/** @const */
 		var allowedViews = ["vpl", "src", "sim"];
 		if (views.length < 1 || views.length > 3 || view === "") {

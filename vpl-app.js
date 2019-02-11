@@ -72,14 +72,20 @@ A3a.vpl.Program.setView = function (view, options) {
 		}
 	}
 
-	window["vplCanvas"].onDraw =
-		window["editorCanvas"].onDraw =
-		window["simCanvas"].onDraw =
-			function () {
-				views.indexOf("vpl") >= 0 && window["vplCanvas"].redraw();
-				views.indexOf("src") >= 0 && window["editorCanvas"].redraw();
-				views.indexOf("sim") >= 0 && window["simCanvas"].redraw();
-			};
+	var onDraw = function () {
+		views.indexOf("vpl") >= 0 && window["vplCanvas"].redraw();
+		views.indexOf("src") >= 0 && window["editorCanvas"].redraw();
+		views.indexOf("sim") >= 0 && window["simCanvas"].redraw();
+	};
+	if (window["vplCanvas"]) {
+		window["vplCanvas"].onDraw = onDraw;
+	}
+	if (window["editorCanvas"]) {
+		window["editorCanvas"].onDraw = onDraw;
+	}
+	if (window["simCanvas"]) {
+		window["simCanvas"].onDraw = onDraw;
+	}
 
 	if (views.indexOf("vpl") >= 0) {
 		window["vplCanvas"].onUpdate();
