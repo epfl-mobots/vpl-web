@@ -36,7 +36,7 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 	});
 	commands.add("src:vpl", {
 		action: function (srcEditor, modifier) {
-			A3a.vpl.Program.setView("vpl");
+			A3a.vpl.Program.setView(["vpl"], {fromView: "src"});
 		},
 		isEnabled: function (srcEditor) {
 			return srcEditor.doesMatchVPL();
@@ -44,7 +44,7 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 		object: this,
 		isAvailable: function (srcEditor) {
 			return !srcEditor.noVPL
-				&& window["vplCanvas"].state.view.split("+").indexOf("vpl") < 0;
+				&& window["vplCanvas"].state.views.indexOf("vpl") < 0;
 		}
 	});
 	commands.add("src:locked", {
@@ -141,12 +141,12 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 	});
 	commands.add("src:sim", {
 		action: function (srcEditor, modifier) {
-			A3a.vpl.Program.setView("sim");
+			A3a.vpl.Program.setView(["sim"], {fromView: "vpl"});
 		},
 		object: this,
 		isAvailable: function (srcEditor) {
 			return srcEditor.runGlue != null && window["vplSim"] != null &&
-				window["vplCanvas"].state.view.split("+").indexOf("sim") < 0;
+				window["vplCanvas"].state.views.indexOf("sim") < 0;
 		}
 	});
 	commands.add("src:teacher-reset", {

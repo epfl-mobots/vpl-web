@@ -6,24 +6,34 @@
 */
 
 /** Change current view
-	@param {string} view "vpl", "src" or "sim"
-	@param {{noVPL:(boolean|undefined),unlocked:(boolean|undefined)}=} options
+	@param {Array.<string>} views array of "vpl", "src" and "sim"
+	@param {{noVPL:(boolean|undefined),unlocked:(boolean|undefined),fromView:(string|undefined)}=} options
 	noVPL:true to prevent vpl (default: false),
 	unlocked:true (with "src") for source code editor in unlocked state (disconnected
-	from vpl)
+	from vpl),
+	fromView:v to change another view from view v (keep v, change other)
 	@return {void}
 */
-A3a.vpl.Program.setView = function (view, options) {
+A3a.vpl.Program.setView = function (views, options) {
 	if (options && options.noVPL) {
 		window["vplProgram"].noVPL = true;
 		window["vplEditor"].noVPL = true;
 		window["vplEditor"].lockWithVPL(false);
 	}
 
-	var views = view.split("+");
+	if (views.length === 1 && options && options.fromView && window["vplCanvas"].state.views.length > 1) {
+		if (window["vplCanvas"].state.views.indexOf(views[0]) >= 0) {
+			// options.fromView already visible
+			return;
+		}
+		var viewIx = window["vplCanvas"].state.views[0] === options.fromView ? 1 : 0;
+		var views1 = window["vplCanvas"].state.views.slice();
+		views1[viewIx] = views[0];
+		views = views1;
+	}
+	window["vplCanvas"].state.views = views;
 
 	document.getElementById("src-editor").style.display = views.indexOf("src") >= 0 ? "block" : "none";
-	window["vplCanvas"].state.view = view;
 
 	if (window["vplSim"] != null) {
 		window["vplSim"].sim.visible = views.indexOf("sim") >= 0;
@@ -62,6 +72,7 @@ A3a.vpl.Program.setView = function (view, options) {
 			window["editorCanvas"].setRelativeArea(relArea);
 			window["vplEditor"].lockWithVPL(!(options && (options.noVPL || options.unlocked)));
 			window["vplEditor"].focus();
+			window["vplEditor"].resize();
 			break;
 		case "sim":
 			window["simCanvas"].setRelativeArea(relArea);

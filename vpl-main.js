@@ -278,7 +278,7 @@ function vplSetup(gui) {
 	}
 
 	var view = getQueryOption("view");
-	var views = view.split("+");
+	var views = view.length === 0 ? ["vpl"] : view.split("+");
 	var robot = getQueryOption("robot");
 
 	if (views.indexOf("sim") >= 0 || robot === "sim") {
@@ -394,9 +394,9 @@ function vplSetup(gui) {
 					} catch (e) {
 						// then try json
 						try {
-							window["vplProgram"].importFromJSON(data, function (view) {
-								A3a.vpl.Program.setView(view);
-								if (view === "vpl") {
+							window["vplProgram"].importFromJSON(data, function (views) {
+								A3a.vpl.Program.setView(views);
+								if (views.indexOf("vpl") >= 0) {
 									window["vplCanvas"].onUpdate();
 								}
 							});
@@ -465,9 +465,9 @@ function vplSetup(gui) {
 	}
 
 	if (getQueryOption("view") === "text") {
-		A3a.vpl.Program.setView("src", {noVPL: true});
+		A3a.vpl.Program.setView(["src"], {noVPL: true});
 	} else {
-		A3a.vpl.Program.setView("vpl");
+		A3a.vpl.Program.setView(["vpl"]);
 		window["vplProgram"].experimentalFeatures = experimentalFeatures;
 		window["vplProgram"].setTeacherRole(getQueryOption("role") === "teacher");
 		window["vplProgram"].renderToCanvas(window["vplCanvas"]);
@@ -527,7 +527,7 @@ function vplSetup(gui) {
 
 	if (view === "text") {
 		// special case for source code editor without VPL
-		A3a.vpl.Program.setView("src", {noVPL: true});
+		A3a.vpl.Program.setView(["src"], {noVPL: true});
 	} else {
 		// enforce 1-3 unique views among vpl, src and sim; otherwise just vpl
 		/** @const */
@@ -548,7 +548,7 @@ function vplSetup(gui) {
 				}
 			}
 		}
-		A3a.vpl.Program.setView(view);
+		A3a.vpl.Program.setView(views);
 	}
 	vplResize();
 }
@@ -600,7 +600,7 @@ function vplResize() {
 	if (window["vplSim"]) {
 		window["vplSim"].sim.simCanvas.resize(width, height);
 	}
-	window["vplCanvas"].state.view.split("+").forEach(function (view) {
+	window["vplCanvas"].state.views.forEach(function (view) {
 		switch (view) {
 		case "vpl":
 			window["vplProgram"].renderToCanvas(window["vplCanvas"]);

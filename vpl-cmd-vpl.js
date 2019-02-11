@@ -46,21 +46,21 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 	});
 	commands.add("vpl:text", {
 		action: function (program, modifier) {
-			A3a.vpl.Program.setView("src");
+			A3a.vpl.Program.setView(["src"], {fromView: "vpl"});
 		},
 		doDrop: function (program, draggedItem) {
 			if (draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.eventHandlerContainer) {
 				var block = /** @type {A3a.vpl.Block} */(draggedItem.data);
 				var span = program.getCodeLocation(program.currentLanguage, block);
 				if (span) {
-					A3a.vpl.Program.setView("src");
+					A3a.vpl.Program.setView(["src"]);
 					editor.selectRange(span.begin, span.end);
 				}
 			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
 				var eventHandler = /** @type {A3a.vpl.EventHandler} */(draggedItem.data);
 				var span = program.getCodeLocation(program.currentLanguage, eventHandler);
 				if (span) {
-					A3a.vpl.Program.setView("src");
+					A3a.vpl.Program.setView(["src"]);
 					editor.selectRange(span.begin, span.end);
 				}
 			}
@@ -71,7 +71,7 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 		},
 		object: this,
 		isAvailable: function (program) {
-			return window["vplCanvas"].state.view.split("+").indexOf("src") < 0;
+			return window["vplCanvas"].state.views.indexOf("src") < 0;
 		}
 	});
 	commands.add("vpl:advanced", {
@@ -172,12 +172,12 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 	});
 	commands.add("vpl:sim", {
 		action: function (program, modifier) {
-			A3a.vpl.Program.setView("sim");
+			A3a.vpl.Program.setView(["sim"], {fromView: "vpl"});
 		},
 		object: this,
 		isAvailable: function (program) {
 			return runglue != null && window["vplSim"] != null &&
-				window["vplCanvas"].state.view.split("+").indexOf("sim") < 0;
+				window["vplCanvas"].state.views.indexOf("sim") < 0;
 		}
 	});
 	commands.add("vpl:duplicate", {
