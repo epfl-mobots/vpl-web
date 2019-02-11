@@ -360,6 +360,7 @@ A3a.vpl.Canvas = function (canvas, relativeArea) {
 							ctx.restore();
 						}
 						ctx.save();
+						self.clip();
 						if (self.transform) {
 							ctx.translate(self.width / 2, self.height / 2);
 							CanvasRenderingContext2D.prototype.transform.apply(ctx, self.transform);
@@ -767,6 +768,18 @@ A3a.vpl.Canvas.prototype.getSize = function () {
 */
 A3a.vpl.Canvas.prototype.clearItems = function () {
 	this.items = [];
+};
+
+/** Apply clip to canvas
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.clip = function () {
+	this.ctx.beginPath();
+	this.ctx.rect(this.canvasWidth * this.relativeArea.xmin,
+		this.canvasHeight * this.relativeArea.ymin,
+		this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin),
+		this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin));
+	this.ctx.clip();
 };
 
 /** Clear canvas
