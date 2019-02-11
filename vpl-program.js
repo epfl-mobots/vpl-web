@@ -384,7 +384,8 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 			}
 		}
 	} catch (e) {}
-	updateFun && updateFun([view]);
+	this.noVPL = view === "src";
+	updateFun && updateFun(view);
 	importFinished = true;
 };
 

@@ -44,6 +44,10 @@ A3a.vpl.VPLSourceEditor = function (canvas, noVPL, language, uiConfig, runGlue) 
 	document.getElementById("editor").addEventListener("input",
 		function () {
 			self.toolbarRender();
+			if (self.doesMatchVPL() === window["vplProgram"].noVPL) {
+				window["vplProgram"].noVPL = !window["vplProgram"].noVPL;
+				window["vplProgram"].renderToCanvas(window["vplCanvas"]);
+			}
 		},
 		false);
 	// editor tab key

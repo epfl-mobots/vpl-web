@@ -142,10 +142,11 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 		{
 			notInteractive: true,
 			notDropTarget: true,
+			notDraggable: this.noVPL,
 			scale: canvas.dims.templateScale,
 			disabled: disabled,
 			/** @type {?A3a.vpl.CanvasItem.mousedown} */
-			mousedown: this.uiConfig.customizationMode
+			mousedown: this.uiConfig.customizationMode && !this.noVPL
 				? function (canvas, data, width, height, x, y, downEvent) {
 					var a = self.mode === A3a.vpl.mode.basic ? self.enabledBlocksBasic : self.enabledBlocksAdvanced;
 					if (a.indexOf(blockTemplate.name) >= 0) {
@@ -245,6 +246,9 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			canvas.disabledMark(item.x + dx, item.y + dy, item.width, item.height);
 		};
 	}
+	if (this.noVPL) {
+		item.draggable = false;
+	}
 	canvas.setItem(item);
 
 	/** @type {A3a.vpl.CanvasItem} */
@@ -260,8 +264,9 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				eventX0 + step * j,
 				y,
 				{
-					notInteractive: eventHandler.disabled,
-					notClickable: eventHandler.disabled
+					notInteractive: eventHandler.disabled || this.noVPL,
+					notClickable: eventHandler.disabled || this.noVPL,
+					notDraggable: this.noVPL
 				});
 		} else {
 			childItem = this.addBlockToCanvas(canvas,
@@ -287,8 +292,9 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				actionX0 + step * j,
 				y,
 				{
-					notInteractive: eventHandler.disabled,
-					notClickable: eventHandler.disabled
+					notInteractive: eventHandler.disabled || this.noVPL,
+					notClickable: eventHandler.disabled || this.noVPL,
+					notDraggable: this.noVPL
 				});
 		} else {
 			childItem = this.addBlockToCanvas(canvas,
@@ -648,6 +654,13 @@ A3a.vpl.Program.prototype.renderToCanvas = function (canvas) {
 			ctx.textBaseline = "bottom";
 			ctx.fillText(errorMsg, eventX0 - canvas.dims.blockSize * 0.6, scrollingAreaY);
 			ctx.restore();
+		});
+	}
+
+	if (this.noVPL) {
+		canvas.addDecoration(function (ctx) {
+			canvas.disabledMark(canvas.dims.margin, canvas.dims.margin,
+				canvasSize.width - 2 * canvas.dims.margin, canvasSize.height - 2 * canvas.dims.margin);
 		});
 	}
 

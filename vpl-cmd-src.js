@@ -51,6 +51,10 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 		action: function (srcEditor, modifier) {
 			srcEditor.lockWithVPL(!srcEditor.isLockedWithVPL);
 			srcEditor.tbCanvas.redraw();
+			if (srcEditor.isLockedWithVPL) {
+				window["vplProgram"].noVPL = false;
+				window["vplProgram"].renderToCanvas(window["vplCanvas"]);
+			}
 		},
 		isEnabled: function (srcEditor) {
 			return srcEditor.srcForAsm === null;
@@ -141,7 +145,7 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 	});
 	commands.add("src:sim", {
 		action: function (srcEditor, modifier) {
-			A3a.vpl.Program.setView(["sim"], {fromView: "vpl"});
+			A3a.vpl.Program.setView(["sim"], {fromView: "src"});
 		},
 		object: this,
 		isAvailable: function (srcEditor) {

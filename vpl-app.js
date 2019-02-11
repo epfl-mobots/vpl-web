@@ -15,7 +15,7 @@
 	@return {void}
 */
 A3a.vpl.Program.setView = function (views, options) {
-	if (options && options.noVPL) {
+	if (options && (options.noVPL || options.unlocked)) {
 		window["vplProgram"].noVPL = true;
 		window["vplEditor"].noVPL = true;
 		window["vplEditor"].lockWithVPL(false);
@@ -62,10 +62,12 @@ A3a.vpl.Program.setView = function (views, options) {
 		case "vpl":
 			window["vplCanvas"].setRelativeArea(relArea);
 			window["vplCanvas"].onUpdate = function () {
-				window["vplProgram"].invalidateCode();
-				window["vplProgram"].enforceSingleTrailingEmptyEventHandler();
+				if (!window["vplProgram"].noVPL) {
+					window["vplProgram"].invalidateCode();
+					window["vplProgram"].enforceSingleTrailingEmptyEventHandler();
+					window["vplEditor"].setCode(window["vplProgram"].getCode(window["vplProgram"].currentLanguage));
+				}
 				window["vplProgram"].renderToCanvas(window["vplCanvas"]);
-				window["vplEditor"].setCode(window["vplProgram"].getCode(window["vplProgram"].currentLanguage));
 			};
 			break;
 		case "src":

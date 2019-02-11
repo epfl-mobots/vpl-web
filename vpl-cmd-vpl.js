@@ -17,6 +17,9 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 		action: function (program, modifier) {
 			program.new();
 		},
+		isEnabled: function (program) {
+			return !program.noVPL && !program.isEmpty();
+		},
 		object: this
 	});
 	commands.add("vpl:save", {
@@ -27,7 +30,7 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 			A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
 		},
 		isEnabled: function (program) {
-			return !program.isEmpty();
+			return !program.noVPL && !program.isEmpty();
 		},
 		object: this
 	});
@@ -37,7 +40,7 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 			// ...
 		},
 		isEnabled: function (program) {
-			return !program.isEmpty();
+			return !program.noVPL && !program.isEmpty();
 		},
 		object: this,
 		isAvailable: function (program) {
@@ -47,6 +50,9 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 	commands.add("vpl:text", {
 		action: function (program, modifier) {
 			A3a.vpl.Program.setView(["src"], {fromView: "vpl"});
+		},
+		isEnabled: function (program) {
+			return !program.noVPL;
 		},
 		doDrop: function (program, draggedItem) {
 			if (draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.eventHandlerContainer) {
@@ -80,6 +86,9 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 				? A3a.vpl.mode.advanced
 				: A3a.vpl.mode.basic);
 		},
+		isEnabled: function (program) {
+			return !program.noVPL;
+		},
 		isSelected: function (program) {
 			return program.mode === A3a.vpl.mode.advanced;
 		},
@@ -90,7 +99,7 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 			program.undo(function () { program.renderToCanvas(canvas); });
 		},
 		isEnabled: function (program) {
-			return program.undoState.canUndo();
+			return !program.noVPL && program.undoState.canUndo();
 		},
 		object: this
 	});
@@ -99,7 +108,7 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 			program.redo(function () { program.renderToCanvas(canvas); });
 		},
 		isEnabled: function (program) {
-			return program.undoState.canRedo();
+			return !program.noVPL && program.undoState.canRedo();
 		},
 		object: this
 	});
@@ -111,7 +120,7 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 			program.notUploadedYet = false;
 		},
 		isEnabled: function (program) {
-			return runglue.isEnabled(program.currentLanguage);
+			return !program.noVPL && runglue.isEnabled(program.currentLanguage);
 		},
 		isSelected: function (program) {
 			return program.uploaded;
@@ -163,7 +172,7 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 			program.uploaded = false;
 		},
 		isEnabled: function (program) {
-			return runglue.isEnabled(program.currentLanguage);
+			return !program.noVPL && runglue.isEnabled(program.currentLanguage);
 		},
 		object: this,
 		isAvailable: function (program) {
@@ -174,6 +183,9 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 		action: function (program, modifier) {
 			A3a.vpl.Program.setView(["sim"], {fromView: "vpl"});
 		},
+		isEnabled: function (program) {
+			return !program.noVPL;
+		},
 		object: this,
 		isAvailable: function (program) {
 			return runglue != null && window["vplSim"] != null &&
@@ -181,6 +193,9 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 		}
 	});
 	commands.add("vpl:duplicate", {
+		isEnabled: function (program) {
+			return !program.noVPL;
+		},
 		doDrop: function (program, draggedItem) {
 			// duplicate event handler
 			var i = program.program.indexOf(draggedItem.data);
@@ -197,6 +212,9 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 		object: this
 	});
 	commands.add("vpl:disable", {
+		isEnabled: function (program) {
+			return !program.noVPL;
+		},
 		doDrop: function (program, draggedItem) {
 			// disable or reenable block or event handler
 			if (draggedItem.data instanceof A3a.vpl.Block) {
@@ -219,6 +237,9 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 		object: this
 	});
 	commands.add("vpl:lock", {
+		isEnabled: function (program) {
+			return !program.noVPL;
+		},
 		doDrop: function (program, draggedItem) {
 			// lock or unlock block or event handler
 			if (draggedItem.data instanceof A3a.vpl.Block) {
@@ -244,6 +265,9 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 		}
 	});
 	commands.add("vpl:trashcan", {
+		isEnabled: function (program) {
+			return !program.noVPL;
+		},
 		doDrop: function (program, draggedItem) {
 			// remove block or event handler
 			if (draggedItem.data instanceof A3a.vpl.Block) {
@@ -276,6 +300,9 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 		action: function (program, modifier) {
 			program.uiConfig.customizationMode = !program.uiConfig.customizationMode;
 		},
+		isEnabled: function (program) {
+			return !program.noVPL;
+		},
 		isSelected: function (program) {
 			return program.uiConfig.customizationMode;
 		},
@@ -297,6 +324,9 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 				program.resetUI();
 			}
 		},
+		isEnabled: function (program) {
+			return !program.noVPL;
+		},
 		object: this,
 		keep: true,
 		isAvailable: function (program) {
@@ -307,6 +337,9 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 		action: function (program, modifier) {
 			var json = program.exportToJSON(true);
 			A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
+		},
+		isEnabled: function (program) {
+			return !program.noVPL;
 		},
 		object: this,
 		keep: true,

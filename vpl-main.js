@@ -193,7 +193,7 @@ function vplSetup(gui) {
 	// canvas
 	var canvasEl = document.getElementById("programCanvas");
 	window["vplCanvas"] = new A3a.vpl.Canvas(canvasEl);
-	window["vplCanvas"].state = {view: "vpl"};
+	window["vplCanvas"].state = {views: ["vpl"]};
 
 	// general settings
 	var isClassic = gui == undefined || getQueryOption("appearance") === "classic";
