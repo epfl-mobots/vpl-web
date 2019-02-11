@@ -381,9 +381,12 @@ function vplSetup(gui) {
 		var files = e.dataTransfer.files;
 		if (files.length === 1) {
 			var file = files[0];
+			var r = /^[^.]+\.(.*)$/.exec(file.name);
+			var ext = r ? r[1] : "";
 			var reader = new window.FileReader();
-			switch (window["vplCanvas"].state.view) {
-			case "vpl":
+			switch (ext.toLowerCase()) {
+			case "aesl":
+			case "json":
 				reader.onload = function (event) {
 					var data = event.target.result;
 					var filename = file.name;
@@ -394,9 +397,20 @@ function vplSetup(gui) {
 					} catch (e) {
 						// then try json
 						try {
-							window["vplProgram"].importFromJSON(data, function (views) {
-								A3a.vpl.Program.setView(views);
-								if (views.indexOf("vpl") >= 0) {
+							window["vplProgram"].importFromJSON(data, function (view) {
+								if (window["vplCanvas"].state.views.indexOf(view) < 0) {
+									if (window["vplCanvas"].state.views.length === 1) {
+										A3a.vpl.Program.setView([view]);
+									} else {
+										// switch vpl to src or src to vpl
+										var views = window["vplCanvas"].state.views.slice();
+										views[views.indexOf("vpl") >= 0 ? views.indexOf("vpl")
+											: views.indexOf("src") >= 0 ? views.indexOf("src")
+											: 0] = view;
+										A3a.vpl.Program.setView(views);
+									}
+								}
+								if (window["vplCanvas"].state.views.indexOf("vpl") >= 0) {
 									window["vplCanvas"].onUpdate();
 								}
 							});
@@ -405,23 +419,28 @@ function vplSetup(gui) {
 				};
 				reader["readAsText"](file);
 				break;
-			case "sim":
-				if (window["vplSim"].sim.wantsSVG()) {
-					reader.onload = function (event) {
-						var data = event.target.result;
-						window["vplSim"].sim.setSVG(data);
-					};
-					reader["readAsText"](file);
-				} else {
-					reader.onload = function (event) {
-						var data = event.target.result;
-						var img = new Image();
-						img.addEventListener("load", function () {
-							window["vplSim"].sim.setImage(img);
-						});
-						img.src = data;
-					};
-					reader["readAsDataURL"](file);
+			case "svg":
+			case "png":
+			case "jpg":
+			case "gif":
+				if (window["vplSim"]) {
+					if (window["vplSim"].sim.wantsSVG()) {
+						reader.onload = function (event) {
+							var data = event.target.result;
+							window["vplSim"].sim.setSVG(data);
+						};
+						reader["readAsText"](file);
+					} else {
+						reader.onload = function (event) {
+							var data = event.target.result;
+							var img = new Image();
+							img.addEventListener("load", function () {
+								window["vplSim"].sim.setImage(img);
+							});
+							img.src = data;
+						};
+						reader["readAsDataURL"](file);
+					}
 				}
 				break;
 			}
