@@ -17,7 +17,7 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 			srcEditor.tbCanvas.redraw();
 		},
 		isEnabled: function (srcEditor) {
-			return !srcEditor.isLockedWithVPL;
+			return !srcEditor.isLockedWithVPL && srcEditor.getCode().length > 0;
 		},
 		object: this
 	});
