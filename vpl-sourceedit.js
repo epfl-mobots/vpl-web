@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -198,15 +198,14 @@ A3a.vpl.VPLSourceEditor.prototype.resize = function () {
 		height = bnd.height;
 	}
 
-	this.tbCanvas.dims = this.tbCanvas.dims;
 	this.tbCanvas.resize(width, height);
 	var canvasBndRect = this.tbCanvas.canvas.getBoundingClientRect();
 	var editorDiv = document.getElementById("src-editor");
 	var tbHeight = this.srcToolbarHeight();
 	editorDiv.style.left = (canvasBndRect.left + canvasBndRect.width * this.tbCanvas.relativeArea.xmin) + "px";
 	editorDiv.style.width = (canvasBndRect.width * (this.tbCanvas.relativeArea.xmax - this.tbCanvas.relativeArea.xmin)) + "px";
-	editorDiv.style.top = (canvasBndRect.top + tbHeight) + "px";
-	editorDiv.style.height = (height - tbHeight) + "px";
+	editorDiv.style.top = (canvasBndRect.top + canvasBndRect.height * this.tbCanvas.relativeArea.ymin + tbHeight) + "px";
+	editorDiv.style.height = (canvasBndRect.height * (this.tbCanvas.relativeArea.ymax - this.tbCanvas.relativeArea.ymin) - tbHeight) + "px";
 
 	this.textEditor.resize();
 

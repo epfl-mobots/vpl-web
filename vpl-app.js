@@ -89,16 +89,11 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 		this.simCanvas.show();
 	}
 
+	this.layout();
+
 	for (var i = 0; i < views.length; i++) {
-		var relArea = {
-			xmin: i / views.length,
-			xmax: (i + 1) / views.length,
-			ymin: 0,
-			ymax: 1
-		};
 		switch (views[i]) {
 		case "vpl":
-			this.vplCanvas.setRelativeArea(relArea);
 			this.vplCanvas.onUpdate = function () {
 				if (!app.program.noVPL) {
 					app.program.invalidateCode();
@@ -109,13 +104,11 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 			};
 			break;
 		case "src":
-			this.editor.tbCanvas.setRelativeArea(relArea);
 			this.editor.lockWithVPL(!(options && (options.noVPL || options.unlocked)));
 			this.editor.focus();
 			this.editor.resize();
 			break;
 		case "sim":
-			this.simCanvas.setRelativeArea(relArea);
 			this.simCanvas.onUpdate = function () {
 				app.renderSim2dViewer();
 			};
@@ -153,7 +146,40 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 	}
 };
 
+/** Calculate canvas layout
+	@return {void}
+*/
+A3a.vpl.Application.prototype.layout = function () {
+	var verticalLayout = this.vplCanvas.canvasWidth < this.vplCanvas.canvasHeight;
+	for (var i = 0; i < this.views.length; i++) {
+		var relArea = verticalLayout
+			? {
+				xmin: 0,
+				xmax: 1,
+				ymin: i / this.views.length,
+				ymax: (i + 1) / this.views.length
+			} : {
+				xmin: i / this.views.length,
+				xmax: (i + 1) / this.views.length,
+				ymin: 0,
+				ymax: 1
+			};
+		switch (this.views[i]) {
+		case "vpl":
+			this.vplCanvas.setRelativeArea(relArea);
+			break;
+		case "src":
+			this.editor.tbCanvas.setRelativeArea(relArea);
+			break;
+		case "sim":
+			this.simCanvas.setRelativeArea(relArea);
+			break;
+		}
+	}
+};
+
 A3a.vpl.Application.prototype.vplResize = function () {
+	this.layout();
 	var width = window.innerWidth;
 	var height = window.innerHeight;
 	if (window["vplDisableResize"]) {
