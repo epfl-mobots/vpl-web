@@ -556,7 +556,7 @@ A3a.vpl.Canvas.prototype.makeMouseEvent = function (e) {
 /** Update
 	@return {void}
 */
-A3a.vpl.Canvas.prototype["update"] = function () {
+A3a.vpl.Canvas.prototype.update = function () {
 	this.onUpdate && this.onUpdate();
 	this.onDraw ? this.onDraw() : this.redraw();
 };

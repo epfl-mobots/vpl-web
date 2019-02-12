@@ -1,18 +1,18 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
 */
 
-window["installThymio"] = function () {
-	/** Run code on the Thymio
-		@param {string} code source code
-		@return {void}
-	*/
-	window["vplRun"] = new A3a.vpl.RunGlue({
+/** Install connection with Thymio
+	@return {void}
+*/
+A3a.vpl.Application.prototype.installThymio = function () {
+	var app = this;
+	this.runGlue = new A3a.vpl.RunGlue({
 		run: function (code) {
-			window["vplNode"].putA3aCodeAsync(code);
+			/** @type {A3a.Node} */(app.runGlue.state).putA3aCodeAsync(code);
 		},
 		init: function (language) {
 			// initialize the list of nodes
@@ -21,17 +21,18 @@ window["installThymio"] = function () {
 					? "http://127.0.0.1:3000"
 					: document.location.origin;
 				A3a.NodeProxy.init(origin, function () {
-					window["vplNode"] = A3a.Node.getNodeList()[0];
-					window["vplCanvas"]["update"]();
+					app.runGlue.state = A3a.Node.getNodeList()[0];
+					app.vplCanvas.update();
 				});
 			} catch (e) {
 				console.info(e);
-				window["vplCanvas"]["update"]();
+				app.vplCanvas.update();
 			}
 		},
 		isEnabled: function (language) {
-			return language === "aseba" && window["vplNode"] != undefined;
+			return language === "aseba" && app.runGlue.state != null;
 		},
-		preferredLanguage: "aseba"
+		preferredLanguage: "aseba",
+		state: null
 	});
 };

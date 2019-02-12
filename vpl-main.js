@@ -192,12 +192,14 @@ function vplSetup(gui) {
 
 	// canvas
 	var canvasEl = document.getElementById("programCanvas");
-	window["vplCanvas"] = new A3a.vpl.Canvas(canvasEl);
-	window["vplCanvas"].state = {views: ["vpl"]};
+
+	// application
+	var app = new A3a.vpl.Application(canvasEl);
+	window["vplApp"] = app;
 
 	// general settings
 	var isClassic = gui == undefined || getQueryOption("appearance") === "classic";
-	window["vplUseLocalStorage"] = getQueryOption("storage") === "local";
+	app.useLocalStorage = getQueryOption("storage") === "local";
 	var language = getQueryOption("language");
 	/** @type {A3a.vpl.ControlBar.drawButton} */
 	var drawButton = A3a.vpl.Commands.drawButtonJS;
@@ -227,8 +229,6 @@ function vplSetup(gui) {
 	}
 	var advancedFeatures = getQueryOption("adv") === "true";
 	var experimentalFeatures = getQueryOption("exp") === "true";
-
-	A3a.vpl.Program.resetBlockLib();
 
 	var filterBlur = 0;	// 0.1 px
 	var filterGrayscale = 0;	// %
@@ -272,8 +272,8 @@ function vplSetup(gui) {
 	}
 
 	if (!language) {
-		language = window["vplRun"]
-			? window["vplRun"].preferredLanguage
+		language = app.runGlue
+			? app.runGlue.preferredLanguage
 			: A3a.vpl.defaultLanguage;
 	}
 
@@ -282,91 +282,83 @@ function vplSetup(gui) {
 	var robot = getQueryOption("robot");
 
 	if (views.indexOf("sim") >= 0 || robot === "sim") {
-		window["simCanvas"] = new A3a.vpl.Canvas(canvasEl);
-		window["installRobotSimulator"]({canvasFilter: filter, canvasTransform: transform});
 		robot = "sim";
 	}
 
 	switch (robot) {
  	case "thymio":
-		window["installThymio"]();
-		window["vplRun"] && window["vplRun"].init(language);
+		app.installThymio();
+		app.runGlue && app.runGlue.init(language);
 		break;
  	case "sim":
-		window["vplRun"] && window["vplRun"].init(language);
+		app.installRobotSimulator({canvasFilter: filter, canvasTransform: transform});
+		app.runGlue && app.runGlue.init(language);
 		break;
 	default:
-		window["vplRun"] = null;
+		app.runGlue = null;
 	}
 
 	if (!A3a.vpl.Program.codeGenerator[language]) {
 		throw "Unsupported language " + language;
 	}
 
-	var uiConfig = new A3a.vpl.UIConfig();
-	uiConfig.setDisabledFeatures(advancedFeatures ? [] : ["src:language"]);
+	app.uiConfig.setDisabledFeatures(advancedFeatures ? [] : ["src:language"]);
 
-	window["vplCommands"] = new A3a.vpl.Commands();
-
-	window["vplProgram"] = new A3a.vpl.Program(A3a.vpl.mode.basic, uiConfig);
-	window["vplProgram"].currentLanguage = language;
-	window["editorCanvas"] = new A3a.vpl.Canvas(canvasEl);
-	window["vplEditor"] = new A3a.vpl.VPLSourceEditor(window["editorCanvas"],
-		window["vplProgram"].noVPL,
-		language,
-		uiConfig,
-		window["vplRun"]);
-	window["editorCanvas"].setFilter(filter);
-	window["vplProgram"].getEditedSourceCodeFun = function () {
-		return window["vplEditor"].doesMatchVPL() ? null : window["vplEditor"].getCode();
+	app.program.currentLanguage = language;
+	app.editor = new A3a.vpl.VPLSourceEditor(app,
+		app.program.noVPL,
+		language);
+	app.editor.tbCanvas.setFilter(filter);
+	app.program.getEditedSourceCodeFun = function () {
+		return app.editor.doesMatchVPL() ? null : app.editor.getCode();
 	};
-	window["vplProgram"].setEditedSourceCodeFun = function (code) {
-		window["vplEditor"].setCode(code);
+	app.program.setEditedSourceCodeFun = function (code) {
+		app.editor.setCode(code);
 	};
-	window["vplCanvas"].state.vpl = new A3a.vpl.Program.CanvasRenderingState();
-	window["vplCanvas"].widgets = widgets;
-	window["vplProgram"].addEventHandler(true);
+	app.vplCanvas.state.vpl = new A3a.vpl.Program.CanvasRenderingState();
+	app.vplCanvas.widgets = widgets;
+	app.program.addEventHandler(true);
 
-	window["vplProgram"].addVPLCommands(window["vplCommands"], window["vplCanvas"], window["vplEditor"], window["vplRun"]);
+	app.addVPLCommands();
 	if (!isClassic && gui && gui["toolbars"]) {
 		if (gui["toolbars"]["vpl"]) {
-			window["vplProgram"].toolbarConfig = gui["toolbars"]["vpl"];
+			app.program.toolbarConfig = gui["toolbars"]["vpl"];
 		}
 		if (gui["toolbars"]["vpl2"]) {
-			window["vplProgram"].toolbar2Config = gui["toolbars"]["vpl2"];
+			app.program.toolbar2Config = gui["toolbars"]["vpl2"];
 		}
 	}
-	window["vplEditor"].addSrcCommands(window["vplCommands"], window["vplRun"]);
+	app.addSrcCommands();
 	if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["editor"]) {
-		window["vplEditor"].toolbarConfig = gui["toolbars"]["editor"];
+		app.editor.toolbarConfig = gui["toolbars"]["editor"];
 	}
-	window["vplProgram"].toolbarDrawButton = drawButton;
-	window["vplProgram"].toolbarGetButtonBounds = getButtonBounds;
-	window["vplEditor"].toolbarDrawButton = drawButton;
-	window["vplEditor"].toolbarGetButtonBounds = getButtonBounds;
-	if (window["vplSim"] != null) {
-	 	window["vplSim"].sim.addSim2DCommands(window["vplCommands"], window["vplEditor"]);
+	app.program.toolbarDrawButton = drawButton;
+	app.program.toolbarGetButtonBounds = getButtonBounds;
+	app.editor.toolbarDrawButton = drawButton;
+	app.editor.toolbarGetButtonBounds = getButtonBounds;
+	if (app.sim2d != null) {
+	 	app.addSim2DCommands();
 		if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["simulator"]) {
-			window["vplSim"].sim.toolbarConfig = gui["toolbars"]["simulator"];
+			app.sim2d.toolbarConfig = gui["toolbars"]["simulator"];
 		}
-		window["vplSim"].sim.toolbarDrawButton = drawButton;
-		window["vplSim"].sim.toolbarGetButtonBounds = getButtonBounds;
+		app.sim2d.toolbarDrawButton = drawButton;
+		app.sim2d.toolbarGetButtonBounds = getButtonBounds;
 	}
 
-	if (window["vplRun"]) {
+	if (app.runGlue) {
 		var stopBlock = A3a.vpl.BlockTemplate.findByName("!stop");
 		var stopGenCode = stopBlock && stopBlock.genCode[language];
 		if (stopGenCode) {
-			window["vplRun"].setStopCode(stopGenCode(null).statement, language);
+			app.runGlue.setStopCode(stopGenCode(null).statement, language);
 		}
 	}
 
 	// apply canvas filters and transforms
 	if (filter) {
-		window["vplCanvas"].setFilter(filter);
+		app.vplCanvas.setFilter(filter);
 	}
 	if (transform) {
-		window["vplCanvas"].transform = transform;
+		app.vplCanvas.transform = transform;
 	}
 
 	// accept dropped aesl files
@@ -392,26 +384,26 @@ function vplSetup(gui) {
 					var filename = file.name;
 					try {
 						// try aesl first
-						window["vplProgram"].importFromAESLFile(data);
-						window["vplCanvas"].onUpdate();
+						app.program.importFromAESLFile(data);
+						app.vplCanvas.onUpdate();
 					} catch (e) {
 						// then try json
 						try {
-							window["vplProgram"].importFromJSON(data, function (view) {
-								if (window["vplCanvas"].state.views.indexOf(view) < 0) {
-									if (window["vplCanvas"].state.views.length === 1) {
-										A3a.vpl.Program.setView([view]);
+							app.program.importFromJSON(data, function (view) {
+								if (app.views.indexOf(view) < 0) {
+									if (app.views.length === 1) {
+										app.setView([view]);
 									} else {
 										// switch vpl to src or src to vpl
-										var views = window["vplCanvas"].state.views.slice();
+										var views = app.views.slice();
 										views[views.indexOf("vpl") >= 0 ? views.indexOf("vpl")
 											: views.indexOf("src") >= 0 ? views.indexOf("src")
 											: 0] = view;
-										A3a.vpl.Program.setView(views);
+										app.setView(views);
 									}
 								}
-								if (window["vplCanvas"].state.views.indexOf("vpl") >= 0) {
-									window["vplCanvas"].onUpdate();
+								if (app.views.indexOf("vpl") >= 0) {
+									app.vplCanvas.onUpdate();
 								}
 							});
 						} catch (e) {}
@@ -423,11 +415,11 @@ function vplSetup(gui) {
 			case "png":
 			case "jpg":
 			case "gif":
-				if (window["vplSim"]) {
-					if (window["vplSim"].sim.wantsSVG()) {
+				if (app.sim2d) {
+					if (app.sim2d.wantsSVG()) {
 						reader.onload = function (event) {
 							var data = event.target.result;
-							window["vplSim"].sim.setSVG(data);
+							app.setSVG(data);
 						};
 						reader["readAsText"](file);
 					} else {
@@ -435,7 +427,7 @@ function vplSetup(gui) {
 							var data = event.target.result;
 							var img = new Image();
 							img.addEventListener("load", function () {
-								window["vplSim"].sim.setImage(img);
+								app.setImage(img);
 							});
 							img.src = data;
 						};
@@ -448,16 +440,16 @@ function vplSetup(gui) {
 	}, false);
 
 	// configure simulator
-	if (window["vplSim"]) {
+	if (app.sim2d) {
 		// shared configuration
-		window["vplSim"].uiConfig = uiConfig;
+		app.sim2d.uiConfig = app.uiConfig;
 
 		// default maps
-		window["vplSim"].sim.disabledGroundImage = new SVG('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><defs><linearGradient id="gradient" x1="-1000" y1="0" x2="-800" y2="0" gradientUnits="userSpaceOnUse"><stop style="stop-color:#000;stop-opacity:1;" offset="0" /><stop style="stop-color:#000;stop-opacity:0;" offset="1" /></linearGradient></defs><g transform="translate(0,-308)"><rect style="fill:url(#gradient);stroke:none" width="319" height="687" x="-1027" y="336" transform="scale(-1,1)" /><path style="fill:none;stroke:#000;stroke-width:30;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" d="M 114,592 C 102,417 750,306 778,532 806,757 674,675 559,622 444,568 259,567 278,664 296,762 726,730 778,808 829,887 725,955 616,936 507,917 144,1083 129,837 Z" /></g></svg>')
+		app.sim2d.disabledGroundImage = new SVG('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><defs><linearGradient id="gradient" x1="-1000" y1="0" x2="-800" y2="0" gradientUnits="userSpaceOnUse"><stop style="stop-color:#000;stop-opacity:1;" offset="0" /><stop style="stop-color:#000;stop-opacity:0;" offset="1" /></linearGradient></defs><g transform="translate(0,-308)"><rect style="fill:url(#gradient);stroke:none" width="319" height="687" x="-1027" y="336" transform="scale(-1,1)" /><path style="fill:none;stroke:#000;stroke-width:30;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none" d="M 114,592 C 102,417 750,306 778,532 806,757 674,675 559,622 444,568 259,567 278,664 296,762 726,730 778,808 829,887 725,955 616,936 507,917 144,1083 129,837 Z" /></g></svg>')
 			.toImage();
-		window["vplSim"].sim.disabledHeightImage = new SVG('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><defs><radialGradient id="gradient" cx="400" cy="650" fx="400" fy="650" r="230" gradientTransform="matrix(1.6,0,0,1.16,-113,-75)" gradientUnits="userSpaceOnUse"><stop style="stop-color:#000;stop-opacity:1;" offset="0" /><stop style="stop-color:#000;stop-opacity:0;" offset="1" /></radialGradient></defs><g transform="translate(0,-308)"><rect style="fill:url(#gradient);fill-opacity:1;stroke:none" width="939" height="650" x="54" y="357" /></g></svg>')
+		app.sim2d.disabledHeightImage = new SVG('<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><defs><radialGradient id="gradient" cx="400" cy="650" fx="400" fy="650" r="230" gradientTransform="matrix(1.6,0,0,1.16,-113,-75)" gradientUnits="userSpaceOnUse"><stop style="stop-color:#000;stop-opacity:1;" offset="0" /><stop style="stop-color:#000;stop-opacity:0;" offset="1" /></radialGradient></defs><g transform="translate(0,-308)"><rect style="fill:url(#gradient);fill-opacity:1;stroke:none" width="939" height="650" x="54" y="357" /></g></svg>')
 			.toImage();
-		window["vplSim"].sim.disabledObstacleSVG = '<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><g transform="translate(0,-308)"><path style="fill:none;stroke:#000;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter" d="M 172,928 137,420 763,371 905,688 708,981 Z" /><path style="fill:none;stroke:#949494;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter" d="m 402,754 168,91 101,-142" /><circle style="fill:none;stroke:#000;stroke-width:6" cx="531" cy="550" r="59" /></g></svg>';
+		app.sim2d.disabledObstacleSVG = '<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><g transform="translate(0,-308)"><path style="fill:none;stroke:#000;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter" d="M 172,928 137,420 763,371 905,688 708,981 Z" /><path style="fill:none;stroke:#949494;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter" d="m 402,754 168,91 101,-142" /><circle style="fill:none;stroke:#000;stroke-width:6" cx="531" cy="550" r="59" /></g></svg>';
 	}
 
 	// reload from storage
@@ -466,42 +458,42 @@ function vplSetup(gui) {
 			function (data) {
 				try {
 					if (data) {
-						window["vplProgram"].importFromJSON(data, function () {
-							window["vplProgram"].renderToCanvas(window["vplCanvas"]);
+						app.program.importFromJSON(data, function () {
+							app.renderProgramToCanvas();
 						});
 					}
 				} catch (e) {}
 			});
-	} else if (window["vplUseLocalStorage"]) {
+	} else if (app.useLocalStorage) {
 		try {
 			var vplJson = window.localStorage.getItem("vpl.json");
 			if (vplJson) {
-				window["vplProgram"].importFromJSON(vplJson, function () {
-					window["vplProgram"].renderToCanvas(window["vplCanvas"]);
+				app.program.importFromJSON(vplJson, function () {
+					app.renderProgramToCanvas();
 				});
 			}
 		} catch (e) {}
 	}
 
 	if (getQueryOption("view") === "text") {
-		A3a.vpl.Program.setView(["src"], {noVPL: true});
+		app.setView(["src"], {noVPL: true});
 	} else {
-		A3a.vpl.Program.setView(["vpl"]);
-		window["vplProgram"].experimentalFeatures = experimentalFeatures;
-		window["vplProgram"].setTeacherRole(getQueryOption("role") === "teacher");
-		window["vplProgram"].renderToCanvas(window["vplCanvas"]);
-		document.getElementById("editor").textContent = window["vplProgram"].getCode(window["vplProgram"].currentLanguage);
+		app.setView(["vpl"]);
+		app.program.experimentalFeatures = experimentalFeatures;
+		app.program.setTeacherRole(getQueryOption("role") === "teacher");
+		app.renderProgramToCanvas();
+		document.getElementById("editor").textContent = app.program.getCode(app.program.currentLanguage);
 	}
 
-	window["vplEditor"].setTeacherRole(getQueryOption("role") === "teacher");
+	app.editor.setTeacherRole(getQueryOption("role") === "teacher");
 	/** @const */
 	var languageList = ["aseba", "l2", "js", "python"];
 	if (languageList.indexOf(language) >= 0) {
 		/** @const */
-		window["vplEditor"].changeLanguage = function () {
+		app.editor.changeLanguage = function () {
 			language = languageList[(languageList.indexOf(language) + 1) % languageList.length];
-			window["vplProgram"].currentLanguage = language;
-			var code = window["vplProgram"].getCode(language);
+			app.program.currentLanguage = language;
+			var code = app.program.getCode(language);
 			return {
 				language: language,
 				code: code
@@ -511,7 +503,7 @@ function vplSetup(gui) {
 
 	var asebaNode = new A3a.A3aNode(A3a.thymioDescr);
 	if (advancedFeatures) {
-		window["vplEditor"].disass = function (language, src) {
+		app.editor.disass = function (language, src) {
 			/** @type {A3a.Compiler}*/
 			var c;
 			try {
@@ -536,17 +528,17 @@ function vplSetup(gui) {
 	}
 
 	// initial canvas resize
-	vplResize();
-	window["vplCanvas"].update();
+	app.vplResize();
+	app.vplCanvas.update();
 
 	// resize canvas
-	window.addEventListener("resize", vplResize, false);
+	window.addEventListener("resize", function () { app.vplResize(); }, false);
 
-	window["vplSim"] && window["vplSim"].sim.setTeacherRole(getQueryOption("role") === "teacher");
+	app.sim2d && app.sim2d.setTeacherRole(getQueryOption("role") === "teacher");
 
 	if (view === "text") {
 		// special case for source code editor without VPL
-		A3a.vpl.Program.setView(["src"], {noVPL: true});
+		app.setView(["src"], {noVPL: true});
 	} else {
 		// enforce 1-3 unique views among vpl, src and sim; otherwise just vpl
 		/** @const */
@@ -567,9 +559,9 @@ function vplSetup(gui) {
 				}
 			}
 		}
-		A3a.vpl.Program.setView(views);
+		app.setView(views);
 	}
-	vplResize();
+	app.vplResize();
 }
 
 window.addEventListener("load", function () {
@@ -604,46 +596,14 @@ window.addEventListener("load", function () {
 	);
 }, false);
 
-function vplResize() {
-	var width = window.innerWidth;
-	var height = window.innerHeight;
-	if (window["vplDisableResize"]) {
-		var bnd = window["vplCanvas"].canvas.getBoundingClientRect();
-		width = bnd.width;
-		height = bnd.height;
-	}
-
-	// vpl, editor and simulator
-	window["vplEditor"].resize();
-	window["vplCanvas"].resize(width, height);
-	if (window["vplSim"]) {
-		window["vplSim"].sim.simCanvas.resize(width, height);
-	}
-	window["vplCanvas"].state.views.forEach(function (view) {
-		switch (view) {
-		case "vpl":
-			window["vplProgram"].renderToCanvas(window["vplCanvas"]);
-			break;
-		case "src":
-			window["editorCanvas"].redraw();
-			break;
-		case "sim":
-			if (window["vplSim"]) {
-				window["vplSim"].sim.render(window["vplCanvas"]);
-			}
-			break;
-		}
-	});
-}
-
 // remember state across reload
 window.addEventListener("unload", function () {
 console.info("vplStorageSetFunction");
-	var json = window["vplProgram"].exportToJSON();
+	var json = window["vplApp"].program.exportToJSON();
 	try {
 		if (window["vplStorageSetFunction"]) {
 			window["vplStorageSetFunction"]("vpl.json", json);
-		} else if (window["vplUseLocalStorage"]) {
+		} else if (window["vplApp"].useLocalStorage) {
 			window.localStorage.setItem("vpl.json", json);
 		}
 	} catch (e) {}

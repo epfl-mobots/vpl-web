@@ -6,98 +6,96 @@
 */
 
 /** Install commands for simulator
-	@param {A3a.vpl.Commands} commands
-	@param {A3a.vpl.VPLSourceEditor} editor
 	@return {void}
 */
-A3a.vpl.VPLSim2DViewer.prototype.addSim2DCommands = function (commands, editor) {
-	commands.add("sim:restart", {
-		action: function (sim2d, modifier) {
-			sim2d.restoreGround();
-			sim2d.robot["start"](A3a.vpl.VPLSim2DViewer.currentTime());
-			sim2d.running = true;
-			sim2d.paused = false;
-			sim2d.render();
+A3a.vpl.Application.prototype.addSim2DCommands = function () {
+	this.commands.add("sim:restart", {
+		action: function (app, modifier) {
+			app.sim2d.restoreGround();
+			app.sim2d.robot["start"](A3a.vpl.VPLSim2DViewer.currentTime());
+			app.sim2d.running = true;
+			app.sim2d.paused = false;
+			app.renderSim2dViewer();
 		},
 		object: this
 	});
-	commands.add("sim:pause", {
-		action: function (sim2d, modifier) {
-			if (sim2d.running) {
-				sim2d.paused = !sim2d.paused;
-				if (sim2d.paused) {
-					sim2d.robot["suspend"]();
+	this.commands.add("sim:pause", {
+		action: function (app, modifier) {
+			if (app.sim2d.running) {
+				app.sim2d.paused = !app.sim2d.paused;
+				if (app.sim2d.paused) {
+					app.sim2d.robot["suspend"]();
 				} else {
-					sim2d.robot["resume"](A3a.vpl.VPLSim2DViewer.currentTime());
-					sim2d.render();
+					app.sim2d.robot["resume"](A3a.vpl.VPLSim2DViewer.currentTime());
+					app.renderSim2dViewer();
 				}
 			}
 		},
-		isEnabled: function (sim2d) {
-			return sim2d.running;
+		isEnabled: function (app) {
+			return app.sim2d.running;
 		},
-		isSelected: function (sim2d) {
-			return sim2d.paused;
+		isSelected: function (app) {
+			return app.sim2d.paused;
 		},
 		object: this
 	});
-	commands.add("sim:speedup", {
-		action: function (sim2d, modifier) {
+	this.commands.add("sim:speedup", {
+		action: function (app, modifier) {
 			/** @const */
 			var s = [0.5, 1, 2, 5, 10];
-			sim2d.robot.setSpeedupFactor(s[(s.indexOf(sim2d.robot.speedupFactor) + 1) % s.length]);
+			app.sim2d.robot.setSpeedupFactor(s[(s.indexOf(app.sim2d.robot.speedupFactor) + 1) % s.length]);
 		},
-		isSelected: function (sim2d) {
-			return sim2d.robot.speedupFactor !== 1;
+		isSelected: function (app) {
+			return app.sim2d.robot.speedupFactor !== 1;
 		},
-		getState: function (sim2d) {
-			return sim2d.robot.speedupFactor;
-		},
-		object: this
-	});
-	commands.add("sim:noise", {
-		action: function (sim2d, modifier) {
-			sim2d.robot.hasNoise = !sim2d.robot.hasNoise;
-		},
-		isSelected: function (sim2d) {
-			return sim2d.robot.hasNoise;
+		getState: function (app) {
+			return app.sim2d.robot.speedupFactor;
 		},
 		object: this
 	});
-	commands.add("sim:pen", {
-		action: function (sim2d, modifier) {
-			sim2d.penDown = !sim2d.penDown;
+	this.commands.add("sim:noise", {
+		action: function (app, modifier) {
+			app.sim2d.robot.hasNoise = !app.sim2d.robot.hasNoise;
 		},
-		isSelected: function (sim2d) {
-			return sim2d.penDown;
-		},
-		object: this
-	});
-	commands.add("sim:clear", {
-		action: function (sim2d, modifier) {
-			sim2d.restoreGround();
-		},
-		isEnabled: function (sim2d) {
-			return sim2d.groundCanvasDirty;
+		isSelected: function (app) {
+			return app.sim2d.robot.hasNoise;
 		},
 		object: this
 	});
-	commands.add("sim:map-kind", {
-		action: function (sim2d, modifier) {
-			switch (sim2d.currentMap) {
+	this.commands.add("sim:pen", {
+		action: function (app, modifier) {
+			app.sim2d.penDown = !app.sim2d.penDown;
+		},
+		isSelected: function (app) {
+			return app.sim2d.penDown;
+		},
+		object: this
+	});
+	this.commands.add("sim:clear", {
+		action: function (app, modifier) {
+			app.restoreGround();
+		},
+		isEnabled: function (app) {
+			return app.sim2d.groundCanvasDirty;
+		},
+		object: this
+	});
+	this.commands.add("sim:map-kind", {
+		action: function (app, modifier) {
+			switch (app.sim2d.currentMap) {
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
-				sim2d.currentMap = A3a.vpl.VPLSim2DViewer.playgroundMap.height;
+				app.sim2d.currentMap = A3a.vpl.VPLSim2DViewer.playgroundMap.height;
 				break;
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
-				sim2d.currentMap = A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle;
+				app.sim2d.currentMap = A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle;
 				break;
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
-				sim2d.currentMap = A3a.vpl.VPLSim2DViewer.playgroundMap.ground;
+				app.sim2d.currentMap = A3a.vpl.VPLSim2DViewer.playgroundMap.ground;
 				break;
 			}
 		},
-		getState: function (sim2d) {
-			switch (sim2d.currentMap) {
+		getState: function (app) {
+			switch (app.sim2d.currentMap) {
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
 				return "ground";
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
@@ -110,36 +108,36 @@ A3a.vpl.VPLSim2DViewer.prototype.addSim2DCommands = function (commands, editor) 
 		},
 		object: this
 	});
-	commands.add("sim:map", {
-		action: function (sim2d, modifier) {
-			switch (sim2d.currentMap) {
+	this.commands.add("sim:map", {
+		action: function (app, modifier) {
+			switch (app.sim2d.currentMap) {
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
 				// toggle between null and disabled ground image
-				sim2d.setImage(sim2d.groundImage == null ? sim2d.disabledGroundImage : null);
+				app.setImage(app.sim2d.groundImage == null ? app.sim2d.disabledGroundImage : null);
 				break;
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
 				// toggle between null and disabled height image
-				sim2d.setImage(sim2d.heightImage == null ? sim2d.disabledHeightImage : null);
+				app.setImage(app.sim2d.heightImage == null ? app.sim2d.disabledHeightImage : null);
 				break;
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
 				// toggle between null and disabled obstacle svg
-				sim2d.setSVG(sim2d.hasObstacles ? null : sim2d.disabledObstacleSVG);
+				app.setSVG(app.sim2d.hasObstacles ? null : app.sim2d.disabledObstacleSVG);
 				break;
 			}
 		},
-		isSelected: function (sim2d) {
-			switch (sim2d.currentMap) {
+		isSelected: function (app) {
+			switch (app.sim2d.currentMap) {
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
-				return sim2d.groundImage != null;
+				return app.sim2d.groundImage != null;
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
-				return sim2d.heightImage != null;
+				return app.sim2d.heightImage != null;
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
-				return sim2d.hasObstacles;
+				return app.sim2d.hasObstacles;
 			}
 			throw "internal";
 		},
-		getState: function (sim2d) {
-			switch (sim2d.currentMap) {
+		getState: function (app) {
+			switch (app.sim2d.currentMap) {
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
 				return "ground";
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
@@ -152,52 +150,55 @@ A3a.vpl.VPLSim2DViewer.prototype.addSim2DCommands = function (commands, editor) 
 		},
 		object: this
 	});
-	commands.add("sim:vpl", {
-		action: function (sim2d, modifier) {
-			A3a.vpl.Program.setView(["vpl"], {fromView: "sim"});
+	this.commands.add("sim:vpl", {
+		action: function (app, modifier) {
+			app.setView(["vpl"], {fromView: "sim"});
 		},
-		isEnabled: function (sim2d) {
-			return editor == null || editor.doesMatchVPL();
+		isEnabled: function (app) {
+			return app.editor == null || app.editor.doesMatchVPL();
 		},
 		object: this,
-		isAvailable: function (srcEditor) {
-			return (editor == null || !editor.noVPL) &&
-				window["vplCanvas"].state.views.indexOf("vpl") < 0;
+		isAvailable: function (app) {
+			return (app.editor == null || !app.editor.noVPL) &&
+				app.views.indexOf("vpl") < 0;
 		}
 	});
-	commands.add("sim:text", {
-		action: function (sim2d, modifier) {
-			A3a.vpl.Program.setView(["src"],
+	this.commands.add("sim:text", {
+		action: function (app, modifier) {
+			app.setView(["src"],
 				{
 					fromView: "sim",
-					unlocked: !window["vplEditor"].isLockedWithVPL
+					unlocked: !app.editor.isLockedWithVPL
 				});
 		},
-		object: this
-	});
-	commands.add("sim:teacher-reset", {
-		action: function (sim2d, modifier) {
-			sim2d.resetUI();
-			sim2d.render();
-		},
 		object: this,
-		keep: true,
-		isAvailable: function (sim2d) {
-			return sim2d.teacherRole && sim2d.uiConfig.customizationMode;
+		isAvailable: function (app) {
+			return app.views.indexOf("src") < 0;
 		}
 	});
-	commands.add("sim:teacher", {
-		action: function (sim2d, modifier) {
-			sim2d.uiConfig.customizationMode = !sim2d.uiConfig.customizationMode;
-			sim2d.render();
-		},
-		isSelected: function (sim2d) {
-			return sim2d.uiConfig.customizationMode;
+	this.commands.add("sim:teacher-reset", {
+		action: function (app, modifier) {
+			app.sim2d.resetUI();
+			app.renderSim2dViewer();
 		},
 		object: this,
 		keep: true,
-		isAvailable:  function (sim2d) {
-			return sim2d.teacherRole;
+		isAvailable: function (app) {
+			return app.sim2d.teacherRole && app.sim2d.uiConfig.customizationMode;
+		}
+	});
+	this.commands.add("sim:teacher", {
+		action: function (app, modifier) {
+			app.sim2d.uiConfig.customizationMode = !app.sim2d.uiConfig.customizationMode;
+			app.renderSim2dViewer();
+		},
+		isSelected: function (app) {
+			return app.sim2d.uiConfig.customizationMode;
+		},
+		object: this,
+		keep: true,
+		isAvailable:  function (app) {
+			return app.sim2d.teacherRole;
 		}
 	});
 };

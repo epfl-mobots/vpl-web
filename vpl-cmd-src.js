@@ -6,123 +6,120 @@
 */
 
 /** Install commands for source code editor
-	@param {A3a.vpl.Commands} commands
-	@param {A3a.vpl.RunGlue} runglue
 	@return {void}
 */
-A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) {
-	commands.add("src:new", {
-		action: function (srcEditor, modifier) {
-			srcEditor.textEditor.setContent("");
-			srcEditor.tbCanvas.redraw();
+A3a.vpl.Application.prototype.addSrcCommands = function () {
+	this.commands.add("src:new", {
+		action: function (app, modifier) {
+			app.editor.textEditor.setContent("");
+			app.editor.tbCanvas.redraw();
 		},
-		isEnabled: function (srcEditor) {
-			return !srcEditor.isLockedWithVPL && srcEditor.getCode().length > 0;
+		isEnabled: function (app) {
+			return !app.editor.isLockedWithVPL && app.editor.getCode().length > 0;
 		},
 		object: this
 	});
-	commands.add("src:save", {
-		action: function (srcEditor, modifier) {
-			// var src = srcEditor.getCode();
+	this.commands.add("src:save", {
+		action: function (app, modifier) {
+			// var src = app.editor.getCode();
 			// var aesl = A3a.vpl.Program.toAESLFile(src);
 			// A3a.vpl.Program.downloadText(aesl, "code.aesl");
-			var json = window["vplProgram"].exportToJSON();
+			var json = app.program.exportToJSON();
 			A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
 		},
-		isEnabled: function (srcEditor) {
-			return srcEditor.getCode().length > 0;
+		isEnabled: function (app) {
+			return app.editor.getCode().length > 0;
 		},
 		object: this
 	});
-	commands.add("src:vpl", {
-		action: function (srcEditor, modifier) {
-			A3a.vpl.Program.setView(["vpl"], {fromView: "src"});
+	this.commands.add("src:vpl", {
+		action: function (app, modifier) {
+			app.setView(["vpl"], {fromView: "src"});
 		},
-		isEnabled: function (srcEditor) {
-			return srcEditor.doesMatchVPL();
+		isEnabled: function (app) {
+			return app.editor.doesMatchVPL();
 		},
 		object: this,
-		isAvailable: function (srcEditor) {
-			return !srcEditor.noVPL
-				&& window["vplCanvas"].state.views.indexOf("vpl") < 0;
+		isAvailable: function (app) {
+			return !app.editor.noVPL && app.views.indexOf("vpl") < 0;
 		}
 	});
-	commands.add("src:locked", {
-		action: function (srcEditor, modifier) {
-			srcEditor.lockWithVPL(!srcEditor.isLockedWithVPL);
-			srcEditor.tbCanvas.redraw();
-			if (srcEditor.isLockedWithVPL) {
-				window["vplProgram"].noVPL = false;
-				window["vplProgram"].renderToCanvas(window["vplCanvas"]);
+	this.commands.add("src:locked", {
+		action: function (app, modifier) {
+			app.editor.lockWithVPL(!app.editor.isLockedWithVPL);
+			app.editor.tbCanvas.redraw();
+			if (app.editor.isLockedWithVPL) {
+				app.program.noVPL = false;
+				app.renderProgramToCanvas();
 			}
 		},
-		isEnabled: function (srcEditor) {
-			return srcEditor.srcForAsm === null;
+		isEnabled: function (app) {
+			return app.editor.srcForAsm === null;
 		},
-		isSelected: function (srcEditor) {
-			return srcEditor.isLockedWithVPL;
+		isSelected: function (app) {
+			return app.editor.isLockedWithVPL;
 		},
 		object: this,
-		isAvailable: function (srcEditor) {
-			return !srcEditor.noVPL;
+		isAvailable: function (app) {
+			return !app.editor.noVPL;
 		}
 	});
-	commands.add("src:language", {
-		action: function (srcEditor, modifier) {
-			var r = srcEditor.changeLanguage();
-			srcEditor.language = r.language;
-			if (srcEditor.isLockedWithVPL) {
-				srcEditor.setCode(r.code);
+	this.commands.add("src:language", {
+		action: function (app, modifier) {
+			var r = app.editor.changeLanguage();
+			app.editor.language = r.language;
+			if (app.editor.isLockedWithVPL) {
+				app.editor.setCode(r.code);
 			}
 		},
-		isEnabled: function (srcEditor) {
-			return srcEditor.srcForAsm === null;
+		isEnabled: function (app) {
+			return app.editor.srcForAsm === null;
 		},
-		getState: function (srcEditor) {
-			return srcEditor.language;
+		getState: function (app) {
+			return app.editor.language;
 		},
 		object: this,
-		isAvailable: function (srcEditor) {
-			return srcEditor.changeLanguage != null;
+		isAvailable: function (app) {
+			return app.editor.changeLanguage != null;
 		}
 	});
-	commands.add("src:disass", {
-		action: function (srcEditor, modifier) {
-			if (srcEditor.srcForAsm !== null) {
-				srcEditor.setCode(/** @type {string} */(srcEditor.srcForAsm));
-				srcEditor.textEditor.setReadOnly(srcEditor.isLockedWithVPL);
+	this.commands.add("src:disass", {
+		action: function (app, modifier) {
+			if (app.editor.srcForAsm !== null) {
+				app.editor.setCode(/** @type {string} */(app.editor.srcForAsm));
+				app.editor.textEditor.setReadOnly(app.editor.isLockedWithVPL);
 			} else {
-				var src = srcEditor.getCode();
-				var dis = srcEditor.disass(srcEditor.language, src);
+				var src = app.editor.getCode();
+				var dis = app.editor.disass(app.editor.language, src);
 				if (dis !== null) {
-					srcEditor.setCode(/** @type {string} */(dis), true);
-					srcEditor.textEditor.setReadOnly(true);
-					srcEditor.srcForAsm = src;
+					app.editor.setCode(/** @type {string} */(dis), true);
+					app.editor.textEditor.setReadOnly(true);
+					app.editor.srcForAsm = src;
 				}
 			}
-			srcEditor.toolbarRender();
+			app.renderSourceEditorToolbar();
 		},
-		isEnabled: function (srcEditor) {
-			return srcEditor.disass != null && srcEditor.disass(srcEditor.language, "") !== null;
+		isEnabled: function (app) {
+			return app.editor.disass != null && app.editor.disass(app.editor.language, "") !== null;
 		},
-		isSelected: function (srcEditor) {
-			return srcEditor.srcForAsm !== null;
+		isSelected: function (app) {
+			return app.editor.srcForAsm !== null;
 		},
-		getState: function (srcEditor) {
-			return srcEditor.language;
+		getState: function (app) {
+			return app.editor.language;
 		},
 		object: this,
-		isAvailable: function (srcEditor) {
-			return srcEditor.disass !== null;
+		isAvailable: function (app) {
+			return app.editor.disass !== null;
 		}
 	});
-	commands.add("src:run", {
-		action: function (srcEditor, modifier) {
-			var code = srcEditor.getCode();
-			srcEditor.runGlue.run(code, srcEditor.language);
+	this.commands.add("src:run", {
+		action: function (app, modifier) {
+			var code = app.editor.getCode();
+			app.runGlue.run(code, app.editor.language);
 		},
-		getState: function (srcEditor) {
-			var code = srcEditor.getCode();
+		getState: function (app) {
+			var code = app.editor.getCode();
 			if (code.length === 0) {
 				return "empty";
 			} else {
@@ -130,52 +127,52 @@ A3a.vpl.VPLSourceEditor.prototype.addSrcCommands = function (commands, runglue) 
 			}
 		},
 		object: this,
-		isAvailable: function (srcEditor) {
-			return srcEditor.runGlue != null;
+		isAvailable: function (app) {
+			return app.runGlue != null;
 		}
 	});
-	commands.add("src:stop", {
-		action: function (srcEditor, modifier) {
-			srcEditor.runGlue.stop(srcEditor.language);
+	this.commands.add("src:stop", {
+		action: function (app, modifier) {
+			app.runGlue.stop(app.editor.language);
 		},
 		object: this,
-		isAvailable: function (srcEditor) {
-			return srcEditor.runGlue != null;
+		isAvailable: function (app) {
+			return app.runGlue != null;
 		}
 	});
-	commands.add("src:sim", {
-		action: function (srcEditor, modifier) {
-			A3a.vpl.Program.setView(["sim"], {fromView: "src"});
+	this.commands.add("src:sim", {
+		action: function (app, modifier) {
+			app.setView(["sim"], {fromView: "src"});
 		},
 		object: this,
-		isAvailable: function (srcEditor) {
-			return srcEditor.runGlue != null && window["vplSim"] != null &&
-				window["vplCanvas"].state.views.indexOf("sim") < 0;
+		isAvailable: function (app) {
+			return app.runGlue != null && app.sim2d != null &&
+				app.views.indexOf("sim") < 0;
 		}
 	});
-	commands.add("src:teacher-reset", {
-		action: function (srcEditor, modifier) {
-			srcEditor.resetUI();
-			srcEditor.toolbarRender();
-		},
-		object: this,
-		keep: true,
-		isAvailable: function (srcEditor) {
-			return srcEditor.teacherRole && srcEditor.uiConfig.customizationMode;
-		}
-	});
-	commands.add("src:teacher", {
-		action: function (srcEditor, modifier) {
-			srcEditor.uiConfig.customizationMode = !srcEditor.uiConfig.customizationMode;
-			srcEditor.toolbarRender();
-		},
-		isSelected: function (srcEditor) {
-			return srcEditor.uiConfig.customizationMode;
+	this.commands.add("src:teacher-reset", {
+		action: function (app, modifier) {
+			app.editor.resetUI();
+			app.renderSourceEditorToolbar();
 		},
 		object: this,
 		keep: true,
-		isAvailable:  function (srcEditor) {
-			return srcEditor.teacherRole;
+		isAvailable: function (app) {
+			return app.editor.teacherRole && app.editor.uiConfig.customizationMode;
+		}
+	});
+	this.commands.add("src:teacher", {
+		action: function (app, modifier) {
+			app.editor.uiConfig.customizationMode = !app.editor.uiConfig.customizationMode;
+			app.renderSourceEditorToolbar();
+		},
+		isSelected: function (app) {
+			return app.editor.uiConfig.customizationMode;
+		},
+		object: this,
+		keep: true,
+		isAvailable:  function (app) {
+			return app.editor.teacherRole;
 		}
 	});
 };

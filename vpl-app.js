@@ -5,6 +5,43 @@
 	For internal use only
 */
 
+/** Main application class (container for VPL, editor and simulator)
+	@constructor
+	@param {Element} canvasEl
+*/
+A3a.vpl.Application = function (canvasEl) {
+	// static initialization
+	if (!A3a.vpl.Application.initialized) {
+		A3a.vpl.Program.resetBlockLib();
+		A3a.vpl.Application.initialized = true;
+	}
+
+	this.canvasEl = canvasEl;
+
+	this.uiConfig = new A3a.vpl.UIConfig();
+	this.commands = new A3a.vpl.Commands();
+
+	/** @type {Array.<string>} */
+	this.views = ["vpl"];
+
+	this.program = new A3a.vpl.Program(A3a.vpl.mode.basic, this.uiConfig);
+
+	this.vplCanvas = new A3a.vpl.Canvas(canvasEl);
+	this.vplCanvas.state = {};
+
+	/** @type {A3a.vpl.Canvas} */
+	this.simCanvas = null;
+	/** @type {A3a.vpl.VPLSim2DViewer} */
+	this.sim2d = null;
+
+	/** @type {A3a.vpl.RunGlue} */
+	this.runGlue = null;
+
+	this.useLocalStorage = false;
+};
+
+A3a.vpl.Application.initialized = false;
+
 /** Change current view
 	@param {Array.<string>} views array of "vpl", "src" and "sim"
 	@param {{noVPL:(boolean|undefined),unlocked:(boolean|undefined),fromView:(string|undefined)}=} options
@@ -14,41 +51,42 @@
 	fromView:v to change another view from view v (keep v, change other)
 	@return {void}
 */
-A3a.vpl.Program.setView = function (views, options) {
+A3a.vpl.Application.prototype.setView = function (views, options) {
+	var app = this;
+
 	if (options && (options.noVPL || options.unlocked)) {
-		window["vplProgram"].noVPL = true;
-		window["vplEditor"].noVPL = true;
-		window["vplEditor"].lockWithVPL(false);
+		this.program.noVPL = true;
+		this.editor.noVPL = true;
+		this.editor.lockWithVPL(false);
 	}
 
-	if (views.length === 1 && options && options.fromView && window["vplCanvas"].state.views.length > 1) {
-		if (window["vplCanvas"].state.views.indexOf(views[0]) >= 0) {
+	if (views.length === 1 && options && options.fromView && this.views.length > 1) {
+		if (this.views.indexOf(views[0]) >= 0) {
 			// options.fromView already visible
 			return;
 		}
-		var viewIx = window["vplCanvas"].state.views[0] === options.fromView ? 1 : 0;
-		var views1 = window["vplCanvas"].state.views.slice();
+		var viewIx = this.views[0] === options.fromView ? 1 : 0;
+		var views1 = this.views.slice();
 		views1[viewIx] = views[0];
 		views = views1;
 	}
-	window["vplCanvas"].state.views = views;
+	this.views = views;
 
 	document.getElementById("src-editor").style.display = views.indexOf("src") >= 0 ? "block" : "none";
 
-	if (window["vplSim"] != null) {
-		window["vplSim"].sim.visible = views.indexOf("sim") >= 0;
-		window["simCanvas"].hide();
+	if (this.sim2d != null) {
+		this.simCanvas.hide();
 	}
-	window["vplCanvas"].hide();
-	window["editorCanvas"].hide();
+	this.vplCanvas.hide();
+	this.editor.tbCanvas.hide();
 	if (views.indexOf("vpl") >= 0) {
-		window["vplCanvas"].show();
+		this.vplCanvas.show();
 	}
 	if (views.indexOf("src") >= 0) {
-		window["editorCanvas"].show();
+		this.editor.tbCanvas.show();
 	}
-	if (window["vplSim"] != null && views.indexOf("sim") >= 0) {
-		window["simCanvas"].show();
+	if (this.sim2d != null && views.indexOf("sim") >= 0) {
+		this.simCanvas.show();
 	}
 
 	for (var i = 0; i < views.length; i++) {
@@ -60,57 +98,89 @@ A3a.vpl.Program.setView = function (views, options) {
 		};
 		switch (views[i]) {
 		case "vpl":
-			window["vplCanvas"].setRelativeArea(relArea);
-			window["vplCanvas"].onUpdate = function () {
-				if (!window["vplProgram"].noVPL) {
-					window["vplProgram"].invalidateCode();
-					window["vplProgram"].enforceSingleTrailingEmptyEventHandler();
-					window["vplEditor"].setCode(window["vplProgram"].getCode(window["vplProgram"].currentLanguage));
+			this.vplCanvas.setRelativeArea(relArea);
+			this.vplCanvas.onUpdate = function () {
+				if (!app.program.noVPL) {
+					app.program.invalidateCode();
+					app.program.enforceSingleTrailingEmptyEventHandler();
+					app.editor.setCode(app.program.getCode(app.program.currentLanguage));
 				}
-				window["vplProgram"].renderToCanvas(window["vplCanvas"]);
+				app.renderProgramToCanvas();
 			};
 			break;
 		case "src":
-			window["editorCanvas"].setRelativeArea(relArea);
-			window["vplEditor"].lockWithVPL(!(options && (options.noVPL || options.unlocked)));
-			window["vplEditor"].focus();
-			window["vplEditor"].resize();
+			this.editor.tbCanvas.setRelativeArea(relArea);
+			this.editor.lockWithVPL(!(options && (options.noVPL || options.unlocked)));
+			this.editor.focus();
+			this.editor.resize();
 			break;
 		case "sim":
-			window["simCanvas"].setRelativeArea(relArea);
-			window["simCanvas"].onUpdate = function () {
-				window["vplSim"].sim.render();
+			this.simCanvas.setRelativeArea(relArea);
+			this.simCanvas.onUpdate = function () {
+				app.renderSim2dViewer();
 			};
 			break;
 		}
 	}
 
 	var onDraw = function () {
-		views.indexOf("vpl") >= 0 && window["vplCanvas"].redraw();
-		views.indexOf("src") >= 0 && window["editorCanvas"].redraw();
-		views.indexOf("sim") >= 0 && window["simCanvas"].redraw();
+		views.indexOf("vpl") >= 0 && app.vplCanvas.redraw();
+		views.indexOf("src") >= 0 && app.editor.tbCanvas.redraw();
+		views.indexOf("sim") >= 0 && app.simCanvas.redraw();
 	};
-	if (window["vplCanvas"]) {
-		window["vplCanvas"].onDraw = onDraw;
+	if (this.vplCanvas) {
+		this.vplCanvas.onDraw = onDraw;
 	}
-	if (window["editorCanvas"]) {
-		window["editorCanvas"].onDraw = onDraw;
+	if (this.editor.tbCanvas) {
+		this.editor.tbCanvas.onDraw = onDraw;
 	}
-	if (window["simCanvas"]) {
-		window["simCanvas"].onDraw = onDraw;
+	if (this.simCanvas) {
+		this.simCanvas.onDraw = onDraw;
 	}
 
 	if (views.indexOf("vpl") >= 0) {
-		window["vplCanvas"].onUpdate();
-		window["vplCanvas"].onDraw ? window["vplCanvas"].onDraw() : window["vplCanvas"].redraw();
+		this.vplCanvas.onUpdate();
+		this.vplCanvas.onDraw ? this.vplCanvas.onDraw() : this.vplCanvas.redraw();
 	}
 	if (views.indexOf("src") >= 0) {
-		window["editorCanvas"].onUpdate();
-		window["editorCanvas"].onDraw ? window["editorCanvas"].onDraw() : window["editorCanvas"].redraw();
+		this.renderSourceEditorToolbar();
+		this.editor.tbCanvas.onDraw ? this.editor.tbCanvas.onDraw() : this.editor.tbCanvas.redraw();
 	}
 	if (views.indexOf("sim") >= 0) {
-		window["vplSim"].sim.start(false);
-		window["simCanvas"].onUpdate();
-		window["simCanvas"].onDraw ? window["simCanvas"].onDraw() : window["simCanvas"].redraw();
+		this.start(false);
+		this.simCanvas.onUpdate();
+		this.simCanvas.onDraw ? this.simCanvas.onDraw() : this.simCanvas.redraw();
 	}
+};
+
+A3a.vpl.Application.prototype.vplResize = function () {
+	var width = window.innerWidth;
+	var height = window.innerHeight;
+	if (window["vplDisableResize"]) {
+		var bnd = this.vplCanvas.canvas.getBoundingClientRect();
+		width = bnd.width;
+		height = bnd.height;
+	}
+
+	// vpl, editor and simulator
+	this.editor.resize();
+	this.vplCanvas.resize(width, height);
+	if (this.sim2d) {
+		this.simCanvas.resize(width, height);
+	}
+	this.views.forEach(function (view) {
+		switch (view) {
+		case "vpl":
+			this.renderProgramToCanvas();
+			break;
+		case "src":
+			this.editor.tbCanvas.redraw();
+			break;
+		case "sim":
+			if (this.sim2d) {
+				this.renderSim2dViewer();
+			}
+			break;
+		}
+	}, this);
 };

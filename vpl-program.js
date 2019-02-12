@@ -145,7 +145,7 @@ A3a.vpl.Program.prototype.saveStateBeforeChange = function () {
 };
 
 /** Undo last change, saving current state and retrieving previous one
-	@param {function(*=):void=} updateFun called at the end and for further
+	@param {function(string):void=} updateFun called at the end and for further
 	asynchrounous loading if necessary
 	@return {void}
 */
@@ -159,7 +159,7 @@ A3a.vpl.Program.prototype.undo = function (updateFun) {
 };
 
 /** Redo last undone change, saving current state and retrieving next one
-	@param {function(*=):void=} updateFun called at the end and for further
+	@param {function(string):void=} updateFun called at the end and for further
 	asynchrounous loading if necessary
 	@return {void}
 */
@@ -324,7 +324,7 @@ A3a.vpl.Program.prototype.exportToJSON = function (noProgram) {
 
 /** Import program from an object, as created by exportToObject
 	@param {Object} obj
-	@param {function(*=):void=} updateFun called at the end and for further
+	@param {function(string):void=} updateFun called at the end and for further
 	asynchronous loading if necessary; arg is "vpl" or "src"
 	@return {void}
 */
@@ -355,7 +355,7 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 								bt.importParam(b, block["param"],
 									function () {
 										if (importFinished && updateFun) {
-											updateFun(["vpl"]);
+											updateFun("vpl");
 										}
 									});
 							} else {
@@ -391,7 +391,7 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 
 /** Import program from its JSON representation, as created by exportToJSON
 	@param {string} json
-	@param {function(*=):void=} updateFun called at the end and for further
+	@param {function(string):void=} updateFun called at the end and for further
 	asynchrounous loading if necessary
 	@return {void}
 */
