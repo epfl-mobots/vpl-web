@@ -35,7 +35,7 @@ A3a.vpl.Commands.isEnabled;
 */
 A3a.vpl.Commands.isSelected;
 
-/** @typedef {function(Object): *}
+/** @typedef {function(Object): (Object | null)}
 */
 A3a.vpl.Commands.getState;
 
@@ -141,11 +141,11 @@ A3a.vpl.Commands.prototype.isSelected = function (name) {
 
 /** Get command state (for multi-state buttons)
 	@param {string} name
-	@return {*}
+	@return {?Object}
 */
 A3a.vpl.Commands.prototype.getState = function (name) {
 	var cmd = this.find(name);
-	return cmd != null ? cmd.getState() : 0;
+	return cmd != null ? cmd.getState() : null;
 };
 
 /** Command definition
@@ -217,10 +217,10 @@ A3a.vpl.Commands.Command.prototype.isSelected = function () {
 };
 
 /** Get command state (for multi-state buttons)
-	@return {*}
+	@return {?Object}
 */
 A3a.vpl.Commands.Command.prototype.getState = function () {
-	return this.getStateFun != null ? this.getStateFun(this.obj) : 0;
+	return this.getStateFun != null ? this.getStateFun(this.obj) : null;
 };
 
 /** Check if command is available (if its button should be displayed)

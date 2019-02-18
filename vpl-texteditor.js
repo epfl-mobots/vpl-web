@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -31,7 +31,6 @@ A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
 		parseInt(taStyle.paddingLeft, 10) - parseInt(taStyle.paddingRight, 10);
 
     this.textarea.style.width = taWidth + "px";
-    this.textarea.style["float"] = "right";
     this.textarea.style.border = "0px";
     this.textarea.style.outline = "none";
     this.textarea.style.resize = "none";
@@ -52,9 +51,8 @@ A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
     this.textarea.addEventListener("input", function (e) {
         self.updateLineNumbers();
     }, false);
-	window.addEventListener("resize", function (e) {
-		self.resize();
-	}, true);
+
+	this.breakpointsEnabled = false;
 
 	/** @type {Array.<number>} */
 	this.breakpoints = [];
@@ -64,6 +62,16 @@ A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
 	this.onBreakpointChanged = null;
 
 	this.updateLineNumbers();
+};
+
+/** Set window resize listener to resize this
+	@return {void}
+*/
+A3a.vpl.TextEditor.prototype.addResizeListener = function () {
+	var self = this;
+	window.addEventListener("resize", function (e) {
+		self.resize();
+	}, true);
 };
 
 /** @typedef {function(Array.<number>):void} */
@@ -112,8 +120,9 @@ A3a.vpl.TextEditor.prototype.toggleBreakpoint = function (line) {
 	@return {void}
 */
 A3a.vpl.TextEditor.prototype.resize = function () {
+	var parentBB = this.div.getBoundingClientRect();
     // style
-    var width = window.innerWidth - this.leftMargin;
+    var width = parentBB.width - this.leftMargin;
 	var height = window.innerHeight - this.topMargin;
     var taStyle = window.getComputedStyle(this.textarea);
 	var taWidth = width - this.pre.getBoundingClientRect().width - 10 -
@@ -121,6 +130,7 @@ A3a.vpl.TextEditor.prototype.resize = function () {
 
     this.textarea.style.width = taWidth + "px";
     this.pre.style.height = height + "px";
+    this.pre.style.maxHeight = height + "px";
 };
 
 /** Update the line number text in the pre element
@@ -143,9 +153,11 @@ A3a.vpl.TextEditor.prototype.updateLineNumbers = function () {
     txt.forEach(function (t, i) {
 		var el = document.createElement("span");
 		el.textContent = t + "\n";
-		el.addEventListener("click", function () {
-			self.toggleBreakpoint(i + 1);
-		});
+		if (this.breakpointsEnabled) {
+			el.addEventListener("click", function () {
+				self.toggleBreakpoint(i + 1);
+			});
+		}
 		this.pre.appendChild(el);
 	}, this);
 }

@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -18,7 +18,8 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.experimentalFeatures = false;
 	/** @type {Array.<A3a.vpl.EventHandler>} */
 	this.program = [];
-	this.uploaded = false;
+	this.uploaded = false;	// program matches what's running
+	this.notUploadedYet = true;	// program has never been loaded since last this.new()
 	/** @type {?function():void} */
 	this.onUpdate = null;
 
@@ -94,6 +95,7 @@ A3a.vpl.Program.prototype.new = function () {
 	this.program = [];
 	this.undoState.reset();
 	this.code = {};
+	this.notUploadedYet = true;
 };
 
 /** Check if empty (no non-empty event handler)
@@ -143,7 +145,7 @@ A3a.vpl.Program.prototype.saveStateBeforeChange = function () {
 };
 
 /** Undo last change, saving current state and retrieving previous one
-	@param {function():void=} updateFun called at the end and for further
+	@param {function(string):void=} updateFun called at the end and for further
 	asynchrounous loading if necessary
 	@return {void}
 */
@@ -157,7 +159,7 @@ A3a.vpl.Program.prototype.undo = function (updateFun) {
 };
 
 /** Redo last undone change, saving current state and retrieving next one
-	@param {function():void=} updateFun called at the end and for further
+	@param {function(string):void=} updateFun called at the end and for further
 	asynchrounous loading if necessary
 	@return {void}
 */
@@ -382,13 +384,14 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 			}
 		}
 	} catch (e) {}
+	this.noVPL = view === "src";
 	updateFun && updateFun(view);
 	importFinished = true;
 };
 
 /** Import program from its JSON representation, as created by exportToJSON
 	@param {string} json
-	@param {function():void=} updateFun called at the end and for further
+	@param {function(string):void=} updateFun called at the end and for further
 	asynchrounous loading if necessary
 	@return {void}
 */

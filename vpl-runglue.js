@@ -12,7 +12,8 @@
 		init: (function(string):void | undefined),
 		isEnabled: (function():boolean | undefined),
 		languages: (Array.<string> | undefined),
-		preferredLanguage: (string | undefined)
+		preferredLanguage: (string | undefined),
+		state: (Object | undefined)
 	}} options
 */
 A3a.vpl.RunGlue = function (options) {
@@ -21,6 +22,7 @@ A3a.vpl.RunGlue = function (options) {
 	this.isEnabledFun = options && options.isEnabled ? options.isEnabled : null;
 	this.preferredLanguage = options && options.preferredLanguage ? options.preferredLanguage : "aseba";
 	this.languages = options && options.languages ? options.languages : [this.preferredLanguage];
+	this.state = options && options.state ? options.state : null;
 
 	/** @type {Object<string,string>} */
 	this.stopCode = {};

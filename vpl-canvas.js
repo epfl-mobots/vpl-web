@@ -161,6 +161,12 @@ A3a.vpl.CanvasItem.canDrop;
 */
 A3a.vpl.CanvasItem.doScroll;
 
+A3a.vpl.CanvasItem.prototype.getTranslation = function () {
+	return this.clippingRect
+		? {dx: this.clippingRect.xOffset, dy: this.clippingRect.yOffset}
+		: {dx: 0, dy: 0};
+};
+
 /** Check if position is inside the clipping rect
 	@param {number} x
 	@param {number} y
@@ -176,20 +182,23 @@ A3a.vpl.CanvasItem.prototype.isInClip = function (x, y) {
 	@constructor
 	@struct
 	@param {Element} canvas
+	@param {A3a.vpl.Canvas.RelativeArea=} relativeArea
 */
-A3a.vpl.Canvas = function (canvas) {
+A3a.vpl.Canvas = function (canvas, relativeArea) {
 	var backingScale = "devicePixelRatio" in window ? window["devicePixelRatio"] : 1;
 	this.canvas = canvas;
-	this.width = canvas.width / backingScale;
-	this.height = canvas.height / backingScale;
+	this.canvasWidth = canvas.width / backingScale;
+	this.canvasHeight = canvas.height / backingScale;
+	this.relativeArea = relativeArea || {xmin: 0, xmax: 1, ymin: 0, ymax: 1};
+	this.width = this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin);
+	this.height = this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin);
+	this.visible = true;
 	/** @type {?Array.<number>} */
 	this.transform = null;
 	/** @type {CanvasRenderingContext2D} */
 	this.ctx = this.canvas.getContext("2d");
 	/** @type {Object} */
 	this.state = null;	// client data used by callbacks (scroll positions etc.)
-	/** @type {?function(number,number):void} */
-	this.wheel = null;
 
 	this.clickTimestamp = 0;
 	this.zoomedItemIndex = -1;
@@ -205,6 +214,9 @@ A3a.vpl.Canvas = function (canvas) {
 	this.dims = /** @type {A3a.vpl.Canvas.dims} */(null);
 	this.resize(this.width, this.height);	// force set this.dims
 
+	/** @type {Object.<string,A3a.vpl.Canvas.Widget>} */
+	this.widgets = {};
+
 	var self = this;
 
 	/** Handle mousedown event
@@ -212,6 +224,10 @@ A3a.vpl.Canvas = function (canvas) {
 		@return {void}
 	*/
 	function mousedown(downEvent) {
+		if (!self.visible) {
+			return;
+		}
+
 		var mouseEvent = self.makeMouseEvent(downEvent);
 
 		function startInteraction(item) {
@@ -231,6 +247,7 @@ A3a.vpl.Canvas = function (canvas) {
 						canvasBndRect.top + item.y,
 						mouseEvent);
 				self.onUpdate && self.onUpdate();
+				self.onDraw ? self.onDraw() : self.redraw();
 				// continue with window-level handler
 				A3a.vpl.dragFun = item.interactiveCB.mousedrag
 					? function (e, isUp) {
@@ -242,14 +259,17 @@ A3a.vpl.Canvas = function (canvas) {
 								canvasBndRect.top + item.y,
 								self.makeMouseEvent(e));
 							self.onUpdate && self.onUpdate();
+							self.onDraw ? self.onDraw() : self.redraw();
 						} else if (item.interactiveCB.mouseup) {
 							item.interactiveCB.mouseup(self, item.data,
 								/** @type {number} */(item.dragging));
 							self.onUpdate && self.onUpdate();
+							self.onDraw ? self.onDraw() : self.redraw();
 						}
 					}
 					: null;
 				self.onUpdate && self.onUpdate();
+				self.onDraw ? self.onDraw() : self.redraw();
 				return true;
 			}
 			return false;
@@ -265,6 +285,7 @@ A3a.vpl.Canvas = function (canvas) {
 			self.zoomedItemIndex = -1;
 			self.zoomedItemProxy = null;
 			self.onUpdate && self.onUpdate();
+			self.onDraw ? self.onDraw() : self.redraw();
 			return;
 		}
 
@@ -289,8 +310,9 @@ A3a.vpl.Canvas = function (canvas) {
 				// drag item itself
 				/** @type {A3a.vpl.CanvasItem} */
 				var dropTargetItem = null;
-				var x0 = mouseEvent.x;
-				var y0 = mouseEvent.y;
+				var d = item.getTranslation();
+				var x0 = mouseEvent.x - d.dx;
+				var y0 = mouseEvent.y - d.dy;
 				A3a.vpl.dragFun = function (dragEvent, isUp) {
 					var mouseEvent = self.makeMouseEvent(dragEvent);
 					if (isUp) {
@@ -328,18 +350,23 @@ A3a.vpl.Canvas = function (canvas) {
 								CanvasRenderingContext2D.prototype.transform.apply(ctx, self.transform);
 								ctx.translate(-self.width / 2, -self.height / 2);
 							}
+							ctx.translate(self.canvasWidth * self.relativeArea.xmin, self.canvasHeight * self.relativeArea.ymin);
 							dropTargetItem.applyClipping(ctx);
 							ctx.lineWidth = 2 * self.dims.blockLineWidth;
 							ctx.strokeStyle = "#aaa";
-							ctx.strokeRect(dropTargetItem.x, dropTargetItem.y, dropTargetItem.width, dropTargetItem.height);
+							var d = dropTargetItem.getTranslation();
+							ctx.strokeRect(dropTargetItem.x + d.dx, dropTargetItem.y + d.dy,
+								dropTargetItem.width, dropTargetItem.height);
 							ctx.restore();
 						}
 						ctx.save();
+						self.clip();
 						if (self.transform) {
 							ctx.translate(self.width / 2, self.height / 2);
 							CanvasRenderingContext2D.prototype.transform.apply(ctx, self.transform);
 							ctx.translate(-self.width / 2, -self.height / 2);
 						}
+						ctx.translate(self.canvasWidth * self.relativeArea.xmin, self.canvasHeight * self.relativeArea.ymin);
 						ctx.globalAlpha = 0.5;
 						item.draw(ctx, mouseEvent.x - x0, mouseEvent.y - y0);
 						item.attachedItems.forEach(function (attachedItem) {
@@ -370,6 +397,10 @@ A3a.vpl.Canvas = function (canvas) {
 	}, false);
 
 	canvas.addEventListener("wheel", function (wheelEvent) {
+		if (!self.visible) {
+			return;
+		}
+
 		function doScroll(item) {
 			if (item.doScroll) {
 				wheelEvent.preventDefault();
@@ -404,6 +435,42 @@ A3a.vpl.Canvas = function (canvas) {
 	this.clipStack = [];
 	/** @type {?function():void} */
 	this.onUpdate = null;
+	/** @type {?function():void} */
+	this.onDraw = null;
+};
+
+/** @typedef
+	{{
+		xmin: number,
+		xmax: number,
+		ymin: number,
+		ymax: number
+	}}
+*/
+A3a.vpl.Canvas.RelativeArea;
+
+/** Change relative area in canvas element
+	@param {A3a.vpl.Canvas.RelativeArea=} relativeArea
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.setRelativeArea = function (relativeArea) {
+	this.relativeArea = relativeArea || {xmin: 0, xmax: 1, ymin: 0, ymax: 1};
+	this.width = this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin);
+	this.height = this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin);
+};
+
+/** Show content
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.show = function () {
+	this.visible = true;
+};
+
+/** Hide content
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.hide = function () {
+	this.visible = false;
 };
 
 /** Set the css filter of the canvas element
@@ -430,11 +497,14 @@ A3a.vpl.Canvas.prototype.applyTransform = function (p) {
 		);
 
 		return [
-			T[0] * p[0] + T[2] * p[1] + T[4],
-			T[1] * p[0] + T[3] * p[1] + T[5]
+			T[0] * p[0] + T[2] * p[1] + T[4] + this.canvasWidth * this.relativeArea.xmin,
+			T[1] * p[0] + T[3] * p[1] + T[5] + this.canvasHeight * this.relativeArea.ymin
 		];
 	} else {
-		return p;
+		return [
+			p[0] + this.canvasWidth * this.relativeArea.xmin,
+			p[1] + this.canvasHeight * this.relativeArea.ymin
+		];
 	}
 };
 
@@ -443,6 +513,10 @@ A3a.vpl.Canvas.prototype.applyTransform = function (p) {
 	@return {Array.<number>} inverse-transformed point in R^2
 */
 A3a.vpl.Canvas.prototype.applyInverseTransform = function (p) {
+	p = [
+		p[0] - this.canvasWidth * this.relativeArea.xmin,
+		p[1] - this.canvasHeight * this.relativeArea.ymin
+	];
 	var T = this.transform;
 	if (T) {
 		// T -> translate(w/2,h/2) T translate(-w/2,-h/2)
@@ -473,24 +547,24 @@ A3a.vpl.Canvas.prototype.makeMouseEvent = function (e) {
 		y: e.clientY,
 		modifier: e.ctrlKey
 	};
-	if (this.transform) {
-		var p1 = this.applyInverseTransform([mouseEvent.x, mouseEvent.y]);
-		mouseEvent.x = p1[0];
-		mouseEvent.y = p1[1];
-	}
+	var p1 = this.applyInverseTransform([mouseEvent.x, mouseEvent.y]);
+	mouseEvent.x = p1[0];
+	mouseEvent.y = p1[1];
 	return mouseEvent;
 };
 
 /** Update
 	@return {void}
 */
-A3a.vpl.Canvas.prototype["update"] = function () {
+A3a.vpl.Canvas.prototype.update = function () {
 	this.onUpdate && this.onUpdate();
+	this.onDraw ? this.onDraw() : this.redraw();
 };
 
 /**
 	@typedef {{
 		blockSize: number,
+		minInteractiveBlockSize: number,
 		blockLineWidth: number,
 		thinLineWidth: number,
 		blockFont: string,
@@ -516,6 +590,7 @@ A3a.vpl.Canvas.prototype["update"] = function () {
 		stateStyle: string,
 		actionStyle: string,
 		commentStyle: string,
+		errorColor: string,
 		background: string,
 		ruleBackground: string,
 		ruleMarks: string,
@@ -532,6 +607,7 @@ A3a.vpl.Canvas.dims;
 A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 	return {
 		blockSize: blockSize,
+		minInteractiveBlockSize: 60,
 		blockLineWidth: Math.max(1, Math.min(3, blockSize / 40)),
 		thinLineWidth: 1,
 		blockFont: Math.round(blockSize / 4).toString(10) + "px sans-serif",
@@ -557,21 +633,24 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		stateStyle: "#0c0",
 		actionStyle: "#38f",
 		commentStyle: "#aaa",
+		errorColor: "#f88",
 		background: "",
 		ruleBackground: "#ddd",
 		ruleMarks: "#bbb"
 	};
 };
 
-/** Resize canvas
+/** Resize canvas element
 	@param {number} width new width
 	@param {number} height new height
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.resize = function (width, height) {
-	this.width = width;
-	this.height = height;
 	var backingScale = "devicePixelRatio" in window ? window["devicePixelRatio"] : 1;
+	this.canvasWidth = this.canvas.width / backingScale;
+	this.canvasHeight = this.canvas.height / backingScale;
+	this.width = this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin);
+	this.height = this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin);
 	this.canvas.width  = width * backingScale;
 	this.canvas.height = height * backingScale;
 	this.ctx = this.canvas.getContext("2d");
@@ -579,8 +658,8 @@ A3a.vpl.Canvas.prototype.resize = function (width, height) {
 		this.ctx.scale(backingScale, backingScale);
 	}
 
-	var cw = Math.min(width, height);
-	var blockSize = Math.min(Math.round(width / 12), 90);
+	var cw = Math.min(this.width, this.height);
+	var blockSize = Math.min(Math.round(this.width / 12), 90);
 	var controlSize = Math.min(Math.max(Math.round(blockSize / 1.3), 32), 60);
 	this.dims = A3a.vpl.Canvas.calcDims(blockSize, controlSize);
 };
@@ -613,9 +692,10 @@ A3a.vpl.Canvas.prototype.clickedItemIndex = function (mouseEvent, clickableOnly)
 	/** @type {Array.<number>} */
 	var indices = [];
 	for (var i = this.items.length - 1; i >= 0; i--) {
+		var d = this.items[i].getTranslation();
 		if ((!clickableOnly || this.items[i].clickable) &&
-			x >= this.items[i].x && x <= this.items[i].x + this.items[i].width &&
-			y >= this.items[i].y && y <= this.items[i].y + this.items[i].height &&
+			x >= this.items[i].x + d.dx && x <= this.items[i].x + d.dx + this.items[i].width &&
+			y >= this.items[i].y + d.dy && y <= this.items[i].y + d.dy + this.items[i].height &&
 			this.items[i].isInClip(x, y)) {
 			indices.push(i);
 		}
@@ -690,6 +770,18 @@ A3a.vpl.Canvas.prototype.clearItems = function () {
 	this.items = [];
 };
 
+/** Apply clip to canvas
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.clip = function () {
+	this.ctx.beginPath();
+	this.ctx.rect(this.canvasWidth * this.relativeArea.xmin,
+		this.canvasHeight * this.relativeArea.ymin,
+		this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin),
+		this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin));
+	this.ctx.clip();
+};
+
 /** Clear canvas
 	@return {void}
 */
@@ -697,10 +789,16 @@ A3a.vpl.Canvas.prototype.erase = function () {
 	if (this.dims && this.dims.background) {
 		this.ctx.save();
 		this.ctx.fillStyle = this.dims.background;
-		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+		this.ctx.fillRect(this.canvasWidth * this.relativeArea.xmin,
+			this.canvasHeight * this.relativeArea.ymin,
+			this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin),
+			this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin));
 		this.ctx.restore();
 	} else {
-		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.ctx.clearRect(this.canvasWidth * this.relativeArea.xmin,
+			this.canvasHeight * this.relativeArea.ymin,
+			this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin),
+			this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin));
 	}
 };
 
@@ -857,17 +955,64 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, width, height, draw, actio
 	this.setItem(item);
 };
 
+/** @typedef {function(CanvasRenderingContext2D,string,A3a.vpl.Canvas.dims):void}
+*/
+A3a.vpl.Canvas.drawWidget;
+
+/** @typedef {function(string,A3a.vpl.Canvas.dims):{xmin:number,xmax:number,ymin:number,ymax:number}}
+*/
+A3a.vpl.Canvas.getWidgetBounds;
+
+/** @typedef {{
+		draw: A3a.vpl.Canvas.drawWidget,
+		bounds: A3a.vpl.Canvas.getWidgetBounds
+	}}
+*/
+A3a.vpl.Canvas.Widget;
+
+/** Draw a widget
+	@param {string} id
+	@param {number} x
+	@param {number} y
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.drawWidget = function (id, x, y) {
+	var w = this.widgets[id];
+	if (w != undefined) {
+		this.ctx.save();
+		this.ctx.translate(x, y);
+		w.draw(this.ctx, id, this.dims);
+		this.ctx.restore();
+	}
+};
+
+/** Get widget bounds
+	@param {string} id
+	@return {{xmin:number,xmax:number,ymin:number,ymax:number}}
+*/
+A3a.vpl.Canvas.prototype.getWidgetBounds = function (id) {
+	var w = this.widgets[id];
+	return w
+		? w.bounds(id, this.dims)
+		: {xmin: 0, xmax: 0, ymin: 0, ymax: 0};
+};
+
 /** Redraw the underlying canvas with all the items
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.redraw = function () {
+	if (!this.visible) {
+		return;
+	}
+
 	this.erase();
+	this.ctx.save();
 	if (this.transform) {
-		this.ctx.save();
 		this.ctx.translate(this.width / 2, this.height / 2);
 		CanvasRenderingContext2D.prototype.transform.apply(this.ctx, this.transform);
 		this.ctx.translate(-this.width / 2, -this.height / 2);
 	}
+	this.ctx.translate(this.canvasWidth * this.relativeArea.xmin, this.canvasHeight * this.relativeArea.ymin);
 	this.items.forEach(function (item) {
 		item.draw(this.ctx);
 	}, this);
@@ -878,7 +1023,5 @@ A3a.vpl.Canvas.prototype.redraw = function () {
 		this.zoomedItemProxy.draw(this.ctx);
 		this.zoomedItemProxy.draw(this.ctx, 0, 0, true);
 	}
-	if (this.transform) {
-		this.ctx.restore();
-	}
+	this.ctx.restore();
 };

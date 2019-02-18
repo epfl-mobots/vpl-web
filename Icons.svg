@@ -1,8 +1,9 @@
+<script type="image/svg+xml" id="Icons.svg">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48">
   <defs>
     <style>
       .cls-1 {
-        opacity: 0.1;
+        opacity: 0.2;
         fill: url(#radial-gradient);
       }
 
@@ -352,8 +353,8 @@
     </g>
     <g id="ic_delete">
       <g id="delete_default">
-        <path id="trash_path" class="cls-6" d="M32.17,15H16a2,2,0,0,0-1.45.63A2,2,0,0,0,14,17.17L15.4,37.11a2,2,0,0,0,2,1.89H30.77a2,2,0,0,0,2-1.89l1.39-19.94a2.09,2.09,0,0,0-.54-1.54A2,2,0,0,0,32.17,15Zm0,2-1.4,20L17.39,37,16,17H32.17Z"/>
-        <path id="clap_path" class="cls-6" d="M15,12H33a1,1,0,0,0,0-2H15a1,1,0,0,0,0,2Z"/>
+        <path id="trash_path" class="cls-7" d="M32.17,15H16a2,2,0,0,0-1.45.63A2,2,0,0,0,14,17.17L15.4,37.11a2,2,0,0,0,2,1.89H30.77a2,2,0,0,0,2-1.89l1.39-19.94a2.09,2.09,0,0,0-.54-1.54A2,2,0,0,0,32.17,15Zm0,2-1.4,20L17.39,37,16,17H32.17Z"/>
+        <path id="clap_path" class="cls-7" d="M15,12H33a1,1,0,0,0,0-2H15a1,1,0,0,0,0,2Z"/>
         <rect id="frame-41" data-name="frame" class="cls-3" width="48" height="48"/>
       </g>
       <g id="delete_highlight">

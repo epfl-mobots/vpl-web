@@ -542,6 +542,58 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 		return -1;
 	}
 
+	/** Validate block definition
+		@param {Object} b block definition
+		@return {boolean} true for success, false for failure
+	*/
+	function validateBlockDefinition(b) {
+		var name = b["name"];
+		if (name[0] === "!") {
+			// special block
+			return true;
+		}
+		if (!/^\w/.test(name)) {
+			window["console"] && window["console"]["info"](
+				"Block definition error: bad name \"" + name + "\"");
+			return false;
+		}
+
+		var defParam = b["defaultParameters"];
+		var buttons = b["buttons"];
+		var radiobuttons = b["radiobuttons"];
+		var sliders = b["sliders"];
+		var rotating = b["rotating"];
+		if ((buttons || radiobuttons || sliders || rotating) && !defParam) {
+			window["console"] && window["console"]["info"](
+				"Block definition error: missing defaultParameters");
+			return false;
+		}
+
+		if (defParam) {
+			var nParams = 0;
+			if (buttons) {
+				nParams += buttons.length;
+			}
+			if (radiobuttons) {
+				nParams += 1;
+			}
+			if (sliders) {
+				nParams += sliders.length;
+			}
+			if (rotating) {
+				nParams += rotating.length;
+			}
+			if (nParams !== defParam.length) {
+				window["console"] && window["console"]["info"](
+					"Block definition error: defaultParameters.length=" + defParam.length +
+						", needs " + nParams + " parameters");
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	/** Substitute inline expressions {expr} in strings of input array, where expr is a
 		JavaScript expression; variable $ contains the block parameters
 		@param {Array.<string>} fmtArray
@@ -602,6 +654,11 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 			});
 		}
 
+		// validation
+		if (!validateBlockDefinition(b)) {
+			window["console"] && window["console"]["info"]("Bad block definition for " + name);
+		}
+
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		var draw = blockTemplate0
 			? blockTemplate0.draw
@@ -627,7 +684,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 
 		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 		var genCode = blockTemplate0 ? blockTemplate0.genCode : {};
-		["aseba", "l2", "js"].forEach(function (lang) {
+		["aseba", "l2", "js", "python"].forEach(function (lang) {
 			if (b[lang]) {
 				genCode[lang] = function (block) {
 					var c = {};
@@ -691,28 +748,30 @@ A3a.vpl.patchBlocksSVG = function (uiConfig) {
 	A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		return {
 			blockSize: blockSize,
-			blockLineWidth: Math.max(1, Math.min(3, blockSize / 40)),
+			minInteractiveBlockSize: uiConfig["styles"]["minInteractiveBlockSize"] === undefined ? 60 : uiConfig["styles"]["minInteractiveBlockSize"],
+			blockLineWidth: uiConfig["styles"]["blockLineWidth"] === undefined ? Math.max(1, Math.min(3, blockSize / 40)) : uiConfig["styles"]["blockLineWidth"],
 			thinLineWidth: 1,
 			blockFont: Math.round(blockSize / 4).toString(10) + "px sans-serif",
 			blockLargeFont: Math.round(blockSize / 3).toString(10) + "px sans-serif",
-			templateScale: Math.max(0.666, 32 / blockSize),
+			templateScale: Math.max(uiConfig["styles"]["templateScale"] || 0.666, (uiConfig["styles"]["minTemplateSize"] || 32) / blockSize),
 			scrollingBlockLib: uiConfig["styles"]["scrollingBlockLib"],
-			margin: Math.min(Math.round(blockSize / 4), 20),
-			interRowSpace: Math.round(blockSize / 2),
-			interEventActionSpace: blockSize / 2,
+			margin: uiConfig["styles"]["margin"] === undefined ? Math.min(Math.round(blockSize / 4), 20) : uiConfig["styles"]["margin"],
+			interRowSpace: uiConfig["styles"]["interRowSpace"] || Math.round(blockSize / 2),
+			interEventActionSpace: uiConfig["styles"]["interEventActionSpace"] || blockSize / 2,
 			controlColor: uiConfig["styles"]["controlColor"] || "navy",
 			controlDownColor: uiConfig["styles"]["controlDownColor"] || "#37f",
 			controlActiveColor: uiConfig["styles"]["controlActiveColor"] || "#06f",
-			interBlockSpace: Math.round(blockSize / 6),
+			interBlockSpace: uiConfig["styles"]["interBlockSpace"] || Math.round(blockSize / 6),
 			controlSize: controlSize,
 			controlFont: "bold 15px sans-serif",
 			topControlSpace: 2 * controlSize,
-			stripHorMargin: Math.min(Math.max(blockSize / 15, 2), 6),
-			stripVertMargin: Math.min(Math.max(blockSize / 15, 2), 6),
+			stripHorMargin: uiConfig["styles"]["stripHorMargin"] === undefined ? Math.min(Math.max(blockSize / 15, 2), 6) : uiConfig["styles"]["stripHorMargin"],
+			stripVertMargin: uiConfig["styles"]["stripVertMargin"] === undefined ? Math.min(Math.max(blockSize / 15, 2), 6) : uiConfig["styles"]["stripVertMargin"],
 			eventStyle: uiConfig["styles"]["event"] || "#f70",
 			stateStyle: uiConfig["styles"]["state"] || "#0c0",
 			actionStyle: uiConfig["styles"]["action"] || "#38f",
 			commentStyle: uiConfig["styles"]["comment"] || "#aaa",
+			errorColor: uiConfig["styles"]["errorColor"] || "#f88",
 			background: uiConfig["styles"]["background"] || "white",
 			ruleBackground: uiConfig["styles"]["ruleBackground"] || "#ddd",
 			ruleMarks: uiConfig["styles"]["ruleMarks"] || "#bbb",

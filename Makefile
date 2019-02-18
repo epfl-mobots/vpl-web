@@ -11,7 +11,7 @@ COPYRIGHT = /* Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE - au
 # Default closure compiler in current directory, used if closure-compiler isn't found
 # Update here or build with "make CLOSURECOMPILER=path" to match your environment
 # The current version can be found at https://github.com/google/closure-compiler/wiki/Binary-Downloads
-CLOSURECOMPILER ?= closure-compiler-v20181028.jar
+CLOSURECOMPILER ?= closure-compiler-v20190121.jar
 
 CLOSURE = $(shell if which closure-compiler >/dev/null; then echo closure-compiler; else echo java -jar $(CLOSURECOMPILER); fi)
 CLOSUREFLAGS = \
@@ -38,11 +38,14 @@ JS = \
 	vpl-code-aseba.js \
 	vpl-code-l2.js \
 	vpl-code-js.js \
+	vpl-code-python.js \
 	vpl-cmd.js \
+	vpl-app.js \
 	vpl-cmd-vpl.js \
 	vpl-controlbar.js \
 	vpl-buttons-js.js \
 	vpl-controlbar-btn.js \
+	vpl-widgets-js.js \
 	vpl-program-canvas.js \
 	vpl-canvas.js \
 	vpl-canvas-scroll.js \
@@ -53,6 +56,7 @@ JS = \
 	vpl-blocklib-svg.js \
 	vpl-blocklib-l2.js \
 	vpl-blocklib-js.js \
+	vpl-blocklib-python.js \
 	vpl-error.js \
 	vpl-undo.js \
 	vpl-aeslfile.js \

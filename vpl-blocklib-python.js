@@ -1,61 +1,61 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
 */
 
-/** Patch standard blocks to generate JavaScript code
+/** Patch standard blocks to generate Python code
 	@return {void}
 */
-A3a.vpl.patchJSBlocks = function () {
+A3a.vpl.patchPythonBlocks = function () {
 
-	A3a.vpl.BlockTemplate.initOutputsJS =
-		"this.set(\"leds.top\", [0, 0, 0]);\n";
-
-	/** @const */
-	A3a.vpl.BlockTemplate.initStatesDeclJS =
-		"// variables for state\n" +
-		"this.setClientState(\"state\", []);\n";
+	A3a.vpl.BlockTemplate.initOutputsPython =
+		"self.set(\"leds.top\", [0, 0, 0])\n";
 
 	/** @const */
-	A3a.vpl.BlockTemplate.initStatesInitJS =
-		"this.setClientState(\"state\", [false, false, false, false]);\n";
+	A3a.vpl.BlockTemplate.initStatesDeclPython =
+		"# variables for state\n" +
+		"self.setClientState(\"state\", [])\n";
 
 	/** @const */
-	A3a.vpl.BlockTemplate.clauseInitStateJS =
-		"var state0 = this.getClientState(\"state\");\n";
+	A3a.vpl.BlockTemplate.initStatesInitPython =
+		"self.setClientState(\"state\", [False, False, False, False])\n";
 
 	/** @const */
-	A3a.vpl.BlockTemplate.initState8DeclJS =
-		"// variable for exclusive state\n" +
-		"this.setClientState(\"state8\", 0);\n";
+	A3a.vpl.BlockTemplate.clauseInitStatePython =
+		"state0 = self.getClientState(\"state\")\n";
 
 	/** @const */
-	A3a.vpl.BlockTemplate.initState8InitJS =
-		"this.setClientState(\"state8\", 0);\n";
+	A3a.vpl.BlockTemplate.initState8DeclPython =
+		"# variable for exclusive state\n" +
+		"self.setClientState(\"state8\", 0)\n";
 
 	/** @const */
-	A3a.vpl.BlockTemplate.clauseInitState8JS =
-		"var state80 = this.getClientState(\"state8\");\n";
+	A3a.vpl.BlockTemplate.initState8InitPython =
+		"self.setClientState(\"state8\", 0)\n";
 
 	/** @const */
-	A3a.vpl.BlockTemplate.initCounterDeclJS =
-		"// variable for counter\n" +
-		"this.setClientState(\"counter\", 0);\n";
+	A3a.vpl.BlockTemplate.clauseInitState8Python =
+		"state80 = self.getClientState(\"state8\")\n";
 
 	/** @const */
-	A3a.vpl.BlockTemplate.initCounterInitJS =
-		"this.setClientState(\"counter\", 0);\n";
+	A3a.vpl.BlockTemplate.initCounterDeclPython =
+		"# variable for counter\n" +
+		"self.setClientState(\"counter\", 0)\n";
 
 	/** @const */
-	A3a.vpl.BlockTemplate.clauseInitCounterCmpJS =
-		"var counter0 = this.getClientState(\"counter\");\n";
+	A3a.vpl.BlockTemplate.initCounterInitPython =
+		"self.setClientState(\"counter\", 0)\n";
 
 	/** @const */
-	A3a.vpl.BlockTemplate.resetTimerJS =
-		"// stop timer 0\n" +
-		"this.setTimer(0, -1);\n";
+	A3a.vpl.BlockTemplate.clauseInitCounterCmpPython =
+		"counter0 = self.getClientState(\"counter\")\n";
+
+	/** @const */
+	A3a.vpl.BlockTemplate.resetTimerPython =
+		"# stop timer 0\n" +
+		"self.setTimer(0, -1)\n";
 
 	(function () {
 		/** Convert number to string with up to 2 fractional digits
@@ -67,28 +67,28 @@ A3a.vpl.patchJSBlocks = function () {
 		}
 
 		/** @const */
-		var libPatchJS = {
+		var libPatchPython = {
 			"!stop": function (block) {
 				return {
 					statement:
-						"this.set(\"motor.left\", 0);\n" +
-						"this.set(\"motor.right\", 0);\n"
+						"self.set(\"motor.left\", 0)\n" +
+						"self.set(\"motor.right\", 0)\n"
 				};
 			},
 			"button": function (block) {
 				var cond = "";
 				for (var i = 0; i < 5; i++) {
 					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " && ") +
-							"this.get(\"button." + ["center", "forward", "backward", "right", "left"][i] + "\")";
+						cond += (cond.length === 0 ? "" : " and ") +
+							"self.get(\"button." + ["center", "forward", "backward", "right", "left"][i] + "\")";
 					}
 				}
 				if (cond === "") {
-					cond = "this.get(\"button.center\") || this.get(\"button.forward\") || this.get(\"button.backward\") || this.get(\"button.right\") || this.get(\"button.left\")";
+					cond = "self.get(\"button.center\") || self.get(\"button.forward\") || self.get(\"button.backward\") || self.get(\"button.right\") || self.get(\"button.left\")";
 				}
 				return {
-					sectionBegin: "this.addEventListener(\"buttons\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_buttons(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 10,
 					clause: cond
 				};
@@ -97,20 +97,20 @@ A3a.vpl.patchJSBlocks = function () {
 				var cond = "";
 				for (var i = 0; i < 7; i++) {
 					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " && ") +
-							"this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] " +
+						cond += (cond.length === 0 ? "" : " and ") +
+							"self.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] " +
 							(block.param[i] > 0 ? ">= 0.6" : "<= 0.4");
 					}
 				}
 				if (cond === "") {
 					for (var i = 0; i < 7; i++) {
-						cond += " || this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 0.5";
+						cond += " || self.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 0.5";
 					}
-					cond = cond.slice(4);	// crop initial " && "
+					cond = cond.slice(5);	// crop initial " and "
 				}
 				return {
-					sectionBegin: "this.addEventListener(\"prox\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_prox(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 1,
 					clause: cond
 				};
@@ -119,8 +119,8 @@ A3a.vpl.patchJSBlocks = function () {
 				var cond = "";
 				for (var i = 0; i < 7; i++) {
 					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " && ") +
-							"this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] " +
+						cond += (cond.length === 0 ? "" : " and ") +
+							"self.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] " +
 							(block.param[i] > 0
 								? ">= " + toFixed2(block.param[7])
 								: "<= " + toFixed2(block.param[8]));
@@ -128,13 +128,13 @@ A3a.vpl.patchJSBlocks = function () {
 				}
 				if (cond === "") {
 					for (var i = 0; i < 7; i++) {
-						cond += " || this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 0.5";
+						cond += " || self.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 0.5";
 					}
 					cond = cond.slice(4);	// crop initial " || "
 				}
 				return {
-					sectionBegin: "this.addEventListener(\"prox\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_prox(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 1,
 					clause: cond
 				};
@@ -143,21 +143,21 @@ A3a.vpl.patchJSBlocks = function () {
 				var cond = "";
 				for (var i = 0; i < 7; i++) {
 					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " && ") +
-							"this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] " +
+						cond += (cond.length === 0 ? "" : " and ") +
+							"self.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] " +
 							(block.param[i] > 0 ? ">= " : "< ") +
 							toFixed2(block.param[7]);
 					}
 				}
 				if (cond === "") {
 					for (var i = 0; i < 7; i++) {
-						cond += " || this.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 0.5";
+						cond += " or self.get(\"prox.horizontal\")[" + [2, 1, 3, 0, 4, 5, 6][i] + "] >= 0.5";
 					}
-					cond = cond.slice(4);	// crop initial " || "
+					cond = cond.slice(4);	// crop initial " or "
 				}
 				return {
-					sectionBegin: "this.addEventListener(\"prox\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_prox(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 1,
 					clause: cond
 				};
@@ -166,20 +166,20 @@ A3a.vpl.patchJSBlocks = function () {
 				var cond = "";
 				for (var i = 0; i < 2; i++) {
 					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " && ") +
-							"this.get(\"prox.ground.delta\")[" + i + "] " +
+						cond += (cond.length === 0 ? "" : " and ") +
+							"self.get(\"prox.ground.delta\")[" + i + "] " +
 							(block.param[i] > 0 ? ">= 0.6" : "<= 0.4");
 					}
 				}
 				if (cond === "") {
 					for (var i = 0; i < 2; i++) {
-						cond += " || this.get(\"prox.ground.delta\")[" + i + "] >= 0.5";
+						cond += " or self.get(\"prox.ground.delta\")[" + i + "] >= 0.5";
 					}
-					cond = cond.slice(4);	// crop initial " || "
+					cond = cond.slice(4);	// crop initial " or "
 				}
 				return {
-					sectionBegin: "this.addEventListener(\"prox\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_prox(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 1,
 					clause: cond
 				};
@@ -188,8 +188,8 @@ A3a.vpl.patchJSBlocks = function () {
 				var cond = "";
 				for (var i = 0; i < 2; i++) {
 					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " && ") +
-							"this.get(\"prox.ground.delta\")[" + i + "] " +
+						cond += (cond.length === 0 ? "" : " and ") +
+							"self.get(\"prox.ground.delta\")[" + i + "] " +
 							(block.param[i] > 0
 								? ">= " + toFixed2(block.param[2])
 								: "<= " + toFixed2(block.param[3]));
@@ -197,13 +197,13 @@ A3a.vpl.patchJSBlocks = function () {
 				}
 				if (cond === "") {
 					for (var i = 0; i < 2; i++) {
-						cond += " || this.get(\"prox.ground.delta\")[" + i + "] >= 0.5";
+						cond += " or self.get(\"prox.ground.delta\")[" + i + "] >= 0.5";
 					}
-					cond = cond.slice(4);	// crop initial " || "
+					cond = cond.slice(4);	// crop initial " or "
 				}
 				return {
-					sectionBegin: "this.addEventListener(\"prox\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_prox(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 1,
 					clause: cond
 				};
@@ -212,29 +212,29 @@ A3a.vpl.patchJSBlocks = function () {
 				var cond = "";
 				for (var i = 0; i < 2; i++) {
 					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " && ") +
-							"this.get(\"prox.ground.delta\")[" + i + "] " +
+						cond += (cond.length === 0 ? "" : " and ") +
+							"self.get(\"prox.ground.delta\")[" + i + "] " +
 							(block.param[i] > 0 ? ">= " : "< ") +
 							toFixed2(block.param[2]);
 					}
 				}
 				if (cond === "") {
 					for (var i = 0; i < 2; i++) {
-						cond += " || this.get(\"prox.ground.delta\")[" + i + "] >= 0.5";
+						cond += " or self.get(\"prox.ground.delta\")[" + i + "] >= 0.5";
 					}
-					cond = cond.slice(4);	// crop initial " || "
+					cond = cond.slice(4);	// crop initial " or "
 				}
 				return {
-					sectionBegin: "this.addEventListener(\"prox\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_prox(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 1,
 					clause: cond
 				};
 			},
 			"tap": function (block) {
 				return {
-					sectionBegin: "this.addEventListener(\"tap\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_tap(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 1000
 				};
 			},
@@ -243,8 +243,8 @@ A3a.vpl.patchJSBlocks = function () {
 				if (dir === 0) {
 					// tap
 					return {
-						sectionBegin: "this.addEventListener(\"tap\", function (name, param) {\n",
-						sectionEnd: "});\n",
+						sectionBegin: "def event_tap(self):\n",
+						sectionEnd: "<\n",
 						sectionPriority: 1000
 					};
 				} else {
@@ -259,16 +259,16 @@ A3a.vpl.patchJSBlocks = function () {
 						cond = name + "Angle >= " + toFixed2(Math.PI / 12 * (a - 0.5));
 					} else {
 						cond = name + "Angle >= " + toFixed2(Math.PI / 12 * (a - 0.5)) +
-							" && " + name + "Angle < " + toFixed2(Math.PI / 12 * (a + 0.5));
+							" and " + name + "Angle < " + toFixed2(Math.PI / 12 * (a + 0.5));
 					}
 					return {
-						sectionBegin: "this.addEventListener(\"acc\", function (name, param) {\n",
-						sectionEnd: "});\n",
+						sectionBegin: "def event_acc(self):\n",
+						sectionEnd: "<\n",
 						sectionPriority: 1,
 						clauseInit:
 							dir === 2
-								? "var pitchAngle = Math.atan2(acc[1], acc[2]);\n"
-								: "var rollAngle = Math.atan2(acc[0], acc[2]);\n",
+								? "pitchAngle = math.atan2(acc[1], acc[2])\n"
+								: "rollAngle = math.atan2(acc[0], acc[2])\n",
 						clause: cond
 					};
 				}
@@ -277,64 +277,64 @@ A3a.vpl.patchJSBlocks = function () {
 				/** @type {number} */
 				var a = /** @type {number} */(block.param[0]);
 				return {
-					sectionBegin: "this.addEventListener(\"acc\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_acc(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 1,
 					clauseInit:
-						"var rollAngle = Math.atan2(acc[0], acc[2]);\n",
+						"rollAngle = math.atan2(acc[0], acc[2])\n",
 					clause:
 						"rollAngle >= " + toFixed2(Math.PI / 12 * (a - 0.5)) +
-						" && rollAngle < " + toFixed2(Math.PI / 12 * (a + 0.5))
+						" and rollAngle < " + toFixed2(Math.PI / 12 * (a + 0.5))
 				};
 			},
 			"pitch": function (block) {
 				/** @type {number} */
 				var a = -/** @type {number} */(block.param[0]);
 				return {
-					sectionBegin: "this.addEventListener(\"acc\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_acc(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 1,
 					clauseInit:
-						"var pitchAngle = Math.atan2(acc[1], acc[2]);\n",
+						"pitchAngle = math.atan2(acc[1], acc[2])\n",
 					clause:
 						"pitchAngle >= " + toFixed2(Math.PI / 12 * (a - 0.5)) +
-						" && pitchAngle < " + toFixed2(Math.PI / 12 * (a + 0.5))
+						" and pitchAngle < " + toFixed2(Math.PI / 12 * (a + 0.5))
 				};
 			},
 			"yaw": function (block) {
 				/** @type {number} */
 				var a = /** @type {number} */(block.param[0]);
 				return {
-					sectionBegin: "this.addEventListener(\"acc\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_acc(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 1,
 					clauseInit:
-						"var yawAngle = Math.atan2(acc[0], acc[1]);\n",
+						"yawAngle = math.atan2(acc[0], acc[1])\n",
 					clause:
 						"yawAngle >= " + toFixed2(Math.PI / 12 * (a - 0.5)) +
-						" && yawAngle < " + toFixed2(Math.PI / 12 * (a + 0.5))
+						" and yawAngle < " + toFixed2(Math.PI / 12 * (a + 0.5))
 				};
 			},
 			"clap": function (block) {
 				return {
-					sectionBegin: "this.addEventListener(\"mic\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_mic(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 1
 				};
 			},
 			"init": function (block) {
 				return {
-					sectionBegin: "// init block\n",
+					sectionBegin: "# init block\n",
 					sectionPriority: 10000
 				};
 			},
 			"timer": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.resetTimerJS
+						A3a.vpl.BlockTemplate.resetTimerPython
 					],
-					sectionBegin: "this.addEventListener(\"timer0\", function (name, param) {\n",
-					sectionEnd: "});\n",
+					sectionBegin: "def event_timer0(self):\n",
+					sectionEnd: "<\n",
 					sectionPriority: 1000
 				};
 			},
@@ -342,30 +342,30 @@ A3a.vpl.patchJSBlocks = function () {
 				var cond = "";
 				for (var i = 0; i < 4; i++) {
 					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " && ") +
+						cond += (cond.length === 0 ? "" : " and ") +
 							(block.param[i] > 0 ? "" : "!") + "state0[" + i + "]";
 					}
 				}
 				return {
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initStatesDeclJS
+						A3a.vpl.BlockTemplate.initStatesDeclPython
 					],
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initStatesInitJS
+						A3a.vpl.BlockTemplate.initStatesInitPython
 					],
-					clauseInit: A3a.vpl.BlockTemplate.clauseInitStateJS,
+					clauseInit: A3a.vpl.BlockTemplate.clauseInitStatePython,
 					clause: cond
 				};
 			},
 			"state 8": function (block) {
 				return {
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initState8DeclJS
+						A3a.vpl.BlockTemplate.initState8DeclPython
 					],
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initState8InitJS
+						A3a.vpl.BlockTemplate.initState8InitPython
 					],
-					clauseInit: A3a.vpl.BlockTemplate.clauseInitState8JS,
+					clauseInit: A3a.vpl.BlockTemplate.clauseInitState8Python,
 					clause: "state80 == " + block.param[0].toString(10)
 				};
 			},
@@ -375,12 +375,12 @@ A3a.vpl.patchJSBlocks = function () {
 						" " + block.param[1];
 					return {
 						initVarDecl: [
-							A3a.vpl.BlockTemplate.initCounterDeclJS
+							A3a.vpl.BlockTemplate.initCounterDeclPython
 						],
 						initCodeExec: [
-							A3a.vpl.BlockTemplate.initCounterInitJS
+							A3a.vpl.BlockTemplate.initCounterInitPython
 						],
-						clauseInit: A3a.vpl.BlockTemplate.clauseInitCounterCmpJS,
+						clauseInit: A3a.vpl.BlockTemplate.clauseInitCounterCmpPython,
 						clause: cond
 					};
 			},
@@ -389,7 +389,7 @@ A3a.vpl.patchJSBlocks = function () {
 					.map(function (p, i) {
 						return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
 					})
-					.join(" && ");
+					.join(" and ");
 				return {
 					clause: cond
 				};
@@ -399,7 +399,7 @@ A3a.vpl.patchJSBlocks = function () {
 					.map(function (p, i) {
 						return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
 					})
-					.join(" && ");
+					.join(" and ");
 				return {
 					clause: cond
 				};
@@ -411,25 +411,25 @@ A3a.vpl.patchJSBlocks = function () {
 					@return {string}
 				*/
 				function clause1(side, x) {
-					return x > 0 ? "this.get(\"motor." + side + "\") > 0.1"
-						: x < 0 ? "this.get(\"motor." + side + "\") > 0.1"
-						: "Math.abs(this.get(\"motor." + side + "\")) < 0.1";
+					return x > 0 ? "self.get(\"motor." + side + "\") > 0.1"
+						: x < 0 ? "self.get(\"motor." + side + "\") > 0.1"
+						: "abs(self.get(\"motor." + side + "\")) < 0.1";
 				}
 
 				return {
 					clause:
-						clause1("left", block.param[0]) + " && " +
+						clause1("left", block.param[0]) + " and " +
 							clause1("right", block.param[1])
 				};
 			},
 			"motor": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputsJS
+						A3a.vpl.BlockTemplate.initOutputsPython
 					],
 					statement:
-						"this.set(\"motor.left\", " + toFixed2(block.param[0]) + ");\n" +
-						"this.set(\"motor.right\", " + toFixed2(block.param[1]) + ");\n"
+						"self.set(\"motor.left\", " + toFixed2(block.param[0]) + ")\n" +
+						"self.set(\"motor.right\", " + toFixed2(block.param[1]) + ")\n"
 				};
 			},
 			"move": function (block) {
@@ -439,107 +439,107 @@ A3a.vpl.patchJSBlocks = function () {
 				var spt = 0.05;
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputsJS
+						A3a.vpl.BlockTemplate.initOutputsPython
 					],
 					statement:
-						"this.set(\"motor.left\", " +
-							toFixed2([0, sp, -sp, sp-spt, sp+spt, -sp, sp][block.param[0]]) + ");\n" +
-						"this.set(\"motor.right\", " +
-							toFixed2([0, sp, -sp, sp+spt, sp-spt, sp, -sp][block.param[0]]) + ");\n"
+						"self.set(\"motor.left\", " +
+							toFixed2([0, sp, -sp, sp-spt, sp+spt, -sp, sp][block.param[0]]) + ")\n" +
+						"self.set(\"motor.right\", " +
+							toFixed2([0, sp, -sp, sp+spt, sp-spt, sp, -sp][block.param[0]]) + ")\n"
 				};
 			},
 			"top color": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputsJS
+						A3a.vpl.BlockTemplate.initOutputsPython
 					],
 					statement:
-						"this.set(\"leds.top\", [" +
+						"self.set(\"leds.top\", [" +
 						block.param.map(toFixed2).join(", ") +
-						"]);\n"
+						"])\n"
 				};
 			},
 			"top color 8": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputsJS
+						A3a.vpl.BlockTemplate.initOutputsPython
 					],
 					statement:
-						"this.set(\"leds.top\", [" +
+						"self.set(\"leds.top\", [" +
 						block.param.map(function (x) { return x.toString(10); }).join(", ") +
-						"]);\n"
+						"])\n"
 				};
 			},
 			"bottom color": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputsJS
+						A3a.vpl.BlockTemplate.initOutputsPython
 					],
 					statement:
-						"this.set(\"leds.bottom.left\", [" +
+						"self.set(\"leds.bottom.left\", [" +
 						block.param.map(toFixed2).join(", ") +
-						"]);\n" +
-						"this.set(\"leds.bottom.right\", [" +
+						"])\n" +
+						"self.set(\"leds.bottom.right\", [" +
 						block.param.map(toFixed2).join(", ") +
-						"]);\n"
+						"])\n"
 				};
 			},
 			"bottom-left color": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputsJS
+						A3a.vpl.BlockTemplate.initOutputsPython
 					],
 					statement:
-						"this.set(\"leds.bottom.left\", [" +
+						"self.set(\"leds.bottom.left\", [" +
 						block.param.map(toFixed2).join(", ") +
-						"]);\n"
+						"])\n"
 				};
 			},
 			"bottom-right color": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputsJS
+						A3a.vpl.BlockTemplate.initOutputsPython
 					],
 					statement:
-						"this.set(\"leds.bottom.right\", [" +
+						"self.set(\"leds.bottom.right\", [" +
 						block.param.map(toFixed2).join(", ") +
-						"]);\n"
+						"])\n"
 				};
 			},
 			"bottom color 8": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputsJS
+						A3a.vpl.BlockTemplate.initOutputsPython
 					],
 					statement:
-						"this.set(\"leds.bottom.left\", [" +
+						"self.set(\"leds.bottom.left\", [" +
 						block.param.map(function (x) { return x.toString(10); }).join(", ") +
-						"]);\n" +
-						"this.set(\"leds.bottom.right\", [" +
+						"])\n" +
+						"self.set(\"leds.bottom.right\", [" +
 						block.param.map(function (x) { return x.toString(10); }).join(", ") +
-						"]);\n"
+						"])\n"
 				};
 			},
 			"bottom-left color 8": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputsJS
+						A3a.vpl.BlockTemplate.initOutputsPython
 					],
 					statement:
-						"this.set(\"leds.bottom.left\", [" +
+						"self.set(\"leds.bottom.left\", [" +
 						block.param.map(function (x) { return x.toString(10); }).join(", ") +
-						"]);\n"
+						"])\n"
 				};
 			},
 			"bottom-right color 8": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initOutputsJS
+						A3a.vpl.BlockTemplate.initOutputsPython
 					],
 					statement:
-						"this.set(\"leds.bottom.right\", [" +
+						"self.set(\"leds.bottom.right\", [" +
 						block.param.map(function (x) { return x.toString(10); }).join(", ") +
-						"]);\n"
+						"])\n"
 				};
 			},
 			"notes": function (block) {
@@ -558,33 +558,33 @@ A3a.vpl.patchJSBlocks = function () {
 				}
 				return {
 					initCodeExec: [
-						"// init notes\n" +
-						"this.set(\"sound\", {});\n",
-						A3a.vpl.BlockTemplate.initOutputsJS
+						"# init notes\n" +
+						"self.set(\"sound\", {})\n",
+						A3a.vpl.BlockTemplate.initOutputsPython
 					],
 					statement:
-						"this.set(\"sound\", {\"f\": [" + notes.join(", ") + "], \"d\": [" + durations.join(", ") + "]});\n"
+						"self.set(\"sound\", {\"f\": [" + notes.join(", ") + "], \"d\": [" + durations.join(", ") + "]})\n"
 				};
 			},
 			"set state": function (block) {
 				var code = "";
 				for (var i = 0; i < 4; i++) {
 					if (block.param[i]) {
-						code += "state[" + i + "] = " + (block.param[i] > 0 ? "true" : "false") + ";\n";
+						code += "state[" + i + "] = " + (block.param[i] > 0 ? "true" : "false") + "\n";
 					}
 				}
 				return {
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initStatesDeclJS
+						A3a.vpl.BlockTemplate.initStatesDeclPython
 					],
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initStatesInitJS
+						A3a.vpl.BlockTemplate.initStatesInitPython
 					],
 					statement: code.length > 0
-						? "var state = this.getClientState(\"state\");\n" +
+						? "state = self.getClientState(\"state\")\n" +
 							code +
-							"this.setClientState(\"state\", state);\n" +
-							"this.set(\"leds.circle\", [0,state[1]?1:0,0,state[3]?1:0,0,state[2]?1:0,0,state[0]?1:0]);\n"
+							"self.setClientState(\"state\", state)\n" +
+							"self.set(\"leds.circle\", [0, 1 if state[1] else 0, 0, 1 if state[3] else 0, 0, 1 if state[2] else 0, 0, 1 if state[0] else 0])\n"
 						: ""
 				};
 			},
@@ -592,21 +592,21 @@ A3a.vpl.patchJSBlocks = function () {
 				var code = "";
 				for (var i = 0; i < 4; i++) {
 					if (block.param[i]) {
-						code += "state[" + i + "] = !state[" + i + "];\n";
+						code += "state[" + i + "] = !state[" + i + "]\n";
 					}
 				}
 				return {
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initStatesDeclJS
+						A3a.vpl.BlockTemplate.initStatesDeclPython
 					],
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initStatesInitJS
+						A3a.vpl.BlockTemplate.initStatesInitPython
 					],
 					statement: code.length > 0
-						? "var state = this.getClientState(\"state\");\n" +
+						? "state = self.getClientState(\"state\")\n" +
 							code +
-							"this.setClientState(\"state\", state);\n" +
-							"this.set(\"leds.circle\", [0,state[1]?1:0,0,state[3]?1:0,0,state[2]?1:0,0,state[0]?1:0]);\n"
+							"self.setClientState(\"state\", state)\n" +
+							"self.set(\"leds.circle\", [0, 1 if state[1] else 0, 0, 1 if state[3] else 0, 0, 1 if state[2] else 0, 0, 1 if state[0] else 0])\n"
 						: ""
 				};
 			},
@@ -618,34 +618,34 @@ A3a.vpl.patchJSBlocks = function () {
 				}
 				return {
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initState8DeclJS
+						A3a.vpl.BlockTemplate.initState8DeclPython
 					],
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initState8InitJS
+						A3a.vpl.BlockTemplate.initState8InitPython
 					],
 					statement:
-						"this.setClientState(\"state8\", " + v.toString(10) + ");\n" +
-						"this.set(\"leds.circle\", [" + a.join(", ") + "]);\n",
+						"self.setClientState(\"state8\", " + v.toString(10) + ")\n" +
+						"self.set(\"leds.circle\", [" + a.join(", ") + "])\n",
 					statementWithoutInit:
-						"this.set(\"leds.circle\", [" + a.join(", ") + "]);\n"
+						"self.set(\"leds.circle\", [" + a.join(", ") + "])\n"
 				};
 			},
 			"change state 8": function (block) {
 				return {
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initState8DeclJS
+						A3a.vpl.BlockTemplate.initState8DeclPython
 					],
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initState8InitJS
+						A3a.vpl.BlockTemplate.initState8InitPython
 					],
-					statement: "var state8 = (this.getClientState(\"state8\") + " +
+					statement: "state8 = (self.getClientState(\"state8\") + " +
 							(block.param[0] > 0 ? "1" : "7") +
-							") % 8;\n" +
-							"this.setClientState(\"state8\", state8);\n" +
-							"this.set(\"leds.circle\", [state8==0?1:0, state8==1?1:0, state8==2?1:0, state8==3?1:0, " +
-								"state8==4?1:0, state8==5?1:0, state8==6?1:0, state8==7?1:0]);\n",
+							") % 8\n" +
+							"self.setClientState(\"state8\", state8)\n" +
+							"self.set(\"leds.circle\", [1 if state8 == 0 else 0, 1 if state8 == 1 else 0, 1 if state8 == 2 else 0, 1 if state8 == 3 else 0, " +
+								"1 if state8 == 4 else 0, 1 if state8 == 5 else 0, 1 if state8 == 6 else 0, 1 if state8 == 7 else 0])\n",
 					statementWithoutInit:
-						"this.set(\"leds.circle\", [" + (block.param[0] === 0 ? "1" : "0") +
+						"self.set(\"leds.circle\", [" + (block.param[0] === 0 ? "1" : "0") +
 							"," + (block.param[0] === 1 ? "1" : "0") +
 							"," + (block.param[0] === 2 ? "1" : "0") +
 							"," + (block.param[0] === 3 ? "1" : "0") +
@@ -653,54 +653,54 @@ A3a.vpl.patchJSBlocks = function () {
 							"," + (block.param[0] === 5 ? "1" : "0") +
 							"," + (block.param[0] === 6 ? "1" : "0") +
 							"," + (block.param[0] === 7 ? "1" : "0") +
-							"]);\n"
+							"])\n"
 				};
 			},
 			"set counter": function (block) {
 				return {
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initCounterDeclJS
+						A3a.vpl.BlockTemplate.initCounterDeclPython
 					],
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.initCounterInitJS
+						A3a.vpl.BlockTemplate.initCounterInitPython
 					],
 					statement:
-						"var counter = " +
+						"counter = " +
 							(block.param[0] === 0 ? "0" :
 								block.param[0] > 0
-									? "Math.min(this.getClientState(\"counter\") + 1, 255)"
-									: "Math.max(this.getClientState(\"counter\") - 1, 0)") +
-						";\n" +
-						"this.setClientState(\"counter\", counter);\n" +
-						"this.set(\"leds.circle\", [counter&1?1:0,counter&2?1:0,counter&4?1:0,counter&8?1:0,\n" +
-						"counter&16?1:0,counter&32?1:0,counter&64?1:0,counter&128?1:0]);\n"
+									? "min(self.getClientState(\"counter\") + 1, 255)"
+									: "max(self.getClientState(\"counter\") - 1, 0)") +
+						"\n" +
+						"self.setClientState(\"counter\", counter)\n" +
+						"self.set(\"leds.circle\", [1 if counter & 1 else 0, 1 if counter & 2 else 0, 1 if counter & 4 else 0, 1 if counter & 8 else 0, " +
+						"1 if counter & 16 else 0, 1 if counter & 32 else 0, 1 if counter & 64 else 0, 1 if counter & 128 else 0])\n"
 				};
 			},
 			"set timer": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.resetTimerJS
+						A3a.vpl.BlockTemplate.resetTimerPython
 					],
-					statement: "this.setTimer(0, " + block.param[0].toFixed(3) + ");\n"
+					statement: "self.setTimer(0, " + block.param[0].toFixed(3) + ")\n"
 				};
 			},
 			"set timer log": function (block) {
 				return {
 					initCodeExec: [
-						A3a.vpl.BlockTemplate.resetTimerJS
+						A3a.vpl.BlockTemplate.resetTimerPython
 					],
-					statement: "this.setTimer(0, " + block.param[0].toFixed(3) + ");\n"
+					statement: "self.setTimer(0, " + block.param[0].toFixed(3) + ")\n"
 				};
 			},
 			"picture comment": function (block) {
 				return {};
 			}
 		};
-		for (var name in libPatchJS) {
-			if (libPatchJS.hasOwnProperty(name)) {
+		for (var name in libPatchPython) {
+			if (libPatchPython.hasOwnProperty(name)) {
 				var blockTemplate = A3a.vpl.BlockTemplate.findByName(name);
 				if (blockTemplate) {
-					blockTemplate.genCode["js"] = libPatchJS[name];
+					blockTemplate.genCode["python"] = libPatchPython[name];
 				}
 			}
 		}

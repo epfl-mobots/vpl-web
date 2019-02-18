@@ -129,7 +129,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.stroke();
 		},
 		"vpl:upload": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
 			ctx.fillRect(0, 0,
@@ -170,7 +170,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.stroke();
 		},
 		"vpl:text": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
 			ctx.fillRect(0, 0,
@@ -199,19 +199,19 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				ctx.lineTo(dims.controlSize * 0.7,
 					dims.controlSize * (0.2 + y));
 			}
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
 		},
 		"vpl:advanced": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: isSelected
 					? dims.controlActiveColor
 					: dims.controlColor;
             ctx.fillRect(0, 0,
                 dims.controlSize, dims.controlSize);
-            ctx.fillStyle = "white";
+            ctx.fillStyle = isEnabled ? "white" : "#777";
             for (var i = 0; i < 4; i++) {
                 for (var j = 0; j < 5; j++) {
                     ctx.fillRect(dims.controlSize * 0.1 * (1 + i) +
@@ -221,7 +221,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
                         dims.controlSize * 0.07);
                 }
             }
-            ctx.fillStyle = isSelected || isPressed ? "white" : "#44a";
+            ctx.fillStyle = !isEnabled ? "#777" : isSelected || isPressed ? "white" : "#44a";
             ctx.fillRect(dims.controlSize * 0.1,
                 dims.controlSize * 0.8,
                 dims.controlSize * 0.8,
@@ -256,7 +256,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.1);
 		},
 		"vpl:stop": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
 			ctx.fillRect(0, 0,
@@ -268,7 +268,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.fill();
 		},
 		"vpl:sim": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
 			ctx.fillRect(0, 0,
@@ -293,12 +293,12 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				-0.5 * dims.controlSize, -0.25 * dims.controlSize);
 			ctx.lineTo(-0.5 * dims.controlSize, 0.5 * dims.controlSize);
 			ctx.closePath();
-			ctx.fillStyle = "white";
+			ctx.fillStyle = isEnabled ? "white" : "#777";
 			ctx.fill();
 			ctx.beginPath();
 			ctx.arc(dims.controlSize, 0.5 * dims.controlSize, 1.4 * dims.controlSize,
 				-3.2, -3.8, true);
-			ctx.strokeStyle = "#999";
+			ctx.strokeStyle = isPressed && isEnabled ? "white" : "#999";
 			ctx.lineWidth = 0.2 * dims.controlSize;
 			ctx.stroke();
 			ctx.beginPath();
@@ -309,12 +309,12 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.restore();
 		},
 		"vpl:duplicate": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
-            ctx.fillStyle = isPressed
+            ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
             ctx.fillRect(0, 0,
                 dims.controlSize, dims.controlSize);
-            ctx.strokeStyle = "white";
+            ctx.strokeStyle = isEnabled ? "white" : "#777";
             ctx.lineWidth = dims.blockLineWidth;
             ctx.strokeRect(dims.controlSize * 0.3,
                 dims.controlSize * 0.3,
@@ -324,12 +324,12 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
                 dims.controlSize * 0.4, dims.controlSize * 0.15);
         },
 		"vpl:disable": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
 			ctx.fillRect(0, 0,
 				dims.controlSize, dims.controlSize);
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.strokeRect(dims.controlSize * 0.3,
 				dims.controlSize * 0.3,
@@ -342,13 +342,13 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.stroke();
 		},
 		"vpl:lock": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
 			ctx.fillRect(0, 0,
 				dims.controlSize, dims.controlSize);
-			ctx.strokeStyle = "white";
-			ctx.fillStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
+			ctx.fillStyle = isEnabled ? "white" : "#777";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.strokeRect(dims.controlSize * 0.3,
 				dims.controlSize * 0.3,
@@ -360,7 +360,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				"white");
 		},
 		"vpl:trashcan": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
 			ctx.fillRect(0, 0,
@@ -375,12 +375,12 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.lineTo(dims.controlSize * 0.75,
 				dims.controlSize * 0.2);
 			ctx.closePath();
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
 		},
 		"vpl:teacher-reset": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
-			ctx.fillStyle = isPressed ? "#d00" : "#a00";
+			ctx.fillStyle = isPressed && isEnabled ? "#d00" : "#a00";
 			ctx.fillRect(0, 0,
 				dims.controlSize, dims.controlSize);
 			ctx.beginPath();
@@ -401,20 +401,20 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.3);
 			ctx.lineTo(dims.controlSize * 0.75,
 				dims.controlSize * 0.3);
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#c66";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
-			ctx.fillStyle = "white";
+			ctx.fillStyle = isEnabled ? "white" : "#c66";
 			A3a.vpl.Canvas.drawHexagonalNut(ctx,
 				dims.controlSize * 0.63,
 				dims.controlSize * 0.7,
 				dims.controlSize * 0.2);
 		},
 		"vpl:teacher-save": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
-			ctx.fillStyle = isPressed ? "#d00" : "#a00";
+			ctx.fillStyle = isPressed && isEnabled ? "#d00" : "#a00";
 			ctx.fillRect(0, 0,
 				dims.controlSize, dims.controlSize);
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#c66";
 			ctx.beginPath();
 			ctx.moveTo(dims.controlSize * 0.25,
 				dims.controlSize * 0.2);
@@ -448,24 +448,24 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.lineTo(dims.controlSize * 0.9,
 				dims.controlSize * 0.7);
 			ctx.stroke();
-			ctx.fillStyle = "white";
+			ctx.fillStyle = isEnabled ? "white" : "#c66";
 			A3a.vpl.Canvas.drawHexagonalNut(ctx,
 				dims.controlSize * 0.46,
 				dims.controlSize * 0.45,
 				dims.controlSize * 0.2);
 		},
 		"vpl:teacher": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? isSelected ? "#f50" : "#d00"
-				: isSelected ? "#d10" : "#a00";
+				: isSelected && isEnabled ? "#d10" : "#a00";
 			ctx.fillRect(0, 0,
 				dims.controlSize, dims.controlSize);
-			ctx.fillStyle = "white";
+			ctx.fillStyle = isEnabled ? "white" : "#c66";
 			A3a.vpl.Canvas.drawHexagonalNut(ctx,
 				dims.controlSize * 0.5,
 				dims.controlSize * 0.4,
 				dims.controlSize * 0.27);
-			ctx.fillStyle = isSelected || isPressed ? "white" : "#c66";
+			ctx.fillStyle = (isSelected || isPressed) && isEnabled ? "white" : "#c66";
 			ctx.fillRect(dims.controlSize * 0.1,
 				dims.controlSize * 0.8,
 				dims.controlSize * 0.8,
@@ -477,7 +477,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		// "src:save": "vpl:save"
 		"src:vpl": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
 			ctx.save();
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
 			ctx.fillRect(0, 0,
@@ -503,7 +503,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.strokeStyle = isEnabled ? "white" : "#777";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
-			ctx.fillStyle = "#99a";
+			ctx.fillStyle = isPressed && isEnabled ? "white" : "#99a";
 			for (var y = 0.15; y < 0.6; y += 0.15) {
 				ctx.fillRect(dims.controlSize * 0.3,
 					dims.controlSize * (0.2 + y),
@@ -547,7 +547,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		},
 		"src:language": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
 			/** @const */
-			var languageAbbr = {"aseba": "Aa", "l2": "l2", "js": "js"};
+			var languageAbbr = {"aseba": "Aa", "l2": "l2", "js": "js", "python": "py"};
 			var s = dims.controlSize;
 			ctx.save();
 			ctx.fillStyle = !isEnabled
@@ -600,10 +600,10 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				ctx.moveTo(s * 0.55, s * (0.2 + 0.1 * i));
 				ctx.lineTo(s * 0.65, s * (0.2 + 0.1 * i));
 			}
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#777";;
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
-			ctx.fillStyle = isSelected || isPressed ? "white" : "#44a";
+			ctx.fillStyle = isEnabled && (isSelected || isPressed) ? "white" : "#44a";
             ctx.fillRect(dims.controlSize * 0.1,
                 dims.controlSize * 0.8,
                 dims.controlSize * 0.8,
@@ -670,14 +670,14 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		},
 		"sim:speedup": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
 			ctx.save();
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: isSelected
 					? dims.controlActiveColor
 					: dims.controlColor;
 			ctx.fillRect(0, 0,
 				dims.controlSize, dims.controlSize);
-			ctx.fillStyle = "white";
+			ctx.fillStyle = isEnabled ? "white" : "#777";
 			ctx.beginPath();
 			for (var i = 0; i < 2; i++) {
 				ctx.moveTo(dims.controlSize * (0.3 + 0.22 * i),
@@ -700,7 +700,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		},
 		"sim:noise": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, sim2d) {
 			ctx.save();
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: isSelected
 					? dims.controlActiveColor
@@ -722,7 +722,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				ctx.lineTo((0.1 + 0.8 / (noise.length - 1) * i) * dims.controlSize,
 					(0.4 + 0.1 * noise[i]) * dims.controlSize);
 			}
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
 			ctx.fillStyle = isSelected || isPressed ? "white" : "#777";
@@ -735,13 +735,13 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		"sim:pen": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, sim2d) {
 			var s = dims.controlSize;
 			ctx.save();
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: isSelected
 					? dims.controlActiveColor
 					: dims.controlColor;
 			ctx.fillRect(0, 0, s, s);
-			ctx.fillStyle = isSelected || isPressed ? "white" : "#777";
+			ctx.fillStyle = isSelected || isPressed && isEnabled ? "white" : "#777";
 			ctx.fillRect(s * 0.1, s * 0.8, s * 0.8, s * 0.1);
 			ctx.translate(s * 0.5, s * (0.4 + (isSelected ? 0.13 : 0)));
 			var th = 0.1;
@@ -751,7 +751,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.moveTo(-th * ln1 / ln * s, (ln - ln1) * s);
 			ctx.lineTo(0, ln * s);
 			ctx.lineTo(th * ln1 / ln * s, (ln - ln1) * s);
-			ctx.fillStyle = "white";
+			ctx.fillStyle = isEnabled ? "white" : "#777";
 			ctx.fill();
 			ctx.beginPath();
 			ctx.moveTo(-th * s, -ln * s);
@@ -759,7 +759,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.lineTo(0, ln * s);
 			ctx.lineTo(th * s, 0);
 			ctx.lineTo(th * s, -ln * s);
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
 			ctx.restore();
@@ -767,16 +767,16 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		"sim:clear": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, sim2d) {
 			var s = dims.controlSize;
 			ctx.save();
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
 			ctx.fillRect(0, 0, s, s);
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.strokeRect(0.15 * s, 0.25 * s, 0.7 * s, 0.5 * s);
 			ctx.translate(0.5 * s, 0.4 * s);
 			ctx.rotate(0.4);
-			ctx.fillStyle = "white";
+			ctx.fillStyle = isEnabled ? "white" : "#777";
 			ctx.fillRect(0, 0, 0.3 * s, 0.2 * s);
 			ctx.restore();
 		},
@@ -784,14 +784,14 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			var s = dims.controlSize;
 			var lineWidth = dims.blockLineWidth;
 			ctx.save();
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
 			ctx.fillRect(0, 0,
 				dims.controlSize, dims.controlSize);
 			ctx.lineWidth = lineWidth;
-			ctx.strokeStyle = "white";
-			ctx.fillStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
+			ctx.fillStyle = isEnabled ? "white" : "#777";
 			var i0 = ["ground", "height", "obstacles"].indexOf(state);
 			for (var i = 0; i < 3; i++) {
 				var phi = 2 * (i + 0.25) / 3 * Math.PI;
@@ -827,7 +827,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 
 			var s = dims.controlSize;
 			ctx.save();
-			ctx.fillStyle = isPressed
+			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: isSelected
 					? dims.controlActiveColor
@@ -837,7 +837,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.fillStyle = isSelected || isPressed ? "white" : "#777";
 			ctx.fillRect(s * 0.1, s * 0.8, s * 0.8, s * 0.1);
 			ctx.lineWidth = dims.blockLineWidth;
-			ctx.strokeStyle = "white";
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
 			ctx.strokeRect(0.15 * s, 0.15 * s, 0.7 * s, 0.5 * s);
 			switch (state) {
 			case "ground":
@@ -900,10 +900,9 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 /** Get button bounds
 	@param {string} id
 	@param {A3a.vpl.Canvas.dims} dims
-	@param {Object=} obj
 	@return {A3a.vpl.ControlBar.Bounds}
 */
-A3a.vpl.Commands.getButtonBoundsJS = function (id, dims, obj) {
+A3a.vpl.Commands.getButtonBoundsJS = function (id, dims) {
 	// fixed size
 	return {
 		xmin: 0,

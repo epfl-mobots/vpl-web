@@ -1,135 +1,155 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
 */
 
 /** Install commands for program
-	@param {A3a.vpl.Commands} commands
-	@param {A3a.vpl.Canvas} canvas
-	@param {A3a.vpl.VPLSourceEditor} editor
-	@param {A3a.vpl.RunGlue} runglue
 	@return {void}
 */
-A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, runglue) {
-	commands.add("vpl:new", {
-		action: function (program, modifier) {
-			program.new();
+A3a.vpl.Application.prototype.addVPLCommands = function () {
+	this.commands.add("vpl:new", {
+		action: function (app, modifier) {
+			app.program.new();
+		},
+		isEnabled: function (app) {
+			return !app.program.noVPL && !app.program.isEmpty();
 		},
 		object: this
 	});
-	commands.add("vpl:save", {
-		action: function (program, modifier) {
-			// var aesl = program.exportAsAESLFile();
+	this.commands.add("vpl:save", {
+		action: function (app, modifier) {
+			// var aesl = app.program.exportAsAESLFile();
 			// A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
-			var json = program.exportToJSON();
+			var json = app.program.exportToJSON();
 			A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
 		},
-		isEnabled: function (program) {
-			return !program.isEmpty();
+		isEnabled: function (app) {
+			return !app.program.noVPL && !app.program.isEmpty();
 		},
 		object: this
 	});
-	commands.add("vpl:upload", {
-		action: function (program, modifier) {
-			var aesl = program.exportAsAESLFile();
+	this.commands.add("vpl:upload", {
+		action: function (app, modifier) {
+			var aesl = app.program.exportAsAESLFile();
 			// ...
 		},
-		isEnabled: function (program) {
-			return !program.isEmpty();
+		isEnabled: function (app) {
+			return !app.program.noVPL && !app.program.isEmpty();
 		},
 		object: this,
-		isAvailable: function (program) {
+		isAvailable: function (app) {
 			return window["vplStorageSetFunction"] != null;
 		}
 	});
-	commands.add("vpl:text", {
-		action: function (program, modifier) {
-			program.setView("src");
+	this.commands.add("vpl:text", {
+		action: function (app, modifier) {
+			app.setView(["src"], {fromView: "vpl"});
 		},
-		doDrop: function (program, draggedItem) {
+		isEnabled: function (app) {
+			return !app.program.noVPL;
+		},
+		doDrop: function (app, draggedItem) {
 			if (draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.eventHandlerContainer) {
 				var block = /** @type {A3a.vpl.Block} */(draggedItem.data);
-				var span = program.getCodeLocation(program.currentLanguage, block);
+				var span = app.program.getCodeLocation(app.program.currentLanguage, block);
 				if (span) {
-					program.setView("src");
-					editor.selectRange(span.begin, span.end);
+					app.setView(["src"]);
+					app.editor.selectRange(span.begin, span.end);
 				}
 			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
 				var eventHandler = /** @type {A3a.vpl.EventHandler} */(draggedItem.data);
-				var span = program.getCodeLocation(program.currentLanguage, eventHandler);
+				var span = app.program.getCodeLocation(app.program.currentLanguage, eventHandler);
 				if (span) {
-					program.setView("src");
-					editor.selectRange(span.begin, span.end);
+					app.setView(["src"]);
+					app.editor.selectRange(span.begin, span.end);
 				}
 			}
 		},
-		canDrop: function (program, draggedItem) {
+		canDrop: function (app, draggedItem) {
 			return draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.eventHandlerContainer != null ||
 				draggedItem.data instanceof A3a.vpl.EventHandler;
 		},
-		object: this
+		object: this,
+		isAvailable: function (app) {
+			return app.views.indexOf("src") < 0;
+		}
 	});
-	commands.add("vpl:advanced", {
-		action: function (program, modifier) {
-			program.setMode(program.mode === A3a.vpl.mode.basic
+	this.commands.add("vpl:advanced", {
+		action: function (app, modifier) {
+			app.program.setMode(app.program.mode === A3a.vpl.mode.basic
 				? A3a.vpl.mode.advanced
 				: A3a.vpl.mode.basic);
 		},
-		isSelected: function (program) {
-			return program.mode === A3a.vpl.mode.advanced;
+		isEnabled: function (app) {
+			return !app.program.noVPL;
+		},
+		isSelected: function (app) {
+			return app.program.mode === A3a.vpl.mode.advanced;
 		},
 		object: this
 	});
-	commands.add("vpl:undo", {
-		action: function (program, modifier) {
-			program.undo(function () { program.renderToCanvas(canvas); });
+	this.commands.add("vpl:undo", {
+		action: function (app, modifier) {
+			app.program.undo(function () { app.renderProgramToCanvas(); });
 		},
-		isEnabled: function (program) {
-			return program.undoState.canUndo();
-		},
-		object: this
-	});
-	commands.add("vpl:redo", {
-		action: function (program, modifier) {
-			program.redo(function () { program.renderToCanvas(canvas); });
-		},
-		isEnabled: function (program) {
-			return program.undoState.canRedo();
+		isEnabled: function (app) {
+			return !app.program.noVPL && app.program.undoState.canUndo();
 		},
 		object: this
 	});
-	commands.add("vpl:run", {
-		action: function (program, modifier) {
-			var code = program.getCode(program.currentLanguage);
-			runglue.run(code, program.currentLanguage);
-			program.uploaded = true;
+	this.commands.add("vpl:redo", {
+		action: function (app, modifier) {
+			app.program.redo(function () { app.renderProgramToCanvas(); });
 		},
-		isEnabled: function (program) {
-			return runglue.isEnabled(program.currentLanguage);
+		isEnabled: function (app) {
+			return !app.program.noVPL && app.program.undoState.canRedo();
 		},
-		isSelected: function (program) {
-			return program.uploaded;
+		object: this
+	});
+	this.commands.add("vpl:run", {
+		action: function (app, modifier) {
+			var code = app.program.getCode(app.program.currentLanguage);
+			app.runGlue.run(code, app.program.currentLanguage);
+			app.program.uploaded = true;
+			app.program.notUploadedYet = false;
 		},
-		doDrop: function (program, draggedItem) {
+		isEnabled: function (app) {
+			return !app.program.noVPL && app.runGlue.isEnabled(app.program.currentLanguage);
+		},
+		isSelected: function (app) {
+			return app.program.uploaded;
+		},
+		getState: function (app) {
+			if (app.program.program.length === 0) {
+				return "empty";
+			} else if (app.program.uploaded) {
+				return "running";
+			} else if (app.program.notUploadedYet) {
+				return "canLoad";
+			} else {
+				return "canReload";
+			}
+		},
+		doDrop: function (app, draggedItem) {
 			if (draggedItem.data instanceof A3a.vpl.Block) {
 				if (draggedItem.data.eventHandlerContainer) {
 					// action from an event handler: just send it
-					var code = program.codeForBlock(/** @type {A3a.vpl.Block} */(draggedItem.data), program.currentLanguage);
-					runglue.run(code, program.currentLanguage);
+					var code = app.program.codeForBlock(/** @type {A3a.vpl.Block} */(draggedItem.data), app.program.currentLanguage);
+					app.runGlue.run(code, app.program.currentLanguage);
 				} else {
 					// action from the templates: display in a zoomed state to set the parameters
 					// (disabled by canDrop below)
-					canvas.zoomedItemProxy = canvas.makeZoomedClone(draggedItem);
+					app.vplCanvas.zoomedItemProxy = app.vplCanvas.makeZoomedClone(draggedItem);
 				}
 			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
-				var code = program.codeForActions(/** @type {A3a.vpl.EventHandler} */(draggedItem.data), program.currentLanguage);
-				runglue.run(code, program.currentLanguage);
+				var code = app.program.codeForActions(/** @type {A3a.vpl.EventHandler} */(draggedItem.data), app.program.currentLanguage);
+				app.runGlue.run(code, app.program.currentLanguage);
 			}
 		},
-		canDrop: function (program, draggedItem) {
-			return runglue.isEnabled(program.currentLanguage) &&
+		canDrop: function (app, draggedItem) {
+			return app.runGlue.isEnabled(app.program.currentLanguage) &&
 				draggedItem.data instanceof A3a.vpl.EventHandler &&
 						/** @type {A3a.vpl.EventHandler} */(draggedItem.data).hasBlockOfType(A3a.vpl.blockType.action) ||
 				draggedItem.data instanceof A3a.vpl.Block &&
@@ -138,62 +158,72 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 						A3a.vpl.blockType.action;
 		},
 		object: this,
-		isAvailable: function (program) {
-			return runglue != null;
+		isAvailable: function (app) {
+			return app.runGlue != null;
 		}
 	});
-	commands.add("vpl:stop", {
-		action: function (program, modifier) {
-			runglue.stop(program.currentLanguage);
-			program.uploaded = false;
+	this.commands.add("vpl:stop", {
+		action: function (app, modifier) {
+			app.runGlue.stop(app.program.currentLanguage);
+			app.program.uploaded = false;
 		},
-		isEnabled: function (program) {
-			return runglue.isEnabled(program.currentLanguage);
-		},
-		object: this,
-		isAvailable: function (program) {
-			return runglue != null;
-		}
-	});
-	commands.add("vpl:sim", {
-		action: function (program, modifier) {
-			program.setView("sim");
+		isEnabled: function (app) {
+			return !app.program.noVPL && app.runGlue.isEnabled(app.program.currentLanguage);
 		},
 		object: this,
-		isAvailable: function (program) {
-			return runglue != null && window["vplSim"] != null;
+		isAvailable: function (app) {
+			return app.runGlue != null;
 		}
 	});
-	commands.add("vpl:duplicate", {
-		doDrop: function (program, draggedItem) {
+	this.commands.add("vpl:sim", {
+		action: function (app, modifier) {
+			app.setView(["sim"], {fromView: "vpl"});
+		},
+		isEnabled: function (app) {
+			return !app.program.noVPL;
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.runGlue != null && app.sim2d != null &&
+				app.views.indexOf("sim") < 0;
+		}
+	});
+	this.commands.add("vpl:duplicate", {
+		isEnabled: function (app) {
+			return !app.program.noVPL;
+		},
+		doDrop: function (app, draggedItem) {
 			// duplicate event handler
-			var i = program.program.indexOf(draggedItem.data);
+			var i = app.program.program.indexOf(draggedItem.data);
 			if (i >= 0) {
-				program.saveStateBeforeChange();
-				program.program.splice(i + 1, 0, draggedItem.data.copy());
-				canvas.onUpdate && canvas.onUpdate();
+				app.program.saveStateBeforeChange();
+				app.program.program.splice(i + 1, 0, draggedItem.data.copy());
+				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 			}
 		},
-		canDrop: function (program, draggedItem) {
+		canDrop: function (app, draggedItem) {
             return draggedItem.data instanceof A3a.vpl.EventHandler &&
 				!/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty();
 		},
 		object: this
 	});
-	commands.add("vpl:disable", {
-		doDrop: function (program, draggedItem) {
+	this.commands.add("vpl:disable", {
+		isEnabled: function (app) {
+			return !app.program.noVPL;
+		},
+		doDrop: function (app, draggedItem) {
 			// disable or reenable block or event handler
 			if (draggedItem.data instanceof A3a.vpl.Block) {
-				program.saveStateBeforeChange();
+				app.program.saveStateBeforeChange();
 				draggedItem.data.disabled = !draggedItem.data.disabled;
-				canvas.onUpdate && canvas.onUpdate();
+				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
-				program.saveStateBeforeChange();
+				app.program.saveStateBeforeChange();
 				draggedItem.data.toggleDisable();
-				canvas.onUpdate && canvas.onUpdate();
+				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 			}
 		},
-		canDrop: function (program, draggedItem) {
+		canDrop: function (app, draggedItem) {
 			// accept non-empty event handler or block in event handler
 			return draggedItem.data instanceof A3a.vpl.EventHandler
 				? !/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty()
@@ -202,20 +232,23 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 		},
 		object: this
 	});
-	commands.add("vpl:lock", {
-		doDrop: function (program, draggedItem) {
+	this.commands.add("vpl:lock", {
+		isEnabled: function (app) {
+			return !app.program.noVPL;
+		},
+		doDrop: function (app, draggedItem) {
 			// lock or unlock block or event handler
 			if (draggedItem.data instanceof A3a.vpl.Block) {
-				program.saveStateBeforeChange();
+				app.program.saveStateBeforeChange();
 				draggedItem.data.locked = !draggedItem.data.locked;
-				canvas.onUpdate && canvas.onUpdate();
+				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
-				program.saveStateBeforeChange();
+				app.program.saveStateBeforeChange();
 				draggedItem.data.locked = !draggedItem.data.locked;
-				canvas.onUpdate && canvas.onUpdate();
+				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 			}
 		},
-		canDrop: function (program, draggedItem) {
+		canDrop: function (app, draggedItem) {
 			// accept non-empty event handler or block in event handler
 			return draggedItem.data instanceof A3a.vpl.EventHandler
 				? !/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty()
@@ -223,30 +256,33 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 					draggedItem.data.eventHandlerContainer !== null;
 		},
 		object: this,
-		isAvailable: function (program) {
+		isAvailable: function (app) {
 			return this.experimentalFeatures && this.teacherRole;
 		}
 	});
-	commands.add("vpl:trashcan", {
-		doDrop: function (program, draggedItem) {
+	this.commands.add("vpl:trashcan", {
+		isEnabled: function (app) {
+			return !app.program.noVPL;
+		},
+		doDrop: function (app, draggedItem) {
 			// remove block or event handler
 			if (draggedItem.data instanceof A3a.vpl.Block) {
 				if (draggedItem.data.eventHandlerContainer !== null) {
-					program.saveStateBeforeChange();
+					app.program.saveStateBeforeChange();
 					draggedItem.data.eventHandlerContainer.removeBlock(
 						/** @type {A3a.vpl.positionInContainer} */(draggedItem.data.positionInContainer));
-					canvas.onUpdate && canvas.onUpdate();
+					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 				}
 			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
-				var i = program.program.indexOf(draggedItem.data);
+				var i = app.program.program.indexOf(draggedItem.data);
 				if (i >= 0) {
-					program.saveStateBeforeChange();
-					program.program.splice(i, 1);
-					canvas.onUpdate && canvas.onUpdate();
+					app.program.saveStateBeforeChange();
+					app.program.program.splice(i, 1);
+					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 				}
 			}
 		},
-		canDrop: function (program, draggedItem) {
+		canDrop: function (app, draggedItem) {
 			// accept non-empty unlocked event handler or block in event handler
 			return draggedItem.data instanceof A3a.vpl.Block
 				? draggedItem.data.eventHandlerContainer !== null && !draggedItem.data.locked
@@ -256,46 +292,55 @@ A3a.vpl.Program.prototype.addVPLCommands = function (commands, canvas, editor, r
 		},
 		object: this
 	});
-	commands.add("vpl:teacher", {
-		action: function (program, modifier) {
-			program.uiConfig.customizationMode = !program.uiConfig.customizationMode;
+	this.commands.add("vpl:teacher", {
+		action: function (app, modifier) {
+			app.program.uiConfig.customizationMode = !app.program.uiConfig.customizationMode;
 		},
-		isSelected: function (program) {
-			return program.uiConfig.customizationMode;
+		isEnabled: function (app) {
+			return !app.program.noVPL;
+		},
+		isSelected: function (app) {
+			return app.program.uiConfig.customizationMode;
 		},
 		object: this,
 		keep: true,
-		isAvailable: function (program) {
-			return program.teacherRole;
+		isAvailable: function (app) {
+			return app.program.teacherRole;
 		}
 	});
-	commands.add("vpl:teacher-reset", {
-		action: function (program, modifier) {
+	this.commands.add("vpl:teacher-reset", {
+		action: function (app, modifier) {
 			if (modifier) {
-				A3a.vpl.Program.enableAllBlocks(program.mode);
-				program.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
-				program.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
+				A3a.vpl.Program.enableAllBlocks(app.program.mode);
+				app.program.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
+				app.program.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
 			} else {
 				A3a.vpl.Program.resetBlockLib();
-				program.new();
-				program.resetUI();
+				app.program.new();
+				app.program.resetUI();
 			}
 		},
-		object: this,
-		keep: true,
-		isAvailable: function (program) {
-			return program.teacherRole && program.uiConfig.customizationMode;
-		}
-	});
-	commands.add("vpl:teacher-save", {
-		action: function (program, modifier) {
-			var json = program.exportToJSON(true);
-			A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
+		isEnabled: function (app) {
+			return !app.program.noVPL;
 		},
 		object: this,
 		keep: true,
-		isAvailable: function (program) {
-			return program.teacherRole && program.uiConfig.customizationMode;
+		isAvailable: function (app) {
+			return app.program.teacherRole && app.program.uiConfig.customizationMode;
+		}
+	});
+	this.commands.add("vpl:teacher-save", {
+		action: function (app, modifier) {
+			var json = app.program.exportToJSON(true);
+			A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
+		},
+		isEnabled: function (app) {
+			return !app.program.noVPL;
+		},
+		object: this,
+		keep: true,
+		isAvailable: function (app) {
+			return app.program.teacherRole && app.program.uiConfig.customizationMode;
 		}
 	});
 };
