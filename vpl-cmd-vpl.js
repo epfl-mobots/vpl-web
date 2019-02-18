@@ -30,6 +30,15 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this
 	});
+	this.commands.add("vpl:load", {
+		action: function (app, modifier) {
+			// not implemented yet
+		},
+		isEnabled: function (app) {
+			return !app.program.noVPL;
+		},
+		object: this
+	});
 	this.commands.add("vpl:upload", {
 		action: function (app, modifier) {
 			var aesl = app.program.exportAsAESLFile();
