@@ -647,12 +647,12 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 */
 A3a.vpl.Canvas.prototype.resize = function (width, height) {
 	var backingScale = "devicePixelRatio" in window ? window["devicePixelRatio"] : 1;
-	this.canvasWidth = this.canvas.width / backingScale;
-	this.canvasHeight = this.canvas.height / backingScale;
-	this.width = this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin);
-	this.height = this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin);
 	this.canvas.width  = width * backingScale;
 	this.canvas.height = height * backingScale;
+	this.canvasWidth = width;
+	this.canvasHeight = height;
+	this.width = this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin);
+	this.height = this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin);
 	this.ctx = this.canvas.getContext("2d");
 	if (backingScale != 1) {
 		this.ctx.scale(backingScale, backingScale);

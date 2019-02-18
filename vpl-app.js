@@ -89,7 +89,7 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 		this.simCanvas.show();
 	}
 
-	this.layout();
+	this.layout(window.innerWidth < window.innerHeight);
 
 	for (var i = 0; i < views.length; i++) {
 		switch (views[i]) {
@@ -106,7 +106,7 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 		case "src":
 			this.editor.lockWithVPL(!(options && (options.noVPL || options.unlocked)));
 			this.editor.focus();
-			this.editor.resize();
+			this.editor.resize(window.innerWidth, window.innerHeight);
 			break;
 		case "sim":
 			this.simCanvas.onUpdate = function () {
@@ -147,10 +147,10 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 };
 
 /** Calculate canvas layout
+	@param {boolean} verticalLayout
 	@return {void}
 */
-A3a.vpl.Application.prototype.layout = function () {
-	var verticalLayout = this.vplCanvas.canvasWidth < this.vplCanvas.canvasHeight;
+A3a.vpl.Application.prototype.layout = function (verticalLayout) {
 	for (var i = 0; i < this.views.length; i++) {
 		var relArea = verticalLayout
 			? {
@@ -179,9 +179,9 @@ A3a.vpl.Application.prototype.layout = function () {
 };
 
 A3a.vpl.Application.prototype.vplResize = function () {
-	this.layout();
 	var width = window.innerWidth;
 	var height = window.innerHeight;
+	this.layout(width < height);
 	if (window["vplDisableResize"]) {
 		var bnd = this.vplCanvas.canvas.getBoundingClientRect();
 		width = bnd.width;
@@ -189,8 +189,8 @@ A3a.vpl.Application.prototype.vplResize = function () {
 	}
 
 	// vpl, editor and simulator
-	this.editor.resize();
 	this.vplCanvas.resize(width, height);
+	this.editor.resize();
 	if (this.sim2d) {
 		this.simCanvas.resize(width, height);
 	}

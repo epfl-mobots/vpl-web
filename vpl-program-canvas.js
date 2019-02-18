@@ -663,7 +663,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	if (program.noVPL) {
 		canvas.addDecoration(function (ctx) {
 			canvas.disabledMark(canvas.dims.margin, canvas.dims.margin,
-				canvasSize.width - 2 * canvas.dims.margin, canvasSize.height - 2 * canvas.dims.margin);
+				canvasSize.width - 2 * canvas.dims.margin, canvasSize.height - 2 * canvas.dims.margin,
+				3);
 		});
 	}
 
