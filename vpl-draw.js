@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 	For internal use only
@@ -42,9 +42,10 @@ A3a.vpl.Canvas.prototype.clearBlockBackground = function () {
 	@param {number} left
 	@param {number} width
 	@param {number} height
+	@param {number=} relativeThickness relative thickness wrt default (default: 1)
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height) {
+A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height, relativeThickness) {
 	this.ctx.save();
 	this.ctx.fillStyle = "#fff";
 	this.ctx.globalAlpha = 0.5;
@@ -52,7 +53,7 @@ A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height) {
 	this.ctx.restore();
 	this.ctx.save();
 	this.ctx.strokeStyle = "#777";
-	this.ctx.lineWidth = 5 * this.dims.blockLineWidth;
+	this.ctx.lineWidth = 5 * this.dims.blockLineWidth * (relativeThickness || 1);
 	this.ctx.globalAlpha = 0.5;
 	this.ctx.beginPath();
 	this.ctx.moveTo(left - this.dims.blockSize * 0.1, top + height * 0.7);

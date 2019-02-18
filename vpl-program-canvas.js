@@ -178,10 +178,10 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 
 	var self = this;
 	var item = new A3a.vpl.CanvasItem(eventHandler,
-		width + 2 * canvas.dims.stripVertMargin,
+		width + 2 * canvas.dims.stripHorMargin,
 		canvas.dims.blockSize + 2 * canvas.dims.stripVertMargin,
 		x - canvas.dims.stripHorMargin,
-		y - canvas.dims.stripVertMargin,
+		y,
 		// draw
 		function (ctx, item, dx, dy) {
 			// gray strip
@@ -198,7 +198,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				canvas.dims.interEventActionSpace;
 			canvas.drawWidget("vpl:then",
 				actionX0 - separatorWidth / 2 + dx,
-				y + canvas.dims.blockSize * 0.5 + dy);
+				y + canvas.dims.stripVertMargin + canvas.dims.blockSize * 0.5 + dy);
 			if (eventHandler.locked) {
 				canvas.lockedMark(item.x, item.y, item.width, item.height,
 					false, eventHandler.disabled ? "#ddd" : "");
@@ -262,7 +262,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		if (event) {
 			childItem = this.addBlockToCanvas(canvas, event,
 				eventX0 + step * j,
-				y,
+				y + canvas.dims.stripVertMargin,
 				{
 					notInteractive: eventHandler.disabled || this.noVPL,
 					notClickable: eventHandler.disabled || this.noVPL,
@@ -273,7 +273,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.event, eventHandler,
 					{eventSide: true, index: j}),
 				eventX0 + step * j,
-				y,
+				y + canvas.dims.stripVertMargin,
 				{
 					notDropTarget: eventHandler.disabled,
 					notClickable: true,
@@ -290,7 +290,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		if (action) {
 			childItem = this.addBlockToCanvas(canvas, action,
 				actionX0 + step * j,
-				y,
+				y + canvas.dims.stripVertMargin,
 				{
 					notInteractive: eventHandler.disabled || this.noVPL,
 					notClickable: eventHandler.disabled || this.noVPL,
@@ -301,7 +301,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.action, eventHandler,
 					{eventSide: false, index: j}),
 				actionX0 + step * j,
-				y,
+				y + canvas.dims.stripVertMargin,
 				{notDropTarget: false, notClickable: true, notDraggable: true});
 		}
 		item.attachItem(childItem);
@@ -312,12 +312,12 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		if (eventHandler.error !== null) {
 			canvas.drawWidget(eventHandler.error.isWarning ? "vpl:warning" : "vpl:error",
 				x - canvas.dims.stripHorMargin - canvas.dims.blockSize * 0.3,
-				y + canvas.dims.blockSize * 0.5);
+				y + canvas.dims.stripVertMargin + canvas.dims.blockSize * 0.5);
 
 			ctx.strokeStyle = canvas.dims.errorColor;
 			ctx.lineWidth = canvas.dims.blockSize * 0.05;
 			ctx.beginPath();
-			var ya = y + canvas.dims.blockSize + canvas.dims.stripVertMargin + canvas.dims.interRowSpace * 0.2;
+			var ya = y + canvas.dims.stripVertMargin + canvas.dims.blockSize + canvas.dims.stripVertMargin + canvas.dims.interRowSpace * 0.2;
 			if (eventHandler.error.eventError) {
 				if (eventHandler.error.eventErrorIndices.length === 0) {
 					ctx.moveTo(eventX0, ya);
@@ -444,6 +444,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		program.toolbarConfig || [
 			"vpl:new",
 			"vpl:save",
+			// "vpl:load",
 			"vpl:upload",
 			"vpl:text",
 			"!space",
@@ -588,8 +589,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	}
 
 	// program scroll region
-	renderingState.programScroll.setTotalHeight(program.program.length
-		* (canvas.dims.blockSize + canvas.dims.interRowSpace));
+	renderingState.programScroll.setTotalHeight(program.program.length *
+		(canvas.dims.blockSize + 2 * canvas.dims.stripVertMargin + canvas.dims.interRowSpace));
 	var scrollingAreaX = 2 * canvas.dims.margin + eventLibWidth;
 	var scrollingAreaWidth = canvasSize.width - eventLibWidth - actionLibWidth - canvas.dims.scrollbarWidth - 4 * canvas.dims.margin;
 
@@ -628,7 +629,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			displaySingleEvent,
 			eventX0, actionX0, eventWidth,
 			canvas.dims.margin + canvas.dims.topControlSpace
-				+ (canvas.dims.blockSize + canvas.dims.interRowSpace) * i);
+				+ (canvas.dims.blockSize + 2 * canvas.dims.stripVertMargin + canvas.dims.interRowSpace) * i);
 		if (eventHandler.error !== null && errorMsg === "") {
 			errorMsg = eventHandler.error.msg;
 			if (eventHandler.error.conflictEventHandler !== null) {
@@ -637,9 +638,11 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 						program.addEventHandlerConflictLinkToCanvas(canvas,
 							eventX0,
 							canvas.dims.margin + canvas.dims.topControlSpace
-								+ (canvas.dims.blockSize + canvas.dims.interRowSpace) * i,
+								+ canvas.dims.stripVertMargin
+								+ (canvas.dims.blockSize + 2 * canvas.dims.stripVertMargin + canvas.dims.interRowSpace) * i,
 							canvas.dims.margin + canvas.dims.topControlSpace
-								+ (canvas.dims.blockSize + canvas.dims.interRowSpace) * j);
+								+ canvas.dims.stripVertMargin
+								+ (canvas.dims.blockSize + 2 * canvas.dims.stripVertMargin + canvas.dims.interRowSpace) * j);
 						break;
 					}
 				}
@@ -663,7 +666,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	if (program.noVPL) {
 		canvas.addDecoration(function (ctx) {
 			canvas.disabledMark(canvas.dims.margin, canvas.dims.margin,
-				canvasSize.width - 2 * canvas.dims.margin, canvasSize.height - 2 * canvas.dims.margin);
+				canvasSize.width - 2 * canvas.dims.margin, canvasSize.height - 2 * canvas.dims.margin,
+				3);
 		});
 	}
 

@@ -192,12 +192,6 @@ A3a.vpl.VPLSourceEditor.prototype.lockWithVPL = function (b) {
 A3a.vpl.VPLSourceEditor.prototype.resize = function () {
 	var width = window.innerWidth;
 	var height = window.innerHeight;
-	if (window["vplDisableResize"]) {
-		var bnd = this.tbCanvas.canvas.getBoundingClientRect();
-		width = bnd.width;
-		height = bnd.height;
-	}
-
 	this.tbCanvas.resize(width, height);
 	var canvasBndRect = this.tbCanvas.canvas.getBoundingClientRect();
 	var editorDiv = document.getElementById("src-editor");

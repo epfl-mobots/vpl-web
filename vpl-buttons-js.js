@@ -128,6 +128,47 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.7);
 			ctx.stroke();
 		},
+		"vpl:load": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+			ctx.fillStyle = isPressed && isEnabled
+				? dims.controlDownColor
+				: dims.controlColor;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			ctx.beginPath();
+			ctx.moveTo(dims.controlSize * 0.25,
+				dims.controlSize * 0.2);
+			ctx.lineTo(dims.controlSize * 0.25,
+				dims.controlSize * 0.7);
+			ctx.lineTo(dims.controlSize * 0.67,
+				dims.controlSize * 0.7);
+			ctx.lineTo(dims.controlSize * 0.67,
+				dims.controlSize * 0.27);
+			ctx.lineTo(dims.controlSize * 0.6,
+				dims.controlSize * 0.2);
+			ctx.closePath();
+			ctx.moveTo(dims.controlSize * 0.6,
+				dims.controlSize * 0.2);
+			ctx.lineTo(dims.controlSize * 0.6,
+				dims.controlSize * 0.27);
+			ctx.lineTo(dims.controlSize * 0.67,
+				dims.controlSize * 0.27);
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
+			ctx.lineWidth = dims.blockLineWidth;
+			ctx.stroke();
+			ctx.lineWidth = 2 * dims.blockLineWidth;
+			ctx.beginPath();
+			ctx.moveTo(dims.controlSize * 0.8,
+				dims.controlSize * 0.55);
+			ctx.lineTo(dims.controlSize * 0.8,
+				dims.controlSize * 0.85);
+			ctx.moveTo(dims.controlSize * 0.7,
+				dims.controlSize * 0.65);
+			ctx.lineTo(dims.controlSize * 0.8,
+				dims.controlSize * 0.55);
+			ctx.lineTo(dims.controlSize * 0.9,
+				dims.controlSize * 0.65);
+			ctx.stroke();
+		},
 		"vpl:upload": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
@@ -881,6 +922,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 	};
 	draw["src:new"] = draw["vpl:new"];
 	draw["src:save"] = draw["vpl:save"];
+	draw["src:load"] = draw["vpl:load"];
 	draw["src:run"] = draw["vpl:run"];
 	draw["src:stop"] = draw["vpl:stop"];
 	draw["src:sim"] = draw["vpl:sim"];
