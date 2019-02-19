@@ -277,6 +277,10 @@ function vplSetup(gui) {
 			: A3a.vpl.defaultLanguage;
 	}
 
+	A3a.vpl.Program.resetBlockLib();
+	app.program.new();
+	app.program.resetUI();
+
 	var view = getQueryOption("view");
 	var views = view.length === 0 ? ["vpl"] : view.split("+");
 	var robot = getQueryOption("robot");
