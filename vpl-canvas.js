@@ -335,7 +335,7 @@ A3a.vpl.Canvas = function (canvas, relativeArea) {
 							canDrop = dropTargetItem.doDrop
 								&& (!dropTargetItem.canDrop || dropTargetItem.canDrop(dropTargetItem, item));
 						}
-						if (dropTargetItem != null) {
+						if (canDrop && dropTargetItem != null) {
 							dropTargetItem.dropTarget = true;
 							self.redraw();
 							dropTargetItem.dropTarget = false;
