@@ -550,6 +550,38 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			}
 		}, this);
 		renderingState.actionScroll.end();
+
+		// more high and low hints
+		canvas.addDecoration(function (ctx) {
+			var moreHighBounds = canvas.getWidgetBounds("vpl:moreHigh");
+			var moreHighHeight = moreHighBounds.ymax - moreHighBounds.ymin;
+			var moreLowBounds = canvas.getWidgetBounds("vpl:moreLow");
+			var moreLowHeight = moreLowBounds.ymax - moreLowBounds.ymin;
+			if (!renderingState.eventScroll.isTop()) {
+				// more to see above
+				canvas.drawWidget("vpl:moreHigh",
+					canvas.dims.margin + canvas.dims.interBlockSpace + canvas.dims.blockSize * canvas.dims.templateScale / 2,
+					canvas.dims.topControlSpace + canvas.dims.margin + moreHighHeight / 2);
+			}
+			if (!renderingState.eventScroll.isBottom()) {
+				// more to see below
+				canvas.drawWidget("vpl:moreLow",
+					canvas.dims.margin + canvas.dims.interBlockSpace + canvas.dims.blockSize * canvas.dims.templateScale / 2,
+					canvas.dims.topControlSpace + canvas.dims.margin + scrollingAreaH - moreLowHeight / 2);
+			}
+			if (!renderingState.actionScroll.isTop()) {
+				// more to see above
+				canvas.drawWidget("vpl:moreHigh",
+					canvasSize.width - actionLibWidth - canvas.dims.margin + canvas.dims.blockSize * canvas.dims.templateScale / 2,
+					canvas.dims.topControlSpace + canvas.dims.margin + moreHighHeight / 2);
+			}
+			if (!renderingState.actionScroll.isBottom()) {
+				// more to see below
+				canvas.drawWidget("vpl:moreLow",
+					canvasSize.width - actionLibWidth - canvas.dims.margin + canvas.dims.blockSize * canvas.dims.templateScale / 2,
+					canvas.dims.topControlSpace + canvas.dims.margin + scrollingAreaH - moreLowHeight / 2);
+			}
+		});
 	} else {
 		var evCol = Math.ceil(nEvTemplates * step / scrollingAreaH);
 		var acCol = Math.ceil(nAcTemplates * step / scrollingAreaH);

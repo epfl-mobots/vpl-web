@@ -232,10 +232,11 @@ A3a.vpl.Canvas = function (canvas, relativeArea) {
 
 		function startInteraction(item) {
 			var canvasBndRect = self.canvas.getBoundingClientRect();
+			var d = item.getTranslation();
 			item.dragging = item.interactiveCB.mousedown(self, item.data,
 				item.width, item.height,
-				canvasBndRect.left + item.x,
-				canvasBndRect.top + item.y,
+				canvasBndRect.left + item.x + d.dx,
+				canvasBndRect.top + item.y + d.dy,
 				mouseEvent);
 			if (item.dragging !== null) {
 				// call immediately
@@ -243,8 +244,8 @@ A3a.vpl.Canvas = function (canvas, relativeArea) {
 					&& item.interactiveCB.mousedrag(self, item.data,
 						/** @type {number} */(item.dragging),
 						item.width, item.height,
-						canvasBndRect.left + item.x,
-						canvasBndRect.top + item.y,
+						canvasBndRect.left + item.x + d.dx,
+						canvasBndRect.top + item.y + d.dy,
 						mouseEvent);
 				self.onUpdate && self.onUpdate();
 				self.onDraw ? self.onDraw() : self.redraw();
@@ -255,8 +256,8 @@ A3a.vpl.Canvas = function (canvas, relativeArea) {
 							item.interactiveCB.mousedrag(self, item.data,
 								/** @type {number} */(item.dragging),
 								item.width, item.height,
-								canvasBndRect.left + item.x,
-								canvasBndRect.top + item.y,
+								canvasBndRect.left + item.x + d.dx,
+								canvasBndRect.top + item.y + d.dy,
 								self.makeMouseEvent(e));
 							self.onUpdate && self.onUpdate();
 							self.onDraw ? self.onDraw() : self.redraw();

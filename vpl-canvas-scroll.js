@@ -148,3 +148,17 @@ A3a.vpl.VertScrollArea.prototype.end = function () {
 A3a.vpl.VertScrollArea.prototype.scrollCanvas = function (dy) {
 	this.vertScroll += dy;
 };
+
+/** Check if scroll is commpletely up
+	@return {boolean}
+*/
+A3a.vpl.VertScrollArea.prototype.isTop = function () {
+	return this.vertScroll <= this.hView * 0.001;
+};
+
+/** Check if scroll is commpletely down
+	@return {boolean}
+*/
+A3a.vpl.VertScrollArea.prototype.isBottom = function () {
+	return this.vertScroll >= this.hTotal - this.hView * 1.001;
+};

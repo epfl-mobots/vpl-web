@@ -83,5 +83,49 @@ A3a.vpl.widgetsJS = {
 				ymax: 0.2 * dims.blockSize
 			}
 		})
+	},
+	"vpl:moreHigh": {
+		draw: /** @type {A3a.vpl.Canvas.drawWidget} */(function (ctx, id, dims) {
+			// upward chevron
+			ctx.beginPath();
+			ctx.moveTo(-0.2 * dims.blockSize, 0.1 * dims.blockSize);
+			ctx.lineTo(0, -0.1 * dims.blockSize);
+			ctx.lineTo(0.2 * dims.blockSize, 0.1 * dims.blockSize);
+			ctx.lineWidth = dims.blockSize * 0.1;
+			ctx.strokeStyle = "black";
+			ctx.shadowColor = "white";
+			ctx.shadowBlur = dims.blockSize * 0.2;
+			ctx.stroke();
+		}),
+		bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
+			return {
+				xmin: -0.3 * dims.blockSize,
+				xmax: 0.3 * dims.blockSize,
+				ymin: -0.2 * dims.blockSize,
+				ymax: 0.2 * dims.blockSize
+			}
+		})
+	},
+	"vpl:moreLow": {
+		draw: /** @type {A3a.vpl.Canvas.drawWidget} */(function (ctx, id, dims) {
+			// downward chevron
+			ctx.beginPath();
+			ctx.moveTo(-0.2 * dims.blockSize, -0.1 * dims.blockSize);
+			ctx.lineTo(0, 0.1 * dims.blockSize);
+			ctx.lineTo(0.2 * dims.blockSize, -0.1 * dims.blockSize);
+			ctx.lineWidth = dims.blockSize * 0.1;
+			ctx.strokeStyle = "black";
+			ctx.shadowColor = "white";
+			ctx.shadowBlur = dims.blockSize * 0.2;
+			ctx.stroke();
+		}),
+		bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
+			return {
+				xmin: -0.3 * dims.blockSize,
+				xmax: 0.3 * dims.blockSize,
+				ymin: -0.2 * dims.blockSize,
+				ymax: 0.2 * dims.blockSize
+			}
+		})
 	}
 };
