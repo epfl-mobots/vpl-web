@@ -592,6 +592,7 @@ A3a.vpl.Canvas.prototype.update = function () {
 		actionStyle: string,
 		commentStyle: string,
 		errorColor: string,
+		warningColor: string,
 		background: string,
 		ruleBackground: string,
 		ruleMarks: string,
@@ -634,7 +635,8 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		stateStyle: "#0c0",
 		actionStyle: "#38f",
 		commentStyle: "#aaa",
-		errorColor: "#f88",
+		errorColor: "#e44",
+		warningColor: "#f88",
 		background: "",
 		ruleBackground: "#ddd",
 		ruleMarks: "#bbb"

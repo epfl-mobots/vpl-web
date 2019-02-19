@@ -231,6 +231,8 @@ Property "widgets" is an array with one element per widget. A widget is a static
 - "vpl:then": placed between events and actions (colon in VPL1)
 - "vpl:error": error marker displayed close to rules with errors (question mark in a circle in VPL1)
 - "vpl:warning": warning marker displayed closed to rules with warnings (minor issues which still permit to run the program)
+- "vpl:moreHigh": hint displayed at the top of block lib (events or actions) when scrollingBlockLib is true (see section "Global style settings" below) and the blocks could be scrolled down to show more
+- "vpl:moreLow": hint displayed at the bottom of block lib (events or actions) when scrollingBlockLib is true and the blocks could be scrolled down to show more
 
 Widgets are scaled. The size reference is given by a widget definition whose name is "vpl:block0" and whose size should correspond to a VPL block as it's drawn in a VPL program (in other words, draw an SVG square any size you want, define a widget "vpl:block0" with it, and draw all the other widgets so that they have the correct relative size with respect to the square; or reuse an existing block).
 
@@ -268,7 +270,8 @@ Some global style settings can be specified in a top-level object named "style".
 - "interBlockSpace" (number, default: blockSize / 6): space between event blocks or action blocks
 - "interEventActionSpace" (number, default: blockSize / 2): space between events and actions in rules
 
-- "errorColor" (string, default: "#f88"): color for error messages and hints
+- "errorColor" (string, default: "#e44"): color for error messages and hints
+- "warningColor" (string, default: "#f88"): color for warning messages and hints
 
 - "scrollingBlockLib" (boolean, default: false): true for single-column sets of event and action blocks, scrolling if required; or false for as many columns as required
 

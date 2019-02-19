@@ -316,7 +316,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				x - canvas.dims.stripHorMargin - widgetWidth / 2,
 				y + canvas.dims.stripVertMargin + canvas.dims.blockSize * 0.5);
 
-			ctx.strokeStyle = canvas.dims.errorColor;
+			ctx.strokeStyle = eventHandler.error.isWarning ? canvas.dims.warningColor : canvas.dims.errorColor;
 			ctx.lineWidth = canvas.dims.blockSize * 0.05;
 			ctx.beginPath();
 			var ya = y + canvas.dims.stripVertMargin + canvas.dims.blockSize + canvas.dims.stripVertMargin + canvas.dims.interRowSpace * 0.2;
@@ -360,7 +360,7 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 		var xc = x - canvas.dims.stripHorMargin - widgetWidth / 2;
 		var yc1 = y1 + canvas.dims.blockSize * 0.5 + widgetHeight / 2;
 		var yc2 = y2 + canvas.dims.blockSize * 0.5 - widgetHeight / 2;
-		ctx.strokeStyle = canvas.dims.errorColor;
+		ctx.strokeStyle = isWarning ? canvas.dims.warningColor : canvas.dims.errorColor;
 		ctx.lineWidth = canvas.dims.blockSize * 0.05;
 		ctx.setLineDash([canvas.dims.blockSize * 0.2, canvas.dims.blockSize * 0.1]);
 		ctx.beginPath();
@@ -661,6 +661,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	eventX0 += (eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
 	actionX0 += (eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
 	var errorMsg = "";
+	var isWarning = false;
 	program.program.forEach(function (eventHandler, i) {
 		program.addEventHandlerToCanvas(canvas, eventHandler,
 			displaySingleEvent,
@@ -669,6 +670,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				+ (canvas.dims.blockSize + 2 * canvas.dims.stripVertMargin + canvas.dims.interRowSpace) * i);
 		if (eventHandler.error !== null && errorMsg === "") {
 			errorMsg = eventHandler.error.msg;
+			isWarning = eventHandler.error.isWarning;
 			if (eventHandler.error.conflictEventHandler !== null) {
 				for (var j = i + 1; j < program.program.length; j++) {
 					if (program.program[j] === eventHandler.error.conflictEventHandler) {
@@ -692,7 +694,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		// display first error message
 		canvas.addDecoration(function (ctx) {
 			ctx.save();
-			ctx.fillStyle = canvas.dims.errorColor;
+			ctx.fillStyle = isWarning ? canvas.dims.warningColor : canvas.dims.errorColor;
 			ctx.font = Math.round(canvas.dims.blockSize * 0.22).toString() + "px sans-serif";
 			ctx.textAlign = "left";
 			ctx.textBaseline = "bottom";
