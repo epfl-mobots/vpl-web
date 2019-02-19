@@ -50,8 +50,8 @@ A3a.vpl.widgetsJS = {
 		}),
 		bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
 			return {
-				xmin: -0.2 * dims.blockSize,
-				xmax: 0.2 * dims.blockSize,
+				xmin: -0.3 * dims.blockSize,
+				xmax: 0.3 * dims.blockSize,
 				ymin: -0.2 * dims.blockSize,
 				ymax: 0.2 * dims.blockSize
 			}
@@ -77,8 +77,8 @@ A3a.vpl.widgetsJS = {
 		}),
 		bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
 			return {
-				xmin: -0.2 * dims.blockSize,
-				xmax: 0.2 * dims.blockSize,
+				xmin: -0.3 * dims.blockSize,
+				xmax: 0.3 * dims.blockSize,
 				ymin: -0.2 * dims.blockSize,
 				ymax: 0.2 * dims.blockSize
 			}

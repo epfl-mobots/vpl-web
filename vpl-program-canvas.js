@@ -310,8 +310,10 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	// error marks
 	canvas.addDecoration(function (ctx) {
 		if (eventHandler.error !== null) {
+			var widgetBounds = canvas.getWidgetBounds(eventHandler.error.isWarning ? "vpl:warning" : "vpl:error");
+			var widgetWidth = widgetBounds.xmax - widgetBounds.xmin;
 			canvas.drawWidget(eventHandler.error.isWarning ? "vpl:warning" : "vpl:error",
-				x - canvas.dims.stripHorMargin - canvas.dims.blockSize * 0.3,
+				x - canvas.dims.stripHorMargin - widgetWidth / 2,
 				y + canvas.dims.stripVertMargin + canvas.dims.blockSize * 0.5);
 
 			ctx.strokeStyle = canvas.dims.errorColor;
@@ -346,15 +348,18 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	@param {number} x
 	@param {number} y1
 	@param {number} y2
+	@param {boolean} isWarning
 	@return {void}
 */
-A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas, x, y1, y2) {
+A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas, x, y1, y2, isWarning) {
 	canvas.addDecoration(function (ctx) {
 		// pink line
-		var xc = x - canvas.dims.stripHorMargin -
-			canvas.dims.blockSize * 0.3;
-		var yc1 = y1 + canvas.dims.blockSize * 0.5 + canvas.dims.blockSize * 0.2;
-		var yc2 = y2 + canvas.dims.blockSize * 0.5 - canvas.dims.blockSize * 0.2;
+		var widgetBounds = canvas.getWidgetBounds(isWarning ? "vpl:warning" : "vpl:error");
+		var widgetWidth = widgetBounds.xmax - widgetBounds.xmin;
+		var widgetHeight = widgetBounds.ymax - widgetBounds.ymin;
+		var xc = x - canvas.dims.stripHorMargin - widgetWidth / 2;
+		var yc1 = y1 + canvas.dims.blockSize * 0.5 + widgetHeight / 2;
+		var yc2 = y2 + canvas.dims.blockSize * 0.5 - widgetHeight / 2;
 		ctx.strokeStyle = canvas.dims.errorColor;
 		ctx.lineWidth = canvas.dims.blockSize * 0.05;
 		ctx.setLineDash([canvas.dims.blockSize * 0.2, canvas.dims.blockSize * 0.1]);
@@ -674,7 +679,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 								+ (canvas.dims.blockSize + 2 * canvas.dims.stripVertMargin + canvas.dims.interRowSpace) * i,
 							canvas.dims.margin + canvas.dims.topControlSpace
 								+ canvas.dims.stripVertMargin
-								+ (canvas.dims.blockSize + 2 * canvas.dims.stripVertMargin + canvas.dims.interRowSpace) * j);
+								+ (canvas.dims.blockSize + 2 * canvas.dims.stripVertMargin + canvas.dims.interRowSpace) * j,
+							eventHandler.error.isWarning);
 						break;
 					}
 				}
