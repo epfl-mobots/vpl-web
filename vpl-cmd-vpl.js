@@ -125,20 +125,29 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			app.program.notUploadedYet = false;
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL && app.runGlue.isEnabled(app.program.currentLanguage);
+			if (app.program.noVPL || !app.runGlue.isEnabled(app.program.currentLanguage)) {
+				return false;
+			}
+			var error = app.program.getError();
+ 			return error == null || error.isWarning;
 		},
 		isSelected: function (app) {
 			return app.program.uploaded;
 		},
 		getState: function (app) {
-			if (app.program.program.length === 0) {
+			if (app.program.isEmpty()) {
 				return "empty";
 			} else if (app.program.uploaded) {
 				return "running";
-			} else if (app.program.notUploadedYet) {
-				return "canLoad";
 			} else {
-				return "canReload";
+				var error = app.program.getError();
+ 				if (error && !error.isWarning) {
+					return "error";
+				} else if (app.program.notUploadedYet) {
+					return "canLoad";
+				} else {
+					return "canReload";
+				}
 			}
 		},
 		doDrop: function (app, draggedItem) {

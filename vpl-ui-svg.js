@@ -22,12 +22,12 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 			for (var i = 0; i < prop.length; i++) {
 				switch (prop[i]) {
 				case "pressed":
-					if (!isPressed) {
+					if (!isPressed || !isEnabled) {
 						return false;
 					}
 					break;
 				case "unpressed":
-					if (isPressed) {
+					if (isPressed && isEnabled) {
 						return false;
 					}
 					break;

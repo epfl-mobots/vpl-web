@@ -110,6 +110,18 @@ A3a.vpl.Program.prototype.isEmpty = function () {
 	return true;
 };
 
+/** Get first error
+	@return {?A3a.vpl.Error}
+*/
+A3a.vpl.Program.prototype.getError = function () {
+	for (var i = 0; i < this.program.length; i++) {
+		if (this.program[i].error !== null) {
+			return this.program[i].error;
+		}
+	}
+	return null;
+};
+
 /** Check if should display a single event (not advanced mode, up to
 	one event per event handler, no state block)
 	@return {boolean}
