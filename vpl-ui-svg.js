@@ -73,6 +73,12 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 							ctx.globalAlpha = el["alpha"];
 						}
 						gui.svg[d.f].draw(ctx, {elementId: d.id});
+						if (el["debug"]) {
+							ctx.fillStyle = "black";
+							ctx.textAlign = "center";
+							ctx.textBaseline = "middle";
+							ctx.fillText(el["debug"], width / 2, height / 2);
+						}
 						ctx.restore();
 					});
 					return;
@@ -83,6 +89,18 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 		// default: brown square
 		ctx.fillStyle = "brown";
 		ctx.fillRect(0, 0, width, height);
+		ctx.fillStyle = "white";
+		ctx.textAlign = "left";
+		ctx.textBaseline = "top";
+		ctx.font = Math.round(height / 6).toString(10) + "px sans-serif";
+		ctx.fillText(id, 0.02 * width, 0.02 * height);
+		ctx.fillText((isPressed ? "pr " : "") +
+			(isSelected ? "sel " : "") +
+			(isEnabled ? "" : "dis"),
+			0.02 * width, 0.22 * height);
+		if (state) {
+			ctx.fillText("=" + state, 0.02 * width, 0.42 * height);
+		}
 	});
 };
 
@@ -167,11 +185,19 @@ A3a.vpl.makeSVGWidgets = function (gui) {
 						if (el["alpha"]) {
 							ctx.globalAlpha = el["alpha"];
 						}
+						ctx.save();
 						var scale = dims.blockSize / block0Size;
 						ctx.scale(scale, scale);
 						ctx.translate(-0.5 * (elBounds.xmin + elBounds.xmax),
 							-0.5 * (elBounds.ymin + elBounds.ymax));
 						gui.svg[d.f].draw(ctx, {elementId: d.id});
+						ctx.restore();
+						if (el["debug"]) {
+							ctx.fillStyle = "black";
+							ctx.textAlign = "center";
+							ctx.textBaseline = "middle";
+							ctx.fillText(el["debug"], 0, 0);
+						}
 					});
 				}),
 				bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
