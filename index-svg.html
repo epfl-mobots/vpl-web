@@ -29,6 +29,7 @@
 		"interRowSpace": 24,
 		"interEventActionSpace": 72,
 		"errorColor": "#ff1744",
+		"warningColor": "#ff7777",
 		"margin":8
 	},
 
@@ -671,17 +672,19 @@
 				}
 
 			],
-			"defaultParameters": [0],
+			"defaultParameters": [0, 0, 1, 1, 1, 2, 1, 0, 1, 2, 1, 4, 2],
 			"sliders": [
 				{
 					"id": "Slider",
-					"thumbId": "Cursor",
+					"thumbId": "cursor",
 					"min": -1,
 					"max": 1
 				}
 			],
 			"score": {
-				"id": "notes"
+				"id": "zones_Bg",
+				"numHeights": 5,
+				"noteSize": 0.9
 			}
 		},
 		{
@@ -917,7 +920,22 @@
 			}
 		},
 		{
-			"name": "Ac_music"
+			"name": "Ac_music",
+			"aseba": {
+				"initVarDecl": [
+					"# variables for notes\nvar notes[6]\nvar durations[6]\nvar note_index\nvar note_count\nvar wave[142]\nvar i\nvar wave_phase\nvar wave_intensity\n"
+				],
+				"initCodeExec": [
+					"# init. variables for notes\nnote_index = 6\nnote_count = 6\n",
+					"# compute a sinus wave for sound\nfor i in 0 : 141 do\nwave_phase = (i - 70) * 468\ncall math.cos(wave_intensity, wave_phase)\nwave[i] = wave_intensity / 256\nend\ncall sound.wave(wave)\n",
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"initCodeDecl": [
+					"# when a note is finished, play the next one\nonevent sound.finished\nif note_index != note_count then\ncall sound.freq(notes[note_index], durations[note_index])\nnote_index++\nend\n"
+				],
+				"statement":
+					"notes = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`]\ndurations = [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * d; }).join(', ')`]\nnote_index = 1\nnote_count = 6\ncall sound.freq(notes[0], durations[0])\n"
+			}
 		}
 	]
 }
@@ -1054,7 +1072,22 @@
 			}
 		},
 		{
-			"name": "Ac_music"
+			"name": "Ac_music",
+			"l2": {
+				"initVarDecl": [
+					"const pi = 3.14;\n",
+					"// variables for notes\nint notes[6];\nint durations[6];\nint note_index;\nint wave[142];\n"
+				],
+				"initCodeExec": [
+					"// init notes\nfor (int i = 0; i < size(wave); i++) {\nwave[i] = 128 * sin(fixed(i) / size(wave) * 2 * pi);\n}\nsound.wave(wave);\nnote_index = 6;\n",
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"initCodeDecl": [
+					"// when a note is finished, play the next one\nonevent sound.finished {\nif (note_index < size(notes)) {\nsound.freq(notes[note_index], durations[note_index]);\nnote_index++;\n}\n}\n"
+				],
+				"statement":
+					"notes = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`]\ndurations = [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * d; }).join(', ')`]\nsound.freq(notes[0], durations[0]);\nnote_index = 1;\n"
+			}
 		}
 	]
 }
@@ -1152,7 +1185,15 @@
 			}
 		},
 		{
-			"name": "Ac_music"
+			"name": "Ac_music",
+			"js": {
+				"initCodeExec": [
+					"// init notes\nthis.set(\"sound\", {});\n",
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"sound\", {\"f\": [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`], \"d\": [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * d; }).join(', ')`]});\n"
+			}
 		}
 	]
 }
@@ -1162,13 +1203,7 @@
 {
 	"blocks": [
 		{
-			"name": "button",
-			"js": {
-				"sectionBegin": "this.addEventListener(\"buttons\", function (name, param) {\n",
-				"sectionEnd": "});\n",
-				"sectionPriority": 10,
-				"clauseAnd": "`$[i] ? 'this.get(\"button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + '\")' : ''`"
-			}
+			"name": "button"
 		},
 		{
 			"name": "Thymio acc 1"
@@ -1180,19 +1215,10 @@
 			"name": "Thymio acc 0"
 		},
 		{
-			"name": "start",
-			"js": {
-				"sectionBegin": "// init block\n",
-				"sectionPriority": 10000
-			}
+			"name": "start"
 		},
 		{
-			"name": "clap",
-			"js": {
-				"sectionBegin": "this.addEventListener(\"mic\", function (name, param) {\n",
-				"sectionEnd": "});\n",
-				"sectionPriority": 1
-			}
+			"name": "clap"
 		},
 		{
 			"name": "Ev_Acc_fall"
@@ -1210,44 +1236,16 @@
 			"name": "Remote2"
 		},
 		{
-			"name": "motor",
-			"js": {
-				"initCodeExec": [
-					"this.set(\"leds.top\", [0, 0, 0]);\n"
-				],
-				"statement":
-					"this.set(\"motor.left\", `$[0].toFixed(2)`);\nthis.set(\"motor.right\", `$[1].toFixed(2)`);\n"
-			}
+			"name": "motor"
 		},
 		{
-			"name": "move",
-			"js": {
-				"initCodeExec": [
-					"this.set(\"leds.top\", [0, 0, 0]);\n"
-				],
-				"statement":
-					"this.set(\"motor.left\", `[0, 0.2, 0.25, 0.1, -1.5, -0.2, -0.25, -0.1, 0.15][$[0]].toFixed(2)`);\nthis.set(\"motor.right\", `[0, 0.2, 0.15, -0.1, -0.25, -0.2, -0.15, 0.1, 0.25][$[0]].toFixed(2)`);\n"
-			}
+			"name": "move"
 		},
 		{
-			"name": "top_color_basic",
-			"js": {
-				"initCodeExec": [
-					"this.set(\"leds.top\", [0, 0, 0]);\n"
-				],
-				"statement":
-					"this.set(\"leds.top\", [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`]);\n"
-			}
+			"name": "top_color_basic"
 		},
 		{
-			"name": "top color",
-			"js": {
-				"initCodeExec": [
-					"this.set(\"leds.top\", [0, 0, 0]);\n"
-				],
-				"statement":
-					"this.set(\"leds.top\", [`$.map(function (x) { return x.toFixed(2); }).join(', ')`]);\n"
-			}
+			"name": "top color"
 		},
 		{
 			"name": "Ac_music"
@@ -1514,7 +1512,6 @@
 			"name": "vpl:undo",
 			"state": ["disabled"],
 			"svg": [
-			
 				{
 					"uri": "Icons.svg#undo_default",
 					"alpha": 0.5
@@ -1548,7 +1545,7 @@
 			"name": "vpl:redo",
 			"state": ["pressed"],
 			"svg": [
-			{
+				{
 					"uri": "Icons.svg#Pressed_bg"
 				},
 				{
@@ -1658,7 +1655,6 @@
 				}
 			]
 		},
-		
 		{
 			"name": "vpl:sim",
 			"state": ["pressed"],
@@ -1685,7 +1681,6 @@
 			"name": "vpl:advanced",
 			"state": ["unselected"],
 			"svg": [
-			
 				{
 					"uri": "Icons.svg#basicMode_default"
 				}
@@ -1695,7 +1690,6 @@
 			"name": "vpl:advanced",
 			"state": ["selected"],
 			"svg": [
-				
 				{
 					"uri": "Icons.svg#mediumMode_default"
 				}
@@ -2167,8 +2161,6 @@
     </g>
   </g>
 </svg>
-
-
 </script>
 
 <!-- appearance of the blocks -->

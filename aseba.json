@@ -129,7 +129,22 @@
 			}
 		},
 		{
-			"name": "Ac_music"
+			"name": "Ac_music",
+			"aseba": {
+				"initVarDecl": [
+					"# variables for notes\nvar notes[6]\nvar durations[6]\nvar note_index\nvar note_count\nvar wave[142]\nvar i\nvar wave_phase\nvar wave_intensity\n"
+				],
+				"initCodeExec": [
+					"# init. variables for notes\nnote_index = 6\nnote_count = 6\n",
+					"# compute a sinus wave for sound\nfor i in 0 : 141 do\nwave_phase = (i - 70) * 468\ncall math.cos(wave_intensity, wave_phase)\nwave[i] = wave_intensity / 256\nend\ncall sound.wave(wave)\n",
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"initCodeDecl": [
+					"# when a note is finished, play the next one\nonevent sound.finished\nif note_index != note_count then\ncall sound.freq(notes[note_index], durations[note_index])\nnote_index++\nend\n"
+				],
+				"statement":
+					"notes = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`]\ndurations = [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * d; }).join(', ')`]\nnote_index = 1\nnote_count = 6\ncall sound.freq(notes[0], durations[0])\n"
+			}
 		}
 	]
 }

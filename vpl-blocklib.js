@@ -2230,7 +2230,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		},
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
-			var note = canvas.noteClick(block.param, width, height, left, top, ev);
+			var note = canvas.noteClick(width, height, left, top, ev);
 			if (note) {
 				block.prepareChange();
 				if (block.param[2 * note.index] === note.tone) {

@@ -532,6 +532,37 @@ A3a.vpl.Canvas.prototype.buttons = function (shapes, state, opt) {
 */
 A3a.vpl.Canvas.buttonShape;
 
+/** Draw notes (low-level)
+	@param {Array.<number>} notes array of {tone,duration}x6
+	(tone between 1 and 5, duration=0/1/2)
+	@param {number} left
+	@param {number} right
+	@param {number} low
+	@param {number} high
+	@param {number} numHeights
+	@param {number} noteSize
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.notesLL = function (notes, left, right, low, high, numHeights, noteSize) {
+	var ctx = this.ctx;
+	var dims = this.dims;
+	ctx.save();
+	ctx.strokeStyle = "black";
+	var numNotes = notes.length / 2;
+	for (var i = 0; i < numNotes; i++) {
+		if (notes[2 * i + 1] > 0) {
+			ctx.fillStyle = notes[2 * i + 1] === 2 ? "white" : "black";
+			ctx.beginPath();
+			ctx.arc(dims.blockSize * (left + (right - left) / numNotes * (i + 0.5)),
+				dims.blockSize * (low + (high - low) / numHeights * (notes[2 * i] + 0.5)),
+				dims.blockSize * noteSize / 2, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.stroke();
+		}
+	}
+	ctx.restore();
+};
+
 /** Draw notes
 	@param {Array.<number>} notes array of {tone,duration}x6
 	(tone between 1 and 5, duration=0/1/2)
@@ -550,18 +581,10 @@ A3a.vpl.Canvas.prototype.notes = function (notes) {
 			dims.blockSize * 0.16 - dims.blockLineWidth);
 	}
 	// notes
-	ctx.strokeStyle = "black";
-	for (var i = 0; i < 6; i++) {
-		if (notes[2 * i + 1] > 0) {
-			ctx.fillStyle = notes[2 * i + 1] === 2 ? "white" : "black";
-			ctx.beginPath();
-			ctx.arc(dims.blockSize * (0.1 + 0.8 / 6 * (i + 0.5)),
-				dims.blockSize * (0.82 - 0.16 * notes[2 * i]),
-				dims.blockSize * 0.07, 0, 2 * Math.PI);
-			ctx.fill();
-			ctx.stroke();
-		}
-	}
+	this.notesLL(notes,
+		0.1, 0.9,
+		0.9, 0.1,
+		5, 0.14);
 	ctx.restore();
 };
 
@@ -1129,8 +1152,13 @@ A3a.vpl.Canvas.prototype.sliderDrag = function (vert, width, height, left, top, 
 	return 0.5 + (vert ? y : x) / 0.8;
 };
 
-/**	Check if a mouse event is inside a note
-	@param {Array.<number>} notes
+/**	Check if a mouse event is inside a note (low-level)
+	@param {number} scoreLeft score left position, relative to block size (e.g. 0.1)
+	@param {number} scoreRight score right position, relative to block size (e.g. 0.9)
+	@param {number} scoreBottom score bottom position, relative to block size (e.g. 0.9)
+	@param {number} scoreTop score top position, relative to block size (e.g. 0.1)
+	@param {number} numNotes number of notes
+	@param {number} numHeights number of heights
 	@param {number} width block width
 	@param {number} height block width
 	@param {number} left block left position
@@ -1138,14 +1166,29 @@ A3a.vpl.Canvas.prototype.sliderDrag = function (vert, width, height, left, top, 
 	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
 	@return {?{index:number,tone:number}}} note, or null
 */
-A3a.vpl.Canvas.prototype.noteClick = function (notes, width, height, left, top, ev) {
-	var x = Math.floor(((ev.x - left) / width - 0.1) / (0.8 / 6));
-	var y = Math.floor((0.9 - (ev.y - top) / height) / 0.16);
-	return x >= 0 && x < 6 && y >= 0 && y < 5
+A3a.vpl.Canvas.prototype.noteClickLL = function (scoreLeft, scoreRight, scoreBottom, scoreTop,
+	numNotes, numHeights,
+	width, height, left, top, ev) {
+	var x = Math.floor(((ev.x - left) / width - scoreLeft) / ((scoreRight - scoreLeft) / numNotes));
+	var y = Math.floor((scoreBottom - (ev.y - top) / height) / ((scoreBottom - scoreTop) / numHeights));
+	return x >= 0 && x < numNotes && y >= 0 && y < numHeights
 		? {
 			index: x,
 			tone: y
 		} : null;
+};
+
+/**	Check if a mouse event is inside a note
+	@param {number} width block width
+	@param {number} height block width
+	@param {number} left block left position
+	@param {number} top bock top position
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
+	@return {?{index:number,tone:number}}} note, or null
+*/
+A3a.vpl.Canvas.prototype.noteClick = function (width, height, left, top, ev) {
+	return this.noteClickLL(0.1, 0.9, 0.9, 0.1, 6, 5,
+		width, height, left, top, ev);
 }
 
 /** Check if mouse is over timer

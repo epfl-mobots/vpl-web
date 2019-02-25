@@ -190,6 +190,9 @@
 			"state": ["pressed"],
 			"svg": [
 				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
 					"uri": "Icons.svg#undo_highlight"
 
 				}
@@ -208,6 +211,9 @@
 			"name": "vpl:redo",
 			"state": ["pressed"],
 			"svg": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
 				{
 					"uri": "Icons.svg#redo_highlight"
 				}
@@ -234,8 +240,11 @@
 		},
 		{
 			"name": "vpl:duplicate",
-			"state": ["selected"],
+			"state": ["pressed"],
 			"svg": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
 				{
 					"uri": "Icons.svg#duplicate_highlight"
 				}
@@ -262,9 +271,11 @@
 		},
 		{
 			"name": "vpl:disable",
-			"state": ["selected"],
+			"state": ["pressed"],
 			"svg": [
-
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
 				{
 					"uri": "Icons.svg#disable_highlight"
 
@@ -371,7 +382,7 @@
 			"state": ["pressed"],
 			"svg": [
 				{
-					"uri": "Icons.svg#Selected_bg"
+					"uri": "Icons.svg#Pressed_bg"
 				}
 			]
 		},
@@ -393,6 +404,46 @@
 			"svg": [
 				{
 					"uri": "Icons.svg#simulator_default"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:teacher",
+			"state": ["pressed","selected"],
+			"svg": [
+				{
+					"uri": "Icons.svg#uiSettings_highlight"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:teacher",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#uiSettings_default"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:teacher-reset",
+			"state": ["pressed","selected"],
+			"svg": [
+				{
+					"uri": "Icons.svg#clearSettings_highlight"
+
+				}
+			]
+		},
+		{
+			"name": "vpl:teacher-reset",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#clearSettings_default"
 
 				}
 			]

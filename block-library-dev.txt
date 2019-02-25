@@ -82,6 +82,12 @@ In json, block contain the following properties:
 	- "color" (string, optional): trace color as a css color string (default: "black")
 	- "linewidth" (number, optional): relative trace width. 1 (default) is the default line width of the block.
 
+- "score" (object, optional): notes for a monophonic melody. Notes are drawn as hollow circles for half notes, solid circles for quarter notes, and not drawn for pauses. They're centered on a grid. The "score" object contains the following properties:
+
+    - "id" (string, required): id of the svg element where notes are drawn
+    - "numHeights" (number, required): number of heights
+    - "noteSize" (number, optional): relative note size adjustment factor. The normal size (default "noteSize" of 1) is height/numHeights.
+
 - "aseba" (object, optional): code fragments to generate Aseba language source code. Code fragments contain Aseba source code. Except for "clause" and "clauseAnd" which contain expression fragments, they can contain muliple lines, comments, empty lines, terminated by linefeeds ("\n"). Backticks mark JavaScript expressions which are evaluated to substitute block parameters; see below. The object contains the following properties:
 	- "initVarDecl" (array of strings, optional): code fragments for (global) variable declarations. Identical fragments (after backtick-expressions evaluation) are output only once.
 	- "initCodeDecl" (array of strings, optional): code fragments for subroutine declarations. Identical fragments (after backtick-expressions evaluation) are output only once.

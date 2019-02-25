@@ -10,7 +10,14 @@
 		"scrollbarThumbColor": "#b0bec5",
 		"scrollbarBackgroundColor": "transparent",
 		"scrollbarWidth": 2,
-		"scrollingBlockLib": true
+		"scrollingBlockLib": true,
+		"stripHorMargin": 16,
+		"stripVertMargin": 16,
+		"interRowSpace": 24,
+		"interEventActionSpace": 72,
+		"errorColor": "#ff1744",
+		"warningColor": "#ff7777",
+		"margin":8
 	},
 
 	"blocks": [
@@ -652,17 +659,19 @@
 				}
 
 			],
-			"defaultParameters": [0],
+			"defaultParameters": [0, 0, 1, 1, 1, 2, 1, 0, 1, 2, 1, 4, 2],
 			"sliders": [
 				{
 					"id": "Slider",
-					"thumbId": "Cursor",
+					"thumbId": "cursor",
 					"min": -1,
 					"max": 1
 				}
 			],
 			"score": {
-				"id": "notes"
+				"id": "zones_Bg",
+				"numHeights": 5,
+				"noteSize": 0.9
 			}
 		},
 		{
@@ -716,6 +725,39 @@
 			]
 		}
 	],
+	"widgets": [
+		{	"name":"vpl:block0",
+			"svg": [
+					{
+					"uri": "Icons.svg#frame"
+					}
+				]
+		},
+
+		{
+	"name":"vpl:then",
+	"svg": [
+				{
+					"uri": "Icons.svg#ic_then"
+				}
+			]
+		},
+		{
+	"name":"vpl:error",
+	"svg": [
+				{
+					"uri": "Icons.svg#Error"
+				}
+			]
+		},
+		{"name":"vpl:warning",
+	"svg": [
+				{
+					"uri": "Icons.svg#Warning"
+				}
+			]
+		}
+	],
 
 	"svgFilenames": [
 		"Icons.svg",
@@ -726,6 +768,7 @@
 		"aseba.json",
 		"l2.json",
 		"js.json",
+		"python.json",
 		"toolbars.json",
 		"buttons.json"
 	]

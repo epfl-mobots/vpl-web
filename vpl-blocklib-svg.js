@@ -369,6 +369,42 @@ A3a.vpl.Canvas.prototype.mousedragSVGRotating = function (block, dragIndex, aux,
 	block.param[dragIndex] = Math.round(val / f);
 };
 
+/** Handle mousedown event in A3a.vpl.BlockTemplate.mousedownFun for a block with a score
+	@param {A3a.vpl.Block} block
+	@param {number} width block width
+	@param {number} height block width
+	@param {number} left left position of the block
+	@param {number} top top position of the block
+	@param {A3a.vpl.CanvasItem.mouseEvent} ev mouse event
+	@param {SVG} svg
+	@param {Object} aux block description in uiConfig
+	@return {?number}
+*/
+A3a.vpl.Canvas.prototype.mousedownSVGNotes = function (block, width, height, left, top, ev, svg, aux) {
+	var ixNotes = (aux["buttons"] ? aux["buttons"].length : 0) +
+		(aux["radiobuttons"] ? 1 : 0) +
+		(aux["sliders"] ? aux["sliders"].length : 0);
+	var numNotes = block.param.slice(ixNotes).length / 2;
+	var numHeights = aux["score"]["numHeights"] || 5;
+	var bnds = svg.getElementBounds(aux["score"]["id"]);
+	var viewBox = svg.viewBox;
+	var note = this.noteClickLL((bnds.xmin - viewBox[0]) / (viewBox[2] - viewBox[0]), (bnds.xmax - viewBox[0]) / (viewBox[2] - viewBox[0]),
+		(bnds.ymax - viewBox[1]) / (viewBox[3] - viewBox[1]), (bnds.ymin - viewBox[1]) / (viewBox[3] - viewBox[1]),
+		numNotes, numHeights,
+		width, height, left, top, ev);
+	if (note) {
+		block.prepareChange();
+		if (block.param[ixNotes + 2 * note.index] === note.tone) {
+			block.param[ixNotes + 2 * note.index + 1] = (block.param[ixNotes + 2 * note.index + 1] + 1) % 3;
+		} else {
+			block.param[ixNotes + 2 * note.index] = note.tone;
+			block.param[ixNotes + 2 * note.index + 1] = 1;
+		}
+		return 0;
+	}
+	return null;
+};
+
 /** Draw a block defined with SVG
 	@param {Object} uiConfig
 	@param {Object} aux block description in uiConfig
@@ -432,6 +468,19 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 				linewidth: diffWheelMotion.linewidth
 			});
 	}
+	if (aux["score"] && aux["score"]["id"]) {
+		var ixNotes = (aux["buttons"] ? aux["buttons"].length : 0) +
+			(aux["radiobuttons"] ? 1 : 0) +
+			(aux["sliders"] ? aux["sliders"].length : 0);
+		var sc = aux["score"];
+		var numHeights = aux["score"]["numHeights"] || 5;
+		var bnds = uiConfig.svg[f].getElementBounds(sc["id"]);
+		var viewBox = uiConfig.svg[f].viewBox;
+		this.notesLL(block.param.slice(ixNotes),
+			(bnds.xmin - viewBox[0]) / (viewBox[2] - viewBox[0]), (bnds.xmax - viewBox[0]) / (viewBox[2] - viewBox[0]),
+			(bnds.ymax - viewBox[1]) / (viewBox[3] - viewBox[1]), (bnds.ymin - viewBox[1]) / (viewBox[3] - viewBox[1]),
+			numHeights, (bnds.ymax - bnds.ymin) / (viewBox[3] - viewBox[1]) / numHeights * (aux["score"]["noteSize"] || 1));
+	}
 };
 
 /** Handle a mousedown event in a block defined with SVG
@@ -484,6 +533,14 @@ A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width
 			return ix0 + ix;
 		}
 		ix0 += rotating.length;
+	}
+	if (aux["score"]) {
+		var ix = canvas.mousedownSVGNotes(block, width, height, left, top, ev,
+			uiConfig.svg[filename], aux);
+		if (ix !== null) {
+			return ix0 + ix;
+		}
+		ix0++;
 	}
 	return null;
 };
@@ -772,6 +829,7 @@ A3a.vpl.patchBlocksSVG = function (uiConfig) {
 			actionStyle: uiConfig["styles"]["action"] || "#38f",
 			commentStyle: uiConfig["styles"]["comment"] || "#aaa",
 			errorColor: uiConfig["styles"]["errorColor"] || "#f88",
+			warningColor: uiConfig["styles"]["warningColor"] || "#f88",
 			background: uiConfig["styles"]["background"] || "white",
 			ruleBackground: uiConfig["styles"]["ruleBackground"] || "#ddd",
 			ruleMarks: uiConfig["styles"]["ruleMarks"] || "#bbb",

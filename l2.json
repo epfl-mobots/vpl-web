@@ -128,7 +128,22 @@
 			}
 		},
 		{
-			"name": "Ac_music"
+			"name": "Ac_music",
+			"l2": {
+				"initVarDecl": [
+					"const pi = 3.14;\n",
+					"// variables for notes\nint notes[6];\nint durations[6];\nint note_index;\nint wave[142];\n"
+				],
+				"initCodeExec": [
+					"// init notes\nfor (int i = 0; i < size(wave); i++) {\nwave[i] = 128 * sin(fixed(i) / size(wave) * 2 * pi);\n}\nsound.wave(wave);\nnote_index = 6;\n",
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"initCodeDecl": [
+					"// when a note is finished, play the next one\nonevent sound.finished {\nif (note_index < size(notes)) {\nsound.freq(notes[note_index], durations[note_index]);\nnote_index++;\n}\n}\n"
+				],
+				"statement":
+					"notes = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`]\ndurations = [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * d; }).join(', ')`]\nsound.freq(notes[0], durations[0]);\nnote_index = 1;\n"
+			}
 		}
 	]
 }
