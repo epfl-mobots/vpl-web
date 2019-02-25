@@ -89,6 +89,18 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 		// default: brown square
 		ctx.fillStyle = "brown";
 		ctx.fillRect(0, 0, width, height);
+		ctx.fillStyle = "white";
+		ctx.textAlign = "left";
+		ctx.textBaseline = "top";
+		ctx.font = Math.round(height / 6).toString(10) + "px sans-serif";
+		ctx.fillText(id, 0.02 * width, 0.02 * height);
+		ctx.fillText((isPressed ? "pr " : "") +
+			(isSelected ? "sel " : "") +
+			(isEnabled ? "" : "dis"),
+			0.02 * width, 0.22 * height);
+		if (state) {
+			ctx.fillText("=" + state, 0.02 * width, 0.42 * height);
+		}
 	});
 };
 
