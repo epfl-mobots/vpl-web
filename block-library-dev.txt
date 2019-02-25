@@ -226,7 +226,7 @@ Property "buttons" is an array with one element per button appearance. Each butt
 
 - "name": button name (see "Toolbar definitions" above)
 - "state": array of strings which restricts when the appearance is used: "pressed" (the button is being clicked or tapped, or the target of a drop), "unpressed" (the button is not being clicked or tapped, nor the target of a drop), "selected" (the button corresponds to a state which is ON), "unselected" (the button corresponds to a state which is OFF), "disabled" (the action is disabled), "enabled" (the action is enabled). In addition, strings starting with "=" specify which state to select for multi-state buttons such as "src:language" or "sim:map"; for example "=aseba" for the "src:language" button would be used when the Aseba language is selected. The first appearance match is used; typically appearance with "state" set to ["disabled"], ["pressed"], ["selected"] (for toggle buttons only), and [] (normal appearance) are defined in that order.
-- "svg": array of objects containing a "uri" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent). SVG elements are rendered starting with the first one, with the last one in the foreground.
+- "svg": array of objects containing a "uri" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent) and a "debug" property (string, displayed centered over the widget). SVG elements are rendered starting with the first one, with the last one in the foreground.
 
 SVG widgets
 -----------
@@ -245,7 +245,7 @@ Widgets are scaled. The size reference is given by a widget definition whose nam
 Each widget appearance is an object with the following properties:
 
 - "name": widget name (see above)
-- "svg": array of objects containing a "uri" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent). SVG elements are rendered starting with the first one, with the last one in the foreground.
+- "svg": array of objects containing a "uri" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent) and a "debug" property (string, displayed centered over the widget). SVG elements are rendered starting with the first one, with the last one in the foreground.
 
 Global style settings
 ---------------------

@@ -73,6 +73,12 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 							ctx.globalAlpha = el["alpha"];
 						}
 						gui.svg[d.f].draw(ctx, {elementId: d.id});
+						if (el["debug"]) {
+							ctx.fillStyle = "black";
+							ctx.textAlign = "center";
+							ctx.textBaseline = "middle";
+							ctx.fillText(el["debug"], width / 2, height / 2);
+						}
 						ctx.restore();
 					});
 					return;
@@ -167,11 +173,19 @@ A3a.vpl.makeSVGWidgets = function (gui) {
 						if (el["alpha"]) {
 							ctx.globalAlpha = el["alpha"];
 						}
+						ctx.save();
 						var scale = dims.blockSize / block0Size;
 						ctx.scale(scale, scale);
 						ctx.translate(-0.5 * (elBounds.xmin + elBounds.xmax),
 							-0.5 * (elBounds.ymin + elBounds.ymax));
 						gui.svg[d.f].draw(ctx, {elementId: d.id});
+						ctx.restore();
+						if (el["debug"]) {
+							ctx.fillStyle = "black";
+							ctx.textAlign = "center";
+							ctx.textBaseline = "middle";
+							ctx.fillText(el["debug"], 0, 0);
+						}
 					});
 				}),
 				bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
