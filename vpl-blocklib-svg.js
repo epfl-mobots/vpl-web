@@ -620,7 +620,8 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 		var radiobuttons = b["radiobuttons"];
 		var sliders = b["sliders"];
 		var rotating = b["rotating"];
-		if ((buttons || radiobuttons || sliders || rotating) && !defParam) {
+		var score = b["score"];
+		if ((buttons || radiobuttons || sliders || rotating || score) && !defParam) {
 			window["console"] && window["console"]["info"](
 				"Block definition error: missing defaultParameters");
 			return false;
@@ -639,6 +640,9 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 			}
 			if (rotating) {
 				nParams += rotating.length;
+			}
+			if (score) {
+				nParams += 2 * Math.floor((defParam.length - nParams) / 2);
 			}
 			if (nParams !== defParam.length) {
 				window["console"] && window["console"]["info"](
