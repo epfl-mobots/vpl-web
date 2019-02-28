@@ -57,9 +57,35 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		ctx.restore();
 	}
 
+	/** Draw control for right/forward/left/down button for rot=0/1/2/3
+		@param {number} x
+		@param {number} y
+		@param {number} rot
+		@return {void}
+	*/
+	function drawButtonTri(x, y, rot) {
+		ctx.save();
+		ctx.fillStyle = isPressed
+			? dims.controlDownColor
+			: dims.controlColor;
+		ctx.fillRect(x, y, width, height);
+		ctx.translate(x + width / 2, y + width / 2);
+		ctx.rotate(-rot * Math.PI / 2);
+		ctx.translate(-x - width / 2, -y - width / 2);
+		ctx.beginPath();
+		ctx.moveTo(x + width * 0.3557, y + width * 0.25);
+		ctx.lineTo(x + width * 0.3557, y + width * 0.75);
+		ctx.lineTo(x + width * 0.7887, y + width * 0.5);
+		ctx.closePath();
+		ctx.strokeStyle = "white";
+		ctx.lineWidth = dims.blockLineWidth;
+		ctx.stroke();
+		ctx.restore();
+	}
+
 	var draw = {
 		// vpl
-		"vpl:new": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:new": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
@@ -87,7 +113,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
 		},
-		"vpl:save": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:save": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
@@ -128,7 +154,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.7);
 			ctx.stroke();
 		},
-		"vpl:load": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:load": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
@@ -169,7 +195,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.65);
 			ctx.stroke();
 		},
-		"vpl:upload": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:upload": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
@@ -210,7 +236,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.3);
 			ctx.stroke();
 		},
-		"vpl:text": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:text": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
@@ -244,7 +270,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
 		},
-		"vpl:advanced": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:advanced": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: isSelected
@@ -268,13 +294,13 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
                 dims.controlSize * 0.8,
                 dims.controlSize * 0.1);
         },
-		"vpl:undo": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:undo": function () {
 			drawUndo(0, 0, false);
 		},
-		"vpl:redo": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:redo": function () {
 			drawUndo(0, 0, true);
 		},
-		"vpl:run": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:run": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
@@ -296,7 +322,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.8,
 				dims.controlSize * 0.1);
 		},
-		"vpl:stop": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:stop": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
@@ -308,7 +334,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.44, dims.controlSize * 0.44);
 			ctx.fill();
 		},
-		"vpl:sim": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:sim": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
@@ -349,7 +375,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 
 			ctx.restore();
 		},
-		"vpl:duplicate": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:duplicate": function () {
             ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
@@ -364,7 +390,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
                 dims.controlSize * 0.55,
                 dims.controlSize * 0.4, dims.controlSize * 0.15);
         },
-		"vpl:disable": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:disable": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
@@ -382,7 +408,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.4);
 			ctx.stroke();
 		},
-		"vpl:lock": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:lock": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
@@ -400,7 +426,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.04,
 				"white");
 		},
-		"vpl:trashcan": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:trashcan": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
 				: dims.controlColor;
@@ -420,7 +446,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
 		},
-		"vpl:teacher-reset": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:teacher-reset": function () {
 			ctx.fillStyle = isPressed && isEnabled ? "#d00" : "#a00";
 			ctx.fillRect(0, 0,
 				dims.controlSize, dims.controlSize);
@@ -451,7 +477,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.7,
 				dims.controlSize * 0.2);
 		},
-		"vpl:teacher-save": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:teacher-save": function () {
 			ctx.fillStyle = isPressed && isEnabled ? "#d00" : "#a00";
 			ctx.fillRect(0, 0,
 				dims.controlSize, dims.controlSize);
@@ -495,7 +521,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.45,
 				dims.controlSize * 0.2);
 		},
-		"vpl:teacher": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"vpl:teacher": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? isSelected ? "#f50" : "#d00"
 				: isSelected && isEnabled ? "#d10" : "#a00";
@@ -516,7 +542,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		// source code editor
 		// "src:new": "vpl:new"
 		// "src:save": "vpl:save"
-		"src:vpl": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"src:vpl": function () {
 			ctx.save();
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
@@ -553,7 +579,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			}
 			ctx.restore();
 		},
-		"src:locked": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"src:locked": function () {
 			ctx.save();
 			ctx.fillStyle = !isEnabled
 				? dims.controlColor
@@ -586,7 +612,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
                 dims.controlSize * 0.1);
 			ctx.restore();
 		},
-		"src:language": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
+		"src:language": function () {
 			/** @const */
 			var languageAbbr = {"aseba": "Aa", "l2": "l2", "js": "js", "python": "py"};
 			var s = dims.controlSize;
@@ -623,7 +649,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.fillText(languageAbbr[state], s * 0.5, s * 0.7);
 			ctx.restore();
 		},
-		"src:disass": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"src:disass": function () {
 			var s = dims.controlSize;
 			ctx.save();
 			ctx.fillStyle = isEnabled && isPressed
@@ -658,7 +684,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		// "src:teacher-reset": "vpl:teacher-reset"
 
 		// simulator
-		"sim:restart": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"sim:restart": function () {
 			ctx.save();
 			ctx.fillStyle = isPressed
 				? dims.controlDownColor
@@ -676,7 +702,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				});
 			ctx.restore();
 		},
-		"sim:pause": function (ctx, dims, width, height, isEnabled, isSelected, isPressed) {
+		"sim:pause": function () {
 			ctx.save();
 			ctx.fillStyle = isPressed
 				? dims.controlDownColor
@@ -709,7 +735,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			}
 			ctx.restore();
 		},
-		"sim:speedup": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
+		"sim:speedup": function () {
 			ctx.save();
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
@@ -733,13 +759,13 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
 			ctx.font = "bold " + Math.round(dims.controlSize / 3).toString(10) + "px sans-serif";
-			ctx.fillText(state >= 1
-				? "\u00d7" + state.toString(10)
-				: "\u00f7" + Math.round(1 / state).toString(10),
+			ctx.fillText(/** @type {number} */(state) >= 1
+				? "\u00d7" + /** @type {number} */(state).toString(10)
+				: "\u00f7" + Math.round(1 / /** @type {number} */(state)).toString(10),
 				dims.controlSize * 0.5, dims.controlSize * 0.7);
 			ctx.restore();
 		},
-		"sim:noise": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, sim2d) {
+		"sim:noise": function () {
 			ctx.save();
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
@@ -773,7 +799,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 				dims.controlSize * 0.1);
 			ctx.restore();
 		},
-		"sim:pen": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, sim2d) {
+		"sim:pen": function () {
 			var s = dims.controlSize;
 			ctx.save();
 			ctx.fillStyle = isPressed && isEnabled
@@ -805,7 +831,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.stroke();
 			ctx.restore();
 		},
-		"sim:clear": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, sim2d) {
+		"sim:clear": function () {
 			var s = dims.controlSize;
 			ctx.save();
 			ctx.fillStyle = isPressed && isEnabled
@@ -821,7 +847,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.fillRect(0, 0, 0.3 * s, 0.2 * s);
 			ctx.restore();
 		},
-		"sim:map-kind": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
+		"sim:map-kind": function () {
 			var s = dims.controlSize;
 			var lineWidth = dims.blockLineWidth;
 			ctx.save();
@@ -856,7 +882,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			}
 			ctx.restore();
 		},
-		"sim:map": function (ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
+		"sim:map": function () {
 			/** Calculate the height for the specified coordinates
 				@param {number} x
 				@param {number} y
@@ -919,6 +945,78 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		},
 		// "sim:vpl": "src:vpl"
 		// "sim:text": "vpl:text"
+		"sim-event:forward": function () {
+			drawButtonTri(0, 0, 1);
+		},
+		"sim-event:backward": function () {
+			drawButtonTri(0, 0, 3);
+		},
+		"sim-event:left": function () {
+			drawButtonTri(0, 0, 2);
+		},
+		"sim-event:right": function () {
+			drawButtonTri(0, 0, 0);
+		},
+		"sim-event:center": function () {
+			ctx.save();
+			ctx.fillStyle = isPressed
+				? dims.controlDownColor
+				: dims.controlColor;
+			ctx.fillRect(0, 0, width, height);
+			ctx.beginPath();
+			ctx.arc(0.5 * width, 0.5 * width, 0.25 * width, 0, 2 * Math.PI);
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = dims.blockLineWidth;
+			ctx.stroke();
+			ctx.restore();
+		},
+		"sim-event:clap": function () {
+			ctx.save();
+			ctx.fillStyle = isPressed
+				? dims.controlDownColor
+				: dims.controlColor;
+			ctx.fillRect(0, 0, width, height);
+			ctx.beginPath();
+
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = dims.blockLineWidth;
+			ctx.translate(0.5 * width, 0.5 * width);
+			ctx.rotate(0.1);
+			for (var i = 0; i < 9; i++) {
+				ctx.beginPath();
+				ctx.moveTo(0.12 * width, 0);
+				ctx.lineTo(0.24 * width, 0);
+				ctx.moveTo(0.28 * width, 0);
+				ctx.lineTo(0.36 * width, 0);
+				ctx.stroke();
+				ctx.rotate(Math.PI / 4.5);
+			}
+			ctx.restore();
+		},
+		"sim-event:tap": function () {
+			ctx.save();
+			ctx.fillStyle = isPressed
+				? dims.controlDownColor
+				: dims.controlColor;
+			ctx.fillRect(0, 0, width, height);
+			ctx.beginPath();
+
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = dims.blockLineWidth;
+			ctx.translate(0.6 * width, 0.6 * width);
+			for (var i = 1; i <= 3; i++) {
+				ctx.beginPath();
+				ctx.arc(0, 0,
+					0.15 * width * i,
+					Math.PI * 0.9, Math.PI * 1.7);
+				ctx.stroke();
+			}
+			ctx.moveTo(0.3 * width, 0);
+			ctx.lineTo(0, 0);
+			ctx.lineTo(0, 0.3 * width);
+			ctx.stroke();
+			ctx.restore();
+		}
 	};
 	draw["src:new"] = draw["vpl:new"];
 	draw["src:save"] = draw["vpl:save"];
@@ -935,7 +1033,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 
 	var dr = draw[id];
 	if (dr) {
-		dr(ctx, dims, width, height, isEnabled, isSelected, isPressed, state);
+		dr();
 	}
 };
 

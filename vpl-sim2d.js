@@ -514,25 +514,6 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 
 	// add buttons for events
 	var yRobotControl = simCanvas.dims.margin;
-	function drawButtonTri(ctx, x, y, rot, isPressed) {
-		ctx.save();
-		ctx.fillStyle = isPressed
-			? simCanvas.dims.controlDownColor
-			: simCanvas.dims.controlColor;
-		ctx.fillRect(x, y, smallBtnSize, smallBtnSize);
-		ctx.translate(x + smallBtnSize / 2, y + smallBtnSize / 2);
-		ctx.rotate(-rot * Math.PI / 2);
-		ctx.translate(-x - smallBtnSize / 2, -y - smallBtnSize / 2);
-		ctx.beginPath();
-		ctx.moveTo(x + smallBtnSize * 0.3557, y + smallBtnSize * 0.25);
-		ctx.lineTo(x + smallBtnSize * 0.3557, y + smallBtnSize * 0.75);
-		ctx.lineTo(x + smallBtnSize * 0.7887, y + smallBtnSize * 0.5);
-		ctx.closePath();
-		ctx.strokeStyle = "white";
-		ctx.lineWidth = simCanvas.dims.blockLineWidth;
-		ctx.stroke();
-		ctx.restore();
-	}
 
 	// forward
 	simCanvas.addControl(simCanvas.dims.margin + smallBtnSize + simCanvas.dims.stripHorMargin,
@@ -540,7 +521,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		smallBtnSize, smallBtnSize,
 		// draw
 		function (ctx, width, height, isPressed) {
-			drawButtonTri(ctx, 0, 0, 1, isPressed);
+			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:forward",
+				ctx, simCanvas.dims, width, height, true, false, isPressed);
 		},
 		// action
 		function (ev) {
@@ -557,7 +539,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		smallBtnSize, smallBtnSize,
 		// draw
 		function (ctx, width, height, isPressed) {
-			drawButtonTri(ctx, 0, 0, 2, isPressed);
+			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:left",
+				ctx, simCanvas.dims, width, height, true, false, isPressed);
 		},
 		// action
 		function (ev) {
@@ -574,17 +557,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		smallBtnSize, smallBtnSize,
 		// draw
 		function (ctx, width, height, isPressed) {
-			ctx.save();
-			ctx.fillStyle = isPressed
-				? simCanvas.dims.controlDownColor
-				: simCanvas.dims.controlColor;
-			ctx.fillRect(0, 0, smallBtnSize, smallBtnSize);
-			ctx.beginPath();
-			ctx.arc(0.5 * smallBtnSize, 0.5 * smallBtnSize, 0.25 * smallBtnSize, 0, 2 * Math.PI);
-			ctx.strokeStyle = "white";
-			ctx.lineWidth = simCanvas.dims.blockLineWidth;
-			ctx.stroke();
-			ctx.restore();
+			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:center",
+				ctx, simCanvas.dims, width, height, true, false, isPressed);
 		},
 		// action
 		function (ev) {
@@ -601,7 +575,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		smallBtnSize, smallBtnSize,
 		// draw
 		function (ctx, width, height, isPressed) {
-			drawButtonTri(ctx, 0, 0, 0, isPressed);
+			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:right",
+				ctx, simCanvas.dims, width, height, true, false, isPressed);
 		},
 		// action
 		function (ev) {
@@ -618,7 +593,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		smallBtnSize, smallBtnSize,
 		// draw
 		function (ctx, width, height, isPressed) {
-			drawButtonTri(ctx, 0, 0, 3, isPressed);
+			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:backward",
+				ctx, simCanvas.dims, width, height, true, false, isPressed);
 		},
 		// action
 		function (ev) {
@@ -637,28 +613,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		smallBtnSize, smallBtnSize,
 		// draw
 		function (ctx, width, height, isPressed) {
-			ctx.save();
-			ctx.fillStyle = isPressed
-				? simCanvas.dims.controlDownColor
-				: simCanvas.dims.controlColor;
-			ctx.fillRect(0, 0, smallBtnSize, smallBtnSize);
-			ctx.beginPath();
-
-			ctx.strokeStyle = "white";
-			ctx.lineWidth = simCanvas.dims.blockLineWidth;
-			ctx.translate(0.6 * smallBtnSize, 0.6 * smallBtnSize);
-			for (var i = 1; i <= 3; i++) {
-				ctx.beginPath();
-				ctx.arc(0, 0,
-					0.15 * smallBtnSize * i,
-					Math.PI * 0.9, Math.PI * 1.7);
-				ctx.stroke();
-			}
-			ctx.moveTo(0.3 * smallBtnSize, 0);
-			ctx.lineTo(0, 0);
-			ctx.lineTo(0, 0.3 * smallBtnSize);
-			ctx.stroke();
-			ctx.restore();
+			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:tap",
+				ctx, simCanvas.dims, width, height, true, false, isPressed);
 		},
 		// action
 		function (ev) {
@@ -672,27 +628,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		smallBtnSize, smallBtnSize,
 		// draw
 		function (ctx, width, height, isPressed) {
-			ctx.save();
-			ctx.fillStyle = isPressed
-				? simCanvas.dims.controlDownColor
-				: simCanvas.dims.controlColor;
-			ctx.fillRect(0, 0, smallBtnSize, smallBtnSize);
-			ctx.beginPath();
-
-			ctx.strokeStyle = "white";
-			ctx.lineWidth = simCanvas.dims.blockLineWidth;
-			ctx.translate(0.5 * smallBtnSize, 0.5 * smallBtnSize);
-			ctx.rotate(0.1);
-			for (var i = 0; i < 9; i++) {
-				ctx.beginPath();
-				ctx.moveTo(0.12 * smallBtnSize, 0);
-				ctx.lineTo(0.24 * smallBtnSize, 0);
-				ctx.moveTo(0.28 * smallBtnSize, 0);
-				ctx.lineTo(0.36 * smallBtnSize, 0);
-				ctx.stroke();
-				ctx.rotate(Math.PI / 4.5);
-			}
-			ctx.restore();
+			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:clap",
+				ctx, simCanvas.dims, width, height, true, false, isPressed);
 		},
 		// action
 		function (ev) {

@@ -218,6 +218,13 @@ Here is the list of button ids for the Simulator view:
 - "sim:text": switch to text programming language editor
 - "sim:teacher": toggle between the normal and the customization states
 - "sim:teacher-reset": reset the available toolbar buttons and VPL blocks to the standard sets
+- "sim-event:forward": send a button.forward event to the simulated robot
+- "sim-event:backward": send a button.backward event to the simulated robot
+- "sim-event:left": send a button.left event to the simulated robot
+- "sim-event:right": send a button.right event to the simulated robot
+- "sim-event:center": send a button.center event to the simulated robot
+- "sim-event:clap": send a mic event to the simulated robot
+- "sim-event:tap": send a tap event to the simulated robot
 
 SVG buttons
 -----------
