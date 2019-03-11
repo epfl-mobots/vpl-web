@@ -98,7 +98,7 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 				if (!app.program.noVPL) {
 					app.program.invalidateCode();
 					app.program.enforceSingleTrailingEmptyEventHandler();
-					app.editor.setCode(app.program.getCode(app.program.currentLanguage));
+					app.editor.changeCode(app.program.getCode(app.program.currentLanguage));
 				}
 				app.renderProgramToCanvas();
 			};

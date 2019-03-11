@@ -79,7 +79,7 @@ A3a.vpl.VPLSourceEditor.prototype.setTeacherRole = function (b) {
 	this.teacherRole = b;
 };
 
-/** Set the code generated from VPL
+/** Set the code
 	@param {?string} code source code, or null to reset it
 	@param {boolean=} isAsm true if code is assembly, false if source code
 	@return {void}
@@ -93,6 +93,23 @@ A3a.vpl.VPLSourceEditor.prototype.setCode = function (code, isAsm) {
 	}
 	if (!isAsm) {
 		this.srcForAsm = null;
+	}
+};
+
+/** Change the code and disassemble it if needed
+	@param {string} code source code
+	@return {void}
+*/
+A3a.vpl.VPLSourceEditor.prototype.changeCode = function (code) {
+	if (this.srcForAsm) {
+		var dis = this.disass(this.language, code);
+		if (dis !== null) {
+			this.setCode(/** @type {string} */(dis), true);
+			this.textEditor.setReadOnly(true);
+			this.srcForAsm = code;
+		}
+	} else {
+		this.setCode(code);
 	}
 };
 
