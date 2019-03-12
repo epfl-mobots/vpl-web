@@ -182,9 +182,10 @@ A3a.vpl.CanvasItem.prototype.isInClip = function (x, y) {
 	@constructor
 	@struct
 	@param {Element} canvas
-	@param {A3a.vpl.Canvas.RelativeArea=} relativeArea
+	@param {?A3a.vpl.Canvas.RelativeArea=} relativeArea
+	@param {CSSParser.Box=} css
 */
-A3a.vpl.Canvas = function (canvas, relativeArea) {
+A3a.vpl.Canvas = function (canvas, relativeArea, css) {
 	var backingScale = "devicePixelRatio" in window ? window["devicePixelRatio"] : 1;
 	this.canvas = canvas;
 	this.canvasWidth = canvas.width / backingScale;
@@ -216,6 +217,8 @@ A3a.vpl.Canvas = function (canvas, relativeArea) {
 
 	/** @type {Object.<string,A3a.vpl.Canvas.Widget>} */
 	this.widgets = {};
+
+	this.css = css || new CSSParser.Box();
 
 	var self = this;
 
@@ -572,31 +575,17 @@ A3a.vpl.Canvas.prototype.update = function () {
 		blockLargeFont: string,
 		templateScale: number,
 		scrollingBlockLib: boolean,
-		margin: number,
-		interRowSpace: number,
-		interEventActionSpace: number,
-		interBlockSpace: number,
 		controlColor: string,
 		controlDownColor: string,
 		controlActiveColor: string,
 		controlSize: number,
 		controlFont: string,
-		topControlSpace: number,
 		scrollbarThumbColor: string,
 		scrollbarBackgroundColor: string,
 		scrollbarWidth: number,
-		stripHorMargin: number,
-		stripVertMargin: number,
-		eventStyle: string,
-		stateStyle: string,
-		actionStyle: string,
-		commentStyle: string,
 		errorColor: string,
 		warningColor: string,
-		background: string,
-		ruleBackground: string,
-		ruleMarks: string,
-
+		ruleMarks: string
 	}}
 */
 A3a.vpl.Canvas.dims;
@@ -616,29 +605,16 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		blockLargeFont: Math.round(blockSize / 3).toString(10) + "px sans-serif",
 		templateScale: Math.max(0.666, 32 / blockSize),
 		scrollingBlockLib: false,
-		margin: Math.min(Math.round(blockSize / 4), 20),
-		interRowSpace: Math.round(blockSize / 2),
-		interEventActionSpace: blockSize / 2,
-		interBlockSpace: Math.round(blockSize / 6),
 		controlColor: "navy",
 		controlDownColor: "#37f",
 		controlActiveColor: "#06f",
 		controlSize: controlSize,
 		controlFont: "bold 15px sans-serif",
-		topControlSpace: 2 * controlSize,
 		scrollbarThumbColor: "navy",
 		scrollbarBackgroundColor: "#ccc",
 		scrollbarWidth: 5,
-		stripHorMargin: Math.min(Math.max(blockSize / 15, 2), 6),
-		stripVertMargin: Math.min(Math.max(blockSize / 15, 2), 6),
-		eventStyle: "#f70",
-		stateStyle: "#0c0",
-		actionStyle: "#38f",
-		commentStyle: "#aaa",
 		errorColor: "#e44",
 		warningColor: "#f88",
-		background: "",
-		ruleBackground: "#ddd",
 		ruleMarks: "#bbb"
 	};
 };
@@ -789,20 +765,10 @@ A3a.vpl.Canvas.prototype.clip = function () {
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.erase = function () {
-	if (this.dims && this.dims.background) {
-		this.ctx.save();
-		this.ctx.fillStyle = this.dims.background;
-		this.ctx.fillRect(this.canvasWidth * this.relativeArea.xmin,
-			this.canvasHeight * this.relativeArea.ymin,
-			this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin),
-			this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin));
-		this.ctx.restore();
-	} else {
-		this.ctx.clearRect(this.canvasWidth * this.relativeArea.xmin,
-			this.canvasHeight * this.relativeArea.ymin,
-			this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin),
-			this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin));
-	}
+	this.ctx.clearRect(this.canvasWidth * this.relativeArea.xmin,
+		this.canvasHeight * this.relativeArea.ymin,
+		this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin),
+		this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin));
 };
 
 /** Begin clipping rect (can be nested)
@@ -977,13 +943,17 @@ A3a.vpl.Canvas.Widget;
 	@param {string} id
 	@param {number} x
 	@param {number} y
+	@param {CSSParser.Box.Rect=} cssBox
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.drawWidget = function (id, x, y) {
+A3a.vpl.Canvas.prototype.drawWidget = function (id, x, y, cssBox) {
 	var w = this.widgets[id];
 	if (w != undefined) {
 		this.ctx.save();
 		this.ctx.translate(x, y);
+		if (cssBox) {
+			cssBox.drawAt(this.ctx, 0, 0);
+		}
 		w.draw(this.ctx, id, this.dims);
 		this.ctx.restore();
 	}
@@ -991,13 +961,21 @@ A3a.vpl.Canvas.prototype.drawWidget = function (id, x, y) {
 
 /** Get widget bounds
 	@param {string} id
+	@param {CSSParser.Box.Rect=} cssBox
 	@return {{xmin:number,xmax:number,ymin:number,ymax:number}}
 */
-A3a.vpl.Canvas.prototype.getWidgetBounds = function (id) {
+A3a.vpl.Canvas.prototype.getWidgetBounds = function (id, cssBox) {
 	var w = this.widgets[id];
-	return w
+	var bnds = w
 		? w.bounds(id, this.dims)
 		: {xmin: 0, xmax: 0, ymin: 0, ymax: 0};
+	if (cssBox) {
+		bnds.xmin -= cssBox.marginLeft + cssBox.borderLeftWidth + cssBox.paddingLeft;
+		bnds.xmax += cssBox.paddingRight + cssBox.borderRightWidth + cssBox.marginRight;
+		bnds.ymin -= cssBox.marginTop + cssBox.borderTopWidth + cssBox.paddingTop;
+		bnds.ymax += cssBox.paddingBottom + cssBox.borderBottomWidth + cssBox.marginBottom;
+	}
+	return bnds;
 };
 
 /** Redraw the underlying canvas with all the items

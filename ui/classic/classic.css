@@ -1,0 +1,87 @@
+/*
+	CSS for VPL3 application
+    Classic version (blocks, buttons and widgets defined in JavaScript)
+	Copyright 2019, ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE
+*/
+
+view {
+	background: white;
+}
+
+toolbar {
+	padding: 5px;
+	margin: 5px;
+}
+
+button {
+	margin: 2px;
+}
+
+separator {
+	width: 5px;
+	height: 5px;
+}
+
+vpl {
+	padding: 5px;
+	padding-top: 30px;
+	margin: 5px;
+	background: #eee;
+}
+
+block {
+	margin: 4px;
+}
+
+block.event {
+	background: #f70;
+}
+block.action {
+	background: #38f;
+}
+block.state {
+	background: #0c0;
+}
+block.comment {
+	background: #aaa;
+}
+
+rule {
+	background: #ddd;
+	border: solid #666;
+	border-radius: 5px;
+	padding: 10px;
+	margin: 10px;
+}
+
+#widget-then {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+block-library {
+	background: #eee;
+	padding: 5px;
+	margin: 5px;
+}
+
+/* simulator */
+
+sim-controller {
+	background: #eee;
+	margin: 5px;
+}
+
+button-small {
+	margin: 5px;
+}
+
+sim-playground-area {
+	background: #eee;
+	margin: 5px;
+	padding: 5px;
+}
+
+sim-playground {
+	border: 2px silver;
+}

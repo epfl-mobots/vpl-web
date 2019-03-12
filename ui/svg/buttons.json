@@ -8,7 +8,7 @@
 					"uri": "Icons.svg#Pressed_bg"
 				},
 				{
-					"uri": "Icons.svg#new_highlight"
+					"uri": "Icons.svg#new2_highlight"
 				}
 			]
 		},
@@ -17,7 +17,7 @@
 			"state": [],
 			"svg": [
 				{
-					"uri": "Icons.svg#new_default"
+					"uri": "Icons.svg#new2_default"
 				}
 			]
 		},
@@ -89,8 +89,7 @@
 			"state": ["selected"],
 			"svg": [
 				{
-					"uri": "Icons.svg#Selected_bg",
-					"alpha": 1.0
+					"uri": "Icons.svg#Pressed_bg"
 				},
 				{
 					"uri": "Icons.svg#textMode_highlight"
@@ -111,7 +110,7 @@
 		},
 		{
 			"name": "vpl:run",
-			"state": ["pressed"],
+			"state": ["pressed", "running"],
 			"svg": [
 
 				{
@@ -120,9 +119,22 @@
 				}
 			]
 		},
+
 		{
 			"name": "vpl:run",
-			"state": [],
+			"state": ["disabled", "=empty"],
+			"svg": [
+
+				{
+					"uri": "Icons.svg#play_default",
+					"alpha": 0.5
+
+				}
+			]
+		},
+		{
+			"name": "vpl:run",
+			"state": ["unselected", "canLoad"],
 			"svg": [
 				{
 					"uri": "Icons.svg#play_default"
@@ -132,12 +144,10 @@
 		},
 		{
 			"name": "vpl:run",
-			"state": ["disabled"],
+			"state": ["canReload"],
 			"svg": [
-
 				{
-					"uri": "Icons.svg#play_default",
-					"alpha": 0.5
+					"uri": "Icons.svg#reload_default"
 
 				}
 			]
@@ -305,7 +315,10 @@
 			"name": "vpl:trashcan",
 			"state": ["pressed"],
 			"svg": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
 
+				},
 				{
 					"uri": "Icons.svg#delete_highlight"
 
@@ -318,16 +331,6 @@
 			"svg": [
 				{
 					"uri": "Icons.svg#delete_default"
-				}
-			]
-		},
-		{
-			"name": "vpl:run",
-			"state": ["disabled"],
-			"svg": [
-				{
-					"uri": "Icons.svg#undo_default",
-					"alpha": 0.5
 				}
 			]
 		},
@@ -357,9 +360,6 @@
 			"name": "vpl:advanced",
 			"state": ["unselected"],
 			"svg": [
-			{
-					"uri": "Icons.svg#Pressed_bg"
-				},
 				{
 					"uri": "Icons.svg#basicMode_default"
 				}
@@ -369,9 +369,6 @@
 			"name": "vpl:advanced",
 			"state": ["selected"],
 			"svg": [
-				{
-					"uri": "Icons.svg#Pressed_bg"
-				},
 				{
 					"uri": "Icons.svg#mediumMode_default"
 				}

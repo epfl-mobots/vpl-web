@@ -2,14 +2,14 @@
 	"toolbars": {
 		"vpl": [
 			"vpl:new",
-			"!space",
 			"vpl:upload",
 			"vpl:save",
 			"!stretch",
 			"vpl:run",
 			"vpl:stop",
+			"!!space",
+			"!!space",
 			"vpl:advanced",
-			"vpl:sim",
 			"vpl:text",
 			"!stretch",
 			"vpl:teacher-reset",

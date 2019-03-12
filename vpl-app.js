@@ -18,6 +18,8 @@ A3a.vpl.Application = function (canvasEl) {
 
 	this.canvasEl = canvasEl;
 
+	this.css = new CSSParser.Box();
+
 	this.uiConfig = new A3a.vpl.UIConfig();
 	this.commands = new A3a.vpl.Commands();
 
@@ -26,7 +28,7 @@ A3a.vpl.Application = function (canvasEl) {
 
 	this.program = new A3a.vpl.Program(A3a.vpl.mode.basic, this.uiConfig);
 
-	this.vplCanvas = new A3a.vpl.Canvas(canvasEl);
+	this.vplCanvas = new A3a.vpl.Canvas(canvasEl, null, this.css);
 	this.vplCanvas.state = {};
 
 	/** @type {A3a.vpl.Canvas} */

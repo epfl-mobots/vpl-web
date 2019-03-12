@@ -13,25 +13,17 @@
 <script type="application/json" id="ui.json">
 {
 	"styles": {
-		"event": "transparent",
-		"state": "transparent",
-		"action": "transparent",
-		"comment": "#aaa",
-		"background": "#fcfdfe",
-		"ruleBackground": "#f4f5f7",
-		"ruleMarks": "#bbb",
 		"scrollbarThumbColor": "#b0bec5",
 		"scrollbarBackgroundColor": "transparent",
 		"scrollbarWidth": 2,
-		"scrollingBlockLib": true,
-		"stripHorMargin": 16,
-		"stripVertMargin": 16,
-		"interRowSpace": 24,
-		"interEventActionSpace": 72,
+		"scrollingBlockLib": false,
 		"errorColor": "#ff1744",
-		"warningColor": "#ff7777",
-		"margin":8
+		"warningColor": "#ff7777"
 	},
+
+	"css": [
+		"svg.css"
+	],
 
 	"blocks": [
 		{
@@ -334,7 +326,7 @@
 				}
 
 			],
-			"defaultParameters": [0, 0, 0],
+			"defaultParameters": [0, 0],
 			"buttons": [
 				{
 					"id": "Blocks.svg#Btn3_ProxGd0",
@@ -799,7 +791,7 @@
 					}
 				]
 		},
-		
+
 		{
 	"name":"vpl:then",
 	"svg": [
@@ -838,6 +830,83 @@
 		"toolbars.json",
 		"buttons.json"
 	]
+}
+</script>
+
+<script type="text/x-vpl-css" id="svg.css">
+/*
+	CSS for VPL3 application
+    SVG version (blocks, buttons and widgets defined in SVG)
+	Copyright 2019, ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE
+*/
+
+view {
+	background: #fcfdfe;
+}
+
+toolbar {
+	padding: 5px;
+	margin: 5px;
+}
+
+button {
+	margin: 2px;
+}
+
+separator {
+	width: 5px;
+	height: 5px;
+}
+
+vpl {
+	padding: 5px;
+	padding-top: 30px;
+	margin: 5px;
+	background: #eee;
+}
+
+block {
+	margin: 4px;
+}
+
+rule {
+	background: #f4f5f7;
+	border: solid #666;
+	border-radius: 5px;
+	padding: 16px;
+	margin: 12px;
+}
+
+#widget-then {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+block-library {
+	background: #eee;
+	padding: 5px;
+	margin: 5px;
+}
+
+/* simulator */
+
+sim-controller {
+	background: #eee;
+	margin: 5px;
+}
+
+button-small {
+	margin: 5px;
+}
+
+sim-playground-area {
+	background: #eee;
+	margin: 5px;
+	padding: 5px;
+}
+
+sim-playground {
+	border: 2px silver;
 }
 </script>
 
@@ -1496,7 +1565,7 @@
 				}
 			]
 		},
-		
+
 		{
 			"name": "vpl:run",
 			"state": ["disabled", "=empty"],
@@ -2247,9 +2316,6 @@
     </g>
   </g>
 </svg>
-
-
-
 </script>
 
 <!-- appearance of the blocks -->
@@ -3108,7 +3174,6 @@
     </g>
   </g>
 </svg>
-
 </script>
 
 <title>VPL</title>
@@ -3185,6 +3250,9 @@ pre#editor-lines {
 <script src="vpl-blocktemplate.js"></script>
 <script src="vpl-block.js"></script>
 <script src="vpl-emptyblock.js"></script>
+<script src="css.js"></script>
+<script src="css-rect.js"></script>
+<script src="css-rect-draw.js"></script>
 <script src="vpl-canvas.js"></script>
 <script src="vpl-canvas-scroll.js"></script>
 <script src="vpl-blocklib.js"></script>

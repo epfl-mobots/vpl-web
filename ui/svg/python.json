@@ -1,0 +1,52 @@
+{
+	"blocks": [
+		{
+			"name": "button"
+		},
+		{
+			"name": "Thymio acc 1"
+		},
+		{
+			"name": "Thymio acc 2"
+		},
+		{
+			"name": "Thymio acc 0"
+		},
+		{
+			"name": "start"
+		},
+		{
+			"name": "clap"
+		},
+		{
+			"name": "Ev_Acc_fall"
+		},
+		{
+			"name": "tap"
+		},
+		{
+			"name": "Ev_ProxH_bas"
+		},
+		{
+			"name": "Remote1"
+		},
+		{
+			"name": "Remote2"
+		},
+		{
+			"name": "motor"
+		},
+		{
+			"name": "move"
+		},
+		{
+			"name": "top_color_basic"
+		},
+		{
+			"name": "top color"
+		},
+		{
+			"name": "Ac_music"
+		}
+	]
+}

@@ -22,6 +22,9 @@ A3a.vpl.ControlBar = function (canvas) {
 	/** layout description: "X" = item, " " = separator, "s" = stretch,
  		"_" amd "S" = non-discardable sep and stretch respectively */
 	this.layout = "";
+	// top-left position of toolbar content, as specified by calcLayout
+	this.x = 0;
+	this.y = 0;
 };
 
 /** @typedef {{
@@ -81,12 +84,14 @@ A3a.vpl.ControlBar.prototype.addStretch = function (nonDiscardable) {
 
 /** Calculate block position based on a layout with items, fixed intervals, separators,
 	and stretch elements
-	@param {A3a.vpl.ControlBar.Bounds} pos
-	@param {number} gap normal gap
-	@param {number} separatorGap large gap used for separators
+	@param {CSSParser.Box.Rect} toolbarBox
+	@param {CSSParser.Box.Rect} itemBox
+	@param {CSSParser.Box.Rect} separatorBox box used for separators
  	@return {void}
 */
-A3a.vpl.ControlBar.prototype.calcLayout = function (pos, gap, separatorGap) {
+A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBox, separatorBox) {
+	this.x = toolbarBox.x;
+	this.y = toolbarBox.y;
 	// remove leading and duplicate optional spaces and stretches
 	var layout = this.layout
 		.replace(/^[s ]+/, "")
@@ -96,19 +101,17 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (pos, gap, separatorGap) {
 		.replace(/s+/g, "s");
 	// calc. sum of fixed sizes and count stretches
 	var itemsTotalWidth = 0;
-	var gapCount = 0;
 	var sepCount = 0;
 	var stretchCount = 0;
 	var controlIx = 0;
+	var itemAdditionalWidth = itemBox.nonContentWidth();
+	var itemOffset = itemBox.offsetLeft();
 	for (var i = 0; i < layout.length; i++) {
 		switch (layout[i]) {
 		case "X":
 			var bounds = this.controls[controlIx].bounds;
-			itemsTotalWidth += bounds.xmax - bounds.xmin;
+			itemsTotalWidth += bounds.xmax - bounds.xmin + itemAdditionalWidth;
 			controlIx++;
-			if (layout[i - 1] === "X") {
-				gapCount++;
-			}
 			break;
 		case " ":
 		case "_":
@@ -120,38 +123,38 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (pos, gap, separatorGap) {
 			break;
 		}
 	}
+	// nominal separator gap
+	var separatorGap = separatorBox.totalWidth();
+	// calc. stretch size
 	var stretchSize = 0;
-	if (itemsTotalWidth >= pos.xmax - pos.xmin) {
+	if (itemsTotalWidth >= toolbarBox.width) {
 		// not enough room for controls without spacing
-		gap = 0;
 		separatorGap = 0;
 	} else {
 		while (true) {
-			var s = itemsTotalWidth + gap * gapCount + separatorGap * sepCount;
-			stretchSize = (pos.xmax - pos.xmin - s) / stretchCount;
+			var s = itemsTotalWidth + separatorGap * sepCount;
+			stretchSize = (toolbarBox.width - s) / stretchCount;
 			if (stretchSize >= separatorGap) {
 				break;
 			}
-			gap /= 2;
 			separatorGap /= 2;
 		}
 	}
-	// calc. stretch size
 	// calc. positions
 	controlIx = 0;
-	var p = pos.xmin;
+	var p = toolbarBox.x;
 	for (var i = 0; i < layout.length; i++) {
 		switch (layout[i]) {
 		case "X":
 			var control = this.controls[controlIx++];
 			if (layout[i - 1] === "X") {
-				control.x = p + gap;
-				p += gap + control.bounds.xmax - control.bounds.xmin;
+				control.x = p + itemOffset;
+				p += control.bounds.xmax - control.bounds.xmin + itemAdditionalWidth;
 			} else {
-				control.x = p;
-				p += control.bounds.xmax - control.bounds.xmin;
+				control.x = p + itemOffset;
+				p += control.bounds.xmax - control.bounds.xmin + itemAdditionalWidth;
 			}
-			control.y = (pos.ymin + pos.ymax) / 2 - (control.bounds.ymax - control.bounds.ymin) / 2;
+			control.y = toolbarBox.y + toolbarBox.height / 2 - (control.bounds.ymax - control.bounds.ymin) / 2;
 			break;
 		case " ":
 		case "_":
@@ -166,9 +169,15 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (pos, gap, separatorGap) {
 };
 
 /** Add all controls to the canvas (should follow calcLayout)
+	@param {CSSParser.Box.Rect} toolbarBox
+	@param {CSSParser.Box.Rect} itemBox
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addToCanvas = function () {
+A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBox) {
+	var self = this;
+	this.canvas.addDecoration(function (ctx) {
+		toolbarBox.drawAt(ctx, self.x, self.y);
+	});
 	this.controls.forEach(function (control) {
 		this.canvas.addControl(control.x, control.y,
 			control.bounds.xmax - control.bounds.xmin,

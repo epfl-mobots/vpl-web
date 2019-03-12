@@ -10,7 +10,7 @@
 	@return {void}
 */
 A3a.vpl.Application.prototype.installRobotSimulator = function (options) {
-	this.simCanvas = new A3a.vpl.Canvas(this.canvasEl);
+	this.simCanvas = new A3a.vpl.Canvas(this.canvasEl, null, this.css);
 
 	var app = this;
 	var intervalId = null;

@@ -5,25 +5,6 @@
 	For internal use only
 */
 
-/** Draw block background
-	@param {A3a.vpl.blockType} blockType
-	@param {boolean} doesZoomOnLongPress true to display hint that a long
-	press is needed to zoom the block before control widgets can be manipulated
-	(currently ignored)
-	@return {void}
-*/
-A3a.vpl.Canvas.prototype.blockBackground = function (blockType, doesZoomOnLongPress) {
-	this.ctx.save();
-	this.ctx.fillStyle = {
-		"e": this.dims.eventStyle,
-		"a": this.dims.actionStyle,
-		"s": this.dims.stateStyle,
-		"c": this.dims.commentStyle
-	}[blockType];
-	this.ctx.fillRect(0, 0, this.dims.blockSize, this.dims.blockSize);
-	this.ctx.restore();
-};
-
 /** Clear block background
 	@return {void}
 */

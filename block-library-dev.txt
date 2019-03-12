@@ -254,34 +254,69 @@ Each widget appearance is an object with the following properties:
 - "name": widget name (see above)
 - "svg": array of objects containing a "uri" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent) and a "debug" property (string, displayed centered over the widget). SVG elements are rendered starting with the first one, with the last one in the foreground.
 
+Stylesheet
+----------
+
+The general layout of the user interface is subject to one or multiple stylesheets. The syntax is based on CSS. Stylesheets must be enumerated in the property "css" in the main ui.json file or script element; the value is an array of filenames (or script id) as strings.
+
+Currently, some style-related parameters are still fixed in JSON (see "Global style settings" below), but eventually all properties should be defined in CSS. Unknown element names, classes, pseudo-classes and properties are ignored.
+
+Style properties follow CSS box model (see <https://www.w3.org/TR/css-box-3/>). Default padding, border and margin are 0. Default size is what's required for the content (such as a block or a widget bounding box), or the available width or height, or 0 for empty boxes (separators).
+
+Box properties:
+
+- padding-left, padding-right, padding-top, padding-bottom
+- padding
+- border-left-width, border-right-width, border-top-width, border-bottom-width
+- border-left-style, border-right-style, border-top-style, border-bottom-style
+- border-left-color, border-right-color, border-top-color, border-bottom-color
+- border-left, border-right, border-top, border-bottom
+- border
+- border-top-left-radius, border-top-right-radius, border-bottom-right-radius, border-bottom-left-radius
+- border-radius
+- margin-left, margin-right, margin-top, margin-bottom
+- margin
+- background-color
+- background (for background-color property only)
+- width, height
+
+Values:
+
+- lengths: floating-point value with unit (px, cm, mm, in, pc, pt), or 0
+- colors: #xxxxxx or #xxx or one of the colors defined in <https://www.w3.org/TR/css-color-3/#svg-color>
+- line styles: none, hidden, dotted, dashed, solid, or double
+
+Elements:
+
+- view (classes: vpl, sim, src)
+- widget (id: widget-error, widget-warning, widget-then; pseudo-class: small)
+- button (classes: vpl, sim, src, top, bottom)
+- separator (classes: vpl, sim, src, top, bottom)
+- toolbar (classes: vpl, sim, src, top, bottom)
+- vpl
+- block (classes: event, action, state, comment, library; pseudo-class: small)
+- rule (pseudo-class: small)
+- block-library (classes: event, action)
+- button-small
+- sim-controller
+- sim-playground-area
+- sim-playground
+
 Global style settings
 ---------------------
 
 Some global style settings can be specified in a top-level object named "style". Here is the list of properties it can contain, their type and their default values.
 
-- "background" (string, default: "white"): background color
-- "margin" (number, default: min(blockSize / 4, 20)): margin between content and window
-
 - "scrollbarThumbColor" (string, default: "navy"): color of scrollbar thumbs
 - "scrollbarBackgroundColor" (string, default: "#ccc"): color of scrollbar background (rectangular shape behind the thumb)
 - "scrollbarWidth" (number, default: 5): scrollbar width in css pixels
 
-- "event" (string, default: "#f70"): color of event blocks
-- "state" (string, default: "#0c0"): color of state blocks
-- "action" (string, default: "#38f"): color of action block
-- "comment" (string, default: "#aaa"): color of comment blocks
 - "blockLineWidth" (number, default: based on block size): line width used in blocks
 - "templateScale" (number, default: 0.666): reduction factor to get size of blocks in libraries
 - "minTemplateSize" (number, default: 32): minimum block size in libraries
-- "stripHorMargin" (number, default: blockSize / 15): margin on left and right of rules
-- "stripVertMargin" (number, default: blockSize / 15): margin on top and bottom of rules
 - "minInteractiveBlockSize" (number, default: 60): minimum block size where direct manipulation of interactive controls (buttons, sliders etc.) is possible; if smaller, a zoomed version is displayed when the block is clicked or touched
 
-- "ruleBackground" (string, default: "#ddd"): background color of rules
 - "ruleMarks" (string, default: "#bbb"): color of rule marks (colon dots)
-- "interRowSpace" (number, default: blockSize / 2): space between rules
-- "interBlockSpace" (number, default: blockSize / 6): space between event blocks or action blocks
-- "interEventActionSpace" (number, default: blockSize / 2): space between events and actions in rules
 
 - "errorColor" (string, default: "#e44"): color for error messages and hints
 - "warningColor" (string, default: "#f88"): color for warning messages and hints

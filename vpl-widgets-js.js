@@ -14,19 +14,19 @@ A3a.vpl.widgetsJS = {
 			ctx.fillStyle = dims.ruleMarks;
 			ctx.beginPath();
 			ctx.arc(0, -0.2 * dims.blockSize,
-				0.17 * dims.interEventActionSpace,
+				0.08 * dims.blockSize,
 				0, 2 * Math.PI);
 			ctx.arc(0, 0.2 * dims.blockSize,
-				0.17 * dims.interEventActionSpace,
+				0.08 * dims.blockSize,
 				0, 2 * Math.PI);
 			ctx.fill();
 		}),
 		bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
 			return {
-				xmin: -0.5 * dims.interEventActionSpace,
-				xmax: 0.5 * dims.interEventActionSpace,
-				ymin: -0.2 * dims.blockSize - 0.3 * dims.interEventActionSpace,
-				ymax: 0.2 * dims.blockSize + 0.3 * dims.interEventActionSpace
+				xmin: -0.1 * dims.blockSize,
+				xmax: 0.1 * dims.blockSize,
+				ymin: -0.5 * dims.blockSize,
+				ymax: 0.5 * dims.blockSize
 			}
 		})
 	},

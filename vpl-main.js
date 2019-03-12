@@ -124,6 +124,12 @@ function vplLoadResourcesInScripts(rootFilename, getAuxiliaryFilenames, onLoad, 
 				rsrc[filename] = txt;
 			});
 		}
+		if (gui["css"]) {
+			gui["css"].forEach(function (filename) {
+				txt = document.getElementById(filename).textContent.trim();
+				rsrc[filename] = txt;
+			});
+		}
 		onLoad(gui, rsrc);
 	} catch (e) {
 		onError(e);
@@ -196,6 +202,14 @@ function vplSetup(gui) {
 	// application
 	var app = new A3a.vpl.Application(canvasEl);
 	window["vplApp"] = app;
+
+	// css
+	if (gui && gui["css"]) {
+		gui["css"].forEach(function (filename) {
+			app.css.parse(filename, gui.rsrc[filename]);
+		});
+		app.css.defineBoxProperties();
+	}
 
 	// general settings
 	var isClassic = gui == undefined || getQueryOption("appearance") === "classic";
@@ -587,6 +601,11 @@ window.addEventListener("load", function () {
 			}
 			if (gui["overlays"]) {
 				gui["overlays"].forEach(function (filename) {
+					gui.rsrc[filename] = rsrc[filename];
+				});
+			}
+			if (gui["css"]) {
+				gui["css"].forEach(function (filename) {
 					gui.rsrc[filename] = rsrc[filename];
 				});
 			}

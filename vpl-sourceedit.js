@@ -33,7 +33,7 @@ A3a.vpl.VPLSourceEditor = function (app, noVPL, language) {
 
 	var self = this;
 
-	this.tbCanvas = new A3a.vpl.Canvas(app.canvasEl);
+	this.tbCanvas = new A3a.vpl.Canvas(app.canvasEl, null, app.css);
 
 	// editor control update
 	document.getElementById("editor").addEventListener("input",
@@ -136,11 +136,27 @@ A3a.vpl.VPLSourceEditor.prototype.selectRange = function (begin, end) {
 };
 
 /** Calculate the toolbar height
-	@return {number}
+	@return {{left:number,top:number,width:number,height:number}}
 */
-A3a.vpl.VPLSourceEditor.prototype.srcToolbarHeight = function () {
-	var dims = this.tbCanvas.dims;
-	return dims.controlSize + 2 * dims.interBlockSpace;
+A3a.vpl.VPLSourceEditor.prototype.editorArea = function () {
+	var canvasSize = this.tbCanvas.getSize();
+	var viewBox = this.tbCanvas.css.getBox({tag: "view", clas: ["src"]});
+	viewBox.setTotalWidth(canvasSize.width);
+	viewBox.setTotalHeight(canvasSize.height);
+	viewBox.setPosition(0, 0);
+	// buttonBox and toolbarBox: don't care about width
+	var buttonBox = this.tbCanvas.css.getBox({tag: "button", clas: ["src", "top"]});
+	buttonBox.height = this.tbCanvas.dims.controlSize;
+	var toolbarBox = this.tbCanvas.css.getBox({tag: "toolbar", clas: ["src", "top"]});
+	toolbarBox.height = buttonBox.totalHeight();
+	toolbarBox.setPosition(viewBox.x, viewBox.y);
+
+	return {
+		left: viewBox.x,
+		top: viewBox.y + toolbarBox.totalHeight(),
+		width: viewBox.width,
+		height: viewBox.height - toolbarBox.totalHeight()
+	};
 };
 
 /** Render toolbar for source code editor
@@ -152,8 +168,34 @@ A3a.vpl.Application.prototype.renderSourceEditorToolbar = function () {
 	// start with an empty canvas
 	editor.tbCanvas.clearItems();
 
-	// top controls
+	// boxes
 	var canvasSize = editor.tbCanvas.getSize();
+
+	var viewBox = editor.tbCanvas.css.getBox({tag: "view", clas: ["src"]});
+	var buttonBox = editor.tbCanvas.css.getBox({tag: "button", clas: ["src", "top"]});
+	var separatorBox = editor.tbCanvas.css.getBox({tag: "separator", clas: ["src", "top"]});
+	var toolbarBox = editor.tbCanvas.css.getBox({tag: "toolbar", clas: ["src", "top"]});
+
+	buttonBox.width = editor.tbCanvas.dims.controlSize;
+	buttonBox.height = editor.tbCanvas.dims.controlSize;
+	toolbarBox.setTotalWidth(canvasSize.width);
+	toolbarBox.height = buttonBox.totalHeight();
+	toolbarBox.setPosition(0, 0);
+
+	// box sizes
+	viewBox.setTotalWidth(canvasSize.width);
+	viewBox.setTotalHeight(canvasSize.height);
+	viewBox.setPosition(0, 0);
+	buttonBox.width = editor.tbCanvas.dims.controlSize;
+	buttonBox.height = editor.tbCanvas.dims.controlSize;
+	toolbarBox.setTotalWidth(viewBox.width);
+	toolbarBox.height = buttonBox.totalHeight();
+	toolbarBox.setPosition(viewBox.x, viewBox.y);
+
+	// view (background)
+	editor.tbCanvas.addDecoration(function (ctx) {
+		viewBox.draw(ctx);
+	});
 
 	// top controls
 	var controlBar = new A3a.vpl.ControlBar(editor.tbCanvas);
@@ -178,15 +220,8 @@ A3a.vpl.Application.prototype.renderSourceEditorToolbar = function () {
 		editor.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
 		editor.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
 
-	var controlBarPos = {
-		xmin: editor.tbCanvas.dims.margin,
-		xmax: canvasSize.width - editor.tbCanvas.dims.margin,
-		ymin: editor.tbCanvas.dims.margin,
-		ymax: editor.tbCanvas.dims.margin + editor.tbCanvas.dims.controlSize
-	};
-	controlBar.calcLayout(controlBarPos,
-		editor.tbCanvas.dims.interBlockSpace, 2 * editor.tbCanvas.dims.interBlockSpace);
-	controlBar.addToCanvas();
+	controlBar.calcLayout(toolbarBox, buttonBox, separatorBox);
+	controlBar.addToCanvas(toolbarBox, buttonBox);
 	editor.tbCanvas.redraw();
 };
 
@@ -212,11 +247,15 @@ A3a.vpl.VPLSourceEditor.prototype.resize = function () {
 	this.tbCanvas.resize(width, height);
 	var canvasBndRect = this.tbCanvas.canvas.getBoundingClientRect();
 	var editorDiv = document.getElementById("src-editor");
-	var tbHeight = this.srcToolbarHeight();
-	editorDiv.style.left = (canvasBndRect.left + canvasBndRect.width * this.tbCanvas.relativeArea.xmin) + "px";
-	editorDiv.style.width = (canvasBndRect.width * (this.tbCanvas.relativeArea.xmax - this.tbCanvas.relativeArea.xmin)) + "px";
-	editorDiv.style.top = (canvasBndRect.top + canvasBndRect.height * this.tbCanvas.relativeArea.ymin + tbHeight) + "px";
-	editorDiv.style.height = (canvasBndRect.height * (this.tbCanvas.relativeArea.ymax - this.tbCanvas.relativeArea.ymin) - tbHeight) + "px";
+	var editorArea = this.editorArea();
+	// editorDiv.style.left = (canvasBndRect.left + canvasBndRect.width * this.tbCanvas.relativeArea.xmin) + "px";
+	// editorDiv.style.width = (canvasBndRect.width * (this.tbCanvas.relativeArea.xmax - this.tbCanvas.relativeArea.xmin)) + "px";
+	// editorDiv.style.top = (canvasBndRect.top + canvasBndRect.height * this.tbCanvas.relativeArea.ymin + tbHeight) + "px";
+	// editorDiv.style.height = (canvasBndRect.height * (this.tbCanvas.relativeArea.ymax - this.tbCanvas.relativeArea.ymin) - tbHeight) + "px";
+	editorDiv.style.left = editorArea.left + "px";
+	editorDiv.style.width = editorArea.width + "px";
+	editorDiv.style.top = editorArea.top + "px";
+	editorDiv.style.height = editorArea.height + "px";
 
 	this.textEditor.resize();
 

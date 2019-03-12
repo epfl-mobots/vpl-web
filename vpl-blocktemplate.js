@@ -152,7 +152,6 @@ A3a.vpl.BlockTemplate.params;
 A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, x0, y0, doesZoomOnLongPress) {
 	canvas.ctx.save();
 	canvas.ctx.translate(x0, y0);
-	canvas.blockBackground(this.type, doesZoomOnLongPress);
 	this.draw(canvas, block);
 	canvas.ctx.restore();
 };

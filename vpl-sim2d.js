@@ -471,8 +471,42 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	// start with an empty canvas
 	simCanvas.clearItems();
 
-	// top controls
+	// boxes
 	var canvasSize = simCanvas.getSize();
+
+	var viewBox = simCanvas.css.getBox({tag: "view", clas: ["sim"]});
+	var smallButtonBox = simCanvas.css.getBox({tag: "button-small", id: "button-sim"});
+	var robotControlBox = simCanvas.css.getBox({tag: "sim-controller"});
+	var separatorControlBox = simCanvas.css.getBox({tag: "separator", id: "sim-controller-separator"});
+	var buttonBox = simCanvas.css.getBox({tag: "button", clas: ["sim", "top"]});
+	var separatorBox = simCanvas.css.getBox({tag: "separator", clas: ["sim", "top"]});
+	var toolbarBox = simCanvas.css.getBox({tag: "toolbar", clas: ["sim", "top"]});
+	var playgroundAreaBox = simCanvas.css.getBox({tag: "sim-playground-area"});
+	var playgroundBox = simCanvas.css.getBox({tag: "sim-playground"});
+
+	// box sizes
+	viewBox.setTotalWidth(canvasSize.width);
+	viewBox.setTotalHeight(canvasSize.height);
+	viewBox.setPosition(0, 0);
+	var smallBtnSize = simCanvas.dims.controlSize * 0.6;
+	smallButtonBox.width = smallBtnSize;
+	smallButtonBox.height = smallBtnSize;
+	robotControlBox.width = 3 * smallButtonBox.totalWidth();
+	robotControlBox.setTotalHeight(viewBox.height);
+	robotControlBox.setPosition(viewBox.x + viewBox.width - robotControlBox.totalWidth(), viewBox.y);
+	buttonBox.width = simCanvas.dims.controlSize;
+	buttonBox.height = simCanvas.dims.controlSize;
+	toolbarBox.setTotalWidth(viewBox.width - robotControlBox.totalWidth());
+	toolbarBox.height = buttonBox.totalHeight();
+	toolbarBox.setPosition(viewBox.x, viewBox.y);
+	playgroundAreaBox.setTotalWidth(viewBox.width - robotControlBox.totalWidth());
+	playgroundAreaBox.setTotalHeight(viewBox.height - toolbarBox.totalHeight());
+	playgroundAreaBox.setPosition(viewBox.x, viewBox.y + toolbarBox.totalHeight());
+
+	// view (background)
+	simCanvas.addDecoration(function (ctx) {
+		viewBox.draw(ctx);
+	});
 
 	// top controls
 	var controlBar = new A3a.vpl.ControlBar(simCanvas);
@@ -500,25 +534,21 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
 		sim2d.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
 
-	var smallBtnSize = simCanvas.dims.controlSize * 0.6;
-
-	var controlBarPos = {
-		xmin: 2 * simCanvas.dims.margin + 3 * smallBtnSize + 2 * simCanvas.dims.stripHorMargin,
-		xmax: canvasSize.width - simCanvas.dims.margin,
-		ymin: simCanvas.dims.margin,
-		ymax: simCanvas.dims.margin + simCanvas.dims.controlSize
-	};
-	controlBar.calcLayout(controlBarPos,
-		simCanvas.dims.interBlockSpace, 2 * simCanvas.dims.interBlockSpace);
-	controlBar.addToCanvas();
+	controlBar.calcLayout(toolbarBox, buttonBox, separatorBox);
+	controlBar.addToCanvas(toolbarBox, buttonBox);
 
 	// add buttons for events
-	var yRobotControl = simCanvas.dims.margin;
+	simCanvas.addDecoration(function (ctx) {
+		robotControlBox.draw(ctx);
+		// ignore other boxes
+	});
+
+	var yRobotControl = robotControlBox.y + smallButtonBox.offsetTop();
 
 	// forward
-	simCanvas.addControl(simCanvas.dims.margin + smallBtnSize + simCanvas.dims.stripHorMargin,
+	simCanvas.addControl(robotControlBox.x + smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
-		smallBtnSize, smallBtnSize,
+		smallButtonBox.width, smallButtonBox.height,
 		// draw
 		function (ctx, width, height, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:forward",
@@ -534,8 +564,9 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		null, null,
 		"button.forward");
 	// left
-	simCanvas.addControl(simCanvas.dims.margin,
-		yRobotControl + smallBtnSize + simCanvas.dims.stripHorMargin,
+	yRobotControl += smallButtonBox.totalHeight();
+	simCanvas.addControl(robotControlBox.x + smallButtonBox.offsetLeft(),
+		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
 		function (ctx, width, height, isPressed) {
@@ -552,8 +583,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		null, null,
 		"button.left");
 	// center
-	simCanvas.addControl(simCanvas.dims.margin + smallBtnSize + simCanvas.dims.stripHorMargin,
-		yRobotControl + smallBtnSize + simCanvas.dims.stripHorMargin,
+	simCanvas.addControl(robotControlBox.x + smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
+		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
 		function (ctx, width, height, isPressed) {
@@ -570,8 +601,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		null, null,
 		"button.center");
 	// right
-	simCanvas.addControl(simCanvas.dims.margin + 2 * smallBtnSize + 2 * simCanvas.dims.stripHorMargin,
-		yRobotControl + smallBtnSize + simCanvas.dims.stripHorMargin,
+	simCanvas.addControl(robotControlBox.x + 2 * smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
+		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
 		function (ctx, width, height, isPressed) {
@@ -588,8 +619,9 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		null, null,
 		"button.right");
 	// backward
-	simCanvas.addControl(simCanvas.dims.margin + smallBtnSize + simCanvas.dims.stripHorMargin,
-		yRobotControl + 2 * smallBtnSize + 2 * simCanvas.dims.stripHorMargin,
+	yRobotControl += smallButtonBox.totalHeight();
+	simCanvas.addControl(robotControlBox.x + smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
+		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
 		function (ctx, width, height, isPressed) {
@@ -605,10 +637,10 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		},
 		null, null,
 		"button.backward");
-	yRobotControl += 3.5 * smallBtnSize + 3 * simCanvas.dims.stripHorMargin;
+	yRobotControl += smallButtonBox.totalHeight() + separatorControlBox.totalHeight();
 
 	// tap
-	simCanvas.addControl(simCanvas.dims.margin + 0.5 * smallBtnSize + 0.5 * simCanvas.dims.stripHorMargin,
+	simCanvas.addControl(robotControlBox.x + 0.5 * smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
@@ -623,7 +655,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		null, null,
 		"tap");
 	// clap
-	simCanvas.addControl(simCanvas.dims.margin + 1.5 * smallBtnSize + 1.5 * simCanvas.dims.stripHorMargin,
+	simCanvas.addControl(robotControlBox.x + 1.5 * smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
@@ -640,29 +672,30 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	yRobotControl += 2 * smallBtnSize;
 
 	// draw robot from top
+	var xRobotControl = robotControlBox.x + 1.5 * smallButtonBox.totalWidth();	// center
 	var yRobotTop = yRobotControl + 3.5 * smallBtnSize;	// rear
 	simCanvas.addDecoration(function (ctx) {
 		ctx.save();
 		ctx.beginPath();
 		// rear left
-		ctx.moveTo(simCanvas.dims.margin + 0.3 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.moveTo(xRobotControl - 1.2 * smallBtnSize,
 			yRobotTop);
-		ctx.lineTo(simCanvas.dims.margin + 0.3 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.lineTo(xRobotControl - 1.2 * smallBtnSize,
 			yRobotTop - 1.8 * smallBtnSize);
-		ctx.bezierCurveTo(simCanvas.dims.margin + 0.78 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.bezierCurveTo(xRobotControl - 0.72 * smallBtnSize,
 			yRobotTop - 2.4 * smallBtnSize,
-			simCanvas.dims.margin + 1.45 * smallBtnSize + simCanvas.dims.stripHorMargin,
+			xRobotControl - 0.05 * smallBtnSize,
 			yRobotTop - 2.4 * smallBtnSize,
-			simCanvas.dims.margin + 1.5 * smallBtnSize + simCanvas.dims.stripHorMargin,
+			xRobotControl,
 			yRobotTop - 2.4 * smallBtnSize);
 		// left side
-		ctx.bezierCurveTo(simCanvas.dims.margin + 1.55 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.bezierCurveTo(xRobotControl + 0.05 * smallBtnSize,
 			yRobotTop - 2.4 * smallBtnSize,
-			simCanvas.dims.margin + 2.22 * smallBtnSize + simCanvas.dims.stripHorMargin,
+			xRobotControl + 0.72 * smallBtnSize,
 			yRobotTop - 2.4 * smallBtnSize,
-			simCanvas.dims.margin + 2.7 * smallBtnSize + simCanvas.dims.stripHorMargin,
+			xRobotControl + 1.2 * smallBtnSize,
 			yRobotTop - 1.8 * smallBtnSize);
-		ctx.lineTo(simCanvas.dims.margin + 2.7 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.lineTo(xRobotControl + 1.2 * smallBtnSize,
 			yRobotTop);
 		ctx.closePath();
 		ctx.lineWidth = 2;
@@ -697,13 +730,13 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 
 		// ground left
 		var groundSensorValues = robot["get"]("prox.ground.delta");
-		drawSensor(simCanvas.dims.margin + 1.05 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		drawSensor(xRobotControl - 0.45 * smallBtnSize,
 			yRobotTop - 1.8 * smallBtnSize,
 			0.4 * smallBtnSize,
 			groundSensorValues[0],
 			"#afa", "#060");
 		// ground right
-		drawSensor(simCanvas.dims.margin + 1.95 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		drawSensor(xRobotControl + 0.45 * smallBtnSize,
 			yRobotTop - 1.8 * smallBtnSize,
 			0.4 * smallBtnSize,
 			groundSensorValues[1],
@@ -712,41 +745,41 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		// proximity
 		var proxSensorValues = robot["get"]("prox.horizontal");
 		// front left
-		drawSensor(simCanvas.dims.margin + 0.05 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		drawSensor(xRobotControl - 1.45 * smallBtnSize,
 			yRobotTop - 2.3 * smallBtnSize,
 			0.4 * smallBtnSize,
 			proxSensorValues[0],
 			"#fcc", "#d00");
-		drawSensor(simCanvas.dims.margin + 0.7 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		drawSensor(xRobotControl - 0.8 * smallBtnSize,
 			yRobotTop - 2.8 * smallBtnSize,
 			0.4 * smallBtnSize,
 			proxSensorValues[1],
 			"#fcc", "#d00");
 		// center
-		drawSensor(simCanvas.dims.margin + 1.5 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		drawSensor(xRobotControl,
 			yRobotTop - 3 * smallBtnSize,
 			0.4 * smallBtnSize,
 			proxSensorValues[2],
 			"#fcc", "#d00");
 		// front right
-		drawSensor(simCanvas.dims.margin + 2.3 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		drawSensor(xRobotControl + 0.8 * smallBtnSize,
 			yRobotTop - 2.8 * smallBtnSize,
 			0.4 * smallBtnSize,
 			proxSensorValues[3],
 			"#fcc", "#d00");
-		drawSensor(simCanvas.dims.margin + 2.95 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		drawSensor(xRobotControl + 1.45 * smallBtnSize,
 			yRobotTop - 2.3 * smallBtnSize,
 			0.4 * smallBtnSize,
 			proxSensorValues[4],
 			"#fcc", "#d00");
 		// back left
-		drawSensor(simCanvas.dims.margin + 0.7 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		drawSensor(xRobotControl - 0.8 * smallBtnSize,
 			yRobotTop + 0.5 * smallBtnSize,
 			0.4 * smallBtnSize,
 			proxSensorValues[5],
 			"#fcc", "#d00");
 		// back right
-		drawSensor(simCanvas.dims.margin + 2.3 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		drawSensor(xRobotControl + 0.8 * smallBtnSize,
 			yRobotTop + 0.5 * smallBtnSize,
 			0.4 * smallBtnSize,
 			proxSensorValues[6],
@@ -761,39 +794,39 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	simCanvas.addDecoration(function (ctx) {
 		ctx.save();
 		ctx.fillStyle = "black";
-		ctx.fillRect(simCanvas.dims.margin + 0.35 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.fillRect(xRobotControl - 1.15 * smallBtnSize,
 			yRobotSide + 0.5 * smallBtnSize,
 			0.3 * smallBtnSize, 0.6 * smallBtnSize);
-		ctx.fillRect(simCanvas.dims.margin + 2.35 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.fillRect(xRobotControl + 0.85 * smallBtnSize,
 			yRobotSide + 0.5 * smallBtnSize,
 			0.3 * smallBtnSize, 0.6 * smallBtnSize);
 		ctx.fillStyle = A3a.vpl.VPLSim2DViewer.color(/** @type {Array.<number>} */(robot["get"]("leds.top")));
-		ctx.fillRect(simCanvas.dims.margin + 0.3 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.fillRect(xRobotControl - 1.2 * smallBtnSize,
 			yRobotSide,
 			2.4 * smallBtnSize, 0.5 * smallBtnSize);
 		ctx.fillStyle = A3a.vpl.VPLSim2DViewer.color(/** @type {Array.<number>} */(robot["get"]("leds.bottom.left")));
-		ctx.fillRect(simCanvas.dims.margin + 0.3 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.fillRect(xRobotControl - 1.2 * smallBtnSize,
 			yRobotSide + 0.5 * smallBtnSize,
 			1.2 * smallBtnSize, 0.5 * smallBtnSize);
 		ctx.fillStyle = A3a.vpl.VPLSim2DViewer.color(/** @type {Array.<number>} */(robot["get"]("leds.bottom.right")));
-		ctx.fillRect(simCanvas.dims.margin + 1.5 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.fillRect(xRobotControl,
 			yRobotSide + 0.5 * smallBtnSize,
 			1.2 * smallBtnSize, 0.5 * smallBtnSize);
 		ctx.lineWidth = 1;
 		ctx.beginPath();
-		ctx.moveTo(simCanvas.dims.margin + 0.3 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.moveTo(xRobotControl - 1.2 * smallBtnSize,
 			yRobotSide + 0.5 * smallBtnSize);
-		ctx.lineTo(simCanvas.dims.margin + 2.7 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.lineTo(xRobotControl + 1.2 * smallBtnSize,
 			yRobotSide + 0.5 * smallBtnSize);
-		ctx.moveTo(simCanvas.dims.margin + 1.5 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.moveTo(xRobotControl,
 			yRobotSide + 0.5 * smallBtnSize);
-		ctx.lineTo(simCanvas.dims.margin + 1.5 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.lineTo(xRobotControl,
 			yRobotSide + smallBtnSize);
 		ctx.strokeStyle = "white";
 		ctx.stroke();
 		ctx.lineJoin = "round";
 		ctx.strokeStyle = "black";
-		ctx.strokeRect(simCanvas.dims.margin + 0.3 * smallBtnSize + simCanvas.dims.stripHorMargin,
+		ctx.strokeRect(xRobotControl - 1.2 * smallBtnSize,
 			yRobotSide,
 			2.4 * smallBtnSize, smallBtnSize);
 		ctx.restore();
@@ -815,7 +848,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			ctx.lineWidth = 0.7 * simCanvas.dims.blockLineWidth;
 			for (var i = 0; i < 3; i++) {
 				ctx.save();
-				ctx.translate(simCanvas.dims.margin + simCanvas.dims.stripHorMargin + (0.5 + i) * smallBtnSize,
+				ctx.translate(xRobotControl + (i - 1) * smallBtnSize,
 					accY0);
 
 				// cross
@@ -898,7 +931,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			var leds = robot["get"]("leds.circle");
 			for (var i = 0; i < 8; i++) {
 				A3a.vpl.Canvas.drawArc(ctx,
-					simCanvas.dims.margin + 1.5 * smallBtnSize + simCanvas.dims.stripHorMargin,
+					xRobotControl,
 					ledsY0,
 					0.9 * smallBtnSize, 1.2 * smallBtnSize,
 					Math.PI * (0.5 - 0.06 - i * 0.25), Math.PI * (0.5 + 0.06 - i * 0.25),
@@ -912,7 +945,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	// draw timer 0
 	var timerY0 = yRobotControl + smallBtnSize;	// center
 	simCanvas.addDecoration(function (ctx) {
-		var x0 = simCanvas.dims.margin + 1.5 * smallBtnSize + simCanvas.dims.stripHorMargin;
+		var x0 = xRobotControl;
 		var y0 = timerY0;
 		var tRemaining = robot["getTimer"](0);
 		if (tRemaining >= 0) {
@@ -931,7 +964,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 					ctx.textBaseline = "top";
 					ctx.font = (smallBtnSize / 2).toFixed(1) + "px sans-serif";
 					ctx.fillStyle = "black";
-					ctx.fillText(t.toFixed(1), simCanvas.dims.margin, y0 - smallBtnSize);
+					ctx.fillText(t.toFixed(1), robotControlBox.x, y0 - smallBtnSize);
 				},
 				Math.min(tRemaining, simCanvas.state.timeScale === "log" ? 9.9 : 3.95),
 				false, simCanvas.state.timeScale === "log");
@@ -944,17 +977,23 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 
 	// simCanvas area available to display the playground
 	var playgroundView = {
-		x: 2 * simCanvas.dims.margin + 3 * smallBtnSize + 2 * simCanvas.dims.stripHorMargin,
-		y: 2 * simCanvas.dims.margin + simCanvas.dims.controlSize
+		x: playgroundAreaBox.x,
+		y: playgroundAreaBox.y,
+		width: playgroundAreaBox.width,
+		height: playgroundAreaBox.height
 	};
-	playgroundView.width = simCanvas.width - playgroundView.x - simCanvas.dims.margin;
-	playgroundView.height = simCanvas.height - playgroundView.y - simCanvas.dims.margin;
 
 	// playground scaling and displacement to center it in playgroundView
 	playgroundView.scale = Math.min(playgroundView.width / sim2d.playground.width,
 		playgroundView.height / sim2d.playground.height);
 	playgroundView.ox = (playgroundView.width - sim2d.playground.width * playgroundView.scale) / 2;
 	playgroundView.oy = (playgroundView.height - sim2d.playground.height * playgroundView.scale) / 2;
+
+	// playground box
+	playgroundBox.width = sim2d.playground.width * playgroundView.scale;
+	playgroundBox.height = sim2d.playground.height * playgroundView.scale;
+	playgroundBox.x = playgroundView.x + playgroundView.ox;
+	playgroundBox.y = playgroundView.y + playgroundView.oy;
 
 	// draw robot and playground as a single CanvasItem
 	var robotSize = robot.robotSize;
@@ -965,6 +1004,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		playgroundView.y + playgroundView.oy,
 		function(ctx, item, dx, dy) {
 			ctx.save();
+			playgroundAreaBox.draw(ctx);
+			playgroundBox.draw(ctx);
 
 			switch (sim2d.currentMap) {
 			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
@@ -984,10 +1025,6 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 				ctx.restore();
 				break;
 			}
-
-			ctx.strokeStyle = "silver";
-			ctx.lineWidth = 3;
-			ctx.strokeRect(item.x + dx, item.y + dy, item.width, item.height);
 
 			// set playground origin in the middle of the playground
 			ctx.translate(item.x + dx + item.width / 2, item.y + dy + item.height / 2);
