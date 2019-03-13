@@ -248,13 +248,9 @@ A3a.vpl.VPLSourceEditor.prototype.resize = function () {
 	var canvasBndRect = this.tbCanvas.canvas.getBoundingClientRect();
 	var editorDiv = document.getElementById("src-editor");
 	var editorArea = this.editorArea();
-	// editorDiv.style.left = (canvasBndRect.left + canvasBndRect.width * this.tbCanvas.relativeArea.xmin) + "px";
-	// editorDiv.style.width = (canvasBndRect.width * (this.tbCanvas.relativeArea.xmax - this.tbCanvas.relativeArea.xmin)) + "px";
-	// editorDiv.style.top = (canvasBndRect.top + canvasBndRect.height * this.tbCanvas.relativeArea.ymin + tbHeight) + "px";
-	// editorDiv.style.height = (canvasBndRect.height * (this.tbCanvas.relativeArea.ymax - this.tbCanvas.relativeArea.ymin) - tbHeight) + "px";
-	editorDiv.style.left = editorArea.left + "px";
+	editorDiv.style.left = (canvasBndRect.left + canvasBndRect.width * this.tbCanvas.relativeArea.xmin + editorArea.left) + "px";
 	editorDiv.style.width = editorArea.width + "px";
-	editorDiv.style.top = editorArea.top + "px";
+	editorDiv.style.top = (canvasBndRect.top + canvasBndRect.height * this.tbCanvas.relativeArea.ymin + editorArea.top) + "px";
 	editorDiv.style.height = editorArea.height + "px";
 
 	this.textEditor.resize();
