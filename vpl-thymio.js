@@ -11,7 +11,7 @@
 A3a.vpl.Application.prototype.installThymio = function () {
 	var app = this;
 	this.runGlue = new A3a.vpl.RunGlue({
-		run: function (code) {
+		run: function (language, code) {
 			/** @type {A3a.Node} */(app.runGlue.state).putA3aCodeAsync(code);
 		},
 		init: function (language) {
@@ -33,6 +33,7 @@ A3a.vpl.Application.prototype.installThymio = function () {
 			return language === "aseba" && app.runGlue.state != null;
 		},
 		preferredLanguage: "aseba",
+		languages: ["aseba", "l2"],
 		state: null
 	});
 };
