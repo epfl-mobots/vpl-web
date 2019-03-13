@@ -9,6 +9,15 @@
 	@return {void}
 */
 A3a.vpl.Application.prototype.addSim2DCommands = function () {
+	this.commands.add("sim:close", {
+		action: function (app, modifier) {
+			app.setView(["sim"], {closeView: true});
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.views.length > 1 && app.views.indexOf("sim") >= 0;
+		}
+	});
 	this.commands.add("sim:restart", {
 		action: function (app, modifier) {
 			app.restoreGround();
@@ -152,7 +161,11 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 	});
 	this.commands.add("sim:vpl", {
 		action: function (app, modifier) {
-			app.setView(["vpl"], {fromView: "sim"});
+			if (app.multipleViews) {
+				app.setView(["vpl"], {openView: true});
+			} else {
+				app.setView(["vpl"], {fromView: "sim"});
+			}
 		},
 		isEnabled: function (app) {
 			return app.editor == null || app.editor.doesMatchVPL();
@@ -165,11 +178,18 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 	});
 	this.commands.add("sim:text", {
 		action: function (app, modifier) {
-			app.setView(["src"],
-				{
-					fromView: "sim",
+			if (app.multipleViews) {
+				app.setView(["src"], {
+					openView: true,
 					unlocked: !app.editor.isLockedWithVPL
 				});
+			} else {
+				app.setView(["src"],
+					{
+						fromView: "sim",
+						unlocked: !app.editor.isLockedWithVPL
+					});
+			}
 		},
 		object: this,
 		isAvailable: function (app) {

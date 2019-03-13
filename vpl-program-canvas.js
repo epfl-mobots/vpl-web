@@ -605,6 +605,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var controlBar = new A3a.vpl.ControlBar(canvas);
 	controlBar.setButtons(this,
 		program.toolbarConfig || [
+			"vpl:close",
+			"!space",
 			"vpl:new",
 			"vpl:save",
 			// "vpl:load",

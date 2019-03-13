@@ -201,6 +201,8 @@ A3a.vpl.Application.prototype.renderSourceEditorToolbar = function () {
 	var controlBar = new A3a.vpl.ControlBar(editor.tbCanvas);
 	controlBar.setButtons(this,
 		editor.toolbarConfig || [
+			"src:close",
+			"!space",
 			"src:new",
 			"src:save",
 			"src:vpl",

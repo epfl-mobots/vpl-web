@@ -9,6 +9,15 @@
 	@return {void}
 */
 A3a.vpl.Application.prototype.addVPLCommands = function () {
+	this.commands.add("vpl:close", {
+		action: function (app, modifier) {
+			app.setView(["vpl"], {closeView: true});
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.views.length > 1 && app.views.indexOf("vpl") >= 0;
+		}
+	});
 	this.commands.add("vpl:new", {
 		action: function (app, modifier) {
 			app.program.new();
@@ -54,7 +63,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:text", {
 		action: function (app, modifier) {
-			app.setView(["src"], {fromView: "vpl"});
+			if (app.multipleViews) {
+				app.setView(["src"], {openView: true});
+			} else {
+				app.setView(["src"], {fromView: "vpl"});
+			}
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL;
@@ -195,7 +208,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:sim", {
 		action: function (app, modifier) {
-			app.setView(["sim"], {fromView: "vpl"});
+			if (app.multipleViews) {
+				app.setView(["sim"], {openView: true});
+			} else {
+				app.setView(["sim"], {fromView: "vpl"});
+			}
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL;

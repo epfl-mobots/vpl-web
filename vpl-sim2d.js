@@ -512,6 +512,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	var controlBar = new A3a.vpl.ControlBar(simCanvas);
 	controlBar.setButtons(this,
 		sim2d.toolbarConfig || [
+			"sim:close",
 			"!stretch",
 			"sim:restart",
 			"sim:pause",

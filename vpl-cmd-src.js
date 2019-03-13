@@ -9,6 +9,15 @@
 	@return {void}
 */
 A3a.vpl.Application.prototype.addSrcCommands = function () {
+	this.commands.add("src:close", {
+		action: function (app, modifier) {
+			app.setView(["src"], {closeView: true});
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.views.length > 1 && app.views.indexOf("src") >= 0;
+		}
+	});
 	this.commands.add("src:new", {
 		action: function (app, modifier) {
 			app.editor.textEditor.setContent("");
@@ -142,7 +151,11 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 	});
 	this.commands.add("src:sim", {
 		action: function (app, modifier) {
-			app.setView(["sim"], {fromView: "src"});
+			if (app.multipleViews) {
+				app.setView(["sim"], {openView: true});
+			} else {
+				app.setView(["sim"], {fromView: "src"});
+			}
 		},
 		object: this,
 		isAvailable: function (app) {

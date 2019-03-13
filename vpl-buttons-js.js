@@ -85,6 +85,21 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 
 	var draw = {
 		// vpl
+		"vpl:close": function () {
+			ctx.fillStyle = isPressed && isEnabled
+				? dims.controlDownColor
+				: dims.controlColor;
+			ctx.fillRect(0, 0,
+				dims.controlSize * 0.5, dims.controlSize);
+			ctx.beginPath();
+			ctx.moveTo(dims.controlSize * 0.1, dims.controlSize * 0.1);
+			ctx.lineTo(dims.controlSize * 0.4, dims.controlSize * 0.4);
+			ctx.moveTo(dims.controlSize * 0.1, dims.controlSize * 0.4);
+			ctx.lineTo(dims.controlSize * 0.4, dims.controlSize * 0.1);
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
+			ctx.lineWidth = dims.blockLineWidth;
+			ctx.stroke();
+		},
 		"vpl:new": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
@@ -540,6 +555,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		},
 
 		// source code editor
+		// "src:close": "vpl:close"
 		// "src:new": "vpl:new"
 		// "src:save": "vpl:save"
 		"src:vpl": function () {
@@ -684,6 +700,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		// "src:teacher-reset": "vpl:teacher-reset"
 
 		// simulator
+		// "sim:close": "vpl:close"
 		"sim:restart": function () {
 			ctx.save();
 			ctx.fillStyle = isPressed
@@ -1018,6 +1035,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.restore();
 		}
 	};
+	draw["src:close"] = draw["vpl:close"];
 	draw["src:new"] = draw["vpl:new"];
 	draw["src:save"] = draw["vpl:save"];
 	draw["src:load"] = draw["vpl:load"];
@@ -1026,6 +1044,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 	draw["src:sim"] = draw["vpl:sim"];
 	draw["src:teacher"] = draw["vpl:teacher"];
 	draw["src:teacher-reset"] = draw["vpl:teacher-reset"];
+	draw["sim:close"] = draw["vpl:close"];
 	draw["sim:vpl"] = draw["src:vpl"];
 	draw["sim:text"] = draw["vpl:text"];
 	draw["sim:teacher"] = draw["vpl:teacher"];
@@ -1043,6 +1062,19 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 	@return {A3a.vpl.ControlBar.Bounds}
 */
 A3a.vpl.Commands.getButtonBoundsJS = function (id, dims) {
+	// special cases
+	switch (id) {
+	case "vpl:close":
+	case "src:close":
+	case "sim:close":
+		return {
+			xmin: 0,
+			xmax: dims.controlSize / 2,
+			ymin: 0,
+			ymax: dims.controlSize
+		};
+	}
+
 	// fixed size
 	return {
 		xmin: 0,

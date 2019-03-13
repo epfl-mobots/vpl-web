@@ -39,6 +39,7 @@ A3a.vpl.Application = function (canvasEl) {
 	/** @type {A3a.vpl.RunGlue} */
 	this.runGlue = null;
 
+	this.multipleViews = false;
 	this.useLocalStorage = false;
 };
 
@@ -46,11 +47,13 @@ A3a.vpl.Application.initialized = false;
 
 /** Change current view
 	@param {Array.<string>} views array of "vpl", "src" and "sim"
-	@param {{noVPL:(boolean|undefined),unlocked:(boolean|undefined),fromView:(string|undefined)}=} options
+	@param {{noVPL:(boolean|undefined),unlocked:(boolean|undefined),fromView:(string|undefined),closeView:(string|undefined)}=} options
 	noVPL:true to prevent vpl (default: false),
 	unlocked:true (with "src") for source code editor in unlocked state (disconnected
 	from vpl),
-	fromView:v to change another view from view v (keep v, change other)
+	fromView:v to change another view from view v (keep v, change other),
+	closeView:true to close views,
+	openView:true to add a view
 	@return {void}
 */
 A3a.vpl.Application.prototype.setView = function (views, options) {
@@ -71,6 +74,14 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 		var views1 = this.views.slice();
 		views1[viewIx] = views[0];
 		views = views1;
+	} else if (options && options.openView) {
+		if (this.views.indexOf(views[0]) < 0) {
+			views = this.views.concat(views);
+		}
+	} else if (views.length === 1 && options && options.closeView &&
+		this.views.length > 1 && this.views.indexOf(views[0]) >= 0) {
+		this.views.splice(this.views.indexOf(views[0]), 1);
+		views = this.views;
 	}
 	this.views = views;
 
@@ -116,6 +127,10 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 			};
 			break;
 		}
+	}
+
+	if (options && (options.closeView || options.openView)) {
+		app.vplResize();
 	}
 
 	var onDraw = function () {

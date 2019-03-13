@@ -214,6 +214,7 @@ function vplSetup(gui) {
 	// general settings
 	var isClassic = gui == undefined || getQueryOption("appearance") === "classic";
 	app.useLocalStorage = getQueryOption("storage") === "local";
+	app.multipleViews = getQueryOption("multiview") === "true";
 	var language = getQueryOption("language");
 	/** @type {A3a.vpl.ControlBar.drawButton} */
 	var drawButton = A3a.vpl.Commands.drawButtonJS;
