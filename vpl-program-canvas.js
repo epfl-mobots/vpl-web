@@ -529,15 +529,19 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	blockCommentLibItemBox.height = canvas.dims.blockSize * canvas.dims.templateScale;
 	blockCommentLibItemBox.width = canvas.dims.blockSize * canvas.dims.templateScale;
 	blockEventLibBox.setTotalHeight(viewBox.height - toolbarBox.totalHeight());
+	var maxBlPerCol =  Math.max(
+		Math.floor(blockEventLibBox.height / blockEventLibItemBox.totalHeight()),
+		1
+	);
 	var evCol = canvas.dims.scrollingBlockLib
 		? 1
-		: Math.ceil(nEvTemplates * blockEventLibItemBox.totalHeight() / blockEventLibBox.height);
+		: Math.ceil(nEvTemplates / maxBlPerCol);
 	blockEventLibBox.width = evCol * blockEventLibItemBox.totalWidth();
 	blockEventLibBox.setPosition(viewBox.x, viewBox.y + toolbarBox.totalHeight());
 	blockActionLibBox.setTotalHeight(viewBox.height - toolbarBox.totalHeight());
 	var acCol = canvas.dims.scrollingBlockLib
 		? 1
-		: Math.ceil(nAcTemplates * blockActionLibItemBox.totalHeight() / blockActionLibBox.height);
+		: Math.ceil(nAcTemplates / maxBlPerCol);
 	blockActionLibBox.width = acCol * blockActionLibItemBox.totalWidth();
 	blockActionLibBox.setPosition(viewBox.x + viewBox.width - blockActionLibBox.totalWidth(),
 		viewBox.y + toolbarBox.totalHeight());
