@@ -544,10 +544,14 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		// ignore other boxes
 	});
 
+	/** @type {Array.<A3a.vpl.CanvasItem>} */
+	var simControls = [];
+
 	var yRobotControl = robotControlBox.y + smallButtonBox.offsetTop();
 
 	// forward
-	simCanvas.addControl(robotControlBox.x + smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
+	simControls.push(simCanvas.addControl(
+		robotControlBox.x + smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
 		smallButtonBox.width, smallButtonBox.height,
 		// draw
@@ -563,10 +567,11 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			robot["sendEvent"]("buttons", null);	// reset "when" state
 		},
 		null, null,
-		"button.forward");
+		"button.forward"));
 	// left
 	yRobotControl += smallButtonBox.totalHeight();
-	simCanvas.addControl(robotControlBox.x + smallButtonBox.offsetLeft(),
+	simControls.push(simCanvas.addControl(
+		robotControlBox.x + smallButtonBox.offsetLeft(),
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
@@ -582,9 +587,10 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			robot["sendEvent"]("buttons", null);	// reset "when" state
 		},
 		null, null,
-		"button.left");
+		"button.left"));
 	// center
-	simCanvas.addControl(robotControlBox.x + smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
+	simControls.push(simCanvas.addControl(
+		robotControlBox.x + smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
@@ -600,9 +606,10 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			robot["sendEvent"]("buttons", null);	// reset "when" state
 		},
 		null, null,
-		"button.center");
+		"button.center"));
 	// right
-	simCanvas.addControl(robotControlBox.x + 2 * smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
+	simControls.push(simCanvas.addControl(
+		robotControlBox.x + 2 * smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
@@ -618,10 +625,11 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			robot["sendEvent"]("buttons", null);	// reset "when" state
 		},
 		null, null,
-		"button.right");
+		"button.right"));
 	// backward
 	yRobotControl += smallButtonBox.totalHeight();
-	simCanvas.addControl(robotControlBox.x + smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
+	simControls.push(simCanvas.addControl(
+		robotControlBox.x + smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
@@ -637,11 +645,12 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			robot["sendEvent"]("buttons", null);	// reset "when" state
 		},
 		null, null,
-		"button.backward");
+		"button.backward"));
 	yRobotControl += smallButtonBox.totalHeight() + separatorControlBox.totalHeight();
 
 	// tap
-	simCanvas.addControl(robotControlBox.x + 0.5 * smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
+	simControls.push(simCanvas.addControl(
+		robotControlBox.x + 0.5 * smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
@@ -654,9 +663,10 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			robot["sendEvent"]("tap", null);
 		},
 		null, null,
-		"tap");
+		"tap"));
 	// clap
-	simCanvas.addControl(robotControlBox.x + 1.5 * smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
+	simControls.push(simCanvas.addControl(
+		robotControlBox.x + 1.5 * smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
 		smallBtnSize, smallBtnSize,
 		// draw
@@ -669,13 +679,13 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			robot["sendEvent"]("mic", null);
 		},
 		null, null,
-		"clap");
+		"clap"));
 	yRobotControl += 2 * smallBtnSize;
 
 	// draw robot from top
 	var xRobotControl = robotControlBox.x + 1.5 * smallButtonBox.totalWidth();	// center
 	var yRobotTop = yRobotControl + 3.5 * smallBtnSize;	// rear
-	simCanvas.addDecoration(function (ctx) {
+	simControls.push(simCanvas.addDecoration(function (ctx) {
 		ctx.save();
 		ctx.beginPath();
 		// rear left
@@ -787,12 +797,12 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			"#fcc", "#d00");
 
 		ctx.restore();
-	});
+	}));
 	yRobotControl += 5 * smallBtnSize;
 
 	// draw robot back side
 	var yRobotSide = yRobotControl;	// top
-	simCanvas.addDecoration(function (ctx) {
+	simControls.push(simCanvas.addDecoration(function (ctx) {
 		ctx.save();
 		ctx.fillStyle = "black";
 		ctx.fillRect(xRobotControl - 1.15 * smallBtnSize,
@@ -831,13 +841,13 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			yRobotSide,
 			2.4 * smallBtnSize, smallBtnSize);
 		ctx.restore();
-	});
+	}));
 	yRobotControl += 1.5 * smallBtnSize;
 
 	// draw accelerometers if there is a height map
 	if (sim2d.heightImage != null) {
-		var accY0 = yRobotControl + smallBtnSize;	// center
-		simCanvas.addDecoration(function (ctx) {
+		var accY0 = yRobotControl + 1.5 * smallBtnSize;	// center
+		simControls.push(simCanvas.addDecoration(function (ctx) {
 			var acc = robot["get"]("acc");
 			var angles = [
 				Math.atan2(acc[0], acc[1]),
@@ -921,14 +931,14 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 				ctx.restore();
 			}
 			ctx.restore();
-		});
-		yRobotControl += 2 * smallBtnSize;
+		}));
+		yRobotControl += 2.5 * smallBtnSize;
 	}
 
 	// draw yellow arc leds
 	if (robot.ledsCircleUsed) {
-		var ledsY0 = yRobotControl + 1.5 * smallBtnSize;	// center
-		simCanvas.addDecoration(function (ctx) {
+		var ledsY0 = yRobotControl + 2 * smallBtnSize;	// center
+		simControls.push(simCanvas.addDecoration(function (ctx) {
 			var leds = robot["get"]("leds.circle");
 			for (var i = 0; i < 8; i++) {
 				A3a.vpl.Canvas.drawArc(ctx,
@@ -939,42 +949,51 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 					leds[i] ? "#fa0" : "white",
 	 				"black", simCanvas.dims.blockLineWidth);
 			}
-		});
+		}));
 		yRobotControl += 3.5 * smallBtnSize;
 	}
 
 	// draw timer 0
-	var timerY0 = yRobotControl + smallBtnSize;	// center
-	simCanvas.addDecoration(function (ctx) {
-		var x0 = xRobotControl;
-		var y0 = timerY0;
-		var tRemaining = robot["getTimer"](0);
-		if (tRemaining >= 0) {
-			if (!simCanvas.state.timeScale) {
-				// set timeScale to "lin" or "log" the first time it's displayed
-				simCanvas.state.timeScale = tRemaining > 4 ? "log" : "lin";
-			} else if (simCanvas.state.timeScale === "lin" && tRemaining > 4) {
-				// ...but in case it's changed before it's elapsed, switch to log if useful
-				simCanvas.state.timeScale = "log";
-			}
-			A3a.vpl.Canvas.drawTimer(ctx,
-				x0, y0, smallBtnSize,
-				simCanvas.dims.blockLineWidth,
-				function (t) {
-					ctx.textAlign = "start";
-					ctx.textBaseline = "top";
-					ctx.font = (smallBtnSize / 2).toFixed(1) + "px sans-serif";
-					ctx.fillStyle = "black";
-					ctx.fillText(t.toFixed(1), robotControlBox.x, y0 - smallBtnSize);
-				},
-				Math.min(tRemaining, simCanvas.state.timeScale === "log" ? 9.9 : 3.95),
-				false, simCanvas.state.timeScale === "log");
-		} else {
-			// forget timeScale, will choose it again next time the timer is shown
-			simCanvas.state.timeScale = false;
-		}
-	});
-	yRobotControl += 3 * smallBtnSize;
+	var timerY0 = yRobotControl + 1.5 * smallBtnSize;	// center
+	var tRemaining = robot["getTimer"](0);
+	if (tRemaining >= 0) {
+		simControls.push(simCanvas.addDecoration(function (ctx) {
+			var x0 = xRobotControl;
+			var y0 = timerY0;
+				if (!simCanvas.state.timeScale) {
+					// set timeScale to "lin" or "log" the first time it's displayed
+					simCanvas.state.timeScale = tRemaining > 4 ? "log" : "lin";
+				} else if (simCanvas.state.timeScale === "lin" && tRemaining > 4) {
+					// ...but in case it's changed before it's elapsed, switch to log if useful
+					simCanvas.state.timeScale = "log";
+				}
+				A3a.vpl.Canvas.drawTimer(ctx,
+					x0, y0, smallBtnSize,
+					simCanvas.dims.blockLineWidth,
+					function (t) {
+						ctx.textAlign = "start";
+						ctx.textBaseline = "top";
+						ctx.font = (smallBtnSize / 2).toFixed(1) + "px sans-serif";
+						ctx.fillStyle = "black";
+						ctx.fillText(t.toFixed(1), robotControlBox.x, y0 - smallBtnSize);
+					},
+					Math.min(tRemaining, simCanvas.state.timeScale === "log" ? 9.9 : 3.95),
+					false, simCanvas.state.timeScale === "log");
+		}));
+		yRobotControl += 2.5 * smallBtnSize;
+	} else {
+		// forget timeScale, will choose it again next time the timer is shown
+		simCanvas.state.timeScale = false;
+	}
+
+	// push down items in simControls to center them if there is enough room
+	var dy = Math.min((playgroundAreaBox.y - robotControlBox.y + robotControlBox.y + robotControlBox.height - yRobotControl) / 2,
+		robotControlBox.y + robotControlBox.height - yRobotControl);
+	if (dy > 0) {
+		simControls.forEach(function (item) {
+			item.y += dy;
+		});
+	}
 
 	// simCanvas area available to display the playground
 	var playgroundView = {
@@ -996,150 +1015,165 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	playgroundBox.x = playgroundView.x + playgroundView.ox;
 	playgroundBox.y = playgroundView.y + playgroundView.oy;
 
-	// draw robot and playground as a single CanvasItem
-	var robotSize = robot.robotSize;
-	var temporaryPause = false;
-	var playgroundItem = new A3a.vpl.CanvasItem(null,
-		sim2d.playground.width * playgroundView.scale, sim2d.playground.height * playgroundView.scale,
-		playgroundView.x + playgroundView.ox,
-		playgroundView.y + playgroundView.oy,
-		function(ctx, item, dx, dy) {
-			ctx.save();
-			playgroundAreaBox.draw(ctx);
-			playgroundBox.draw(ctx);
-
-			switch (sim2d.currentMap) {
-			case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
-				ctx.drawImage(sim2d.groundCanvas, item.x + dx, item.y + dy, item.width, item.height);
-				break;
-			case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
-				if (sim2d.heightImage != null) {
-					ctx.drawImage(sim2d.heightCanvas, item.x + dx, item.y + dy, item.width, item.height);
-				}
-				break;
-			case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
+	if (this.uiConfig.customizationMode) {
+		// draw vpl:customization widget
+		var customBounds = simCanvas.getWidgetBounds("vpl:customize");
+		if (customBounds) {
+			var customBox = simCanvas.css.getBox({tag: "widget", id: "widget-customize"});
+			customBox.width = customBounds.xmax - customBounds.xmin;
+			customBox.height = customBounds.ymax - customBounds.ymin;
+			simCanvas.addDecoration(function (ctx) {
+				simCanvas.drawWidget("vpl:customize",
+					playgroundView.x + playgroundView.width / 2,
+					playgroundView.y + playgroundView.height / 2);
+			});
+		}
+	} else {
+		// draw robot and playground as a single CanvasItem
+		var robotSize = robot.robotSize;
+		var temporaryPause = false;
+		var playgroundItem = new A3a.vpl.CanvasItem(null,
+			sim2d.playground.width * playgroundView.scale, sim2d.playground.height * playgroundView.scale,
+			playgroundView.x + playgroundView.ox,
+			playgroundView.y + playgroundView.oy,
+			function(ctx, item, dx, dy) {
 				ctx.save();
-				// map sim2d.playground to item.x+dx,item.y+dy,item.width,item.height
+				playgroundAreaBox.draw(ctx);
+				playgroundBox.draw(ctx);
+
+				switch (sim2d.currentMap) {
+				case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
+					ctx.drawImage(sim2d.groundCanvas, item.x + dx, item.y + dy, item.width, item.height);
+					break;
+				case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
+					if (sim2d.heightImage != null) {
+						ctx.drawImage(sim2d.heightCanvas, item.x + dx, item.y + dy, item.width, item.height);
+					}
+					break;
+				case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
+					ctx.save();
+					// map sim2d.playground to item.x+dx,item.y+dy,item.width,item.height
+					ctx.translate(item.x + dx + item.width / 2, item.y + dy + item.height / 2);
+					ctx.scale(playgroundView.scale, -playgroundView.scale);	// upside-down
+					sim2d.obstacles.draw(ctx);
+					ctx.restore();
+					break;
+				}
+
+				// set playground origin in the middle of the playground
 				ctx.translate(item.x + dx + item.width / 2, item.y + dy + item.height / 2);
-				ctx.scale(playgroundView.scale, -playgroundView.scale);	// upside-down
-				sim2d.obstacles.draw(ctx);
-				ctx.restore();
-				break;
-			}
+				ctx.scale(playgroundView.scale, playgroundView.scale);
 
-			// set playground origin in the middle of the playground
-			ctx.translate(item.x + dx + item.width / 2, item.y + dy + item.height / 2);
-			ctx.scale(playgroundView.scale, playgroundView.scale);
+				ctx.translate(robot.pos[0], -robot.pos[1]);	// y upside-down
+				ctx.rotate(0.5 * Math.PI - robot.theta);
 
-			ctx.translate(robot.pos[0], -robot.pos[1]);	// y upside-down
-			ctx.rotate(0.5 * Math.PI - robot.theta);
-
-			ctx.beginPath();
-			// middle rear
-			ctx.moveTo(0, 0.2 * robotSize);
-			// right side
-			ctx.lineTo(0.5 * robotSize, 0.2 * robotSize);
-			ctx.lineTo(0.5 * robotSize, -0.55 * robotSize);
-			ctx.bezierCurveTo(0.3 * robotSize, -0.8 * robotSize,
-				0.02 * robotSize, -0.8 * robotSize,
-				0, -0.8 * robotSize);
-			// left side
-			ctx.bezierCurveTo(-0.02 * robotSize, -0.8 * robotSize,
-				-0.3 * robotSize, -0.8 * robotSize,
-				-0.5 * robotSize, -0.55 * robotSize);
-			ctx.lineTo(-0.5 * robotSize, 0.2 * robotSize);
-			ctx.closePath();
-			ctx.fillStyle = A3a.vpl.VPLSim2DViewer.color(/** @type {Array.<number>} */(robot["get"]("leds.top")));
-			ctx.strokeStyle = "black";
-			ctx.lineJoin = "round";
-			ctx.lineWidth = 2;
-			ctx.moveTo(0.05 * robotSize, 0);
-			ctx.arc(0, 0, 0.05 * robotSize, 0, 2 * Math.PI);
-			ctx.fill();
-			ctx.stroke();
-
-			if (!sim2d.running || sim2d.paused) {
 				ctx.beginPath();
-				ctx.arc(0, 0, robotSize, 0, 2 * Math.PI);
-				ctx.strokeStyle = simCanvas.state.moving ? "navy" : "#3cf";
-				ctx.lineWidth = robotSize * 0.1;
-				ctx.stroke();
-				ctx.beginPath();
-				ctx.arc(0, -robotSize, 0.15 * robotSize, 0, 2 * Math.PI);
-				ctx.fillStyle = simCanvas.state.orienting ? "navy" : "white";
-				ctx.strokeStyle = simCanvas.state.orienting ? "navy" : "#3cf";
-				ctx.lineWidth = robotSize * 0.06;
+				// middle rear
+				ctx.moveTo(0, 0.2 * robotSize);
+				// right side
+				ctx.lineTo(0.5 * robotSize, 0.2 * robotSize);
+				ctx.lineTo(0.5 * robotSize, -0.55 * robotSize);
+				ctx.bezierCurveTo(0.3 * robotSize, -0.8 * robotSize,
+					0.02 * robotSize, -0.8 * robotSize,
+					0, -0.8 * robotSize);
+				// left side
+				ctx.bezierCurveTo(-0.02 * robotSize, -0.8 * robotSize,
+					-0.3 * robotSize, -0.8 * robotSize,
+					-0.5 * robotSize, -0.55 * robotSize);
+				ctx.lineTo(-0.5 * robotSize, 0.2 * robotSize);
+				ctx.closePath();
+				ctx.fillStyle = A3a.vpl.VPLSim2DViewer.color(/** @type {Array.<number>} */(robot["get"]("leds.top")));
+				ctx.strokeStyle = "black";
+				ctx.lineJoin = "round";
+				ctx.lineWidth = 2;
+				ctx.moveTo(0.05 * robotSize, 0);
+				ctx.arc(0, 0, 0.05 * robotSize, 0, 2 * Math.PI);
 				ctx.fill();
 				ctx.stroke();
-			}
 
-			ctx.restore();
-		},
-		{
-			mousedown: function (canvas, data, width, height, left, top, ev) {
-				var x = ((ev.x - left) - width / 2) / playgroundView.scale;
-				var y = (height / 2 - (ev.y - top)) / playgroundView.scale;
-				var xr = x - robot.pos[0];
-				var yr = y - robot.pos[1];
-				var xHandle = robotSize * Math.cos(robot.theta);
-				var yHandle = robotSize * Math.sin(robot.theta);
-				if ((!sim2d.running || sim2d.paused) &&
-					(xr - xHandle) * (xr - xHandle) + (yr - yHandle) * (yr - yHandle) <
-					0.1 * robotSize * robotSize) {
-					simCanvas.state.x = x;
-						simCanvas.state.y = y;
-					simCanvas.state.orienting = true;
-					return 1;
+				if (!sim2d.running || sim2d.paused) {
+					ctx.beginPath();
+					ctx.arc(0, 0, robotSize, 0, 2 * Math.PI);
+					ctx.strokeStyle = simCanvas.state.moving ? "navy" : "#3cf";
+					ctx.lineWidth = robotSize * 0.1;
+					ctx.stroke();
+					ctx.beginPath();
+					ctx.arc(0, -robotSize, 0.15 * robotSize, 0, 2 * Math.PI);
+					ctx.fillStyle = simCanvas.state.orienting ? "navy" : "white";
+					ctx.strokeStyle = simCanvas.state.orienting ? "navy" : "#3cf";
+					ctx.lineWidth = robotSize * 0.06;
+					ctx.fill();
+					ctx.stroke();
 				}
-				if (xr * xr + yr * yr < robotSize * robotSize) {
-					if (!sim2d.paused) {
-						// suspend during drag
-						robot["suspend"]();
-						temporaryPause = true;
-					} else {
-						temporaryPause = false;
+
+				ctx.restore();
+			},
+			{
+				mousedown: function (canvas, data, width, height, left, top, ev) {
+					var x = ((ev.x - left) - width / 2) / playgroundView.scale;
+					var y = (height / 2 - (ev.y - top)) / playgroundView.scale;
+					var xr = x - robot.pos[0];
+					var yr = y - robot.pos[1];
+					var xHandle = robotSize * Math.cos(robot.theta);
+					var yHandle = robotSize * Math.sin(robot.theta);
+					if ((!sim2d.running || sim2d.paused) &&
+						(xr - xHandle) * (xr - xHandle) + (yr - yHandle) * (yr - yHandle) <
+						0.1 * robotSize * robotSize) {
+						simCanvas.state.x = x;
+							simCanvas.state.y = y;
+						simCanvas.state.orienting = true;
+						return 1;
+					}
+					if (xr * xr + yr * yr < robotSize * robotSize) {
+						if (!sim2d.paused) {
+							// suspend during drag
+							robot["suspend"]();
+							temporaryPause = true;
+						} else {
+							temporaryPause = false;
+						}
+						simCanvas.state.x = x;
+						simCanvas.state.y = y;
+						simCanvas.state.moving = true;
+						return 0;
+					}
+					return null;
+				},
+				mousedrag: function (canvas, data, dragIndex, width, height, left, top, ev) {
+					var x = ((ev.x - left) - width / 2) / playgroundView.scale;
+					var y = (height / 2 - (ev.y - top)) / playgroundView.scale;
+					switch (dragIndex) {
+					case 0:
+						var pt0 = robot.pos;
+						robot["setPosition"]([
+								robot.pos[0] + x - simCanvas.state.x,
+								robot.pos[1] + y - simCanvas.state.y
+							],
+							robot.theta);
+						sim2d.drawPen(A3a.vpl.Robot.TraceShape.line,
+							[pt0[0], pt0[1], robot.pos[0], robot.pos[1]]);
+						break;
+					case 1:
+						var dtheta = Math.atan2(y - robot.pos[1], x - robot.pos[0]) -
+							Math.atan2(simCanvas.state.y - robot.pos[1],
+								simCanvas.state.x - robot.pos[0]);
+						robot["setPosition"](robot.pos, robot.theta + dtheta);
+						break;
 					}
 					simCanvas.state.x = x;
 					simCanvas.state.y = y;
-					simCanvas.state.moving = true;
-					return 0;
+				},
+				mouseup: function (canvas, data, dragIndex) {
+					simCanvas.state.moving = false;
+					simCanvas.state.orienting = false;
+					if (temporaryPause) {
+						robot["resume"](A3a.vpl.VPLSim2DViewer.currentTime());
+					}
 				}
-				return null;
-			},
-			mousedrag: function (canvas, data, dragIndex, width, height, left, top, ev) {
-				var x = ((ev.x - left) - width / 2) / playgroundView.scale;
-				var y = (height / 2 - (ev.y - top)) / playgroundView.scale;
-				switch (dragIndex) {
-				case 0:
-					var pt0 = robot.pos;
-					robot["setPosition"]([
-							robot.pos[0] + x - simCanvas.state.x,
-							robot.pos[1] + y - simCanvas.state.y
-						],
-						robot.theta);
-					sim2d.drawPen(A3a.vpl.Robot.TraceShape.line,
-						[pt0[0], pt0[1], robot.pos[0], robot.pos[1]]);
-					break;
-				case 1:
-					var dtheta = Math.atan2(y - robot.pos[1], x - robot.pos[0]) -
-						Math.atan2(simCanvas.state.y - robot.pos[1],
-							simCanvas.state.x - robot.pos[0]);
-					robot["setPosition"](robot.pos, robot.theta + dtheta);
-					break;
-				}
-				simCanvas.state.x = x;
-				simCanvas.state.y = y;
-			},
-			mouseup: function (canvas, data, dragIndex) {
-				simCanvas.state.moving = false;
-				simCanvas.state.orienting = false;
-				if (temporaryPause) {
-					robot["resume"](A3a.vpl.VPLSim2DViewer.currentTime());
-				}
-			}
-		});
-	playgroundItem.draggable = false;
-	simCanvas.setItem(playgroundItem);
+			});
+		playgroundItem.draggable = false;
+		simCanvas.setItem(playgroundItem);
+	}
 
 	simCanvas.redraw();
 
