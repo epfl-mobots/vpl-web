@@ -831,18 +831,19 @@ A3a.vpl.Canvas.prototype.setItem = function (item, index) {
 
 /** Draw static stuff
 	@param {function(CanvasRenderingContext2D):void} fun drawing function
-	@return {void}
+	@return {A3a.vpl.CanvasItem}
 */
 A3a.vpl.Canvas.prototype.addDecoration = function (fun) {
 	var item = new A3a.vpl.CanvasItem(null,
 		-1, -1, 0, 0,
 		function(ctx, item, dx, dy) {
 			ctx.save();
-			ctx.translate(dx, dy);
+			ctx.translate(item.x + dx, item.y + dy);
 			fun(ctx);
 			ctx.restore();
 		});
 	this.setItem(item);
+	return item;
 };
 
 /** Function drawing control button with origin at (0,0); args are ctx, width, height, isPressed
@@ -865,7 +866,7 @@ A3a.vpl.Canvas.controlAction;
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 	@param {string=} id
-	@return {void}
+	@return {A3a.vpl.CanvasItem}
 */
 A3a.vpl.Canvas.prototype.addControl = function (x, y, width, height, draw, action, doDrop, canDrop, id) {
 	/** @type {A3a.vpl.CanvasItem.mouseEvent} */
@@ -922,6 +923,7 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, width, height, draw, actio
 	item.draggable = false;
 	item.noDropHint = true;	// drawn with isPressed=true for better control on appearance
 	this.setItem(item);
+	return item;
 };
 
 /** @typedef {function(CanvasRenderingContext2D,string,A3a.vpl.Canvas.dims):void}
