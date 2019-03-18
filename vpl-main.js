@@ -337,6 +337,8 @@ function vplSetup(gui) {
 	app.vplCanvas.state.vpl = new A3a.vpl.Program.CanvasRenderingState();
 	app.vplCanvas.widgets = widgets;
 	app.program.addEventHandler(true);
+	app.simCanvas.widgets = widgets;
+	app.editor.tbCanvas.widgets = widgets;
 
 	app.addVPLCommands();
 	if (!isClassic && gui && gui["toolbars"]) {

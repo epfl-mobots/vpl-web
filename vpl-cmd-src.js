@@ -43,7 +43,11 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 	});
 	this.commands.add("src:vpl", {
 		action: function (app, modifier) {
-			app.setView(["vpl"], {fromView: "src"});
+			if (app.multipleViews) {
+				app.setView(["vpl"], {openView: true});
+			} else {
+				app.setView(["vpl"], {fromView: "src"});
+			}
 		},
 		isEnabled: function (app) {
 			return app.editor.doesMatchVPL();
