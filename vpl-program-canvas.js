@@ -787,61 +787,75 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	// program scroll region
 	renderingState.programScroll.setTotalHeight(program.program.length * ruleBox.totalHeight());
 
-	// program
-	renderingState.programScroll.resize(vplBox.x, vplBox.y,
-		vplBox.width,	vplBox.height);
-	canvas.addDecoration(function (ctx) {
-		vplBox.draw(ctx);
-	});
-	renderingState.programScroll.begin(canvas);
-	eventX0 += (eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
-	actionX0 += (eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
-	var errorMsg = "";
-	var isWarning = false;
-	program.program.forEach(function (eventHandler, i) {
-		program.addEventHandlerToCanvas(canvas, eventHandler,
-			displaySingleEvent,
-			eventX0, actionX0,
-			vplBox.y + ruleBox.totalHeight() * i + ruleBox.offsetTop() + blockEventBox.offsetTop(),
-			blockEventBox, blockActionBox, blockStateBox, blockCommentBox, ruleBox, ruleSeparatorBox);
-		if (eventHandler.error !== null && errorMsg === "") {
-			errorMsg = eventHandler.error.msg;
-			isWarning = eventHandler.error.isWarning;
-			if (eventHandler.error.conflictEventHandler !== null) {
-				for (var j = i + 1; j < program.program.length; j++) {
-					if (program.program[j] === eventHandler.error.conflictEventHandler) {
-						program.addEventHandlerConflictLinkToCanvas(canvas,
-							eventX0,
-							vplBox.y + ruleBox.totalHeight() * i + ruleBox.offsetTop() + blockEventBox.offsetTop(),
-							vplBox.y + ruleBox.totalHeight() * j + ruleBox.offsetTop() + blockEventBox.offsetTop(),
-							ruleBox, blockEventBox,
-							eventHandler.error.isWarning);
-						break;
+	if (uiConfig.customizationMode) {
+		// draw vpl:customization widget
+		var customBounds = canvas.getWidgetBounds("vpl:customize");
+		if (customBounds) {
+			var customBox = canvas.css.getBox({tag: "widget", id: "widget-customize"});
+			customBox.width = customBounds.xmax - customBounds.xmin;
+			customBox.height = customBounds.ymax - customBounds.ymin;
+			canvas.addDecoration(function (ctx) {
+				canvas.drawWidget("vpl:customize",
+					vplBox.x + vplBox.width / 2, vplBox.y + vplBox.height / 2);
+			});
+		}
+	} else {
+		// program
+		renderingState.programScroll.resize(vplBox.x, vplBox.y,
+			vplBox.width,	vplBox.height);
+		canvas.addDecoration(function (ctx) {
+			vplBox.draw(ctx);
+		});
+		renderingState.programScroll.begin(canvas);
+		eventX0 += (eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
+		actionX0 += (eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
+		var errorMsg = "";
+		var isWarning = false;
+		program.program.forEach(function (eventHandler, i) {
+			program.addEventHandlerToCanvas(canvas, eventHandler,
+				displaySingleEvent,
+				eventX0, actionX0,
+				vplBox.y + ruleBox.totalHeight() * i + ruleBox.offsetTop() + blockEventBox.offsetTop(),
+				blockEventBox, blockActionBox, blockStateBox, blockCommentBox, ruleBox, ruleSeparatorBox);
+			if (eventHandler.error !== null && errorMsg === "") {
+				errorMsg = eventHandler.error.msg;
+				isWarning = eventHandler.error.isWarning;
+				if (eventHandler.error.conflictEventHandler !== null) {
+					for (var j = i + 1; j < program.program.length; j++) {
+						if (program.program[j] === eventHandler.error.conflictEventHandler) {
+							program.addEventHandlerConflictLinkToCanvas(canvas,
+								eventX0,
+								vplBox.y + ruleBox.totalHeight() * i + ruleBox.offsetTop() + blockEventBox.offsetTop(),
+								vplBox.y + ruleBox.totalHeight() * j + ruleBox.offsetTop() + blockEventBox.offsetTop(),
+								ruleBox, blockEventBox,
+								eventHandler.error.isWarning);
+							break;
+						}
 					}
 				}
 			}
+		});
+		renderingState.programScroll.end();
+		if (errorMsg) {
+			// display first error message
+			canvas.addDecoration(function (ctx) {
+				ctx.save();
+				ctx.fillStyle = isWarning ? canvas.dims.warningColor : canvas.dims.errorColor;
+				ctx.font = Math.round(canvas.dims.blockSize * 0.22).toString() + "px sans-serif";
+				ctx.textAlign = "left";
+				ctx.textBaseline = "bottom";
+				ctx.fillText(errorMsg, eventX0 - canvas.dims.blockSize * 0.6, vplBox.y);
+				ctx.restore();
+			});
 		}
-	});
-	renderingState.programScroll.end();
-	if (errorMsg) {
-		// display first error message
-		canvas.addDecoration(function (ctx) {
-			ctx.save();
-			ctx.fillStyle = isWarning ? canvas.dims.warningColor : canvas.dims.errorColor;
-			ctx.font = Math.round(canvas.dims.blockSize * 0.22).toString() + "px sans-serif";
-			ctx.textAlign = "left";
-			ctx.textBaseline = "bottom";
-			ctx.fillText(errorMsg, eventX0 - canvas.dims.blockSize * 0.6, vplBox.y);
-			ctx.restore();
-		});
-	}
 
-	if (program.noVPL) {
-		canvas.addDecoration(function (ctx) {
-			canvas.disabledMark(vplBox.x, vplBox.y,
-				vplBox.width, vplBox.height,
-				3);
-		});
+		if (program.noVPL) {
+			canvas.addDecoration(function (ctx) {
+				canvas.disabledMark(vplBox.x, vplBox.y,
+					vplBox.width, vplBox.height,
+					3);
+			});
+		}
 	}
 
 	// copyright

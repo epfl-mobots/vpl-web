@@ -11,15 +11,13 @@
 A3a.vpl.widgetsJS = {
 	"vpl:then": {
 		draw: /** @type {A3a.vpl.Canvas.drawWidget} */(function (ctx, id, dims) {
-			ctx.fillStyle = dims.ruleMarks;
+			ctx.strokeStyle = dims.ruleMarks;
+			ctx.lineWidth = 0.1 * dims.blockSize;
 			ctx.beginPath();
-			ctx.arc(0, -0.2 * dims.blockSize,
-				0.08 * dims.blockSize,
-				0, 2 * Math.PI);
-			ctx.arc(0, 0.2 * dims.blockSize,
-				0.08 * dims.blockSize,
-				0, 2 * Math.PI);
-			ctx.fill();
+			ctx.moveTo(-0.1 * dims.blockSize, -0.2 * dims.blockSize);
+			ctx.lineTo(0.1 * dims.blockSize, 0);
+			ctx.lineTo(-0.1 * dims.blockSize, 0.2 * dims.blockSize);
+			ctx.stroke();
 		}),
 		bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
 			return {
@@ -118,6 +116,20 @@ A3a.vpl.widgetsJS = {
 			ctx.shadowColor = "white";
 			ctx.shadowBlur = dims.blockSize * 0.2;
 			ctx.stroke();
+		}),
+		bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
+			return {
+				xmin: -0.3 * dims.blockSize,
+				xmax: 0.3 * dims.blockSize,
+				ymin: -0.2 * dims.blockSize,
+				ymax: 0.2 * dims.blockSize
+			}
+		})
+	},
+	"vpl:customize": {
+		draw: /** @type {A3a.vpl.Canvas.drawWidget} */(function (ctx, id, dims) {
+			ctx.fillStyle = dims.ruleMarks;
+			A3a.vpl.Canvas.drawHexagonalNut(ctx, 0, 0, dims.blockSize);
 		}),
 		bounds: /** @type {A3a.vpl.Canvas.getWidgetBounds} */(function (id, dims) {
 			return {
