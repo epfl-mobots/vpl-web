@@ -222,24 +222,29 @@ function vplSetup(gui) {
 	var getButtonBounds = A3a.vpl.Commands.getButtonBoundsJS;
 	/** @type {Object.<string,A3a.vpl.Canvas.Widget>} */
 	var widgets = A3a.vpl.widgetsJS;
-	if (isClassic) {
-	 	if (A3a.vpl.patchL2Blocks) {
-			A3a.vpl.patchL2Blocks();
+ 	if (A3a.vpl.patchL2Blocks) {
+		A3a.vpl.patchL2Blocks();
+	}
+ 	if (A3a.vpl.patchJSBlocks) {
+		A3a.vpl.patchJSBlocks();
+	}
+ 	if (A3a.vpl.patchPythonBlocks) {
+		A3a.vpl.patchPythonBlocks();
+	}
+	if (gui && !isClassic) {
+		if (gui["buttons"] !== null) {
+			drawButton = A3a.vpl.drawButtonSVGFunction(gui);
+			getButtonBounds = A3a.vpl.getButtonBoundsSVGFunction(gui);
 		}
-	 	if (A3a.vpl.patchJSBlocks) {
-			A3a.vpl.patchJSBlocks();
+		if (gui["widgets"] !== null) {
+			widgets = A3a.vpl.makeSVGWidgets(gui);
 		}
-	 	if (A3a.vpl.patchPythonBlocks) {
-			A3a.vpl.patchPythonBlocks();
-		}
-	} else if (gui) {
-		drawButton = A3a.vpl.drawButtonSVGFunction(gui);
-		getButtonBounds = A3a.vpl.getButtonBoundsSVGFunction(gui);
-		widgets = A3a.vpl.makeSVGWidgets(gui);
-		try {
-			A3a.vpl.patchBlocksSVG(gui);
-		} catch (e) {
-			window["console"] && window["console"]["error"](e);
+		if (gui["blocks"] !== null) {
+			try {
+				A3a.vpl.patchBlocksSVG(gui);
+			} catch (e) {
+				window["console"] && window["console"]["error"](e);
+			}
 		}
 	}
 	var advancedFeatures = getQueryOption("adv") === "true";
@@ -337,7 +342,9 @@ function vplSetup(gui) {
 	app.vplCanvas.state.vpl = new A3a.vpl.Program.CanvasRenderingState();
 	app.vplCanvas.widgets = widgets;
 	app.program.addEventHandler(true);
-	app.simCanvas.widgets = widgets;
+	if (app.simCanvas != null) {
+		app.simCanvas.widgets = widgets;
+	}
 	app.editor.tbCanvas.widgets = widgets;
 
 	app.addVPLCommands();

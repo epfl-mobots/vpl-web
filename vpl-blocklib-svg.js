@@ -834,7 +834,7 @@ A3a.vpl.patchBlocksSVG = function (uiConfig) {
 	// build array of block templates from definitions in uiConfig.blocks and svg in uiConfig.rsrc
 	/** @type {Array.<A3a.vpl.BlockTemplate>} */
 	var lib = [];
-	A3a.vpl.loadBlockOverlay(uiConfig, uiConfig["blocks"], lib);
+	A3a.vpl.loadBlockOverlay(uiConfig, uiConfig["blocks"] || [], lib);
 
 	A3a.vpl.BlockTemplate.lib = lib;
 };

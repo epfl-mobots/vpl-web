@@ -9,9 +9,9 @@
 		"warningColor": "#ff7777"
 	},
 
-	"overlays": [
-		"toolbars.json"
-	],
+	"blocks": null,
+	"buttons": null,
+	"widgets": null,
 
 	"css": [
 		"classic.css"
