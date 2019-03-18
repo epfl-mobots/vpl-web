@@ -78,10 +78,20 @@ CSSParser.Box.Rect.prototype.drawAt = function (ctx, x, y, includePadding) {
 		ctx.rect(x, y, w, h);
 	}
 
+	ctx.save();
+	if (this.shadowOffset) {
+		ctx.shadowOffsetX = this.shadowOffset[0];
+		ctx.shadowOffsetY = this.shadowOffset[1];
+		ctx.shadowColor = this.shadowColor;
+		ctx.shadowBlur = this.shadowBlurRadius;
+	}
 	if (this.backgroundColor) {
 		ctx.fillStyle = this.backgroundColor;
-		ctx.fill();
+	} else if (this.shadowOffset) {
+		ctx.fillStyle = "transparent";
 	}
+	ctx.fill();
+	ctx.restore();
 
 	function setBorderStyle(lineWidth, color, style) {
 		ctx.strokeStyle = color;

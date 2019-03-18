@@ -225,6 +225,22 @@ CSSParser.Box.prototype.processValue = function (key, val) {
 		default:
 			throw "Wrong number of radius dimensions";
 		}
+	case "box-shadow":
+		val = val.split(",")[0];	// use first shadow only; inset not supported
+		var valArr = val.replace(/ +/g, " ")
+			.split(" ");
+		if (valArr[0] === "inset") {
+			valArr = valArr.slice(1);
+		}
+		if (valArr.length >= 3 && valArr.length <= 5) {
+			return {
+				offset: [this.convertLength(valArr[0]), this.convertLength(valArr[1])],
+				color: valArr[valArr.length - 1],
+				blurRadius: valArr.length >= 4 ? this.convertLength(valArr[2]) : null,
+				spreadRadius: valArr.length >= 5 ? this.convertLength(valArr[3]) : null
+			}
+		}
+		return {};
 	default:
 		return val;
 	}
@@ -292,6 +308,11 @@ CSSParser.Box.Rect = function (width, height, x, y) {
 	this.paddingBottom = null;
 
 	this.backgroundColor = null;
+
+	this.shadowOffset = null;
+	this.shadowBlurRadius = null;
+	this.shadowSpreadRadius = null;
+	this.shadowColor = null;
 };
 
 CSSParser.Box.Rect.defaultBox = function () {
@@ -332,6 +353,11 @@ CSSParser.Box.Rect.defaultBox = function () {
 	box.paddingBottom = 0;
 
 	box.backgroundColor = "transparent";
+
+	box.shadowOffset = null;
+	box.shadowBlurRadius = 0;
+	box.shadowSpreadRadius = 0;
+	box.shadowColor = null;
 
 	return box;
 };
@@ -588,6 +614,14 @@ CSSParser.Box.Rect.prototype.setProperties = function (props) {
 		case "background":	// color is the only supported property
 			this.backgroundColor = props[key];
 			break;
+		case "box-shadow":
+			if (props[key].shadowOffset !== null) {
+				this.shadowOffset = props[key].offset;
+				this.shadowBlurRadius = props[key].blurRadius || 0;
+				this.shadowSpreadRadius = props[key].spreadRadius || 0;
+				this.shadowColor = props[key].color;
+			}
+			break;
 		case "width":
 			this.width = props[key];
 			break;
@@ -643,6 +677,11 @@ CSSParser.Box.Rect.prototype.copy = function () {
 	box.paddingBottom = this.paddingBottom;
 
 	box.backgroundColor = this.backgroundColor;
+
+	box.shadowOffset = this.shadowOffset;
+	box.shadowBlurRadius = this.shadowBlurRadius;
+	box.shadowSpreadRadius = this.shadowSpreadRadius;
+	box.shadowColor = this.shadowColor;
 
 	return box;
 };
@@ -750,6 +789,19 @@ CSSParser.Box.Rect.prototype.merge = function (overridingBox) {
 
 	if (overridingBox.backgroundColor !== null) {
 		box.backgroundColor = overridingBox.backgroundColor;
+	}
+
+	if (overridingBox.shadowOffset !== null) {
+		box.shadowOffset = overridingBox.shadowOffset;
+	}
+	if (overridingBox.shadowBlurRadius !== null) {
+		box.shadowBlurRadius = overridingBox.shadowBlurRadius;
+	}
+	if (overridingBox.shadowSpreadRadius !== null) {
+		box.shadowSpreadRadius = overridingBox.shadowSpreadRadius;
+	}
+	if (overridingBox.shadowColor !== null) {
+		box.shadowColor = overridingBox.shadowColor;
 	}
 
 	return box;

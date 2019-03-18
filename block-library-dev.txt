@@ -294,6 +294,7 @@ Box properties:
 - margin
 - background-color
 - background (for background-color property only)
+- box-shadow ("inset" and spread radius ignored, one shadow only)
 - width, height
 
 Values:
