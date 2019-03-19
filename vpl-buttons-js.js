@@ -9,15 +9,20 @@
 	@param {string} id
 	@param {CanvasRenderingContext2D} ctx canvas 2d context
 	@param {A3a.vpl.Canvas.dims} dims
-	@param {number} width
-	@param {number} height
+	@param {CSSParser.Box} css
+	@param {Array.<string>} cssClasses
 	@param {boolean} isEnabled
 	@param {boolean} isSelected
 	@param {boolean} isPressed
 	@param {*=} state state for multi-value buttons
 	@return {void}
 */
-A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
+A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnabled, isSelected, isPressed, state) {
+
+	var box = css.getBox({tag: "button", clas: cssClasses, id: id.replace(/:/g, "-")});
+	var bnds = A3a.vpl.Commands.getButtonBoundsJS(id, dims);
+	box.width = bnds.xmax - bnds.xmin;
+	box.height = bnds.ymax - bnds.ymin;
 
 	/** Draw control for undo (back arrow) or redo (flipped)
 		@param {number} x
@@ -68,14 +73,14 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 		ctx.fillStyle = isPressed
 			? dims.controlDownColor
 			: dims.controlColor;
-		ctx.fillRect(x, y, width, height);
-		ctx.translate(x + width / 2, y + width / 2);
+		ctx.fillRect(x, y, box.width, box.height);
+		ctx.translate(x + box.width / 2, y + box.width / 2);
 		ctx.rotate(-rot * Math.PI / 2);
-		ctx.translate(-x - width / 2, -y - width / 2);
+		ctx.translate(-x - box.width / 2, -y - box.width / 2);
 		ctx.beginPath();
-		ctx.moveTo(x + width * 0.3557, y + width * 0.25);
-		ctx.lineTo(x + width * 0.3557, y + width * 0.75);
-		ctx.lineTo(x + width * 0.7887, y + width * 0.5);
+		ctx.moveTo(x + box.width * 0.3557, y + box.width * 0.25);
+		ctx.lineTo(x + box.width * 0.3557, y + box.width * 0.75);
+		ctx.lineTo(x + box.width * 0.7887, y + box.width * 0.5);
 		ctx.closePath();
 		ctx.strokeStyle = "white";
 		ctx.lineWidth = dims.blockLineWidth;
@@ -390,6 +395,18 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 
 			ctx.restore();
 		},
+		"vpl:message-empty": function () {
+		},
+		"vpl:message-error": function (app) {
+			if (state) {
+				ctx.fillStyle = box.color;
+				ctx.font = box.font;
+				ctx.textAlign = "center";
+				ctx.textBaseline = "middle";
+				ctx.fillText(/** @type {string} */(state), box.width / 2, box.height / 2);
+			}
+		},
+		// "vpl:message-warning": "vpl:message-error"
 		"vpl:duplicate": function () {
             ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
@@ -706,7 +723,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.fillStyle = isPressed
 				? dims.controlDownColor
 				: dims.controlColor;
-			ctx.fillRect(0, 0, width, height);
+			ctx.fillRect(0, 0, box.width, box.height);
 			var s = dims.controlSize;
 			ctx.lineWidth = 0.08 * s;
 			A3a.vpl.Canvas.drawArcArrow(ctx, 0.5 * s, 0.5 * s, 0.28 * s,
@@ -979,9 +996,9 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.fillStyle = isPressed
 				? dims.controlDownColor
 				: dims.controlColor;
-			ctx.fillRect(0, 0, width, height);
+			ctx.fillRect(0, 0, box.width, box.height);
 			ctx.beginPath();
-			ctx.arc(0.5 * width, 0.5 * width, 0.25 * width, 0, 2 * Math.PI);
+			ctx.arc(0.5 * box.width, 0.5 * box.width, 0.25 * box.width, 0, 2 * Math.PI);
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
@@ -992,19 +1009,19 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.fillStyle = isPressed
 				? dims.controlDownColor
 				: dims.controlColor;
-			ctx.fillRect(0, 0, width, height);
+			ctx.fillRect(0, 0, box.width, box.height);
 			ctx.beginPath();
 
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = dims.blockLineWidth;
-			ctx.translate(0.5 * width, 0.5 * width);
+			ctx.translate(0.5 * box.width, 0.5 * box.width);
 			ctx.rotate(0.1);
 			for (var i = 0; i < 9; i++) {
 				ctx.beginPath();
-				ctx.moveTo(0.12 * width, 0);
-				ctx.lineTo(0.24 * width, 0);
-				ctx.moveTo(0.28 * width, 0);
-				ctx.lineTo(0.36 * width, 0);
+				ctx.moveTo(0.12 * box.width, 0);
+				ctx.lineTo(0.24 * box.width, 0);
+				ctx.moveTo(0.28 * box.width, 0);
+				ctx.lineTo(0.36 * box.width, 0);
 				ctx.stroke();
 				ctx.rotate(Math.PI / 4.5);
 			}
@@ -1015,26 +1032,27 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, width, height, isEnable
 			ctx.fillStyle = isPressed
 				? dims.controlDownColor
 				: dims.controlColor;
-			ctx.fillRect(0, 0, width, height);
+			ctx.fillRect(0, 0, box.width, box.height);
 			ctx.beginPath();
 
 			ctx.strokeStyle = "white";
 			ctx.lineWidth = dims.blockLineWidth;
-			ctx.translate(0.6 * width, 0.6 * width);
+			ctx.translate(0.6 * box.width, 0.6 * box.width);
 			for (var i = 1; i <= 3; i++) {
 				ctx.beginPath();
 				ctx.arc(0, 0,
-					0.15 * width * i,
+					0.15 * box.width * i,
 					Math.PI * 0.9, Math.PI * 1.7);
 				ctx.stroke();
 			}
-			ctx.moveTo(0.3 * width, 0);
+			ctx.moveTo(0.3 * box.width, 0);
 			ctx.lineTo(0, 0);
-			ctx.lineTo(0, 0.3 * width);
+			ctx.lineTo(0, 0.3 * box.width);
 			ctx.stroke();
 			ctx.restore();
 		}
 	};
+	draw["vpl:message-warning"] = draw["vpl:message-error"];
 	draw["src:close"] = draw["vpl:close"];
 	draw["src:new"] = draw["vpl:new"];
 	draw["src:save"] = draw["vpl:save"];
@@ -1070,6 +1088,13 @@ A3a.vpl.Commands.getButtonBoundsJS = function (id, dims) {
 		return {
 			xmin: 0,
 			xmax: dims.controlSize / 2,
+			ymin: 0,
+			ymax: dims.controlSize
+		};
+	case "vpl:message":
+		return {
+			xmin: 0,
+			xmax: 5 * dims.controlSize,
 			ymin: 0,
 			ymax: dims.controlSize
 		};

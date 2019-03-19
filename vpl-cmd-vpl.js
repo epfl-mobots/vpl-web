@@ -327,6 +327,39 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this
 	});
+	this.commands.add("vpl:message-error", {
+		isEnabled: function (app) {
+			return false;
+		},
+		getState: function (app) {
+			return app.vplMessage;
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.vplMessage && !app.vplMessageIsWarning;
+		}
+	});
+	this.commands.add("vpl:message-warning", {
+		isEnabled: function (app) {
+			return false;
+		},
+		getState: function (app) {
+			return app.vplMessage;
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.vplMessage && app.vplMessageIsWarning;
+		}
+	});
+	this.commands.add("vpl:message-empty", {
+		isEnabled: function (app) {
+			return false;
+		},
+		object: this,
+		isAvailable: function (app) {
+			return !app.vplMessage;
+		}
+	});
 	this.commands.add("vpl:teacher", {
 		action: function (app, modifier) {
 			app.program.uiConfig.customizationMode = !app.program.uiConfig.customizationMode;

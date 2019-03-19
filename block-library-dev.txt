@@ -296,12 +296,15 @@ Box properties:
 - background (for background-color property only)
 - box-shadow ("inset" and spread radius ignored, one shadow only)
 - width, height
+- color
+- font
 
 Values:
 
 - lengths: floating-point value with unit (px, cm, mm, in, pc, pt), or 0
 - colors: #xxxxxx or #xxx or one of the colors defined in <https://www.w3.org/TR/css-color-3/#svg-color>
 - line styles: none, hidden, dotted, dashed, solid, or double
+- font: see <https://www.w3.org/TR/2018/REC-css-fonts-3-20180920/#font-prop>
 
 Elements:
 

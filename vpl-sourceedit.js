@@ -220,6 +220,7 @@ A3a.vpl.Application.prototype.renderSourceEditorToolbar = function () {
 			"src:teacher-reset",
 			"src:teacher"
 		],
+		["src", "top"],
 		editor.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
 		editor.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
 

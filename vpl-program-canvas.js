@@ -445,7 +445,11 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 
 	// 2nd toolbar at bottom between templates
 	var toolbar2Config = program.toolbar2Config || [
-		// empty by default
+		"!!stretch",
+		"vpl:message-error",
+		"vpl:message-warning",
+		"vpl:message-empty",
+		"!!stretch"
 	];
 
 	// program item counts
@@ -605,6 +609,22 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		viewBox.draw(ctx);
 	});
 
+	// find first error, or first warning if there is no error
+	this.vplMessage = "";
+	this.vplMessageIsWarning = false;
+	for (var i = 0; i < program.program.length; i++) {
+		if (program.program[i].error) {
+			if (!program.program[i].error.isWarning) {
+				this.vplMessage = program.program[i].error.msg;
+				this.vplMessageIsWarning = false;
+				break;	// stop at first error
+			} else if (!this.vplMessage) {
+				this.vplMessage = program.program[i].error.msg;
+				this.vplMessageIsWarning = true;
+			}
+		}
+	}
+
 	// top controls
 	var controlBar = new A3a.vpl.ControlBar(canvas);
 	controlBar.setButtons(this,
@@ -636,6 +656,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			"vpl:teacher-save",
 			"vpl:teacher"
 		],
+		["vpl", "top"],
 		program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
 		program.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
 	controlBar.calcLayout(toolbarBox, buttonBox, separatorBox);
@@ -646,9 +667,10 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		var controlBar2 = new A3a.vpl.ControlBar(canvas);
 		controlBar2.setButtons(this,
 			toolbar2Config,
+			["vpl", "bottom"],
 			program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
 			program.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
-		controlBar2.calcLayout(toolbar2Box, buttonBox, separator2Box);
+		controlBar2.calcLayout(toolbar2Box, button2Box, separator2Box);
 		controlBar2.addToCanvas(toolbar2Box, button2Box);
 	}
 
@@ -836,18 +858,6 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			}
 		});
 		renderingState.programScroll.end();
-		if (errorMsg) {
-			// display first error message
-			canvas.addDecoration(function (ctx) {
-				ctx.save();
-				ctx.fillStyle = isWarning ? canvas.dims.warningColor : canvas.dims.errorColor;
-				ctx.font = Math.round(canvas.dims.blockSize * 0.22).toString() + "px sans-serif";
-				ctx.textAlign = "left";
-				ctx.textBaseline = "bottom";
-				ctx.fillText(errorMsg, eventX0 - canvas.dims.blockSize * 0.6, vplBox.y);
-				ctx.restore();
-			});
-		}
 
 		if (program.noVPL) {
 			canvas.addDecoration(function (ctx) {

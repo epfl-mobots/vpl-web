@@ -10,7 +10,7 @@
 	@return {A3a.vpl.ControlBar.drawButton}
 */
 A3a.vpl.drawButtonSVGFunction = function (gui) {
-	return /** @type {A3a.vpl.ControlBar.drawButton} */(function (id, ctx, dims, width, height, isEnabled, isSelected, isPressed, state) {
+	return /** @type {A3a.vpl.ControlBar.drawButton} */(function (id, ctx, dims, css, box, isEnabled, isSelected, isPressed, state) {
 		/** Check if the requested state match the state in the definition
 			@param {Array.<string>} prop
 			@return {boolean}
@@ -77,7 +77,7 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 							ctx.fillStyle = "black";
 							ctx.textAlign = "center";
 							ctx.textBaseline = "middle";
-							ctx.fillText(el["debug"], width / 2, height / 2);
+							ctx.fillText(el["debug"], box.width / 2, box.height / 2);
 						}
 						ctx.restore();
 					});
@@ -88,18 +88,18 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 
 		// default: brown square
 		ctx.fillStyle = "brown";
-		ctx.fillRect(0, 0, width, height);
+		ctx.fillRect(0, 0, box.width, box.height);
 		ctx.fillStyle = "white";
 		ctx.textAlign = "left";
 		ctx.textBaseline = "top";
-		ctx.font = Math.round(height / 6).toString(10) + "px sans-serif";
-		ctx.fillText(id, 0.02 * width, 0.02 * height);
+		ctx.font = Math.round(box.height / 6).toString(10) + "px sans-serif";
+		ctx.fillText(id, 0.02 * box.width, 0.02 * box.height);
 		ctx.fillText((isPressed ? "pr " : "") +
 			(isSelected ? "sel " : "") +
 			(isEnabled ? "" : "dis"),
-			0.02 * width, 0.22 * height);
+			0.02 * box.width, 0.22 * box.height);
 		if (state) {
-			ctx.fillText("=" + state, 0.02 * width, 0.42 * height);
+			ctx.fillText("=" + state, 0.02 * box.width, 0.42 * box.height);
 		}
 	});
 };

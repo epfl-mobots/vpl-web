@@ -813,7 +813,6 @@ A3a.vpl.patchBlocksSVG = function (uiConfig) {
 			blockLineWidth: uiConfig["styles"]["blockLineWidth"] === undefined ? Math.max(1, Math.min(3, blockSize / 40)) : uiConfig["styles"]["blockLineWidth"],
 			thinLineWidth: 1,
 			blockFont: Math.round(blockSize / 4).toString(10) + "px sans-serif",
-			blockLargeFont: Math.round(blockSize / 3).toString(10) + "px sans-serif",
 			templateScale: Math.max(uiConfig["styles"]["templateScale"] || 0.666, (uiConfig["styles"]["minTemplateSize"] || 32) / blockSize),
 			scrollingBlockLib: uiConfig["styles"]["scrollingBlockLib"],
 			controlColor: uiConfig["styles"]["controlColor"] || "navy",

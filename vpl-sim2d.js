@@ -532,6 +532,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			"sim:teacher-reset",
 			"sim:teacher"
 		],
+		["sim", "top"],
 		sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
 		sim2d.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
 
@@ -553,11 +554,11 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	simControls.push(simCanvas.addControl(
 		robotControlBox.x + smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
-		smallButtonBox.width, smallButtonBox.height,
+		smallButtonBox,
 		// draw
-		function (ctx, width, height, isPressed) {
+		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:forward",
-				ctx, simCanvas.dims, width, height, true, false, isPressed);
+				ctx, simCanvas.dims, box, true, false, isPressed);
 		},
 		// action
 		function (ev) {
@@ -573,11 +574,11 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	simControls.push(simCanvas.addControl(
 		robotControlBox.x + smallButtonBox.offsetLeft(),
 		yRobotControl,
-		smallBtnSize, smallBtnSize,
+		smallButtonBox,
 		// draw
-		function (ctx, width, height, isPressed) {
+		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:left",
-				ctx, simCanvas.dims, width, height, true, false, isPressed);
+				ctx, simCanvas.dims, box, true, false, isPressed);
 		},
 		// action
 		function (ev) {
@@ -592,11 +593,11 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	simControls.push(simCanvas.addControl(
 		robotControlBox.x + smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
-		smallBtnSize, smallBtnSize,
+		smallButtonBox,
 		// draw
-		function (ctx, width, height, isPressed) {
+		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:center",
-				ctx, simCanvas.dims, width, height, true, false, isPressed);
+				ctx, simCanvas.dims, box, true, false, isPressed);
 		},
 		// action
 		function (ev) {
@@ -611,11 +612,11 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	simControls.push(simCanvas.addControl(
 		robotControlBox.x + 2 * smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
-		smallBtnSize, smallBtnSize,
+		smallButtonBox,
 		// draw
-		function (ctx, width, height, isPressed) {
+		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:right",
-				ctx, simCanvas.dims, width, height, true, false, isPressed);
+				ctx, simCanvas.dims, box, true, false, isPressed);
 		},
 		// action
 		function (ev) {
@@ -631,11 +632,11 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	simControls.push(simCanvas.addControl(
 		robotControlBox.x + smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
-		smallBtnSize, smallBtnSize,
+		smallButtonBox,
 		// draw
-		function (ctx, width, height, isPressed) {
+		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:backward",
-				ctx, simCanvas.dims, width, height, true, false, isPressed);
+				ctx, simCanvas.dims, box, true, false, isPressed);
 		},
 		// action
 		function (ev) {
@@ -652,11 +653,11 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	simControls.push(simCanvas.addControl(
 		robotControlBox.x + 0.5 * smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
-		smallBtnSize, smallBtnSize,
+		smallButtonBox,
 		// draw
-		function (ctx, width, height, isPressed) {
+		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:tap",
-				ctx, simCanvas.dims, width, height, true, false, isPressed);
+				ctx, simCanvas.dims, box, true, false, isPressed);
 		},
 		// action
 		function (ev) {
@@ -668,11 +669,11 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	simControls.push(simCanvas.addControl(
 		robotControlBox.x + 1.5 * smallButtonBox.totalWidth() + smallButtonBox.offsetLeft(),
 		yRobotControl,
-		smallBtnSize, smallBtnSize,
+		smallButtonBox,
 		// draw
-		function (ctx, width, height, isPressed) {
+		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:clap",
-				ctx, simCanvas.dims, width, height, true, false, isPressed);
+				ctx, simCanvas.dims, box, true, false, isPressed);
 		},
 		// action
 		function (ev) {

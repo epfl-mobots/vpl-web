@@ -572,7 +572,6 @@ A3a.vpl.Canvas.prototype.update = function () {
 		blockLineWidth: number,
 		thinLineWidth: number,
 		blockFont: string,
-		blockLargeFont: string,
 		templateScale: number,
 		scrollingBlockLib: boolean,
 		controlColor: string,
@@ -602,7 +601,6 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 		blockLineWidth: Math.max(1, Math.min(3, blockSize / 40)),
 		thinLineWidth: 1,
 		blockFont: Math.round(blockSize / 4).toString(10) + "px sans-serif",
-		blockLargeFont: Math.round(blockSize / 3).toString(10) + "px sans-serif",
 		templateScale: Math.max(0.666, 32 / blockSize),
 		scrollingBlockLib: false,
 		controlColor: "navy",
@@ -847,7 +845,7 @@ A3a.vpl.Canvas.prototype.addDecoration = function (fun) {
 };
 
 /** Function drawing control button with origin at (0,0); args are ctx, width, height, isPressed
-	@typedef {function(CanvasRenderingContext2D,number,number,boolean):void}
+	@typedef {function(CanvasRenderingContext2D,CSSParser.Box.Rect,boolean):void}
 */
 A3a.vpl.Canvas.controlDraw;
 
@@ -856,11 +854,10 @@ A3a.vpl.Canvas.controlDraw;
 */
 A3a.vpl.Canvas.controlAction;
 
-/** Add active control (new)
+/** Add active control
 	@param {number} x
 	@param {number} y
-	@param {number} width
-	@param {number} height
+	@param {CSSParser.Box.Rect} box
 	@param {A3a.vpl.Canvas.controlDraw} draw
 	@param {?A3a.vpl.Canvas.controlAction=} action
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
@@ -868,17 +865,17 @@ A3a.vpl.Canvas.controlAction;
 	@param {string=} id
 	@return {A3a.vpl.CanvasItem}
 */
-A3a.vpl.Canvas.prototype.addControl = function (x, y, width, height, draw, action, doDrop, canDrop, id) {
+A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop, canDrop, id) {
 	/** @type {A3a.vpl.CanvasItem.mouseEvent} */
 	var downEvent;
 	var self = this;
 	var item = new A3a.vpl.CanvasItem(null,
-		width, height, x, y,
+		box.width, box.height, x, y,
 		/** @type {A3a.vpl.CanvasItem.draw} */
 		(function (ctx, item, dx, dy) {
 			ctx.save();
 			ctx.translate(item.x + dx, item.y + dy);
-			draw(ctx, item.width, item.height,
+			draw(ctx, box,
 				(self.downControl.id === id && /** @type {boolean} */(self.downControl.isInside)) ||
 					item.dropTarget);
 			ctx.restore();

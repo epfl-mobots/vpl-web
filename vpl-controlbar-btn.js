@@ -10,13 +10,13 @@
 		string,
 		CanvasRenderingContext2D,
 		A3a.vpl.Canvas.dims,
-		number,
-		number,
+		CSSParser.Box,
+		Array.<string>,
 		boolean,
 		boolean,
 		boolean,
 		Object): void}
-	Function to draw buttons (arguments: id, ctx, dims, width, height, isEnabled,
+	Function to draw buttons (arguments: id, ctx, dims, css, cssClasses, isEnabled,
 	isSelected, isPressed, obj)
 */
 A3a.vpl.ControlBar.drawButton;
@@ -33,11 +33,12 @@ A3a.vpl.ControlBar.getButtonBounds;
 /** Add a control button, taking care of disabled ones
 	@param {A3a.vpl.Application} app
 	@param {string} id
+	@param {Array.<string>} cssClasses
 	@param {A3a.vpl.ControlBar.drawButton} drawButton
 	@param {A3a.vpl.ControlBar.Bounds} buttonBounds
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addButton = function (app, id, drawButton, buttonBounds) {
+A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButton, buttonBounds) {
 	var disabled = app.uiConfig.isDisabled(id);
 	if (app.commands.find(id).isAvailable() && (app.uiConfig.customizationMode || !disabled)) {
 		var canvas = this.canvas;
@@ -46,14 +47,14 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, drawButton, buttonBo
 		var obj = cmd.obj;
 
 		this.addControl(
-			function (ctx, width, height, isPressed) {
-				drawButton(id, ctx, canvas.dims, width, height,
+			function (ctx, box, isPressed) {
+				drawButton(id, ctx, canvas.dims, canvas.css, cssClasses,
 					app.commands.isEnabled(id),
 					app.commands.isSelected(id),
 					isPressed,
 					app.commands.getState(id));
 				if (disabled) {
-					canvas.disabledMark(0, 0, width, height);
+					canvas.disabledMark(0, 0, box.width, box.height);
 				}
 			},
 			buttonBounds,
@@ -86,11 +87,12 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, drawButton, buttonBo
 /** Set all the buttons
 	@param {A3a.vpl.Application} app
 	@param {Array.<string>} buttons button id, "!space" for space, "!stretch" for stretch
+	@param {Array.<string>} cssClasses
 	@param {A3a.vpl.ControlBar.drawButton} drawButton
 	@param {function(string,A3a.vpl.Canvas.dims,Object):A3a.vpl.ControlBar.Bounds} getButtonBounds
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.setButtons = function (app, buttons, drawButton, getButtonBounds) {
+A3a.vpl.ControlBar.prototype.setButtons = function (app, buttons, cssClasses, drawButton, getButtonBounds) {
 	this.reset();
 	for (var i = 0; i < buttons.length; i++) {
 		switch (buttons[i]) {
@@ -107,7 +109,9 @@ A3a.vpl.ControlBar.prototype.setButtons = function (app, buttons, drawButton, ge
 			this.addStretch(true);
 			break;
 		default:
-			this.addButton(app, buttons[i], drawButton,
+			this.addButton(app,
+				buttons[i], cssClasses,
+				drawButton,
 				getButtonBounds(buttons[i], this.canvas.dims, app.commands.find(buttons[i]).obj));
 			break;
 		}

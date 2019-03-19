@@ -179,14 +179,15 @@ A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBox) {
 		toolbarBox.drawAt(ctx, self.x, self.y);
 	});
 	this.controls.forEach(function (control) {
+		var itemBox1 = itemBox.copy();
+		itemBox1.width = control.bounds.xmax - control.bounds.xmin;
 		this.canvas.addControl(control.x, control.y,
-			control.bounds.xmax - control.bounds.xmin,
-			control.bounds.ymax - control.bounds.ymin,
+			itemBox1,
 			control.bounds.xmin !== 0 || control.bounds.ymin !== 0
-				? function (ctx, width, height, isPressed) {
+				? function (ctx, box, isPressed) {
 					ctx.save();
 					ctx.translate(-control.bounds.xmin, -control.bounds.ymin);
-					control.draw(ctx, width, height, isPressed);
+					control.draw(ctx, box, isPressed);
 					ctx.restore();
 				}
 				: control.draw,

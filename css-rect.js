@@ -308,6 +308,9 @@ CSSParser.Box.Rect = function (width, height, x, y) {
 	this.paddingBottom = null;
 
 	this.backgroundColor = null;
+	this.color = null;
+
+	this.font = null;
 
 	this.shadowOffset = null;
 	this.shadowBlurRadius = null;
@@ -353,6 +356,9 @@ CSSParser.Box.Rect.defaultBox = function () {
 	box.paddingBottom = 0;
 
 	box.backgroundColor = "transparent";
+	box.color = "black";
+
+	box.font = "10px sans-serif";
 
 	box.shadowOffset = null;
 	box.shadowBlurRadius = 0;
@@ -614,6 +620,12 @@ CSSParser.Box.Rect.prototype.setProperties = function (props) {
 		case "background":	// color is the only supported property
 			this.backgroundColor = props[key];
 			break;
+		case "color":
+			this.color = props[key];
+			break;
+		case "font":
+			this.font = props[key];
+			break;
 		case "box-shadow":
 			if (props[key].shadowOffset !== null) {
 				this.shadowOffset = props[key].offset;
@@ -677,6 +689,9 @@ CSSParser.Box.Rect.prototype.copy = function () {
 	box.paddingBottom = this.paddingBottom;
 
 	box.backgroundColor = this.backgroundColor;
+	box.color = this.color;
+
+	box.font = this.font;
 
 	box.shadowOffset = this.shadowOffset;
 	box.shadowBlurRadius = this.shadowBlurRadius;
@@ -789,6 +804,13 @@ CSSParser.Box.Rect.prototype.merge = function (overridingBox) {
 
 	if (overridingBox.backgroundColor !== null) {
 		box.backgroundColor = overridingBox.backgroundColor;
+	}
+	if (overridingBox.color !== null) {
+		box.color = overridingBox.color;
+	}
+
+	if (overridingBox.font !== null) {
+		box.font = overridingBox.font;
 	}
 
 	if (overridingBox.shadowOffset !== null) {

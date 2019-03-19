@@ -28,6 +28,9 @@ A3a.vpl.Application = function (canvasEl) {
 
 	this.program = new A3a.vpl.Program(A3a.vpl.mode.basic, this.uiConfig);
 
+	this.vplMessage = "";
+	this.vplMessageIsWarning = false;	// false for error, true for warning
+
 	this.vplCanvas = new A3a.vpl.Canvas(canvasEl, null, this.css);
 	this.vplCanvas.state = {};
 
