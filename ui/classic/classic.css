@@ -13,8 +13,25 @@ toolbar {
 	margin: 5px;
 }
 
+toolbar.vpl.bottom {
+	padding: 0;
+	margin: 0;
+}
+
 button {
 	margin: 2px;
+}
+
+button.vpl.bottom {
+	font: 20px sans-serif;
+}
+
+#vpl-message-error {
+	color: #e44;
+}
+
+#vpl-message-warning {
+	color: #f88;
 }
 
 separator {
@@ -24,12 +41,11 @@ separator {
 
 vpl {
 	padding: 5px;
-	padding-top: 30px;
 	margin: 5px;
 	background: #eee;
 }
 
-block {
+block.library {
 	margin: 4px;
 }
 
@@ -46,11 +62,24 @@ block.comment {
 	background: #aaa;
 }
 
+block-container {
+	padding: 0;
+	padding-bottom: 8px;
+	margin: 12px;
+	margin-bottom: 4px;
+}
+block-container.error {
+	border-bottom: #e44 3px;
+}
+block-container.warning {
+	border-bottom: #f88 3px;
+}
+
 rule {
 	background: #ddd;
 	border: solid #666;
 	border-radius: 5px;
-	padding: 10px;
+	padding: 5px;
 	margin: 10px;
 }
 
