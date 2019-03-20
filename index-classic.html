@@ -80,7 +80,7 @@ vpl {
 	background: #eee;
 }
 
-block {
+block.library {
 	margin: 4px;
 }
 
@@ -97,11 +97,24 @@ block.comment {
 	background: #aaa;
 }
 
+block-container {
+	padding: 0;
+	padding-bottom: 8px;
+	margin: 12px;
+	margin-bottom: 4px;
+}
+block-container.error {
+	border-bottom: #e44 3px;
+}
+block-container.warning {
+	border-bottom: #f88 3px;
+}
+
 rule {
 	background: #ddd;
 	border: solid #666;
 	border-radius: 5px;
-	padding: 10px;
+	padding: 5px;
 	margin: 10px;
 }
 

@@ -315,6 +315,7 @@ Elements:
 - toolbar (classes: vpl, sim, src, top, bottom)
 - vpl
 - block (classes: event, action, state, comment, library; pseudo-class: small)
+- block-container (classes: error, warning; used only in rules, not in block-library)
 - rule (pseudo-class: small)
 - block-library (classes: event, action)
 - button-small

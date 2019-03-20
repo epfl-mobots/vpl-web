@@ -186,13 +186,18 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 	@param {CSSParser.Box.Rect} blockActionBox
 	@param {CSSParser.Box.Rect} blockStateBox
 	@param {CSSParser.Box.Rect} blockCommentBox
+	@param {CSSParser.Box.Rect} blockContainerBox
+	@param {CSSParser.Box.Rect} blockContainerErrorBox
+	@param {CSSParser.Box.Rect} blockContainerWarningBox
 	@param {CSSParser.Box.Rect} ruleBox
 	@param {CSSParser.Box.Rect} separatorBox
 	@return {void}
 */
 A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	function (canvas, eventHandler, displaySingleEvent, eventX0, actionX0, y,
-		blockEventBox, blockActionBox, blockStateBox, blockCommentBox, ruleBox, separatorBox) {
+		blockEventBox, blockActionBox, blockStateBox, blockCommentBox,
+		blockContainerBox, blockContainerErrorBox, blockContainerWarningBox,
+		ruleBox, separatorBox) {
 
 	/** Get block box for the specified type
 		@param {A3a.vpl.Block} block
@@ -215,14 +220,14 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 
 	var canvasSize = canvas.getSize();
 	var x = eventX0;
-	var step = blockEventBox.totalWidth();
+	var step = blockContainerBox.totalWidth();
 
 	var self = this;
 	var item = new A3a.vpl.CanvasItem(eventHandler,
 		ruleBox.paddedWidth(),
 		ruleBox.paddedHeight(),
-		x - ruleBox.paddingLeft - blockEventBox.offsetLeft(),
-		y - ruleBox.paddingTop - blockEventBox.offsetTop(),
+		x - ruleBox.paddingLeft - blockContainerBox.offsetLeft() - blockEventBox.offsetLeft(),
+		y - ruleBox.paddingTop - blockContainerBox.offsetTop() - blockEventBox.offsetTop(),
 		// draw
 		function (ctx, item, dx, dy) {
 			// strip
@@ -231,15 +236,34 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			var widgetBounds = canvas.getWidgetBounds("vpl:then");
 			var separatorWidth = (widgetBounds.xmax - widgetBounds.xmin) || 0;
 			separatorBox.drawAt(ctx,
-				actionX0 - separatorBox.width - separatorBox.marginRight - separatorBox.paddingRight - blockEventBox.offsetLeft() + dx,
+				actionX0 - separatorBox.width - separatorBox.marginRight - separatorBox.paddingRight - blockContainerBox.offsetLeft() + dx,
 				item.y + (ruleBox.paddedHeight() - separatorBox.height) / 2 + dy);
 			canvas.drawWidget("vpl:then",
-				actionX0 - separatorBox.totalWidth() / 2 - blockEventBox.offsetLeft() + dx,
+				actionX0 - separatorBox.totalWidth() / 2 - blockContainerBox.offsetLeft() + dx,
 				item.y + ruleBox.paddedHeight() / 2 + dy);
 			if (eventHandler.locked) {
 				canvas.lockedMark(item.x, item.y, item.width, item.height,
 					false, eventHandler.disabled ? "#ddd" : "");
 			}
+			// block container boxes
+			events.forEach(function (event, j) {
+				var box = eventHandler.error && eventHandler.error.eventErrorIndices.indexOf(j) >= 0
+					? eventHandler.error.isWarning ? blockContainerWarningBox : blockContainerErrorBox
+					: blockContainerBox;
+				box.drawAt(ctx,
+					item.x + dx + ruleBox.paddingLeft + blockContainerBox.marginLeft + j * step,
+					item.y + dy + ruleBox.paddingTop + blockContainerBox.marginTop,
+					true);
+			});
+			actions.forEach(function (action, j) {
+				var box = eventHandler.error && eventHandler.error.actionErrorIndices.indexOf(j) >= 0
+					? eventHandler.error.isWarning ? blockContainerWarningBox : blockContainerErrorBox
+					: blockContainerBox;
+				box.drawAt(ctx,
+					item.x + dx + ruleBox.paddingLeft + actionX0 - eventX0 + blockContainerBox.marginLeft + j * step,
+					item.y + dy + ruleBox.paddingTop + blockContainerBox.marginTop,
+					true);
+			});
 		},
 		// interactiveCB
 		null,
@@ -346,7 +370,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		item.attachItem(childItem);
 	}, this);
 
-	// error marks
+	// error widgets
 	canvas.addDecoration(function (ctx) {
 		if (eventHandler.error !== null) {
 			var widgetBounds = canvas.getWidgetBounds(eventHandler.error.isWarning ? "vpl:warning" : "vpl:error");
@@ -354,32 +378,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			errorBox.width = widgetBounds.xmax - widgetBounds.xmin;
 			errorBox.height = widgetBounds.ymax - widgetBounds.ymin;
 			canvas.drawWidget(eventHandler.error.isWarning ? "vpl:warning" : "vpl:error",
-				x - ruleBox.paddingLeft - blockEventBox.offsetLeft() - errorBox.width / 2,
+				x - ruleBox.paddingLeft - blockContainerBox.offsetLeft() - blockEventBox.offsetLeft() - errorBox.width / 2,
 				y + blockEventBox.height * 0.5);
-
-			ctx.strokeStyle = eventHandler.error.isWarning ? canvas.dims.warningColor : canvas.dims.errorColor;
-			ctx.lineWidth = canvas.dims.blockSize * 0.05;
-			ctx.beginPath();
-			var ya = y + blockEventBox.height + blockEventBox.paddingBottom + blockEventBox.marginBottom;
-			if (eventHandler.error.eventError) {
-				if (eventHandler.error.eventErrorIndices.length === 0) {
-					ctx.moveTo(eventX0, ya);
-					ctx.lineTo(eventX0 + step * (events.length - 1) + blockEventBox.width, ya);
-				} else {
-					for (var i = 0; i < eventHandler.error.eventErrorIndices.length; i++) {
-						var xe = eventX0 +
-								step * eventHandler.error.eventErrorIndices[i];
-						ctx.moveTo(xe, ya);
-						ctx.lineTo(xe + blockEventBox.width, ya);
-					}
-				}
-			}
-			for (var i = 0; i < eventHandler.error.actionErrorIndices.length; i++) {
-				var xa = actionX0 + step * eventHandler.error.actionErrorIndices[i];
-				ctx.moveTo(xa, ya);
-				ctx.lineTo(xa + blockEventBox.width, ya);
-			}
-			ctx.stroke();
 		}
 	});
 };
@@ -390,11 +390,11 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	@param {number} y1 top side of blocks in first rule
 	@param {number} y2 top side of blocks in second rule (below)
 	@param {CSSParser.Box.Rect} ruleBox
-	@param {CSSParser.Box.Rect} blockBox
+	@param {CSSParser.Box.Rect} blockContainerBox
 	@param {boolean} isWarning
 	@return {void}
 */
-A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas, x, y1, y2, ruleBox, blockBox, isWarning) {
+A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas, x, y1, y2, ruleBox, blockContainerBox, isWarning) {
 	canvas.addDecoration(function (ctx) {
 		// pink line
 		var widgetBounds = canvas.getWidgetBounds(isWarning ? "vpl:warning" : "vpl:error");
@@ -405,9 +405,9 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 		});
 		errorBox.width = widgetBounds.xmax - widgetBounds.xmin;
 		errorBox.height = widgetBounds.ymax - widgetBounds.ymin;
-		var xc = x - ruleBox.paddingLeft - blockBox.offsetLeft() - errorBox.width / 2;
-		var yc1 = y1 + (blockBox.height + errorBox.height) / 2;
-		var yc2 = y2 + (blockBox.height - errorBox.height) / 2;
+		var xc = x - ruleBox.paddingLeft - blockContainerBox.offsetLeft() - errorBox.width / 2;
+		var yc1 = y1 + (blockContainerBox.height + errorBox.height) / 2;
+		var yc2 = y2 + (blockContainerBox.height - errorBox.height) / 2;
 		ctx.strokeStyle = isWarning ? canvas.dims.warningColor : canvas.dims.errorColor;
 		ctx.lineWidth = canvas.dims.blockSize * 0.05;
 		ctx.setLineDash([canvas.dims.blockSize * 0.2, canvas.dims.blockSize * 0.1]);
@@ -504,6 +504,9 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var blockActionBox = canvas.css.getBox({tag: "block", clas: ["action"], pseudoClass: this.zoomBlocks ? ["small"] : []});
 	var blockStateBox = canvas.css.getBox({tag: "block", clas: ["state"], pseudoClass: this.zoomBlocks ? ["small"] : []});
 	var blockCommentBox = canvas.css.getBox({tag: "block", clas: ["comment"], pseudoClass: this.zoomBlocks ? ["small"] : []});
+	var blockContainerBox = canvas.css.getBox({tag: "block-container"});
+	var blockContainerErrorBox = canvas.css.getBox({tag: "block-container", clas: ["error"]});
+	var blockContainerWarningBox = canvas.css.getBox({tag: "block-container", clas: ["warning"]});
 	var ruleBox = canvas.css.getBox({tag: "rule", pseudoClass: this.zoomBlocks ? ["small"] : []});
 	var ruleSeparatorBox = canvas.css.getBox({tag: "widget", id: "widget-then", pseudoClass: this.zoomBlocks ? ["small"] : []});
 	var blockEventLibItemBox = canvas.css.getBox({tag: "block", clas: ["library", "event"]});
@@ -565,22 +568,24 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	blockStateBox.height = canvas.dims.blockSize;
 	blockCommentBox.width = canvas.dims.blockSize;
 	blockCommentBox.height = canvas.dims.blockSize;
+	blockContainerBox.width = blockContainerErrorBox.width = blockContainerWarningBox.width = blockEventBox.totalWidth();
+	blockContainerBox.height = blockContainerErrorBox.height = blockContainerWarningBox.height = blockEventBox.totalHeight();
 	var widgetBounds = canvas.getWidgetBounds("vpl:then");
 	if (widgetBounds) {
 		ruleSeparatorBox.width = widgetBounds.xmax - widgetBounds.xmin;
 		ruleSeparatorBox.height = widgetBounds.ymax - widgetBounds.ymin;
 	}
 	var ruleSeparatorWidth = ruleSeparatorBox.totalWidth();
-	var ruleWidth = (nMaxEventHandlerELength + nMaxEventHandlerALength) * blockEventBox.totalWidth()
-		+ ruleSeparatorWidth;
+	var blockStep = blockContainerBox.totalWidth();
+	var ruleWidth = (nMaxEventHandlerELength + nMaxEventHandlerALength) * blockStep + ruleSeparatorWidth;
 	// position of first event block in program (will be adjusted to make room for lists of events and actions)
 	var eventX0 = viewBox.x + (viewBox.width - ruleWidth) / 2;
 	// position of first action block in program (will be adjusted to make room for lists of events and actions)
 	var actionX0 = eventX0 +
-		blockActionBox.totalWidth() * nMaxEventHandlerELength +
+		blockStep * nMaxEventHandlerELength +
 		ruleSeparatorWidth;
 	ruleBox.width = ruleWidth;
-	ruleBox.height = blockEventBox.totalHeight();
+	ruleBox.height = blockContainerBox.totalHeight();
 
 	/** Get box for the specified block template
 		@param {A3a.vpl.BlockTemplate} blockTemplate
@@ -837,8 +842,10 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			program.addEventHandlerToCanvas(canvas, eventHandler,
 				displaySingleEvent,
 				eventX0, actionX0,
-				vplBox.y + ruleBox.totalHeight() * i + ruleBox.offsetTop() + blockEventBox.offsetTop(),
-				blockEventBox, blockActionBox, blockStateBox, blockCommentBox, ruleBox, ruleSeparatorBox);
+				vplBox.y + ruleBox.totalHeight() * i + ruleBox.offsetTop() + blockContainerBox.offsetTop(),
+				blockEventBox, blockActionBox, blockStateBox, blockCommentBox,
+				blockContainerBox, blockContainerErrorBox, blockContainerWarningBox,
+				ruleBox, ruleSeparatorBox);
 			if (eventHandler.error !== null && errorMsg === "") {
 				errorMsg = eventHandler.error.msg;
 				isWarning = eventHandler.error.isWarning;
@@ -847,9 +854,9 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 						if (program.program[j] === eventHandler.error.conflictEventHandler) {
 							program.addEventHandlerConflictLinkToCanvas(canvas,
 								eventX0,
-								vplBox.y + ruleBox.totalHeight() * i + ruleBox.offsetTop() + blockEventBox.offsetTop(),
-								vplBox.y + ruleBox.totalHeight() * j + ruleBox.offsetTop() + blockEventBox.offsetTop(),
-								ruleBox, blockEventBox,
+								vplBox.y + ruleBox.totalHeight() * i + ruleBox.offsetTop() + blockContainerBox.offsetTop(),
+								vplBox.y + ruleBox.totalHeight() * j + ruleBox.offsetTop() + blockContainerBox.offsetTop(),
+								ruleBox, blockContainerBox,
 								eventHandler.error.isWarning);
 							break;
 						}
