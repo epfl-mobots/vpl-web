@@ -98,6 +98,18 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return app.views.indexOf("src") < 0;
 		}
 	});
+	this.commands.add("vpl:text-toggle", {
+		action: function (app, modifier) {
+			app.setView(["src"], {toggle: true});
+		},
+		isEnabled: function (app) {
+			return !app.program.noVPL;
+		},
+		isSelected: function (app) {
+			return app.views.indexOf("src") >= 0;
+		},
+		object: this
+	});
 	this.commands.add("vpl:advanced", {
 		action: function (app, modifier) {
 			app.program.setMode(app.program.mode === A3a.vpl.mode.basic

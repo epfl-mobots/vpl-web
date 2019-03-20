@@ -186,6 +186,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:save": download the VPL program
 - "vpl:upload": upload VPL program to the central repository (to the teacher computer)
 - "vpl:text": switch to the text programming language editor (Aseba, L2 or JavaScript)
+- "vpl:text-toggle": toggle visibility of text editor (replaces "vpl:text" and "src:close")
 - "vpl:advanced": toggle between basic and advanced VPL mode
 - "vpl:undo": undo last change
 - "vpl:redo": redo last undone change
