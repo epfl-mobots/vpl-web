@@ -9,7 +9,7 @@
 	@param {string} id
 	@param {CanvasRenderingContext2D} ctx canvas 2d context
 	@param {A3a.vpl.Canvas.dims} dims
-	@param {CSSParser.Box} css
+	@param {CSSParser.VPL} css
 	@param {Array.<string>} cssClasses
 	@param {boolean} isEnabled
 	@param {boolean} isSelected

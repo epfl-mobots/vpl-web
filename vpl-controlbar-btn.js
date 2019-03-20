@@ -10,7 +10,7 @@
 		string,
 		CanvasRenderingContext2D,
 		A3a.vpl.Canvas.dims,
-		CSSParser.Box,
+		CSSParser.VPL,
 		Array.<string>,
 		boolean,
 		boolean,

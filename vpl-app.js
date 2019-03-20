@@ -18,7 +18,7 @@ A3a.vpl.Application = function (canvasEl) {
 
 	this.canvasEl = canvasEl;
 
-	this.css = new CSSParser.Box();
+	this.css = new CSSParser.VPL();
 
 	this.uiConfig = new A3a.vpl.UIConfig();
 	this.commands = new A3a.vpl.Commands();

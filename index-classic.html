@@ -118,6 +118,13 @@ rule {
 	margin: 10px;
 }
 
+conflict-line.error {
+	line: 3px #e44 dashed;
+}
+conflict-line.warning {
+	line: 3px #f88;
+}
+
 #widget-then {
 	padding-left: 10px;
 	padding-right: 10px;
@@ -226,8 +233,8 @@ pre#editor-lines {
 <script src="vpl-block.js"></script>
 <script src="vpl-emptyblock.js"></script>
 <script src="css.js"></script>
-<script src="css-rect.js"></script>
-<script src="css-rect-draw.js"></script>
+<script src="vpl-css.js"></script>
+<script src="vpl-css-draw.js"></script>
 <script src="vpl-canvas.js"></script>
 <script src="vpl-canvas-scroll.js"></script>
 <script src="vpl-blocklib.js"></script>

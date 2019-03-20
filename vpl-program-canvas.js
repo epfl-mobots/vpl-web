@@ -30,7 +30,7 @@ A3a.vpl.Program.CanvasRenderingState = function () {
 /** Add a block to a canvas
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.Block} block
-	@param {CSSParser.Box.Rect} box
+	@param {CSSParser.VPL.Box} box
 	@param {number} x horizontal block position (without box padding)
 	@param {number} y vertical  block position (without box padding)
 	@param {{
@@ -143,7 +143,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 /** Add a block template on a canvas
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.BlockTemplate} blockTemplate
-	@param {CSSParser.Box.Rect} box
+	@param {CSSParser.VPL.Box} box
 	@param {number} x horizontal block template position (without box padding)
 	@param {number} y vertical  block template position (without box padding)
 	@return {void}
@@ -182,15 +182,15 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 	@param {number} eventX0
 	@param {number} actionX0
 	@param {number} y
-	@param {CSSParser.Box.Rect} blockEventBox
-	@param {CSSParser.Box.Rect} blockActionBox
-	@param {CSSParser.Box.Rect} blockStateBox
-	@param {CSSParser.Box.Rect} blockCommentBox
-	@param {CSSParser.Box.Rect} blockContainerBox
-	@param {CSSParser.Box.Rect} blockContainerErrorBox
-	@param {CSSParser.Box.Rect} blockContainerWarningBox
-	@param {CSSParser.Box.Rect} ruleBox
-	@param {CSSParser.Box.Rect} separatorBox
+	@param {CSSParser.VPL.Box} blockEventBox
+	@param {CSSParser.VPL.Box} blockActionBox
+	@param {CSSParser.VPL.Box} blockStateBox
+	@param {CSSParser.VPL.Box} blockCommentBox
+	@param {CSSParser.VPL.Box} blockContainerBox
+	@param {CSSParser.VPL.Box} blockContainerErrorBox
+	@param {CSSParser.VPL.Box} blockContainerWarningBox
+	@param {CSSParser.VPL.Box} ruleBox
+	@param {CSSParser.VPL.Box} separatorBox
 	@return {void}
 */
 A3a.vpl.Program.prototype.addEventHandlerToCanvas =
@@ -201,7 +201,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 
 	/** Get block box for the specified type
 		@param {A3a.vpl.Block} block
-		@return {CSSParser.Box.Rect}
+		@return {CSSParser.VPL.Box}
 	*/
 	function boxForBlockType(block) {
 		switch (block.blockTemplate.type) {
@@ -389,8 +389,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	@param {number} x left side of first event block
 	@param {number} y1 top side of blocks in first rule
 	@param {number} y2 top side of blocks in second rule (below)
-	@param {CSSParser.Box.Rect} ruleBox
-	@param {CSSParser.Box.Rect} blockContainerBox
+	@param {CSSParser.VPL.Box} ruleBox
+	@param {CSSParser.VPL.Box} blockContainerBox
 	@param {boolean} isWarning
 	@return {void}
 */
@@ -405,22 +405,23 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 		});
 		errorBox.width = widgetBounds.xmax - widgetBounds.xmin;
 		errorBox.height = widgetBounds.ymax - widgetBounds.ymin;
+		var errorLine = canvas.css.getLine({
+			tag: "conflict-line",
+			clas: [isWarning ? "warning" : "error"]
+		});
 		var xc = x - ruleBox.paddingLeft - blockContainerBox.offsetLeft() - errorBox.width / 2;
 		var yc1 = y1 + (blockContainerBox.height + errorBox.height) / 2;
 		var yc2 = y2 + (blockContainerBox.height - errorBox.height) / 2;
-		ctx.strokeStyle = isWarning ? canvas.dims.warningColor : canvas.dims.errorColor;
-		ctx.lineWidth = canvas.dims.blockSize * 0.05;
-		ctx.setLineDash([canvas.dims.blockSize * 0.2, canvas.dims.blockSize * 0.1]);
 		ctx.beginPath();
 		ctx.moveTo(xc, yc1);
 		ctx.lineTo(xc, yc2);
-		ctx.stroke();
+		errorLine.stroke(ctx);
 		ctx.beginPath();
-		ctx.arc(xc, yc1, ctx.lineWidth, 0, Math.PI);
-		ctx.stroke();
+		ctx.arc(xc, yc1, errorLine.lineWidth, 0, Math.PI);
+		errorLine.stroke(ctx);
 		ctx.beginPath();
-		ctx.arc(xc, yc2, ctx.lineWidth, -Math.PI, 0);
-		ctx.stroke();
+		ctx.arc(xc, yc2, errorLine.lineWidth, -Math.PI, 0);
+		errorLine.stroke(ctx);
 	});
 };
 
@@ -589,7 +590,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 
 	/** Get box for the specified block template
 		@param {A3a.vpl.BlockTemplate} blockTemplate
-		@return {CSSParser.Box.Rect}
+		@return {CSSParser.VPL.Box}
 	*/
 	function boxForBlockTemplate(blockTemplate) {
 		switch (blockTemplate.type) {

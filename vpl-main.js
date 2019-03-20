@@ -208,7 +208,7 @@ function vplSetup(gui) {
 		gui["css"].forEach(function (filename) {
 			app.css.parse(filename, gui.rsrc[filename]);
 		});
-		app.css.defineBoxProperties();
+		app.css.defineProperties();
 	}
 
 	// general settings
