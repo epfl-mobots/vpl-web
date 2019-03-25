@@ -7,11 +7,7 @@
 
 /** About box
 	@constructor
-	@param {string} textareaId id of textarea element, which should be
-	enclosed in a div and follow a pre
-	@param {string} preId id of pre element for line numbers (element before textarea)
-	@param {number=} topMargin
-	@param {number=} leftMargin
+	@param {string} html html content of the about box
 */
 A3a.vpl.About = function (html) {
 	this.html = html;
@@ -41,6 +37,9 @@ A3a.vpl.About = function (html) {
 	}, false);
 };
 
+/** Show about box
+	@return {void}
+*/
 A3a.vpl.About.prototype.show = function () {
 	this.div.innerHTML = this.html;	// do it here to restart from the desired starting point
 	this.backgroundDiv.style.display = "block";
@@ -49,6 +48,9 @@ A3a.vpl.About.prototype.show = function () {
 	this.div.style.marginTop = (-boundingBox.height / 2) + "px";
 };
 
+/** Hide about box
+	@return {void}
+*/
 A3a.vpl.About.prototype.hide = function () {
 	this.backgroundDiv.style.display = "none";
 };

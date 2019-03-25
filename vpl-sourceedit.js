@@ -17,8 +17,8 @@ A3a.vpl.VPLSourceEditor = function (app, noVPL, language) {
 	this.app = app;
 	this.code0 = "";	// from VPL, to restore when VPL lock is set
 	this.isLockedWithVPL = true;
-	/** @type {?function():{language:string,code:string}} */
-	this.changeLanguage = null;
+	/** @type {?A3a.vpl.VPLSourceEditor.UpdateCodeLanguage} */
+	this.updateCodeLanguage = null;
 	/** @type {?function(string,string):?string} */
 	this.disass = null;
 	/** @type {?string} */
@@ -62,6 +62,17 @@ A3a.vpl.VPLSourceEditor = function (app, noVPL, language) {
 		// normal behavior
 		return true;
 	}, false);
+};
+
+/** @typedef {function():{language:string,code:string}} */
+A3a.vpl.VPLSourceEditor.UpdateCodeLanguage;
+
+/** Change the function which regenerate source code upon programming language change
+	@param {A3a.vpl.VPLSourceEditor.UpdateCodeLanguage} f
+	@return {void}
+*/
+A3a.vpl.VPLSourceEditor.prototype.setUpdateCodeLanguageFunction = function (f) {
+	this.updateCodeLanguage = f;
 };
 
 /** Reset UI

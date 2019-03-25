@@ -523,7 +523,7 @@ function vplSetup(gui) {
 	var languageList = ["aseba", "l2", "js", "python"];
 	if (languageList.indexOf(language) >= 0) {
 		/** @const */
-		app.editor.changeLanguage = function () {
+		app.editor.setUpdateCodeLanguageFunction(function () {
 			language = languageList[(languageList.indexOf(language) + 1) % languageList.length];
 			app.program.currentLanguage = language;
 			var code = app.program.getCode(language);
@@ -531,7 +531,7 @@ function vplSetup(gui) {
 				language: language,
 				code: code
 			};
-		};
+		});
 	}
 
 	var asebaNode = new A3a.A3aNode(A3a.thymioDescr);
