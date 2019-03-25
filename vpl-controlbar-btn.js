@@ -117,3 +117,17 @@ A3a.vpl.ControlBar.prototype.setButtons = function (app, buttons, cssClasses, dr
 		}
 	}
 };
+
+/** Check if any button is available
+	@param {A3a.vpl.Application} app
+	@param {Array.<string>} buttons button id, "!space" for space, "!stretch" for stretch
+	@return {boolean}
+*/
+A3a.vpl.ControlBar.hasAvailableButtons = function (app, buttons) {
+	for (var i = 0; i < buttons.length; i++) {
+		if (buttons[i][0] !== "!" && app.commands.find(buttons[i]).isAvailable()) {
+			return true;
+		}
+	}
+	return false;
+};

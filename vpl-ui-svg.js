@@ -172,7 +172,9 @@ A3a.vpl.makeSVGWidgets = function (gui) {
 	[
 		"vpl:then",
 		"vpl:error",
-		"vpl:warning"
+		"vpl:warning",
+		"vpl:moreHigh",
+		"vpl:moreLow"
 	].forEach(function (id) {
 		var widget = find(id);
 		if (widget) {

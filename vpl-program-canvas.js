@@ -436,6 +436,22 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	// make sure code is up-to-date to have error info
 	program.getCode(program.currentLanguage);
 
+	// find first error, or first warning if there is no error
+	this.vplMessage = "";
+	this.vplMessageIsWarning = false;
+	for (var i = 0; i < program.program.length; i++) {
+		if (program.program[i].error) {
+			if (!program.program[i].error.isWarning) {
+				this.vplMessage = program.program[i].error.msg;
+				this.vplMessageIsWarning = false;
+				break;	// stop at first error
+			} else if (!this.vplMessage) {
+				this.vplMessage = program.program[i].error.msg;
+				this.vplMessageIsWarning = true;
+			}
+		}
+	}
+
 	// zoom blocks if too small
 	program.zoomBlocks = canvas.dims.blockSize < canvas.dims.minInteractiveBlockSize;
 
@@ -449,9 +465,9 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		"!!stretch",
 		"vpl:message-error",
 		"vpl:message-warning",
-		"vpl:message-empty",
 		"!!stretch"
 	];
+	var toolbar2HasAvButtons = A3a.vpl.ControlBar.hasAvailableButtons(this, toolbar2Config);
 
 	// program item counts
 	var displaySingleEvent = program.displaySingleEvent();
@@ -559,7 +575,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		viewBox.y + viewBox.height - toolbar2Box.totalHeight());
 	vplBox.setTotalWidth(viewBox.width - blockEventLibBox.totalWidth() - blockActionLibBox.totalWidth());
 	vplBox.setTotalHeight(viewBox.height - toolbarBox.totalHeight() -
-		(toolbar2Config.length > 0 ? toolbar2Box.totalHeight() : 0));
+		(toolbar2HasAvButtons ? toolbar2Box.totalHeight() : 0));
 	vplBox.setPosition(viewBox.x + blockEventLibBox.totalWidth(), viewBox.y + toolbarBox.totalHeight());
 	blockEventBox.width = canvas.dims.blockSize;
 	blockEventBox.height = canvas.dims.blockSize;
@@ -615,22 +631,6 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		viewBox.draw(ctx);
 	});
 
-	// find first error, or first warning if there is no error
-	this.vplMessage = "";
-	this.vplMessageIsWarning = false;
-	for (var i = 0; i < program.program.length; i++) {
-		if (program.program[i].error) {
-			if (!program.program[i].error.isWarning) {
-				this.vplMessage = program.program[i].error.msg;
-				this.vplMessageIsWarning = false;
-				break;	// stop at first error
-			} else if (!this.vplMessage) {
-				this.vplMessage = program.program[i].error.msg;
-				this.vplMessageIsWarning = true;
-			}
-		}
-	}
-
 	// top controls
 	var controlBar = new A3a.vpl.ControlBar(canvas);
 	controlBar.setButtons(this,
@@ -671,7 +671,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	controlBar.addToCanvas(toolbarBox, buttonBox);
 
 	// 2nd toolbar at bottom between templates
-	if (toolbar2Config.length > 0) {
+	if (toolbar2HasAvButtons > 0) {
 		var controlBar2 = new A3a.vpl.ControlBar(canvas);
 		controlBar2.setButtons(this,
 			toolbar2Config,
