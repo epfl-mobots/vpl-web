@@ -637,6 +637,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		program.toolbarConfig || [
 			"vpl:close",
 			"!space",
+			"vpl:about",
+			"!space",
 			"vpl:new",
 			"vpl:save",
 			// "vpl:load",

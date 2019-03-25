@@ -182,6 +182,7 @@ Buttons for actions which are permanently disabled, such as "vpl:run" when neith
 Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 
 - "vpl:close": close the VPL view
+- "vpl:about": display an about box (modal box with HTML defined in property "about" of property "html" of ui.json)
 - "vpl:new": reset VPL program to start a new program
 - "vpl:save": download the VPL program
 - "vpl:upload": upload VPL program to the central repository (to the teacher computer)
@@ -356,3 +357,14 @@ Some global style settings can be specified in a top-level object named "style".
 - "controlColor" (string, default: "navy"): color of control buttons in normal state
 - "controlDownColor" (string, default: "#37f"): color of control buttons in pressed state
 - "controlActiveColor" (string, default: "#06f"): color of control buttons in active (selected) state
+
+Auxiliary HTML documents
+------------------------
+
+HTML documents are defined as string properties of the top-level object named "html". For additional flexibility, they can contain a simple iframe element which loads a separate HTML document. Here is a definition for the About box:
+
+"<iframe src=\"vpl-about.html\" style=\"width:100%;height:100%;border:none;\"></iframe>"
+
+ The following properties are used:
+
+- "about": HTML document displayed in the About box.

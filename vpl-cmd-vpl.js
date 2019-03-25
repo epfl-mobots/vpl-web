@@ -18,6 +18,15 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return app.views.length > 1 && app.views.indexOf("vpl") >= 0;
 		}
 	});
+	this.commands.add("vpl:about", {
+		action: function (app, modifier) {
+			app.aboutBox.show();
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.aboutBox != null;
+		}
+	});
 	this.commands.add("vpl:new", {
 		action: function (app, modifier) {
 			app.program.new();

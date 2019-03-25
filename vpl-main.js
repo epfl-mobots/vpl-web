@@ -211,6 +211,11 @@ function vplSetup(gui) {
 		app.css.defineProperties();
 	}
 
+	// about box
+	if (gui && gui["html"] && gui["html"]["about"]) {
+		app.aboutBox = new A3a.vpl.About(gui["html"]["about"]);
+	}
+
 	// general settings
 	var isClassic = gui == undefined || getQueryOption("appearance") === "classic";
 	app.useLocalStorage = getQueryOption("storage") === "local";

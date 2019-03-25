@@ -26,6 +26,9 @@ A3a.vpl.Application = function (canvasEl) {
 	/** @type {Array.<string>} */
 	this.views = ["vpl"];
 
+	/** @type {A3a.vpl.About} */
+	this.aboutBox = null;
+
 	this.program = new A3a.vpl.Program(A3a.vpl.mode.basic, this.uiConfig);
 
 	this.vplMessage = "";

@@ -68,6 +68,7 @@ JS = \
 	vpl-cmd-src.js \
 	vpl-ui-svg.js \
 	vpl-runglue.js \
+	vpl-about.js \
 	vpl-main.js \
 	vpl-robot.js \
 	vpl-virtualthymio.js \
