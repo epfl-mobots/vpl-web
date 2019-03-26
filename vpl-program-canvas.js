@@ -641,7 +641,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			"!space",
 			"vpl:new",
 			"vpl:save",
-			// "vpl:load",
+			"vpl:load",
 			"vpl:upload",
 			"!space",
 			"vpl:advanced",

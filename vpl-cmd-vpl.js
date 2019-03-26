@@ -50,7 +50,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:load", {
 		action: function (app, modifier) {
-			// not implemented yet
+			app.loadBox.show();
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL;

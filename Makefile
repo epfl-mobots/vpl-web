@@ -69,6 +69,8 @@ JS = \
 	vpl-ui-svg.js \
 	vpl-runglue.js \
 	vpl-about.js \
+	vpl-files.js \
+	vpl-load.js \
 	vpl-main.js \
 	vpl-robot.js \
 	vpl-virtualthymio.js \

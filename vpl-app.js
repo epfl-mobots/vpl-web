@@ -28,6 +28,8 @@ A3a.vpl.Application = function (canvasEl) {
 
 	/** @type {A3a.vpl.About} */
 	this.aboutBox = null;
+	/** @type {A3a.vpl.Load} */
+	this.loadBox = null;
 
 	this.program = new A3a.vpl.Program(A3a.vpl.mode.basic, this.uiConfig);
 
