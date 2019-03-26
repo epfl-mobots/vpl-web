@@ -322,6 +322,10 @@ function vplSetup(gui) {
 		app.installThymio();
 		app.runGlue && app.runGlue.init(language);
 		break;
+	case "thymio-tdm":
+		app.installThymioTDM();
+		app.runGlue && app.runGlue.init(language);
+		break;
  	case "sim":
 		app.installRobotSimulator({canvasFilter: filter, canvasTransform: transform});
 		app.runGlue && app.runGlue.init(language);

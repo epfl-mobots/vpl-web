@@ -92,7 +92,8 @@ JS = \
 	vpl-obstacles.js \
 	vpl-sim2d.js \
 	vpl-cmd-sim.js \
-	vpl-thymio.js
+	vpl-thymio.js \
+	vpl-thymio-tdm.js
 
 .PHONY: all
 all: vpl-min.js
