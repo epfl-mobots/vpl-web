@@ -56,6 +56,7 @@ document.addEventListener("touchend", function (e) {
 	@return {void}
 */
 function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, onError) {
+	var path = rootFilename.indexOf("/") >= 0 ? rootFilename.replace(/\/[^/]*$/, "/") : "";
 	var rsrc = {};
 	var xhr = new XMLHttpRequest();
 	xhr.addEventListener("load", function () {
@@ -85,7 +86,7 @@ function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, on
 						onError("XMLHttpRequest error for " + rootFilename);
 					}
 				});
-				xhr.open("GET", f);
+				xhr.open("GET", path + f);
 				xhr.send();
 			});
 		} else {
