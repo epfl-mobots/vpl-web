@@ -12,6 +12,11 @@
 		"svg.css"
 	],
 
+
+	"html": {
+		"about": "<iframe src=\"vpl-about.html\" style=\"width:100%;height:100%;border:none;\"></iframe>"
+	},
+
 	"blocks": [
 		{
 			"name": "!empty event",
@@ -36,10 +41,9 @@
 			"type": "event",
 			"modes": ["basic", "advanced"],
 			"svg": [
-			   {
+				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Bg_Thymio"
 				},
@@ -81,11 +85,9 @@
 			"type": "event",
 			"modes": ["advanced"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Rot360Rail"
 				},
@@ -111,11 +113,9 @@
 			"type": "event",
 			"modes": ["advanced"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Rot360Rail"
 				},
@@ -141,11 +141,9 @@
 			"type": "event",
 			"modes": ["advanced"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Rot360Rail"
 				},
@@ -171,14 +169,12 @@
 			"type": "event",
 			"modes": ["basic"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ev_Start"
 				}
-
 			],
 			"defaultParameters": []
 		},
@@ -187,15 +183,12 @@
 			"type": "event",
 			"modes": ["basic"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Ev_Clap"
 				}
-
 			],
 			"defaultParameters": []
 		},
@@ -204,15 +197,12 @@
 			"type": "event",
 			"modes": ["basic"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Ev_Acc_Fall"
 				}
-
 			],
 			"defaultParameters": []
 		},
@@ -221,11 +211,9 @@
 			"type": "event",
 			"modes": ["basic"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Ev_Acc_Hit"
 				}
@@ -237,18 +225,15 @@
 			"type": "event",
 			"modes": ["basic"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Bg_Thymio_top"
 				},
 				{
 					"uri": "Blocks.svg#ProxZones"
 				}
-
 			],
 			"defaultParameters": [0, 0, 0, 0],
 			"buttons": [
@@ -279,15 +264,12 @@
 			"type": "event",
 			"modes": ["basic"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Ev_ProxGr_bas"
 				}
-
 			],
 			"defaultParameters": [0],
 			"buttons": [
@@ -303,15 +285,12 @@
 			"type": "event",
 			"modes": ["advanced"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Ev_ProxGr_med"
 				}
-
 			],
 			"defaultParameters": [0, 0],
 			"buttons": [
@@ -382,14 +361,12 @@
 			"type": "event",
 			"modes": ["advanced"],
 			"svg": [
-			   {
+				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Ev_Remote1"
 				}
-
 			],
 			"defaultParameters": [false, false, false, false, false],
 			"buttons": [
@@ -425,14 +402,12 @@
 			"type": "event",
 			"modes": ["advanced"],
 			"svg": [
-			   {
+				{
 					"uri": "Blocks.svg#Events_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#Ev_Remote2"
 				}
-
 			],
 			"defaultParameters": [false, false, false, false, false, false, false, false, false, false, false, false],
 			"buttons": [
@@ -559,7 +534,6 @@
 			"type": "action",
 			"modes": ["basic"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -621,7 +595,6 @@
 			"type": "action",
 			"modes": ["basic"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -693,7 +666,6 @@
 			"type": "action",
 			"modes": ["advanced"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -737,22 +709,18 @@
 			"type": "action",
 			"modes": ["basic", "advanced"],
 			"svg": [
-
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
-
 				{
 					"uri": "Blocks.svg#zones_Bg"
 				},
-
 				{
 					"uri": "Blocks.svg#beat"
 				},
 				{
 					"uri": "Blocks.svg#Slider"
 				}
-
 			],
 			"defaultParameters": [0, 0, 1, 1, 1, 2, 1, 0, 1, 2, 1, 4, 2],
 			"sliders": [
@@ -773,10 +741,10 @@
 	"widgets": [
 		{	"name":"vpl:block0",
 			"svg": [
-					{
+				{
 					"uri": "Icons.svg#frame"
-					}
-				]
+				}
+			]
 		},
 
 		{

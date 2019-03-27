@@ -18,13 +18,18 @@ A3a.vpl.Application = function (canvasEl) {
 
 	this.canvasEl = canvasEl;
 
-	this.css = new CSSParser.Box();
+	this.css = new CSSParser.VPL();
 
 	this.uiConfig = new A3a.vpl.UIConfig();
 	this.commands = new A3a.vpl.Commands();
 
 	/** @type {Array.<string>} */
 	this.views = ["vpl"];
+
+	/** @type {A3a.vpl.About} */
+	this.aboutBox = null;
+	/** @type {A3a.vpl.Load} */
+	this.loadBox = null;
 
 	this.program = new A3a.vpl.Program(A3a.vpl.mode.basic, this.uiConfig);
 
@@ -56,7 +61,8 @@ A3a.vpl.Application.initialized = false;
 	from vpl),
 	fromView:v to change another view from view v (keep v, change other),
 	closeView:true to close views,
-	openView:true to add a view
+	openView:true to add a view,
+	toggle:true to add a view or close it
 	@return {void}
 */
 A3a.vpl.Application.prototype.setView = function (views, options) {
@@ -85,6 +91,15 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 		this.views.length > 1 && this.views.indexOf(views[0]) >= 0) {
 		this.views.splice(this.views.indexOf(views[0]), 1);
 		views = this.views;
+	} else if (views.length === 1 && options && options.toggle) {
+		if (this.views.indexOf(views[0]) >= 0) {
+			// close
+			this.views.splice(this.views.indexOf(views[0]), 1);
+			views = this.views;
+		} else {
+			// open
+			views = this.views.concat(views);
+		}
 	}
 	this.views = views;
 

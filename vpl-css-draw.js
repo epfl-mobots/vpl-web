@@ -6,7 +6,29 @@
 */
 
 /** @const */
-CSSParser.Box.Rect.debug = false;
+CSSParser.VPL.debug = false;
+
+/** Set line style
+	@param {CanvasRenderingContext2D} ctx
+	@param {?number} lineWidth
+	@param {?string} color
+	@param {?string} style
+	@return {void}
+*/
+CSSParser.VPL.Box.setLineStyle = function (ctx, lineWidth, color, style) {
+	ctx.strokeStyle = color || "black";
+	switch (style) {
+	case "dotted":
+		ctx.setLineDash([2 * lineWidth, 3 * lineWidth]);
+		ctx.lineDashOffset = 0;
+		break;
+	case "dashed":
+		ctx.setLineDash([3 * lineWidth, 3 * lineWidth]);
+		ctx.lineDashOffset = 0;
+		break;
+	}
+	ctx.lineWidth = lineWidth || 0;
+}
 
 /** Draw css box at the specified position
 	@param {CanvasRenderingContext2D} ctx
@@ -15,7 +37,7 @@ CSSParser.Box.Rect.debug = false;
 	@param {boolean=} includePadding true if x,y include padding
 	@return {void}
 */
-CSSParser.Box.Rect.prototype.drawAt = function (ctx, x, y, includePadding) {
+CSSParser.VPL.Box.prototype.drawAt = function (ctx, x, y, includePadding) {
 	// add padding
 	if (!includePadding) {
 		x -= this.paddingLeft;
@@ -26,7 +48,7 @@ CSSParser.Box.Rect.prototype.drawAt = function (ctx, x, y, includePadding) {
 	var w = this.width + this.paddingLeft + this.paddingRight;
 	var h = this.height + this.paddingTop + this.paddingBottom;
 
-	if (CSSParser.Box.Rect.debug) {
+	if (CSSParser.VPL.debug) {
 		ctx.save();
 		ctx.strokeStyle = "black";
 		ctx.lineWidth = 1;
@@ -49,20 +71,20 @@ CSSParser.Box.Rect.prototype.drawAt = function (ctx, x, y, includePadding) {
 		@return {void}
 	*/
 	function rrect() {
-		var rx = Math.min(self.borderTopLeftRadii[0], w / 2);
-		var ry = Math.min(self.borderTopLeftRadii[1], h / 2);
+		var rx = Math.min(self.borderTopLeftRadius[0], w / 2);
+		var ry = Math.min(self.borderTopLeftRadius[1], h / 2);
 		ctx.moveTo(x, y + ry);
 		ctx.bezierCurveTo(x, y + ry / 2, x + rx / 2, y, x + rx, y);
-		rx = Math.min(self.borderTopRightRadii[0], w / 2);
-		ry = Math.min(self.borderTopRightRadii[1], h / 2);
+		rx = Math.min(self.borderTopRightRadius[0], w / 2);
+		ry = Math.min(self.borderTopRightRadius[1], h / 2);
 		ctx.lineTo(x + w - rx, y);
 		ctx.bezierCurveTo(x + w - rx / 2, y, x + w, y + ry / 2, x + w, y + ry);
-		rx = Math.min(self.borderBottomRightRadii[0], w / 2);
-		ry = Math.min(self.borderBottomRightRadii[1], h / 2);
+		rx = Math.min(self.borderBottomRightRadius[0], w / 2);
+		ry = Math.min(self.borderBottomRightRadius[1], h / 2);
 		ctx.lineTo(x + w, y + h - ry);
 		ctx.bezierCurveTo(x + w, y + h - ry / 2, x + w - rx / 2, y + h, x + w - rx, y + h);
-		rx = Math.min(self.borderBottomLeftRadii[0], w / 2);
-		ry = Math.min(self.borderBottomLeftRadii[1], h / 2);
+		rx = Math.min(self.borderBottomLeftRadius[0], w / 2);
+		ry = Math.min(self.borderBottomLeftRadius[1], h / 2);
 		ctx.lineTo(x + rx, y + h);
 		ctx.bezierCurveTo(x + rx / 2, y + h, x, y + h - ry / 2, x, y + h - ry);
 		ctx.closePath();
@@ -93,25 +115,10 @@ CSSParser.Box.Rect.prototype.drawAt = function (ctx, x, y, includePadding) {
 	ctx.fill();
 	ctx.restore();
 
-	function setBorderStyle(lineWidth, color, style) {
-		ctx.strokeStyle = color;
-		switch (style) {
-		case "dotted":
-			ctx.setLineDash([2, 5]);
-			ctx.lineDashOffset = 0;
-			break;
-		case "dashed":
-			ctx.setLineDash([5, 5]);
-			ctx.lineDashOffset = 0;
-			break;
-		}
-		ctx.lineWidth = lineWidth;
-	}
-
 	if (this.sameBorder) {
 		if (this.borderLeftWidth > 0 && this.borderLeftColor &&
 			this.borderLeftStyle !== "none" && this.borderLeftStyle !== "hidden") {
-			setBorderStyle(this.borderLeftWidth, this.borderLeftColor, this.borderLeftStyle);
+			CSSParser.VPL.Box.setLineStyle(ctx, this.borderLeftWidth, this.borderLeftColor, this.borderLeftStyle);
 			if (this.borderLeftStyle === "double") {
 				ctx.save();
 				ctx.translate(x + w / 2, y + h / 2);
@@ -125,7 +132,7 @@ CSSParser.Box.Rect.prototype.drawAt = function (ctx, x, y, includePadding) {
 	} else {
 		if (this.borderLeftWidth > 0 && this.borderLeftColor &&
 			this.borderLeftStyle !== "none" && this.borderLeftStyle !== "hidden") {
-			setBorderStyle(this.borderLeftWidth, this.borderLeftColor, this.borderLeftStyle);
+			CSSParser.VPL.Box.setLineStyle(ctx, this.borderLeftWidth, this.borderLeftColor, this.borderLeftStyle);
 			ctx.beginPath();
 			ctx.moveTo(x, y);
 			ctx.lineTo(x, y + h);
@@ -133,7 +140,7 @@ CSSParser.Box.Rect.prototype.drawAt = function (ctx, x, y, includePadding) {
 		}
 		if (this.borderRightWidth > 0 && this.borderRightColor &&
 			this.borderRightStyle !== "none" && this.borderRightStyle !== "hidden") {
-			setBorderStyle(this.borderRightWidth, this.borderRightColor, this.borderRightStyle);
+			CSSParser.VPL.Box.setLineStyle(ctx, this.borderRightWidth, this.borderRightColor, this.borderRightStyle);
 			ctx.beginPath();
 			ctx.moveTo(x + w, y);
 			ctx.lineTo(x + w, y + h);
@@ -141,7 +148,7 @@ CSSParser.Box.Rect.prototype.drawAt = function (ctx, x, y, includePadding) {
 		}
 		if (this.borderTopWidth > 0 && this.borderTopColor &&
 			this.borderTopStyle !== "none" && this.borderTopStyle !== "hidden") {
-			setBorderStyle(this.borderTopWidth, this.borderTopColor, this.borderTopStyle);
+			CSSParser.VPL.Box.setLineStyle(ctx, this.borderTopWidth, this.borderTopColor, this.borderTopStyle);
 			ctx.beginPath();
 			ctx.moveTo(x, y);
 			ctx.lineTo(x + w, y);
@@ -149,7 +156,7 @@ CSSParser.Box.Rect.prototype.drawAt = function (ctx, x, y, includePadding) {
 		}
 		if (this.borderBottomWidth > 0 && this.borderBottomColor &&
 			this.borderBottomStyle !== "none" && this.borderBottomStyle !== "hidden") {
-			setBorderStyle(this.borderBottomWidth, this.borderBottomColor, this.borderBottomStyle);
+			CSSParser.VPL.Box.setLineStyle(ctx, this.borderBottomWidth, this.borderBottomColor, this.borderBottomStyle);
 			ctx.beginPath();
 			ctx.moveTo(x, y + h);
 			ctx.lineTo(x + w, y + h);
@@ -160,6 +167,26 @@ CSSParser.Box.Rect.prototype.drawAt = function (ctx, x, y, includePadding) {
 	ctx.restore();
 };
 
-CSSParser.Box.Rect.prototype.draw = function (ctx) {
+CSSParser.VPL.Box.prototype.draw = function (ctx) {
 	this.drawAt(ctx, this.x, this.y);
+};
+
+/** Stroke css line for the current path (ignore style "double")
+	@param {CanvasRenderingContext2D} ctx
+	@return {void}
+*/
+CSSParser.VPL.Line.prototype.stroke = function (ctx) {
+	ctx.save();
+	if (this.shadowOffset) {
+		ctx.shadowOffsetX = this.shadowOffset[0];
+		ctx.shadowOffsetY = this.shadowOffset[1];
+		ctx.shadowColor = this.shadowColor;
+		ctx.shadowBlur = this.shadowBlurRadius;
+	}
+	if (this.lineWidth > 0 && this.color &&
+		this.lineStyle !== "none" && this.lineStyle !== "hidden") {
+		CSSParser.VPL.Box.setLineStyle(ctx, this.lineWidth, this.color, this.lineStyle);
+		ctx.stroke();
+	}
+	ctx.restore();
 };

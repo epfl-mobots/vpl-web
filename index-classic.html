@@ -28,7 +28,11 @@
 
 	"css": [
 		"classic.css"
-	]
+	],
+
+	"html": {
+		"about": "<iframe src=\"vpl-about.html\" style=\"width:100%;height:100%;border:none;\"></iframe>"
+	}
 }
 </script>
 
@@ -116,6 +120,13 @@ rule {
 	border-radius: 5px;
 	padding: 5px;
 	margin: 10px;
+}
+
+conflict-line.error {
+	line: 3px #e44 dashed;
+}
+conflict-line.warning {
+	line: 3px #f88;
 }
 
 #widget-then {
@@ -226,8 +237,8 @@ pre#editor-lines {
 <script src="vpl-block.js"></script>
 <script src="vpl-emptyblock.js"></script>
 <script src="css.js"></script>
-<script src="css-rect.js"></script>
-<script src="css-rect-draw.js"></script>
+<script src="vpl-css.js"></script>
+<script src="vpl-css-draw.js"></script>
 <script src="vpl-canvas.js"></script>
 <script src="vpl-canvas-scroll.js"></script>
 <script src="vpl-blocklib.js"></script>
@@ -260,12 +271,16 @@ pre#editor-lines {
 <script src="vpl-cmd-src.js"></script>
 <script src="vpl-ui-svg.js"></script>
 <script src="vpl-runglue.js"></script>
+<script src="vpl-about.js"></script>
+<script src="vpl-files.js"></script>
+<script src="vpl-load.js"></script>
 <script src="vpl-main.js"></script>
 
 <script src="a3a-nodebase.js"></script>
 <script src="a3a-nodeproxy.js"></script>
 
 <script src="vpl-thymio.js"></script>
+<script src="vpl-thymio-tdm.js"></script>
 <script src="vpl-robot.js"></script>
 <script src="vpl-virtualthymio.js"></script>
 <script src="compiler-ns.js"></script>
@@ -286,6 +301,8 @@ pre#editor-lines {
 <script src="vpl-sim.js"></script>
 <script src="vpl-sim2d.js"></script>
 <script src="vpl-cmd-sim.js"></script>
+
+<script src="thymio/thymio.js"></script>
 
 </head>
 

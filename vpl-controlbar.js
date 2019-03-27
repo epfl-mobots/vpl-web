@@ -84,9 +84,9 @@ A3a.vpl.ControlBar.prototype.addStretch = function (nonDiscardable) {
 
 /** Calculate block position based on a layout with items, fixed intervals, separators,
 	and stretch elements
-	@param {CSSParser.Box.Rect} toolbarBox
-	@param {CSSParser.Box.Rect} itemBox
-	@param {CSSParser.Box.Rect} separatorBox box used for separators
+	@param {CSSParser.VPL.Box} toolbarBox
+	@param {CSSParser.VPL.Box} itemBox
+	@param {CSSParser.VPL.Box} separatorBox box used for separators
  	@return {void}
 */
 A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBox, separatorBox) {
@@ -169,8 +169,8 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBox, separat
 };
 
 /** Add all controls to the canvas (should follow calcLayout)
-	@param {CSSParser.Box.Rect} toolbarBox
-	@param {CSSParser.Box.Rect} itemBox
+	@param {CSSParser.VPL.Box} toolbarBox
+	@param {CSSParser.VPL.Box} itemBox
 	@return {void}
 */
 A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBox) {

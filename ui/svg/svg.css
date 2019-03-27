@@ -5,16 +5,16 @@
 */
 
 view {
-	background: #fcfdfe;
+	background: #fbfcfc;
 }
 
 toolbar {
-	padding: 5px;
-	margin: 5px;
+	padding: 2px;
+	margin: 4px;
 }
 
 button {
-	margin: 2px;
+	margin: 0px 8px 0px 8px;
 }
 
 separator {
@@ -23,10 +23,10 @@ separator {
 }
 
 vpl {
-	padding: 5px;
-	padding-top: 30px;
-	margin: 5px;
-	background: #eee;
+	padding: 16px;
+	margin: 0px;
+	background: #ffffff;
+	box-shadow: 0px 2px 16px #eceff1;
 }
 
 block {
@@ -34,11 +34,11 @@ block {
 }
 
 rule {
-	background: #f4f5f7;
+	background: #fbfcfc;
 	border: solid #eceff1;
-	border-radius: 2px;
+	border-radius: 4px;
 	padding: 16px;
-	margin: 12px;
+	margin: 16px;
 }
 
 #widget-then {
@@ -47,9 +47,11 @@ rule {
 }
 
 block-library {
-	background: #eee;
-	padding: 5px;
-	margin: 5px;
+	background: #ffffff;
+	padding: 8px;
+	margin: 8px 0px 0px 0px;
+	border-left: 1px solid #eceff1;
+	border-right: 1px solid #eceff1;
 }
 
 /* simulator */

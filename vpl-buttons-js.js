@@ -9,7 +9,7 @@
 	@param {string} id
 	@param {CanvasRenderingContext2D} ctx canvas 2d context
 	@param {A3a.vpl.Canvas.dims} dims
-	@param {CSSParser.Box} css
+	@param {CSSParser.VPL} css
 	@param {Array.<string>} cssClasses
 	@param {boolean} isEnabled
 	@param {boolean} isSelected
@@ -104,6 +104,18 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 			ctx.strokeStyle = isEnabled ? "white" : "#777";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
+		},
+		"vpl:about": function () {
+			ctx.fillStyle = isPressed && isEnabled
+				? dims.controlDownColor
+				: dims.controlColor;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.font = "bold " + Math.round(dims.controlSize * 0.7).toString(10) + "px sans-serif";
+			ctx.fillStyle = isEnabled ? "white" : "#777";
+			ctx.fillText("?", dims.controlSize * 0.5, dims.controlSize * 0.5);
 		},
 		"vpl:new": function () {
 			ctx.fillStyle = isPressed && isEnabled
@@ -289,6 +301,45 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 			ctx.strokeStyle = isEnabled ? "white" : "#777";
 			ctx.lineWidth = dims.blockLineWidth;
 			ctx.stroke();
+		},
+		"vpl:text-toggle": function () {
+			ctx.fillStyle = isPressed && isEnabled
+				? dims.controlDownColor
+				: dims.controlColor;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			ctx.beginPath();
+			ctx.moveTo(dims.controlSize * 0.28,
+				dims.controlSize * 0.2);
+			ctx.lineTo(dims.controlSize * 0.28,
+				dims.controlSize * 0.7);
+			ctx.lineTo(dims.controlSize * 0.70,
+				dims.controlSize * 0.7);
+			ctx.lineTo(dims.controlSize * 0.70,
+				dims.controlSize * 0.27);
+			ctx.lineTo(dims.controlSize * 0.63,
+				dims.controlSize * 0.2);
+			ctx.closePath();
+			ctx.moveTo(dims.controlSize * 0.63,
+				dims.controlSize * 0.2);
+			ctx.lineTo(dims.controlSize * 0.63,
+				dims.controlSize * 0.27);
+			ctx.lineTo(dims.controlSize * 0.70,
+				dims.controlSize * 0.27);
+			for (var y = 0.1; y < 0.5; y += 0.1) {
+				ctx.moveTo(dims.controlSize * 0.33,
+					dims.controlSize * (0.2 + y));
+				ctx.lineTo(dims.controlSize * 0.63,
+					dims.controlSize * (0.2 + y));
+			}
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
+			ctx.lineWidth = dims.blockLineWidth;
+			ctx.stroke();
+			ctx.fillStyle = isEnabled ? isSelected || isPressed ? "white" : "#44a" : "#777";
+			ctx.fillRect(dims.controlSize * 0.1,
+				dims.controlSize * 0.8,
+				dims.controlSize * 0.8,
+				dims.controlSize * 0.1);
 		},
 		"vpl:advanced": function () {
 			ctx.fillStyle = isPressed && isEnabled

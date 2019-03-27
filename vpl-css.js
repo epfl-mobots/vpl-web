@@ -5,11 +5,11 @@
 	For internal use only
 */
 
-/** CSS parser with support for boxes with margin, padding, and style
+/** CSS parser with support for VPL properties (boxes, lines, text)
 	@constructor
 	@extends {CSSParser}
 */
-CSSParser.Box = function () {
+CSSParser.VPL = function () {
 	CSSParser.call(this);
 
 	/** @type {Array.<string>} */
@@ -26,30 +26,29 @@ CSSParser.Box = function () {
 		"solid",
 		"double"
 	];
-
-	this.defaultBox = CSSParser.Box.Rect.defaultBox();
 };
-CSSParser.Box.prototype = Object.create(CSSParser.prototype);
-CSSParser.Box.prototype.constructor = CSSParser.Box;
+CSSParser.VPL.prototype = Object.create(CSSParser.prototype);
+CSSParser.VPL.prototype.constructor = CSSParser.VPL;
 
 /** Add the tag of a supported element
 	@param {string} tag
 	@return {void}
 */
-CSSParser.Box.prototype.addElement = function (tag) {
+CSSParser.VPL.prototype.addElement = function (tag) {
 	this.elements.push(tag);
 };
 
-/** Convert generic css properties in rawRules to box-specific properties
+/** Convert generic css properties in rawRules to vpl-specific properties
+	for box, line, etc.
 	@return {void}
 */
-CSSParser.Box.prototype.defineBoxProperties = function () {
+CSSParser.VPL.prototype.defineProperties = function () {
 	for (var i = 0; i < this.rawRules.length; i++) {
-		var rect = new CSSParser.Box.Rect();
-		rect.setProperties(this.rawRules[i].properties);
+		var props = new CSSParser.VPL.Properties();
+		props.setProperties(this.rawRules[i].properties);
 		this.rules.push({
 			selector: this.rawRules[i].selector,
-			rect: rect
+			props: props
 		});
 	}
 };
@@ -57,7 +56,7 @@ CSSParser.Box.prototype.defineBoxProperties = function () {
 /**
 	@inheritDoc
 */
-CSSParser.Box.prototype.processValue = function (key, val) {
+CSSParser.VPL.prototype.processValue = function (key, val) {
 	var self = this;
 
 	/** Check if valid length
@@ -103,6 +102,7 @@ CSSParser.Box.prototype.processValue = function (key, val) {
 	case "border-right-width":
 	case "border-top-width":
 	case "border-bottom-width":
+	case "line-width":
 	case "width":
 	case "height":
 		// one length value
@@ -131,6 +131,7 @@ CSSParser.Box.prototype.processValue = function (key, val) {
 	case "border-right-style":
 	case "border-top-style":
 	case "border-bottom-style":
+	case "line-style":
 		if (!isStyle(val)) {
 			throw "Unknown border style";
 		}
@@ -139,6 +140,7 @@ CSSParser.Box.prototype.processValue = function (key, val) {
 	case "border-right-color":
 	case "border-top-color":
 	case "border-bottom-color":
+	case "color":
 	case "background-color":
 	case "background":	// only color is supported
 		if (!isColor(val)) {
@@ -150,6 +152,7 @@ CSSParser.Box.prototype.processValue = function (key, val) {
 	case "border-top":
 	case "border-bottom":
 	case "border":
+	case "line":
 		// find what is what
 		/** @type {?string} */
 		var color = null;
@@ -226,6 +229,7 @@ CSSParser.Box.prototype.processValue = function (key, val) {
 			throw "Wrong number of radius dimensions";
 		}
 	case "box-shadow":
+	case "line-shadow":
 		val = val.split(",")[0];	// use first shadow only; inset not supported
 		var valArr = val.replace(/ +/g, " ")
 			.split(" ");
@@ -246,177 +250,152 @@ CSSParser.Box.prototype.processValue = function (key, val) {
 	}
 };
 
-/** Get box by tag name, or default box
+/** Get properties specified by selector
 	@param {CSSParser.Selector.Options} opt
-	@return {!CSSParser.Box.Rect}
+	@return {CSSParser.VPL.Properties}
 */
-CSSParser.Box.prototype.getBox = function (opt) {
-	/** @type {CSSParser.Box.Rect} */
-	var box = null;
+CSSParser.VPL.prototype.getProperties = function (opt) {
+	/** @type {CSSParser.VPL.Properties} */
+	var props = null;
 	for (var i = 0; i < this.rules.length; i++) {
 		if (this.rules[i].selector.match(opt)) {
-			box = box ? box.merge(this.rules[i].rect) : this.rules[i].rect.copy();
+			props = props ? props.merge(this.rules[i].props) : this.rules[i].props.copy();
 		}
 	}
-	return box ? this.defaultBox.merge(box) : this.defaultBox.copy();
+	return props;
+};
+
+/** Get box specified by selector
+	@param {CSSParser.Selector.Options} opt
+	@return {!CSSParser.VPL.Box}
+*/
+CSSParser.VPL.prototype.getBox = function (opt) {
+	var props = this.getProperties(opt);
+	return new CSSParser.VPL.Box(props);
+};
+
+/** Get line specified by selector
+	@param {CSSParser.Selector.Options} opt
+	@return {!CSSParser.VPL.Line}
+*/
+CSSParser.VPL.prototype.getLine = function (opt) {
+	var props = this.getProperties(opt);
+	return new CSSParser.VPL.Line(props);
 };
 
 /**
 	@constructor
-	@param {number=} width content width (default: 0)
-	@param {number=} height content height (default: 0)
-	@param {number=} x content left position (default: 0)
-	@param {number=} y content top position (default: 0)
 */
-CSSParser.Box.Rect = function (width, height, x, y) {
-	this.width = width || 0;
-	this.height = height || 0;
-	this.x = x || 0;
-	this.y = y || 0;
-
-	this.marginLeft = null;
-	this.marginRight = null;
-	this.marginTop = null;
-	this.marginBottom = null;
-
-	this.sameBorder = true;
-	this.roundedCorners = false;
-
-	this.borderLeftWidth = null;
-	this.borderRightWidth = null;
-	this.borderTopWidth = null;
-	this.borderBottomWidth = null;
-
-	this.borderLeftStyle = null;
-	this.borderRightStyle = null;
-	this.borderTopStyle = null;
-	this.borderBottomStyle = null;
-
-	this.borderLeftColor = null;
-	this.borderRightColor = null;
-	this.borderTopColor = null;
-	this.borderBottomColor = null;
-
-	this.borderTopLeftRadii = null;
-	this.borderTopRightRadii = null;
-	this.borderBottomRightRadii = null;
-	this.borderBottomLeftRadii = null;
-
-	this.paddingLeft = null;
-	this.paddingRight = null;
-	this.paddingTop = null;
-	this.paddingBottom = null;
-
-	this.backgroundColor = null;
-	this.color = null;
-
-	this.font = null;
-
-	this.shadowOffset = null;
-	this.shadowBlurRadius = null;
-	this.shadowSpreadRadius = null;
-	this.shadowColor = null;
-};
-
-CSSParser.Box.Rect.defaultBox = function () {
-	var box = new CSSParser.Box.Rect();
-	box.x = 0;
-	box.y = 0;
-	box.width = 0;
-	box.height = 0;
-
-	box.marginLeft = 0;
-	box.marginRight = 0;
-	box.marginTop = 0;
-	box.marginBottom = 0;
-
-	box.borderLeftWidth = 0;
-	box.borderRightWidth = 0;
-	box.borderTopWidth = 0;
-	box.borderBottomWidth = 0;
-
-	box.borderLeftStyle = "none";
-	box.borderRightStyle = "none";
-	box.borderTopStyle = "none";
-	box.borderBottomStyle = "none";
-
-	box.borderLeftColor = "black";
-	box.borderRightColor = "black";
-	box.borderTopColor = "black";
-	box.borderBottomColor = "black";
-
-	box.borderTopLeftRadii = [0, 0];
-	box.borderTopRightRadii = [0, 0];
-	box.borderBottomRightRadii = [0, 0];
-	box.borderBottomLeftRadii = [0, 0];
-
-	box.paddingLeft = 0;
-	box.paddingRight = 0;
-	box.paddingTop = 0;
-	box.paddingBottom = 0;
-
-	box.backgroundColor = "transparent";
-	box.color = "black";
-
-	box.font = "10px sans-serif";
-
-	box.shadowOffset = null;
-	box.shadowBlurRadius = 0;
-	box.shadowSpreadRadius = 0;
-	box.shadowColor = null;
-
-	return box;
-};
-
-/** Set the position of the top-left corner of the total box including margins
-	@param {number} left
-	@param {number} top
-	@return {void}
-*/
-CSSParser.Box.Rect.prototype.setPosition = function (left, top) {
-	this.x = left + this.offsetLeft();
-	this.y = top + this.offsetTop();
-};
-
-/** Get the total width of the box, including margin and padding
-	@return {number}
-*/
-CSSParser.Box.Rect.prototype.totalWidth = function () {
-	return this.width + this.nonContentWidth();
-};
-
-/** Get the total height of the box, including margin and padding
-	@return {number}
-*/
-CSSParser.Box.Rect.prototype.totalHeight = function () {
-	return this.height + this.nonContentHeight();
-};
-
-/** Set the total width of the box, including margin and padding
-	@param {number} totalWidth
-	@return {void}
-*/
-CSSParser.Box.Rect.prototype.setTotalWidth = function (totalWidth) {
-	this.width = totalWidth -
-		(this.marginLeft + this.paddingLeft +
-			this.paddingRight + this.marginRight);
-};
-
-/** Set the total height of the box, including margin and padding
-	@param {number} totalHeight
-	@return {void}
-*/
-CSSParser.Box.Rect.prototype.setTotalHeight = function (totalHeight) {
-	this.height = totalHeight -
-		(this.marginTop + this.paddingTop +
-			this.paddingBottom + this.marginBottom);
+CSSParser.VPL.Properties = function () {
+	this.properties = {};
 };
 
 /** Set the properties from those obtained from css
 	@param {Object} props css properties
 	@return {void}
 */
-CSSParser.Box.Rect.prototype.setProperties = function (props) {
+CSSParser.VPL.Properties.prototype.setProperties = function (props) {
+	for (var key in props) {
+		if (props.hasOwnProperty(key)) {
+			this.properties[key] = props[key];
+		}
+	}
+};
+
+/** Create copy
+	@return {CSSParser.VPL.Properties}
+*/
+CSSParser.VPL.Properties.prototype.copy = function () {
+	var props = new CSSParser.VPL.Properties();
+	props.setProperties(this.properties);
+	return props;
+};
+
+/** Create copy where some properties are overridden
+	@param {CSSParser.VPL.Properties} overridingProps
+	@return {CSSParser.VPL.Properties}
+*/
+CSSParser.VPL.Properties.prototype.merge = function (overridingProps) {
+	var props = this.copy();
+	for (var key in overridingProps.properties) {
+		if (overridingProps.properties.hasOwnProperty(key)) {
+			props.properties[key] = overridingProps.properties[key];
+		}
+	}
+	return props;
+};
+
+/**
+	@constructor
+	@extends {CSSParser.VPL.Properties}
+	@param {CSSParser.VPL.Properties=} props
+*/
+CSSParser.VPL.Box = function (props) {
+	CSSParser.VPL.Properties.call(this);
+
+	this.width = 0;
+	this.height = 0;
+	this.x = 0;
+	this.y = 0;
+
+	this.marginLeft = 0;
+	this.marginRight = 0;
+	this.marginTop = 0;
+	this.marginBottom = 0;
+
+	this.sameBorder = true;
+	this.roundedCorners = false;
+
+	this.borderLeftWidth = 0;
+	this.borderRightWidth = 0;
+	this.borderTopWidth = 0;
+	this.borderBottomWidth = 0;
+
+	this.borderLeftStyle = "none";
+	this.borderRightStyle = "none";
+	this.borderTopStyle = "none";
+	this.borderBottomStyle = "none";
+
+	this.borderLeftColor = "black";
+	this.borderRightColor = "black";
+	this.borderTopColor = "black";
+	this.borderBottomColor = "black";
+
+	this.borderTopLeftRadius = [0, 0];
+	this.borderTopRightRadius = [0, 0];
+	this.borderBottomRightRadius = [0, 0];
+	this.borderBottomLeftRadius = [0, 0];
+
+	this.paddingLeft = 0;
+	this.paddingRight = 0;
+	this.paddingTop = 0;
+	this.paddingBottom = 0;
+
+	this.backgroundColor = "transparent";
+	this.color = "black";
+
+	this.font = "10px sans-serif";
+
+	this.shadowOffset = null;
+	this.shadowBlurRadius = 0;
+	this.shadowSpreadRadius = 0;
+	this.shadowColor = null;
+
+	if (props) {
+		this.setProperties(props.properties);
+	}
+};
+CSSParser.VPL.Box.prototype = Object.create(CSSParser.VPL.Properties.prototype);
+CSSParser.VPL.Box.prototype.constructor = CSSParser.VPL.Box;
+
+/** Set the properties from those obtained from css
+	@param {Object} props css properties
+	@return {void}
+*/
+CSSParser.VPL.Box.prototype.setProperties = function (props) {
+	// call base method
+	CSSParser.VPL.Properties.prototype.setProperties.call(this, props);
+
 	for (var key in props) {
 		switch (key) {
 		case "margin-left":
@@ -582,34 +561,34 @@ CSSParser.Box.Rect.prototype.setProperties = function (props) {
 			this.sameBorder = true;
 			break;
 		case "border-top-left-radius":
-			this.borderTopLeftRadii = props[key];
-			if (this.borderTopLeftRadii[0] > 0 || this.borderTopLeftRadii[1] > 0) {
+			this.borderTopLeftRadius = props[key];
+			if (this.borderTopLeftRadius[0] > 0 || this.borderTopLeftRadius[1] > 0) {
 				this.roundedCorners = true;
 			}
 			break;
 		case "border-top-right-radius":
-			this.borderTopRightRadii = props[key];
-			if (this.borderTopLeftRadii[0] > 0 || this.borderTopLeftRadii[1] > 0) {
+			this.borderTopRightRadius = props[key];
+			if (this.borderTopLeftRadius[0] > 0 || this.borderTopLeftRadius[1] > 0) {
 				this.roundedCorners = true;
 			}
 			break;
 		case "border-bottom-right-radius":
-			this.borderBottomRightRadii = props[key];
-			if (this.borderTopLeftRadii[0] > 0 || this.borderTopLeftRadii[1] > 0) {
+			this.borderBottomRightRadius = props[key];
+			if (this.borderTopLeftRadius[0] > 0 || this.borderTopLeftRadius[1] > 0) {
 				this.roundedCorners = true;
 			}
 			break;
 		case "border-bottom-left-radius":
-			this.borderBottomLeftRadii = props[key];
-			if (this.borderTopLeftRadii[0] > 0 || this.borderTopLeftRadii[1] > 0) {
+			this.borderBottomLeftRadius = props[key];
+			if (this.borderTopLeftRadius[0] > 0 || this.borderTopLeftRadius[1] > 0) {
 				this.roundedCorners = true;
 			}
 			break;
 		case "border-radius":
-			this.borderTopLeftRadii = [props[key][0], props[key][4]];
-			this.borderTopRightRadii = [props[key][1], props[key][5]];
-			this.borderBottomRightRadii = [props[key][2], props[key][6]];
-			this.borderBottomLeftRadii = [props[key][3], props[key][7]];
+			this.borderTopLeftRadius = [props[key][0], props[key][4]];
+			this.borderTopRightRadius = [props[key][1], props[key][5]];
+			this.borderBottomRightRadius = [props[key][2], props[key][6]];
+			this.borderBottomLeftRadius = [props[key][3], props[key][7]];
 			for (var i = 0; i < props[key].length; i++) {
 				if (props[key][i] > 0) {
 					this.roundedCorners = true;
@@ -644,11 +623,55 @@ CSSParser.Box.Rect.prototype.setProperties = function (props) {
 	}
 };
 
-/** Create copy where some properties are overridden
-	@return {CSSParser.Box.Rect}
+/** Set the position of the top-left corner of the total box including margins
+	@param {number} left
+	@param {number} top
+	@return {void}
 */
-CSSParser.Box.Rect.prototype.copy = function () {
-	var box = new CSSParser.Box.Rect();
+CSSParser.VPL.Box.prototype.setPosition = function (left, top) {
+	this.x = left + this.offsetLeft();
+	this.y = top + this.offsetTop();
+};
+
+/** Get the total width of the box, including margin and padding
+	@return {number}
+*/
+CSSParser.VPL.Box.prototype.totalWidth = function () {
+	return this.width + this.nonContentWidth();
+};
+
+/** Get the total height of the box, including margin and padding
+	@return {number}
+*/
+CSSParser.VPL.Box.prototype.totalHeight = function () {
+	return this.height + this.nonContentHeight();
+};
+
+/** Set the total width of the box, including margin and padding
+	@param {number} totalWidth
+	@return {void}
+*/
+CSSParser.VPL.Box.prototype.setTotalWidth = function (totalWidth) {
+	this.width = totalWidth -
+		(this.marginLeft + this.paddingLeft +
+			this.paddingRight + this.marginRight);
+};
+
+/** Set the total height of the box, including margin and padding
+	@param {number} totalHeight
+	@return {void}
+*/
+CSSParser.VPL.Box.prototype.setTotalHeight = function (totalHeight) {
+	this.height = totalHeight -
+		(this.marginTop + this.paddingTop +
+			this.paddingBottom + this.marginBottom);
+};
+
+/** Create copy
+	@return {CSSParser.VPL.Box}
+*/
+CSSParser.VPL.Box.prototype.copy = function () {
+	var box = new CSSParser.VPL.Box();
 
 	box.width = this.width;
 	box.height = this.height;
@@ -678,10 +701,10 @@ CSSParser.Box.Rect.prototype.copy = function () {
 	box.borderTopColor = this.borderTopColor;
 	box.borderBottomColor = this.borderBottomColor;
 
-	box.borderTopLeftRadii = this.borderTopLeftRadii;
-	box.borderTopRightRadii = this.borderTopRightRadii;
-	box.borderBottomRightRadii = this.borderBottomRightRadii;
-	box.borderBottomLeftRadii = this.borderBottomLeftRadii;
+	box.borderTopLeftRadius = this.borderTopLeftRadius;
+	box.borderTopRightRadius = this.borderTopRightRadius;
+	box.borderBottomRightRadius = this.borderBottomRightRadius;
+	box.borderBottomLeftRadius = this.borderBottomLeftRadius;
 
 	box.paddingLeft = this.paddingLeft;
 	box.paddingRight = this.paddingRight;
@@ -701,145 +724,17 @@ CSSParser.Box.Rect.prototype.copy = function () {
 	return box;
 };
 
-/** Create copy where some properties are overridden
-	@param {CSSParser.Box.Rect} overridingBox
-	@return {CSSParser.Box.Rect}
-*/
-CSSParser.Box.Rect.prototype.merge = function (overridingBox) {
-	var box = this.copy();
-
-	if (overridingBox.width !== null) {
-		box.width = overridingBox.width;
-	}
-	if (overridingBox.height !== null) {
-		box.height = overridingBox.height;
-	}
-	if (overridingBox.x !== null) {
-		box.x = overridingBox.x;
-	}
-	if (overridingBox.y !== null) {
-		box.y = overridingBox.y;
-	}
-
-	if (overridingBox.marginLeft !== null) {
-		box.marginLeft = overridingBox.marginLeft;
-	}
-	if (overridingBox.marginRight !== null) {
-		box.marginRight = overridingBox.marginRight;
-	}
-	if (overridingBox.marginTop !== null) {
-		box.marginTop = overridingBox.marginTop;
-	}
-	if (overridingBox.marginBottom !== null) {
-		box.marginBottom = overridingBox.marginBottom;
-	}
-
-	box.sameBorder = box.sameBorder && overridingBox.sameBorder;
-	box.roundedCorners = box.roundedCorners || overridingBox.roundedCorners;
-
-	if (overridingBox.borderLeftWidth !== null) {
-		box.borderLeftWidth = overridingBox.borderLeftWidth;
-	}
-	if (overridingBox.borderRightWidth !== null) {
-		box.borderRightWidth = overridingBox.borderRightWidth;
-	}
-	if (overridingBox.borderTopWidth !== null) {
-		box.borderTopWidth = overridingBox.borderTopWidth;
-	}
-	if (overridingBox.borderBottomWidth !== null) {
-		box.borderBottomWidth = overridingBox.borderBottomWidth;
-	}
-
-	if (overridingBox.borderLeftStyle !== null) {
-		box.borderLeftStyle = overridingBox.borderLeftStyle;
-	}
-	if (overridingBox.borderRightStyle !== null) {
-		box.borderRightStyle = overridingBox.borderRightStyle;
-	}
-	if (overridingBox.borderTopStyle !== null) {
-		box.borderTopStyle = overridingBox.borderTopStyle;
-	}
-	if (overridingBox.borderBottomStyle !== null) {
-		box.borderBottomStyle = overridingBox.borderBottomStyle;
-	}
-
-	if (overridingBox.borderLeftColor !== null) {
-		box.borderLeftColor = overridingBox.borderLeftColor;
-	}
-	if (overridingBox.borderRightColor !== null) {
-		box.borderRightColor = overridingBox.borderRightColor;
-	}
-	if (overridingBox.borderTopColor !== null) {
-		box.borderTopColor = overridingBox.borderTopColor;
-	}
-	if (overridingBox.borderBottomColor !== null) {
-		box.borderBottomColor = overridingBox.borderBottomColor;
-	}
-
-	if (overridingBox.borderTopLeftRadii !== null) {
-		box.borderTopLeftRadii = overridingBox.borderTopLeftRadii;
-	}
-	if (overridingBox.borderTopRightRadii !== null) {
-		box.borderTopRightRadii = overridingBox.borderTopRightRadii;
-	}
-	if (overridingBox.borderBottomRightRadii !== null) {
-		box.borderBottomRightRadii = overridingBox.borderBottomRightRadii;
-	}
-	if (overridingBox.borderBottomLeftRadii !== null) {
-		box.borderBottomLeftRadii = overridingBox.borderBottomLeftRadii;
-	}
-
-	if (overridingBox.paddingLeft !== null) {
-		box.paddingLeft = overridingBox.paddingLeft;
-	}
-	if (overridingBox.paddingRight !== null) {
-		box.paddingRight = overridingBox.paddingRight;
-	}
-	if (overridingBox.paddingTop !== null) {
-		box.paddingTop = overridingBox.paddingTop;
-	}
-	if (overridingBox.paddingBottom !== null) {
-		box.paddingBottom = overridingBox.paddingBottom;
-	}
-
-	if (overridingBox.backgroundColor !== null) {
-		box.backgroundColor = overridingBox.backgroundColor;
-	}
-	if (overridingBox.color !== null) {
-		box.color = overridingBox.color;
-	}
-
-	if (overridingBox.font !== null) {
-		box.font = overridingBox.font;
-	}
-
-	if (overridingBox.shadowOffset !== null) {
-		box.shadowOffset = overridingBox.shadowOffset;
-	}
-	if (overridingBox.shadowBlurRadius !== null) {
-		box.shadowBlurRadius = overridingBox.shadowBlurRadius;
-	}
-	if (overridingBox.shadowSpreadRadius !== null) {
-		box.shadowSpreadRadius = overridingBox.shadowSpreadRadius;
-	}
-	if (overridingBox.shadowColor !== null) {
-		box.shadowColor = overridingBox.shadowColor;
-	}
-
-	return box;
-}
-
 /** Calculate sum of left margin, border and padding
 	@return {number}
 */
-CSSParser.Box.Rect.prototype.offsetLeft = function () {
+CSSParser.VPL.Box.prototype.offsetLeft = function () {
 	return this.marginLeft + this.borderLeftWidth + this.paddingLeft;
 };
 
 /** Calculate additional width (left and right margin, border and padding)
 	@return {number}
 */
-CSSParser.Box.Rect.prototype.nonContentWidth = function () {
+CSSParser.VPL.Box.prototype.nonContentWidth = function () {
 	return this.marginLeft + this.borderLeftWidth + this.paddingLeft +
 		this.paddingRight + this.borderRightWidth + this.marginRight;
 };
@@ -847,14 +742,14 @@ CSSParser.Box.Rect.prototype.nonContentWidth = function () {
 /** Calculate sum of top, border and padding
 	@return {number}
 */
-CSSParser.Box.Rect.prototype.offsetTop = function () {
+CSSParser.VPL.Box.prototype.offsetTop = function () {
 	return this.marginTop + this.borderTopWidth + this.paddingTop;
 };
 
 /** Calculate additional height (top and bottom margin, border and padding)
 	@return {number}
 */
-CSSParser.Box.Rect.prototype.nonContentHeight = function () {
+CSSParser.VPL.Box.prototype.nonContentHeight = function () {
 	return this.marginTop + this.borderTopWidth + this.paddingTop +
 		this.paddingBottom + this.borderBottomWidth + this.marginBottom;
 };
@@ -862,27 +757,116 @@ CSSParser.Box.Rect.prototype.nonContentHeight = function () {
 /** Calculate padding width (left and right padding)
 	@return {number}
 */
-CSSParser.Box.Rect.prototype.paddingWidth = function () {
+CSSParser.VPL.Box.prototype.paddingWidth = function () {
 	return this.paddingLeft + this.paddingRight;
 };
 
 /** Calculate padded width (width plus left and right padding)
 	@return {number}
 */
-CSSParser.Box.Rect.prototype.paddedWidth = function () {
+CSSParser.VPL.Box.prototype.paddedWidth = function () {
 	return this.width + this.paddingLeft + this.paddingRight;
 };
 
 /** Calculate padding height (top and bottom padding)
 	@return {number}
 */
-CSSParser.Box.Rect.prototype.paddingHeight = function () {
+CSSParser.VPL.Box.prototype.paddingHeight = function () {
 	return this.paddingTop + this.paddingBottom;
 };
 
 /** Calculate padded height (height plus top and bottom padding)
 	@return {number}
 */
-CSSParser.Box.Rect.prototype.paddedHeight = function () {
+CSSParser.VPL.Box.prototype.paddedHeight = function () {
 	return this.height + this.paddingTop + this.paddingBottom;
+};
+
+/**
+	@constructor
+	@extends {CSSParser.VPL.Properties}
+	@param {CSSParser.VPL.Properties=} props
+*/
+CSSParser.VPL.Line = function (props) {
+	CSSParser.VPL.Properties.call(this);
+
+	this.margin = 0;
+	this.lineWidth = 0;
+	this.lineStyle = "none";
+	this.color = "black";
+
+	this.shadowOffset = null;
+	this.shadowBlurRadius = 0;
+	this.shadowSpreadRadius = 0;
+	this.shadowColor = null;
+
+	if (props) {
+		this.setProperties(props.properties);
+	}
+};
+CSSParser.VPL.Line.prototype = Object.create(CSSParser.VPL.Properties.prototype);
+CSSParser.VPL.Line.prototype.constructor = CSSParser.VPL.Line;
+
+/** Set the properties from those obtained from css
+	@param {Object} props css properties
+	@return {void}
+*/
+CSSParser.VPL.Line.prototype.setProperties = function (props) {
+	// call base method
+	CSSParser.VPL.Properties.prototype.setProperties.call(this, props);
+
+	for (var key in props) {
+		switch (key) {
+		case "margin":
+			this.margin = props[key];
+			break;
+		case "line-width":
+			this.lineWidth = props[key];
+			break;
+		case "line-style":
+			this.lineStyle = props[key];
+			break;
+		case "color":
+			this.color = props[key];
+			break;
+		case "line":
+			if (props[key].color !== null) {
+				this.color = /** @type {string} */(props[key].color);
+			}
+			if (props[key].style !== null) {
+				this.lineStyle = /** @type {string} */(props[key].style);
+			}
+			if (props[key].width !== null) {
+				this.lineWidth = /** @type {number} */(props[key].width);
+			}
+			break;
+		case "line-shadow":
+			if (props[key].shadowOffset !== null) {
+				this.shadowOffset = props[key].offset;
+				this.shadowBlurRadius = props[key].blurRadius || 0;
+				this.shadowSpreadRadius = props[key].spreadRadius || 0;
+				this.shadowColor = props[key].color;
+			}
+			break;
+		}
+	}
+};
+
+/** Create copy
+	@return {CSSParser.VPL.Line}
+*/
+CSSParser.VPL.Line.prototype.copy = function () {
+	var line = new CSSParser.VPL.Line();
+
+	line.margin = this.margin;
+	line.width = this.width;
+	line.style = this.style;
+	line.color = this.color;
+
+	line.shadowOffset = this.shadowOffset;
+	line.shadowBlurRadius = this.shadowBlurRadius;
+	line.shadowSpreadRadius = this.shadowSpreadRadius;
+	line.shadowColor = this.shadowColor;
+
+	return line;
 };

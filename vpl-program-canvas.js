@@ -30,7 +30,7 @@ A3a.vpl.Program.CanvasRenderingState = function () {
 /** Add a block to a canvas
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.Block} block
-	@param {CSSParser.Box.Rect} box
+	@param {CSSParser.VPL.Box} box
 	@param {number} x horizontal block position (without box padding)
 	@param {number} y vertical  block position (without box padding)
 	@param {{
@@ -143,7 +143,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 /** Add a block template on a canvas
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.BlockTemplate} blockTemplate
-	@param {CSSParser.Box.Rect} box
+	@param {CSSParser.VPL.Box} box
 	@param {number} x horizontal block template position (without box padding)
 	@param {number} y vertical  block template position (without box padding)
 	@return {void}
@@ -182,15 +182,15 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 	@param {number} eventX0
 	@param {number} actionX0
 	@param {number} y
-	@param {CSSParser.Box.Rect} blockEventBox
-	@param {CSSParser.Box.Rect} blockActionBox
-	@param {CSSParser.Box.Rect} blockStateBox
-	@param {CSSParser.Box.Rect} blockCommentBox
-	@param {CSSParser.Box.Rect} blockContainerBox
-	@param {CSSParser.Box.Rect} blockContainerErrorBox
-	@param {CSSParser.Box.Rect} blockContainerWarningBox
-	@param {CSSParser.Box.Rect} ruleBox
-	@param {CSSParser.Box.Rect} separatorBox
+	@param {CSSParser.VPL.Box} blockEventBox
+	@param {CSSParser.VPL.Box} blockActionBox
+	@param {CSSParser.VPL.Box} blockStateBox
+	@param {CSSParser.VPL.Box} blockCommentBox
+	@param {CSSParser.VPL.Box} blockContainerBox
+	@param {CSSParser.VPL.Box} blockContainerErrorBox
+	@param {CSSParser.VPL.Box} blockContainerWarningBox
+	@param {CSSParser.VPL.Box} ruleBox
+	@param {CSSParser.VPL.Box} separatorBox
 	@return {void}
 */
 A3a.vpl.Program.prototype.addEventHandlerToCanvas =
@@ -201,7 +201,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 
 	/** Get block box for the specified type
 		@param {A3a.vpl.Block} block
-		@return {CSSParser.Box.Rect}
+		@return {CSSParser.VPL.Box}
 	*/
 	function boxForBlockType(block) {
 		switch (block.blockTemplate.type) {
@@ -389,8 +389,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	@param {number} x left side of first event block
 	@param {number} y1 top side of blocks in first rule
 	@param {number} y2 top side of blocks in second rule (below)
-	@param {CSSParser.Box.Rect} ruleBox
-	@param {CSSParser.Box.Rect} blockContainerBox
+	@param {CSSParser.VPL.Box} ruleBox
+	@param {CSSParser.VPL.Box} blockContainerBox
 	@param {boolean} isWarning
 	@return {void}
 */
@@ -405,22 +405,23 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 		});
 		errorBox.width = widgetBounds.xmax - widgetBounds.xmin;
 		errorBox.height = widgetBounds.ymax - widgetBounds.ymin;
+		var errorLine = canvas.css.getLine({
+			tag: "conflict-line",
+			clas: [isWarning ? "warning" : "error"]
+		});
 		var xc = x - ruleBox.paddingLeft - blockContainerBox.offsetLeft() - errorBox.width / 2;
 		var yc1 = y1 + (blockContainerBox.height + errorBox.height) / 2;
 		var yc2 = y2 + (blockContainerBox.height - errorBox.height) / 2;
-		ctx.strokeStyle = isWarning ? canvas.dims.warningColor : canvas.dims.errorColor;
-		ctx.lineWidth = canvas.dims.blockSize * 0.05;
-		ctx.setLineDash([canvas.dims.blockSize * 0.2, canvas.dims.blockSize * 0.1]);
 		ctx.beginPath();
 		ctx.moveTo(xc, yc1);
 		ctx.lineTo(xc, yc2);
-		ctx.stroke();
+		errorLine.stroke(ctx);
 		ctx.beginPath();
-		ctx.arc(xc, yc1, ctx.lineWidth, 0, Math.PI);
-		ctx.stroke();
+		ctx.arc(xc, yc1, errorLine.lineWidth, 0, Math.PI);
+		errorLine.stroke(ctx);
 		ctx.beginPath();
-		ctx.arc(xc, yc2, ctx.lineWidth, -Math.PI, 0);
-		ctx.stroke();
+		ctx.arc(xc, yc2, errorLine.lineWidth, -Math.PI, 0);
+		errorLine.stroke(ctx);
 	});
 };
 
@@ -435,6 +436,22 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	// make sure code is up-to-date to have error info
 	program.getCode(program.currentLanguage);
 
+	// find first error, or first warning if there is no error
+	this.vplMessage = "";
+	this.vplMessageIsWarning = false;
+	for (var i = 0; i < program.program.length; i++) {
+		if (program.program[i].error) {
+			if (!program.program[i].error.isWarning) {
+				this.vplMessage = program.program[i].error.msg;
+				this.vplMessageIsWarning = false;
+				break;	// stop at first error
+			} else if (!this.vplMessage) {
+				this.vplMessage = program.program[i].error.msg;
+				this.vplMessageIsWarning = true;
+			}
+		}
+	}
+
 	// zoom blocks if too small
 	program.zoomBlocks = canvas.dims.blockSize < canvas.dims.minInteractiveBlockSize;
 
@@ -448,9 +465,9 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		"!!stretch",
 		"vpl:message-error",
 		"vpl:message-warning",
-		"vpl:message-empty",
 		"!!stretch"
 	];
+	var toolbar2HasAvButtons = A3a.vpl.ControlBar.hasAvailableButtons(this, toolbar2Config);
 
 	// program item counts
 	var displaySingleEvent = program.displaySingleEvent();
@@ -558,7 +575,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		viewBox.y + viewBox.height - toolbar2Box.totalHeight());
 	vplBox.setTotalWidth(viewBox.width - blockEventLibBox.totalWidth() - blockActionLibBox.totalWidth());
 	vplBox.setTotalHeight(viewBox.height - toolbarBox.totalHeight() -
-		(toolbar2Config.length > 0 ? toolbar2Box.totalHeight() : 0));
+		(toolbar2HasAvButtons ? toolbar2Box.totalHeight() : 0));
 	vplBox.setPosition(viewBox.x + blockEventLibBox.totalWidth(), viewBox.y + toolbarBox.totalHeight());
 	blockEventBox.width = canvas.dims.blockSize;
 	blockEventBox.height = canvas.dims.blockSize;
@@ -589,7 +606,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 
 	/** Get box for the specified block template
 		@param {A3a.vpl.BlockTemplate} blockTemplate
-		@return {CSSParser.Box.Rect}
+		@return {CSSParser.VPL.Box}
 	*/
 	function boxForBlockTemplate(blockTemplate) {
 		switch (blockTemplate.type) {
@@ -614,31 +631,17 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		viewBox.draw(ctx);
 	});
 
-	// find first error, or first warning if there is no error
-	this.vplMessage = "";
-	this.vplMessageIsWarning = false;
-	for (var i = 0; i < program.program.length; i++) {
-		if (program.program[i].error) {
-			if (!program.program[i].error.isWarning) {
-				this.vplMessage = program.program[i].error.msg;
-				this.vplMessageIsWarning = false;
-				break;	// stop at first error
-			} else if (!this.vplMessage) {
-				this.vplMessage = program.program[i].error.msg;
-				this.vplMessageIsWarning = true;
-			}
-		}
-	}
-
 	// top controls
 	var controlBar = new A3a.vpl.ControlBar(canvas);
 	controlBar.setButtons(this,
 		program.toolbarConfig || [
 			"vpl:close",
 			"!space",
+			"vpl:about",
+			"!space",
 			"vpl:new",
 			"vpl:save",
-			// "vpl:load",
+			"vpl:load",
 			"vpl:upload",
 			"!space",
 			"vpl:advanced",
@@ -668,7 +671,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	controlBar.addToCanvas(toolbarBox, buttonBox);
 
 	// 2nd toolbar at bottom between templates
-	if (toolbar2Config.length > 0) {
+	if (toolbar2HasAvButtons > 0) {
 		var controlBar2 = new A3a.vpl.ControlBar(canvas);
 		controlBar2.setButtons(this,
 			toolbar2Config,

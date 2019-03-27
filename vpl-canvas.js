@@ -183,7 +183,7 @@ A3a.vpl.CanvasItem.prototype.isInClip = function (x, y) {
 	@struct
 	@param {Element} canvas
 	@param {?A3a.vpl.Canvas.RelativeArea=} relativeArea
-	@param {CSSParser.Box=} css
+	@param {CSSParser.VPL=} css
 */
 A3a.vpl.Canvas = function (canvas, relativeArea, css) {
 	var backingScale = "devicePixelRatio" in window ? window["devicePixelRatio"] : 1;
@@ -218,7 +218,7 @@ A3a.vpl.Canvas = function (canvas, relativeArea, css) {
 	/** @type {Object.<string,A3a.vpl.Canvas.Widget>} */
 	this.widgets = {};
 
-	this.css = css || new CSSParser.Box();
+	this.css = css || new CSSParser.VPL();
 
 	var self = this;
 
@@ -845,7 +845,7 @@ A3a.vpl.Canvas.prototype.addDecoration = function (fun) {
 };
 
 /** Function drawing control button with origin at (0,0); args are ctx, width, height, isPressed
-	@typedef {function(CanvasRenderingContext2D,CSSParser.Box.Rect,boolean):void}
+	@typedef {function(CanvasRenderingContext2D,CSSParser.VPL.Box,boolean):void}
 */
 A3a.vpl.Canvas.controlDraw;
 
@@ -857,7 +857,7 @@ A3a.vpl.Canvas.controlAction;
 /** Add active control
 	@param {number} x
 	@param {number} y
-	@param {CSSParser.Box.Rect} box
+	@param {CSSParser.VPL.Box} box
 	@param {A3a.vpl.Canvas.controlDraw} draw
 	@param {?A3a.vpl.Canvas.controlAction=} action
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
@@ -942,7 +942,7 @@ A3a.vpl.Canvas.Widget;
 	@param {string} id
 	@param {number} x
 	@param {number} y
-	@param {CSSParser.Box.Rect=} cssBox
+	@param {CSSParser.VPL.Box=} cssBox
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.drawWidget = function (id, x, y, cssBox) {
@@ -960,7 +960,7 @@ A3a.vpl.Canvas.prototype.drawWidget = function (id, x, y, cssBox) {
 
 /** Get widget bounds
 	@param {string} id
-	@param {CSSParser.Box.Rect=} cssBox
+	@param {CSSParser.VPL.Box=} cssBox
 	@return {{xmin:number,xmax:number,ymin:number,ymax:number}}
 */
 A3a.vpl.Canvas.prototype.getWidgetBounds = function (id, cssBox) {

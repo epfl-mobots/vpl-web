@@ -83,6 +83,13 @@ rule {
 	margin: 10px;
 }
 
+conflict-line.error {
+	line: 3px #e44 dashed;
+}
+conflict-line.warning {
+	line: 3px #f88;
+}
+
 #widget-then {
 	padding-left: 10px;
 	padding-right: 10px;

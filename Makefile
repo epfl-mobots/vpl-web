@@ -48,8 +48,8 @@ JS = \
 	vpl-widgets-js.js \
 	vpl-program-canvas.js \
 	css.js \
-	css-rect.js \
-	css-rect-draw.js \
+	vpl-css.js \
+	vpl-css-draw.js \
 	vpl-canvas.js \
 	vpl-canvas-scroll.js \
 	vpl-draw.js \
@@ -68,6 +68,9 @@ JS = \
 	vpl-cmd-src.js \
 	vpl-ui-svg.js \
 	vpl-runglue.js \
+	vpl-about.js \
+	vpl-files.js \
+	vpl-load.js \
 	vpl-main.js \
 	vpl-robot.js \
 	vpl-virtualthymio.js \
@@ -89,7 +92,8 @@ JS = \
 	vpl-obstacles.js \
 	vpl-sim2d.js \
 	vpl-cmd-sim.js \
-	vpl-thymio.js
+	vpl-thymio.js \
+	vpl-thymio-tdm.js
 
 .PHONY: all
 all: vpl-min.js

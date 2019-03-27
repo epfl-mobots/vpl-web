@@ -56,6 +56,7 @@ document.addEventListener("touchend", function (e) {
 	@return {void}
 */
 function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, onError) {
+	var path = rootFilename.indexOf("/") >= 0 ? rootFilename.replace(/\/[^/]*$/, "/") : "";
 	var rsrc = {};
 	var xhr = new XMLHttpRequest();
 	xhr.addEventListener("load", function () {
@@ -85,7 +86,7 @@ function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, on
 						onError("XMLHttpRequest error for " + rootFilename);
 					}
 				});
-				xhr.open("GET", f);
+				xhr.open("GET", path + f);
 				xhr.send();
 			});
 		} else {
@@ -208,8 +209,16 @@ function vplSetup(gui) {
 		gui["css"].forEach(function (filename) {
 			app.css.parse(filename, gui.rsrc[filename]);
 		});
-		app.css.defineBoxProperties();
+		app.css.defineProperties();
 	}
+
+	// about box
+	if (gui && gui["html"] && gui["html"]["about"]) {
+		app.aboutBox = new A3a.vpl.About(gui["html"]["about"]);
+	}
+
+	// load box
+	app.loadBox = new A3a.vpl.Load(app);
 
 	// general settings
 	var isClassic = gui == undefined || getQueryOption("appearance") === "classic";
@@ -314,6 +323,10 @@ function vplSetup(gui) {
 		app.installThymio();
 		app.runGlue && app.runGlue.init(language);
 		break;
+	case "thymio-tdm":
+		app.installThymioTDM();
+		app.runGlue && app.runGlue.init(language);
+		break;
  	case "sim":
 		app.installRobotSimulator({canvasFilter: filter, canvasTransform: transform});
 		app.runGlue && app.runGlue.init(language);
@@ -401,69 +414,8 @@ function vplSetup(gui) {
 		var files = e.dataTransfer.files;
 		if (files.length === 1) {
 			var file = files[0];
-			var r = /^[^.]+\.(.*)$/.exec(file.name);
-			var ext = r ? r[1] : "";
-			var reader = new window.FileReader();
-			switch (ext.toLowerCase()) {
-			case "aesl":
-			case "json":
-				reader.onload = function (event) {
-					var data = event.target.result;
-					var filename = file.name;
-					try {
-						// try aesl first
-						app.program.importFromAESLFile(data);
-						app.vplCanvas.onUpdate();
-					} catch (e) {
-						// then try json
-						try {
-							app.program.importFromJSON(data, function (view) {
-								if (app.views.indexOf(view) < 0) {
-									if (app.views.length === 1) {
-										app.setView([view]);
-									} else {
-										// switch vpl to src or src to vpl
-										var views = app.views.slice();
-										views[views.indexOf("vpl") >= 0 ? views.indexOf("vpl")
-											: views.indexOf("src") >= 0 ? views.indexOf("src")
-											: 0] = view;
-										app.setView(views);
-									}
-								}
-								if (app.views.indexOf("vpl") >= 0) {
-									app.vplCanvas.onUpdate();
-								}
-							});
-						} catch (e) {}
-					}
-				};
-				reader["readAsText"](file);
-				break;
-			case "svg":
-			case "png":
-			case "jpg":
-			case "gif":
-				if (app.sim2d) {
-					if (app.sim2d.wantsSVG()) {
-						reader.onload = function (event) {
-							var data = event.target.result;
-							app.setSVG(data);
-						};
-						reader["readAsText"](file);
-					} else {
-						reader.onload = function (event) {
-							var data = event.target.result;
-							var img = new Image();
-							img.addEventListener("load", function () {
-								app.setImage(img);
-							});
-							img.src = data;
-						};
-						reader["readAsDataURL"](file);
-					}
-				}
-				break;
-			}
+			// try to load file as a program or as an image for the simulator
+			app.loadProgramFile(file) || app.loadImageFile(file);
 		}
 	}, false);
 
@@ -518,7 +470,7 @@ function vplSetup(gui) {
 	var languageList = ["aseba", "l2", "js", "python"];
 	if (languageList.indexOf(language) >= 0) {
 		/** @const */
-		app.editor.changeLanguage = function () {
+		app.editor.setUpdateCodeLanguageFunction(function () {
 			language = languageList[(languageList.indexOf(language) + 1) % languageList.length];
 			app.program.currentLanguage = language;
 			var code = app.program.getCode(language);
@@ -526,7 +478,7 @@ function vplSetup(gui) {
 				language: language,
 				code: code
 			};
-		};
+		});
 	}
 
 	var asebaNode = new A3a.A3aNode(A3a.thymioDescr);

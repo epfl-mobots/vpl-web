@@ -79,7 +79,7 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 	});
 	this.commands.add("src:language", {
 		action: function (app, modifier) {
-			var r = app.editor.changeLanguage();
+			var r = app.editor.updateCodeLanguage();
 			app.editor.language = r.language;
 			if (app.editor.isLockedWithVPL) {
 				app.editor.setCode(r.code);
@@ -93,7 +93,7 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.editor.changeLanguage != null;
+			return app.editor.updateCodeLanguage != null;
 		}
 	});
 	this.commands.add("src:disass", {

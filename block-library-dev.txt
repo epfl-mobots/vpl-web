@@ -182,10 +182,12 @@ Buttons for actions which are permanently disabled, such as "vpl:run" when neith
 Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 
 - "vpl:close": close the VPL view
+- "vpl:about": display an about box (modal box with HTML defined in property "about" of property "html" of ui.json)
 - "vpl:new": reset VPL program to start a new program
 - "vpl:save": download the VPL program
 - "vpl:upload": upload VPL program to the central repository (to the teacher computer)
 - "vpl:text": switch to the text programming language editor (Aseba, L2 or JavaScript)
+- "vpl:text-toggle": toggle visibility of text editor (replaces "vpl:text" and "src:close")
 - "vpl:advanced": toggle between basic and advanced VPL mode
 - "vpl:undo": undo last change
 - "vpl:redo": redo last undone change
@@ -299,14 +301,21 @@ Box properties:
 - color
 - font
 
+Line properties:
+
+- color
+- line-width
+- line-style
+
 Values:
 
 - lengths: floating-point value with unit (px, cm, mm, in, pc, pt), or 0
 - colors: #xxxxxx or #xxx or one of the colors defined in <https://www.w3.org/TR/css-color-3/#svg-color>
 - line styles: none, hidden, dotted, dashed, solid, or double
 - font: see <https://www.w3.org/TR/2018/REC-css-fonts-3-20180920/#font-prop>
+- border-left, border-right, border-top, border-bottom, line: 1, 2 or 3 properties for line width (length), color and line style in any order
 
-Elements:
+Box elements:
 
 - view (classes: vpl, sim, src)
 - widget (id: widget-error, widget-warning, widget-then; pseudo-class: small)
@@ -322,6 +331,10 @@ Elements:
 - sim-controller
 - sim-playground-area
 - sim-playground
+
+Line elements:
+
+- conflict-line (classes: error, warning)
 
 Global style settings
 ---------------------
@@ -339,11 +352,19 @@ Some global style settings can be specified in a top-level object named "style".
 
 - "ruleMarks" (string, default: "#bbb"): color of rule marks (colon dots)
 
-- "errorColor" (string, default: "#e44"): color for error messages and hints
-- "warningColor" (string, default: "#f88"): color for warning messages and hints
-
 - "scrollingBlockLib" (boolean, default: false): true for single-column sets of event and action blocks, scrolling if required; or false for as many columns as required
 
 - "controlColor" (string, default: "navy"): color of control buttons in normal state
 - "controlDownColor" (string, default: "#37f"): color of control buttons in pressed state
 - "controlActiveColor" (string, default: "#06f"): color of control buttons in active (selected) state
+
+Auxiliary HTML documents
+------------------------
+
+HTML documents are defined as string properties of the top-level object named "html". For additional flexibility, they can contain a simple iframe element which loads a separate HTML document. Here is a definition for the About box:
+
+"<iframe src=\"vpl-about.html\" style=\"width:100%;height:100%;border:none;\"></iframe>"
+
+ The following properties are used:
+
+- "about": HTML document displayed in the About box.

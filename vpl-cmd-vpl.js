@@ -18,6 +18,15 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return app.views.length > 1 && app.views.indexOf("vpl") >= 0;
 		}
 	});
+	this.commands.add("vpl:about", {
+		action: function (app, modifier) {
+			app.aboutBox.show();
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.aboutBox != null;
+		}
+	});
 	this.commands.add("vpl:new", {
 		action: function (app, modifier) {
 			app.program.new();
@@ -41,7 +50,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:load", {
 		action: function (app, modifier) {
-			// not implemented yet
+			app.loadBox.show();
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL;
@@ -97,6 +106,18 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		isAvailable: function (app) {
 			return app.views.indexOf("src") < 0;
 		}
+	});
+	this.commands.add("vpl:text-toggle", {
+		action: function (app, modifier) {
+			app.setView(["src"], {toggle: true});
+		},
+		isEnabled: function (app) {
+			return !app.program.noVPL;
+		},
+		isSelected: function (app) {
+			return app.views.indexOf("src") >= 0;
+		},
+		object: this
 	});
 	this.commands.add("vpl:advanced", {
 		action: function (app, modifier) {

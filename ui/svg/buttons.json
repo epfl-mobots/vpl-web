@@ -110,7 +110,7 @@
 		},
 		{
 			"name": "vpl:run",
-			"state": ["pressed", "running"],
+			"state": ["pressed"],
 			"svg": [
 
 				{
@@ -122,7 +122,7 @@
 
 		{
 			"name": "vpl:run",
-			"state": ["disabled", "=empty"],
+			"state": ["disabled", "=error"],
 			"svg": [
 
 				{
@@ -132,9 +132,10 @@
 				}
 			]
 		},
+
 		{
 			"name": "vpl:run",
-			"state": ["unselected", "canLoad"],
+			"state": ["=canLoad"],
 			"svg": [
 				{
 					"uri": "Icons.svg#play_default"
@@ -144,7 +145,7 @@
 		},
 		{
 			"name": "vpl:run",
-			"state": ["canReload"],
+			"state": ["=running"],
 			"svg": [
 				{
 					"uri": "Icons.svg#reload_default"
@@ -153,22 +154,23 @@
 			]
 		},
 		{
+			"name": "vpl:run",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#play_default"
+
+				}
+			]
+		},
+
+		{
 			"name": "vpl:stop",
 			"state": ["pressed"],
 			"svg": [
 
 				{
 					"uri": "Icons.svg#stop_highlight"
-
-				}
-			]
-		},
-		{
-			"name": "vpl:stop",
-			"state": [],
-			"svg": [
-				{
-					"uri": "Icons.svg#stop_default"
 
 				}
 			]
@@ -184,6 +186,17 @@
 				}
 			]
 		},
+		{
+			"name": "vpl:stop",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#stop_default"
+
+				}
+			]
+		},
+
 		{
 			"name": "vpl:undo",
 			"state": ["disabled"],
