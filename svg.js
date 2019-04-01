@@ -394,7 +394,9 @@ SVG.prototype.draw = function (ctx, options) {
 			tr = tr
 				.replace(/\s*\(\s*/g, "(")
 				.replace(/\s*\)\s*/g, ")")
-				.replace(/\s+/g, ",");
+				.replace(/ +,/g, ",")
+				.replace(/, +/g, ",")
+				.replace(/ +/g, ",");
 			var tra = tr.split(")");
 			tra.slice(0, -1).forEach(function (t) {
 				var c = t.split("(")[0];
@@ -428,6 +430,9 @@ SVG.prototype.draw = function (ctx, options) {
 					var scy = args[1] || scx;
 					ctx && ctx.scale(scx, scy);
 					transform.scale(scx, scy);
+					break;
+				case "matrix":
+					ctx && ctx.transform(args[0], args[1], args[2], args[3], args[4], args[5]);
 					break;
 				default:
 					throw "transform not implemented: " + c;
