@@ -549,7 +549,7 @@ window.addEventListener("load", function () {
 		vplGetQueryOption("ui") || "ui.json",
 		function (obj) {
 			// get subfiles
-			return obj["svgFilenames"].concat(obj["overlays"] || []).concat(obj["css"] || []);
+			return (obj["svgFilenames"] || []).concat(obj["overlays"] || []).concat(obj["css"] || []);
 		},
 		function (gui, rsrc) {
 			// success
