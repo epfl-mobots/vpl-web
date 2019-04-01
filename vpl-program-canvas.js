@@ -690,9 +690,11 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	if (canvas.dims.scrollingBlockLib) {
 		eventLibWidth = canvas.dims.blockSize * canvas.dims.templateScale + blockEventLibItemBox.nonContentWidth();
 		renderingState.eventScroll.setTotalHeight(nEvTemplates * stepEvent);
+		blockEventLibBox.width = eventLibWidth;
+		blockEventLibBox.height = blockEventLibBox.height;
 		renderingState.eventScroll.resize(blockEventLibBox.x,
 			blockEventLibBox.y,
-			eventLibWidth,
+			blockEventLibBox.width,
 			blockEventLibBox.height);
 		canvas.addDecoration(function (ctx) {
 			blockEventLibBox.draw(ctx);
@@ -707,8 +709,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 						.indexOf(blockTemplate.name) >= 0)) {
 				var box = boxForBlockTemplate(blockTemplate);
 				program.addBlockTemplateToCanvas(canvas, blockTemplate, box,
-					box.x + box.offsetLeft(),
-					box.y + box.offsetTop() + row * stepEvent);
+					blockEventLibBox.x + box.offsetLeft(),
+					blockEventLibBox.y + box.offsetTop() + row * stepEvent);
 				row++;
 			}
 		}, this);
@@ -716,6 +718,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 
 		actionLibWidth = canvas.dims.blockSize * canvas.dims.templateScale + blockActionLibItemBox.nonContentWidth();
 		renderingState.actionScroll.setTotalHeight(nAcTemplates * stepAction);
+		blockActionLibBox.width = actionLibWidth;
+		blockActionLibBox.height = blockActionLibBox.height;
 		renderingState.actionScroll.resize(blockActionLibBox.x,
 			blockActionLibBox.y,
 			blockActionLibBox.width,
@@ -733,8 +737,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 						.indexOf(blockTemplate.name) >= 0)) {
 				var box = boxForBlockTemplate(blockTemplate);
 				program.addBlockTemplateToCanvas(canvas, blockTemplate, box,
-					box.x + blockActionLibItemBox.offsetLeft(),
-					box.y + blockActionLibItemBox.offsetTop() + row * stepAction);
+					blockActionLibBox.x + blockActionLibItemBox.offsetLeft(),
+					blockActionLibBox.y + blockActionLibItemBox.offsetTop() + row * stepAction);
 				row++;
 			}
 		}, this);
