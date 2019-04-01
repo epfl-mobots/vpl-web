@@ -137,35 +137,35 @@ function vplLoadResourcesInScripts(rootFilename, getAuxiliaryFilenames, onLoad, 
 	}
 }
 
+/** Get value corresponding to key in the URI query
+	@param {string} key
+	@return {string}
+*/
+function vplGetQueryOption(key) {
+	var q = document.location.href.indexOf("?");
+	if (q >= 0) {
+		var pairs = document.location.href
+			.slice(q + 1)
+			.split("&").map(function (p) {
+				return p.split("=")
+					.map(function (s) {
+						return decodeURIComponent(s);
+					});
+				});
+		for (var i = 0; i < pairs.length; i++) {
+			if (pairs[i][0] === key) {
+				return pairs[i][1];
+			}
+		}
+	}
+	return "";
+}
+
 /** Setup everything for vpl
 	@param {Object=} gui
 	@return {void}
 */
 function vplSetup(gui) {
-	/** Get value corresponding to key in the URI query
-		@param {string} key
-		@return {string}
-	*/
-	function getQueryOption(key) {
-		var q = document.location.href.indexOf("?");
-		if (q >= 0) {
-			var pairs = document.location.href
-				.slice(q + 1)
-				.split("&").map(function (p) {
-					return p.split("=")
-						.map(function (s) {
-							return decodeURIComponent(s);
-						});
-					});
-			for (var i = 0; i < pairs.length; i++) {
-				if (pairs[i][0] === key) {
-					return pairs[i][1];
-				}
-			}
-		}
-		return "";
-	}
-
 	// handle overlays in gui
 	if (gui && gui["overlays"]) {
 		gui["blocks"] = gui["blocks"] || [];
@@ -221,10 +221,10 @@ function vplSetup(gui) {
 	app.loadBox = new A3a.vpl.Load(app);
 
 	// general settings
-	var isClassic = gui == undefined || getQueryOption("appearance") === "classic";
-	app.useLocalStorage = getQueryOption("storage") === "local";
-	app.multipleViews = getQueryOption("multiview") === "true";
-	var language = getQueryOption("language");
+	var isClassic = gui == undefined || vplGetQueryOption("appearance") === "classic";
+	app.useLocalStorage = vplGetQueryOption("storage") === "local";
+	app.multipleViews = vplGetQueryOption("multiview") !== "false";
+	var language = vplGetQueryOption("language");
 	/** @type {A3a.vpl.ControlBar.drawButton} */
 	var drawButton = A3a.vpl.Commands.drawButtonJS;
 	/** @type {A3a.vpl.ControlBar.getButtonBounds} */
@@ -256,17 +256,17 @@ function vplSetup(gui) {
 			}
 		}
 	}
-	var advancedFeatures = getQueryOption("adv") === "true";
-	var experimentalFeatures = getQueryOption("exp") === "true";
+	var advancedFeatures = vplGetQueryOption("adv") === "true";
+	var experimentalFeatures = vplGetQueryOption("exp") === "true";
 
 	var filterBlur = 0;	// 0.1 px
 	var filterGrayscale = 0;	// %
 	var filter = "";
-	var opt = getQueryOption("blur").trim() || "";
+	var opt = vplGetQueryOption("blur").trim() || "";
 	if (/^\d+$/.test(opt)) {
 		filterBlur = parseInt(opt, 10) / 10;
 	}
-	opt = getQueryOption("grayscale") || "";
+	opt = vplGetQueryOption("grayscale") || "";
 	if (/^\d+$/.test(opt)) {
 		filterGrayscale = parseInt(opt, 10) / 100;
 	}
@@ -279,15 +279,15 @@ function vplSetup(gui) {
 	var mirror = false;
 	/** @type {?Array.<number>} */
 	var transform = null;
-	opt = getQueryOption("scale").trim() || "";
+	opt = vplGetQueryOption("scale").trim() || "";
 	if (/^\d+(\.\d*)?$/.test(opt)) {
 		scale = parseFloat(opt);
 	}
-	opt = getQueryOption("rotation").trim() || "";
+	opt = vplGetQueryOption("rotation").trim() || "";
 	if (/^-?\d+(\.\d*)?$/.test(opt)) {
 		rotation = parseFloat(opt) * Math.PI / 180;
 	}
-	opt = getQueryOption("mirror").trim() || "";
+	opt = vplGetQueryOption("mirror").trim() || "";
 	mirror = opt === "true";
 	if (scale !== 1 || rotation !== 0 || mirror) {
 		transform = [
@@ -310,9 +310,9 @@ function vplSetup(gui) {
 	app.program.new();
 	app.program.resetUI();
 
-	var view = getQueryOption("view");
+	var view = vplGetQueryOption("view");
 	var views = view.length === 0 ? ["vpl"] : view.split("+");
-	var robot = getQueryOption("robot");
+	var robot = vplGetQueryOption("robot");
 
 	if (views.indexOf("sim") >= 0 || robot === "sim") {
 		robot = "sim";
@@ -455,17 +455,17 @@ function vplSetup(gui) {
 		} catch (e) {}
 	}
 
-	if (getQueryOption("view") === "text") {
+	if (vplGetQueryOption("view") === "text") {
 		app.setView(["src"], {noVPL: true});
 	} else {
 		app.setView(["vpl"]);
 		app.program.experimentalFeatures = experimentalFeatures;
-		app.program.setTeacherRole(getQueryOption("role") === "teacher");
+		app.program.setTeacherRole(vplGetQueryOption("role") === "teacher");
 		app.renderProgramToCanvas();
 		document.getElementById("editor").textContent = app.program.getCode(app.program.currentLanguage);
 	}
 
-	app.editor.setTeacherRole(getQueryOption("role") === "teacher");
+	app.editor.setTeacherRole(vplGetQueryOption("role") === "teacher");
 	/** @const */
 	var languageList = ["aseba", "l2", "js", "python"];
 	if (languageList.indexOf(language) >= 0) {
@@ -514,7 +514,7 @@ function vplSetup(gui) {
 	// resize canvas
 	window.addEventListener("resize", function () { app.vplResize(); }, false);
 
-	app.sim2d && app.sim2d.setTeacherRole(getQueryOption("role") === "teacher");
+	app.sim2d && app.sim2d.setTeacherRole(vplGetQueryOption("role") === "teacher");
 
 	if (view === "text") {
 		// special case for source code editor without VPL
@@ -546,10 +546,10 @@ function vplSetup(gui) {
 
 window.addEventListener("load", function () {
 	(/^https?:\/\//.test(document.location.href) ? vplLoadResourcesWithXHR : vplLoadResourcesInScripts)(
-		"ui.json",
+		vplGetQueryOption("ui") || "ui.json",
 		function (obj) {
 			// get subfiles
-			return obj["svgFilenames"].concat(obj["overlays"] || []);
+			return obj["svgFilenames"].concat(obj["overlays"] || []).concat(obj["css"] || []);
 		},
 		function (gui, rsrc) {
 			// success
