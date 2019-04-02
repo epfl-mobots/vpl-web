@@ -17,9 +17,7 @@
 		"scrollbarThumbColor": "#b0bec5",
 		"scrollbarBackgroundColor": "transparent",
 		"scrollbarWidth": 2,
-		"scrollingBlockLib": true,
-		"errorColor": "#ff1744",
-		"warningColor": "#ff7777"
+		"scrollingBlockLib": true
 	},
 
 	"blocks": null,
@@ -58,7 +56,11 @@ toolbar.vpl.bottom {
 }
 
 button {
-	margin: 2px;
+	width: 3.5vw;
+	height: 3.5vw;
+	min-width: 28px;
+	min-height: 28px;
+	margin: 0.2vw;
 }
 
 button.vpl.bottom {
@@ -84,6 +86,13 @@ vpl {
 	background: #eee;
 }
 
+block {
+	width: 6vw;
+	height: 6vw;
+	min-width: 32px;
+	min-height: 32px;
+}
+
 block.library {
 	margin: 4px;
 }
@@ -103,9 +112,9 @@ block.comment {
 
 block-container {
 	padding: 0;
-	padding-bottom: 8px;
-	margin: 12px;
-	margin-bottom: 4px;
+	padding-bottom: 0.4vw;
+	margin: 0.6vw;
+	margin-bottom: 0.2vw;
 }
 block-container.error {
 	border-bottom: #e44 3px;
@@ -117,9 +126,9 @@ block-container.warning {
 rule {
 	background: #ddd;
 	border: solid #666;
-	border-radius: 5px;
-	padding: 5px;
-	margin: 10px;
+	border-radius: 0.6vw;
+	padding: 0.3vw;
+	margin:0.6vw;
 }
 
 conflict-line.error {
@@ -130,14 +139,14 @@ conflict-line.warning {
 }
 
 #widget-then {
-	padding-left: 10px;
-	padding-right: 10px;
+	padding-left: 2vw;
+	padding-right: 2px;
 }
 
 block-library {
 	background: #eee;
-	padding: 5px;
-	margin: 5px;
+	padding: 0.5vw;
+	margin: 0.5vw;
 }
 
 /* simulator */
@@ -145,10 +154,13 @@ block-library {
 sim-controller {
 	background: #eee;
 	margin: 5px;
+	padding: 1vw;
 }
 
-button-small {
-	margin: 5px;
+button.event {
+	width: 2vw;
+	height: 2vw;
+	margin: 0.2vw;
 }
 
 sim-playground-area {
@@ -229,78 +241,78 @@ pre#editor-lines {
 }
 </style>
 
-<script src="a3a-ns.js"></script>
-<script src="svg.js"></script>
-<script src="svg-transform.js"></script>
-<script src="vpl-ns.js"></script>
-<script src="vpl-blocktemplate.js"></script>
-<script src="vpl-block.js"></script>
-<script src="vpl-emptyblock.js"></script>
-<script src="css.js"></script>
-<script src="vpl-css.js"></script>
-<script src="vpl-css-draw.js"></script>
-<script src="vpl-canvas.js"></script>
-<script src="vpl-canvas-scroll.js"></script>
-<script src="vpl-blocklib.js"></script>
-<script src="vpl-blocklib-svg.js"></script>
-<script src="vpl-blocklib-l2.js"></script>
-<script src="vpl-blocklib-js.js"></script>
-<script src="vpl-blocklib-python.js"></script>
-<script src="vpl-eventhandler.js"></script>
-<script src="vpl-uiconfig.js"></script>
-<script src="vpl-program.js"></script>
-<script src="vpl-code.js"></script>
-<script src="vpl-code-aseba.js"></script>
-<script src="vpl-code-l2.js"></script>
-<script src="vpl-code-js.js"></script>
-<script src="vpl-code-python.js"></script>
-<script src="vpl-cmd.js"></script>
-<script src="vpl-app.js"></script>
-<script src="vpl-cmd-vpl.js"></script>
-<script src="vpl-controlbar.js"></script>
-<script src="vpl-buttons-js.js"></script>
-<script src="vpl-controlbar-btn.js"></script>
-<script src="vpl-widgets-js.js"></script>
-<script src="vpl-program-canvas.js"></script>
-<script src="vpl-error.js"></script>
-<script src="vpl-draw.js"></script>
-<script src="vpl-undo.js"></script>
-<script src="vpl-aeslfile.js"></script>
-<script src="vpl-texteditor.js"></script>
-<script src="vpl-sourceedit.js"></script>
-<script src="vpl-cmd-src.js"></script>
-<script src="vpl-ui-svg.js"></script>
-<script src="vpl-runglue.js"></script>
-<script src="vpl-about.js"></script>
-<script src="vpl-files.js"></script>
-<script src="vpl-load.js"></script>
-<script src="vpl-main.js"></script>
+<script src="src/a3a-ns.js"></script>
+<script src="src/svg.js"></script>
+<script src="src/svg-transform.js"></script>
+<script src="src/vpl-ns.js"></script>
+<script src="src/vpl-blocktemplate.js"></script>
+<script src="src/vpl-block.js"></script>
+<script src="src/vpl-emptyblock.js"></script>
+<script src="src/css.js"></script>
+<script src="src/vpl-css.js"></script>
+<script src="src/vpl-css-draw.js"></script>
+<script src="src/vpl-canvas.js"></script>
+<script src="src/vpl-canvas-scroll.js"></script>
+<script src="src/vpl-blocklib.js"></script>
+<script src="src/vpl-blocklib-svg.js"></script>
+<script src="src/vpl-blocklib-l2.js"></script>
+<script src="src/vpl-blocklib-js.js"></script>
+<script src="src/vpl-blocklib-python.js"></script>
+<script src="src/vpl-eventhandler.js"></script>
+<script src="src/vpl-uiconfig.js"></script>
+<script src="src/vpl-program.js"></script>
+<script src="src/vpl-code.js"></script>
+<script src="src/vpl-code-aseba.js"></script>
+<script src="src/vpl-code-l2.js"></script>
+<script src="src/vpl-code-js.js"></script>
+<script src="src/vpl-code-python.js"></script>
+<script src="src/vpl-cmd.js"></script>
+<script src="src/vpl-app.js"></script>
+<script src="src/vpl-cmd-vpl.js"></script>
+<script src="src/vpl-controlbar.js"></script>
+<script src="src/vpl-buttons-js.js"></script>
+<script src="src/vpl-controlbar-btn.js"></script>
+<script src="src/vpl-widgets-js.js"></script>
+<script src="src/vpl-program-canvas.js"></script>
+<script src="src/vpl-error.js"></script>
+<script src="src/vpl-draw.js"></script>
+<script src="src/vpl-undo.js"></script>
+<script src="src/vpl-aeslfile.js"></script>
+<script src="src/vpl-texteditor.js"></script>
+<script src="src/vpl-sourceedit.js"></script>
+<script src="src/vpl-cmd-src.js"></script>
+<script src="src/vpl-ui-svg.js"></script>
+<script src="src/vpl-runglue.js"></script>
+<script src="src/vpl-about.js"></script>
+<script src="src/vpl-files.js"></script>
+<script src="src/vpl-load.js"></script>
+<script src="src/vpl-main.js"></script>
 
-<script src="a3a-nodebase.js"></script>
-<script src="a3a-nodeproxy.js"></script>
+<script src="src/a3a-nodebase.js"></script>
+<script src="src/a3a-nodeproxy.js"></script>
 
-<script src="vpl-thymio.js"></script>
-<script src="vpl-thymio-tdm.js"></script>
-<script src="vpl-robot.js"></script>
-<script src="vpl-virtualthymio.js"></script>
-<script src="compiler-ns.js"></script>
-<script src="compiler-vm.js"></script>
-<script src="compiler-dis.js"></script>
-<script src="compiler.js"></script>
-<script src="compiler-macros.js"></script>
-<script src="compiler-l2.js"></script>
-<script src="compiler-macros-l2.js"></script>
-<script src="compiler-thymio.js"></script>
-<script src="inputbuffer.js"></script>
-<script src="a3a-idmapping.js"></script>
-<script src="a3a-com.js"></script>
-<script src="a3a-device.js"></script>
-<script src="a3a-virtual-thymio.js"></script>
-<script src="vpl-virtualthymio-a3a.js"></script>
-<script src="vpl-obstacles.js"></script>
-<script src="vpl-sim.js"></script>
-<script src="vpl-sim2d.js"></script>
-<script src="vpl-cmd-sim.js"></script>
+<script src="src/vpl-thymio.js"></script>
+<script src="src/vpl-thymio-tdm.js"></script>
+<script src="src/vpl-robot.js"></script>
+<script src="src/vpl-virtualthymio.js"></script>
+<script src="src/compiler-ns.js"></script>
+<script src="src/compiler-vm.js"></script>
+<script src="src/compiler-dis.js"></script>
+<script src="src/compiler.js"></script>
+<script src="src/compiler-macros.js"></script>
+<script src="src/compiler-l2.js"></script>
+<script src="src/compiler-macros-l2.js"></script>
+<script src="src/compiler-thymio.js"></script>
+<script src="src/inputbuffer.js"></script>
+<script src="src/a3a-idmapping.js"></script>
+<script src="src/a3a-com.js"></script>
+<script src="src/a3a-device.js"></script>
+<script src="src/a3a-virtual-thymio.js"></script>
+<script src="src/vpl-virtualthymio-a3a.js"></script>
+<script src="src/vpl-obstacles.js"></script>
+<script src="src/vpl-sim.js"></script>
+<script src="src/vpl-sim2d.js"></script>
+<script src="src/vpl-cmd-sim.js"></script>
 
 <script src="thymio/thymio.js"></script>
 

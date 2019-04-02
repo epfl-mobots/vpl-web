@@ -1,7 +1,11 @@
 #	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 #	Miniature Mobile Robots group, Switzerland
 #	Author: Yves Piguet
-#	For internal use only
+
+#	Licensed under the 3-Clause BSD License;
+#	you may not use this file except in compliance with the License.
+#	You may obtain a copy of the License at
+#	https://opensource.org/licenses/BSD-3-Clause
 
 .PHONY: main
 main:	all
@@ -95,6 +99,8 @@ JS = \
 	vpl-thymio.js \
 	vpl-thymio-tdm.js
 
+vpath %.js src
+
 .PHONY: all
 all: vpl-min.js
 
@@ -112,4 +118,4 @@ clean:
 
 .PHONY: oh
 oh:
-	ohcount $(JS)
+	ohcount src

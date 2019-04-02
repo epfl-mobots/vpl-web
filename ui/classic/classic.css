@@ -19,7 +19,11 @@ toolbar.vpl.bottom {
 }
 
 button {
-	margin: 2px;
+	width: 3.5vw;
+	height: 3.5vw;
+	min-width: 28px;
+	min-height: 28px;
+	margin: 0.2vw;
 }
 
 button.vpl.bottom {
@@ -45,6 +49,13 @@ vpl {
 	background: #eee;
 }
 
+block {
+	width: 6vw;
+	height: 6vw;
+	min-width: 32px;
+	min-height: 32px;
+}
+
 block.library {
 	margin: 4px;
 }
@@ -64,9 +75,9 @@ block.comment {
 
 block-container {
 	padding: 0;
-	padding-bottom: 8px;
-	margin: 12px;
-	margin-bottom: 4px;
+	padding-bottom: 0.4vw;
+	margin: 0.6vw;
+	margin-bottom: 0.2vw;
 }
 block-container.error {
 	border-bottom: #e44 3px;
@@ -78,9 +89,9 @@ block-container.warning {
 rule {
 	background: #ddd;
 	border: solid #666;
-	border-radius: 5px;
-	padding: 5px;
-	margin: 10px;
+	border-radius: 0.6vw;
+	padding: 0.3vw;
+	margin:0.6vw;
 }
 
 conflict-line.error {
@@ -91,14 +102,14 @@ conflict-line.warning {
 }
 
 #widget-then {
-	padding-left: 10px;
-	padding-right: 10px;
+	padding-left: 2vw;
+	padding-right: 2px;
 }
 
 block-library {
 	background: #eee;
-	padding: 5px;
-	margin: 5px;
+	padding: 0.5vw;
+	margin: 0.5vw;
 }
 
 /* simulator */
@@ -106,10 +117,13 @@ block-library {
 sim-controller {
 	background: #eee;
 	margin: 5px;
+	padding: 1vw;
 }
 
-button-small {
-	margin: 5px;
+button.event {
+	width: 2vw;
+	height: 2vw;
+	margin: 0.2vw;
 }
 
 sim-playground-area {
