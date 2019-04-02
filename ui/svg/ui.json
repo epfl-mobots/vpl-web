@@ -274,7 +274,7 @@
 			"defaultParameters": [0],
 			"buttons": [
 				{
-					"id": "Blocks.svg#btn2_ProxGd_detection",
+					"id": "btn2_ProxGd_detection",
 					"val": [0, 1],
 					"st": ["fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
 				}
@@ -295,12 +295,12 @@
 			"defaultParameters": [0, 0],
 			"buttons": [
 				{
-					"id": "Blocks.svg#Btn3_ProxGd0",
+					"id": "Btn3_ProxGd0",
 					"val": [0, 1, 2],
 					"st": ["fill:#90a4ae","fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
 				},
 				{
-					"id": "Blocks.svg#Btn3_ProxGd1",
+					"id": "Btn3_Prox2-6",
 					"val": [0, 1, 2],
 					"st": ["fill:#90a4ae","fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
 				}
