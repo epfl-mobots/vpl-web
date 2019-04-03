@@ -30,6 +30,19 @@ CSSParser.VPL = function () {
 		"solid",
 		"double"
 	];
+
+	/** @type {Array.<string>} */
+	this.fontStyles = [
+		"normal",
+		"italic",
+		"oblique"
+	];
+
+	/** @type {Array.<string>} */
+	this.fontWeights = [
+		"normal",
+		"bold"
+	];
 };
 CSSParser.VPL.prototype = Object.create(CSSParser.prototype);
 CSSParser.VPL.prototype.constructor = CSSParser.VPL;
@@ -111,6 +124,7 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 	case "height":
 	case "min-width":
 	case "min-height":
+	case "font-size":
 		// one length value
 		return this.convertLength(val);
 	case "margin":
@@ -234,6 +248,41 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 		default:
 			throw "Wrong number of radius dimensions";
 		}
+	case "font":
+		// (font-style | font-weight)* font-size font-family
+		var fontStyle = "";
+		var fontWeight = "";
+		/** @type {CSSParser.Length} */
+		var fontSize = null;
+		var fontFamily = "";
+		val.replace(/ +/g, " ")
+			.split(" ")
+			.forEach(function (val1) {
+				if (fontSize === null) {
+					if (isLength(val1)) {
+						fontSize = self.convertLength(val1);
+					} else {
+						// font-style or font-weight
+						if (self.fontStyles.indexOf(val1) >= 0) {
+							fontStyle = val1;
+						} else if (self.fontWeights.indexOf(val1) >= 0) {
+							fontWeight = val1;
+						} else {
+							throw "Unknown font style " + val1;
+						}
+					}
+				} else if (fontFamily !== "") {
+					throw "Unexpected font style after font-family";
+				} else {
+					fontFamily = val1;
+				}
+			});
+		return {
+			fontFamily: fontFamily,
+			fontSize: fontSize,
+			fontStyle: fontStyle,
+			fontWeight: fontWeight
+		};
 	case "box-shadow":
 	case "line-shadow":
 		val = val.split(",")[0];	// use first shadow only; inset not supported
@@ -388,7 +437,10 @@ CSSParser.VPL.Box = function (props, lengthBase) {
 	this.backgroundColor = "transparent";
 	this.color = "black";
 
-	this.font = "10px sans-serif";
+	this.fontFamily = "sans-serif";
+	this.fontSize = 10;
+	this.fontStyle = "";
+	this.fontWeight = "";
 
 	this.shadowOffset = null;
 	this.shadowBlurRadius = 0;
@@ -605,7 +657,22 @@ CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 			this.color = props[key];
 			break;
 		case "font":
-			this.font = props[key];
+			this.fontFamily = props[key].fontFamily;
+			this.fontSize = props[key].fontSize.toValue(lengthBase);
+			this.fontStyle = props[key].fontStyle;
+			this.fontWeight = props[key].fontWeight;
+			break;
+		case "font-family":
+			this.fontFamily = props[key];
+			break;
+		case "font-size":
+			this.fontSize = props[key].toValue(lengthBase);
+			break;
+		case "font-style":
+			this.fontStyle = props[key];
+			break;
+		case "font-weight":
+			this.fontWeight = props[key];
 			break;
 		case "box-shadow":
 			if (props[key].shadowOffset !== null) {
@@ -725,7 +792,10 @@ CSSParser.VPL.Box.prototype.copy = function () {
 	box.backgroundColor = this.backgroundColor;
 	box.color = this.color;
 
-	box.font = this.font;
+	box.fontFamily = this.fontFamily;
+	box.fontSize = this.fontSize;
+	box.fontStyle = this.fontStyle;
+	box.fontWeight = this.fontWeight;
 
 	box.shadowOffset = this.shadowOffset;
 	box.shadowBlurRadius = this.shadowBlurRadius;
@@ -791,6 +861,16 @@ CSSParser.VPL.Box.prototype.paddingHeight = function () {
 */
 CSSParser.VPL.Box.prototype.paddedHeight = function () {
 	return this.height + this.paddingTop + this.paddingBottom;
+};
+
+/** Get font as a CSS string
+	@return {string}
+*/
+CSSParser.VPL.Box.prototype.cssFontString = function () {
+	return (this.fontStyle ? this.fontStyle + " " : "") +
+		(this.fontWeight ? this.fontWeight + " " : "") +
+		this.fontSize.toFixed(1) + "px " +
+		this.fontFamily;
 };
 
 /**

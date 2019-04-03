@@ -452,7 +452,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 		"vpl:message-error": function (app) {
 			if (state) {
 				ctx.fillStyle = box.color;
-				ctx.font = box.font;
+				ctx.font = box.cssFontString();
 				ctx.textAlign = "center";
 				ctx.textBaseline = "middle";
 				ctx.fillText(/** @type {string} */(state), box.width / 2, box.height / 2);
