@@ -1,33 +1,83 @@
 <!DOCTYPE html>
 <html>
+
+<link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
 	<head>
 		<title>About VPL 3</title>
 		<style>
-			div {
-				position: fixed;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-			}
-			h1, p {
-				text-align: center;
-			}
-			a {
-				color: black;
-				text-decoration-line: none;
-			}
+		div {
+			position: relative;
+			margin-left:auto;
+			margin-right:auto;
+			text-align: center;
+			font-family: 'Rubik', sans-serif;
+			color: black;
+			height:100%;
+		}
+		h1 {
+
+			font-size: 18px;
+			font-weight: 400;
+			line-height: 2;
+		}
+		p{
+			color: black;
+			font-weight: 300;
+			font-size: 12px;
+			
+		}
+		
+		a {
+		font-weight: 400;
+		text-decoration-line: none;
+		color: black;
+		
+		}
+		
+		#main_logo{
+		width:12%;
+		margin:8% auto;
+
+
+		}
+		
+		footer img{
+		padding: 8px 16px 8px 16px;
+		}
+		
+		hr {
+	   display: block;
+	   position: relative;
+	   padding: 0;
+	   margin-top: 10%;
+	   height: 0;
+	   width:80%;
+	   max-height: 0;
+	   font-size: 1px;
+	   line-height: 0;
+	   clear: both;
+	   border: none;
+	   border-top: 1px solid #aaaaaa;
+	   border-bottom: 1px solid #ffffff;
+		}
+						
 		</style>
 	</head>
 	<body>
 		<div>
-			<h1>VPL 3</h1>
-			<p>Visual Programming Language v.3</p>
-			<p><a href="https://epfl.ch">École polytechnique fédérale de Lausanne (EPFL)</a></p>
-			<!-- <p><a href="https://epfl.ch"><img src="EPFL_Logo_SVG.svg" width="100px" alt="EPFL Logo"></a></p> -->
-			<p><a href="http://mobots.epfl.ch">Miniature Mobile Robots Group (Mobots)</a></p>
+			<div id="main_logo"><img src="ui/svg/Logo_vpl.svg" alt ="VPL 3"></div>
+			<p><h1>Visual Programming Language v.3</h1></p>
+			<p>Source code under the 3-Clause BSD License</p>
+ 			<p>User interface graphics licensed under the CC-BY-NC-ND License</p>
+ 			<p>Developed by <a href="http://mobots.epfl.ch" target="_blank">Miniature Mobile Robots Group (Mobots)</a></p>
+ 			<hr></hr>
+ 			<footer>
+		
+			<a href="https://epfl.ch" target="_blank"><img src="ui/svg/EPFL_Logo_SVG.svg" width="100px" alt="EPFL Logo"></a>
+			<a href="https://www.grstiftung.ch" target="_blank"><img src="ui/svg/grs_logo_RGB.svg" width="100px" alt="GRS Logo"></a>
+			
 			<!-- <p><a href="https://biorob.epfl.ch">Biorobotics Laboratory (Biorob)</a></p> -->
-			<p>Source code licensed under the 3-Clause BSD License</p>
- 			<p>User interface graphics licensed under the Licence Creative Common BY-NC-ND</p>
+			</footer>
 		</div>
 	</body>
 </html>
