@@ -1,5 +1,29 @@
 {
 	"buttons": [
+
+	{
+			"name": "vpl:about",
+			"state": ["pressed"],
+			"svg": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#about_highlight"
+				}
+			]
+		},
+
+		{
+			"name": "vpl:about",
+			"state": [],
+			"svg": [
+
+				{
+					"uri": "Icons.svg#about_default"
+				}
+			]
+		},
 		{
 			"name": "vpl:new",
 			"state": ["pressed"],
@@ -71,7 +95,7 @@
 			]
 		},
 		{
-			"name": "vpl:text",
+			"name": "vpl:text-toggle",
 			"state": ["pressed"],
 			"svg": [
 				{
@@ -85,7 +109,7 @@
 			]
 		},
 		{
-			"name": "vpl:text",
+			"name": "vpl:text-toggle",
 			"state": ["selected"],
 			"svg": [
 				{
@@ -98,7 +122,7 @@
 			]
 		},
 		{
-			"name": "vpl:text",
+			"name": "vpl:text-toggle",
 			"state": [],
 			"svg": [
 

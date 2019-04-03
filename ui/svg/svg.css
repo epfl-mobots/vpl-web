@@ -14,6 +14,10 @@ toolbar {
 }
 
 button {
+	width: 3.5vw;
+	height: 3.5vw;
+	min-width: 28px;
+	min-height: 28px;
 	margin: 0px 8px 0px 8px;
 }
 
@@ -30,6 +34,10 @@ vpl {
 }
 
 block {
+	width: 6vw;
+	height: 6vw;
+	min-width: 32px;
+	min-height: 32px;
 	margin: 4px;
 }
 

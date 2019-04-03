@@ -1,6 +1,7 @@
 {
 	"toolbars": {
 		"vpl": [
+			"vpl:about",
 			"vpl:new",
 			"vpl:upload",
 			"vpl:save",
@@ -10,7 +11,7 @@
 			"!!space",
 			"!!space",
 			"vpl:advanced",
-			"vpl:text",
+			"vpl:text-toggle",
 			"!stretch",
 			"vpl:teacher-reset",
 			"vpl:teacher-save",
