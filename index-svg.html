@@ -108,19 +108,6 @@
 			"defaultParameters": []
 		},
 		{
-			"name": "timerUp",
-			"type": "event",
-			"modes": ["basic", "advanced"],
-			"svg": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_TimersUp"
-				}
-			]
-		},
-		{
 			"name": "CircleLeds_bas",
 			"type": "event",
 			"modes": ["basic", "advanced"],
@@ -551,40 +538,6 @@
 			]
 		},
 		{
-			"name": "Ev_ProxH_Back_adv",
-			"type": "event",
-			"modes": ["advanced"],
-			"svg": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_ProxH_Back_adv"
-				}
-			],
-			"defaultParameters": [0, 0],
-			"sliders": [
-				{
-					"id": "Slid_threshold-2",
-					"thumbId": "cursor_threshold-2",
-					"min": -1,
-					"max": 1
-				}
-			],
-			"buttons": [
-				{
-					"id": "Btn3_Prox5_adv",
-					"val": [0, 1, 2],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox6_adv",
-					"val": [0, 1, 2],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				}
-			]
-		},
-		{
 			"name": "Ev_ProxH_Front_adv",
 			"type": "event",
 			"modes": ["advanced"],
@@ -628,6 +581,40 @@
 				},
 				{
 					"id": "Btn3_Prox4_adv",
+					"val": [0, 1, 2],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				}
+			]
+		},
+		{
+			"name": "Ev_ProxH_Back_adv",
+			"type": "event",
+			"modes": ["advanced"],
+			"svg": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ev_ProxH_Back_adv"
+				}
+			],
+			"defaultParameters": [0, 0],
+			"sliders": [
+				{
+					"id": "Slid_threshold-2",
+					"thumbId": "cursor_threshold-2",
+					"min": -1,
+					"max": 1
+				}
+			],
+			"buttons": [
+				{
+					"id": "Btn3_Prox5_adv",
+					"val": [0, 1, 2],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox6_adv",
 					"val": [0, 1, 2],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				}
@@ -832,6 +819,37 @@
 				}
 			]
 		},
+		{
+			"name": "timerUp",
+			"type": "event",
+			"modes": ["advanced"],
+			"svg": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ev_TimersUp"
+				}
+			]
+		},
+		{
+			"name": "Ev_counter",
+			"type": "event",
+			"modes": ["advanced"],
+			
+			"svg": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#EvCounter"
+				}
+							
+			]
+			
+		},
+		
+		
 		{
 			"name": "motor",
 			"type": "action",
@@ -1273,6 +1291,23 @@
 							
 			]
 			
+		},
+		
+		{
+			"name": "Ac_counter",
+			"type": "action",
+			"modes": ["advanced"],
+			
+			"svg": [
+				{
+					"uri": "Blocks.svg#Actions_bg"
+				},
+				{
+					"uri": "Blocks.svg#AcCounter"
+				}
+							
+			]
+			
 		}
 	],
 	"widgets": [
@@ -1344,8 +1379,8 @@ toolbar {
 button {
 	width: 3.5vw;
 	height: 3.5vw;
-	min-width: 28px;
-	min-height: 28px;
+	min-width: 12px;
+	min-height: 12px;
 	margin: 0px 8px 0px 8px;
 }
 
@@ -1364,8 +1399,8 @@ vpl {
 block {
 	width: 6vw;
 	height: 6vw;
-	min-width: 32px;
-	min-height: 32px;
+	min-width: 64px;
+	min-height: 64px;
 	margin: 4px;
 }
 
@@ -3322,6 +3357,10 @@ sim-playground {
       .cls-116 {
         stroke: #90a4ae;
       }
+
+      .cls-117 {
+        fill-rule: evenodd;
+      }
     </style>
     <radialGradient id="radial-gradient" cx="71.14" cy="40.99" r="30.43" gradientUnits="userSpaceOnUse">
       <stop offset="0.27" stop-color="#ff3d00"/>
@@ -3397,7 +3436,7 @@ sim-playground {
     <radialGradient id="radial-gradient-42" cx="48.05" cy="65.16" r="34.09" gradientTransform="translate(-6.37 -11.12) scale(1.13 1.18)" xlink:href="#radial-gradient-40"/>
     <radialGradient id="radial-gradient-43" cx="48.05" cy="29.22" r="34.09" gradientTransform="translate(-6.37 -15.21) scale(1.13 1.36)" xlink:href="#radial-gradient-40"/>
   </defs>
-  <title>BlocksAsset 649</title>
+  <title>BlocksAsset 650</title>
   <g id="Layer_2" data-name="Layer 2">
     <g id="Ev_Empty">
       <g id="Event_empty">
@@ -4028,12 +4067,12 @@ sim-playground {
         </g>
       </g>
       <g id="ComparatorChange">
-        <polygon id="ComparatorDown" class="cls-101" points="26.79 65.08 38.79 65.08 32.79 74.08 26.79 65.08"/>
-        <polygon id="ComparatorUp" class="cls-101" points="26.79 30.95 32.79 21.95 38.79 30.95 26.79 30.95"/>
+        <polygon id="ComparatorDown" class="cls-81" points="26.79 65.08 38.79 65.08 32.79 74.08 26.79 65.08"/>
+        <polygon id="ComparatorUp" class="cls-81" points="26.79 30.95 32.79 21.95 38.79 30.95 26.79 30.95"/>
       </g>
       <g id="ValueChange">
-        <polygon id="ValueDown" class="cls-101" points="56.13 65.08 68.13 65.08 62.13 74.08 56.13 65.08"/>
-        <polygon id="ValueUp" class="cls-101" points="56.13 30.95 62.13 21.95 68.13 30.95 56.13 30.95"/>
+        <polygon id="ValueDown" class="cls-81" points="56.13 65.08 68.13 65.08 62.13 74.08 56.13 65.08"/>
+        <polygon id="ValueUp" class="cls-81" points="56.13 30.95 62.13 21.95 68.13 30.95 56.13 30.95"/>
       </g>
       <rect id="ValueField" class="cls-97" x="48.13" y="42.15" width="28" height="12"/>
       <g id="StatesOff-3" data-name="StatesOff">
@@ -4188,7 +4227,7 @@ sim-playground {
     </g>
     <g id="Ac_Music">
       <g id="Music_Slider">
-        <line id="slid_tempo" class="cls-34" x1="84.08" y1="12.84" x2="25.95" y2="12.84"/>
+        <line id="slid_tempo" class="cls-34" x1="81.01" y1="12.84" x2="31.01" y2="12.84"/>
         <circle id="cursor_tempo" class="cls-36" cx="55.01" cy="12.84" r="5"/>
       </g>
       <g id="beat">
@@ -4223,12 +4262,12 @@ sim-playground {
         </g>
       </g>
       <g id="OperatorChange">
-        <polygon id="ComparatorDown-2" data-name="ComparatorDown" class="cls-101" points="26.79 65.08 38.79 65.08 32.79 74.08 26.79 65.08"/>
-        <polygon id="ComparatorUp-2" data-name="ComparatorUp" class="cls-101" points="26.79 30.95 32.79 21.95 38.79 30.95 26.79 30.95"/>
+        <polygon id="ComparatorDown-2" data-name="ComparatorDown" class="cls-81" points="26.79 65.08 38.79 65.08 32.79 74.08 26.79 65.08"/>
+        <polygon id="ComparatorUp-2" data-name="ComparatorUp" class="cls-81" points="26.79 30.95 32.79 21.95 38.79 30.95 26.79 30.95"/>
       </g>
       <g id="ValueChange-2" data-name="ValueChange">
-        <polygon id="ValueDown-2" data-name="ValueDown" class="cls-101" points="56.13 65.08 68.13 65.08 62.13 74.08 56.13 65.08"/>
-        <polygon id="ValueUp-2" data-name="ValueUp" class="cls-101" points="56.13 30.95 62.13 21.95 68.13 30.95 56.13 30.95"/>
+        <polygon id="ValueDown-2" data-name="ValueDown" class="cls-81" points="56.13 65.08 68.13 65.08 62.13 74.08 56.13 65.08"/>
+        <polygon id="ValueUp-2" data-name="ValueUp" class="cls-81" points="56.13 30.95 62.13 21.95 68.13 30.95 56.13 30.95"/>
       </g>
       <rect id="ValueField-2" data-name="ValueField" class="cls-97" x="48.13" y="42.15" width="28" height="12"/>
       <g id="StatesOff-4" data-name="StatesOff">
@@ -4331,9 +4370,28 @@ sim-playground {
       <g id="Slider_timer">
         <line id="slid_unit_full" class="cls-116" x1="84.06" y1="79.98" x2="84.06" y2="15.98"/>
         <line id="slid_unit_full-2" data-name="slid_unit_full" class="cls-34" x1="84.06" y1="79.98" x2="84.06" y2="15.98"/>
-        <circle id="Cursor_units" class="cls-65" cx="84.06" cy="38.19" r="5"/>
+        <circle id="Cursor_units" class="cls-65" cx="84.06" cy="48.01" r="5"/>
       </g>
       <rect id="text_TimeDisplay" class="cls-97" x="4.06" y="40.76" width="24" height="14.5"/>
+    </g>
+    <g id="LICENSE">
+      <g>
+        <g id="BY">
+          <path id="path37" d="M37.54,82.25a.57.57,0,0,0-.57-.58H33.32a.58.58,0,0,0-.58.58V85.9h1v4.32h2.77V85.9h1V82.25Z"/>
+          <circle id="circle39" cx="35.14" cy="79.94" r="1.25"/>
+          <path id="path41" class="cls-117" d="M35.13,75.53a8.55,8.55,0,0,0-6.28,2.59,8.77,8.77,0,0,0-2.63,6.34,9,9,0,0,0,8.91,8.92,8.8,8.8,0,0,0,6.39-2.65,8.46,8.46,0,0,0,2.55-6.27,8.86,8.86,0,0,0-8.94-8.93Zm0,1.61a7.32,7.32,0,0,1,7.31,7.32,6.82,6.82,0,0,1-2.1,5.11,7.16,7.16,0,0,1-5.21,2.18A7.27,7.27,0,0,1,30,79.28,6.9,6.9,0,0,1,35.15,77.14Z"/>
+        </g>
+        <path id="NC" d="M57.54,75.53a8.86,8.86,0,0,1,8.94,8.93,8.46,8.46,0,0,1-2.55,6.27,8.8,8.8,0,0,1-6.39,2.65,9,9,0,0,1-8.91-8.92,8.77,8.77,0,0,1,2.63-6.34A8.55,8.55,0,0,1,57.54,75.53Zm-6.9,6.53a7.35,7.35,0,0,0,6.92,9.69A7.61,7.61,0,0,0,64,88l-3.37-1.5a2.58,2.58,0,0,1-2.45,2v1.38h-1V88.49a4.27,4.27,0,0,1-2.71-1.06l1.23-1.24a2.72,2.72,0,0,0,2,.8c.53,0,1.11-.2,1.11-.88a.7.7,0,0,0-.24-.54l-.85-.38-1.06-.47-1.42-.63Zm6.92-4.92a6.88,6.88,0,0,0-5.13,2.14,7.92,7.92,0,0,0-1,1.21L54.84,82a2.45,2.45,0,0,1,2.3-1.59V79.05h1v1.37a3.9,3.9,0,0,1,2.24.82l-1.17,1.21a2.72,2.72,0,0,0-1.53-.53c-.44,0-1.07.14-1.07.7a.35.35,0,0,0,.08.22l1.14.51.77.35,1.44.63,4.57,2a7.87,7.87,0,0,0,.23-1.91,7.32,7.32,0,0,0-7.31-7.32Z"/>
+        <g id="ND">
+          <path id="path1334" d="M79.73,75.54a9,9,0,1,0,.23,0A1.77,1.77,0,0,0,79.73,75.54Zm0,1.53H80a7.28,7.28,0,1,1-.23,0Z"/>
+          <path id="rect1338" d="M76.83,82.35H83.4V84H76.83Zm0,2.91H83.4v1.61H76.83Z"/>
+        </g>
+        <g id="CC">
+          <path id="path2554" class="cls-117" d="M12.72,75.52a8.61,8.61,0,0,0-6.27,2.6,9,9,0,0,0-2.64,6.34,8.75,8.75,0,0,0,2.62,6.29,8.84,8.84,0,0,0,6.29,2.64,9.1,9.1,0,0,0,6.39-2.66,8.59,8.59,0,0,0,2.55-6.27,8.86,8.86,0,0,0-8.94-8.94Zm0,1.62A7.26,7.26,0,0,1,20,84.46,7,7,0,0,1,18,89.58a7.41,7.41,0,0,1-5.21,2.17A7.2,7.2,0,0,1,7.6,89.6a7.3,7.3,0,0,1-2.18-5.14A7.4,7.4,0,0,1,7.6,79.27,7,7,0,0,1,12.75,77.14Z"/>
+          <path id="path2556" class="cls-117" d="M12.63,83a2.51,2.51,0,0,0-2.37-1.28,2.56,2.56,0,0,0-2.61,2.77,2.52,2.52,0,0,0,2.66,2.77,2.69,2.69,0,0,0,2.35-1.39l-1.11-.57a1.09,1.09,0,0,1-1.1.77c-.82,0-1.2-.68-1.2-1.58s.32-1.58,1.2-1.58a1.11,1.11,0,0,1,1,.72Z"/>
+          <path id="path2558" class="cls-117" d="M17.79,83a2.52,2.52,0,0,0-2.37-1.28,2.56,2.56,0,0,0-2.61,2.77,2.52,2.52,0,0,0,2.66,2.77,2.66,2.66,0,0,0,2.34-1.39l-1.1-.57a1.09,1.09,0,0,1-1.1.77c-.82,0-1.2-.68-1.2-1.58s.32-1.58,1.2-1.58a1.12,1.12,0,0,1,1,.72Z"/>
+        </g>
+      </g>
     </g>
   </g>
 </svg>
