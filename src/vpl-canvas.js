@@ -628,6 +628,7 @@ A3a.vpl.Canvas.prototype.recalcSize = function () {
 	this.ctx = this.canvas.getContext("2d");
 	var backingScale = "devicePixelRatio" in window ? window["devicePixelRatio"] : 1;
 	if (backingScale != 1) {
+		this.ctx.resetTransform();
 		this.ctx.scale(backingScale, backingScale);
 	}
 
