@@ -526,13 +526,15 @@ A3a.vpl.Canvas.buttonShape;
 	@param {number} high
 	@param {number} numHeights
 	@param {number} noteSize
+	@param {number} linewidth
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.notesLL = function (notes, left, right, low, high, numHeights, noteSize) {
+A3a.vpl.Canvas.prototype.notesLL = function (notes, left, right, low, high, numHeights, noteSize, linewidth) {
 	var ctx = this.ctx;
 	var dims = this.dims;
 	ctx.save();
 	ctx.strokeStyle = "black";
+	ctx.lineWidth = dims.blockLineWidth * linewidth;
 	var numNotes = notes.length / 2;
 	for (var i = 0; i < numNotes; i++) {
 		if (notes[2 * i + 1] > 0) {
@@ -569,7 +571,7 @@ A3a.vpl.Canvas.prototype.notes = function (notes) {
 	this.notesLL(notes,
 		0.1, 0.9,
 		0.9, 0.1,
-		5, 0.14);
+		5, 0.14, 1);
 	ctx.restore();
 };
 

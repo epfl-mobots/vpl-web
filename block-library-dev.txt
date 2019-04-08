@@ -95,7 +95,8 @@ In json, block contain the following properties:
 
     - "id" (string, required): id of the svg element where notes are drawn
     - "numHeights" (number, required): number of heights
-    - "noteSize" (number, optional): relative note size adjustment factor. The normal size (default "noteSize" of 1) is height/numHeights.
+    - "noteSize" (number, optional): relative note size adjustment factor. The normal size (default "noteSize" of 1) is height/numHeights
+    - "linewidth" (number, optional): relative line width for half notes. 1 (default) is the default line width of the block.
 
 - "aseba" (object, optional): code fragments to generate Aseba language source code. Code fragments contain Aseba source code. Except for "clause" and "clauseAnd" which contain expression fragments, they can contain muliple lines, comments, empty lines, terminated by linefeeds ("\n"). Backticks mark JavaScript expressions which are evaluated to substitute block parameters; see below. The object contains the following properties:
 	- "initVarDecl" (array of strings, optional): code fragments for (global) variable declarations. Identical fragments (after backtick-expressions evaluation) are output only once.

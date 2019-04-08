@@ -477,13 +477,14 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 			(aux["radiobuttons"] ? 1 : 0) +
 			(aux["sliders"] ? aux["sliders"].length : 0);
 		var sc = aux["score"];
-		var numHeights = aux["score"]["numHeights"] || 5;
+		var numHeights = sc["numHeights"] || 5;
 		var bnds = uiConfig.svg[f].getElementBounds(sc["id"]);
 		var viewBox = uiConfig.svg[f].viewBox;
 		this.notesLL(block.param.slice(ixNotes),
 			(bnds.xmin - viewBox[0]) / (viewBox[2] - viewBox[0]), (bnds.xmax - viewBox[0]) / (viewBox[2] - viewBox[0]),
 			(bnds.ymax - viewBox[1]) / (viewBox[3] - viewBox[1]), (bnds.ymin - viewBox[1]) / (viewBox[3] - viewBox[1]),
-			numHeights, (bnds.ymax - bnds.ymin) / (viewBox[3] - viewBox[1]) / numHeights * (aux["score"]["noteSize"] || 1));
+			numHeights, (bnds.ymax - bnds.ymin) / (viewBox[3] - viewBox[1]) / numHeights * (sc["noteSize"] || 1),
+			sc["linewidth"] === undefined ? 1 : sc["linewidth"]);
 	}
 };
 
