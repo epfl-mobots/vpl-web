@@ -853,7 +853,7 @@ A3a.vpl.Canvas.prototype.addDecoration = function (fun) {
 	return item;
 };
 
-/** Function drawing control button with origin at (0,0); args are ctx, width, height, isPressed
+/** Function drawing control button with origin at (0,0); args are ctx, box, isPressed
 	@typedef {function(CanvasRenderingContext2D,CSSParser.VPL.Box,boolean):void}
 */
 A3a.vpl.Canvas.controlDraw;

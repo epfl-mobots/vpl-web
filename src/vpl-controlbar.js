@@ -151,13 +151,8 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBox, separat
 		switch (layout[i]) {
 		case "X":
 			var control = this.controls[controlIx++];
-			if (layout[i - 1] === "X") {
-				control.x = p + itemOffset;
-				p += control.bounds.xmax - control.bounds.xmin + itemAdditionalWidth;
-			} else {
-				control.x = p + itemOffset;
-				p += control.bounds.xmax - control.bounds.xmin + itemAdditionalWidth;
-			}
+			control.x = p + itemOffset;
+			p += control.bounds.xmax - control.bounds.xmin + itemAdditionalWidth;
 			control.y = toolbarBox.y + toolbarBox.height / 2 - (control.bounds.ymax - control.bounds.ymin) / 2;
 			break;
 		case " ":

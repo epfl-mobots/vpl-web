@@ -14,7 +14,13 @@
 	@return {A3a.vpl.ControlBar.drawButton}
 */
 A3a.vpl.drawButtonSVGFunction = function (gui) {
-	return /** @type {A3a.vpl.ControlBar.drawButton} */(function (id, ctx, dims, css, box, isEnabled, isSelected, isPressed, state) {
+	/** @const */
+	var defaultToJS = [
+		"vpl:message-error",
+		"vpl:message-warning"
+	];
+
+	return /** @type {A3a.vpl.ControlBar.drawButton} */(function (id, ctx, dims, css, cssClasses, isEnabled, isSelected, isPressed, state) {
 		/** Check if the requested state match the state in the definition
 			@param {Array.<string>} prop
 			@return {boolean}
@@ -65,6 +71,8 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 			return true;
 		}
 
+		var box = css.getBox({tag: "button", clas: cssClasses, id: id.replace(/:/g, "-")});
+
 		// find definition
 		if (gui["buttons"]) {
 			for (var i = 0; i < gui["buttons"].length; i++) {
@@ -90,20 +98,25 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 			}
 		}
 
-		// default: brown square
-		ctx.fillStyle = "brown";
-		ctx.fillRect(0, 0, box.width, box.height);
-		ctx.fillStyle = "white";
-		ctx.textAlign = "left";
-		ctx.textBaseline = "top";
-		ctx.font = Math.round(box.height / 6).toString(10) + "px sans-serif";
-		ctx.fillText(id, 0.02 * box.width, 0.02 * box.height);
-		ctx.fillText((isPressed ? "pr " : "") +
-			(isSelected ? "sel " : "") +
-			(isEnabled ? "" : "dis"),
-			0.02 * box.width, 0.22 * box.height);
-		if (state) {
-			ctx.fillText("=" + state, 0.02 * box.width, 0.42 * box.height);
+		// default: js version for those enumerated in defaultToJS, else brown square
+		if (defaultToJS.indexOf(id) >= 0) {
+			A3a.vpl.Commands.drawButtonJS(id, ctx, dims, css, cssClasses, isEnabled, isSelected, isPressed, state);
+		} else {
+			// default: brown square
+			ctx.fillStyle = "brown";
+			ctx.fillRect(0, 0, box.width, box.height);
+			ctx.fillStyle = "white";
+			ctx.textAlign = "left";
+			ctx.textBaseline = "top";
+			ctx.font = Math.round(box.height / 6).toString(10) + "px sans-serif";
+			ctx.fillText(id, 0.02 * box.width, 0.02 * box.height);
+			ctx.fillText((isPressed ? "pr " : "") +
+				(isSelected ? "sel " : "") +
+				(isEnabled ? "" : "dis"),
+				0.02 * box.width, 0.22 * box.height);
+			if (state) {
+				ctx.fillText("=" + state, 0.02 * box.width, 0.42 * box.height);
+			}
 		}
 	});
 };

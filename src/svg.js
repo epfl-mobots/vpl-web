@@ -1046,7 +1046,6 @@ SVG.prototype.draw = function (ctx, options) {
 				if (styleStr) {
 					SVG.parseStyle(style, styleStr);
 				}
-console.info(style);
 				if (style["opacity"]) {
 					ctx.globalAlpha *= parseFloat(style["opacity"]);
 				}

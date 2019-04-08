@@ -1406,6 +1406,18 @@ button {
 	margin: 0px 8px 0px 8px;
 }
 
+button.vpl.bottom {
+	font: 1.3vw sans-serif;
+}
+
+#vpl-message-error {
+	color: #ff1744;
+}
+
+#vpl-message-warning {
+	color: #ff7777;
+}
+
 separator {
 	width: 5px;
 	height: 5px;
@@ -1417,7 +1429,6 @@ vpl {
 	border-radius: 4px;
 	background: #fbfcfc;
 	box-shadow: 0px 2px 8px #cfd8dc;
-	overflow: scroll;
 }
 
 block {
@@ -1950,6 +1961,9 @@ sim-playground {
 		],
 		"vpl2": [
 			"!!stretch",
+			"vpl:message-error",
+			"vpl:message-warning",
+			"!stretch",
 			"vpl:undo",
 			"vpl:redo",
 			"vpl:duplicate",
