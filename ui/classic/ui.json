@@ -3,8 +3,7 @@
 		"ruleMarks": "#bbb",
 		"scrollbarThumbColor": "#b0bec5",
 		"scrollbarBackgroundColor": "transparent",
-		"scrollbarWidth": 2,
-		"scrollingBlockLib": true
+		"scrollbarWidth": 2
 	},
 
 	"blocks": null,

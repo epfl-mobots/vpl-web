@@ -563,13 +563,13 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		Math.floor(blockEventLibBox.height / blockEventLibItemBox.totalHeight()),
 		1
 	);
-	var evCol = canvas.dims.scrollingBlockLib
+	var evCol = blockEventLibBox.scroll
 		? 1
 		: Math.ceil(nEvTemplates / maxBlPerCol);
 	blockEventLibBox.width = evCol * blockEventLibItemBox.totalWidth();
 	blockEventLibBox.setPosition(viewBox.x, viewBox.y + toolbarBox.totalHeight());
 	blockActionLibBox.setTotalHeight(viewBox.height - toolbarBox.totalHeight());
-	var acCol = canvas.dims.scrollingBlockLib
+	var acCol = blockActionLibBox.scroll
 		? 1
 		: Math.ceil(nAcTemplates / maxBlPerCol);
 	blockActionLibBox.width = acCol * blockActionLibItemBox.totalWidth();
@@ -693,7 +693,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var stepAction = blockActionLibItemBox.totalHeight();
 	var eventLibWidth = 0;
 	var actionLibWidth = 0;
-	if (canvas.dims.scrollingBlockLib) {
+	if (blockEventLibBox.scroll) {
 		eventLibWidth = canvas.dims.blockSize * canvas.dims.templateScale + blockEventLibItemBox.nonContentWidth();
 		renderingState.eventScroll.setTotalHeight(nEvTemplates * stepEvent);
 		blockEventLibBox.width = eventLibWidth;
@@ -722,6 +722,47 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		}, this);
 		renderingState.eventScroll.end();
 
+		// more high and low hints
+		canvas.addDecoration(function (ctx) {
+			var moreHighBounds = canvas.getWidgetBounds("vpl:moreHigh");
+			var moreHighHeight = moreHighBounds.ymax - moreHighBounds.ymin;
+			var moreLowBounds = canvas.getWidgetBounds("vpl:moreLow");
+			var moreLowHeight = moreLowBounds.ymax - moreLowBounds.ymin;
+			if (!renderingState.eventScroll.isTop()) {
+				// more to see above
+				canvas.drawWidget("vpl:moreHigh",
+					blockEventLibBox.x + blockEventLibBox.width / 2,
+					blockEventLibBox.y + moreHighHeight / 2);
+			}
+			if (!renderingState.eventScroll.isBottom()) {
+				// more to see below
+				canvas.drawWidget("vpl:moreLow",
+					blockEventLibBox.x + blockEventLibBox.width / 2,
+					blockEventLibBox.y + blockEventLibBox.height - moreLowHeight / 2);
+			}
+		});
+	} else {
+		canvas.addDecoration(function (ctx) {
+			blockEventLibBox.draw(ctx);
+		});
+		eventLibWidth = evCol * stepEvent + blockEventLibBox.nonContentWidth();
+		var colLen = Math.ceil(nEvTemplates / evCol);
+		var row = 0;
+		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
+			if ((blockTemplate.type === A3a.vpl.blockType.event ||
+					blockTemplate.type === A3a.vpl.blockType.state) &&
+				(uiConfig.customizationMode ||
+					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
+						.indexOf(blockTemplate.name) >= 0)) {
+				var box = boxForBlockTemplate(blockTemplate);
+				var x = blockEventLibBox.x + box.offsetLeft() + Math.floor(row / colLen) * stepEvent;
+				var y = blockEventLibBox.y + box.offsetTop() + stepEvent * (row % colLen);
+				program.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y);
+				row++;
+			}
+		}, this);
+	}
+	if (blockActionLibBox.scroll) {
 		actionLibWidth = canvas.dims.blockSize * canvas.dims.templateScale + blockActionLibItemBox.nonContentWidth();
 		renderingState.actionScroll.setTotalHeight(nAcTemplates * stepAction);
 		blockActionLibBox.width = actionLibWidth;
@@ -756,18 +797,6 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			var moreHighHeight = moreHighBounds.ymax - moreHighBounds.ymin;
 			var moreLowBounds = canvas.getWidgetBounds("vpl:moreLow");
 			var moreLowHeight = moreLowBounds.ymax - moreLowBounds.ymin;
-			if (!renderingState.eventScroll.isTop()) {
-				// more to see above
-				canvas.drawWidget("vpl:moreHigh",
-					blockEventLibBox.x + blockEventLibBox.width / 2,
-					blockEventLibBox.y + moreHighHeight / 2);
-			}
-			if (!renderingState.eventScroll.isBottom()) {
-				// more to see below
-				canvas.drawWidget("vpl:moreLow",
-					blockEventLibBox.x + blockEventLibBox.width / 2,
-					blockEventLibBox.y + blockEventLibBox.height - moreLowHeight / 2);
-			}
 			if (!renderingState.actionScroll.isTop()) {
 				// more to see above
 				canvas.drawWidget("vpl:moreHigh",
@@ -782,26 +811,6 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			}
 		});
 	} else {
-		canvas.addDecoration(function (ctx) {
-			blockEventLibBox.draw(ctx);
-		});
-		eventLibWidth = evCol * stepEvent + blockEventLibBox.nonContentWidth();
-		var colLen = Math.ceil(nEvTemplates / evCol);
-		var row = 0;
-		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
-			if ((blockTemplate.type === A3a.vpl.blockType.event ||
-					blockTemplate.type === A3a.vpl.blockType.state) &&
-				(uiConfig.customizationMode ||
-					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
-						.indexOf(blockTemplate.name) >= 0)) {
-				var box = boxForBlockTemplate(blockTemplate);
-				var x = blockEventLibBox.x + box.offsetLeft() + Math.floor(row / colLen) * stepEvent;
-				var y = blockEventLibBox.y + box.offsetTop() + stepEvent * (row % colLen);
-				program.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y);
-				row++;
-			}
-		}, this);
-
 		canvas.addDecoration(function (ctx) {
 			blockActionLibBox.draw(ctx);
 		});

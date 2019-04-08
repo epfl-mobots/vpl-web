@@ -261,8 +261,8 @@ Property "widgets" is an array with one element per widget. A widget is a static
 - "vpl:then": placed between events and actions (colon in VPL1)
 - "vpl:error": error marker displayed close to rules with errors (question mark in a circle in VPL1)
 - "vpl:warning": warning marker displayed closed to rules with warnings (minor issues which still permit to run the program)
-- "vpl:moreHigh": hint displayed at the top of block lib (events or actions) when scrollingBlockLib is true (see section "Global style settings" below) and the blocks could be scrolled down to show more
-- "vpl:moreLow": hint displayed at the bottom of block lib (events or actions) when scrollingBlockLib is true and the blocks could be scrolled down to show more
+- "vpl:moreHigh": hint displayed at the top of block lib (events or actions) when overflow is scroll (see section "Stylesheet" below) and the blocks could be scrolled down to show more
+- "vpl:moreLow": hint displayed at the bottom of block lib (events or actions) when overflow is scroll and the blocks could be scrolled down to show more
 
 Widgets are scaled. The size reference is given by a widget definition whose name is "vpl:block0" and whose size should correspond to a VPL block as it's drawn in a VPL program (in other words, draw an SVG square any size you want, define a widget "vpl:block0" with it, and draw all the other widgets so that they have the correct relative size with respect to the square; or reuse an existing block).
 
@@ -301,6 +301,7 @@ Box properties:
 - width, height
 - color
 - font
+- overflow (used in block-library only)
 
 Line properties:
 
@@ -315,6 +316,7 @@ Values:
 - line styles: none, hidden, dotted, dashed, solid, or double
 - font: see <https://www.w3.org/TR/2018/REC-css-fonts-3-20180920/#font-prop>
 - border-left, border-right, border-top, border-bottom, line: 1, 2 or 3 properties for line width (length), color and line style in any order
+- overflow: wrap (default) or scroll
 
 Box elements:
 
@@ -352,8 +354,6 @@ Some global style settings can be specified in a top-level object named "style".
 - "minInteractiveBlockSize" (number, default: 60): minimum block size where direct manipulation of interactive controls (buttons, sliders etc.) is possible; if smaller, a zoomed version is displayed when the block is clicked or touched
 
 - "ruleMarks" (string, default: "#bbb"): color of rule marks (colon dots)
-
-- "scrollingBlockLib" (boolean, default: false): true for single-column sets of event and action blocks, scrolling if required; or false for as many columns as required
 
 - "controlColor" (string, default: "navy"): color of control buttons in normal state
 - "controlDownColor" (string, default: "#37f"): color of control buttons in pressed state

@@ -3,7 +3,6 @@
 		"scrollbarThumbColor": "#b0bec5",
 		"scrollbarBackgroundColor": "transparent",
 		"scrollbarWidth": 2,
-		"scrollingBlockLib": false,
 		"errorColor": "#ff1744",
 		"warningColor": "#ff7777"
 	},

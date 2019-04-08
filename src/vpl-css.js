@@ -303,6 +303,11 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 			}
 		}
 		return {};
+	case "overflow":
+		if (["wrap", "scroll"].indexOf(val) < 0) {
+			throw "Unknown overflow mode";
+		}
+		return val;
 	default:
 		return val;
 	}
@@ -441,6 +446,8 @@ CSSParser.VPL.Box = function (props, lengthBase) {
 	this.fontSize = 10;
 	this.fontStyle = "";
 	this.fontWeight = "";
+
+	this.scroll = false;	// false=overflow:wrap, true=overflow:scroll
 
 	this.shadowOffset = null;
 	this.shadowBlurRadius = 0;
@@ -674,6 +681,9 @@ CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 		case "font-weight":
 			this.fontWeight = props[key];
 			break;
+		case "overflow":
+			this.scroll = props[key] === "scroll";
+			break;
 		case "box-shadow":
 			if (props[key].shadowOffset !== null) {
 				this.shadowOffset = props[key].offset.map(function (l) { return l ? l.toValue(lengthBase) : 0; });
@@ -796,6 +806,8 @@ CSSParser.VPL.Box.prototype.copy = function () {
 	box.fontSize = this.fontSize;
 	box.fontStyle = this.fontStyle;
 	box.fontWeight = this.fontWeight;
+
+	box.scroll = this.scroll;
 
 	box.shadowOffset = this.shadowOffset;
 	box.shadowBlurRadius = this.shadowBlurRadius;
