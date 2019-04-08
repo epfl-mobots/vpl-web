@@ -14,6 +14,7 @@
 	@param {{
 		run: (function(string,string):void | undefined),
 		init: (function(string):void | undefined),
+		isConnected: (function():boolean | undefined),
 		isEnabled: (function():boolean | undefined),
 		languages: (Array.<string> | undefined),
 		preferredLanguage: (string | undefined),
@@ -23,6 +24,7 @@
 A3a.vpl.RunGlue = function (options) {
 	this.runFun = options && options.run ? options.run : null;
 	this.initFun = options && options.init ? options.init : null;
+	this.isConnectedFun = options && options.isConnected ? options.isConnected : null;
 	this.isEnabledFun = options && options.isEnabled ? options.isEnabled : null;
 	this.preferredLanguage = options && options.preferredLanguage ? options.preferredLanguage : "aseba";
 	this.languages = options && options.languages ? options.languages : [this.preferredLanguage];
@@ -30,6 +32,14 @@ A3a.vpl.RunGlue = function (options) {
 
 	/** @type {Object<string,string>} */
 	this.stopCode = {};
+};
+
+/** Check if the RunGlue interface is enabled for a specific language
+	@param {string} language
+	@return {boolean}
+*/
+A3a.vpl.RunGlue.prototype.isConnected = function (language) {
+	return this.isConnectedFun == null || this.isConnectedFun();
 };
 
 /** Check if the RunGlue interface is enabled for a specific language

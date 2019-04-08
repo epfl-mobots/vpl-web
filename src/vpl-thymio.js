@@ -33,6 +33,9 @@ A3a.vpl.Application.prototype.installThymio = function () {
 				app.vplCanvas.update();
 			}
 		},
+		isConnected: function () {
+			return app.runGlue.state != null;
+		},
 		isEnabled: function (language) {
 			return language === "aseba" && app.runGlue.state != null;
 		},

@@ -406,6 +406,18 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 				dims.controlSize * 0.44, dims.controlSize * 0.44);
 			ctx.fill();
 		},
+		"vpl:connected": function () {
+			ctx.fillStyle = isEnabled
+				? dims.controlDownColor
+				: dims.controlColor;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.font = "bold " + Math.round(dims.controlSize * 0.7).toString(10) + "px sans-serif";
+			ctx.fillStyle = isEnabled ? "white" : "#777";
+			ctx.fillText("C", dims.controlSize * 0.5, dims.controlSize * 0.5);
+		},
 		"vpl:sim": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
@@ -1111,6 +1123,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 	draw["src:load"] = draw["vpl:load"];
 	draw["src:run"] = draw["vpl:run"];
 	draw["src:stop"] = draw["vpl:stop"];
+	draw["src:connected"] = draw["vpl:connected"];
 	draw["src:sim"] = draw["vpl:sim"];
 	draw["src:teacher"] = draw["vpl:teacher"];
 	draw["src:teacher-reset"] = draw["vpl:teacher-reset"];

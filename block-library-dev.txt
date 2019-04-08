@@ -194,6 +194,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:redo": redo last undone change
 - "vpl:run": run the VPL program with the Thymio or the simulator (state is "empty", "running", "error", "canLoad", or "canReload" depending on the VPL program and whether it's been run and modified)
 - "vpl:stop": stop the VPL program
+- "vpl:connected": connection indicator (no action; enabled if connected, disabled if no connection)
 - "vpl:sim": switch to the simulator view
 - "vpl:duplicate": duplicate a rule (drag target)
 - "vpl:disable": toggle a rule or block between disabled and enabled states (drag target)
@@ -214,6 +215,7 @@ Here is the list of button ids for the Editor view:
 - "src:disass": toggle between the text programming language and the bytecode disassembly (for Aseba and L2)
 - "src:run": run the text program with the Thymio or the simulator (state is "empty" or "canLoad" depending on the source code)
 - "src:stop": stop the text program
+- "src:connected": connection indicator (no action; enabled if connected, disabled if no connection)
 - "src:sim": switch to the simulator view
 - "src:teacher": toggle between the normal and the customization states
 - "src:teacher-reset": reset the available toolbar buttons and VPL blocks to the standard sets
