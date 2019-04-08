@@ -30,6 +30,7 @@ var SVG = function (src) {
 		transform: (Object | undefined),
 		elementId: (string | undefined),
 		element: (Element | undefined),
+		obj: (Object | undefined),
 		showBoundingBox: (boolean | undefined),
 		cb: ({
 			line: (function(Array.<number>,Array.<number>,boolean):void | undefined),
@@ -214,6 +215,44 @@ SVG.Displacement;
 */
 SVG.ClipRect;
 
+/** Merge new style into a base style object
+	@param {Object} baseDict
+	@param {Object} newDict
+	@return {void}
+*/
+SVG.mergeStyle = function (baseDict, newDict) {
+	for (var key in newDict) {
+		if (newDict.hasOwnProperty(key)) {
+			baseDict[key] = newDict[key];
+		}
+	}
+};
+
+/** Make a shallow copy of a style object
+	@param {Object} dict
+	@return {Object}
+*/
+SVG.copyStyle = function (dict) {
+	var copy = {};
+	SVG.mergeStyle(copy, dict);
+	return copy;
+};
+
+/** Convert a style string to an object
+	@param {Object} dict
+	@param {string} style
+	@return {void}
+*/
+SVG.parseStyle = function (dict, style) {
+	style.split(";").forEach(function (st) {
+		st = st.trim().split(":").map(function (s) { return s.trim(); });
+		if (st.length === 2) {
+			var val = st[1];
+			dict[st[0]] = val;
+		}
+	});
+}
+
 /** Draw SVG from source code
 	@param {CanvasRenderingContext2D} ctx
 	@param {SVG.Options=} options
@@ -339,21 +378,6 @@ SVG.prototype.draw = function (ctx, options) {
 		});
 	}
 
-	/** Convert a style string to an object
-		@return {Object}
-	*/
-	function parseStyle(style) {
-		var dict = {};
-		style.split(";").forEach(function (st) {
-			st = st.trim().split(":").map(function (s) { return s.trim(); });
-			if (st.length === 2) {
-				var val = st[1];
-				dict[st[0]] = val;
-			}
-		});
-		return dict;
-	}
-
 	/** Apply displacement to context (not to transform)
 		@param {Element} el
 		@param {SVG.Displacement} displacement
@@ -437,6 +461,7 @@ SVG.prototype.draw = function (ctx, options) {
 					break;
 				case "matrix":
 					ctx && ctx.transform(args[0], args[1], args[2], args[3], args[4], args[5]);
+					transform.matrix(args[0], args[1], args[2], args[3], args[4], args[5]);
 					break;
 				default:
 					throw "transform not implemented: " + c;
@@ -545,10 +570,9 @@ SVG.prototype.draw = function (ctx, options) {
 		/** Parse the "d" attribute of a path element and define a new path in
 			context ctx
 			@param {string} d
-			@param {boolean=} noDraw
 			@return {void}
 		*/
-		function path(d, noDraw) {
+		function path(d) {
 			d = d
 				.replace(/\.([0-9]+)(?=\.)/g,".$1 ")	// split e.g. 12.34.56 as 12.34 .56
 				.replace(/([.0-9])-/g, "$1 -")
@@ -837,6 +861,7 @@ SVG.prototype.draw = function (ctx, options) {
 		*/
 		function decodeFillStyle(fill) {
 			/** Decode stops array
+				@param {Array.<{offset:number,color:string}>} stops
 				@param {NodeList<!Element>} stopEl
 				@return {void}
 			*/
@@ -847,7 +872,10 @@ SVG.prototype.draw = function (ctx, options) {
 						var str = (stopEl[i].getAttribute("offset") || "0").trim();
 						var offset = /%$/.test(str) ? parseFloat(str.slice(0, -1)) / 100 : parseFloat(str);
 						var style = stopEl[i].getAttribute("style");
-						var styleDict = style ? parseStyle(style) : {};
+						var styleDict = {};
+ 						if (style) {
+							SVG.parseStyle(styleDict, style);
+						}
 						if (!isNaN(offset)) {
 							var color = stopEl[i].getAttribute("stop-color") || styleDict["stop-color"] || "#000";
 							if (SVG.colorDict.hasOwnProperty(color)) {
@@ -1014,7 +1042,11 @@ SVG.prototype.draw = function (ctx, options) {
 		function paint() {
 			if (ctx) {
 				var styleStr = (baseStyle || "") + ";" + (overriddenStyle || "");
-				var style = parseStyle(styleStr);
+				var style = {};
+				if (styleStr) {
+					SVG.parseStyle(style, styleStr);
+				}
+console.info(style);
 				if (style["opacity"]) {
 					ctx.globalAlpha *= parseFloat(style["opacity"]);
 				}
@@ -1050,7 +1082,10 @@ SVG.prototype.draw = function (ctx, options) {
 		function paintText(str, x, y) {
 			if (ctx) {
 				var styleStr = (baseStyle || "") + ";" + (overriddenStyle || "");
-				var style = parseStyle(styleStr);
+				var style = {};
+				if (styleStr) {
+					SVG.parseStyle(style, styleStr);
+				}
 				var fontSize = style["font-size"] || "12px";
 				var fontFamily = style["font-family"] || "helvetica";
 				ctx.font = fontSize + " " + fontFamily;

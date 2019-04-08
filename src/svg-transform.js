@@ -85,6 +85,26 @@ SVG.Transform.prototype.rotate = function (angle) {
 	];
 };
 
+/** Apply matrix transform
+	@param {number} a
+	@param {number} b
+	@param {number} c
+	@param {number} d
+	@param {number} e
+	@param {number} f
+	@return {void}
+*/
+SVG.Transform.prototype.matrix = function (a, b, c, d, e, f) {
+	this.mat = [
+		a * this.mat[0] + c * this.mat[1],
+		b * this.mat[0] + d * this.mat[1],
+		a * this.mat[2] + c * this.mat[3],
+		b * this.mat[2] + d * this.mat[3],
+		a * this.mat[4] + c * this.mat[5] + e,
+		b * this.mat[4] + d * this.mat[5] + f
+	];
+};
+
 /** SVG point
 	@constructor
 	@param {number=} x
@@ -158,4 +178,17 @@ SVG.Transform.Stack.prototype.scale = function (sx, sy) {
 */
 SVG.Transform.Stack.prototype.rotate = function (angle) {
 	this.stack[this.stack.length - 1].rotate(angle);
+};
+
+/** Matrix product
+	@param {number} a
+	@param {number} b
+	@param {number} c
+	@param {number} d
+	@param {number} e
+	@param {number} f
+	@return {void}
+*/
+SVG.Transform.Stack.prototype.matrix = function (a, b, c, d, e, f) {
+	this.stack[this.stack.length - 1].matrix(a, b, c, d, e, f);
 };

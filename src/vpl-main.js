@@ -562,7 +562,7 @@ window.addEventListener("load", function () {
 			if (gui["svgFilenames"]) {
 				gui["svgFilenames"].forEach(function (filename) {
 					gui.rsrc[filename] = rsrc[filename];
-					gui.svg[filename] = new SVG(rsrc[filename]);
+					gui.svg[filename] = new SVG.Preparsed(rsrc[filename]);
 				});
 			}
 			if (gui["overlays"]) {

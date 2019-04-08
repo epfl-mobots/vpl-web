@@ -59,6 +59,7 @@ JS = \
 	vpl-draw.js \
 	vpl-blocklib.js \
 	svg.js \
+	svg-preparsed.js \
 	svg-transform.js \
 	vpl-blocklib-svg.js \
 	vpl-blocklib-l2.js \
