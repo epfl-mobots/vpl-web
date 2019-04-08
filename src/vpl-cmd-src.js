@@ -157,6 +157,15 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 			return app.runGlue != null;
 		}
 	});
+	this.commands.add("src:connected", {
+		isEnabled: function (app) {
+			return !app.program.noVPL && app.runGlue.isConnected();
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.runGlue != null;
+		}
+	});
 	this.commands.add("src:sim", {
 		action: function (app, modifier) {
 			if (app.multipleViews) {

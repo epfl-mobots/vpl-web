@@ -231,6 +231,15 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return app.runGlue != null;
 		}
 	});
+	this.commands.add("vpl:connected", {
+		isEnabled: function (app) {
+			return !app.program.noVPL && app.runGlue.isConnected();
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.runGlue != null;
+		}
+	});
 	this.commands.add("vpl:sim", {
 		action: function (app, modifier) {
 			if (app.multipleViews) {
