@@ -144,6 +144,8 @@ A3a.vpl.Canvas.prototype.getStyles = function (aux, block) {
 */
 A3a.vpl.Canvas.prototype.getDisplacements = function (aux, svg, param) {
 	var displacements = {};
+	var ix0 = (aux["buttons"] ? aux["buttons"].length : 0) +
+		(aux["radiobuttons"] ? 1 : 0);
 
 	if (aux["sliders"] != undefined) {
 		for (var i = 0; i < aux["sliders"].length; i++) {
@@ -161,13 +163,14 @@ A3a.vpl.Canvas.prototype.getDisplacements = function (aux, svg, param) {
 				y0Thumb = bnds.ymin;	// no thumb adjustment along y axis
 			}
 			// calc thumb position between 0 and 1
-			var f = (param[i] - sliderAux["min"]) / (sliderAux["max"] - sliderAux["min"]);
+			var f = (param[ix0 + i] - sliderAux["min"]) / (sliderAux["max"] - sliderAux["min"]);
 			// translate thumb
 			displacements[sliderAux["thumbId"]] = {
 				dx: f * (bnds.xmax - bnds.xmin) - (x0Thumb - bnds.xmin),
 				dy: f * (bnds.ymin - bnds.ymax) - (y0Thumb - bnds.ymax)
 			};
 		}
+		ix0 += aux["sliders"].length;
 	}
 
 	if (aux["rotating"] != undefined) {
@@ -177,7 +180,7 @@ A3a.vpl.Canvas.prototype.getDisplacements = function (aux, svg, param) {
 			var bndsCenter = svg.getElementBounds(rotatingAux["centerId"]);
 			// rotate element
 			displacements[rotatingAux["id"]] = {
-				phi: param[i] * f,
+				phi: param[ix0 + i] * f,
 				x0: (bndsCenter.xmin + bndsCenter.xmax) / 2,
 				y0: (bndsCenter.ymin + bndsCenter.ymax) / 2
 			};
@@ -314,7 +317,9 @@ A3a.vpl.Canvas.prototype.mousedragSVGSlider = function (block, dragIndex, aux, w
 			val = s;
 		}
 	});
-	block.param[dragIndex] = Math.max(min, Math.min(max, val));
+	var ix0 = (aux["buttons"] ? aux["buttons"].length : 0) +
+		(aux["radiobuttons"] ? 1 : 0);
+	block.param[ix0 + dragIndex] = Math.max(min, Math.min(max, val));
 };
 
 /** Handle mousedown event in A3a.vpl.BlockTemplate.mousedownFun for a block with rotating elements
@@ -370,7 +375,10 @@ A3a.vpl.Canvas.prototype.mousedragSVGRotating = function (block, dragIndex, aux,
 	var pt = this.canvasToSVGCoord(ev.x - left, ev.y - top, width, height);
 	var val = Math.atan2(pt.y - this.clientData.c.y, pt.x - this.clientData.c.x) - this.clientData.phi0;
 	var f = aux["rotating"][dragIndex]["numSteps"] ? 2 * Math.PI / parseInt(aux["rotating"][dragIndex]["numSteps"], 10) : 1;
-	block.param[dragIndex] = Math.round(val / f);
+	var ix0 = (aux["buttons"] ? aux["buttons"].length : 0) +
+		(aux["radiobuttons"] ? 1 : 0) +
+		(aux["sliders"] ? aux["sliders"].length : 0);
+	block.param[ix0 + dragIndex] = Math.round(val / f);
 };
 
 /** Handle mousedown event in A3a.vpl.BlockTemplate.mousedownFun for a block with a score
