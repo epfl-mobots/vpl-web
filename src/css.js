@@ -443,8 +443,14 @@ CSSParser.Length = function (val, type) {
 CSSParser.Length.type = {
 	absolute: "abs",
 	percentage: "%",
-	vw: "vw",
-	vh: "vh"
+	vw: "vw",	// viewport width / 100 (parent element)
+	vh: "vh",
+	vmin: "vmin",
+	vmax: "vmax",
+	ww: "ww",	// window width / 100
+	wh: "wh",
+	wmin: "wmin",
+	wmax: "wmax"
 };
 
 /** Set length
@@ -473,6 +479,18 @@ CSSParser.Length.prototype.toValue = function (lengthBase) {
 		return this.val * (lengthBase ? lengthBase.vw : 1);
 	case CSSParser.Length.type.vh:
 		return this.val * (lengthBase ? lengthBase.vh : 1);
+	case CSSParser.Length.type.vmin:
+		return this.val * (lengthBase ? Math.min(lengthBase.vw, lengthBase.vh) : 1);
+	case CSSParser.Length.type.vmax:
+		return this.val * (lengthBase ? Math.max(lengthBase.vw, lengthBase.vh) : 1);
+	case CSSParser.Length.type.ww:
+		return this.val * (lengthBase ? lengthBase.ww : 1);
+	case CSSParser.Length.type.wh:
+		return this.val * (lengthBase ? lengthBase.wh : 1);
+	case CSSParser.Length.type.wmin:
+		return this.val * (lengthBase ? Math.min(lengthBase.ww, lengthBase.wh) : 1);
+	case CSSParser.Length.type.wmax:
+		return this.val * (lengthBase ? Math.max(lengthBase.ww, lengthBase.wh) : 1);
 	default:
 		throw "internal";
 	}
@@ -483,11 +501,15 @@ CSSParser.Length.prototype.toValue = function (lengthBase) {
 	@param {number} base
 	@param {number} vw
 	@param {number} vh
+	@param {number} ww
+	@param {number} wh
 */
-CSSParser.LengthBase = function (base, vw, vh) {
+CSSParser.LengthBase = function (base, vw, vh, ww, wh) {
 	this.base = base;
 	this.vw = vw;
 	this.vh = vh;
+	this.ww = ww;
+	this.wh = wh;
 };
 
 /** Selector

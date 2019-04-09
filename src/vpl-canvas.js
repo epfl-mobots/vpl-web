@@ -630,7 +630,9 @@ A3a.vpl.Canvas.prototype.recalcSize = function () {
 		this.ctx.scale(backingScale, backingScale);
 	}
 
-	this.css.lengthBase = new CSSParser.LengthBase(this.width, this.width / 100, this.height / 100);
+	this.css.lengthBase = new CSSParser.LengthBase(this.width,
+		this.width / 100, this.height / 100,
+		this.canvasWidth / 100, this.canvasHeight / 100);
 	var blockSize = this.css.getBox({tag: "block"}).width;
 	var controlSize = this.css.getBox({tag: "button"}).width;
 	this.dims = A3a.vpl.Canvas.calcDims(blockSize, controlSize);
