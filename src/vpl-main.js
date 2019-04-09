@@ -201,6 +201,11 @@ function vplSetup(gui) {
 		});
 	}
 
+	// validate ui (correct usage of blocks, control elements etc.)
+	if (gui) {
+		A3a.vpl.validateUI(gui);
+	}
+
 	// canvas
 	var canvasEl = document.getElementById("programCanvas");
 

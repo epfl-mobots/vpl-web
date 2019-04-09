@@ -1362,6 +1362,25 @@ SVG.prototype.isInside = function (elementId, x, y) {
 	return x >= bnds.xmin && x <= bnds.xmax && y >= bnds.ymin && y <= bnds.ymax;
 };
 
+/** Check if an element with the specified id exists
+	@param {string} elementId
+	@return {boolean}
+*/
+SVG.prototype.hasElement = function (elementId) {
+	return this.dom.getElementById(elementId) != null;
+};
+
+/** Check if an element with the specified id is included in another one
+	@param {string} elementId
+	@param {string} ancestorId
+	@return {boolean}
+*/
+SVG.prototype.hasAncestor = function (elementId, ancestorId) {
+	var element = this.dom.getElementById(elementId);
+	var ancestor = this.dom.getElementById(ancestorId);
+	return ancestor != null && element != null && ancestor.contains(element);
+};
+
 /** Draw to an image
 	@return {Image}
 */

@@ -45,6 +45,7 @@ JS = \
 	vpl-code-python.js \
 	vpl-cmd.js \
 	vpl-app.js \
+	vpl-ui-validator.js \
 	vpl-cmd-vpl.js \
 	vpl-controlbar.js \
 	vpl-buttons-js.js \

@@ -612,62 +612,6 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 		return -1;
 	}
 
-	/** Validate block definition
-		@param {Object} b block definition
-		@return {boolean} true for success, false for failure
-	*/
-	function validateBlockDefinition(b) {
-		var name = b["name"];
-		if (name[0] === "!") {
-			// special block
-			return true;
-		}
-		if (!/^\w/.test(name)) {
-			window["console"] && window["console"]["info"](
-				"Block definition error: bad name \"" + name + "\"");
-			return false;
-		}
-
-		var defParam = b["defaultParameters"];
-		var buttons = b["buttons"];
-		var radiobuttons = b["radiobuttons"];
-		var sliders = b["sliders"];
-		var rotating = b["rotating"];
-		var score = b["score"];
-		if ((buttons || radiobuttons || sliders || rotating || score) && !defParam) {
-			window["console"] && window["console"]["info"](
-				"Block definition error: missing defaultParameters");
-			return false;
-		}
-
-		if (defParam) {
-			var nParams = 0;
-			if (buttons) {
-				nParams += buttons.length;
-			}
-			if (radiobuttons) {
-				nParams += 1;
-			}
-			if (sliders) {
-				nParams += sliders.length;
-			}
-			if (rotating) {
-				nParams += rotating.length;
-			}
-			if (score) {
-				nParams += 2 * Math.floor((defParam.length - nParams) / 2);
-			}
-			if (nParams !== defParam.length) {
-				window["console"] && window["console"]["info"](
-					"Block definition error: defaultParameters.length=" + defParam.length +
-						", needs " + nParams + " parameters");
-				return false;
-			}
-		}
-
-		return true;
-	}
-
 	/** Substitute inline expressions {expr} in strings of input array, where expr is a
 		JavaScript expression; variable $ contains the block parameters
 		@param {Array.<string>} fmtArray
@@ -726,11 +670,6 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 					throw "Unknown block mode " + m;
 				}
 			});
-		}
-
-		// validation
-		if (!validateBlockDefinition(b)) {
-			window["console"] && window["console"]["info"]("Bad block definition for " + name);
 		}
 
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */

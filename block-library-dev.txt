@@ -48,7 +48,7 @@ In json, block contain the following properties:
 
 - "svg" (array of objects, at least one element, required): list of the parts defining the block appearance including buttons, sliders, etc. Each part is described by an object with the following properties (** only "uri" is implemented now **):
 
-	- "uri" (string, required): uri of the svg element
+	- "uri" (string, required): uri of the svg element ("filename#id", with same filename for all elements in the same block)
 	- "scale" (number, optional, default: 1): scale at which the element is displayed
 	- "dx" (number, optional, default: 0): horizontal displacement
 	- "dy" (number, optional, default: 0): vertical displacement
@@ -65,7 +65,7 @@ In json, block contain the following properties:
 
 	- "id" (string, required): id of the svg element corresponding to the button. It should be contained in the element identified by "main".
 	- "val" (number, boolean or string, required): value for the set of radio buttons.
-	- "st" (array of strings): style strings applied to svg elements when the corresponding value in val is active. Each style is defined by a fill and/or a stroke color, with the syntax "fill:color;stroke:color", or fill/stroke swapped, or one of them skipped without semicolon.
+	- "st" (array of 2 strings): style strings applied to svg elements when the radio button is unselected or selected, respectively. Each style is defined by a fill and/or a stroke color, with the syntax "fill:color;stroke:color", or fill/stroke swapped, or one of them skipped without semicolon.
 
 - "sliders" (array of objects, optional): slider definitions. Each slider is described by an object with the following properties:
 

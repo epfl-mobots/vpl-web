@@ -1484,3 +1484,36 @@ SVG.Preparsed.prototype.draw = function (ctx, options) {
 	}
 	return {x: xa, y: ya}
 };
+
+/** Find a descendent specified by id
+	@param {Object} root
+	@param {string} elementId
+	@return {Object}
+*/
+SVG.Preparsed.findDescendentElement = function (root, elementId) {
+	if (root.id === elementId) {
+		return root;
+	}
+	if (root.children) {
+		for (var i = 0; i < root.children.length; i++) {
+			var el = SVG.Preparsed.findDescendentElement(root.children[i], elementId);
+			if (el) {
+				return el;
+			}
+		}
+	}
+	return null;
+};
+
+/** @inheritDoc
+*/
+SVG.Preparsed.prototype.hasElement = function (elementId) {
+	return SVG.Preparsed.findDescendentElement(this.doc, elementId) != null;
+};
+
+/** @inheritDoc
+*/
+SVG.Preparsed.prototype.hasAncestor = function (elementId, ancestorId) {
+	var ancestor = SVG.Preparsed.findDescendentElement(this.doc, ancestorId);
+	return SVG.Preparsed.findDescendentElement(ancestor, elementId) != null;
+}
