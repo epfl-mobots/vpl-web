@@ -573,6 +573,7 @@ A3a.vpl.Canvas.prototype.update = function () {
 	@typedef {{
 		blockSize: number,
 		minInteractiveBlockSize: number,
+		eventRightAlign: boolean,
 		blockLineWidth: number,
 		blockFont: string,
 		templateScale: number,
@@ -600,6 +601,7 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 	return {
 		blockSize: blockSize,
 		minInteractiveBlockSize: 60,
+		eventRightAlign: false,
 		blockLineWidth: Math.max(1, Math.min(3, blockSize / 40)),
 		blockFont: Math.round(blockSize / 4).toString(10) + "px sans-serif",
 		templateScale: Math.max(0.666, 32 / blockSize),

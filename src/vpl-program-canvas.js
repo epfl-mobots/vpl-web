@@ -183,6 +183,7 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.EventHandler} eventHandler
 	@param {boolean} displaySingleEvent
+	@param {number} maxEventBlockCount max number of events for right alignment, or -1 for left alignment
 	@param {number} eventX0
 	@param {number} actionX0
 	@param {number} y
@@ -198,7 +199,8 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 	@return {void}
 */
 A3a.vpl.Program.prototype.addEventHandlerToCanvas =
-	function (canvas, eventHandler, displaySingleEvent, eventX0, actionX0, y,
+	function (canvas, eventHandler, displaySingleEvent, maxEventBlockCount,
+		eventX0, actionX0, y,
 		blockEventBox, blockActionBox, blockStateBox, blockCommentBox,
 		blockContainerBox, blockContainerErrorBox, blockContainerWarningBox,
 		ruleBox, separatorBox) {
@@ -255,7 +257,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 					? eventHandler.error.isWarning ? blockContainerWarningBox : blockContainerErrorBox
 					: blockContainerBox;
 				box.drawAt(ctx,
-					item.x + dx + ruleBox.paddingLeft + blockContainerBox.marginLeft + j * step,
+					item.x + dx + ruleBox.paddingLeft + blockContainerBox.marginLeft +
+						((maxEventBlockCount > 0 ? maxEventBlockCount - events.length : 0) + j) * step,
 					item.y + dy + ruleBox.paddingTop + blockContainerBox.marginTop,
 					true);
 			});
@@ -326,7 +329,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	events.forEach(function (event, j) {
 		if (event) {
 			childItem = this.addBlockToCanvas(canvas, event, boxForBlockType(event),
-				eventX0 + step * j,
+				eventX0 + step * ((maxEventBlockCount > 0 ? maxEventBlockCount - events.length : 0) + j),
 				y,
 				{
 					notInteractive: eventHandler.disabled || this.noVPL,
@@ -338,7 +341,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.event, eventHandler,
 					{eventSide: true, index: j}),
 				blockEventBox,
-				eventX0 + step * j,
+				eventX0 + step * ((maxEventBlockCount > 0 ? maxEventBlockCount - events.length : 0) + j),
 				y,
 				{
 					notDropTarget: eventHandler.disabled,
@@ -862,7 +865,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		var isWarning = false;
 		program.program.forEach(function (eventHandler, i) {
 			program.addEventHandlerToCanvas(canvas, eventHandler,
-				displaySingleEvent,
+				displaySingleEvent, canvas.dims.eventRightAlign ? nMaxEventHandlerELength : -1,
 				eventX0, actionX0,
 				vplBox.y + ruleBox.totalHeight() * i + ruleBox.offsetTop() + blockContainerBox.offsetTop(),
 				blockEventBox, blockActionBox, blockStateBox, blockCommentBox,
