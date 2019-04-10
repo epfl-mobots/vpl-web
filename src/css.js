@@ -261,6 +261,18 @@ CSSParser.prototype.convertLength = function (length) {
 		type = CSSParser.Length.type.vw;
 	} else if (re[3] === "vh") {
 		type = CSSParser.Length.type.vh;
+	} else if (re[3] === "vmin") {
+		type = CSSParser.Length.type.vmin;
+	} else if (re[3] === "vmax") {
+		type = CSSParser.Length.type.vmax;
+	} else if (re[3] === "ww") {
+		type = CSSParser.Length.type.ww;
+	} else if (re[3] === "wh") {
+		type = CSSParser.Length.type.wh;
+	} else if (re[3] === "wmin") {
+		type = CSSParser.Length.type.wmin;
+	} else if (re[3] === "wmax") {
+		type = CSSParser.Length.type.wmax;
 	} else if (parseFloat(re[1]) == 0) {
 		// unit ignored if length is 0 (can be missing)
 		sc = 0;
