@@ -156,6 +156,13 @@ Code fragments, styles, and some other properties can contain backtick-expressio
 - i: index of the parameter (used in clauseAnd code fragments and in slider's snap property)
 - rgb: function which converts an array of RGB values between 0 and 1 to an RGB value suited for representing an RGB led (saturated colors are mapped to themselves, but [0,0,0] (led switched off) is mapped to gray).
 
+Miscellaneous settings
+----------------------
+
+Property "miscSettings" contains VPL global settings which aren't related to the user interface:
+
+- "basicMultiEvent" (boolean, default false): true to allow multiple event blocks in basic mode
+
 Toolbars
 --------
 

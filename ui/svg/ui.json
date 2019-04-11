@@ -11,9 +11,12 @@
 		"svg.css"
 	],
 
-
 	"html": {
 		"about": "<iframe src=\"vpl-about.html\" style=\"width:100%;height:100%;border:none;\"></iframe>"
+	},
+
+	"miscSettings": {
+		"basicMultiEvent": true
 	},
 
 	"blocks": [

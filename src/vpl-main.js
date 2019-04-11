@@ -264,6 +264,9 @@ function vplSetup(gui) {
 				window["console"] && window["console"]["error"](e);
 			}
 		}
+		if (gui["miscSettings"] && gui["miscSettings"]["basicMultiEvent"] != undefined) {
+			A3a.vpl.Program.basicMultiEvent = gui["miscSettings"]["basicMultiEvent"] == true;
+		}
 	}
 	var advancedFeatures = vplGetQueryOption("adv") === "true";
 	var experimentalFeatures = vplGetQueryOption("exp") === "true";

@@ -39,6 +39,8 @@ A3a.vpl.Program = function (mode, uiConfig) {
 
 	/** @type {Array.<string>} */
 	this.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
+	/** @type {boolean} */
+	this.multiEventBasic = A3a.vpl.Program.basicMultiEvent;
 	/** @type {Array.<string>} */
 	this.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
 	/** @type {A3a.vpl.UIConfig} */
@@ -50,6 +52,8 @@ A3a.vpl.Program.codeGenerator = {};
 
 /** @type {Array.<string>} */
 A3a.vpl.Program.basicBlocks = [];
+
+A3a.vpl.Program.basicMultiEvent = false;
 
 /** @type {Array.<string>} */
 A3a.vpl.Program.advancedBlocks = [];
@@ -95,6 +99,7 @@ A3a.vpl.Program.prototype.resetUI = function () {
 A3a.vpl.Program.prototype.new = function () {
 	this.mode = A3a.vpl.mode.basic;
 	this.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
+	this.multiEventBasic = A3a.vpl.Program.basicMultiEvent;
 	this.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
 	this.program = [];
 	this.undoState.reset();
@@ -131,7 +136,7 @@ A3a.vpl.Program.prototype.getError = function () {
 	@return {boolean}
 */
 A3a.vpl.Program.prototype.displaySingleEvent = function () {
-	if (this.mode !== A3a.vpl.mode.basic) {
+	if (this.mode !== A3a.vpl.mode.basic || this.multiEventBasic) {
 		return false;
 	}
 	for (var i = 0; i < this.program.length; i++) {
@@ -278,6 +283,7 @@ A3a.vpl.Program.prototype.exportToObject = function (noProgram) {
 		return {
 			"advanced": this.mode === A3a.vpl.mode.advanced,
 			"basicBlocks": this.enabledBlocksBasic,
+			"basicMultiEvent": this.multiEventBasic,
 			"advancedBlocks": this.enabledBlocksAdvanced,
 			"disabledUI": this.uiConfig.disabledUI
 		};
@@ -322,6 +328,7 @@ A3a.vpl.Program.prototype.exportToObject = function (noProgram) {
 	return {
 		"advanced": this.mode === A3a.vpl.mode.advanced,
 		"basicBlocks": this.enabledBlocksBasic,
+		"basicMultiEvent": this.multiEventBasic,
 		"advancedBlocks": this.enabledBlocksAdvanced,
 		"disabledUI": this.uiConfig.disabledUI,
 		"program": p,
@@ -357,6 +364,7 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 				this.uiConfig.setDisabledFeatures(obj["disabledUI"]);
 			}
 			this.enabledBlocksBasic = obj["basicBlocks"] || A3a.vpl.Program.basicBlocks;
+			this.multiEventBasic = obj["basicMultiEvent"] || A3a.vpl.Program.basicMultiEvent;
 			this.enabledBlocksAdvanced = obj["advancedBlocks"] || A3a.vpl.Program.advancedBlocks;
 			if (obj["program"]) {
 				this.program = obj["program"].map(function (eventHandler) {
