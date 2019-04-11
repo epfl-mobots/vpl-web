@@ -1013,6 +1013,14 @@ A3a.vpl.Canvas.prototype.redraw = function () {
 		item.draw(this.ctx, 0, 0, true);
 	}, this);
 	if (this.zoomedItemProxy) {
+		this.ctx.save();
+		this.ctx.globalAlpha = 0.5;
+		this.ctx.fillStyle = "black";
+		this.ctx.fillRect(this.canvasWidth * this.relativeArea.xmin,
+			this.canvasHeight * this.relativeArea.ymin,
+			this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin),
+			this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin));
+		this.ctx.restore();
 		this.zoomedItemProxy.draw(this.ctx);
 		this.zoomedItemProxy.draw(this.ctx, 0, 0, true);
 	}
