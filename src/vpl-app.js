@@ -248,4 +248,7 @@ A3a.vpl.Application.prototype.vplResize = function () {
 			break;
 		}
 	}, this);
+
+	// modal boxes
+	this.aboutBox.center();
 };

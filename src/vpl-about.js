@@ -48,9 +48,7 @@ A3a.vpl.About = function (html) {
 A3a.vpl.About.prototype.show = function () {
 	this.div.innerHTML = this.html;	// do it here to restart from the desired starting point
 	this.backgroundDiv.style.display = "block";
-	var boundingBox = this.div.getBoundingClientRect();
-	this.div.style.marginLeft = (-boundingBox.width / 2) + "px";
-	this.div.style.marginTop = (-boundingBox.height / 2) + "px";
+	this.center();
 };
 
 /** Hide about box
@@ -58,4 +56,10 @@ A3a.vpl.About.prototype.show = function () {
 */
 A3a.vpl.About.prototype.hide = function () {
 	this.backgroundDiv.style.display = "none";
+};
+
+A3a.vpl.About.prototype.center = function () {
+	var boundingBox = this.div.getBoundingClientRect();
+	this.div.style.marginLeft = (-boundingBox.width / 2) + "px";
+	this.div.style.marginTop = (-boundingBox.height / 2) + "px";
 };
