@@ -94,6 +94,10 @@ rule {
 	margin:0.6vw;
 }
 
+rule:small {
+	background: white;
+}
+
 conflict-line.error {
 	line: 3px #e44 dashed;
 }

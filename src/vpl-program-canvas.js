@@ -381,7 +381,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	canvas.addDecoration(function (ctx) {
 		if (eventHandler.error !== null) {
 			var widgetBounds = canvas.getWidgetBounds(eventHandler.error.isWarning ? "vpl:warning" : "vpl:error");
-			var errorBox = canvas.css.getBox({tag: "widget", id: "widget-error", pseudoClass: this.zoomBlocks ? ["small"] : []});
+			var errorBox = canvas.css.getBox({tag: "widget", id: "widget-error", pseudoClass: self.zoomBlocks ? ["small"] : []});
 			errorBox.width = widgetBounds.xmax - widgetBounds.xmin;
 			errorBox.height = widgetBounds.ymax - widgetBounds.ymin;
 			canvas.drawWidget(eventHandler.error.isWarning ? "vpl:warning" : "vpl:error",
@@ -402,13 +402,14 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	@return {void}
 */
 A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas, x, y1, y2, ruleBox, blockContainerBox, isWarning) {
+	var self = this;
 	canvas.addDecoration(function (ctx) {
 		// pink line
 		var widgetBounds = canvas.getWidgetBounds(isWarning ? "vpl:warning" : "vpl:error");
 		var errorBox = canvas.css.getBox({
 			tag: "widget",
 			id: isWarning ? "widget-warning" : "widget-error",
-			pseudoClass: this.zoomBlocks ? ["small"] : []
+			pseudoClass: self.zoomBlocks ? ["small"] : []
 		});
 		errorBox.width = widgetBounds.xmax - widgetBounds.xmin;
 		errorBox.height = widgetBounds.ymax - widgetBounds.ymin;
@@ -526,15 +527,15 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var toolbarBox = canvas.css.getBox({tag: "toolbar", clas: ["vpl", "top"]});
 	var toolbar2Box = canvas.css.getBox({tag: "toolbar", clas: ["vpl", "bottom"]});
 	var vplBox = canvas.css.getBox({tag: "vpl", id: "scrolling-vpl"});
-	var blockEventBox = canvas.css.getBox({tag: "block", clas: ["event"], pseudoClass: this.zoomBlocks ? ["small"] : []});
-	var blockActionBox = canvas.css.getBox({tag: "block", clas: ["action"], pseudoClass: this.zoomBlocks ? ["small"] : []});
-	var blockStateBox = canvas.css.getBox({tag: "block", clas: ["state"], pseudoClass: this.zoomBlocks ? ["small"] : []});
-	var blockCommentBox = canvas.css.getBox({tag: "block", clas: ["comment"], pseudoClass: this.zoomBlocks ? ["small"] : []});
+	var blockEventBox = canvas.css.getBox({tag: "block", clas: ["event"], pseudoClass: program.zoomBlocks ? ["small"] : []});
+	var blockActionBox = canvas.css.getBox({tag: "block", clas: ["action"], pseudoClass: program.zoomBlocks ? ["small"] : []});
+	var blockStateBox = canvas.css.getBox({tag: "block", clas: ["state"], pseudoClass: program.zoomBlocks ? ["small"] : []});
+	var blockCommentBox = canvas.css.getBox({tag: "block", clas: ["comment"], pseudoClass: program.zoomBlocks ? ["small"] : []});
 	var blockContainerBox = canvas.css.getBox({tag: "block-container"});
 	var blockContainerErrorBox = canvas.css.getBox({tag: "block-container", clas: ["error"]});
 	var blockContainerWarningBox = canvas.css.getBox({tag: "block-container", clas: ["warning"]});
-	var ruleBox = canvas.css.getBox({tag: "rule", pseudoClass: this.zoomBlocks ? ["small"] : []});
-	var ruleSeparatorBox = canvas.css.getBox({tag: "widget", id: "widget-then", pseudoClass: this.zoomBlocks ? ["small"] : []});
+	var ruleBox = canvas.css.getBox({tag: "rule", pseudoClass: program.zoomBlocks ? ["small"] : []});
+	var ruleSeparatorBox = canvas.css.getBox({tag: "widget", id: "widget-then", pseudoClass: program.zoomBlocks ? ["small"] : []});
 	var blockEventLibItemBox = canvas.css.getBox({tag: "block", clas: ["library", "event"]});
 	var blockActionLibItemBox = canvas.css.getBox({tag: "block", clas: ["library", "action"]});
 	var blockStateLibItemBox = canvas.css.getBox({tag: "block", clas: ["library", "state"]});
