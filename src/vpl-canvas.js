@@ -900,8 +900,8 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 				self.downControl = {
 					id: id,
 					rect: {
-						x: x,
-						y: y,
+						x: item.x,
+						y: item.y,
 						w: width,
 						h: height
 					},
