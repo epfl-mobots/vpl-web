@@ -518,10 +518,44 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		}
 	}, this);
 
+	// toolbar button boxes and height
+	var toolbarConfig = program.toolbarConfig || [
+		"vpl:close",
+		"!space",
+		"vpl:about",
+		"!space",
+		"vpl:new",
+		"vpl:save",
+		"vpl:load",
+		"vpl:upload",
+		"!space",
+		"vpl:advanced",
+		"!stretch",
+		"vpl:undo",
+		"vpl:redo",
+		"!stretch",
+		"vpl:run",
+		"vpl:stop",
+		"!stretch",
+		"vpl:sim",
+		"vpl:text",
+		"!stretch",
+		"vpl:duplicate",
+		"vpl:disable",
+		"vpl:lock",
+		"vpl:trashcan",
+		"!stretch",
+		"vpl:teacher-reset",
+		"vpl:teacher-save",
+		"vpl:teacher"
+	];
+	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, toolbarConfig, ["vpl", "top"]);
+	var toolbarItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
+	var toolbar2ItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, toolbar2Config, ["vpl", "bottom"]);
+	var toolbar2ItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
+
 	// boxes
 	var viewBox = canvas.css.getBox({tag: "view", clas: ["vpl"]});
-	var buttonBox = canvas.css.getBox({tag: "button", clas: ["vpl", "top"]});
-	var button2Box = canvas.css.getBox({tag: "button", clas: ["vpl", "bottom"]});
 	var separatorBox = canvas.css.getBox({tag: "separator", clas: ["vpl", "top"]});
 	var separator2Box = canvas.css.getBox({tag: "separator", clas: ["vpl", "bottom"]});
 	var toolbarBox = canvas.css.getBox({tag: "toolbar", clas: ["vpl", "top"]});
@@ -547,12 +581,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	viewBox.setTotalWidth(canvasSize.width);
 	viewBox.setTotalHeight(canvasSize.height);
 	viewBox.setPosition(0, 0);
-	buttonBox.width = canvas.dims.controlSize;
-	buttonBox.height = canvas.dims.controlSize;
-	button2Box.width = canvas.dims.controlSize;
-	button2Box.height = canvas.dims.controlSize;
 	toolbarBox.setTotalWidth(viewBox.width);
-	toolbarBox.height = buttonBox.totalHeight();
+	toolbarBox.height = toolbarItemHeight;
 	toolbarBox.setPosition(viewBox.x, viewBox.y);
 	blockEventLibItemBox.height = canvas.dims.blockSize * canvas.dims.templateScale;
 	blockEventLibItemBox.width = canvas.dims.blockSize * canvas.dims.templateScale;
@@ -580,7 +610,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	blockActionLibBox.setPosition(viewBox.x + viewBox.width - blockActionLibBox.totalWidth(),
 		viewBox.y + toolbarBox.totalHeight());
 	toolbar2Box.setTotalWidth(viewBox.width - blockEventLibBox.totalWidth() - blockActionLibBox.totalWidth());
-	toolbar2Box.height = button2Box.totalHeight();
+	toolbar2Box.height = toolbar2ItemHeight;
 	toolbar2Box.setPosition(viewBox.x + blockEventLibBox.totalWidth(),
 		viewBox.y + viewBox.height - toolbar2Box.totalHeight());
 	vplBox.setTotalWidth(viewBox.width - blockEventLibBox.totalWidth() - blockActionLibBox.totalWidth());
@@ -644,41 +674,12 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	// top controls
 	var controlBar = new A3a.vpl.ControlBar(canvas);
 	controlBar.setButtons(this,
-		program.toolbarConfig || [
-			"vpl:close",
-			"!space",
-			"vpl:about",
-			"!space",
-			"vpl:new",
-			"vpl:save",
-			"vpl:load",
-			"vpl:upload",
-			"!space",
-			"vpl:advanced",
-			"!stretch",
-			"vpl:undo",
-			"vpl:redo",
-			"!stretch",
-			"vpl:run",
-			"vpl:stop",
-			"!stretch",
-			"vpl:sim",
-			"vpl:text",
-			"!stretch",
-			"vpl:duplicate",
-			"vpl:disable",
-			"vpl:lock",
-			"vpl:trashcan",
-			"!stretch",
-			"vpl:teacher-reset",
-			"vpl:teacher-save",
-			"vpl:teacher"
-		],
+		toolbarConfig,
 		["vpl", "top"],
 		program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
 		program.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
-	controlBar.calcLayout(toolbarBox, buttonBox, separatorBox);
-	controlBar.addToCanvas(toolbarBox, buttonBox);
+	controlBar.calcLayout(toolbarBox, toolbarItemBoxes, separatorBox);
+	controlBar.addToCanvas(toolbarBox, toolbarItemBoxes);
 
 	// 2nd toolbar at bottom between templates
 	if (toolbar2HasAvButtons > 0) {
@@ -688,8 +689,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			["vpl", "bottom"],
 			program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
 			program.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
-		controlBar2.calcLayout(toolbar2Box, button2Box, separator2Box);
-		controlBar2.addToCanvas(toolbar2Box, button2Box);
+		controlBar2.calcLayout(toolbar2Box, toolbar2ItemBoxes, separator2Box);
+		controlBar2.addToCanvas(toolbar2Box, toolbar2ItemBoxes);
 	}
 
 	// templates

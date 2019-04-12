@@ -135,3 +135,35 @@ A3a.vpl.ControlBar.hasAvailableButtons = function (app, buttons) {
 	}
 	return false;
 };
+
+/** Find the button boxes
+	@param {A3a.vpl.Application} app
+	@param {Array.<string>} buttons button id, "!space" for space, "!stretch" for stretch
+	@param {Array.<string>} cssClasses
+	@return {Object.<string,CSSParser.VPL.Box>}
+*/
+A3a.vpl.ControlBar.buttonBoxes = function (app, buttons, cssClasses) {
+	/** @type {Object.<string,CSSParser.VPL.Box>} */
+	var boxes = {};
+	for (var i = 0; i < buttons.length; i++) {
+		if (buttons[i][0] !== "!" && app.commands.find(buttons[i]).isAvailable()) {
+			var buttonBox = app.css.getBox({tag: "button", id: buttons[i].replace(/:/g, "-"), clas: cssClasses});
+			boxes[buttons[i]] = buttonBox;
+		}
+	}
+	return boxes;
+};
+
+/** Find the maximum button height based on button box, incl. padding and margin
+	@param {Object.<string,CSSParser.VPL.Box>} boxes
+	@return {number}
+*/
+A3a.vpl.ControlBar.maxBoxHeight = function (boxes) {
+	var maxHeight = 0;
+	for (var key in boxes) {
+		if (boxes.hasOwnProperty(key)) {
+			maxHeight = Math.max(maxHeight, boxes[key].totalHeight());
+		}
+	}
+	return maxHeight;
+};

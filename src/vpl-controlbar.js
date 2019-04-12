@@ -16,11 +16,14 @@
 A3a.vpl.ControlBar = function (canvas) {
 	this.canvas = canvas;
 	/** @type {Array.<{
+		id: string,
 		draw: A3a.vpl.Canvas.controlDraw,
 		action: ?A3a.vpl.Canvas.controlAction,
 		doDrop: ?A3a.vpl.CanvasItem.doDrop,
 		canDrop: ?A3a.vpl.CanvasItem.canDrop,
-		bounds: A3a.vpl.ControlBar.Bounds
+		bounds: A3a.vpl.ControlBar.Bounds,
+		x: number,
+		y: number
 	}>} */
 	this.controls = [];
 	/** layout description: "X" = item, " " = separator, "s" = stretch,
@@ -50,7 +53,7 @@ A3a.vpl.ControlBar.prototype.reset = function () {
 
 /** Add the definition of a control button
 	@param {A3a.vpl.Canvas.controlDraw} draw
-	@param {A3a.vpl.ControlBar.Bounds} bounds
+	@param {A3a.vpl.ControlBar.Bounds} bounds (to scale and center drawing to fill button box)
 	@param {?A3a.vpl.Canvas.controlAction=} action
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
@@ -65,7 +68,8 @@ A3a.vpl.ControlBar.prototype.addControl = function (draw, bounds, action, doDrop
 		canDrop: canDrop || null,
 		id: id || "",
 		bounds: bounds,
-		pos: 0
+		x: 0,
+		y: 0
 	});
 	this.layout += "X";
 };
@@ -89,11 +93,11 @@ A3a.vpl.ControlBar.prototype.addStretch = function (nonDiscardable) {
 /** Calculate block position based on a layout with items, fixed intervals, separators,
 	and stretch elements
 	@param {CSSParser.VPL.Box} toolbarBox
-	@param {CSSParser.VPL.Box} itemBox
+	@param {Object.<string,CSSParser.VPL.Box>} itemBoxes
 	@param {CSSParser.VPL.Box} separatorBox box used for separators
  	@return {void}
 */
-A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBox, separatorBox) {
+A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBoxes, separatorBox) {
 	this.x = toolbarBox.x;
 	this.y = toolbarBox.y;
 	// remove leading and duplicate optional spaces and stretches
@@ -108,13 +112,10 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBox, separat
 	var sepCount = 0;
 	var stretchCount = 0;
 	var controlIx = 0;
-	var itemAdditionalWidth = itemBox.nonContentWidth();
-	var itemOffset = itemBox.offsetLeft();
 	for (var i = 0; i < layout.length; i++) {
 		switch (layout[i]) {
 		case "X":
-			var bounds = this.controls[controlIx].bounds;
-			itemsTotalWidth += bounds.xmax - bounds.xmin + itemAdditionalWidth;
+			itemsTotalWidth += itemBoxes[this.controls[controlIx].id].totalWidth();
 			controlIx++;
 			break;
 		case " ":
@@ -150,10 +151,11 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBox, separat
 	for (var i = 0; i < layout.length; i++) {
 		switch (layout[i]) {
 		case "X":
-			var control = this.controls[controlIx++];
-			control.x = p + itemOffset;
-			p += control.bounds.xmax - control.bounds.xmin + itemAdditionalWidth;
-			control.y = toolbarBox.y + toolbarBox.height / 2 - (control.bounds.ymax - control.bounds.ymin) / 2;
+			var control = this.controls[controlIx];
+			control.x = p + itemBoxes[control.id].offsetLeft();
+			p += itemBoxes[control.id].totalWidth();
+			control.y = toolbarBox.y + itemBoxes[control.id].offsetTop();
+			controlIx++;
 			break;
 		case " ":
 		case "_":
@@ -169,23 +171,24 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBox, separat
 
 /** Add all controls to the canvas (should follow calcLayout)
 	@param {CSSParser.VPL.Box} toolbarBox
-	@param {CSSParser.VPL.Box} itemBox
+	@param {Object.<string,CSSParser.VPL.Box>} itemBoxes
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBox) {
+A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes) {
 	var self = this;
 	this.canvas.addDecoration(function (ctx) {
 		toolbarBox.drawAt(ctx, self.x, self.y);
 	});
 	this.controls.forEach(function (control) {
-		var itemBox1 = itemBox.copy();
-		itemBox1.width = control.bounds.xmax - control.bounds.xmin;
 		this.canvas.addControl(control.x, control.y,
-			itemBox1,
+			itemBoxes[control.id],
 			control.bounds.xmin !== 0 || control.bounds.ymin !== 0
 				? function (ctx, box, isPressed) {
+					var sc = Math.min(box.width / (control.bounds.xmax - control.bounds.xmin),
+						box.height / (control.bounds.ymax - control.bounds.ymin));
 					ctx.save();
 					ctx.translate(-control.bounds.xmin, -control.bounds.ymin);
+					ctx.scale(sc, sc);
 					control.draw(ctx, box, isPressed);
 					ctx.restore();
 				}

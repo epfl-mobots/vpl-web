@@ -404,7 +404,6 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 			ctx.fillRect(dims.controlSize * 0.28,
 				dims.controlSize * 0.28,
 				dims.controlSize * 0.44, dims.controlSize * 0.44);
-			ctx.fill();
 		},
 		"vpl:connected": function () {
 			ctx.fillStyle = isEnabled

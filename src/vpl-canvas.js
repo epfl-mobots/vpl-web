@@ -887,6 +887,7 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 		/** @type {A3a.vpl.CanvasItem.draw} */
 		(function (ctx, item, dx, dy) {
 			ctx.save();
+			box.drawAt(ctx, item.x + dx, item.y + dy);
 			ctx.translate(item.x + dx, item.y + dy);
 			draw(ctx, box,
 				(self.downControl.id === id && /** @type {boolean} */(self.downControl.isInside)) ||

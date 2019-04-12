@@ -183,6 +183,30 @@ A3a.vpl.Application.prototype.renderSourceEditorToolbar = function () {
 	// start with an empty canvas
 	editor.tbCanvas.clearItems();
 
+	// toolbar button boxes and height
+	var toolbarConfig = editor.toolbarConfig || [
+		"src:close",
+		"!space",
+		"src:new",
+		"src:save",
+		"!space",
+		"src:language",
+		"src:disass",
+		"!stretch",
+		"src:run",
+		"src:stop",
+		"!stretch",
+		"src:sim",
+		"src:vpl",
+		"!space",
+		"src:locked",
+		"!stretch",
+		"src:teacher-reset",
+		"src:teacher"
+	];
+	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, toolbarConfig, ["src", "top"]);
+	var toolbarItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
+
 	// boxes
 	var canvasSize = editor.tbCanvas.getSize();
 	editor.tbCanvas.recalcSize();
@@ -192,20 +216,12 @@ A3a.vpl.Application.prototype.renderSourceEditorToolbar = function () {
 	var separatorBox = editor.tbCanvas.css.getBox({tag: "separator", clas: ["src", "top"]});
 	var toolbarBox = editor.tbCanvas.css.getBox({tag: "toolbar", clas: ["src", "top"]});
 
-	buttonBox.width = editor.tbCanvas.dims.controlSize;
-	buttonBox.height = editor.tbCanvas.dims.controlSize;
-	toolbarBox.setTotalWidth(canvasSize.width);
-	toolbarBox.height = buttonBox.totalHeight();
-	toolbarBox.setPosition(0, 0);
-
 	// box sizes
 	viewBox.setTotalWidth(canvasSize.width);
 	viewBox.setTotalHeight(canvasSize.height);
 	viewBox.setPosition(0, 0);
-	buttonBox.width = editor.tbCanvas.dims.controlSize;
-	buttonBox.height = editor.tbCanvas.dims.controlSize;
 	toolbarBox.setTotalWidth(viewBox.width);
-	toolbarBox.height = buttonBox.totalHeight();
+	toolbarBox.height = toolbarItemHeight;
 	toolbarBox.setPosition(viewBox.x, viewBox.y);
 
 	// view (background)
@@ -216,32 +232,13 @@ A3a.vpl.Application.prototype.renderSourceEditorToolbar = function () {
 	// top controls
 	var controlBar = new A3a.vpl.ControlBar(editor.tbCanvas);
 	controlBar.setButtons(this,
-		editor.toolbarConfig || [
-			"src:close",
-			"!space",
-			"src:new",
-			"src:save",
-			"!space",
-			"src:language",
-			"src:disass",
-			"!stretch",
-			"src:run",
-			"src:stop",
-			"!stretch",
-			"src:sim",
-			"src:vpl",
-			"!space",
-			"src:locked",
-			"!stretch",
-			"src:teacher-reset",
-			"src:teacher"
-		],
+		toolbarConfig,
 		["src", "top"],
 		editor.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
 		editor.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
 
-	controlBar.calcLayout(toolbarBox, buttonBox, separatorBox);
-	controlBar.addToCanvas(toolbarBox, buttonBox);
+	controlBar.calcLayout(toolbarBox, toolbarItemBoxes, separatorBox);
+	controlBar.addToCanvas(toolbarBox, toolbarItemBoxes);
 	editor.tbCanvas.redraw();
 };
 

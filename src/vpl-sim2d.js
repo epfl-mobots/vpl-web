@@ -475,6 +475,31 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	// start with an empty canvas
 	simCanvas.clearItems();
 
+	// toolbar button boxes and height
+	var toolbarConfig = sim2d.toolbarConfig || [
+		"sim:close",
+		"!stretch",
+		"sim:restart",
+		"sim:pause",
+		"!space",
+		"sim:speedup",
+		"sim:noise",
+		"!stretch",
+		"sim:pen",
+		"sim:clear",
+		"!space",
+		"sim:map-kind",
+		"sim:map",
+		"!stretch",
+		"sim:vpl",
+		"sim:text",
+		"!stretch",
+		"sim:teacher-reset",
+		"sim:teacher"
+	];
+	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, toolbarConfig, ["sim", "top"]);
+	var toolbarItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
+
 	// boxes
 	var canvasSize = simCanvas.getSize();
 	simCanvas.recalcSize();
@@ -483,7 +508,6 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	var smallButtonBox = simCanvas.css.getBox({tag: "button", clas: ["sim", "event"]});
 	var robotControlBox = simCanvas.css.getBox({tag: "sim-controller"});
 	var separatorControlBox = simCanvas.css.getBox({tag: "separator", id: "sim-controller-separator"});
-	var buttonBox = simCanvas.css.getBox({tag: "button", clas: ["sim", "top"]});
 	var separatorBox = simCanvas.css.getBox({tag: "separator", clas: ["sim", "top"]});
 	var toolbarBox = simCanvas.css.getBox({tag: "toolbar", clas: ["sim", "top"]});
 	var playgroundAreaBox = simCanvas.css.getBox({tag: "sim-playground-area"});
@@ -497,10 +521,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	robotControlBox.width = 3 * smallButtonBox.totalWidth();
 	robotControlBox.setTotalHeight(viewBox.height);
 	robotControlBox.setPosition(viewBox.x + viewBox.width - robotControlBox.totalWidth(), viewBox.y);
-	buttonBox.width = simCanvas.dims.controlSize;
-	buttonBox.height = simCanvas.dims.controlSize;
 	toolbarBox.setTotalWidth(viewBox.width - robotControlBox.totalWidth());
-	toolbarBox.height = buttonBox.totalHeight();
+	toolbarBox.height = toolbarItemHeight;
 	toolbarBox.setPosition(viewBox.x, viewBox.y);
 	playgroundAreaBox.setTotalWidth(viewBox.width - robotControlBox.totalWidth());
 	playgroundAreaBox.setTotalHeight(viewBox.height - toolbarBox.totalHeight());
@@ -514,33 +536,13 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	// top controls
 	var controlBar = new A3a.vpl.ControlBar(simCanvas);
 	controlBar.setButtons(this,
-		sim2d.toolbarConfig || [
-			"sim:close",
-			"!stretch",
-			"sim:restart",
-			"sim:pause",
-			"!space",
-			"sim:speedup",
-			"sim:noise",
-			"!stretch",
-			"sim:pen",
-			"sim:clear",
-			"!space",
-			"sim:map-kind",
-			"sim:map",
-			"!stretch",
-			"sim:vpl",
-			"sim:text",
-			"!stretch",
-			"sim:teacher-reset",
-			"sim:teacher"
-		],
+		toolbarConfig,
 		["sim", "top"],
 		sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
 		sim2d.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
 
-	controlBar.calcLayout(toolbarBox, buttonBox, separatorBox);
-	controlBar.addToCanvas(toolbarBox, buttonBox);
+	controlBar.calcLayout(toolbarBox, toolbarItemBoxes, separatorBox);
+	controlBar.addToCanvas(toolbarBox, toolbarItemBoxes);
 
 	// add buttons for events
 	simCanvas.addDecoration(function (ctx) {
