@@ -2,9 +2,16 @@
 	"toolbars": {
 		"vpl": [
 			"vpl:about",
+			"!!space",
+			"!!space",
 			"vpl:new",
-			"vpl:upload",
 			"vpl:save",
+			"vpl:load",
+			"!!stretch",
+			"vpl:message-error",
+			"vpl:message-warning",
+			"!!space",
+			"vpl:connected",
 			"!stretch",
 			"vpl:run",
 			"vpl:stop",
@@ -26,20 +33,12 @@
 			"vpl:trashcan"
 		],
 		"editor": [
-			"src:new",
-			"src:save",
-			"src:vpl",
+			"!!stretch",
 			"src:locked",
 			"!space",
 			"src:language",
-			"!stretch",
-			"src:run",
-			"src:stop",
-			"!space",
-			"src:sim",
-			"!stretch",
-			"src:teacher-reset",
-			"src:teacher"
+			"!stretch"
+
 		],
 		"simulator": [
 			"!stretch",

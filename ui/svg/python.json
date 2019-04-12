@@ -4,31 +4,31 @@
 			"name": "button"
 		},
 		{
-			"name": "Thymio acc 1"
+			"name": "roll"
 		},
 		{
-			"name": "Thymio acc 2"
+			"name": "yaw"
 		},
 		{
-			"name": "Thymio acc 0"
+			"name": "pitch"
 		},
 		{
-			"name": "start"
+			"name": "init"
 		},
 		{
 			"name": "clap"
 		},
 		{
-			"name": "Ev_Acc_fall"
+			"name": "fall"
 		},
 		{
 			"name": "tap"
 		},
 		{
-			"name": "Remote1"
+			"name": "remote control arrows"
 		},
 		{
-			"name": "Remote2"
+			"name": "remote control keypad"
 		},
 		{
 			"name": "motor"
@@ -37,13 +37,13 @@
 			"name": "move"
 		},
 		{
-			"name": "top_color_basic"
+			"name": "top color 8"
 		},
 		{
 			"name": "top color"
 		},
 		{
-			"name": "Ac_music"
+			"name": "notes with speed"
 		}
 	]
 }

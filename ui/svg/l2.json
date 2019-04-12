@@ -10,7 +10,7 @@
 			}
 		},
 		{
-			"name": "Thymio acc 1",
+			"name": "roll",
 			"l2": {
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
@@ -21,7 +21,7 @@
 			}
 		},
 		{
-			"name": "Thymio acc 2",
+			"name": "yaw",
 			"l2": {
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
@@ -32,7 +32,7 @@
 			}
 		},
 		{
-			"name": "Thymio acc 0",
+			"name": "pitch",
 			"l2": {
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
@@ -43,7 +43,7 @@
 			}
 		},
 		{
-			"name": "start",
+			"name": "init",
 			"l2": {
 				"sectionBegin": "// init block\n",
 				"sectionPriority": 10000
@@ -63,16 +63,16 @@
 			}
 		},
 		{
-			"name": "Ev_Acc_fall"
+			"name": "fall"
 		},
 		{
 			"name": "tap"
 		},
 		{
-			"name": "Remote1"
+			"name": "remote control arrows"
 		},
 		{
-			"name": "Remote2"
+			"name": "remote control keypad"
 		},
 		{
 			"name": "motor",
@@ -95,7 +95,7 @@
 			}
 		},
 		{
-			"name": "top_color_basic",
+			"name": "top color 8",
 			"l2": {
 				"initVarDecl": [
 					"// RGB color of the top led\nint topColor[3];\n"
@@ -125,7 +125,7 @@
 			}
 		},
 		{
-			"name": "Ac_music",
+			"name": "notes with speed",
 			"l2": {
 				"initVarDecl": [
 					"const pi = 3.14;\n",

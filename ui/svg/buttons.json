@@ -1,7 +1,6 @@
 {
 	"buttons": [
-
-	{
+		{
 			"name": "vpl:about",
 			"state": ["pressed"],
 			"svg": [
@@ -13,12 +12,10 @@
 				}
 			]
 		},
-
 		{
 			"name": "vpl:about",
 			"state": [],
 			"svg": [
-
 				{
 					"uri": "Icons.svg#about_default"
 				}
@@ -46,7 +43,7 @@
 			]
 		},
 		{
-			"name": "vpl:upload",
+			"name": "vpl:load",
 			"state": ["pressed"],
 			"svg": [
 				{
@@ -55,16 +52,14 @@
 				},
 				{
 					"uri": "Icons.svg#open_highlight"
-
 				}
 			]
 		},
 		{
-			"name": "vpl:upload",
+			"name": "vpl:load",
 			"state": [],
 			"svg": [
 				{
-
 					"uri": "Icons.svg#open_default"
 				}
 			]
@@ -79,7 +74,6 @@
 				},
 				{
 					"uri": "Icons.svg#download_highlight"
-
 				}
 			]
 		},
@@ -87,9 +81,7 @@
 			"name": "vpl:save",
 			"state": [],
 			"svg": [
-
 				{
-
 					"uri": "Icons.svg#download_default"
 				}
 			]
@@ -104,7 +96,6 @@
 				},
 				{
 					"uri": "Icons.svg#textMode_highlight"
-
 				}
 			]
 		},
@@ -117,7 +108,6 @@
 				},
 				{
 					"uri": "Icons.svg#textMode_highlight"
-
 				}
 			]
 		},
@@ -125,10 +115,38 @@
 			"name": "vpl:text-toggle",
 			"state": [],
 			"svg": [
-
 				{
-
 					"uri": "Icons.svg#textMode_default"
+				}
+			]
+		},
+		{
+			"name": "src:locked",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#locked_default"
+				}
+			]
+		},
+		{
+			"name": "src:locked",
+			"state": ["pressed"],
+			"svg": [
+				{
+					"uri": "Icons.svg#unlocked_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:connected",
+			"state": [],
+			"svg": [
+				{
+					"uri": "Icons.svg#Circle_bg"
+				},
+				{
+					"uri": "Icons.svg#robotConnect_default"
 				}
 			]
 		},
@@ -136,34 +154,27 @@
 			"name": "vpl:run",
 			"state": ["pressed"],
 			"svg": [
-
 				{
 					"uri": "Icons.svg#play_highlight"
-
 				}
 			]
 		},
-
 		{
 			"name": "vpl:run",
 			"state": ["disabled", "=error"],
 			"svg": [
-
 				{
 					"uri": "Icons.svg#play_default",
 					"alpha": 0.5
-
 				}
 			]
 		},
-
 		{
 			"name": "vpl:run",
 			"state": ["=canLoad"],
 			"svg": [
 				{
 					"uri": "Icons.svg#play_default"
-
 				}
 			]
 		},
@@ -173,7 +184,6 @@
 			"svg": [
 				{
 					"uri": "Icons.svg#reload_default"
-
 				}
 			]
 		},
@@ -183,7 +193,6 @@
 			"svg": [
 				{
 					"uri": "Icons.svg#play_default"
-
 				}
 			]
 		},
@@ -192,10 +201,8 @@
 			"name": "vpl:stop",
 			"state": ["pressed"],
 			"svg": [
-
 				{
 					"uri": "Icons.svg#stop_highlight"
-
 				}
 			]
 		},
@@ -206,7 +213,6 @@
 				{
 					"uri": "Icons.svg#stop_default",
 					"alpha": 0.5
-
 				}
 			]
 		},
@@ -216,11 +222,9 @@
 			"svg": [
 				{
 					"uri": "Icons.svg#stop_default"
-
 				}
 			]
 		},
-
 		{
 			"name": "vpl:undo",
 			"state": ["disabled"],
@@ -228,7 +232,6 @@
 				{
 					"uri": "Icons.svg#undo_default",
 					"alpha": 0.5
-
 				}
 			]
 		},
@@ -241,7 +244,6 @@
 				},
 				{
 					"uri": "Icons.svg#undo_highlight"
-
 				}
 			]
 		},
@@ -325,7 +327,6 @@
 				},
 				{
 					"uri": "Icons.svg#disable_highlight"
-
 				}
 			]
 		},
@@ -354,11 +355,9 @@
 			"svg": [
 				{
 					"uri": "Icons.svg#Pressed_bg"
-
 				},
 				{
 					"uri": "Icons.svg#delete_highlight"
-
 				}
 			]
 		},
@@ -389,7 +388,6 @@
 			"svg": [
 				{
 					"uri": "Icons.svg#simulator_default"
-
 				}
 			]
 		},
@@ -438,7 +436,6 @@
 			"svg": [
 				{
 					"uri": "Icons.svg#simulator_default"
-
 				}
 			]
 		},
@@ -448,7 +445,6 @@
 			"svg": [
 				{
 					"uri": "Icons.svg#uiSettings_highlight"
-
 				}
 			]
 		},
@@ -458,7 +454,6 @@
 			"svg": [
 				{
 					"uri": "Icons.svg#uiSettings_default"
-
 				}
 			]
 		},
@@ -468,7 +463,6 @@
 			"svg": [
 				{
 					"uri": "Icons.svg#clearSettings_highlight"
-
 				}
 			]
 		},
@@ -478,7 +472,6 @@
 			"svg": [
 				{
 					"uri": "Icons.svg#clearSettings_default"
-
 				}
 			]
 		}

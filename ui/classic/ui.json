@@ -1,11 +1,4 @@
 {
-	"styles": {
-		"ruleMarks": "#bbb",
-		"scrollbarThumbColor": "#b0bec5",
-		"scrollbarBackgroundColor": "transparent",
-		"scrollbarWidth": 2
-	},
-
 	"blocks": null,
 	"buttons": null,
 	"widgets": null,

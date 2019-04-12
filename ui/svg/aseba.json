@@ -9,7 +9,7 @@
 			}
 		},
 		{
-			"name": "Thymio acc 1",
+			"name": "roll",
 			"aseba": {
 				"initVarDecl": [
 					"# yaw angle from accelerometer\nvar yawAngle\n"
@@ -21,7 +21,7 @@
 			}
 		},
 		{
-			"name": "Thymio acc 2",
+			"name": "yaw",
 			"aseba": {
 				"initVarDecl": [
 					"# yaw angle from accelerometer\nvar yawAngle\n"
@@ -33,7 +33,7 @@
 			}
 		},
 		{
-			"name": "Thymio acc 0",
+			"name": "pitch",
 			"aseba": {
 				"initVarDecl": [
 					"# yaw angle from accelerometer\nvar yawAngle\n"
@@ -45,7 +45,7 @@
 			}
 		},
 		{
-			"name": "start",
+			"name": "init",
 			"aseba": {
 				"sectionBegin": "# initialization\n",
 				"sectionPriority": 10000
@@ -64,16 +64,16 @@
 			}
 		},
 		{
-			"name": "Ev_Acc_fall"
+			"name": "fall"
 		},
 		{
 			"name": "tap"
 		},
 		{
-			"name": "Remote1"
+			"name": "remote control arrows"
 		},
 		{
-			"name": "Remote2"
+			"name": "remote control keypad"
 		},
 		{
 			"name": "motor",
@@ -96,7 +96,7 @@
 			}
 		},
 		{
-			"name": "top_color_basic",
+			"name": "top color 8",
 			"aseba": {
 				"initVarDecl": [
 					"# RGB color of the top led\nvar topColor[3]\n"
@@ -126,7 +126,7 @@
 			}
 		},
 		{
-			"name": "Ac_music",
+			"name": "notes with speed",
 			"aseba": {
 				"initVarDecl": [
 					"# variables for notes\nvar notes[6]\nvar durations[6]\nvar note_index\nvar note_count\nvar wave[142]\nvar i\nvar wave_phase\nvar wave_intensity\n"

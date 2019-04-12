@@ -10,16 +10,16 @@
 			}
 		},
 		{
-			"name": "Thymio acc 1"
+			"name": "roll"
 		},
 		{
-			"name": "Thymio acc 2"
+			"name": "yaw"
 		},
 		{
-			"name": "Thymio acc 0"
+			"name": "pitch"
 		},
 		{
-			"name": "start",
+			"name": "init",
 			"js": {
 				"sectionBegin": "// init block\n",
 				"sectionPriority": 10000
@@ -34,16 +34,16 @@
 			}
 		},
 		{
-			"name": "Ev_Acc_fall"
+			"name": "fall"
 		},
 		{
 			"name": "tap"
 		},
 		{
-			"name": "Remote1"
+			"name": "remote control arrows"
 		},
 		{
-			"name": "Remote2"
+			"name": "remote control keypad"
 		},
 		{
 			"name": "motor",
@@ -66,7 +66,7 @@
 			}
 		},
 		{
-			"name": "top_color_basic",
+			"name": "top color 8",
 			"js": {
 				"initCodeExec": [
 					"this.set(\"leds.top\", [0, 0, 0]);\n"
@@ -86,7 +86,7 @@
 			}
 		},
 		{
-			"name": "Ac_music",
+			"name": "notes with speed",
 			"js": {
 				"initCodeExec": [
 					"// init notes\nthis.set(\"sound\", {});\n",

@@ -651,7 +651,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 				type = A3a.vpl.blockType.hidden;
 				break;
 			default:
-				throw "Unknown block type " + b["type"];
+				throw "Unknown block type " + b["type"] + " for block " + name;
 			}
 		}
 
