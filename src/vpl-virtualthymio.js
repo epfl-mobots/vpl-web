@@ -47,7 +47,7 @@ A3a.vpl.VirtualThymio = function () {
 
 	this.ledsCircleUsed = false;
 
-	this.audioContext = new (window["AudioContext"] || window["webkitAudioContext"]);
+	this.audioContext = null;
 
 	// remaining initialization: call VirtualThymio's methods (too early to call overridden method)
 	A3a.vpl.VirtualThymio.prototype["reset"].call(this, 0);
@@ -126,6 +126,9 @@ A3a.vpl.VirtualThymio.prototype["reset"] = function (t0) {
 			function playNote() {
 				if (i >= val["f"].length) {
 					return;
+				}
+				if (self.audioContext == null) {
+					self.audioContext = new (window["AudioContext"] || window["webkitAudioContext"]);
 				}
 				var oscNode = self.audioContext.createOscillator();
 				oscNode.type = 'sawtooth';
