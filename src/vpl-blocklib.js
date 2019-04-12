@@ -99,6 +99,20 @@ A3a.vpl.BlockTemplate.lib =	[
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
+		name: "!default event",
+		type: A3a.vpl.blockType.hidden,
+		genCode: {
+			"aseba": function (block) {
+				return {
+					initCodeExec: [
+						"timer.period[1] = 100\n"
+					],
+					sectionBegin: "onevent timer1\n"
+				};
+			}
+		}
+	}),
+	new A3a.vpl.BlockTemplate({
 		name: "!empty action",
 		type: A3a.vpl.blockType.hidden,
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
@@ -2849,7 +2863,7 @@ A3a.vpl.BlockTemplate.filterBlocks = function (a) {
 A3a.vpl.BlockTemplate.getBlocksByMode = function (mode) {
 	var a = [];
 	A3a.vpl.BlockTemplate.lib.forEach(function (b) {
-		if (b.modes.indexOf(mode) >= 0) {
+		if (b.type !== A3a.vpl.blockType.hidden && b.modes.indexOf(mode) >= 0) {
 			a.push(b);
 		}
 	});

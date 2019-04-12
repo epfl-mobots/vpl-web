@@ -72,6 +72,15 @@ A3a.vpl.patchJSBlocks = function () {
 
 		/** @const */
 		var libPatchJS = {
+			"!default event": function (block) {
+				return {
+					initCodeExec: [
+						"this.setTimer(1, 0.1);\n"
+					],
+					sectionBegin: "this.addEventListener(\"timer1\", function (name, param) {\n",
+					sectionEnd: "});\n",
+				};
+			},
 			"!stop": function (block) {
 				return {
 					statement:

@@ -152,21 +152,25 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 	// check errors
 	eventHandler.error = null;
 	var hasEvent = false;
+	var hasState = false;
 	for (var i = 0; i < eventHandler.events.length; i++) {
-		if (!eventHandler.events[i].disabled &&
-			eventHandler.events[i].blockTemplate.type === A3a.vpl.blockType.event) {
-			hasEvent = true;
-			if (eventHandler.events[i].blockTemplate.validate) {
-				var err = eventHandler.events[i].blockTemplate.validate(eventHandler.events[i]);
-				if (err) {
-					err.addEventError([i]);
-					if (!err.isWarning || !eventHandler.error) {
-						eventHandler.error = err;
-					}
-					if (!err.isWarning) {
-						return {error: err};
+		if (!eventHandler.events[i].disabled) {
+			if (eventHandler.events[i].blockTemplate.type === A3a.vpl.blockType.event) {
+				hasEvent = true;
+				if (eventHandler.events[i].blockTemplate.validate) {
+					var err = eventHandler.events[i].blockTemplate.validate(eventHandler.events[i]);
+					if (err) {
+						err.addEventError([i]);
+						if (!err.isWarning || !eventHandler.error) {
+							eventHandler.error = err;
+						}
+						if (!err.isWarning) {
+							return {error: err};
+						}
 					}
 				}
+			} else if (eventHandler.events[i].blockTemplate.type === A3a.vpl.blockType.state) {
+				hasState = true;
 			}
 		}
 	}
@@ -181,7 +185,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 	if (!hasEvent && !hasAction) {
 		return {};
 	}
-	if (!hasEvent) {
+	if (!hasEvent && !hasState) {
 		var err = new A3a.vpl.Error("Missing event block");
 		err.addEventError([]);
 		eventHandler.error = err;
@@ -283,8 +287,33 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 			});
 		}
 	}
-	if (priEv && str.length > 0) {
-		var eventCode = priEv.generateCode(this.language);
+	if ((priEv || !hasEvent) && str.length > 0) {
+		var eventCode = priEv
+			? priEv.generateCode(this.language)
+			: A3a.vpl.BlockTemplate
+				.findByName("!default event")
+				.genCode[this.language](null);
+		if (eventCode.initVarDecl) {
+			eventCode.initVarDecl.forEach(function (frag) {
+				if (initVarDecl.indexOf(frag) < 0) {
+					initVarDecl.push(frag);
+				}
+			});
+		}
+		if (eventCode.initCodeExec) {
+			eventCode.initCodeExec.forEach(function (frag) {
+				if (initCodeExec.indexOf(frag) < 0) {
+					initCodeExec.push(frag);
+				}
+			});
+		}
+		if (eventCode.initCodeDecl) {
+			eventCode.initCodeDecl.forEach(function (frag) {
+				if (initCodeDecl.indexOf(frag) < 0) {
+					initCodeDecl.push(frag);
+				}
+			});
+		}
 		return {
 			initVarDecl: initVarDecl,
 			initCodeExec: initCodeExec,

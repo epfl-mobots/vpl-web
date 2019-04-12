@@ -72,6 +72,15 @@ A3a.vpl.patchPythonBlocks = function () {
 
 		/** @const */
 		var libPatchPython = {
+			"!default event": function (block) {
+				return {
+					initCodeExec: [
+						"self.setTimer(0.1)\n"
+					],
+					sectionBegin: "def event_timer1(self):\n",
+					sectionEnd: "<\n",
+				};
+			},
 			"!stop": function (block) {
 				return {
 					statement:
