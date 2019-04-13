@@ -9,7 +9,6 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
-/** @const */
 CSSParser.VPL.debug = false;
 
 /** Set line style

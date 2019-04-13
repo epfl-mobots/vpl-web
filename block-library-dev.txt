@@ -381,3 +381,22 @@ HTML documents are defined as string properties of the top-level object named "h
  The following properties are used:
 
 - "about": HTML document displayed in the About box.
+
+Options passed in query string
+------------------------------
+
+The entry point of the web application is defined in vpl-main.js, in an event listener function for "load". Options can be specified in query parameters, i.e. in key=value pairs, separated by ampersand following a question mark.
+
+The following options are supported:
+
+- "appearance": "classic" (icons and blocks defined in JavaScript) or "svg" (default) (icons and blocks defined in SVG and json).
+- "multiview": "true" (default) to enable the display of multiple views simultaneously (main vpl view, text source code and simulator), "false" to force a single view filling all the available space.
+- "language": programming language the vpl program is converted to. "aseba" (default), "l2" (C-like syntax with functions, local variables, boolean and fixed-point values, and multi-dim arrays), "python", or "js". Not all the languages are compatible with the Thymio or the simulator.
+- "cssdebug": "true" to display the padding and margin rectangles of css boxes, or "false" (default).
+- "adv": "true" to enable advanced features such as the Aseba virtual machine disassembler, or "false" (default).
+- "blur": radius of blur filter applied to canvas in 0.1px units (default 0), to simulate vision deficiency.
+- "grayscale": percentage of grayscale filter applied to canvas (default 0), to simulate grayscale printing, low-quality displays such as beamers where color shifts are common, or vision deficiency.
+- "view": list of initial views (default "vpl"). Views ("vpl", "src" or "sim") are separated by '+'.
+- "robot": device code is sent to for execution. "thymio" for a Thymio via asebahttp (supported language: "aseba"), "thymio-tdm" for a Thymio via the Thymio Device Manager (supported language: "aseba"), "sim" for the simulator (supported languages: "aseba", "l2", and "js"), or undefined for no execution.
+- "role": "student" (default) or "teacher" (options to customize the user interface and vpl blocks).
+- "ui": filename of the main json file (default "ui.json")

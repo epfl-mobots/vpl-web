@@ -234,6 +234,7 @@ function vplSetup(gui) {
 	app.useLocalStorage = vplGetQueryOption("storage") === "local";
 	app.multipleViews = vplGetQueryOption("multiview") !== "false";
 	var language = vplGetQueryOption("language");
+	CSSParser.VPL.debug = vplGetQueryOption("cssdebug") === "true";
 	/** @type {A3a.vpl.ControlBar.drawButton} */
 	var drawButton = A3a.vpl.Commands.drawButtonJS;
 	/** @type {A3a.vpl.ControlBar.getButtonBounds} */
