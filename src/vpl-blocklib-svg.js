@@ -311,7 +311,7 @@ A3a.vpl.Canvas.prototype.mousedragSVGSlider = function (block, dragIndex, aux, w
 	var snap = this.clientData.sliderAux["snap"];
 	snap && snap.forEach(function (s, i) {
 		if (typeof s === "string" && /^`.+`$/.test(s)) {
-			s = A3a.vpl.BlockTemplate.substInline(s, block, i);
+			s = /** @type {number} */(JSON.parse(A3a.vpl.BlockTemplate.substInline(s, block, i)));
 		}
 		if (Math.abs(val - s) < (max - min) / 10) {
 			val = s;
@@ -672,6 +672,26 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 			});
 		}
 
+		/** @type {?A3a.vpl.BlockTemplate.validateFun} */
+		var validate = blockTemplate0 ? blockTemplate0.validate : null;
+		var validation = b["validation"];
+		if (validation) {
+			validate = function (b) {
+				for (var i = 0; i < validation.length; i++) {
+					var assert = validation[i]["assert"];
+					var r = typeof assert === "string" && /^`.+`$/.test(assert)
+						? JSON.parse(A3a.vpl.BlockTemplate.substInline(assert, b))
+						: assert;
+					if (!r) {
+						var w = validation[i]["warning"];
+						return w
+							? new A3a.vpl.Error(w, true)
+							: new A3a.vpl.Error(validation[i]["error"] || "Error");
+					}
+				}
+			};
+		}
+
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		var draw = blockTemplate0
 			? blockTemplate0.draw
@@ -739,7 +759,8 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 			draw: draw,
 			mousedown: mousedown,
 			mousedrag: mousedrag,
-			genCode: genCode
+			genCode: genCode,
+			validate: validate
 		};
 		if (blockIndex >= 0) {
 			// replace previous blockTemplate
