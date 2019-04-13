@@ -242,10 +242,11 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			var widgetBounds = canvas.getWidgetBounds("vpl:then");
 			var separatorWidth = (widgetBounds.xmax - widgetBounds.xmin) || 0;
 			separatorBox.drawAt(ctx,
-				actionX0 - separatorBox.width - separatorBox.marginRight - separatorBox.paddingRight - blockContainerBox.offsetLeft() + dx,
+				actionX0 - separatorBox.width - separatorBox.marginRight - separatorBox.paddingRight -
+					blockContainerBox.offsetLeft() - blockActionBox.offsetLeft() + dx,
 				item.y + (ruleBox.paddedHeight() - separatorBox.height) / 2 + dy);
 			canvas.drawWidget("vpl:then",
-				actionX0 - separatorBox.totalWidth() / 2 - blockContainerBox.offsetLeft() + dx,
+				actionX0 - separatorBox.totalWidth() / 2 - blockContainerBox.offsetLeft() - blockActionBox.offsetLeft() + dx,
 				item.y + ruleBox.paddedHeight() / 2 + dy);
 			if (eventHandler.locked) {
 				canvas.lockedMark(item.x, item.y, item.width, item.height,
