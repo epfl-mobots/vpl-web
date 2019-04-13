@@ -182,17 +182,15 @@ A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes) {
 	this.controls.forEach(function (control) {
 		this.canvas.addControl(control.x, control.y,
 			itemBoxes[control.id],
-			control.bounds.xmin !== 0 || control.bounds.ymin !== 0
-				? function (ctx, box, isPressed) {
-					var sc = Math.min(box.width / (control.bounds.xmax - control.bounds.xmin),
-						box.height / (control.bounds.ymax - control.bounds.ymin));
-					ctx.save();
-					ctx.translate(-control.bounds.xmin, -control.bounds.ymin);
-					ctx.scale(sc, sc);
-					control.draw(ctx, box, isPressed);
-					ctx.restore();
-				}
-				: control.draw,
+			function (ctx, box, isPressed) {
+				var sc = Math.min(box.width / (control.bounds.xmax - control.bounds.xmin),
+					box.height / (control.bounds.ymax - control.bounds.ymin));
+				ctx.save();
+				ctx.translate(-control.bounds.xmin, -control.bounds.ymin);
+				ctx.scale(sc, sc);
+				control.draw(ctx, box, isPressed);
+				ctx.restore();
+			},
 			control.action,
 			control.doDrop, control.canDrop,
 			control.id);
