@@ -165,15 +165,18 @@ A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, x0, y0
 	@param {string} fmt
 	@param {A3a.vpl.Block} block
 	@param {number=} i parameter index in clauseAnd fragments
-	@return {string}
+	@param {boolean=} keepResult true to return last result instead of string
+	@return {*}
 */
-A3a.vpl.BlockTemplate.substInline = function (fmt, block, i) {
+A3a.vpl.BlockTemplate.substInline = function (fmt, block, i, keepResult) {
+	/** @type {*} */
+	var result = null;
 	while (true) {
 		var r = /`([^`]*)`/.exec(fmt);
 		if (r == null) {
 			break;
 		}
-		var result = new Function("$", "i", "rgb",
+		result = new Function("$", "i", "rgb",
 			"return " + r[1] + ";"
 		)(
 			block.param,
@@ -192,5 +195,5 @@ A3a.vpl.BlockTemplate.substInline = function (fmt, block, i) {
 		);
 		fmt = fmt.slice(0, r.index) + result + fmt.slice(r.index + r[0].length);
 	}
-	return fmt;
+	return keepResult ? result : fmt;
 };

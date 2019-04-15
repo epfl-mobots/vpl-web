@@ -265,9 +265,17 @@ function vplSetup(gui) {
 				window["console"] && window["console"]["error"](e);
 			}
 		}
-		if (gui["miscSettings"] && gui["miscSettings"]["basicMultiEvent"] != undefined) {
-			A3a.vpl.Program.basicMultiEvent = gui["miscSettings"]["basicMultiEvent"] == true;
-		}
+	}
+	if (gui["miscSettings"] && gui["miscSettings"]["basicMultiEvent"] != undefined) {
+		A3a.vpl.Program.basicMultiEvent = gui["miscSettings"]["basicMultiEvent"] == true;
+	}
+	if (gui["miscSettings"] && gui["miscSettings"]["viewRelativeSizes"]) {
+		var vrs = gui["miscSettings"]["viewRelativeSizes"];
+		app.viewRelativeSizes = {
+			"vpl": vrs["vpl"] || 1,
+			"src": vrs["src"] || 1,
+			"sim": vrs["sim"] || 1
+		};
 	}
 	var advancedFeatures = vplGetQueryOption("adv") === "true";
 	var experimentalFeatures = vplGetQueryOption("exp") === "true";

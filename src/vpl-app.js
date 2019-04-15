@@ -29,6 +29,12 @@ A3a.vpl.Application = function (canvasEl) {
 
 	/** @type {Array.<string>} */
 	this.views = ["vpl"];
+	/** @type {Object.<string,number>} */
+	this.viewRelativeSizes = {
+		"vpl": 1,
+		"src": 1,
+		"sim": 1
+	};
 
 	/** @type {A3a.vpl.About} */
 	this.aboutBox = null;
@@ -190,19 +196,25 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 	@return {void}
 */
 A3a.vpl.Application.prototype.layout = function (verticalLayout) {
+	var relSizes = this.views.map(function (view) {
+		return this.viewRelativeSizes[view];
+	}, this);
+	var sumRelSizes = relSizes.reduce(function (acc, rs) { return acc + rs; }, 0);
+	var x = 0;
 	for (var i = 0; i < this.views.length; i++) {
 		var relArea = verticalLayout
 			? {
 				xmin: 0,
 				xmax: 1,
-				ymin: i / this.views.length,
-				ymax: (i + 1) / this.views.length
+				ymin: x,
+				ymax: x + relSizes[i] / sumRelSizes
 			} : {
-				xmin: i / this.views.length,
-				xmax: (i + 1) / this.views.length,
+				xmin: x,
+				xmax: x + relSizes[i] / sumRelSizes,
 				ymin: 0,
 				ymax: 1
 			};
+		x += relSizes[i] / sumRelSizes;
 		switch (this.views[i]) {
 		case "vpl":
 			this.vplCanvas.setRelativeArea(relArea);

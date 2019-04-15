@@ -28,7 +28,12 @@
 	],
 
 	"miscSettings": {
-		"basicMultiEvent": true
+		"basicMultiEvent": true,
+		"viewRelativeSizes": {
+			"vpl": 2,
+			"src": 1,
+			"sim": 2
+		}
 	},
 
 	"html": {
@@ -550,27 +555,27 @@
 			"buttons": [
 				{
 					"id": "Btn3_Prox0",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox1",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox2",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox3",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox4",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				}
 			]
@@ -591,12 +596,12 @@
 			"buttons": [
 				{
 					"id": "Btn3_Prox5",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox6",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				}
 			]
@@ -905,6 +910,48 @@
 				},
 				{
 					"uri": "Blocks.svg#EvCounter"
+				}
+			],
+			"defaultParameters": [0, 0],
+			"otherParameters": 2,
+			"pushbuttons": [
+				{
+					"id": "ComparatorDown",
+					"newParameters": "`[Math.max($[0]-1,-2),$[1]]`"
+				},
+				{
+					"id": "ComparatorUp",
+					"newParameters": "`[Math.min($[0]+1,2),$[1]]`"
+				},
+				{
+					"id": "ValueDown",
+					"newParameters": "`[$[0],($[1]+255)%256]`"
+				},
+				{
+					"id": "ValueUp",
+					"newParameters": "`[$[0],($[1]+1)%256]`"
+				}
+			],
+			"styles": [
+				{
+					"id": "AboveValue",
+					"st": "visibility:`$[0]===-2?'visible':'hidden'`"
+				},
+				{
+					"id": "AboveValue-2",
+					"st": "visibility:`$[0]===-1?'visible':'hidden'`"
+				},
+				{
+					"id": "Equals",
+					"st": "visibility:`$[0]===0?'visible':'hidden'`"
+				},
+				{
+					"id": "StrictBelowValue",
+					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "BelowValue",
+					"st": "visibility:`$[0]===2?'visible':'hidden'`"
 				}
 			]
 		},
@@ -1461,6 +1508,44 @@
 				{
 					"uri": "Blocks.svg#AcCounter"
 				}
+			],
+			"defaultParameters": [0, 0],
+			"otherParameters": 2,
+			"pushbuttons": [
+				{
+					"id": "ComparatorDown-2",
+					"newParameters": "`[Math.max($[0]-1,-2),$[1]]`"
+				},
+				{
+					"id": "ComparatorUp-2",
+					"newParameters": "`[Math.min($[0]+1,2),$[1]]`"
+				},
+				{
+					"id": "ValueDown-2",
+					"newParameters": "`[$[0],($[1]+255)%256]`"
+				},
+				{
+					"id": "ValueUp-2",
+					"newParameters": "`[$[0],($[1]+1)%256]`"
+				}
+			],
+			"styles": [
+				{
+					"id": "Plus",
+					"st": "visibility:`$[0]===0?'visible':'hidden'`"
+				},
+				{
+					"id": "Minus",
+					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Multiply",
+					"st": "visibility:`$[0]===2?'visible':'hidden'`"
+				},
+				{
+					"id": "Divide",
+					"st": "visibility:`$[0]===3?'visible':'hidden'`"
+				}
 			]
 		}
 	],
@@ -1643,12 +1728,12 @@ sim-playground {
 			"name": "roll",
 			"aseba": {
 				"initVarDecl": [
-					"# yaw angle from accelerometer\nvar yawAngle\n"
+					"# roll angle from accelerometer\nvar rollAngle\n"
 				],
 				"sectionBegin": "onevent acc\n",
 				"clauseInit":
-					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+					"call math.atan2(rollAngle, acc[0], acc[2])\n",
+				"clause": "rollAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and rollAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -1683,6 +1768,40 @@ sim-playground {
 			}
 		},
 		{
+			"name": "state 256",
+			"aseba": {
+				"initVarDecl": [
+					"var state256\nvar state2560\n"
+				],
+				"initCodeExec": [
+					"state256 = 0\n"
+				],
+				"clauseInit":
+					"state2560 = state256\n",
+				"clause":
+					"state2560 == `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`"
+			}
+		},
+		{
+			"name": "acc side",
+			"aseba": {
+				"initVarDecl": [
+					"# roll angle from accelerometer\nvar rollAngle\n"
+				],
+				"sectionBegin": "onevent acc\n",
+				"clauseInit":
+					"call math.atan2(rollAngle, acc[0], acc[2])\n",
+				"clause": "abs(rollAngle - 16384) < 1365"
+			}
+		},
+		{
+			"name": "acc upside down",
+			"aseba": {
+				"sectionBegin": "onevent acc\n",
+				"clause": "-acc[2] / 2 > abs(acc[0]) + abs(acc[1])"
+			}
+		},
+		{
 			"name": "clap",
 			"aseba": {
 				"initCodeExec": [
@@ -1698,7 +1817,28 @@ sim-playground {
 			"name": "fall"
 		},
 		{
-			"name": "tap"
+			"name": "tap",
+			"aseba": {
+				"sectionBegin":
+					"onevent tap\n",
+				"sectionPriority": 1000
+			}
+		},
+		{
+			"name": "horiz prox front",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`$[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
+			}
+		},
+		{
+			"name": "horiz prox back",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`$[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
+			}
 		},
 		{
 			"name": "remote control arrows"
@@ -1754,6 +1894,40 @@ sim-playground {
 					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\ntopColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
 				"statementWithoutInit":
 					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
+			}
+		},
+		{
+			"name": "set state 256",
+			"aseba": {
+				"initVarDecl": [
+					"var state256\nvar state2560\n"
+				],
+				"initCodeExec": [
+					"state256 = 0\n"
+				],
+				"initCodeDecl": [
+					"sub display_state256\ncall leds.circle((state256&1)*32,(state256&2)*16,(state256&4)*8,(state256&8)*4,(state256&16)*2,state256&32,(state256&64)/2,(state256&128)/4)\n"
+				],
+				"statement":
+					"state256 = `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`\ncallsub display_state256\n"
+			}
+		},
+		{
+			"name": "notes",
+			"aseba": {
+				"initVarDecl": [
+					"# variables for notes\nvar notes[6]\nvar durations[6]\nvar note_index\nvar note_count\nvar wave[142]\nvar i\nvar wave_phase\nvar wave_intensity\n"
+				],
+				"initCodeExec": [
+					"# init. variables for notes\nnote_index = 6\nnote_count = 6\n",
+					"# compute a sinus wave for sound\nfor i in 0 : 141 do\nwave_phase = (i - 70) * 468\ncall math.cos(wave_intensity, wave_phase)\nwave[i] = wave_intensity / 256\nend\ncall sound.wave(wave)\n",
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"initCodeDecl": [
+					"# when a note is finished, play the next one\nonevent sound.finished\nif note_index != note_count then\ncall sound.freq(notes[note_index], durations[note_index])\nnote_index++\nend\n"
+				],
+				"statement":
+					"notes = [`$.filter(function (a, i) { return i % 2 == 0; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`]\ndurations = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return 7 * d; }).join(', ')`]\nnote_index = 1\nnote_count = 6\ncall sound.freq(notes[0], durations[0])\n"
 			}
 		},
 		{
@@ -2631,7 +2805,8 @@ sim-playground {
 </script>
 
 <!--appearance of interface icons -->
-<script type="image/svg+xml" id="Icons.svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48.01">
+<script type="image/svg+xml" id="Icons.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48.01">
   <defs>
     <style>
       .cls-1 {

@@ -3,6 +3,7 @@
     SVG version (blocks, buttons and widgets defined in SVG)
 	Copyright 2019, ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE
 */
+
 view {
 	background: #fbfcfc;
 }
@@ -76,7 +77,6 @@ block-library {
 	border-right: 1px solid #eceff1;
 	overflow: scroll;*/
 }
-
 
 
 /* simulator */
