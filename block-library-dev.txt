@@ -55,7 +55,7 @@ In json, block contain the following properties:
 
 - "defaultParameters" (array of number, boolean or string values, optional): default values of the block parameters which define the state, in this order, of buttons (one value per button), radiobuttons (a single values for all radiobuttons), sliders (one value per slider), rotating controls (one value per control).
 
-- "buttons" (array of objects, optional): button definitions. Each button is described by an object with the following properties:
+- "buttons" (array of objects, optional): multi-state button definitions. Each button is described by an object with the following properties:
 
 	- "id" (string, required): id of the svg element corresponding to the button. It should be contained in the element identified by "main".
 	- "val" (array of numbers, booleans or strings, required): possible values for the button state. Each click toggles to the next value.
@@ -66,6 +66,11 @@ In json, block contain the following properties:
 	- "id" (string, required): id of the svg element corresponding to the button. It should be contained in the element identified by "main".
 	- "val" (number, boolean or string, required): value for the set of radio buttons.
 	- "st" (array of 2 strings): style strings applied to svg elements when the radio button is unselected or selected, respectively. Each style is defined by a fill and/or a stroke color, with the syntax "fill:color;stroke:color", or fill/stroke swapped, or one of them skipped without semicolon.
+
+- "pushbuttons" (array of objects, optional): definitions of buttons not associated to a specific parameter. The effect of clicking a pushbutton is to change globally the parameters, with more freedom (and complexity) than buttons or radiobuttons. They can be used to increment or decrement parameters. Parameters used only by pushbuttons can be reserved with "otherParameters". In pushbuttons objects, the following properties must be defined:
+
+    - "id" (string, required): id of the svg element corresponding to the button. It should be contained in the element identified by "main".
+    - "newParameters" (string, required): new value of the parameters when the button is clicked. The length of the parameter array must not be changed.
 
 - "sliders" (array of objects, optional): slider definitions. Each slider is described by an object with the following properties:
 
@@ -97,6 +102,13 @@ In json, block contain the following properties:
     - "numHeights" (number, required): number of heights
     - "noteSize" (number, optional): relative note size adjustment factor. The normal size (default "noteSize" of 1) is height/numHeights
     - "linewidth" (number, optional): relative line width for half notes. 1 (default) is the default line width of the block.
+
+- "otherParameters" (number, optional, default 0): number of additional parameters, typically used by pushbuttons.
+
+- "styles" (array of objects, optional): style applied to SVG element. Each element contains the following properties:
+
+    - "id" (string, required): id of the svg element style is applied to
+    - "st" (string, required): style string; usually contains backtick-expressions
 
 - "aseba" (object, optional): code fragments to generate Aseba language source code. Code fragments contain Aseba source code. Except for "clause" and "clauseAnd" which contain expression fragments, they can contain muliple lines, comments, empty lines, terminated by linefeeds ("\n"). Backticks mark JavaScript expressions which are evaluated to substitute block parameters; see below. The object contains the following properties:
 	- "initVarDecl" (array of strings, optional): code fragments for (global) variable declarations. Identical fragments (after backtick-expressions evaluation) are output only once.

@@ -44,6 +44,7 @@ A3a.vpl.validateUI = function (ui) {
 		var rotating = b["rotating"];
 		var diffwheelmotion = b["diffwheelmotion"];
 		var score = b["score"];
+		var otherParameters = b["otherParameters"] ? parseInt(b["otherParameters"], 10) : 0;
 		var svgArr = b["svg"];
 		/** @type {SVG} */
 		var svg;
@@ -231,7 +232,7 @@ A3a.vpl.validateUI = function (ui) {
 			}
 		}
 
-		if ((buttons || radiobuttons || sliders || rotating || score) && !defParam) {
+		if ((buttons || radiobuttons || sliders || rotating || score || otherParameters > 0) && !defParam) {
 			info("In block \"" + name + "\", missing defaultParameters");
 			errorCount++;
 		}
@@ -253,6 +254,7 @@ A3a.vpl.validateUI = function (ui) {
 			if (score) {
 				nParams += 2 * Math.floor((defParam.length - nParams) / 2);
 			}
+			nParams += otherParameters;
 			if (nParams !== defParam.length) {
 				info("In block \"" + name + "\", defaultParameters.length=" + defParam.length +
 						", needs " + nParams + " parameters");

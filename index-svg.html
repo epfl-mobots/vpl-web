@@ -906,6 +906,48 @@
 				{
 					"uri": "Blocks.svg#EvCounter"
 				}
+			],
+			"defaultParameters": [0, 0],
+			"otherParameters": 2,
+			"pushbuttons": [
+				{
+					"id": "ComparatorDown",
+					"newParameters": "`[Math.max($[0]-1,-2),$[1]]`"
+				},
+				{
+					"id": "ComparatorUp",
+					"newParameters": "`[Math.min($[0]+1,2),$[1]]`"
+				},
+				{
+					"id": "ValueDown",
+					"newParameters": "`[$[0],($[1]+255)%256]`"
+				},
+				{
+					"id": "ValueUp",
+					"newParameters": "`[$[0],($[1]+1)%256]`"
+				}
+			],
+			"styles": [
+				{
+					"id": "AboveValue",
+					"st": "visibility:`$[0]===-2?'visible':'hidden'`"
+				},
+				{
+					"id": "AboveValue-2",
+					"st": "visibility:`$[0]===-1?'visible':'hidden'`"
+				},
+				{
+					"id": "Equals",
+					"st": "visibility:`$[0]===0?'visible':'hidden'`"
+				},
+				{
+					"id": "StrictBelowValue",
+					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "BelowValue",
+					"st": "visibility:`$[0]===2?'visible':'hidden'`"
+				}
 			]
 		},
 		{
@@ -1460,6 +1502,44 @@
 				},
 				{
 					"uri": "Blocks.svg#AcCounter"
+				}
+			],
+			"defaultParameters": [0, 0],
+			"otherParameters": 2,
+			"pushbuttons": [
+				{
+					"id": "ComparatorDown-2",
+					"newParameters": "`[Math.max($[0]-1,-2),$[1]]`"
+				},
+				{
+					"id": "ComparatorUp-2",
+					"newParameters": "`[Math.min($[0]+1,2),$[1]]`"
+				},
+				{
+					"id": "ValueDown-2",
+					"newParameters": "`[$[0],($[1]+255)%256]`"
+				},
+				{
+					"id": "ValueUp-2",
+					"newParameters": "`[$[0],($[1]+1)%256]`"
+				}
+			],
+			"styles": [
+				{
+					"id": "Plus",
+					"st": "visibility:`$[0]===0?'visible':'hidden'`"
+				},
+				{
+					"id": "Minus",
+					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Multiply",
+					"st": "visibility:`$[0]===2?'visible':'hidden'`"
+				},
+				{
+					"id": "Divide",
+					"st": "visibility:`$[0]===3?'visible':'hidden'`"
 				}
 			]
 		}
@@ -2619,7 +2699,8 @@ sim-playground {
 </script>
 
 <!--appearance of interface icons -->
-<script type="image/svg+xml" id="Icons.svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48.01">
+<script type="image/svg+xml" id="Icons.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48.01">
   <defs>
     <style>
       .cls-1 {

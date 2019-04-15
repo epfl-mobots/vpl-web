@@ -1046,28 +1046,30 @@ SVG.prototype.draw = function (ctx, options) {
 				if (styleStr) {
 					SVG.parseStyle(style, styleStr);
 				}
-				if (style["opacity"]) {
-					ctx.globalAlpha *= parseFloat(style["opacity"]);
-				}
-				if (style["fill"] && style["fill"] !== "none") {
-					ctx.fillStyle = style["fill"] === "white" || style["fill"] === "#fff" || style["fill"] === "#ffffff"
-						? "white"
-						: decodeFillStyle(style["fill"]) || "none";
-					ctx.fill();
-				}
-				if (style["stroke"] && style["stroke"] !== "none") {
-					ctx.lineWidth = lengthToNum(style["stroke-width"] || "1px",
-						1,
-						100);	// size not implemented yet
-					ctx.strokeStyle = style["stroke"] || "none";
-					ctx.miterLimit = style["stroke-miterlimit"] || 4;
-					ctx.lineJoin = style["stroke-linejoin"] || "miter";
-					ctx.lineCap = style["stroke-linecap"] || "butt";
-					if (style["stroke-dasharray"]) {
-						ctx.setLineDash(style["stroke-dasharray"].split(" ").map(function (s) { return parseFloat(s); }));
-						ctx.lineDashOffset = style["stroke-dashoffset"] ? parseFloat(style["stroke-dashoffset"]) : 0;
+				if (style["visibility"] !== "hidden") {
+					if (style["opacity"]) {
+						ctx.globalAlpha *= parseFloat(style["opacity"]);
 					}
-					ctx.stroke();
+					if (style["fill"] && style["fill"] !== "none") {
+						ctx.fillStyle = style["fill"] === "white" || style["fill"] === "#fff" || style["fill"] === "#ffffff"
+							? "white"
+							: decodeFillStyle(style["fill"]) || "none";
+						ctx.fill();
+					}
+					if (style["stroke"] && style["stroke"] !== "none") {
+						ctx.lineWidth = lengthToNum(style["stroke-width"] || "1px",
+							1,
+							100);	// size not implemented yet
+						ctx.strokeStyle = style["stroke"] || "none";
+						ctx.miterLimit = style["stroke-miterlimit"] || 4;
+						ctx.lineJoin = style["stroke-linejoin"] || "miter";
+						ctx.lineCap = style["stroke-linecap"] || "butt";
+						if (style["stroke-dasharray"]) {
+							ctx.setLineDash(style["stroke-dasharray"].split(" ").map(function (s) { return parseFloat(s); }));
+							ctx.lineDashOffset = style["stroke-dashoffset"] ? parseFloat(style["stroke-dashoffset"]) : 0;
+						}
+						ctx.stroke();
+					}
 				}
 			}
 		}
@@ -1085,18 +1087,20 @@ SVG.prototype.draw = function (ctx, options) {
 				if (styleStr) {
 					SVG.parseStyle(style, styleStr);
 				}
-				var fontSize = style["font-size"] || "12px";
-				var fontFamily = style["font-family"] || "helvetica";
-				ctx.font = fontSize + " " + fontFamily;
-				if (style["fill"] && style["fill"] !== "none") {
-					ctx.fillStyle = style["fill"] === "white" || style["fill"] === "#fff" || style["fill"] === "#ffffff"
-						? "white"
-						: options && options.fill || "silver";
-					ctx.fillText(str, x, y);
-				}
-				if (style["stroke"] && style["stroke"] !== "none") {
-					ctx.strokeStyle = options && options.stroke || "black";
-					ctx.strokeText(str, x, y);
+				if (style["visibility"] !== "hidden") {
+					var fontSize = style["font-size"] || "12px";
+					var fontFamily = style["font-family"] || "helvetica";
+					ctx.font = fontSize + " " + fontFamily;
+					if (style["fill"] && style["fill"] !== "none") {
+						ctx.fillStyle = style["fill"] === "white" || style["fill"] === "#fff" || style["fill"] === "#ffffff"
+							? "white"
+							: options && options.fill || "silver";
+						ctx.fillText(str, x, y);
+					}
+					if (style["stroke"] && style["stroke"] !== "none") {
+						ctx.strokeStyle = options && options.stroke || "black";
+						ctx.strokeText(str, x, y);
+					}
 				}
 			}
 		}

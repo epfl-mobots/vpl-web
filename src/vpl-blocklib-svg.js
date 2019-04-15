@@ -80,7 +80,7 @@ A3a.vpl.Canvas.prototype.mousedownSVGButtons = function (block, width, height, l
 	svg, buttons) {
 	var pt = this.canvasToSVGCoord(ev.x - left, ev.y - top, width, height);
 	for (var i = 0; i < buttons.length; i++) {
-		var id = buttons[i].id;
+		var id = buttons[i]["id"];
 		if (svg.isInside(id, pt.x, pt.y)) {
 			var ix = buttons[i]["val"].indexOf(block.param[i]);
 			if (ix >= 0) {
@@ -97,11 +97,29 @@ A3a.vpl.Canvas.prototype.mousedownSVGRadioButtons = function (block, width, heig
 	svg, buttons, nButtons) {
 	var pt = this.canvasToSVGCoord(ev.x - left, ev.y - top, width, height);
 	for (var i = 0; i < buttons.length; i++) {
-		var id = buttons[i].id;
+		var id = buttons[i]["id"];
 		if (svg.isInside(id, pt.x, pt.y)) {
 			block.prepareChange();
 			block.param[nButtons] = buttons[i]["val"];
 			return 0;
+		}
+	}
+	return null;
+};
+
+A3a.vpl.Canvas.prototype.mousedownSVGPushbuttons = function (block, width, height, left, top, ev,
+	svg, pushbuttons) {
+	var pt = this.canvasToSVGCoord(ev.x - left, ev.y - top, width, height);
+	for (var i = 0; i < pushbuttons.length; i++) {
+		var id = pushbuttons[i]["id"];
+		if (svg.isInside(id, pt.x, pt.y)) {
+			block.prepareChange();
+			var p = pushbuttons[i]["newParameters"];
+			if (typeof p === "string" && /^`.+`$/.test(p)) {
+				p = /** @type {Array} */(A3a.vpl.BlockTemplate.substInline(p, block, undefined, true));
+			}
+			block.param = p;
+			return true;
 		}
 	}
 	return null;
@@ -131,7 +149,8 @@ A3a.vpl.Canvas.prototype.getStyles = function (aux, block) {
 		styles[aux["radiobuttons"][i]["id"]] = st[block.param[nButtons] === val ? 1 : 0];
 	}
 	for (var i = 0; i < nStyles; i++) {
-		styles[aux["styles"][i]["id"]] = A3a.vpl.BlockTemplate.substInline(aux["styles"][i]["st"], block);
+		styles[aux["styles"][i]["id"]] =
+			/** @type {string} */(A3a.vpl.BlockTemplate.substInline(aux["styles"][i]["st"], block));
 	}
 	return styles;
 };
@@ -311,7 +330,7 @@ A3a.vpl.Canvas.prototype.mousedragSVGSlider = function (block, dragIndex, aux, w
 	var snap = this.clientData.sliderAux["snap"];
 	snap && snap.forEach(function (s, i) {
 		if (typeof s === "string" && /^`.+`$/.test(s)) {
-			s = /** @type {number} */(JSON.parse(A3a.vpl.BlockTemplate.substInline(s, block, i)));
+			s = /** @type {number} */(A3a.vpl.BlockTemplate.substInline(s, block, i, true));
 		}
 		if (Math.abs(val - s) < (max - min) / 10) {
 			val = s;
@@ -529,6 +548,14 @@ A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width
 		}
 		ix0++;
 	}
+	var pushbuttons = aux["pushbuttons"];
+	if (pushbuttons) {
+		var handled = canvas.mousedownSVGPushbuttons(block, width, height, left, top, ev, uiConfig.svg[filename],
+			pushbuttons);
+		if (handled !== null) {
+			return -1;
+		}
+	}
 	var sliders = aux["sliders"];
 	if (sliders) {
 		ix = canvas.mousedownSVGSliders(block, width, height, left, top, ev, uiConfig.svg[filename],
@@ -620,7 +647,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 	*/
 	function substInlineA(fmtArray, block) {
 		return fmtArray.map(function (fmt) {
-			return A3a.vpl.BlockTemplate.substInline(fmt, block);
+			return /** @type {string} */(A3a.vpl.BlockTemplate.substInline(fmt, block));
 		});
 	}
 
@@ -680,7 +707,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 				for (var i = 0; i < validation.length; i++) {
 					var assert = validation[i]["assert"];
 					var r = typeof assert === "string" && /^`.+`$/.test(assert)
-						? JSON.parse(A3a.vpl.BlockTemplate.substInline(assert, b))
+						? A3a.vpl.BlockTemplate.substInline(assert, b, undefined, true)
 						: assert;
 					if (!r) {
 						var w = validation[i]["warning"];
