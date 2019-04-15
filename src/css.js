@@ -183,6 +183,7 @@ CSSParser.prototype.parse = function (filename, src) {
 			}
 			i++;
 			col++;
+			skipBlanks();
 		}
 
 		// declaration block
