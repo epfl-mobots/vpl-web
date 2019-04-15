@@ -791,6 +791,7 @@ A3a.vpl.patchBlocksSVG = function (uiConfig) {
 			controlDownColor: uiConfig["styles"]["controlDownColor"] || "#37f",
 			controlActiveColor: uiConfig["styles"]["controlActiveColor"] || "#06f",
 			controlSize: controlSize,
+			controlLineWidth: uiConfig["styles"]["controlLineWidth"] === undefined ? Math.max(1, Math.min(3, blockSize / 40)) : uiConfig["styles"]["controlLineWidth"],
 			controlFont: "bold 15px sans-serif",
 			errorColor: uiConfig["styles"]["errorColor"] || "#f88",
 			warningColor: uiConfig["styles"]["warningColor"] || "#f88",
