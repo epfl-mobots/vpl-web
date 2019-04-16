@@ -94,7 +94,7 @@ A3a.vpl.ControlBar.prototype.addStretch = function (nonDiscardable) {
 	and stretch elements
 	@param {CSSParser.VPL.Box} toolbarBox
 	@param {Object.<string,CSSParser.VPL.Box>} itemBoxes
-	@param {CSSParser.VPL.Box} separatorBox box used for separators
+	@param {CSSParser.VPL.Box=} separatorBox box used for separators
  	@return {void}
 */
 A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBoxes, separatorBox) {
@@ -129,7 +129,7 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBoxes, separ
 		}
 	}
 	// nominal separator gap
-	var separatorGap = separatorBox.totalWidth();
+	var separatorGap = separatorBox ? separatorBox.totalWidth() : 0;
 	// calc. stretch size
 	var stretchSize = 0;
 	if (itemsTotalWidth >= toolbarBox.width) {

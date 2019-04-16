@@ -10,7 +10,11 @@ view {
 
 toolbar {
 	padding: 8px;
+}
 
+toolbar.top {
+	border-bottom: 2px solid #eceff1;
+	background: #f5f7f8;
 }
 
 button {
@@ -19,6 +23,11 @@ button {
 	min-width: 36px;
 	min-height: 36px;
 	margin: 0.2vw;
+}
+
+vpl.top {
+	border-bottom: 1px solid #eceff1;
+	background: #f5f7f8;
 }
 
 button.vpl.top {
@@ -45,7 +54,7 @@ vpl {
 	margin: 0px;
 	border-radius: 4px;
 	background: #fbfcfc;
-	box-shadow: 0px 0px 8px #aabbcc;
+	/*box-shadow: 0px 0px 8px #aabbcc;*/
 }
 
 block {
@@ -67,17 +76,23 @@ rule {
 #widget-then {
 	padding-left: 20px;
 	padding-right: 20px;
+	width: 4ww;
+	height: 4ww;
+}
+
+#widget-error, #widget-warning {
+	width: 3.5ww;
+	height: 3.5ww;
+	margin-right: 0.1ww;
 }
 
 block-library {
-
 	padding: 4px 8px 4px 8px;
 	margin: 0px;
-	/*border-left: 1px solid #eceff1;
-	border-right: 1px solid #eceff1;
-	overflow: scroll;*/
+	border-left: 2px solid #eceff1;
+	border-right: 2px solid #eceff1;
+	overflow: scroll;
 }
-
 
 /* simulator */
 

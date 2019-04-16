@@ -30,7 +30,7 @@ A3a.vpl.ControlBar.drawButton;
 		string,
 		A3a.vpl.Canvas.dims
 	): A3a.vpl.ControlBar.Bounds}
-	Function to get button width (arguments: id, dims)
+	Function to get button bounds (arguments: id, dims)
 */
 A3a.vpl.ControlBar.getButtonBounds;
 

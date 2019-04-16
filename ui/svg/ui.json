@@ -14,7 +14,12 @@
 	],
 
 	"miscSettings": {
-		"basicMultiEvent": true
+		"basicMultiEvent": true,
+		"viewRelativeSizes": {
+			"vpl": 2,
+			"src": 1,
+			"sim": 2
+		}
 	},
 
 	"html": {
@@ -39,6 +44,14 @@
 					"uri": "Blocks.svg#Action_empty"
 				}
 			]
+		},
+		{
+			"name": "!default event",
+			"type": "hidden"
+		},
+		{
+			"name": "!stop",
+			"type": "hidden"
 		},
 		{
 			"name": "button",
@@ -106,7 +119,7 @@
 		},
 		{
 			"name": "state 256",
-			"type": "event",
+			"type": "state",
 			"modes": ["basic"],
 			"svg": [
 				{
@@ -165,7 +178,7 @@
 		},
 		{
 			"name": "state 256 with mask",
-			"type": "event",
+			"type": "state",
 			"modes": ["advanced"],
 			"svg": [
 				{
@@ -380,7 +393,7 @@
 		},
 		{
 			"name": "color 8 state",
-			"type": "event",
+			"type": "state",
 			"modes": ["basic", "advanced"],
 			"svg": [
 				{
@@ -408,27 +421,27 @@
 				},
 				{
 					"id": "Btn2_SelectedGreen",
-					"val": 1,
-					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
-				},
-				{
-					"id": "Btn2_SelectedCyan",
 					"val": 2,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedBlue",
+					"id": "Btn2_SelectedCyan",
 					"val": 3,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
+					"id": "Btn2_SelectedBlue",
+					"val": 1,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
 					"id": "Btn2_SelectedMagenta",
-					"val": 4,
+					"val": 5,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
 					"id": "Btn2_SelectedRed",
-					"val": 5,
+					"val": 4,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
@@ -451,7 +464,7 @@
 		},
 		{
 			"name": "bottom color 8 state",
-			"type": "event",
+			"type": "state",
 			"modes": ["basic", "advanced"],
 			"svg": [
 				{
@@ -536,27 +549,27 @@
 			"buttons": [
 				{
 					"id": "Btn3_Prox0",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox1",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox2",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox3",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox4",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				}
 			]
@@ -577,12 +590,12 @@
 			"buttons": [
 				{
 					"id": "Btn3_Prox5",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox6",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				}
 			]
@@ -1531,14 +1544,6 @@
 		}
 	],
 	"widgets": [
-		{
-			"name":"vpl:block0",
-			"svg": [
-				{
-					"uri": "Icons.svg#frame"
-				}
-			]
-		},
 		{
 			"name":"vpl:then",
 			"svg": [

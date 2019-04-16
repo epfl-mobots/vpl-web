@@ -753,7 +753,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 					b[lang]["initCodeExec"] && (c.initCodeExec = substInlineA(b[lang]["initCodeExec"], block));
 					b[lang]["sectionBegin"] && (c.sectionBegin = A3a.vpl.BlockTemplate.substInline(b[lang]["sectionBegin"], block));
 					b[lang]["sectionEnd"] && (c.sectionEnd = A3a.vpl.BlockTemplate.substInline(b[lang]["sectionEnd"], block));
-					c.sectionPriority = /** @type {number} */(b[lang]["sectionPriority"]) || 1;
+					c.sectionPriority = /** @type {(number|undefined)} */(b[lang]["sectionPriority"]);
 					b[lang]["clauseInit"] && (c.clauseInit = A3a.vpl.BlockTemplate.substInline(b[lang]["clauseInit"], block));
 					if (b[lang]["clauseAnd"]) {
 						var clause = "";

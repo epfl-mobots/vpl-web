@@ -60,6 +60,14 @@
 			]
 		},
 		{
+			"name": "!default event",
+			"type": "hidden"
+		},
+		{
+			"name": "!stop",
+			"type": "hidden"
+		},
+		{
 			"name": "button",
 			"type": "event",
 			"modes": ["basic", "advanced"],
@@ -125,7 +133,7 @@
 		},
 		{
 			"name": "state 256",
-			"type": "event",
+			"type": "state",
 			"modes": ["basic"],
 			"svg": [
 				{
@@ -184,7 +192,7 @@
 		},
 		{
 			"name": "state 256 with mask",
-			"type": "event",
+			"type": "state",
 			"modes": ["advanced"],
 			"svg": [
 				{
@@ -399,7 +407,7 @@
 		},
 		{
 			"name": "color 8 state",
-			"type": "event",
+			"type": "state",
 			"modes": ["basic", "advanced"],
 			"svg": [
 				{
@@ -427,27 +435,27 @@
 				},
 				{
 					"id": "Btn2_SelectedGreen",
-					"val": 1,
-					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
-				},
-				{
-					"id": "Btn2_SelectedCyan",
 					"val": 2,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedBlue",
+					"id": "Btn2_SelectedCyan",
 					"val": 3,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
+					"id": "Btn2_SelectedBlue",
+					"val": 1,
+					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
+				},
+				{
 					"id": "Btn2_SelectedMagenta",
-					"val": 4,
+					"val": 5,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
 					"id": "Btn2_SelectedRed",
-					"val": 5,
+					"val": 4,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
@@ -470,7 +478,7 @@
 		},
 		{
 			"name": "bottom color 8 state",
-			"type": "event",
+			"type": "state",
 			"modes": ["basic", "advanced"],
 			"svg": [
 				{
@@ -1713,6 +1721,21 @@ sim-playground {
 {
 	"blocks": [
 		{
+			"name": "!default event",
+			"aseba": {
+				"initCodeExec": [
+					"timer.period[1] = 100\n"
+				],
+				"sectionBegin": "onevent timer1\n"
+			}
+		},
+		{
+			"name": "!stop",
+			"aseba": {
+				"statement": "motor.left.target = 0\nmotor.right.target = 0\n"
+			}
+		},
+		{
 			"name": "button",
 			"aseba": {
 				"sectionBegin": "onevent buttons\n",
@@ -1727,6 +1750,7 @@ sim-playground {
 					"# roll angle from accelerometer\nvar rollAngle\n"
 				],
 				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
 				"clauseInit":
 					"call math.atan2(rollAngle, acc[0], acc[2])\n",
 				"clause": "rollAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and rollAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
@@ -1739,6 +1763,7 @@ sim-playground {
 					"# yaw angle from accelerometer\nvar yawAngle\n"
 				],
 				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
 				"clauseInit":
 					"call math.atan2(yawAngle, acc[0], acc[1])\n",
 				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
@@ -1751,6 +1776,7 @@ sim-playground {
 					"# yaw angle from accelerometer\nvar yawAngle\n"
 				],
 				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
 				"clauseInit":
 					"call math.atan2(yawAngle, acc[0], acc[1])\n",
 				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
@@ -1785,6 +1811,7 @@ sim-playground {
 					"# roll angle from accelerometer\nvar rollAngle\n"
 				],
 				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
 				"clauseInit":
 					"call math.atan2(rollAngle, acc[0], acc[2])\n",
 				"clause": "abs(rollAngle - 16384) < 1365"
@@ -1794,6 +1821,7 @@ sim-playground {
 			"name": "acc upside down",
 			"aseba": {
 				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
 				"clause": "-acc[2] / 2 > abs(acc[0]) + abs(acc[1])"
 			}
 		},
@@ -1818,6 +1846,30 @@ sim-playground {
 				"sectionBegin":
 					"onevent tap\n",
 				"sectionPriority": 1000
+			}
+		},
+		{
+			"name": "color 8 state",
+			"aseba": {
+				"initVarDecl": [
+					"# RGB color of the top led\nvar topColor[3]\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n"
+				],
+				"clause": "topColor[0] `$[0] >= 4 ? '>=' : '<'` 16 && topColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && topColor[0] `$[0] % 2 ? '>=' : '<'` 16"
+			}
+		},
+		{
+			"name": "bottom color 8 state",
+			"aseba": {
+				"initVarDecl": [
+					"# RGB color of the bottom led\nvar bottomColor[3]\n"
+				],
+				"initCodeExec": [
+					"bottomColor = [0, 0, 0]\n"
+				],
+				"clause": "bottomColor[0] `$[0] >= 4 ? '>=' : '<'` 16 && bottomColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && bottomColor[0] `$[0] % 2 ? '>=' : '<'` 16"
 			}
 		},
 		{
@@ -1874,6 +1926,20 @@ sim-playground {
 				],
 				"statement":
 					"call leds.top(`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`)\ntopColor = [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`]\n"
+			}
+		},
+		{
+			"name": "bottom color 8",
+			"aseba": {
+				"initVarDecl": [
+					"# RGB color of the bottom led\nvar bottomColor[3]\n"
+				],
+				"initCodeExec": [
+					"bottomColor = [0, 0, 0]\n",
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"call leds.bottom.left(`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`)\ncall leds.bottom.right(`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`)\nbottomColor = [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`]\n"
 			}
 		},
 		{

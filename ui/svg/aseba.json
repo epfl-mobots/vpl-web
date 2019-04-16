@@ -1,6 +1,21 @@
 {
 	"blocks": [
 		{
+			"name": "!default event",
+			"aseba": {
+				"initCodeExec": [
+					"timer.period[1] = 100\n"
+				],
+				"sectionBegin": "onevent timer1\n"
+			}
+		},
+		{
+			"name": "!stop",
+			"aseba": {
+				"statement": "motor.left.target = 0\nmotor.right.target = 0\n"
+			}
+		},
+		{
 			"name": "button",
 			"aseba": {
 				"sectionBegin": "onevent buttons\n",
@@ -12,12 +27,13 @@
 			"name": "roll",
 			"aseba": {
 				"initVarDecl": [
-					"# yaw angle from accelerometer\nvar yawAngle\n"
+					"# roll angle from accelerometer\nvar rollAngle\n"
 				],
 				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
 				"clauseInit":
-					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+					"call math.atan2(rollAngle, acc[0], acc[2])\n",
+				"clause": "rollAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and rollAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -27,6 +43,7 @@
 					"# yaw angle from accelerometer\nvar yawAngle\n"
 				],
 				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
 				"clauseInit":
 					"call math.atan2(yawAngle, acc[0], acc[1])\n",
 				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
@@ -39,6 +56,7 @@
 					"# yaw angle from accelerometer\nvar yawAngle\n"
 				],
 				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
 				"clauseInit":
 					"call math.atan2(yawAngle, acc[0], acc[1])\n",
 				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
@@ -49,6 +67,42 @@
 			"aseba": {
 				"sectionBegin": "# initialization\n",
 				"sectionPriority": 10000
+			}
+		},
+		{
+			"name": "state 256",
+			"aseba": {
+				"initVarDecl": [
+					"var state256\nvar state2560\n"
+				],
+				"initCodeExec": [
+					"state256 = 0\n"
+				],
+				"clauseInit":
+					"state2560 = state256\n",
+				"clause":
+					"state2560 == `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`"
+			}
+		},
+		{
+			"name": "acc side",
+			"aseba": {
+				"initVarDecl": [
+					"# roll angle from accelerometer\nvar rollAngle\n"
+				],
+				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"call math.atan2(rollAngle, acc[0], acc[2])\n",
+				"clause": "abs(rollAngle - 16384) < 1365"
+			}
+		},
+		{
+			"name": "acc upside down",
+			"aseba": {
+				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
+				"clause": "-acc[2] / 2 > abs(acc[0]) + abs(acc[1])"
 			}
 		},
 		{
@@ -67,7 +121,52 @@
 			"name": "fall"
 		},
 		{
-			"name": "tap"
+			"name": "tap",
+			"aseba": {
+				"sectionBegin":
+					"onevent tap\n",
+				"sectionPriority": 1000
+			}
+		},
+		{
+			"name": "color 8 state",
+			"aseba": {
+				"initVarDecl": [
+					"# RGB color of the top led\nvar topColor[3]\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n"
+				],
+				"clause": "topColor[0] `$[0] >= 4 ? '>=' : '<'` 16 && topColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && topColor[0] `$[0] % 2 ? '>=' : '<'` 16"
+			}
+		},
+		{
+			"name": "bottom color 8 state",
+			"aseba": {
+				"initVarDecl": [
+					"# RGB color of the bottom led\nvar bottomColor[3]\n"
+				],
+				"initCodeExec": [
+					"bottomColor = [0, 0, 0]\n"
+				],
+				"clause": "bottomColor[0] `$[0] >= 4 ? '>=' : '<'` 16 && bottomColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && bottomColor[0] `$[0] % 2 ? '>=' : '<'` 16"
+			}
+		},
+		{
+			"name": "horiz prox front",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`$[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
+			}
+		},
+		{
+			"name": "horiz prox back",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`$[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
+			}
 		},
 		{
 			"name": "remote control arrows"
@@ -110,6 +209,20 @@
 			}
 		},
 		{
+			"name": "bottom color 8",
+			"aseba": {
+				"initVarDecl": [
+					"# RGB color of the bottom led\nvar bottomColor[3]\n"
+				],
+				"initCodeExec": [
+					"bottomColor = [0, 0, 0]\n",
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"call leds.bottom.left(`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`)\ncall leds.bottom.right(`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`)\nbottomColor = [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`]\n"
+			}
+		},
+		{
 			"name": "top color",
 			"aseba": {
 				"initVarDecl": [
@@ -123,6 +236,40 @@
 					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\ntopColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
 				"statementWithoutInit":
 					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
+			}
+		},
+		{
+			"name": "set state 256",
+			"aseba": {
+				"initVarDecl": [
+					"var state256\nvar state2560\n"
+				],
+				"initCodeExec": [
+					"state256 = 0\n"
+				],
+				"initCodeDecl": [
+					"sub display_state256\ncall leds.circle((state256&1)*32,(state256&2)*16,(state256&4)*8,(state256&8)*4,(state256&16)*2,state256&32,(state256&64)/2,(state256&128)/4)\n"
+				],
+				"statement":
+					"state256 = `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`\ncallsub display_state256\n"
+			}
+		},
+		{
+			"name": "notes",
+			"aseba": {
+				"initVarDecl": [
+					"# variables for notes\nvar notes[6]\nvar durations[6]\nvar note_index\nvar note_count\nvar wave[142]\nvar i\nvar wave_phase\nvar wave_intensity\n"
+				],
+				"initCodeExec": [
+					"# init. variables for notes\nnote_index = 6\nnote_count = 6\n",
+					"# compute a sinus wave for sound\nfor i in 0 : 141 do\nwave_phase = (i - 70) * 468\ncall math.cos(wave_intensity, wave_phase)\nwave[i] = wave_intensity / 256\nend\ncall sound.wave(wave)\n",
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"initCodeDecl": [
+					"# when a note is finished, play the next one\nonevent sound.finished\nif note_index != note_count then\ncall sound.freq(notes[note_index], durations[note_index])\nnote_index++\nend\n"
+				],
+				"statement":
+					"notes = [`$.filter(function (a, i) { return i % 2 == 0; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`]\ndurations = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return 7 * d; }).join(', ')`]\nnote_index = 1\nnote_count = 6\ncall sound.freq(notes[0], durations[0])\n"
 			}
 		},
 		{
