@@ -36,8 +36,19 @@ A3a.vpl.About = function (html) {
 	this.backgroundDiv.appendChild(this.div);
 	document.body.appendChild(this.backgroundDiv);
 
+	// close box
+	this.closebox = document.createElement("div");
+	this.closebox.style.position = "absolute";
+	this.closebox.style.width = "32px";
+	this.closebox.style.height = "32px";
+	this.closebox.style.top = "0";
+	this.closebox.style.right = "0";
+	this.closebox.textContent = "\u00d7";	// times
+	this.closebox.style.font = "bold 30px sans-serif";
+	this.closebox.style.textAlign = "right";
+	this.closebox.style.padding = "5px";
 	var self = this;
-	this.backgroundDiv.addEventListener("click", function () {
+	this.closebox.addEventListener("click", function () {
 		self.hide();
 	}, false);
 };
@@ -47,6 +58,7 @@ A3a.vpl.About = function (html) {
 */
 A3a.vpl.About.prototype.show = function () {
 	this.div.innerHTML = this.html;	// do it here to restart from the desired starting point
+	this.div.appendChild(this.closebox);
 	this.backgroundDiv.style.display = "block";
 	this.center();
 };

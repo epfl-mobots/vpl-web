@@ -28,7 +28,6 @@ A3a.vpl.Load = function (app) {
 
 	this.div = document.createElement("div");
 	this.div.style.width = "40em";
-	this.div.style.height = "10em";
 	this.div.style.position = "fixed";
 	this.div.style.top = "50%";
 	this.div.style.left = "50%";
@@ -40,13 +39,22 @@ A3a.vpl.Load = function (app) {
 	var el = document.createElement("p");
 	el.textContent = "Open program file";
 	this.div.appendChild(el);
-	el = document.createElement("p");
+	el = document.createElement("table");
+	el.style.width = "100%";
+	this.div.appendChild(el);
+	var tr = document.createElement("tr");
+	el.appendChild(tr);
+	var td = document.createElement("td");
+	tr.appendChild(td);
 	this.input = document.createElement("input");
 	this.input.setAttribute("type", "file");
 	this.input.setAttribute("accept", ".aesl,.json");
 	this.input.style.width = "35em";
-	el.appendChild(this.input);
+	td.appendChild(this.input);
 
+	td = document.createElement("td");
+	td.align = "right";
+	tr.appendChild(td);
 	var button = document.createElement("input");
 	button.setAttribute("type", "button");
 	button.setAttribute("value", "OK");
@@ -57,9 +65,9 @@ A3a.vpl.Load = function (app) {
 		}
 		self.hide();
 	}, false);
-	el.appendChild(button);
+	td.appendChild(button);
 
-	el.appendChild(document.createTextNode(" "));
+	td.appendChild(document.createTextNode("\u00a0\u00a0"));	// nbsp
 
 	button = document.createElement("input");
 	button.setAttribute("type", "button");
@@ -67,9 +75,23 @@ A3a.vpl.Load = function (app) {
 	button.addEventListener("click", function () {
 		self.hide();
 	}, false);
-	el.appendChild(button);
+	td.appendChild(button);
 
-	this.div.appendChild(el);
+	// close box
+	var closebox = document.createElement("div");
+	closebox.style.position = "absolute";
+	closebox.style.width = "32px";
+	closebox.style.height = "32px";
+	closebox.style.top = "0";
+	closebox.style.right = "0";
+	closebox.textContent = "\u00d7";	// times
+	closebox.style.font = "bold 30px sans-serif";
+	closebox.style.textAlign = "right";
+	closebox.style.padding = "5px";
+	closebox.addEventListener("click", function () {
+		self.hide();
+	}, false);
+	el.appendChild(closebox);
 };
 
 /** Show about box
