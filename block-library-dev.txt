@@ -281,14 +281,13 @@ SVG widgets
 
 Property "widgets" is an array with one element per widget. A widget is a static graphical element used in the graphical user interface. They're identified by one of the following names:
 
-- "vpl:block0": size reference, never displayed; see below
 - "vpl:then": placed between events and actions (colon in VPL1)
 - "vpl:error": error marker displayed close to rules with errors (question mark in a circle in VPL1)
 - "vpl:warning": warning marker displayed closed to rules with warnings (minor issues which still permit to run the program)
 - "vpl:moreHigh": hint displayed at the top of block lib (events or actions) when overflow is scroll (see section "Stylesheet" below) and the blocks could be scrolled down to show more
 - "vpl:moreLow": hint displayed at the bottom of block lib (events or actions) when overflow is scroll and the blocks could be scrolled down to show more
 
-Widgets are scaled. The size reference is given by a widget definition whose name is "vpl:block0" and whose size should correspond to a VPL block as it's drawn in a VPL program (in other words, draw an SVG square any size you want, define a widget "vpl:block0" with it, and draw all the other widgets so that they have the correct relative size with respect to the square; or reuse an existing block).
+Widgets are scaled to fill their css box (see below). The box id for widget "vpl:then" is "widget-then", and so on.
 
 Each widget appearance is an object with the following properties:
 
@@ -354,7 +353,7 @@ Values:
 Box elements:
 
 - view (classes: vpl, sim, src)
-- widget (id: widget-error, widget-warning, widget-then; pseudo-class: small)
+- widget (id: widget-error, widget-warning, widget-then, widget-moreLow, widget-moreHigh; pseudo-class: small)
 - button (classes: vpl, sim, src, top, bottom)
 - separator (classes: vpl, sim, src, top, bottom)
 - toolbar (classes: vpl, sim, src, top, bottom)

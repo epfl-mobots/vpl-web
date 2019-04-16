@@ -1030,17 +1030,13 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 
 	if (this.uiConfig.customizationMode) {
 		// draw vpl:customization widget
-		var customBounds = simCanvas.getWidgetBounds("vpl:customize");
-		if (customBounds) {
-			var customBox = simCanvas.css.getBox({tag: "widget", id: "widget-customize"});
-			customBox.width = customBounds.xmax - customBounds.xmin;
-			customBox.height = customBounds.ymax - customBounds.ymin;
-			simCanvas.addDecoration(function (ctx) {
-				simCanvas.drawWidget("vpl:customize",
-					playgroundView.x + playgroundView.width / 2,
-					playgroundView.y + playgroundView.height / 2);
-			});
-		}
+		var customizationBox = simCanvas.css.getBox({tag: "widget", id: "vpl-customize"});
+		simCanvas.addDecoration(function (ctx) {
+			simCanvas.drawWidget("vpl:customize",
+				playgroundView.x + playgroundView.width / 2,
+				playgroundView.y + playgroundView.height / 2,
+				customizationBox);
+		});
 	} else {
 		// draw robot and playground as a single CanvasItem
 		var robotSize = robot.robotSize;

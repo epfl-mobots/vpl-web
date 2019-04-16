@@ -1551,14 +1551,6 @@
 	],
 	"widgets": [
 		{
-			"name":"vpl:block0",
-			"svg": [
-				{
-					"uri": "Icons.svg#frame"
-				}
-			]
-		},
-		{
 			"name":"vpl:then",
 			"svg": [
 				{
@@ -1607,18 +1599,15 @@
 
 view {
 	background: #fbfcfc;
-	
 }
 
-toolbar{
+toolbar {
 	padding: 8px;
-	
-
 }
 
-toolbar.top{
-border-bottom: 2px solid #eceff1;
-background: #f5f7f8;
+toolbar.top {
+	border-bottom: 2px solid #eceff1;
+	background: #f5f7f8;
 }
 
 button {
@@ -1629,9 +1618,9 @@ button {
 	margin: 0.2vw;
 }
 
-vpl.top{
-border-bottom: 1px solid #eceff1;
-background: #f5f7f8;
+vpl.top {
+	border-bottom: 1px solid #eceff1;
+	background: #f5f7f8;
 }
 
 button.vpl.top {
@@ -1680,10 +1669,17 @@ rule {
 #widget-then {
 	padding-left: 20px;
 	padding-right: 20px;
+	width: 4ww;
+	height: 4ww;
+}
+
+#widget-error, #widget-warning {
+	width: 3.5ww;
+	height: 3.5ww;
+	margin-right: 0.1ww;
 }
 
 block-library {
-
 	padding: 4px 8px 4px 8px;
 	margin: 0px;
 	border-left: 2px solid #eceff1;
@@ -2450,7 +2446,7 @@ sim-playground {
 			"state": [],
 			"svg": [
 				{
-					"uri": "Icons.svg#locked_default"
+					"uri": "Icons.svg#locked_highlight"
 				}
 			]
 		},

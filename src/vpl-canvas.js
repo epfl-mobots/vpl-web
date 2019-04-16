@@ -221,7 +221,7 @@ A3a.vpl.Canvas = function (canvas, relativeArea, css) {
 	this.dims = /** @type {A3a.vpl.Canvas.dims} */(null);
 	this.resize(this.width, this.height);	// force set this.dims
 
-	/** @type {Object.<string,A3a.vpl.Canvas.Widget>} */
+	/** @type {Object.<string,A3a.vpl.Canvas.drawWidget>} */
 	this.widgets = {};
 
 	var self = this;
@@ -939,58 +939,27 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 	return item;
 };
 
-/** @typedef {function(CanvasRenderingContext2D,string,A3a.vpl.Canvas.dims):void}
+/** @typedef {function(CanvasRenderingContext2D,string,A3a.vpl.Canvas.dims,CSSParser.VPL.Box):void}
 */
 A3a.vpl.Canvas.drawWidget;
 
-/** @typedef {function(string,A3a.vpl.Canvas.dims):{xmin:number,xmax:number,ymin:number,ymax:number}}
-*/
-A3a.vpl.Canvas.getWidgetBounds;
-
-/** @typedef {{
-		draw: A3a.vpl.Canvas.drawWidget,
-		bounds: A3a.vpl.Canvas.getWidgetBounds
-	}}
-*/
-A3a.vpl.Canvas.Widget;
-
 /** Draw a widget
 	@param {string} id
-	@param {number} x
-	@param {number} y
+	@param {number} x center of widget along horizontal axis
+	@param {number} y center of widget along vertical axis
 	@param {CSSParser.VPL.Box=} cssBox
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.drawWidget = function (id, x, y, cssBox) {
+	cssBox.drawAt(this.ctx, x - cssBox.width / 2, y - cssBox.height / 2);
+
 	var w = this.widgets[id];
 	if (w != undefined) {
 		this.ctx.save();
 		this.ctx.translate(x, y);
-		if (cssBox) {
-			cssBox.drawAt(this.ctx, 0, 0);
-		}
-		w.draw(this.ctx, id, this.dims);
+		w(this.ctx, id, this.dims, cssBox);
 		this.ctx.restore();
 	}
-};
-
-/** Get widget bounds
-	@param {string} id
-	@param {CSSParser.VPL.Box=} cssBox
-	@return {{xmin:number,xmax:number,ymin:number,ymax:number}}
-*/
-A3a.vpl.Canvas.prototype.getWidgetBounds = function (id, cssBox) {
-	var w = this.widgets[id];
-	var bnds = w
-		? w.bounds(id, this.dims)
-		: {xmin: 0, xmax: 0, ymin: 0, ymax: 0};
-	if (cssBox) {
-		bnds.xmin -= cssBox.marginLeft + cssBox.borderLeftWidth + cssBox.paddingLeft;
-		bnds.xmax += cssBox.paddingRight + cssBox.borderRightWidth + cssBox.marginRight;
-		bnds.ymin -= cssBox.marginTop + cssBox.borderTopWidth + cssBox.paddingTop;
-		bnds.ymax += cssBox.paddingBottom + cssBox.borderBottomWidth + cssBox.marginBottom;
-	}
-	return bnds;
 };
 
 /** Redraw the underlying canvas with all the items
