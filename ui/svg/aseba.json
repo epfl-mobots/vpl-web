@@ -73,7 +73,8 @@
 			"name": "state 256",
 			"aseba": {
 				"initVarDecl": [
-					"var state256\nvar state2560\n"
+					"var state256\n",
+					"var state2560\n"
 				],
 				"initCodeExec": [
 					"state256 = 0\n"
@@ -81,7 +82,23 @@
 				"clauseInit":
 					"state2560 = state256\n",
 				"clause":
-					"state2560 == `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`"
+					"state2560 == `$.reduce(function (a, b, i) { return b ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`"
+			}
+		},
+		{
+			"name": "state 256 with mask",
+			"aseba": {
+				"initVarDecl": [
+					"var state256\n",
+					"var state2560\n"
+				],
+				"initCodeExec": [
+					"state256 = 0\n"
+				],
+				"clauseInit":
+					"state2560 = state256\n",
+				"clause":
+					"(state2560 & `$.reduce(function (a, b, i) { return b !== 0 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`) == `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`"
 			}
 		},
 		{
@@ -118,7 +135,12 @@
 			}
 		},
 		{
-			"name": "fall"
+			"name": "fall",
+			"aseba": {
+				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
+				"clause": "abs(acc[0]) + abs(acc[1]) + abs(acc[2]) < 16"
+			}
 		},
 		{
 			"name": "tap",
@@ -137,7 +159,7 @@
 				"initCodeExec": [
 					"topColor = [0, 0, 0]\n"
 				],
-				"clause": "topColor[0] `$[0] >= 4 ? '>=' : '<'` 16 && topColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && topColor[0] `$[0] % 2 ? '>=' : '<'` 16"
+				"clause": "topColor[0] `$[0] >= 4 ? '>=' : '<'` 16 and topColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 and topColor[0] `$[0] % 2 ? '>=' : '<'` 16"
 			}
 		},
 		{
@@ -149,7 +171,7 @@
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0]\n"
 				],
-				"clause": "bottomColor[0] `$[0] >= 4 ? '>=' : '<'` 16 && bottomColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && bottomColor[0] `$[0] % 2 ? '>=' : '<'` 16"
+				"clause": "bottomColor[0] `$[0] >= 4 ? '>=' : '<'` 16 and bottomColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 and bottomColor[0] `$[0] % 2 ? '>=' : '<'` 16"
 			}
 		},
 		{
@@ -169,10 +191,30 @@
 			}
 		},
 		{
-			"name": "remote control arrows"
+			"name": "remote control arrows",
+			"aseba": {
+				"sectionBegin": "onevent rc5\n",
+				"sectionPriority": 10,
+				"clause": "`[[85, 17], [80, 32], [81, 33], [86, 16, 78], [87, 13]][$[0]].map(function (c) { return 'rc5.command == ' + c; }).join(' or ')`"
+			}
 		},
 		{
-			"name": "remote control keypad"
+			"name": "remote control keypad",
+			"aseba": {
+				"sectionBegin": "onevent rc5\n",
+				"sectionPriority": 10,
+				"clause": "rc5.command == `$[0]`"
+			}
+		},
+		{
+			"name": "timer",
+			"aseba": {
+				"initCodeExec": [
+					"# stop timer 0\ntimer.period[0] = 0\n"
+				],
+				"sectionBegin": "onevent timer0\ntimer.period[0] = 0\n",
+				"sectionPriority": 1000
+			}
 		},
 		{
 			"name": "motor",
@@ -239,19 +281,51 @@
 			}
 		},
 		{
+			"name": "bottom color",
+			"aseba": {
+				"initVarDecl": [
+					"# RGB color of the bottom led\nvar bottomColor[3]\n"
+				],
+				"initCodeExec": [
+					"bottomColor = [0, 0, 0]\n",
+					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+				],
+				"statement":
+					"call leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\ncall leds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\nbottomColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
+				"statementWithoutInit":
+					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
+			}
+		},
+		{
 			"name": "set state 256",
 			"aseba": {
 				"initVarDecl": [
-					"var state256\nvar state2560\n"
+					"var state256\n"
 				],
 				"initCodeExec": [
 					"state256 = 0\n"
 				],
 				"initCodeDecl": [
-					"sub display_state256\ncall leds.circle((state256&1)*32,(state256&2)*16,(state256&4)*8,(state256&8)*4,(state256&16)*2,state256&32,(state256&64)/2,(state256&128)/4)\n"
+					"sub display_state256\ncall leds.circle((state256&1)*32,(state256&128)/4,(state256&64)/2,state256&32,(state256&16)*2,(state256&8)*4,(state256&4)*8,(state256&2)*16)\n"
 				],
 				"statement":
-					"state256 = `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`\ncallsub display_state256\n"
+					"state256 = `$.reduce(function (a, b, i) { return b ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`\ncallsub display_state256\n"
+			}
+		},
+		{
+			"name": "set state 256 with mask",
+			"aseba": {
+				"initVarDecl": [
+					"var state256\n"
+				],
+				"initCodeExec": [
+					"state256 = 0\n"
+				],
+				"initCodeDecl": [
+					"sub display_state256\ncall leds.circle((state256&1)*32,(state256&128)/4,(state256&64)/2,state256&32,(state256&16)*2,(state256&8)*4,(state256&4)*8,(state256&2)*16)\n"
+				],
+				"statement":
+					"state256 = state256 & `$.reduce(function (a, b, i) { return b === 0 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)` | `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`\ncallsub display_state256\n"
 			}
 		},
 		{

@@ -776,31 +776,31 @@
 					"uri": "Blocks.svg#Ev_Remote1"
 				}
 			],
-			"defaultParameters": [false, false, false, false, false],
-			"buttons": [
+			"defaultParameters": [0],
+			"radiobuttons": [
 				{
 					"id": "Btn2_Remote1_85",
-					"val": [false, true],
+					"val": 0,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_80",
-					"val": [false, true],
+					"val": 1,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_81",
-					"val": [false, true],
+					"val": 2,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_86",
-					"val": [false, true],
+					"val": 3,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_87",
-					"val": [false, true],
+					"val": 4,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				}
 			]
@@ -817,66 +817,66 @@
 					"uri": "Blocks.svg#Ev_Remote2"
 				}
 			],
-			"defaultParameters": [false, false, false, false, false, false, false, false, false, false, false, false],
-			"buttons": [
+			"defaultParameters": [1],
+			"radiobuttons": [
 				{
 					"id": "Btn2_Remote2_0",
-					"val": [false, true],
+					"val": 0,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_1",
-					"val": [false, true],
+					"val": 1,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_2",
-					"val": [false, true],
+					"val": 2,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_3",
-					"val": [false, true],
+					"val": 3,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_4",
-					"val": [false, true],
+					"val": 4,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_5",
-					"val": [false, true],
+					"val": 5,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_6",
-					"val": [false, true],
+					"val": 6,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_7",
-					"val": [false, true],
+					"val": 7,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_8",
-					"val": [false, true],
+					"val": 8,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_9",
-					"val": [false, true],
+					"val": 9,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_16",
-					"val": [false, true],
+					"val": 16,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_17",
-					"val": [false, true],
+					"val": 17,
 					"st": ["fill:#90a4ae", "fill:#84edcf;stroke:#263238"]
 				}
 			]
@@ -1376,42 +1376,42 @@
 			"buttons": [
 				{
 					"id": "Btn3_State0_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State1_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State2_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State3_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State4_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State5_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State6_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State7_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				}
 			]
