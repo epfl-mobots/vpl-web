@@ -78,20 +78,30 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 			for (var i = 0; i < gui["buttons"].length; i++) {
 				if (gui["buttons"][i]["name"] === id && checkState(gui["buttons"][i]["state"])) {
 					var btn = gui["buttons"][i];
-					btn["svg"].forEach(function (el) {
-						var d = A3a.vpl.Canvas.decodeURI(el["uri"]);
-						ctx.save();
-						if (el["alpha"]) {
-							ctx.globalAlpha = el["alpha"];
+					btn["draw"].forEach(function (el) {
+						if (el["uri"]) {
+							var d = A3a.vpl.Canvas.decodeURI(el["uri"]);
+							ctx.save();
+							if (el["alpha"]) {
+								ctx.globalAlpha = el["alpha"];
+							}
+							gui.svg[d.f].draw(ctx, {elementId: d.id});
+							if (el["debug"]) {
+								ctx.fillStyle = "black";
+								ctx.textAlign = "center";
+								ctx.textBaseline = "middle";
+								ctx.fillText(el["debug"], box.width / 2, box.height / 2);
+							}
+							ctx.restore();
 						}
-						gui.svg[d.f].draw(ctx, {elementId: d.id});
-						if (el["debug"]) {
-							ctx.fillStyle = "black";
-							ctx.textAlign = "center";
-							ctx.textBaseline = "middle";
-							ctx.fillText(el["debug"], box.width / 2, box.height / 2);
+						if (el["js"]) {
+							var fun = new Function("ctx", el["js"]);
+							ctx.save();
+							ctx.scale(box.width, box.height);
+							ctx.beginPath();
+							fun(ctx);
+							ctx.restore();
 						}
-						ctx.restore();
 					});
 					return;
 				}
@@ -135,7 +145,7 @@ A3a.vpl.getButtonBoundsSVGFunction = function (gui) {
 					(b["state"] == undefined ||
 						(b["state"].indexOf("pressed") < 0 && b["state"].indexOf("selected") < 0 &&
 							b["state"].indexOf("disabled") < 0))) {
-					var el = b["svg"][0];	// first SVG element
+					var el = b["draw"][0];	// first SVG element
 					var d = A3a.vpl.Canvas.decodeURI(el["uri"]);
 					var bnds = gui.svg[d.f].getElementBounds(d.id);
 					return bnds;
@@ -186,26 +196,36 @@ A3a.vpl.makeSVGWidgets = function (gui) {
 	].forEach(function (id) {
 		var widget = find(id);
 		if (widget) {
-			var d = A3a.vpl.Canvas.decodeURI(widget["svg"][0]["uri"]);
+			var d = A3a.vpl.Canvas.decodeURI(widget["draw"][0]["uri"]);
 			var elBounds = gui.svg[d.f].getElementBounds(d.id);
 			widgets[id] = /** @type {A3a.vpl.Canvas.drawWidget} */(function (ctx, id, dims, box) {
-				widget["svg"].forEach(function (el) {
-					var d = A3a.vpl.Canvas.decodeURI(el["uri"]);
-					if (el["alpha"]) {
-						ctx.globalAlpha = el["alpha"];
+				widget["draw"].forEach(function (el) {
+					if (el["uri"]) {
+						var d = A3a.vpl.Canvas.decodeURI(el["uri"]);
+						if (el["alpha"]) {
+							ctx.globalAlpha = el["alpha"];
+						}
+						ctx.save();
+						var sc = Math.min(box.width / (elBounds.xmax - elBounds.xmin),
+							box.height / (elBounds.ymax - elBounds.ymin));
+						ctx.scale(sc, sc);
+						ctx.translate(-(elBounds.xmin + elBounds.xmax) / 2, -(elBounds.ymin + elBounds.ymax) / 2);
+						gui.svg[d.f].draw(ctx, {elementId: d.id});
+						ctx.restore();
+						if (el["debug"]) {
+							ctx.fillStyle = "black";
+							ctx.textAlign = "center";
+							ctx.textBaseline = "middle";
+							ctx.fillText(el["debug"], 0, 0);
+						}
 					}
-					ctx.save();
-					var sc = Math.min(box.width / (elBounds.xmax - elBounds.xmin),
-						box.height / (elBounds.ymax - elBounds.ymin));
-					ctx.scale(sc, sc);
-					ctx.translate(-(elBounds.xmin + elBounds.xmax) / 2, -(elBounds.ymin + elBounds.ymax) / 2);
-					gui.svg[d.f].draw(ctx, {elementId: d.id});
-					ctx.restore();
-					if (el["debug"]) {
-						ctx.fillStyle = "black";
-						ctx.textAlign = "center";
-						ctx.textBaseline = "middle";
-						ctx.fillText(el["debug"], 0, 0);
+					if (el["js"]) {
+						var fun = new Function("ctx", el["js"]);
+						ctx.save();
+						ctx.scale(box.width, box.height);
+						ctx.beginPath();
+						fun(ctx);
+						ctx.restore();
 					}
 				});
 			});

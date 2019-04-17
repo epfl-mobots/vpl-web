@@ -20,7 +20,7 @@ Here are fragments of index-svg.html which illustrate the definition of the bloc
   ...
   {
   	"name": "button",
-    "svg": [
+    "draw": [
       {
         "uri": "blocks.svg#event-button"
       }
@@ -46,9 +46,10 @@ In json, block contain the following properties:
 
 - "modes" (array of strings, possibly empty, required): in which VPL mode the block is displayed. Contains "basic" if displayed in basic mode, "advanced" if displayed in advanced mode. This defines only the default block usage; customization can override it.
 
-- "svg" (array of objects, at least one element, required): list of the parts defining the block appearance including buttons, sliders, etc. Each part is described by an object with the following properties (** only "uri" is implemented now **):
+- "draw" (array of objects, at least one element, required): list of the parts defining the block appearance including buttons, sliders, etc. Each part is described by an object with the following properties (** only "uri" and "js" are implemented now **):
 
-	- "uri" (string, required): uri of the svg element ("filename#id", with same filename for all elements in the same block)
+	- "uri" (string, required unless "js" exists): uri of the svg element ("filename#id", with same filename for all elements in the same block)
+    - "js" (string, required unless "uri" exists): JavaScript code which can draw to a canvas. The canvas context is stored in variable ctx, and the block parameters in variable $. The block area is between 0 and 1 along both axes. This area is not clipped. Code is bracketed between ctx.save() and ctx.restore().
 	- "scale" (number, optional, default: 1): scale at which the element is displayed
 	- "dx" (number, optional, default: 0): horizontal displacement
 	- "dy" (number, optional, default: 0): vertical displacement
@@ -142,12 +143,12 @@ Example:
   	{
   	  "name": "!empty event",
   	  "type": "hidden",
-  	  "svg": [ { "uri": "blocks.svg#event-empty" } ]
+  	  "draw": [ { "uri": "blocks.svg#event-empty" } ]
   	},
   	{
   	  "name": "!empty action",
   	  "type": "hidden",
-  	  "svg": [ { "uri": "blocks.svg#action-empty" } ]
+  	  "draw": [ { "uri": "blocks.svg#action-empty" } ]
   	},
   	{
   	  "name": "!stop",
@@ -270,7 +271,7 @@ Property "buttons" is an array with one element per button appearance. Each butt
 
 - "name": button name (see "Toolbar definitions" above)
 - "state": array of strings which restricts when the appearance is used: "pressed" (the button is being clicked or tapped, or the target of a drop), "unpressed" (the button is not being clicked or tapped, nor the target of a drop), "selected" (the button corresponds to a state which is ON), "unselected" (the button corresponds to a state which is OFF), "disabled" (the action is disabled), "enabled" (the action is enabled). In addition, strings starting with "=" specify which state to select for multi-state buttons such as "src:language" or "sim:map"; for example "=aseba" for the "src:language" button would be used when the Aseba language is selected. The first appearance match is used; typically appearance with "state" set to ["disabled"], ["pressed"], ["selected"] (for toggle buttons only), and [] (normal appearance) are defined in that order.
-- "svg": array of objects containing a "uri" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent) and a "debug" property (string, displayed centered over the widget). SVG elements are rendered starting with the first one, with the last one in the foreground.
+- "draw": array of objects defining the appearance of buttons, like for blocks (see above). They have a "uri" property for svg or a "js" property for JavaScript code, and optionally an "alpha" property (number, 1=opaque, 0=transparent) and a "debug" property (string, displayed centered over the widget). Elements in "draw" are rendered starting with the first one, with the last one in the foreground.
 
 "Buttons" with id "vpl:message-error" and "vpl:message-warning" (not real buttons, but placeholders to display error or warning messages in a toolbar) should not be redefined in SVG. The text style can be changed in css.
 
@@ -292,7 +293,7 @@ Widgets are scaled to fill their css box (see below). The box id for widget "vpl
 Each widget appearance is an object with the following properties:
 
 - "name": widget name (see above)
-- "svg": array of objects containing a "uri" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent) and a "debug" property (string, displayed centered over the widget). SVG elements are rendered starting with the first one, with the last one in the foreground.
+- "svg": array of objects containing a "uri" or "js" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent) and a "debug" property (string, displayed centered over the widget). SVG elements are rendered starting with the first one, with the last one in the foreground.
 
 If the value of property "widgets" is null ("widgets":null), the default built-in (non-SVG) widget definitions are used. Otherwise, undefined widgets are empty (nothing is displayed).
 
