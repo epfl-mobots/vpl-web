@@ -356,7 +356,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return draggedItem.data instanceof A3a.vpl.Block
 				? draggedItem.data.eventHandlerContainer !== null && !draggedItem.data.locked
 				: draggedItem.data instanceof A3a.vpl.EventHandler &&
-					!/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty() &&
+					(!/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty() ||
+ 						app.program.program.indexOf(draggedItem.data) + 1 < app.program.program.length) &&
  					!/** @type {A3a.vpl.EventHandler} */(draggedItem.data).locked;
 		},
 		object: this
