@@ -21,7 +21,7 @@ A3a.vpl.Application.prototype.installThymioTDM = function () {
 		init: function (language) {
 			// initialize the list of nodes
 			try {
-				window["tdmInit"](null,
+				window["tdmInit"](vplGetHashOption("w"),
 					function () {
 						app.runGlue.state = {};
 						app.vplCanvas.update();

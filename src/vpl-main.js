@@ -146,10 +146,9 @@ function vplLoadResourcesInScripts(rootFilename, getAuxiliaryFilenames, onLoad, 
 	@return {string}
 */
 function vplGetQueryOption(key) {
-	var q = document.location.href.indexOf("?");
-	if (q >= 0) {
-		var pairs = document.location.href
-			.slice(q + 1)
+	var query = /^[^?]*\?([^#]*)/.exec(document.location.href)[1];
+	if (query) {
+		var pairs = query
 			.split("&").map(function (p) {
 				return p.split("=")
 					.map(function (s) {
@@ -163,6 +162,23 @@ function vplGetQueryOption(key) {
 		}
 	}
 	return "";
+}
+
+/** Get value corresponding to key in the location hash
+	@param {string} key
+	@return {string}
+*/
+function vplGetHashOption(key) {
+	var dict = (document.location.hash || "#")
+		.slice(1)
+		.split("&").map(function (p) {
+			return p.split("=");
+		})
+		.reduce(function (acc, p) {
+			acc[p[0]] = p[1];
+			return acc;
+		}, {});
+	return dict[key] || null;
 }
 
 /** Setup everything for vpl
