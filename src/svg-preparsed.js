@@ -624,6 +624,7 @@ SVG.Preparsed.prototype.parse = function () {
 			obj.transform = parseTransform(el.getAttribute("transform"));
 			break;
 		case "polygon":
+		case "polyline":
 			obj.points = el.getAttribute("points")
 				.trim()
 				.replace(/\s+/g, " ")
@@ -1369,6 +1370,7 @@ SVG.Preparsed.prototype.draw = function (ctx, options) {
 			transform.restore();
 			break;
 		case "polygon":
+		case "polyline":
 			if (el.points.length >= 4) {
 				ctx && ctx.save();
 				transform.save();
@@ -1380,9 +1382,13 @@ SVG.Preparsed.prototype.draw = function (ctx, options) {
 					ctx && ctx.lineTo(el.points[i], el.points[i + 1]);
 					addPoint(el.points[i], el.points[i + 1]);
 				}
+				if (el.name === "polygon") {
+					ctx && ctx.closePath();
+				}
 				paint();
 				if (options && options.cb && options.cb.line) {
-					options.cb.line(xa.slice(-el.points.length / 2), ya.slice(-el.points.length / 2), false);
+					options.cb.line(xa.slice(-el.points.length / 2), ya.slice(-el.points.length / 2),
+						el.name === "polygon");
 				}
 				ctx && ctx.restore();
 				transform.restore();
