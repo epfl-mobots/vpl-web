@@ -83,11 +83,12 @@ A3a.vpl.Load = function (app) {
 	closebox.style.width = "32px";
 	closebox.style.height = "32px";
 	closebox.style.top = "0";
-	closebox.style.right = "0";
+	closebox.style.left = "0";
 	closebox.textContent = "\u00d7";	// times
 	closebox.style.font = "bold 30px sans-serif";
-	closebox.style.textAlign = "right";
+	closebox.style.textAlign = "left";
 	closebox.style.padding = "5px";
+	closebox.style.paddingLeft = "10px";
 	closebox.addEventListener("click", function () {
 		self.hide();
 	}, false);

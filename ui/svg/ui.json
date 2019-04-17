@@ -30,7 +30,7 @@
 		{
 			"name": "!empty event",
 			"type": "hidden",
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Event_empty"
 				}
@@ -39,7 +39,7 @@
 		{
 			"name": "!empty action",
 			"type": "hidden",
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Action_empty"
 				}
@@ -57,7 +57,7 @@
 			"name": "button",
 			"type": "event",
 			"modes": ["basic", "advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -107,7 +107,7 @@
 			"name": "init",
 			"type": "event",
 			"modes": ["basic", "advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -121,7 +121,7 @@
 			"name": "state 256",
 			"type": "state",
 			"modes": ["basic"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -180,7 +180,7 @@
 			"name": "state 256 with mask",
 			"type": "state",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -193,42 +193,42 @@
 			"buttons": [
 				{
 					"id": "Btn3_State0_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State1_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State2_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State3_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State4_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State5_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State6_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State7_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["stroke:#607d8b", "fill:#455a64;stroke:#263238", "fill:#84edcf;stroke:#263238"]
 				}
 			]
@@ -237,7 +237,7 @@
 			"name": "roll",
 			"type": "event",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -265,7 +265,7 @@
 			"name": "acc side",
 			"type": "event",
 			"modes": ["basic"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -281,7 +281,7 @@
 			"name": "acc upside down",
 			"type": "event",
 			"modes": ["basic"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -297,7 +297,7 @@
 			"name": "yaw",
 			"type": "event",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -325,7 +325,7 @@
 			"name": "pitch",
 			"type": "event",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -353,7 +353,7 @@
 			"name": "clap",
 			"type": "event",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -367,7 +367,7 @@
 			"name": "fall",
 			"type": "event",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -381,7 +381,7 @@
 			"name": "tap",
 			"type": "event",
 			"modes": ["basic"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -395,7 +395,7 @@
 			"name": "color 8 state",
 			"type": "state",
 			"modes": ["basic", "advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -466,7 +466,7 @@
 			"name": "bottom color 8 state",
 			"type": "state",
 			"modes": ["basic", "advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -537,7 +537,7 @@
 			"name": "horiz prox front",
 			"type": "event",
 			"modes": ["basic"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -572,13 +572,19 @@
 					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				}
+			],
+			"validation": [
+				{
+					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No proximity sensor specified"
+				}
 			]
 		},
 		{
 			"name": "horiz prox back",
 			"type": "event",
 			"modes": ["basic"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -598,13 +604,19 @@
 					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				}
+			],
+			"validation": [
+				{
+					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No proximity sensor specified"
+				}
 			]
 		},
 		{
 			"name": "horiz prox front adv",
 			"type": "event",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -617,35 +629,41 @@
 				{
 					"id": "Slid_threshold",
 					"thumbId": "cursor_threshold",
-					"min": -1,
+					"min": 0,
 					"max": 1
 				}
 			],
 			"buttons": [
 				{
 					"id": "Btn3_Prox0_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox1_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox2_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox3_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox4_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.slice(0,5).reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No proximity sensor specified"
 				}
 			]
 		},
@@ -653,7 +671,7 @@
 			"name": "horiz prox back adv",
 			"type": "event",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -666,20 +684,26 @@
 				{
 					"id": "Slid_threshold-2",
 					"thumbId": "cursor_threshold-2",
-					"min": -1,
+					"min": 0,
 					"max": 1
 				}
 			],
 			"buttons": [
 				{
 					"id": "Btn3_Prox5_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_Prox6_adv",
-					"val": [0, 1, 2],
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.slice(0,2).reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No proximity sensor specified"
 				}
 			]
 		},
@@ -687,7 +711,7 @@
 			"name": "ground mean",
 			"type": "event",
 			"modes": ["basic"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -695,11 +719,11 @@
 					"uri": "Blocks.svg#Ev_ProxGr_bas"
 				}
 			],
-			"defaultParameters": [0],
+			"defaultParameters": [true],
 			"buttons": [
 				{
-					"id": "Blocks.svg#btn2_ProxGd_detection",
-					"val": [0, 1],
+					"id": "btn2_ProxGd_detection",
+					"val": [true, false],
 					"st": ["fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
 				}
 			]
@@ -708,7 +732,7 @@
 			"name": "ground",
 			"type": "event",
 			"modes": ["basic"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -719,14 +743,20 @@
 			"defaultParameters": [0, 0],
 			"buttons": [
 				{
-					"id": "Blocks.svg#Btn3_ProxGd0",
-					"val": [0, 1, 2],
+					"id": "Btn3_ProxGd0",
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
-					"id": "Blocks.svg#Btn3_ProxGd1",
-					"val": [0, 1, 2],
+					"id": "Btn3_ProxGd1",
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No ground sensor specified"
 				}
 			]
 		},
@@ -734,7 +764,7 @@
 			"name": "ground 1",
 			"type": "event",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -747,20 +777,26 @@
 				{
 					"id": "slider_threshold_proxGd",
 					"thumbId": "Cursor_proxGd",
-					"min": -1,
+					"min": 0,
 					"max": 1
 				}
 			],
 			"buttons": [
 				{
-					"id": "Blocks.svg#Btn3_ProxGd0_adv",
-					"val": [0, 1, 2],
+					"id": "Btn3_ProxGd0_adv",
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
 				},
 				{
-					"id": "Blocks.svg#Btn3_ProxGd1_adv",
-					"val": [0, 1, 2],
+					"id": "Btn3_ProxGd1_adv",
+					"val": [0, 1, -1],
 					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.slice(0, 2).reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No ground sensor specified"
 				}
 			]
 		},
@@ -768,7 +804,7 @@
 			"name": "remote control arrows",
 			"type": "event",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -809,7 +845,7 @@
 			"name": "remote control keypad",
 			"type": "event",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -885,7 +921,7 @@
 			"name": "timer",
 			"type": "event",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -898,7 +934,7 @@
 			"name": "counter comparison",
 			"type": "event",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
@@ -953,7 +989,7 @@
 			"name": "motor",
 			"type": "action",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -1009,7 +1045,7 @@
 			"name": "move",
 			"type": "action",
 			"modes": ["basic"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -1070,7 +1106,7 @@
 			"name": "top color 8",
 			"type": "action",
 			"modes": ["basic"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -1141,7 +1177,7 @@
 			"name": "bottom color 8",
 			"type": "action",
 			"modes": ["basic"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -1212,7 +1248,7 @@
 			"name": "top color",
 			"type": "action",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -1255,7 +1291,7 @@
 			"name": "bottom color",
 			"type": "action",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -1298,7 +1334,7 @@
 			"name": "set state 256",
 			"type": "action",
 			"modes": ["basic", "advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -1357,7 +1393,7 @@
 			"name": "set state 256 with mask",
 			"type": "action",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -1420,7 +1456,7 @@
 			"name": "notes",
 			"type": "action",
 			"modes": ["basic"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -1442,7 +1478,7 @@
 			"name": "notes with speed",
 			"type": "action",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -1475,27 +1511,39 @@
 			"name": "set timer",
 			"type": "action",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
 				{
-					"uri": "Blocks.svg#Seconds"
+					"uri": "Blocks.svg#timer10Secods_bg"
 				},
 				{
 					"uri": "Blocks.svg#text_TimeDisplay"
 				},
 				{
 					"uri": "Blocks.svg#Slider_timer"
+				},
+				{
+					"js":
+						"ctx.moveTo(0.5, 0.47); ctx.lineTo(0.65, 0.4); ctx.lineTo(0.65, 0.38 - 0.05 * $[0]); ctx.lineTo(0.35, 0.38 - 0.05 * $[0]); ctx.lineTo(0.35, 0.4); ctx.closePath(); ctx.fillStyle = 'white'; ctx.strokeStyle = 'black'; ctx.lineWidth = 0.01; ctx.fill(); ctx.stroke();"
+				}
+			],
+			"defaultParameters": [1],
+			"sliders": [
+				{
+					"id": "Slider_timer",
+					"thumbId": "Cursor_units",
+					"min": 0,
+					"max": 4
 				}
 			]
-
 		},
 		{
 			"name": "arithmetic",
 			"type": "action",
 			"modes": ["advanced"],
-			"svg": [
+			"draw": [
 				{
 					"uri": "Blocks.svg#Actions_bg"
 				},
@@ -1546,7 +1594,7 @@
 	"widgets": [
 		{
 			"name":"vpl:then",
-			"svg": [
+			"draw": [
 				{
 					"uri": "Icons.svg#ic_then"
 				}
@@ -1554,7 +1602,7 @@
 		},
 		{
 			"name":"vpl:error",
-			"svg": [
+			"draw": [
 				{
 					"uri": "Icons.svg#Error"
 				}
@@ -1562,7 +1610,7 @@
 		},
 		{
 			"name":"vpl:warning",
-			"svg": [
+			"draw": [
 				{
 					"uri": "Icons.svg#Warning"
 				}

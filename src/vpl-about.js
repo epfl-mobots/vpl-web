@@ -42,11 +42,12 @@ A3a.vpl.About = function (html) {
 	this.closebox.style.width = "32px";
 	this.closebox.style.height = "32px";
 	this.closebox.style.top = "0";
-	this.closebox.style.right = "0";
+	this.closebox.style.left = "0";
 	this.closebox.textContent = "\u00d7";	// times
 	this.closebox.style.font = "bold 30px sans-serif";
-	this.closebox.style.textAlign = "right";
+	this.closebox.style.textAlign = "left";
 	this.closebox.style.padding = "5px";
+	this.closebox.style.paddingLeft = "10px";
 	var self = this;
 	this.closebox.addEventListener("click", function () {
 		self.hide();

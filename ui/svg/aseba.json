@@ -24,45 +24,6 @@
 			}
 		},
 		{
-			"name": "roll",
-			"aseba": {
-				"initVarDecl": [
-					"# roll angle from accelerometer\nvar rollAngle\n"
-				],
-				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 1,
-				"clauseInit":
-					"call math.atan2(rollAngle, acc[0], acc[2])\n",
-				"clause": "rollAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and rollAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
-			}
-		},
-		{
-			"name": "yaw",
-			"aseba": {
-				"initVarDecl": [
-					"# yaw angle from accelerometer\nvar yawAngle\n"
-				],
-				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 1,
-				"clauseInit":
-					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
-			}
-		},
-		{
-			"name": "pitch",
-			"aseba": {
-				"initVarDecl": [
-					"# yaw angle from accelerometer\nvar yawAngle\n"
-				],
-				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 1,
-				"clauseInit":
-					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
-			}
-		},
-		{
 			"name": "init",
 			"aseba": {
 				"sectionBegin": "# initialization\n",
@@ -102,6 +63,19 @@
 			}
 		},
 		{
+			"name": "roll",
+			"aseba": {
+				"initVarDecl": [
+					"# roll angle from accelerometer\nvar rollAngle\n"
+				],
+				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"call math.atan2(rollAngle, acc[0], acc[2])\n",
+				"clause": "rollAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and rollAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+			}
+		},
+		{
 			"name": "acc side",
 			"aseba": {
 				"initVarDecl": [
@@ -120,6 +94,32 @@
 				"sectionBegin": "onevent acc\n",
 				"sectionPriority": 1,
 				"clause": "-acc[2] / 2 > abs(acc[0]) + abs(acc[1])"
+			}
+		},
+		{
+			"name": "yaw",
+			"aseba": {
+				"initVarDecl": [
+					"# yaw angle from accelerometer\nvar yawAngle\n"
+				],
+				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"call math.atan2(yawAngle, acc[0], acc[1])\n",
+				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+			}
+		},
+		{
+			"name": "pitch",
+			"aseba": {
+				"initVarDecl": [
+					"# yaw angle from accelerometer\nvar yawAngle\n"
+				],
+				"sectionBegin": "onevent acc\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"call math.atan2(yawAngle, acc[0], acc[1])\n",
+				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -191,6 +191,46 @@
 			}
 		},
 		{
+			"name": "horiz prox front adv",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`i < 5 && $[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[5]) : ''`"
+			}
+		},
+		{
+			"name": "horiz prox back adv",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`i < 2 && $[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[2]) : ''`"
+			}
+		},
+		{
+			"name": "ground mean",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"sectionPriority": 1,
+				"clause": "prox.ground.delta[0] + prox.ground.delta[1] `$[0] ? '>= 900' : '<= 800'`"
+			}
+		},
+		{
+			"name": "ground",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`$[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= 450' : '<= 400') : ''`"
+			}
+		},
+		{
+			"name": "ground 1",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`i < 2 && $[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(25 + 40 * $[2]) : ''`"
+			}
+		},
+		{
 			"name": "remote control arrows",
 			"aseba": {
 				"sectionBegin": "onevent rc5\n",
@@ -215,6 +255,9 @@
 				"sectionBegin": "onevent timer0\ntimer.period[0] = 0\n",
 				"sectionPriority": 1000
 			}
+		},
+		{
+			"name": "counter comparison"
 		},
 		{
 			"name": "motor",
@@ -363,6 +406,12 @@
 				"statement":
 					"notes = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`]\ndurations = [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * d; }).join(', ')`]\nnote_index = 1\nnote_count = 6\ncall sound.freq(notes[0], durations[0])\n"
 			}
+		},
+		{
+			"name": "set timer"
+		},
+		{
+			"name": "arithmetic"
 		}
 	]
 }
