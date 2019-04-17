@@ -186,9 +186,10 @@ CSSParser.VPL.Line.prototype.stroke = function (ctx) {
 		ctx.shadowColor = this.shadowColor;
 		ctx.shadowBlur = this.shadowBlurRadius;
 	}
-	if (this.lineWidth > 0 && this.color &&
-		this.lineStyle !== "none" && this.lineStyle !== "hidden") {
-		CSSParser.VPL.Box.setLineStyle(ctx, this.lineWidth, this.color, this.lineStyle);
+	if (this.width > 0 && this.color &&
+		this.style !== "none" && this.style !== "hidden") {
+		CSSParser.VPL.Box.setLineStyle(ctx, this.width, this.color, this.style);
+		ctx.lineCap = this.cap;
 		ctx.stroke();
 	}
 	ctx.restore();

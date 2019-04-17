@@ -341,12 +341,14 @@ Line properties:
 - color
 - line-width
 - line-style
+- line-cap
 
 Values:
 
 - lengths: floating-point value with unit (px, cm, mm, in, pc, pt, vw, vh, vmin, vmax, ww, wh, wmin, wmax, %), or 0
 - colors: #xxxxxx or #xxx or one of the colors defined in <https://www.w3.org/TR/css-color-3/#svg-color>
 - line styles: none, hidden, dotted, dashed, solid, or double
+- line caps: butt, round, square
 - font: see <https://www.w3.org/TR/2018/REC-css-fonts-3-20180920/#font-prop>
 - border-left, border-right, border-top, border-bottom, line: 1, 2 or 3 properties for line width (length), color and line style in any order
 - overflow: wrap (default) or scroll

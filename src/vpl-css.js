@@ -107,6 +107,14 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 		return self.borderStyles.indexOf(val) >= 0;
 	}
 
+	/** Check if valid line cap
+		@param {string} val
+		@return {boolean}
+	*/
+	function isLineCap(val) {
+		return ["butt", "round", "square"].indexOf(val) >= 0;
+	}
+
 	switch (key) {
 	case "margin-left":
 	case "margin-right":
@@ -155,6 +163,11 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 	case "line-style":
 		if (!isStyle(val)) {
 			throw "Unknown border style";
+		}
+		return val;
+	case "line-cap":
+		if (!isLineCap(val)) {
+			throw "Unknown line cap";
 		}
 		return val;
 	case "border-left-color":
@@ -893,8 +906,9 @@ CSSParser.VPL.Box.prototype.cssFontString = function () {
 */
 CSSParser.VPL.Line = function (props, lengthBase) {
 	this.margin = 0;
-	this.lineWidth = null;
-	this.lineStyle = null;
+	this.width = null;
+	this.style = null;
+	this.cap = null;
 	this.color = "black";
 
 	this.shadowOffset = null;
@@ -906,11 +920,14 @@ CSSParser.VPL.Line = function (props, lengthBase) {
 		this.setProperties(props.properties, /** @type {CSSParser.LengthBase} */(lengthBase));
 	}
 
-	if (this.lineWidth === null) {
- 		this.lineWidth = this.lineStyle !== null && this.lineStyle !== "none" ? 1 : 0;
+	if (this.width === null) {
+ 		this.width = this.style !== null && this.style !== "none" ? 1 : 0;
 	}
-	if (this.lineStyle === null) {
-		this.lineStyle = this.lineWidth > 0 ? "solid" : "none";
+	if (this.style === null) {
+		this.style = this.width > 0 ? "solid" : "none";
+	}
+	if (this.cap === null) {
+		this.cap = "butt";
 	}
 };
 CSSParser.VPL.Line.prototype = Object.create(CSSParser.VPL.Properties.prototype);
@@ -928,10 +945,13 @@ CSSParser.VPL.Line.prototype.setProperties = function (props, lengthBase) {
 			this.margin = props[key].toValue(lengthBase);
 			break;
 		case "line-width":
-			this.lineWidth = props[key].toValue(lengthBase);
+			this.width = props[key].toValue(lengthBase);
 			break;
 		case "line-style":
-			this.lineStyle = props[key];
+			this.style = props[key];
+			break;
+		case "line-cap":
+			this.cap = props[key];
 			break;
 		case "color":
 			this.color = props[key];
@@ -941,10 +961,10 @@ CSSParser.VPL.Line.prototype.setProperties = function (props, lengthBase) {
 				this.color = /** @type {string} */(props[key].color);
 			}
 			if (props[key].style !== null) {
-				this.lineStyle = /** @type {string} */(props[key].style);
+				this.style = /** @type {string} */(props[key].style);
 			}
 			if (props[key].width !== null) {
-				this.lineWidth = /** @type {number} */(props[key].width.toValue(lengthBase));
+				this.width = /** @type {number} */(props[key].width.toValue(lengthBase));
 			}
 			break;
 		case "line-shadow":
@@ -968,6 +988,7 @@ CSSParser.VPL.Line.prototype.copy = function () {
 	line.margin = this.margin;
 	line.width = this.width;
 	line.style = this.style;
+	line.cap = this.cap;
 	line.color = this.color;
 
 	line.shadowOffset = this.shadowOffset;
