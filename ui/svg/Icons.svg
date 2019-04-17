@@ -86,7 +86,7 @@
       <stop offset="1" stop-color="#6200ea" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <title>IconsAsset 101</title>
+  <title>IconsAsset 102</title>
   <g id="Layer_2" data-name="Layer 2">
     <g id="Pressed_bg">
       <circle id="shadow" class="cls-1" cx="24" cy="24.01" r="24"/>
@@ -469,9 +469,15 @@
     <g id="ic_then">
       <path id="Arrow-3" data-name="Arrow" class="cls-6" d="M25.12,18.28a.68.68,0,0,0,0,.95l3.58,3.58H17a.67.67,0,0,0,0,1.34H28.7l-3.58,3.58a.68.68,0,0,0,0,.95.66.66,0,0,0,.94,0L30.79,24a.68.68,0,0,0,0-.94l-4.73-4.73A.66.66,0,0,0,25.12,18.28Z"/>
     </g>
-    <g id="ScrollArrow">
-      <rect id="frame-55" data-name="frame" class="cls-3" y="16.51" width="48" height="15"/>
-      <polyline class="cls-19" points="18 21.13 24 27.13 30 21.13"/>
+    <g id="ScrollArrows">
+      <g id="ScrollDown">
+        <rect id="frame-55" data-name="frame" class="cls-3" y="16.51" width="48" height="15"/>
+        <polyline class="cls-19" points="18 21.13 24 27.13 30 21.13"/>
+      </g>
+      <g id="ScrollUp">
+        <rect id="frame-56" data-name="frame" class="cls-3" y="16.51" width="48" height="15"/>
+        <polyline class="cls-19" points="30 27.13 24 21.13 18 27.13"/>
+      </g>
     </g>
     <g id="CC-BY-NC-ND">
       <g>
