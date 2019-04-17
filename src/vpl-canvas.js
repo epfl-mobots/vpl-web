@@ -982,7 +982,7 @@ A3a.vpl.Canvas.prototype.redraw = function () {
 		item.draw(this.ctx);
 	}, this);
 	this.items.forEach(function (item) {
-		item.draw(this.ctx, 0, 0, true);
+		item.draw(this.ctx, undefined, undefined, true);
 	}, this);
 	if (this.zoomedItemProxy) {
 		this.ctx.save();
