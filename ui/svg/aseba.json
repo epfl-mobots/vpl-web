@@ -195,7 +195,7 @@
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
 				"sectionPriority": 1,
-				"clauseAnd": "`i < 5 && $[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[5]) : ''`"
+				"clauseAnd": "`i < 5 && $[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[5]) + '00' : ''`"
 			}
 		},
 		{
@@ -203,7 +203,7 @@
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
 				"sectionPriority": 1,
-				"clauseAnd": "`i < 2 && $[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[2]) : ''`"
+				"clauseAnd": "`i < 2 && $[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[2]) + '00' : ''`"
 			}
 		},
 		{
@@ -227,7 +227,7 @@
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
 				"sectionPriority": 1,
-				"clauseAnd": "`i < 2 && $[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(25 + 40 * $[2]) : ''`"
+				"clauseAnd": "`i < 2 && $[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + 25 * Math.round(40 * $[2]) : ''`"
 			}
 		},
 		{
@@ -257,7 +257,20 @@
 			}
 		},
 		{
-			"name": "counter comparison"
+			"name": "counter comparison",
+			"aseba": {
+				"initVarDecl": [
+					"var state256\n",
+					"var state2560\n"
+				],
+				"initCodeExec": [
+					"state256 = 0\n"
+				],
+				"clauseInit":
+					"state2560 = state256\n",
+				"clause":
+					"state2560 `['<=','<','==','>','>='][$[0] + 2]` `$[1]`"
+			}
 		},
 		{
 			"name": "motor",
@@ -408,10 +421,27 @@
 			}
 		},
 		{
-			"name": "set timer"
+			"name": "set timer",
+			"aseba": {
+				"initCodeExec": [
+					"# stop timer 0\ntimer.period[0] = 0\n"
+				],
+				"statement":
+					"timer.period[0] = `Math.round(1000 * $[0])`\n"
+			}
 		},
 		{
-			"name": "arithmetic"
+			"name": "arithmetic",
+			"aseba": {
+				"initVarDecl": [
+					"var state256\n"
+				],
+				"initCodeExec": [
+					"state256 = 0\n"
+				],
+				"statement":
+					"state256 `['','+','-','*','/'][$[0]]`= `$[1]`\n"
+			}
 		}
 	]
 }

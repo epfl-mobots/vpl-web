@@ -1,3 +1,4 @@
+<script type="application/json" id="ui.json">
 {
 	"styles": {
 		"scrollbarThumbColor": "#b0bec5",
@@ -245,18 +246,15 @@
 					"uri": "Blocks.svg#Rot360Rail"
 				},
 				{
-					"uri": "Blocks.svg#ThymioAcc1"
-				},
-				{
-					"uri": "Blocks.svg#Rot360_Handle"
+					"uri": "Blocks.svg#Acc1"
 				}
 			],
 			"defaultParameters": [0],
 			"rotating": [
 				{
-					"id": "Rot360",
-					"centerId": "RotationCenter",
-					"thumbId": "Btn2_HandleAcc0",
+					"id": "Acc1",
+					"centerId": "RotationCenter1",
+					"thumbId": "Btn2_HandleAcc1",
 					"numSteps": 12
 				}
 			]
@@ -305,18 +303,15 @@
 					"uri": "Blocks.svg#Rot360Rail"
 				},
 				{
-					"uri": "Blocks.svg#ThymioAcc2"
-				},
-				{
-					"uri": "Blocks.svg#Rot360_Handle"
+					"uri": "Blocks.svg#Acc2"
 				}
 			],
 			"defaultParameters": [0],
 			"rotating": [
 				{
-					"id": "Rot360",
-					"centerId": "RotationCenter",
-					"thumbId": "Btn2_HandleAcc0",
+					"id": "Acc2",
+					"centerId": "RotationCenter2",
+					"thumbId": "Btn2_HandleAcc2",
 					"numSteps": 12
 				}
 			]
@@ -333,17 +328,14 @@
 					"uri": "Blocks.svg#Rot360Rail"
 				},
 				{
-					"uri": "Blocks.svg#ThymioAcc0"
-				},
-				{
-					"uri": "Blocks.svg#Rot360_Handle"
+					"uri": "Blocks.svg#Acc0"
 				}
 			],
 			"defaultParameters": [0],
 			"rotating": [
 				{
-					"id": "Rot360",
-					"centerId": "RotationCenter",
+					"id": "Acc0",
+					"centerId": "RotationCenter0",
 					"thumbId": "Btn2_HandleAcc0",
 					"numSteps": 12
 				}
@@ -932,7 +924,7 @@
 		},
 		{
 			"name": "counter comparison",
-			"type": "event",
+			"type": "state",
 			"modes": ["advanced"],
 			"draw": [
 				{
@@ -940,6 +932,9 @@
 				},
 				{
 					"uri": "Blocks.svg#EvCounter"
+				},
+				{
+					"js": "ctx.font = 'bold 0.17px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText($[1].toString(10), 0.64, 0.52);"
 				}
 			],
 			"defaultParameters": [0, 0],
@@ -1526,7 +1521,7 @@
 				},
 				{
 					"js":
-						"ctx.moveTo(0.5, 0.47); ctx.lineTo(0.65, 0.4); ctx.lineTo(0.65, 0.38 - 0.05 * $[0]); ctx.lineTo(0.35, 0.38 - 0.05 * $[0]); ctx.lineTo(0.35, 0.4); ctx.closePath(); ctx.fillStyle = 'white'; ctx.strokeStyle = 'black'; ctx.lineWidth = 0.01; ctx.fill(); ctx.stroke();"
+						"ctx.moveTo(0.5, 0.47); ctx.lineTo(0.65, 0.4); ctx.lineTo(0.65, 0.38 - 0.05 * $[0]); ctx.lineTo(0.35, 0.38 - 0.05 * $[0]); ctx.lineTo(0.35, 0.4); ctx.closePath(); ctx.fillStyle = 'white'; ctx.strokeStyle = 'black'; ctx.lineWidth = 0.015; ctx.fill(); ctx.stroke(); ctx.font = '0.15px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText($[0].toFixed(1)+'s', 0.022, 0.5);"
 				}
 			],
 			"defaultParameters": [1],
@@ -1549,6 +1544,9 @@
 				},
 				{
 					"uri": "Blocks.svg#AcCounter"
+				},
+				{
+					"js": "ctx.font = 'bold 0.17px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(['=','+','\u2212','\u00d7','\u00f7'][$[0]], 0.34, 0.52); ctx.fillText($[1].toString(10), 0.65, 0.52);"
 				}
 			],
 			"defaultParameters": [0, 0],
@@ -1556,11 +1554,11 @@
 			"pushbuttons": [
 				{
 					"id": "ComparatorDown-2",
-					"newParameters": "`[Math.max($[0]-1,-2),$[1]]`"
+					"newParameters": "`[Math.max($[0]-1,0),$[1]]`"
 				},
 				{
 					"id": "ComparatorUp-2",
-					"newParameters": "`[Math.min($[0]+1,2),$[1]]`"
+					"newParameters": "`[Math.min($[0]+1,4),$[1]]`"
 				},
 				{
 					"id": "ValueDown-2",
@@ -1573,27 +1571,31 @@
 			],
 			"styles": [
 				{
+					"id": "Equals-2",
+					"st": "visibility:hidden"
+				},
+				{
 					"id": "Plus",
-					"st": "visibility:`$[0]===0?'visible':'hidden'`"
+					"st": "visibility:hidden"
 				},
 				{
 					"id": "Minus",
-					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+					"st": "visibility:hidden"
 				},
 				{
 					"id": "Multiply",
-					"st": "visibility:`$[0]===2?'visible':'hidden'`"
+					"st": "visibility:hidden"
 				},
 				{
 					"id": "Divide",
-					"st": "visibility:`$[0]===3?'visible':'hidden'`"
+					"st": "visibility:hidden"
 				}
 			]
 		}
 	],
 	"widgets": [
 		{
-			"name":"vpl:then",
+			"name": "vpl:then",
 			"draw": [
 				{
 					"uri": "Icons.svg#ic_then"
@@ -1601,7 +1603,7 @@
 			]
 		},
 		{
-			"name":"vpl:error",
+			"name": "vpl:error",
 			"draw": [
 				{
 					"uri": "Icons.svg#Error"
@@ -1609,10 +1611,26 @@
 			]
 		},
 		{
-			"name":"vpl:warning",
+			"name": "vpl:warning",
 			"draw": [
 				{
 					"uri": "Icons.svg#Warning"
+				}
+			]
+		},
+		{
+			"name": "vpl:moreLow",
+			"draw": [
+				{
+					"uri": "Icons.svg#ScrollDown"
+				}
+			]
+		},
+		{
+			"name": "vpl:moreHigh",
+			"draw": [
+				{
+					"uri": "Icons.svg#ScrollUp"
 				}
 			]
 		}

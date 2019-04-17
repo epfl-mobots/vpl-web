@@ -937,7 +937,7 @@
 		},
 		{
 			"name": "counter comparison",
-			"type": "event",
+			"type": "state",
 			"modes": ["advanced"],
 			"draw": [
 				{
@@ -945,6 +945,9 @@
 				},
 				{
 					"uri": "Blocks.svg#EvCounter"
+				},
+				{
+					"js": "ctx.font = 'bold 0.17px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText($[1].toString(10), 0.64, 0.52);"
 				}
 			],
 			"defaultParameters": [0, 0],
@@ -1531,7 +1534,7 @@
 				},
 				{
 					"js":
-						"ctx.moveTo(0.5, 0.47); ctx.lineTo(0.65, 0.4); ctx.lineTo(0.65, 0.38 - 0.05 * $[0]); ctx.lineTo(0.35, 0.38 - 0.05 * $[0]); ctx.lineTo(0.35, 0.4); ctx.closePath(); ctx.fillStyle = 'white'; ctx.strokeStyle = 'black'; ctx.lineWidth = 0.015; ctx.fill(); ctx.stroke();"
+						"ctx.moveTo(0.5, 0.47); ctx.lineTo(0.65, 0.4); ctx.lineTo(0.65, 0.38 - 0.05 * $[0]); ctx.lineTo(0.35, 0.38 - 0.05 * $[0]); ctx.lineTo(0.35, 0.4); ctx.closePath(); ctx.fillStyle = 'white'; ctx.strokeStyle = 'black'; ctx.lineWidth = 0.015; ctx.fill(); ctx.stroke(); ctx.font = '0.15px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText($[0].toFixed(1)+'s', 0.022, 0.5);"
 				}
 			],
 			"defaultParameters": [1],
@@ -1554,6 +1557,9 @@
 				},
 				{
 					"uri": "Blocks.svg#AcCounter"
+				},
+				{
+					"js": "ctx.font = 'bold 0.17px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(['=','+','\u2212','\u00d7','\u00f7'][$[0]], 0.34, 0.52); ctx.fillText($[1].toString(10), 0.65, 0.52);"
 				}
 			],
 			"defaultParameters": [0, 0],
@@ -1561,11 +1567,11 @@
 			"pushbuttons": [
 				{
 					"id": "ComparatorDown-2",
-					"newParameters": "`[Math.max($[0]-1,-2),$[1]]`"
+					"newParameters": "`[Math.max($[0]-1,0),$[1]]`"
 				},
 				{
 					"id": "ComparatorUp-2",
-					"newParameters": "`[Math.min($[0]+1,2),$[1]]`"
+					"newParameters": "`[Math.min($[0]+1,4),$[1]]`"
 				},
 				{
 					"id": "ValueDown-2",
@@ -1578,20 +1584,24 @@
 			],
 			"styles": [
 				{
+					"id": "Equals-2",
+					"st": "visibility:hidden"
+				},
+				{
 					"id": "Plus",
-					"st": "visibility:`$[0]===0?'visible':'hidden'`"
+					"st": "visibility:hidden"
 				},
 				{
 					"id": "Minus",
-					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+					"st": "visibility:hidden"
 				},
 				{
 					"id": "Multiply",
-					"st": "visibility:`$[0]===2?'visible':'hidden'`"
+					"st": "visibility:hidden"
 				},
 				{
 					"id": "Divide",
-					"st": "visibility:`$[0]===3?'visible':'hidden'`"
+					"st": "visibility:hidden"
 				}
 			]
 		}
@@ -1979,7 +1989,7 @@ sim-playground {
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
 				"sectionPriority": 1,
-				"clauseAnd": "`i < 5 && $[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[5]) : ''`"
+				"clauseAnd": "`i < 5 && $[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[5]) + '00' : ''`"
 			}
 		},
 		{
@@ -1987,7 +1997,7 @@ sim-playground {
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
 				"sectionPriority": 1,
-				"clauseAnd": "`i < 2 && $[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[2]) : ''`"
+				"clauseAnd": "`i < 2 && $[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[2]) + '00' : ''`"
 			}
 		},
 		{
@@ -2011,7 +2021,7 @@ sim-playground {
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
 				"sectionPriority": 1,
-				"clauseAnd": "`i < 2 && $[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(25 + 40 * $[2]) : ''`"
+				"clauseAnd": "`i < 2 && $[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + 25 * Math.round(40 * $[2]) : ''`"
 			}
 		},
 		{
@@ -2041,7 +2051,20 @@ sim-playground {
 			}
 		},
 		{
-			"name": "counter comparison"
+			"name": "counter comparison",
+			"aseba": {
+				"initVarDecl": [
+					"var state256\n",
+					"var state2560\n"
+				],
+				"initCodeExec": [
+					"state256 = 0\n"
+				],
+				"clauseInit":
+					"state2560 = state256\n",
+				"clause":
+					"state2560 `['<=','<','==','>','>='][$[0] + 2]` `$[1]`"
+			}
 		},
 		{
 			"name": "motor",
@@ -2196,11 +2219,23 @@ sim-playground {
 			"aseba": {
 				"initCodeExec": [
 					"# stop timer 0\ntimer.period[0] = 0\n"
-				]
+				],
+				"statement":
+					"timer.period[0] = `Math.round(1000 * $[0])`\n"
 			}
 		},
 		{
-			"name": "arithmetic"
+			"name": "arithmetic",
+			"aseba": {
+				"initVarDecl": [
+					"var state256\n"
+				],
+				"initCodeExec": [
+					"state256 = 0\n"
+				],
+				"statement":
+					"state256 `['','+','-','*','/'][$[0]]`= `$[1]`\n"
+			}
 		}
 	]
 }
@@ -3063,7 +3098,8 @@ sim-playground {
 </script>
 
 <!--appearance of interface icons -->
-<script type="image/svg+xml" id="Icons.svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48.01">
+<script type="image/svg+xml" id="Icons.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48.01">
   <defs>
     <style>
       .cls-1 {

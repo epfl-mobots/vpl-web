@@ -27,9 +27,13 @@
 			"!!stretch",
 			"vpl:undo",
 			"vpl:redo",
+			"!!stretch",
 			"vpl:duplicate",
+			"!!stretch",
 			"vpl:disable",
-			"vpl:trashcan"
+			"!!stretch",
+			"vpl:trashcan",
+			"!!stretch"
 		],
 		"editor": [
 			"!!stretch",
