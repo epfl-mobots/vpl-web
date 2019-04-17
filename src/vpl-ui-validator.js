@@ -45,7 +45,7 @@ A3a.vpl.validateUI = function (ui) {
 		var diffwheelmotion = b["diffwheelmotion"];
 		var score = b["score"];
 		var otherParameters = b["otherParameters"] ? parseInt(b["otherParameters"], 10) : 0;
-		var svgArr = b["svg"];
+		var drawArr = b["draw"];
 		/** @type {SVG} */
 		var svg;
 
@@ -54,28 +54,36 @@ A3a.vpl.validateUI = function (ui) {
 			@return {boolean}
 		*/
 		function belongsToDisplayedElement(id) {
-			for (var i = 0; i < svgArr.length; i++) {
-				var uriDec = A3a.vpl.Canvas.decodeURI(svgArr[i]["uri"]);
-				if (ui.svg[f].hasAncestor(id, uriDec.id)) {
-					return true;
+			for (var i = 0; i < drawArr.length; i++) {
+				if (drawArr[i]["uri"]) {
+					var uriDec = A3a.vpl.Canvas.decodeURI(drawArr[i]["uri"]);
+					if (ui.svg[f].hasAncestor(id, uriDec.id)) {
+						return true;
+					}
 				}
 			}
 			return false;
 		}
 
 		// check that all svg elements exist in a single svg
-		if (svgArr) {
-			var f = A3a.vpl.Canvas.decodeURI(svgArr[0]["uri"]).f;
-			svg = ui.svg[f];
-			for (var i = 0; i < svgArr.length; i++) {
-				var uriDec = A3a.vpl.Canvas.decodeURI(svgArr[i]["uri"]);
-				if (uriDec.f !== f) {
-					info("In block \"" + name + "\", multiple svg");
-					errorCount++;
-				} else {
-					if (!svg.hasElement(uriDec.id)) {
-						info("In block \"" + name + "\", uri \"" + svgArr[i]["uri"] + "\" not found");
-						errorCount++;
+		if (drawArr) {
+			var f = null;
+			for (var i = 0; i < drawArr.length; i++) {
+				if (drawArr[i]["uri"]) {
+					if (f == null) {
+						f = A3a.vpl.Canvas.decodeURI(drawArr[i]["uri"]).f;
+						svg = ui.svg[f];
+					} else {
+						var uriDec = A3a.vpl.Canvas.decodeURI(drawArr[i]["uri"]);
+						if (uriDec.f !== f) {
+							info("In block \"" + name + "\", multiple svg");
+							errorCount++;
+						} else {
+							if (!svg.hasElement(uriDec.id)) {
+								info("In block \"" + name + "\", uri \"" + drawArr[i]["uri"] + "\" not found");
+								errorCount++;
+							}
+						}
 					}
 				}
 			}

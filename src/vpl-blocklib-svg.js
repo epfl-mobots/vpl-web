@@ -436,19 +436,27 @@ A3a.vpl.Canvas.prototype.mousedownSVGNotes = function (block, width, height, lef
 	return null;
 };
 
-/** Draw a block defined with SVG
+/** Draw a block defined with SVG and/or JS
 	@param {Object} uiConfig
 	@param {Object} aux block description in uiConfig
 	@param {A3a.vpl.Block} block
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
-	if (aux["svg"].length === 0) {
+	if (aux["draw"].length === 0) {
 		// nothing to draw
 		return;
 	}
-	var f = A3a.vpl.Canvas.decodeURI(aux["svg"][0]["uri"]).f;
-	var displacements = this.getDisplacements(aux, uiConfig.svg[f], block.param);
+
+	var f = null;
+	for (var i = 0; i < aux["draw"].length; i++) {
+		if (aux["draw"][i]["uri"]) {
+			f = A3a.vpl.Canvas.decodeURI(aux["draw"][i]["uri"]).f;
+			break;
+		}
+	}
+
+	var displacements = f ? this.getDisplacements(aux, uiConfig.svg[f], block.param) : {};
 	var diffWheelMotion = null;
 	if (aux["diffwheelmotion"] && aux["diffwheelmotion"]["id"]) {
 		var dw = aux["diffwheelmotion"];
@@ -480,16 +488,26 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 			linewidth: linewidth
 		};
 	}
-	aux["svg"].forEach(function (el) {
-		var d = A3a.vpl.Canvas.decodeURI(el["uri"]);
-		this.drawSVG(uiConfig.svg[d.f],
-			{
-				elementId: d.id,
-				style: this.getStyles(aux, block),
-				displacement: displacements,
-				clips: this.getClips(aux, uiConfig.svg[f], block.param),
-				drawBoundingBox: false // true
-			});
+	aux["draw"].forEach(function (el) {
+		if (el["uri"]) {
+			var d = A3a.vpl.Canvas.decodeURI(el["uri"]);
+			this.drawSVG(uiConfig.svg[d.f],
+				{
+					elementId: d.id,
+					style: this.getStyles(aux, block),
+					displacement: displacements,
+					clips: this.getClips(aux, uiConfig.svg[f], block.param),
+					drawBoundingBox: false // true
+				});
+		}
+		if (el["js"]) {
+			var fun = new Function("ctx", "$", el["js"]);
+			this.ctx.save();
+			this.ctx.scale(this.dims.blockSize, this.dims.blockSize);
+			this.ctx.beginPath();
+			fun(this.ctx, block.param);
+			this.ctx.restore();
+		}
 	}, this);
 	if (diffWheelMotion) {
 		this.traces(diffWheelMotion.dleft, diffWheelMotion.dright,
@@ -528,7 +546,7 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 	@return {?number}
 */
 A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width, height, left, top, ev) {
-	var filename = A3a.vpl.Canvas.decodeURI(aux["svg"][0]["uri"]).f;
+	var filename = A3a.vpl.Canvas.decodeURI(aux["draw"][0]["uri"]).f;
 	var ix0 = 0;
 	var buttons = aux["buttons"];
 	if (buttons) {
