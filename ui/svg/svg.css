@@ -31,7 +31,7 @@ vpl.top {
 }
 
 button.vpl.top {
-	font-size: 1.3vw;
+	font-size: 2wh;
 	font-weight: 300;
 	font-family: 'Rubik', sans-serif;
 }
@@ -73,17 +73,34 @@ rule {
 	margin: 16px;
 }
 
+crossout-line {
+	line-width: 0.75ww;
+ 	color: rgba(120,120,120,0.5);
+}
+crossout-line.vpl {
+	line-width: 5vw;
+}
+
 #widget-then {
 	padding-left: 20px;
 	padding-right: 20px;
-	width: 4ww;
-	height: 4ww;
+	width: 2ww;
+	height: 2ww;
 }
 
 #widget-error, #widget-warning {
-	width: 3.5ww;
-	height: 3.5ww;
-	margin-right: 0.1ww;
+	width: 3ww;
+	height: 3ww;
+}
+
+#widget-moreLow, #widget-moreHigh {
+	width: 3ww;
+	height: 3ww;
+}
+
+conflict-line {
+    line: 2px #ff1744 dashed;
+    stroke-linejoin:round;
 }
 
 block-library {

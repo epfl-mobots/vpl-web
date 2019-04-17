@@ -27,23 +27,24 @@ A3a.vpl.Canvas.prototype.clearBlockBackground = function () {
 	@param {number} left
 	@param {number} width
 	@param {number} height
-	@param {number=} relativeThickness relative thickness wrt default (default: 1)
+	@param {Array.<string>=} clas css classes for crossout-line
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height, relativeThickness) {
+A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height, clas) {
 	this.ctx.save();
 	this.ctx.fillStyle = "#fff";
 	this.ctx.globalAlpha = 0.5;
 	this.ctx.fillRect(left, top, width, height);
 	this.ctx.restore();
 	this.ctx.save();
-	this.ctx.strokeStyle = "#777";
-	this.ctx.lineWidth = 5 * this.dims.blockLineWidth * (relativeThickness || 1);
-	this.ctx.globalAlpha = 0.5;
+	var crossoutLine = this.css.getLine({
+		tag: "crossout-line",
+		clas: clas || []
+	});
 	this.ctx.beginPath();
 	this.ctx.moveTo(left - this.dims.blockSize * 0.1, top + height * 0.7);
 	this.ctx.lineTo(left + width + this.dims.blockSize * 0.1, top + height * 0.3);
-	this.ctx.stroke();
+	crossoutLine.stroke(this.ctx);
 	this.ctx.restore();
 };
 

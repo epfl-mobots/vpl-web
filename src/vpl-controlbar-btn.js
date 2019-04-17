@@ -58,7 +58,7 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 					isPressed,
 					app.commands.getState(id));
 				if (disabled) {
-					canvas.disabledMark(0, 0, box.width, box.height);
+					canvas.disabledMark(0, 0, box.width, box.height, ["button"]);
 				}
 			},
 			buttonBounds,

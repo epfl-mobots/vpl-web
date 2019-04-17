@@ -27,7 +27,7 @@ button {
 }
 
 button.vpl.bottom {
-	font: 1.8ww sans-serif;
+	font: 1.8vw sans-serif;
 }
 
 #vpl-message-error {
@@ -100,6 +100,20 @@ rule:small {
 	background: white;
 }
 
+crossout-line {
+	line-width: 0.75vw;
+ 	color: rgba(120,120,120,0.5);
+}
+crossout-line.vpl {
+	line-width: 5vw;
+}
+
+#widget-error, #widget-warning {
+	width: 3vw;
+	height: 3vw;
+	margin-right: 1vw;
+}
+
 conflict-line.error {
 	line: 3px #e44 dashed;
 }
@@ -108,8 +122,8 @@ conflict-line.warning {
 }
 
 #widget-then {
-	padding-left: 2vw;
-	padding-right: 2px;
+	width: 3vw;
+	height: 3vw;
 }
 
 block-library {

@@ -371,6 +371,7 @@ Box elements:
 Line elements:
 
 - conflict-line (classes: error, warning)
+- crossout-line (classes: button, vpl, rule, block)
 
 Global style settings
 ---------------------

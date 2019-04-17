@@ -95,7 +95,8 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 	*/
 	function isColor(val) {
 		return CSSParser.colorDict.hasOwnProperty(val) ||
-			/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(val);
+			/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(val) ||
+			/^rgba\([^()]*\)$/.test(val);
 	}
 
 	/** Check if valid style
@@ -892,8 +893,8 @@ CSSParser.VPL.Box.prototype.cssFontString = function () {
 */
 CSSParser.VPL.Line = function (props, lengthBase) {
 	this.margin = 0;
-	this.lineWidth = 0;
-	this.lineStyle = "none";
+	this.lineWidth = null;
+	this.lineStyle = null;
 	this.color = "black";
 
 	this.shadowOffset = null;
@@ -903,6 +904,13 @@ CSSParser.VPL.Line = function (props, lengthBase) {
 
 	if (props) {
 		this.setProperties(props.properties, /** @type {CSSParser.LengthBase} */(lengthBase));
+	}
+
+	if (this.lineWidth === null) {
+ 		this.lineWidth = this.lineStyle !== null && this.lineStyle !== "none" ? 1 : 0;
+	}
+	if (this.lineStyle === null) {
+		this.lineStyle = this.lineWidth > 0 ? "solid" : "none";
 	}
 };
 CSSParser.VPL.Line.prototype = Object.create(CSSParser.VPL.Properties.prototype);

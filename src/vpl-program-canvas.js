@@ -76,8 +76,8 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 					canvas.lockedMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize, true);
 				}
 				if (block.disabled || opts.disabled) {
-					canvas.dims.blockLineWidth = dims0.blockLineWidth;    // unscaled line width for disabled mark
-					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize);
+					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize,
+						["block"]);
 				}
 				canvas.dims = dims0;
 			} else {
@@ -90,7 +90,8 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 					canvas.lockedMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize, true);
 				}
 				if (block.disabled) {
-					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize);
+					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize,
+						["block"]);
 				}
 			}
 			canvas.ctx.restore();
@@ -312,7 +313,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	);
 	if (eventHandler.disabled) {
 		item.drawOverlay = function (ctx, item, dx, dy) {
-			canvas.disabledMark(item.x + dx, item.y + dy, item.width, item.height);
+			canvas.disabledMark(item.x + dx, item.y + dy, item.width, item.height, ["rule"]);
 		};
 	}
 	if (this.noVPL) {
@@ -891,7 +892,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			canvas.addDecoration(function (ctx) {
 				canvas.disabledMark(vplBox.x, vplBox.y,
 					vplBox.width, vplBox.height,
-					3);
+					["vpl"]);
 			});
 		}
 	}
