@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 This is a Derivative Work.
-Changes by Mobots, EPFL, March 2019
+Changes by Mobots, EPFL, March-April 2019
 
 Build:
 1. git clone https://github.com/Mobsya/thymio-js-api-demo.git
@@ -28,8 +28,9 @@ Build:
 6. use the resulting dist/thymio.js in your web app:
 
 // default for websocketURL: "ws://localhost:8597" (local tdm)
+// default for uuid: none (pick last connected node)
 // default for success (function called once done): null (none)
-tdmInit(websocketURL, success);
+tdmInit(websocketURL, uuid, success);
 tdmRun(asebaSourceCode, success);
 
 */
@@ -38,7 +39,7 @@ import {createClient, Node, NodeStatus, Request, setup} from '@mobsya/thymio-api
 
 window.tdmSelectedNode = undefined;
 
-window.tdmInit = function (url, success) {
+window.tdmInit = function (url, uuid, success) {
 
     // Connect to the switch
     // We will need some way to get that url, via the launcher
@@ -54,7 +55,9 @@ window.tdmInit = function (url, success) {
     client.onNodesChanged = async (nodes) => {
         try {
             for (let node of nodes) {
-                if ((!window.tdmSelectedNode || window.tdmSelectedNode.status != NodeStatus.ready) && node.status == NodeStatus.available) {
+                if ((!window.tdmSelectedNode || window.tdmSelectedNode.status != NodeStatus.ready)
+                    && node.status == NodeStatus.available
+                    && (!uuid || node.id.toString() === uuid)) {
                     try {
                         console.log(`Locking ${node.id}`)
                         // Lock (take ownership) of the node. We cannot mutate a node (send code to it), until we have a lock on it

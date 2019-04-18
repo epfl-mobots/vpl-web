@@ -146,7 +146,8 @@ function vplLoadResourcesInScripts(rootFilename, getAuxiliaryFilenames, onLoad, 
 	@return {string}
 */
 function vplGetQueryOption(key) {
-	var query = /^[^?]*\?([^#]*)/.exec(document.location.href)[1];
+	var r = /^[^?]*\?([^#]*)/.exec(document.location.href);
+	var query = r && r[1];
 	if (query) {
 		var pairs = query
 			.split("&").map(function (p) {
