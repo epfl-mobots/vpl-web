@@ -626,6 +626,7 @@ A3a.vpl.Canvas.prototype.accelerometerHandle = function () {
 	ctx.moveTo(0, 0);
 	ctx.lineTo(0, -dims.blockSize * 0.4);
 	ctx.strokeStyle = "#666";
+	ctx.lineWidth = dims.blockLineWidth;
 	ctx.stroke();
 	ctx.beginPath();
 	ctx.arc(0, -dims.blockSize * 0.4, dims.blockSize * 0.1,
@@ -790,6 +791,7 @@ A3a.vpl.Canvas.prototype.drawInit = function () {
 	ctx.save();
 	ctx.fillStyle = "black";
 	ctx.strokeStyle = "black";
+	ctx.lineWidth = dims.blockLineWidth;
 	ctx.beginPath();
 	ctx.arc(dims.blockSize * 0.3, dims.blockSize * 0.5,
 		dims.blockSize * 0.08,
