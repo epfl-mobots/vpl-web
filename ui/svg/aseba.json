@@ -399,7 +399,7 @@
 					"# when a note is finished, play the next one\nonevent sound.finished\nif note_index != note_count then\ncall sound.freq(notes[note_index], durations[note_index])\nnote_index++\nend\n"
 				],
 				"statement":
-					"notes = [`$.filter(function (a, i) { return i % 2 == 0; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`]\ndurations = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return 7 * d; }).join(', ')`]\nnote_index = 1\nnote_count = 6\ncall sound.freq(notes[0], durations[0])\n"
+					"notes = [`$.filter(function (a, i) { return i % 2 == 0; }).map(function (h, i) { return $[2 * i + 1] ? [262, 311, 370, 440, 524, 370][h] : 0; }).join(', ')`]\ndurations = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return d ? 7 * d : 28; }).join(', ')`]\nnote_index = 1\nnote_count = 6\ncall sound.freq(notes[0], durations[0])\n"
 			}
 		},
 		{
@@ -417,7 +417,7 @@
 					"# when a note is finished, play the next one\nonevent sound.finished\nif note_index != note_count then\ncall sound.freq(notes[note_index], durations[note_index])\nnote_index++\nend\n"
 				],
 				"statement":
-					"notes = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`]\ndurations = [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * d; }).join(', ')`]\nnote_index = 1\nnote_count = 6\ncall sound.freq(notes[0], durations[0])\n"
+					"notes = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h, i) { return $[2 * i + 2] ? [262, 311, 370, 440, 524, 370][h] : 0; }).join(', ')`]\ndurations = [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * (d ? d : 4); }).join(', ')`]\nnote_index = 1\nnote_count = 6\ncall sound.freq(notes[0], durations[0])\n"
 			}
 		},
 		{
