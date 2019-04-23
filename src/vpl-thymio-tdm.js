@@ -36,7 +36,7 @@ A3a.vpl.Application.prototype.installThymioTDM = function () {
 			return app.runGlue.state != null;
 		},
 		isEnabled: function (language) {
-			return language === "aseba" && app.runGlue.state != null;
+			return language === "aseba" && app.runGlue.state != null && window["tdmCanRun"]();
 		},
 		preferredLanguage: "aseba",
 		languages: ["aseba"],

@@ -31,6 +31,7 @@ Build:
 // default for uuid: none (pick last connected node)
 // default for success (function called once done): null (none)
 tdmInit(websocketURL, uuid, success);
+var b = tdmCanRun();
 tdmRun(asebaSourceCode, success);
 
 */
@@ -55,6 +56,12 @@ window.tdmInit = function (url, uuid, success) {
     client.onNodesChanged = async (nodes) => {
         try {
             for (let node of nodes) {
+                if (window.tdmSelectedNode
+                    && window.tdmSelectedNode.id.toString() === node.id.toString()
+                    && node.status != NodeStatus.ready) {
+                    // lock on tdmSelectedNode lost
+                    window.tdmSelectedNode = null;
+                }
                 if ((!window.tdmSelectedNode || window.tdmSelectedNode.status != NodeStatus.ready)
                     && node.status == NodeStatus.available
                     && (!uuid || node.id.toString() === uuid)) {
@@ -68,7 +75,7 @@ window.tdmInit = function (url, uuid, success) {
                         console.log("Node locked");
                         success && success();
                     } catch (e) {
-                        console.log(`Unable To Log ${node.id} (${node.name})`)
+                        console.log(`Unable To Lock ${node.id} (${node.name})`)
                     }
                 }
             }
@@ -76,6 +83,10 @@ window.tdmInit = function (url, uuid, success) {
             console.log(e)
         }
     }
+};
+
+window.tdmCanRun = function () {
+    return window.tdmSelectedNode != null && window.tdmSelectedNode.status == NodeStatus.ready;
 };
 
 window.tdmRun = async function (program, success) {

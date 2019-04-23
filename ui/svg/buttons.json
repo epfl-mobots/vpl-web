@@ -161,7 +161,7 @@
 		},
 		{
 			"name": "vpl:run",
-			"state": ["disabled", "=error"],
+			"state": ["disabled"],
 			"draw": [
 				{
 					"uri": "Icons.svg#play_default",

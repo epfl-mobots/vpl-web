@@ -15,7 +15,7 @@
 		run: (function(string,string):void | undefined),
 		init: (function(string):void | undefined),
 		isConnected: (function():boolean | undefined),
-		isEnabled: (function():boolean | undefined),
+		isEnabled: (function(string):boolean | undefined),
 		languages: (Array.<string> | undefined),
 		preferredLanguage: (string | undefined),
 		state: (Object | undefined)
@@ -47,8 +47,8 @@ A3a.vpl.RunGlue.prototype.isConnected = function (language) {
 	@return {boolean}
 */
 A3a.vpl.RunGlue.prototype.isEnabled = function (language) {
-	return this.runFun != null && this.languages.indexOf(language) >= 0 ||
-		(this.isEnabledFun == null || this.isEnabledFun());
+	return this.runFun != null && this.languages.indexOf(language) >= 0 &&
+		(this.isEnabledFun == null || this.isEnabledFun(language));
 };
 
 /** Initialize the RunGlue interface
