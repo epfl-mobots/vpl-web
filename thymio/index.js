@@ -58,20 +58,20 @@ window.tdmInit = function (url, uuid, success) {
             for (let node of nodes) {
                 if (window.tdmSelectedNode
                     && window.tdmSelectedNode.id.toString() === node.id.toString()
-                    && node.status != NodeStatus.ready) {
-                    // lock on tdmSelectedNode lost
+                    && node.status != NodeStatus.ready && node.status != NodeStatus.available) {
+                    // tdmSelectedNode lost
                     window.tdmSelectedNode = null;
                 }
                 if ((!window.tdmSelectedNode || window.tdmSelectedNode.status != NodeStatus.ready)
                     && node.status == NodeStatus.available
                     && (!uuid || node.id.toString() === uuid)) {
                     try {
+                        window.tdmSelectedNode = node;
                         console.log(`Locking ${node.id}`)
                         // Lock (take ownership) of the node. We cannot mutate a node (send code to it), until we have a lock on it
                         // Once locked, a node will appear busy / unavailable to other clients until we close the connection or call `unlock` explicitely
                         // We can lock as many nodes as we want
                         await node.lock();
-                        window.tdmSelectedNode = node;
                         console.log("Node locked");
                         success && success();
                     } catch (e) {
@@ -85,15 +85,21 @@ window.tdmInit = function (url, uuid, success) {
     }
 };
 
+window.tdmIsConnected = function () {
+    return window.tdmSelectedNode != null;
+};
+
 window.tdmCanRun = function () {
     return window.tdmSelectedNode != null && window.tdmSelectedNode.status == NodeStatus.ready;
 };
 
 window.tdmRun = async function (program, success) {
     try {
-        await window.tdmSelectedNode.sendAsebaProgram(program);
-        await window.tdmSelectedNode.runProgram();
-        success && success();
+        if (window.tdmSelectedNode.status == NodeStatus.ready) {
+            await window.tdmSelectedNode.sendAsebaProgram(program);
+            await window.tdmSelectedNode.runProgram();
+            success && success();
+        }
     } catch(e) {
         console.log(e);
     }

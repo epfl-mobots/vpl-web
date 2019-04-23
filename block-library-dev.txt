@@ -215,7 +215,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:redo": redo last undone change
 - "vpl:run": run the VPL program with the Thymio or the simulator (state is "empty", "running", "error", "canLoad", or "canReload" depending on the VPL program and whether it's been run and modified)
 - "vpl:stop": stop the VPL program
-- "vpl:connected": connection indicator (no action; enabled if connected, disabled if no connection)
+- "vpl:connected": connection indicator (no action, always disabled; selected if connected, unselected if no connection)
 - "vpl:sim": switch to the simulator view
 - "vpl:duplicate": duplicate a rule (drag target)
 - "vpl:disable": toggle a rule or block between disabled and enabled states (drag target)
