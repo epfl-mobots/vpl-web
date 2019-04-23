@@ -71,7 +71,7 @@
 				"sectionBegin": "onevent acc\n",
 				"sectionPriority": 1,
 				"clauseInit":
-					"call math.atan2(rollAngle, acc[0], acc[2])\n",
+					"call math.atan2(rollAngle, -acc[0], acc[2])\n",
 				"clause": "rollAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and rollAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
@@ -85,7 +85,7 @@
 				"sectionPriority": 1,
 				"clauseInit":
 					"call math.atan2(rollAngle, acc[0], acc[2])\n",
-				"clause": "abs(rollAngle - 16384) < 1365"
+				"clause": "abs(abs(rollAngle) - 16384) < 1365"
 			}
 		},
 		{
@@ -106,20 +106,20 @@
 				"sectionPriority": 1,
 				"clauseInit":
 					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+				"clause": "yawAngle >= `Math.round(-2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(-2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
 			"name": "pitch",
 			"aseba": {
 				"initVarDecl": [
-					"# yaw angle from accelerometer\nvar yawAngle\n"
+					"# pitch angle from accelerometer\nvar pitchAngle\n"
 				],
 				"sectionBegin": "onevent acc\n",
 				"sectionPriority": 1,
 				"clauseInit":
-					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+					"call math.atan2(pitchAngle, acc[1], acc[2])\n",
+				"clause": "pitchAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and pitchAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{

@@ -1891,7 +1891,7 @@ sim-playground {
 				"sectionBegin": "onevent acc\n",
 				"sectionPriority": 1,
 				"clauseInit":
-					"call math.atan2(rollAngle, acc[0], acc[2])\n",
+					"call math.atan2(rollAngle, -acc[0], acc[2])\n",
 				"clause": "rollAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and rollAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
@@ -1905,7 +1905,7 @@ sim-playground {
 				"sectionPriority": 1,
 				"clauseInit":
 					"call math.atan2(rollAngle, acc[0], acc[2])\n",
-				"clause": "abs(rollAngle - 16384) < 1365"
+				"clause": "abs(abs(rollAngle) - 16384) < 1365"
 			}
 		},
 		{
@@ -1926,20 +1926,20 @@ sim-playground {
 				"sectionPriority": 1,
 				"clauseInit":
 					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+				"clause": "yawAngle >= `Math.round(-2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(-2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
 			"name": "pitch",
 			"aseba": {
 				"initVarDecl": [
-					"# yaw angle from accelerometer\nvar yawAngle\n"
+					"# pitch angle from accelerometer\nvar pitchAngle\n"
 				],
 				"sectionBegin": "onevent acc\n",
 				"sectionPriority": 1,
 				"clauseInit":
-					"call math.atan2(yawAngle, acc[0], acc[1])\n",
-				"clause": "yawAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+					"call math.atan2(pitchAngle, acc[1], acc[2])\n",
+				"clause": "pitchAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and pitchAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -2271,45 +2271,28 @@ sim-playground {
 {
 	"blocks": [
 		{
+			"name": "!default event",
+			"l2": {
+				"initCodeExec": [
+					"timer.period[1] = 100;\n"
+				],
+				"sectionBegin": "onevent timer1 {\n",
+				"sectionEnd": "}\n"
+			}
+		},
+		{
+			"name": "!stop",
+			"l2": {
+				"statement": "motor.left.target = 0;\nmotor.right.target = 0;\n"
+			}
+		},
+		{
 			"name": "button",
 			"l2": {
 				"sectionBegin": "onevent buttons {\n",
 				"sectionEnd": "}\n",
 				"sectionPriority": 10,
 				"clauseAnd": "`$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''`"
-			}
-		},
-		{
-			"name": "roll",
-			"l2": {
-				"sectionBegin": "onevent acc {\n",
-				"sectionEnd": "}\n",
-				"sectionPriority": 1,
-				"clauseInit":
-					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
-				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
-			}
-		},
-		{
-			"name": "yaw",
-			"l2": {
-				"sectionBegin": "onevent acc {\n",
-				"sectionEnd": "}\n",
-				"sectionPriority": 1,
-				"clauseInit":
-					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
-				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
-			}
-		},
-		{
-			"name": "pitch",
-			"l2": {
-				"sectionBegin": "onevent acc {\n",
-				"sectionEnd": "}\n",
-				"sectionPriority": 1,
-				"clauseInit":
-					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
-				"clause": "yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
 			}
 		},
 		{
@@ -2320,10 +2303,95 @@ sim-playground {
 			}
 		},
 		{
+			"name": "state 256",
+			"l2": {
+				"initVarDecl": [
+					"int state256;\n",
+					"int state2560;\n"
+				],
+				"initCodeExec": [
+					"state256 = 0;\n"
+				],
+				"clauseInit":
+					"state2560 = state256;\n",
+				"clause":
+					"state2560 == `$.reduce(function (a, b, i) { return b ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`"
+			}
+		},
+		{
+			"name": "state 256 with mask",
+			"l2": {
+				"initVarDecl": [
+					"int state256;\n",
+					"int state2560;\n"
+				],
+				"initCodeExec": [
+					"state256 = 0;\n"
+				],
+				"clauseInit":
+					"state2560 = state256;\n",
+				"clause":
+					"(state2560 & `$.reduce(function (a, b, i) { return b !== 0 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`) == `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`"
+			}
+		},
+		{
+			"name": "roll",
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"fixed rollAngle = atan2(-acc[0], acc[2]);\n",
+				"clause": "rollAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` && rollAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+			}
+		},
+		{
+			"name": "acc side",
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}",
+				"sectionPriority": 1,
+				"clauseInit":
+					"fixed rollAngle = atan2(acc[0], acc[2]);\n",
+				"clause": "abs(abs(rollAngle) - 0.5) < 0.02"
+			}
+		},
+		{
+			"name": "acc upside down",
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clause": "-acc[2] / 2 > abs(acc[0]) + abs(acc[1])"
+			}
+		},
+		{
+			"name": "yaw",
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+				"clause": "yawAngle >= `(Math.PI / 12 * (-$[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * (-$[0] + 0.5)).toFixed(2)`"
+			}
+		},
+		{
+			"name": "pitch",
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseInit":
+					"fixed pitchAngle = atan2(acc[1], acc[2]);\n",
+				"clause": "pitchAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+			}
+		},
+		{
 			"name": "clap",
 			"l2": {
 				"initCodeExec": [
-					"// setup threshold for detecting claps\nmic.threshold = 250\n"
+					"// setup threshold for detecting claps\nmic.threshold = 250;\n"
 				],
 				"sectionBegin": "onevent mic {\n",
 				"sectionEnd": "}\n",
@@ -2333,16 +2401,153 @@ sim-playground {
 			}
 		},
 		{
-			"name": "fall"
+			"name": "fall",
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clause": "abs(acc[0]) + abs(acc[1]) + abs(acc[2]) < 16"
+			}
 		},
 		{
-			"name": "tap"
+			"name": "tap",
+			"l2": {
+				"sectionBegin": "onevent tap {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1000
+			}
 		},
 		{
-			"name": "remote control arrows"
+			"name": "color 8 state",
+			"l2": {
+				"initVarDecl": [
+					"// RGB color of the top led\nint topColor[3];\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0];\n"
+				],
+				"clause": "topColor[0] `$[0] >= 4 ? '>=' : '<'` 16 && topColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && topColor[0] `$[0] % 2 ? '>=' : '<'` 16"
+			}
 		},
 		{
-			"name": "remote control keypad"
+			"name": "bottom color 8 state",
+			"l2": {
+				"initVarDecl": [
+					"// RGB color of the bottom led\nint bottomColor[3];\n"
+				],
+				"initCodeExec": [
+					"bottomColor = [0, 0, 0];\n"
+				],
+				"clause": "bottomColor[0] `$[0] >= 4 ? '>=' : '<'` 16 && bottomColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && bottomColor[0] `$[0] % 2 ? '>=' : '<'` 16"
+			}
+		},
+		{
+			"name": "horiz prox front",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`$[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
+			}
+		},
+		{
+			"name": "horiz prox back",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`$[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
+			}
+		},
+		{
+			"name": "horiz prox front adv",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`i < 5 && $[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[5]) + '00' : ''`"
+			}
+		},
+		{
+			"name": "horiz prox back adv",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`i < 2 && $[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[2]) + '00' : ''`"
+			}
+		},
+		{
+			"name": "ground mean",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clause": "prox.ground.delta[0] + prox.ground.delta[1] `$[0] ? '>= 900' : '<= 800'`"
+			}
+		},
+		{
+			"name": "ground",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`$[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= 450' : '<= 400') : ''`"
+			}
+		},
+		{
+			"name": "ground 1",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1,
+				"clauseAnd": "`i < 2 && $[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + 25 * Math.round(40 * $[2]) : ''`"
+			}
+		},
+		{
+			"name": "remote control arrows",
+			"l2": {
+				"sectionBegin": "onevent rc5 {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 10,
+				"clause": "`[[85, 17], [80, 32], [81, 33], [86, 16, 78], [87, 13]][$[0]].map(function (c) { return 'rc5.command == ' + c; }).join(' or ')`"
+			}
+		},
+		{
+			"name": "remote control keypad",
+			"l2": {
+				"sectionBegin": "onevent rc5 {\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 10,
+				"clause": "rc5.command == `$[0]`"
+			}
+		},
+		{
+			"name": "timer",
+			"l2": {
+				"initCodeExec": [
+					"// stop timer 0\ntimer.period[0] = 0;\n"
+				],
+				"sectionBegin": "onevent timer0 {\ntimer.period[0] = 0;\n",
+				"sectionEnd": "}\n",
+				"sectionPriority": 1000
+			}
+		},
+		{
+			"name": "counter comparison",
+			"l2": {
+				"initVarDecl": [
+					"int state256;\n",
+					"int state2560;\n"
+				],
+				"initCodeExec": [
+					"state256 = 0;\n"
+				],
+				"clauseInit":
+					"state2560 = state256;\n",
+				"clause":
+					"state2560 `['<=','<','==','>','>='][$[0] + 2]` `$[1]`"
+			}
 		},
 		{
 			"name": "motor",
@@ -2395,6 +2600,24 @@ sim-playground {
 			}
 		},
 		{
+			"name": "notes",
+			"l2": {
+				"initVarDecl": [
+					"const pi = 3.14;\n",
+					"// variables for notes\nint notes[6];\nint durations[6];\nint note_index;\nint wave[142];\n"
+				],
+				"initCodeExec": [
+					"// init notes\nfor (int i = 0; i < size(wave); i++) {\nwave[i] = 128 * sin(fixed(i) / size(wave) * 2 * pi);\n}\nsound.wave(wave);\nnote_index = 6;\n",
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"initCodeDecl": [
+					"// when a note is finished, play the next one\nonevent sound.finished {\nif (note_index < size(notes)) {\nsound.freq(notes[note_index], durations[note_index]);\nnote_index++;\n}\n}\n"
+				],
+				"statement":
+					"notes = [`$.filter(function (a, i) { return i % 2 == 0; }).map(function (h, i) { return $[2 * i + 1] ? [262, 311, 370, 440, 524, 370][h] : 0; }).join(', ')`];\ndurations = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return d ? 7 * d : 28; }).join(', ')`];\nnote_index = 1;\nnote_count = 6;\nsound.freq(notes[0], durations[0]);\n"
+			}
+		},
+		{
 			"name": "notes with speed",
 			"l2": {
 				"initVarDecl": [
@@ -2409,7 +2632,30 @@ sim-playground {
 					"// when a note is finished, play the next one\nonevent sound.finished {\nif (note_index < size(notes)) {\nsound.freq(notes[note_index], durations[note_index]);\nnote_index++;\n}\n}\n"
 				],
 				"statement":
-					"notes = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`]\ndurations = [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * d; }).join(', ')`]\nsound.freq(notes[0], durations[0]);\nnote_index = 1;\n"
+					"notes = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h, i) { return $[2 * i + 2] ? [262, 311, 370, 440, 524, 370][h] : 0; }).join(', ')`];\ndurations = [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * (d ? d : 4); }).join(', ')`];\nnote_index = 1;\nnote_count = 6;\nsound.freq(notes[0], durations[0]);\n"
+			}
+		},
+		{
+			"name": "set timer",
+			"l2": {
+				"initCodeExec": [
+					"// stop timer 0\ntimer.period[0] = 0;\n"
+				],
+				"statement":
+					"timer.period[0] = `Math.round(1000 * $[0])`;\n"
+			}
+		},
+		{
+			"name": "arithmetic",
+			"l2": {
+				"initVarDecl": [
+					"int state256;\n"
+				],
+				"initCodeExec": [
+					"state256 = 0;\n"
+				],
+				"statement":
+					"state256 `['','+','-','*','/'][$[0]]`= `$[1]`;\n"
 			}
 		}
 	]

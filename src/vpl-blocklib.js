@@ -965,7 +965,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					sectionBegin: "onevent acc\n",
 					sectionPriority: 1,
 					clauseInit:
-						"call math.atan2(rollAngle, acc[0], acc[2])\n",
+						"call math.atan2(rollAngle, -acc[0], acc[2])\n",
 					clause:
 						a === -12
 							? "rollAngle >= " + Math.round(2730.67 * 12 - 1365.33) +
