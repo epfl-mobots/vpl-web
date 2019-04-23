@@ -613,15 +613,24 @@
 				},
 				{
 					"uri": "Blocks.svg#Ev_ProxH_Front_adv"
+				},
+				{
+					"js": "ctx.strokeStyle = '#6200ea'; ctx.lineWidth = 0.02; ctx.lineCap = 'round'; var r = 0.95 - 0.3 * $[5]; var w = 0.09 - 0.05 * $[5]; $.slice(0,-1).forEach(function (b, i) { if (b) { var phi = 0.298 * (i + 0.65); ctx.moveTo(r * Math.sin(phi) - w * Math.cos(phi), 1 - r * Math.cos(phi) - w * Math.sin(phi)); ctx.lineTo(r * Math.sin(phi) + w * Math.cos(phi), 1 - r * Math.cos(phi) + w * Math.sin(phi)); } }); ctx.stroke();"
 				}
 			],
-			"defaultParameters": [0, 0, 0, 0, 0, 0],
+			"styles": [
+				{
+					"id": "Obstacles-3",
+					"st": "visibility:hidden"
+				}
+			],
+			"defaultParameters": [0, 0, 0, 0, 0, 0.5],
 			"sliders": [
 				{
 					"id": "Slid_threshold",
 					"thumbId": "cursor_threshold",
-					"min": 0,
-					"max": 1
+					"min": 1,
+					"max": 0
 				}
 			],
 			"buttons": [
@@ -668,6 +677,15 @@
 				},
 				{
 					"uri": "Blocks.svg#Ev_ProxH_Back_adv"
+				},
+				{
+					"js": "ctx.strokeStyle = '#6200ea'; ctx.lineWidth = 0.02; ctx.lineCap = 'round'; var p = 0.9 - 0.5 * $[2]; var w = 0.1 - 0.05 * $[2]; $.slice(0,-1).forEach(function (b, i) { if (b) { var x = 0.26 + 0.33 * i; ctx.moveTo(x - w, p); ctx.lineTo(x + w, p); } }); ctx.stroke();"
+				}
+			],
+			"styles": [
+				{
+					"id": "Obstacles-4",
+					"st": "visibility:hidden"
 				}
 			],
 			"defaultParameters": [0, 0, 0],
