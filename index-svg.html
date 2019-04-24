@@ -19,7 +19,7 @@
 		"scrollbarWidth": 2,
 		"errorColor": "#ff1744",
 		"warningColor": "#ff7777",
-		"minInteractiveBlockSize":"90",
+		"minInteractiveBlockSize":"80",
 		"eventRightAlign": true
 	},
 
@@ -1802,7 +1802,7 @@ separator {
 }
 
 vpl {
-	padding: 16px;
+	padding: 16px 0 16px 0;
 	margin: 0px;
 	border-radius: 4px;
 	background: #fbfcfc;
@@ -1810,11 +1810,15 @@ vpl {
 }
 
 block {
-	width: 8ww;
-	height: 8ww;
+	width: 9vw;
+	height: 9vw;
 	min-width: 72px;
 	min-height: 72px;
 	margin: 8px;
+}
+
+block.small{
+width: 9.4ww;
 }
 
 rule {
@@ -1834,8 +1838,8 @@ crossout-line.vpl {
 }
 
 #widget-then {
-	padding-left: 20px;
-	padding-right: 20px;
+	padding-left: 16px;
+	padding-right: 16px;
 	width: 2ww;
 	height: 2ww;
 }
@@ -1849,6 +1853,8 @@ crossout-line.vpl {
 	width: 3ww;
 	height: 3ww;
 }
+
+
 
 conflict-line {
     line: 2px #ff1744 dashed;

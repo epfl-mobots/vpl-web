@@ -5,7 +5,7 @@
 		"scrollbarWidth": 2,
 		"errorColor": "#ff1744",
 		"warningColor": "#ff7777",
-		"minInteractiveBlockSize":"90",
+		"minInteractiveBlockSize":"80",
 		"eventRightAlign": true
 	},
 
