@@ -41,7 +41,7 @@ button.vpl.top {
 	width: 20vw;
 	background: #eceff1;
 	padding: 0px 4px 0px 4px;
-	border-radius: 16px;
+	border-radius: 18px;
 }
 
 separator {
@@ -74,11 +74,11 @@ rule {
 }
 
 crossout-line {
-	line-width: 0.75ww;
+	line-width: 0.2ww;
  	color: rgba(120,120,120,0.5);
 }
 crossout-line.vpl {
-	line-width: 5vw;
+	
 }
 
 #widget-then {

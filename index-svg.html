@@ -1793,7 +1793,7 @@ button.vpl.top {
 	width: 20vw;
 	background: #eceff1;
 	padding: 0px 4px 0px 4px;
-	border-radius: 16px;
+	border-radius: 18px;
 }
 
 separator {
@@ -1826,11 +1826,11 @@ rule {
 }
 
 crossout-line {
-	line-width: 0.75ww;
+	line-width: 0.2ww;
  	color: rgba(120,120,120,0.5);
 }
 crossout-line.vpl {
-	line-width: 5vw;
+	
 }
 
 #widget-then {
@@ -3061,9 +3061,7 @@ sim-playground {
 			"name": "vpl:text-toggle",
 			"state": ["selected"],
 			"draw": [
-				{
-					"uri": "Icons.svg#Pressed_bg"
-				},
+
 				{
 					"uri": "Icons.svg#textMode_highlight"
 				}
@@ -3083,7 +3081,7 @@ sim-playground {
 			"state": [],
 			"draw": [
 				{
-					"uri": "Icons.svg#locked_highlight"
+					"uri": "Icons.svg#locked_default"
 				}
 			]
 		},
@@ -3093,6 +3091,19 @@ sim-playground {
 			"draw": [
 				{
 					"uri": "Icons.svg#unlocked_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:connected",
+			"state": ["unselected"],
+			"draw": [
+			{
+					"uri": "Icons.svg#Circle_bg"
+				},
+				{
+					"uri": "Icons.svg#disconnect_default"
+					
 				}
 			]
 		},
@@ -3108,13 +3119,16 @@ sim-playground {
 				}
 			]
 		},
+		
 		{
 			"name": "vpl:connected",
 			"state": [],
 			"draw": [
 				{
-					"uri": "Icons.svg#robotConnect_default",
-					"alpha": 0.5
+					"uri": "Icons.svg#Circle_bg"
+				},
+				{
+					"uri": "Icons.svg#robotConnect_default"
 				}
 			]
 		},
@@ -3169,6 +3183,9 @@ sim-playground {
 			"name": "vpl:stop",
 			"state": ["pressed"],
 			"draw": [
+			{
+					"uri": "Icons.svg#Pressed_bg"
+				},
 				{
 					"uri": "Icons.svg#stop_highlight"
 				}
@@ -3184,6 +3201,8 @@ sim-playground {
 				}
 			]
 		},
+		
+		
 		{
 			"name": "vpl:stop",
 			"state": [],
@@ -3191,8 +3210,9 @@ sim-playground {
 				{
 					"uri": "Icons.svg#stop_default"
 				}
+				
 			]
-		},
+		},		
 		{
 			"name": "vpl:undo",
 			"state": ["disabled"],
@@ -3361,11 +3381,16 @@ sim-playground {
 		},
 		{
 			"name": "vpl:advanced",
-			"state": ["unselected"],
+			"state": ["pressed"],
 			"draw": [
+			
 				{
-					"uri": "Icons.svg#basicMode_default"
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#mediumMode_default"
 				}
+				
 			]
 		},
 		{
@@ -3377,12 +3402,13 @@ sim-playground {
 				}
 			]
 		},
+		
 		{
 			"name": "vpl:advanced",
-			"state": ["pressed"],
+			"state": [],
 			"draw": [
 				{
-					"uri": "Icons.svg#Pressed_bg"
+					"uri": "Icons.svg#basicMode_default"
 				}
 			]
 		},
@@ -3448,8 +3474,7 @@ sim-playground {
 </script>
 
 <!--appearance of interface icons -->
-<script type="image/svg+xml" id="Icons.svg">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48.01">
+<script type="image/svg+xml" id="Icons.svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48.01">
   <defs>
     <style>
       .cls-1 {
@@ -3460,7 +3485,7 @@ sim-playground {
         fill: #fff;
       }
 
-      .cls-15, .cls-16, .cls-19, .cls-3, .cls-7 {
+      .cls-15, .cls-16, .cls-3, .cls-7, .cls-8, .cls-9 {
         fill: none;
       }
 
@@ -3476,24 +3501,28 @@ sim-playground {
         fill: #455a64;
       }
 
-      .cls-10, .cls-15, .cls-19, .cls-7 {
+      .cls-10, .cls-15, .cls-7, .cls-9 {
         stroke: #6200ea;
       }
 
-      .cls-19, .cls-7 {
+      .cls-7, .cls-8 {
+        stroke-linecap: round;
+      }
+
+      .cls-7, .cls-8, .cls-9 {
         stroke-linejoin: round;
       }
 
-      .cls-10, .cls-11, .cls-15, .cls-16, .cls-19, .cls-7 {
+      .cls-10, .cls-11, .cls-15, .cls-16, .cls-7, .cls-8, .cls-9 {
         stroke-width: 2px;
       }
 
-      .cls-8 {
-        fill: #b0bec5;
+      .cls-11, .cls-16, .cls-8 {
+        stroke: #455a64;
       }
 
-      .cls-9 {
-        fill: #263238;
+      .cls-8 {
+        opacity: 0.5;
       }
 
       .cls-10, .cls-11, .cls-15, .cls-16 {
@@ -3502,10 +3531,6 @@ sim-playground {
 
       .cls-11, .cls-14 {
         fill: #84edcf;
-      }
-
-      .cls-11, .cls-16 {
-        stroke: #455a64;
       }
 
       .cls-12 {
@@ -3517,15 +3542,15 @@ sim-playground {
       }
 
       .cls-17 {
-        fill: #ffd600;
+        fill: #b0bec5;
       }
 
       .cls-18 {
-        fill: #ff1744;
+        fill: #ffd600;
       }
 
       .cls-19 {
-        stroke-linecap: round;
+        fill: #ff1744;
       }
 
       .cls-20 {
@@ -3537,7 +3562,7 @@ sim-playground {
       <stop offset="1" stop-color="#6200ea" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <title>IconsAsset 102</title>
+  <title>IconsAsset 103</title>
   <g id="Layer_2" data-name="Layer 2">
     <g id="Pressed_bg">
       <circle id="shadow" class="cls-1" cx="24" cy="24.01" r="24"/>
@@ -3651,22 +3676,16 @@ sim-playground {
     </g>
     <g id="ic_basicMode">
       <g id="basicMode_default">
-        <polygon class="cls-7" points="24 34.81 10 26.41 24 18.01 38 26.41 24 34.81"/>
+        <polyline class="cls-7" points="38 26.41 24 34.81 10 26.41"/>
         <rect id="frame-19" data-name="frame" class="cls-3" y="0.01" width="48" height="48"/>
         <polygon class="cls-8" points="10 20.41 24 12.01 38 20.41 24 28.81 10 20.41"/>
       </g>
     </g>
     <g id="ic_mediumMode">
       <g id="mediumMode_default">
-        <polygon class="cls-7" points="15 23.41 10 26.41 24 34.81 38 26.41 33 23.41 24 28.81 15 23.41"/>
+        <polyline class="cls-7" points="10 26.41 24 34.81 38 26.41"/>
         <rect id="frame-20" data-name="frame" class="cls-3" y="0.01" width="48" height="48"/>
-        <polygon class="cls-7" points="24 28.81 10 20.41 24 12.01 38 20.41 24 28.81"/>
-      </g>
-    </g>
-    <g id="ic_submit">
-      <g>
-        <path class="cls-9" d="M33.33,38H14.67A3.67,3.67,0,0,1,11,34.34V15.67A3.66,3.66,0,0,1,14.67,12H24a1,1,0,0,1,0,2H14.67A1.66,1.66,0,0,0,13,15.67V34.34A1.67,1.67,0,0,0,14.67,36H33.33A1.67,1.67,0,0,0,35,34.34V24.9a1,1,0,0,1,2,0v9.44A3.67,3.67,0,0,1,33.33,38Z"/>
-        <path class="cls-9" d="M21.93,30a1,1,0,0,1-.7-.3l-5.89-5.88a1,1,0,0,1,0-1.42,1,1,0,0,1,1.41,0l5.18,5.18L35.29,14.23a1,1,0,0,1,1.42,1.42L22.64,29.71A1,1,0,0,1,21.93,30Z"/>
+        <polygon class="cls-9" points="24 28.81 10 20.41 24 12.01 38 20.41 24 28.81"/>
       </g>
     </g>
     <g id="ic_Help">
@@ -3772,7 +3791,7 @@ sim-playground {
         <rect id="frame-33" data-name="frame" class="cls-3" y="0.01" width="48" height="48"/>
       </g>
       <g id="disconnect_default">
-        <path class="cls-8" d="M20.11,17.08a1,1,0,0,0,1.42,0L24,14.6l2.48,2.48a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.42l-2.47-2.47,2.47-2.48A1,1,0,1,0,26.48,9.3L24,11.78,21.53,9.3a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l2.48,2.48-2.48,2.47A1,1,0,0,0,20.11,17.08Z"/>
+        <path class="cls-17" d="M20.11,17.08a1,1,0,0,0,1.42,0L24,14.6l2.48,2.48a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.42l-2.47-2.47,2.47-2.48A1,1,0,1,0,26.48,9.3L24,11.78,21.53,9.3a1,1,0,0,0-1.42,0,1,1,0,0,0,0,1.41l2.48,2.48-2.48,2.47A1,1,0,0,0,20.11,17.08Z"/>
         <path class="cls-6" d="M36,21H12a2,2,0,0,0-2,2v9a2,2,0,0,0,2,2h2a6.29,6.29,0,0,0,1.54,1.71l.06.05c.19.14.38.26.58.38l.06,0a6.63,6.63,0,0,0,1.37.58l.19,0a3.35,3.35,0,0,0,.55.11l.21,0a5.73,5.73,0,0,0,1.51,0l.21,0a3.57,3.57,0,0,0,.55-.11l.19-.05a6.1,6.1,0,0,0,1.37-.57l.06,0c.2-.12.39-.24.58-.38l.06-.05A6.29,6.29,0,0,0,24.65,34H36a2,2,0,0,0,2-2V23A2,2,0,0,0,36,21ZM22.89,33a1.88,1.88,0,0,1-.16.23,4.16,4.16,0,0,1-.32.39l-.13.14a3.84,3.84,0,0,1-.54.44l-.12.09c-.2.12-.4.23-.61.33l-.05,0a4.91,4.91,0,0,1-.71.22l-.15,0a3.7,3.7,0,0,1-1.53,0l-.16,0a5.19,5.19,0,0,1-.7-.22l-.05,0a5.92,5.92,0,0,1-.61-.33l-.12-.09a3.34,3.34,0,0,1-.54-.44l-.13-.14a4.16,4.16,0,0,1-.32-.39,1.88,1.88,0,0,1-.16-.23,4.14,4.14,0,0,1-.67-2.26,4.23,4.23,0,0,1,8.45,0A4.17,4.17,0,0,1,22.89,33ZM36,32H25.44a7.12,7.12,0,0,0,.12-1.23,6.23,6.23,0,0,0-12.45,0A7.12,7.12,0,0,0,13.23,32H12V23H36Z"/>
         <rect id="frame-34" data-name="frame" class="cls-3" y="0.01" width="48" height="48"/>
       </g>
@@ -3853,11 +3872,11 @@ sim-playground {
     <g id="ic_lockCode">
       <g id="locked_highlight">
         <rect id="frame-45" data-name="frame" class="cls-3" y="0.01" width="48" height="48"/>
-        <path id="pathLocked" class="cls-5" d="M35,17H30.9v-2.1a6.9,6.9,0,0,0-13.8,0V17H13a1,1,0,0,0-1,1V36a1,1,0,0,0,1,1H35a1,1,0,0,0,1-1V18A1,1,0,0,0,35,17Zm-15.9-2.1a4.9,4.9,0,0,1,9.8,0V17H19.1ZM34,35H14V19H34Z"/>
+        <path id="pathLocked" class="cls-5" d="M34,17H30.9V15.2A7.09,7.09,0,0,0,24.21,8a6.9,6.9,0,0,0-7.11,6.9V17H14a2,2,0,0,0-2,2V35a2,2,0,0,0,2,2H34a2,2,0,0,0,2-2V19A2,2,0,0,0,34,17Zm-14.9-2.1a4.9,4.9,0,0,1,9.8,0V17H19.1ZM34,35H14V19H34Z"/>
       </g>
       <g id="locked_default">
         <rect id="frame-46" data-name="frame" class="cls-3" y="0.01" width="48" height="48"/>
-        <path id="pathLocked-2" data-name="pathLocked" class="cls-6" d="M35,17H30.9v-2.1a6.9,6.9,0,0,0-13.8,0V17H13a1,1,0,0,0-1,1V36a1,1,0,0,0,1,1H35a1,1,0,0,0,1-1V18A1,1,0,0,0,35,17Zm-15.9-2.1a4.9,4.9,0,0,1,9.8,0V17H19.1ZM34,35H14V19H34Z"/>
+        <path id="pathLocked-2" data-name="pathLocked" class="cls-6" d="M34,17H30.9V15.2A7.09,7.09,0,0,0,24.21,8a6.9,6.9,0,0,0-7.11,6.9V17H14a2,2,0,0,0-2,2V35a2,2,0,0,0,2,2H34a2,2,0,0,0,2-2V19A2,2,0,0,0,34,17Zm-14.9-2.1a4.9,4.9,0,0,1,9.8,0V17H19.1ZM34,35H14V19H34Z"/>
       </g>
     </g>
     <g id="ic_unlockCode">
@@ -3892,16 +3911,16 @@ sim-playground {
     </g>
     <g id="Warning">
       <g>
-        <path class="cls-17" d="M24,13.12,35.6,34H12.4L24,13.12m0-3.06a1,1,0,0,0-.87.51l-13.31,24A1,1,0,0,0,10.7,36H37.3a1,1,0,0,0,.88-1.49l-13.3-24a1,1,0,0,0-.88-.51Z"/>
-        <circle class="cls-17" cx="24" cy="30.99" r="1"/>
-        <rect class="cls-17" x="22.99" y="18.03" width="2" height="10" rx="1"/>
+        <path class="cls-18" d="M24,13.12,35.6,34H12.4L24,13.12m0-3.06a1,1,0,0,0-.87.51l-13.31,24A1,1,0,0,0,10.7,36H37.3a1,1,0,0,0,.88-1.49l-13.3-24a1,1,0,0,0-.88-.51Z"/>
+        <circle class="cls-18" cx="24" cy="30.99" r="1"/>
+        <rect class="cls-18" x="22.99" y="18.03" width="2" height="10" rx="1"/>
       </g>
     </g>
     <g id="Error">
       <g>
-        <circle class="cls-18" cx="24" cy="30.44" r="1"/>
-        <rect class="cls-18" x="22.99" y="17.48" width="2" height="10" rx="1"/>
-        <path class="cls-18" d="M24,12A12,12,0,1,1,12,24,12,12,0,0,1,24,12m0-2A14,14,0,1,0,38,24,14,14,0,0,0,24,10Z"/>
+        <circle class="cls-19" cx="24" cy="30.44" r="1"/>
+        <rect class="cls-19" x="22.99" y="17.48" width="2" height="10" rx="1"/>
+        <path class="cls-19" d="M24,12A12,12,0,1,1,12,24,12,12,0,0,1,24,12m0-2A14,14,0,1,0,38,24,14,14,0,0,0,24,10Z"/>
       </g>
     </g>
     <g id="valid">
@@ -3923,11 +3942,11 @@ sim-playground {
     <g id="ScrollArrows">
       <g id="ScrollDown">
         <rect id="frame-55" data-name="frame" class="cls-3" y="16.51" width="48" height="15"/>
-        <polyline class="cls-19" points="18 21.13 24 27.13 30 21.13"/>
+        <polyline class="cls-7" points="18 21.13 24 27.13 30 21.13"/>
       </g>
       <g id="ScrollUp">
         <rect id="frame-56" data-name="frame" class="cls-3" y="16.51" width="48" height="15"/>
-        <polyline class="cls-19" points="30 27.13 24 21.13 18 27.13"/>
+        <polyline class="cls-7" points="30 27.13 24 21.13 18 27.13"/>
       </g>
     </g>
     <g id="CC-BY-NC-ND">
