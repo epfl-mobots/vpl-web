@@ -18,6 +18,7 @@ SVG.Preparsed = function (src) {
 	SVG.call(this, src);
 
 	this.doc = {};
+	this.idCache = {};
 	this.cssDict = {};
 	this.parse();
 };
@@ -692,7 +693,15 @@ SVG.Preparsed.prototype.findById = function (id) {
 		return null;
 	}
 
-	return findById(this.doc, id);
+	if (this.idCache[id]) {
+		return this.idCache[id];
+	}
+
+	var obj = findById(this.doc, id);
+	if (obj) {
+		this.idCache[id] = obj;
+	}
+	return obj;
 };
 
 /** @inheritDoc
