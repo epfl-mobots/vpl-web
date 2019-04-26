@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -21,6 +21,9 @@ var SVG = function (src) {
 	this.viewBox = (this.root.getAttribute("viewBox") || "0 0 1 1")
 		.split(" ")
 		.map(function (s) { return parseFloat(s); });
+
+	/** @type {Object.<string,{xmin:number,xmax:number,ymin:number,ymax:number}>} */
+	this.elementBoundsCache = {};
 };
 
 /** @typedef {{
@@ -1356,8 +1359,14 @@ SVG.calcBounds = function (p) {
 	@return {{xmin:number,xmax:number,ymin:number,ymax:number}}
 */
 SVG.prototype.getElementBounds = function (elementId) {
+	if (this.elementBoundsCache[elementId]) {
+		return this.elementBoundsCache[elementId];
+	}
+
 	var p = this.draw(null, {elementId: elementId});
-	return SVG.calcBounds(p);
+	var bnds = SVG.calcBounds(p);
+	this.elementBoundsCache[elementId] = bnds;
+	return bnds;
 };
 
 /** Check if a point is roughly inside an element
