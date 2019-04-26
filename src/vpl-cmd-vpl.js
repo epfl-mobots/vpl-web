@@ -329,7 +329,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return this.experimentalFeatures && this.teacherRole;
+			return app.program.experimentalFeatures && app.program.teacherRole;
 		}
 	});
 	this.commands.add("vpl:trashcan", {
