@@ -1175,7 +1175,6 @@ A3a.vpl.BlockTemplate.lib =	[
 			}
 			return block;
 		},
-		sectionPriority: function () { return 1; },
 		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 		genCode: {
 			"aseba": function (block) {
@@ -1187,6 +1186,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					}
 				}
 				return {
+					sectionPriority: 1,
 					initVarDecl: [
 						A3a.vpl.BlockTemplate.initStatesDecl
 					],
@@ -1219,11 +1219,11 @@ A3a.vpl.BlockTemplate.lib =	[
 			}
 			return i;
 		},
-		sectionPriority: function () { return 1; },
 		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 		genCode: {
 			"aseba": function (block) {
 				return {
+					sectionPriority: 1,
 					initVarDecl: [
 						A3a.vpl.BlockTemplate.initState8Decl
 					],
@@ -1293,7 +1293,6 @@ A3a.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			sectionPriority: function () { return 1; },
 			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 			genCode: {
 				"aseba": function (block) {
@@ -1301,6 +1300,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						(block.param[0] === 0 ? "==" : block.param[0] > 0 ? ">=" : "<=") +
 						" " + block.param[1];
 					return {
+						sectionPriority: 1,
 						initVarDecl: [
 							A3a.vpl.BlockTemplate.initCounterDecl
 						],
@@ -1348,7 +1348,6 @@ A3a.vpl.BlockTemplate.lib =	[
 			var val = canvas.sliderDrag(false, width, height, left, top, ev);
 			block.param[dragIndex] = Math.max(0, Math.min(1, Math.round(val)));
 		},
-		sectionPriority: function () { return 1; },
 		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 		genCode: {
 			"aseba": function (block) {
@@ -1358,6 +1357,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					})
 					.join(" and ");
 				return {
+					sectionPriority: 1,
 					initVarDecl: [
 						A3a.vpl.BlockTemplate.initTopColorDecl
 					],
@@ -2609,7 +2609,6 @@ A3a.vpl.BlockTemplate.lib =	[
 				}
 				return i;
 			},
-			sectionPriority: function () { return 1; },
 			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 			genCode: {
 				"aseba": function (block) {
