@@ -117,12 +117,15 @@ A3a.vpl.Application.prototype.toHTMLDocument = function (css) {
 	var thenWidgetImg = this.vplCanvas.widgetToImgElement("vpl:then", css, dims, scale);
 	return "<!DOCTYPE html>\n" +
 		"<html>\n" +
+		(this.cssForHTMLDocument
+			? "<head>\n<style>\n" + this.cssForHTMLDocument + "</style>\n</head>\n"
+			: "") +
 		"<body>\n" +
-		"<table>\n" +
+		"<table class='program'>\n" +
 		this.program.program.map(function (rule) {
 			return rule.isEmpty()
 				? ""
-				: "<tr>\n" +
+				: "<tr class='rule'>\n" +
 					"<td class='events'>\n" +
 					"<table class='events'>\n" +
 					"<tr class='events'>\n" +

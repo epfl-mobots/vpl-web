@@ -541,8 +541,13 @@ function vplSetup(gui) {
 	}
 
 	// about box
-	if (gui && gui["html"] && gui["html"]["about"]) {
-		app.aboutBox = new A3a.vpl.About(gui["html"]["about"]);
+	if (gui && gui["fragments"] && gui["fragments"]["about.html"]) {
+		app.aboutBox = new A3a.vpl.About(gui["fragments"]["about.html"]);
+	}
+
+	// css for html output
+	if (gui && gui["fragments"] && gui["fragments"]["vpl-export-html.css"]) {
+		app.cssForHTMLDocument = gui["fragments"]["vpl-export-html.css"];
 	}
 
 	// initial canvas resize

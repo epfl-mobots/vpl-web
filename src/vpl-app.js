@@ -49,6 +49,8 @@ A3a.vpl.Application = function (canvasEl) {
 	this.vplCanvas = new A3a.vpl.Canvas(canvasEl, {css: this.css});
 	this.vplCanvas.state = {};
 
+	this.cssForHTMLDocument = "";
+
 	/** @type {A3a.vpl.Canvas} */
 	this.simCanvas = null;
 	/** @type {A3a.vpl.VPLSim2DViewer} */
