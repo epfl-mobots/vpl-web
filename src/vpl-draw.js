@@ -887,8 +887,8 @@ A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 		? time === 0 ? 0 : Math.log(time * 10) / Math.log(100)	// [0.1,10] -> [0,1]
 		: time / 4;	// [0, 4] -> [0, 1]
 	var r = 0.4 * s;
-	var dx = isEvent ? -0.05 * s : 0;
-	var dy = isEvent ? 0.09 * s : 0;
+	var dx = isEvent ? -0.05 * s : 0.05 * s;
+	var dy = isEvent ? 0.07 * s : 0.03 * s;
 	var x0 = s / 2 + dx;
 	var y0 = s / 2 + dy;
 
@@ -899,7 +899,7 @@ A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 			ctx.textBaseline = "top";
 			ctx.font = Math.round(s / 6).toString(10) + "px sans-serif";
 			ctx.fillStyle = "white";
-			ctx.fillText(t.toFixed(t < 1 ? 2 : 1), s / 20, dy);
+			ctx.fillText(t.toFixed(t < 1 ? 2 : 1), s / 20, s / 40);
 		},
 		time, isEvent, isLog);
 };
