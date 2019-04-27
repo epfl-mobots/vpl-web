@@ -68,6 +68,7 @@ JS = \
 	vpl-blocklib-python.js \
 	vpl-error.js \
 	vpl-undo.js \
+	vpl-html.js \
 	vpl-aeslfile.js \
 	vpl-texteditor.js \
 	vpl-sourceedit.js \

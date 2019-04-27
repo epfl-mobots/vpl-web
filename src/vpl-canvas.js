@@ -83,14 +83,15 @@ A3a.vpl.CanvasItem.prototype.clone = function () {
 };
 
 /** Draw item
-	@param {CanvasRenderingContext2D} ctx
+	@param {A3a.vpl.Canvas} canvas
 	@param {number=} dx horizontal offset wrt original position, or not supplied
 	to draw at the original position with clipping
 	@param {number=} dy vertical offset wrt original position
 	@param {boolean=} overlay true to call drawOverlay, false to call drawContent
 	@return {void}
 */
-A3a.vpl.CanvasItem.prototype.draw = function (ctx, dx, dy, overlay) {
+A3a.vpl.CanvasItem.prototype.draw = function (canvas, dx, dy, overlay) {
+	var ctx = canvas.ctx;
 	var clipped = this.clippingRect && dx === undefined;
 	if (clipped) {
 		ctx.save();
@@ -102,9 +103,9 @@ A3a.vpl.CanvasItem.prototype.draw = function (ctx, dx, dy, overlay) {
 		dy = this.clippingRect.yOffset;
 	}
 	if (overlay) {
-		this.drawOverlay && this.drawOverlay(ctx, this, dx || 0, dy || 0);
+		this.drawOverlay && this.drawOverlay(canvas, this, dx || 0, dy || 0);
 	} else {
-		this.drawContent && this.drawContent(ctx, this, dx || 0, dy || 0);
+		this.drawContent && this.drawContent(canvas, this, dx || 0, dy || 0);
 	}
 	if (clipped) {
 		ctx.restore();
@@ -124,8 +125,26 @@ A3a.vpl.CanvasItem.prototype.applyClipping = function (ctx) {
 	}
 };
 
+/** Export to data URL
+	@param {A3a.vpl.Canvas.dims} dims
+	@param {number=} scale scale (default=1)
+	@param {string=} mimetype mime type (default: "image/png")
+	@return {string}
+*/
+A3a.vpl.CanvasItem.prototype.toDataURL = function (dims, scale, mimetype) {
+	var canvasEl = document.createElement("canvas");
+	scale = scale || 1;
+	canvasEl.width = scale * this.width;
+	canvasEl.height = scale * this.height;
+	var canvas = new A3a.vpl.Canvas(canvasEl, {pixelRatio: scale});
+	canvas.dims = dims;
+	this.draw(canvas);
+	this.draw(canvas, 0, 0, true);
+	return canvasEl.toDataURL(mimetype || "image/png");
+};
+
 /**
-	@typedef {function(CanvasRenderingContext2D,A3a.vpl.CanvasItem,number,number):void}
+	@typedef {function(A3a.vpl.Canvas,A3a.vpl.CanvasItem,number,number):void}
 */
 A3a.vpl.CanvasItem.draw;
 
@@ -186,15 +205,18 @@ A3a.vpl.CanvasItem.prototype.isInClip = function (x, y) {
 	@constructor
 	@struct
 	@param {Element} canvas
-	@param {?A3a.vpl.Canvas.RelativeArea=} relativeArea
-	@param {CSSParser.VPL=} css
+	@param {{
+		relativeArea: (?A3a.vpl.Canvas.RelativeArea | undefined),
+		css: (CSSParser.VPL | undefined),
+		pixelRatio: (number | undefined)
+	}=} options
 */
-A3a.vpl.Canvas = function (canvas, relativeArea, css) {
-	var backingScale = "devicePixelRatio" in window ? window["devicePixelRatio"] : 1;
+A3a.vpl.Canvas = function (canvas, options) {
+	var backingScale = options && options.pixelRatio || ("devicePixelRatio" in window ? window["devicePixelRatio"] : 1);
 	this.canvas = canvas;
 	this.canvasWidth = canvas.width / backingScale;
 	this.canvasHeight = canvas.height / backingScale;
-	this.relativeArea = relativeArea || {xmin: 0, xmax: 1, ymin: 0, ymax: 1};
+	this.relativeArea = options && options.relativeArea || {xmin: 0, xmax: 1, ymin: 0, ymax: 1};
 	this.width = this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin);
 	this.height = this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin);
 	this.visible = true;
@@ -215,11 +237,11 @@ A3a.vpl.Canvas = function (canvas, relativeArea, css) {
 
 	this.clientData = {};	// can be used to store client data
 
-	this.css = css || new CSSParser.VPL();
+	this.css = options && options.css || new CSSParser.VPL();
 
 	/** @type {A3a.vpl.Canvas.dims} */
 	this.dims = /** @type {A3a.vpl.Canvas.dims} */(null);
-	this.resize(this.width, this.height);	// force set this.dims
+	this.resize(this.width, this.height, options && options.pixelRatio);	// force set this.dims
 
 	/** @type {Object.<string,A3a.vpl.Canvas.drawWidget>} */
 	this.widgets = {};
@@ -376,12 +398,12 @@ A3a.vpl.Canvas = function (canvas, relativeArea, css) {
 						}
 						ctx.translate(self.canvasWidth * self.relativeArea.xmin, self.canvasHeight * self.relativeArea.ymin);
 						ctx.globalAlpha = 0.5;
-						item.draw(ctx, mouseEvent.x - x0, mouseEvent.y - y0);
+						item.draw(self, mouseEvent.x - x0, mouseEvent.y - y0);
 						item.attachedItems.forEach(function (attachedItem) {
-							attachedItem.draw(ctx, mouseEvent.x - x0, mouseEvent.y - y0);
-							attachedItem.draw(ctx, mouseEvent.x - x0, mouseEvent.y - y0, true);
+							attachedItem.draw(self, mouseEvent.x - x0, mouseEvent.y - y0);
+							attachedItem.draw(self, mouseEvent.x - x0, mouseEvent.y - y0, true);
 						});
-						item.draw(ctx, mouseEvent.x - x0, mouseEvent.y - y0, true);
+						item.draw(self, mouseEvent.x - x0, mouseEvent.y - y0, true);
 						ctx.restore();
 						self.canvas.style.cursor = canDrop ? "copy" : "default";
 					}
@@ -622,13 +644,14 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 };
 
 /** Recalc position and sizes
+	@param {number=} pixelRatio
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.recalcSize = function () {
+A3a.vpl.Canvas.prototype.recalcSize = function (pixelRatio) {
 	this.width = this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin);
 	this.height = this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin);
 	this.ctx = this.canvas.getContext("2d");
-	var backingScale = "devicePixelRatio" in window ? window["devicePixelRatio"] : 1;
+	var backingScale = pixelRatio || ("devicePixelRatio" in window ? window["devicePixelRatio"] : 1);
 	if (backingScale != 1) {
 		this.ctx["resetTransform"]();
 		this.ctx.scale(backingScale, backingScale);
@@ -645,15 +668,16 @@ A3a.vpl.Canvas.prototype.recalcSize = function () {
 /** Resize canvas element
 	@param {number} width new width
 	@param {number} height new height
+	@param {number=} pixelRatio
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.resize = function (width, height) {
-	var backingScale = "devicePixelRatio" in window ? window["devicePixelRatio"] : 1;
+A3a.vpl.Canvas.prototype.resize = function (width, height, pixelRatio) {
+	var backingScale = pixelRatio || ("devicePixelRatio" in window ? window["devicePixelRatio"] : 1);
 	this.canvas.width  = width * backingScale;
 	this.canvas.height = height * backingScale;
 	this.canvasWidth = width;
 	this.canvasHeight = height;
-	this.recalcSize();
+	this.recalcSize(pixelRatio);
 };
 
 /** @typedef {{x:number,y:number,w:number,h:number,xOffset:number,yOffset:number}} */
@@ -709,7 +733,8 @@ A3a.vpl.Canvas.prototype.makeZoomedClone = function (item) {
 	c.y = (canvasSize.height - c.height) / 2;
 	c.zoomOnLongPress = null;
 	var self = this;
-	c.drawContent = function (ctx, item1, dx, dy) {
+	c.drawContent = function (canvas, item1, dx, dy) {
+		var ctx = canvas.ctx;
 		ctx.save();
 		ctx.translate(item1.x, item1.y);
 		ctx.scale(sc, sc);
@@ -718,12 +743,13 @@ A3a.vpl.Canvas.prototype.makeZoomedClone = function (item) {
 		ctx.restore();
 	};
 	if (item.drawOverlay) {
-		c.drawOverlay = function (ctx, item1, dx, dy) {
+		c.drawOverlay = function (canvas, item1, dx, dy) {
+			var ctx = canvas.ctx;
 			ctx.save();
 			ctx.translate(item1.x, item1.y);
 			ctx.scale(sc, sc);
 			ctx.translate(-item1.x, -item1.y);
-			item.drawOverlay(ctx, c, item1.x - c.x, item1.y - c.y);
+			item.drawOverlay(canvas, c, item1.x - c.x, item1.y - c.y);
 			ctx.restore();
 		};
 	}
@@ -849,7 +875,8 @@ A3a.vpl.Canvas.prototype.setItem = function (item, index) {
 A3a.vpl.Canvas.prototype.addDecoration = function (fun) {
 	var item = new A3a.vpl.CanvasItem(null,
 		-1, -1, 0, 0,
-		function(ctx, item, dx, dy) {
+		function(canvas, item, dx, dy) {
+			var ctx = canvas.ctx;
 			ctx.save();
 			ctx.translate(item.x + dx, item.y + dy);
 			fun(ctx);
@@ -887,7 +914,8 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 	var item = new A3a.vpl.CanvasItem(null,
 		box.width, box.height, x, y,
 		/** @type {A3a.vpl.CanvasItem.draw} */
-		(function (ctx, item, dx, dy) {
+		(function (canvas, item, dx, dy) {
+			var ctx = canvas.ctx;
 			ctx.save();
 			box.drawAt(ctx, item.x + dx, item.y + dy);
 			ctx.translate(item.x + dx, item.y + dy);
@@ -943,7 +971,7 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 */
 A3a.vpl.Canvas.drawWidget;
 
-/** Draw a widget
+/** Draw a widget with its css box
 	@param {string} id
 	@param {number} x center of widget along horizontal axis
 	@param {number} y center of widget along vertical axis
@@ -979,10 +1007,10 @@ A3a.vpl.Canvas.prototype.redraw = function () {
 	}
 	this.ctx.translate(this.canvasWidth * this.relativeArea.xmin, this.canvasHeight * this.relativeArea.ymin);
 	this.items.forEach(function (item) {
-		item.draw(this.ctx);
+		item.draw(this);
 	}, this);
 	this.items.forEach(function (item) {
-		item.draw(this.ctx, undefined, undefined, true);
+		item.draw(this, undefined, undefined, true);
 	}, this);
 	if (this.zoomedItemProxy) {
 		this.ctx.save();
@@ -993,8 +1021,8 @@ A3a.vpl.Canvas.prototype.redraw = function () {
 			this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin),
 			this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin));
 		this.ctx.restore();
-		this.zoomedItemProxy.draw(this.ctx);
-		this.zoomedItemProxy.draw(this.ctx, 0, 0, true);
+		this.zoomedItemProxy.draw(this);
+		this.zoomedItemProxy.draw(this, 0, 0, true);
 	}
 	this.ctx.restore();
 };

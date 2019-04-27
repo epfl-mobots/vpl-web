@@ -124,6 +124,7 @@ conflict-line.warning {
 #widget-then {
 	width: 3vw;
 	height: 3vw;
+	padding: 1vw;
 }
 
 block-library {

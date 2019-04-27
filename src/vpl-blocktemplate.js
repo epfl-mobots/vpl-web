@@ -149,11 +149,9 @@ A3a.vpl.BlockTemplate.params;
 	@param {A3a.vpl.Block} block
 	@param {number} x0 position of left side
 	@param {number} y0 position of top side
-	@param {boolean} doesZoomOnLongPress true to display hint that a long
-	press is needed to zoom the block before control widgets can be manipulated
 	@return {void}
 */
-A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, x0, y0, doesZoomOnLongPress) {
+A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, x0, y0) {
 	canvas.ctx.save();
 	canvas.ctx.translate(x0, y0);
 	this.draw(canvas, block);

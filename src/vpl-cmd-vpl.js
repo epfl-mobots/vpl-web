@@ -74,6 +74,16 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return window["vplStorageSetFunction"] != null;
 		}
 	});
+	this.commands.add("vpl:exportToHTML", {
+		action: function (app, modifier) {
+			var html = app.toHTMLDocument(app.css);
+			A3a.vpl.Program.downloadText(html, "vpl-program.html", "text/html");
+		},
+		isEnabled: function (app) {
+			return !app.program.noVPL && !app.program.isEmpty();
+		},
+		object: this
+	});
 	this.commands.add("vpl:text", {
 		action: function (app, modifier) {
 			if (app.multipleViews) {

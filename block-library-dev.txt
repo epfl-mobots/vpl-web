@@ -207,6 +207,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:about": display an about box (modal box with HTML defined in property "about" of property "html" of ui.json)
 - "vpl:new": reset VPL program to start a new program
 - "vpl:save": download the VPL program
+- "vpl:exportToHTML": export the VPL program to a self-contained HTML file
 - "vpl:upload": upload VPL program to the central repository (to the teacher computer)
 - "vpl:text": switch to the text programming language editor (Aseba, L2 or JavaScript)
 - "vpl:text-toggle": toggle visibility of text editor (replaces "vpl:text" and "src:close")

@@ -62,16 +62,16 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 		canvas.dims.blockSize * (opts && opts.scale || 1),
 		x, y,
 		// draw
-		function (ctx, item, dx, dy) {
-			canvas.ctx.save();
+		function (canvas, item, dx, dy) {
+			var ctx = canvas.ctx;
+			ctx.save();
 			if (opts && opts.scale) {
 				var dims0 = canvas.dims;
 				box.drawAt(ctx, item.x + dx, item.y + dy);
 				canvas.dims = A3a.vpl.Canvas.calcDims(canvas.dims.blockSize * opts.scale, canvas.dims.controlSize * opts.scale);
 				block.blockTemplate.renderToCanvas(canvas,
 					/** @type {A3a.vpl.Block} */(item.data),
-					item.x + dx, item.y + dy,
-					item.zoomOnLongPress != null);
+					item.x + dx, item.y + dy);
 				if (block.locked) {
 					canvas.lockedMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize, true);
 				}
@@ -84,8 +84,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 				box.drawAt(ctx, item.x + dx, item.y + dy);
 				block.blockTemplate.renderToCanvas(canvas,
 					/** @type {A3a.vpl.Block} */(item.data),
-					item.x + dx, item.y + dy,
-					item.zoomOnLongPress != null);
+					item.x + dx, item.y + dy);
 				if (block.locked) {
 					canvas.lockedMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize, true);
 				}
@@ -94,7 +93,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 						["block"]);
 				}
 			}
-			canvas.ctx.restore();
+			ctx.restore();
 		},
 		// interactiveCB
 		opts && opts.notInteractive ||
@@ -236,7 +235,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		x - ruleBox.paddingLeft - blockContainerBox.offsetLeft() - blockEventBox.offsetLeft(),
 		y - ruleBox.paddingTop - blockContainerBox.offsetTop() - blockEventBox.offsetTop(),
 		// draw
-		function (ctx, item, dx, dy) {
+		function (canvas, item, dx, dy) {
+			var ctx = canvas.ctx;
 			// strip
 			ruleBox.drawAt(ctx, item.x + dx, item.y + dy, true);
 			// event/action separator
@@ -479,7 +479,11 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		"!!stretch",
 		"vpl:message-error",
 		"vpl:message-warning",
-		"!!stretch"
+		"!!stretch",
+		"vpl:duplicate",
+		"vpl:disable",
+		"vpl:lock",
+		"vpl:trashcan",
 	];
 	var toolbar2HasAvButtons = A3a.vpl.ControlBar.hasAvailableButtons(this, toolbar2Config);
 
@@ -532,6 +536,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		"vpl:save",
 		"vpl:load",
 		"vpl:upload",
+		"vpl:exportToHTML",
 		"!space",
 		"vpl:advanced",
 		"!stretch",
@@ -543,11 +548,6 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		"!stretch",
 		"vpl:sim",
 		"vpl:text",
-		"!stretch",
-		"vpl:duplicate",
-		"vpl:disable",
-		"vpl:lock",
-		"vpl:trashcan",
 		"!stretch",
 		"vpl:teacher-reset",
 		"vpl:teacher-save",

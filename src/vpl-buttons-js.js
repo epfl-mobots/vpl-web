@@ -187,6 +187,32 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 				dims.controlSize * 0.7);
 			ctx.stroke();
 		},
+		"vpl:exportToHTML": function () {
+			ctx.fillStyle = isPressed && isEnabled
+				? dims.controlDownColor
+				: dims.controlColor;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			ctx.strokeStyle = isEnabled ? "white" : "#777";
+			ctx.lineWidth = 2 * dims.controlLineWidth;
+			ctx.beginPath();
+			ctx.moveTo(dims.controlSize * 0.8,
+				dims.controlSize * 0.2);
+			ctx.lineTo(dims.controlSize * 0.8,
+				dims.controlSize * 0.5);
+			ctx.moveTo(dims.controlSize * 0.7,
+				dims.controlSize * 0.4);
+			ctx.lineTo(dims.controlSize * 0.8,
+				dims.controlSize * 0.5);
+			ctx.lineTo(dims.controlSize * 0.9,
+				dims.controlSize * 0.4);
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.font = "bold " + Math.round(dims.controlSize * 0.3).toString(10) + "px sans-serif";
+			ctx.fillStyle = isEnabled ? "white" : "#777";
+			ctx.fillText("HTML", dims.controlSize * 0.5, dims.controlSize * 0.7);
+			ctx.stroke();
+		},
 		"vpl:load": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor

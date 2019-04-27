@@ -37,7 +37,7 @@ A3a.vpl.VPLSourceEditor = function (app, noVPL, language) {
 
 	var self = this;
 
-	this.tbCanvas = new A3a.vpl.Canvas(app.canvasEl, null, app.css);
+	this.tbCanvas = new A3a.vpl.Canvas(app.canvasEl, {css: app.css});
 
 	// editor control update
 	document.getElementById("editor").addEventListener("input",

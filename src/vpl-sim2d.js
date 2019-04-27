@@ -1045,7 +1045,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			sim2d.playground.width * playgroundView.scale, sim2d.playground.height * playgroundView.scale,
 			playgroundView.x + playgroundView.ox,
 			playgroundView.y + playgroundView.oy,
-			function(ctx, item, dx, dy) {
+			function(canvas, item, dx, dy) {
+				var ctx = canvas.ctx;
 				ctx.save();
 				playgroundAreaBox.draw(ctx);
 				playgroundBox.draw(ctx);

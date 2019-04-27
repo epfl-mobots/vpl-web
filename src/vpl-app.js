@@ -46,7 +46,7 @@ A3a.vpl.Application = function (canvasEl) {
 	this.vplMessage = "";
 	this.vplMessageIsWarning = false;	// false for error, true for warning
 
-	this.vplCanvas = new A3a.vpl.Canvas(canvasEl, null, this.css);
+	this.vplCanvas = new A3a.vpl.Canvas(canvasEl, {css: this.css});
 	this.vplCanvas.state = {};
 
 	/** @type {A3a.vpl.Canvas} */
