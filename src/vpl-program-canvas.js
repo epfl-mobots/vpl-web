@@ -843,10 +843,25 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	if (uiConfig.customizationMode) {
 		// draw vpl:customization widget
 		var customizationBox = canvas.css.getBox({tag: "widget", id: "vpl-customize"});
+		customizationBox.width = vplBox.width / 4;
+		customizationBox.height = vplBox.height / 4;
 		canvas.addDecoration(function (ctx) {
 			canvas.drawWidget("vpl:customize",
 				vplBox.x + vplBox.width / 2, vplBox.y + vplBox.height / 2,
 				customizationBox);
+		});
+	} else if (program.message) {
+		canvas.addDecoration(function (ctx) {
+			var lines = program.message.split("\n");
+			var fontSize = Math.min(14, canvasSize.height / lines.length);
+			ctx.font = fontSize + "px sans-serif";
+			ctx.textAlign = "start";
+			ctx.textBaseline = "top";
+			var x0 = vplBox.x + fontSize;
+			var y0 = vplBox.y + fontSize;
+			lines.forEach(function (line, i) {
+				ctx.fillText(line, x0, y0 + fontSize * 1.2 * i);
+			});
 		});
 	} else {
 		// program

@@ -37,6 +37,9 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.code = {};
 	this.currentLanguage = A3a.vpl.defaultLanguage;
 
+	/** @type {?string} */
+	this.message = null;	// text message displayed in lieu of vpl program
+
 	/** @type {Array.<string>} */
 	this.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
 	/** @type {boolean} */

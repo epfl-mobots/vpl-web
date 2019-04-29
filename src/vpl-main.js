@@ -218,17 +218,20 @@ function vplSetup(gui) {
 		});
 	}
 
-	// validate ui (correct usage of blocks, control elements etc.)
-	if (gui) {
-		A3a.vpl.validateUI(gui);
-	}
-
 	// canvas
 	var canvasEl = document.getElementById("programCanvas");
 
 	// application
 	var app = new A3a.vpl.Application(canvasEl);
 	window["vplApp"] = app;
+
+	// validate ui (correct usage of blocks, control elements etc.)
+	if (gui) {
+		app.program.message = A3a.vpl.validateUI(gui);
+		if (app.program.message) {
+			window["console"]["info"](app.program.message);
+		}
+	}
 
 	// css
 	if (gui && gui["css"]) {

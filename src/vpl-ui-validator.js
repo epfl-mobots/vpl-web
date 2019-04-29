@@ -11,13 +11,11 @@
 
 /** Validate ui (correct usage of blocks, control elements etc.)
 	@param {Object} ui
-	@return {boolean}
+	@return {?string} null if ok, or error messages (lf-terminated lines)
 */
 A3a.vpl.validateUI = function (ui) {
 
-	var info = window["console"] && window["console"]["info"]
- 		? window["console"]["info"]
-		: function () {};
+	var msg = "";
 
 	/** Validate block definition
 		@param {Object} b block definition
@@ -33,7 +31,7 @@ A3a.vpl.validateUI = function (ui) {
 		var errorCount = 0;
 
 		if (!/^\w/.test(name)) {
-			info("Bad block name \"" + name + "\"");
+			msg += "Bad block name \"" + name + "\"\n";
 			errorCount++;
 		}
 
@@ -76,11 +74,11 @@ A3a.vpl.validateUI = function (ui) {
 					} else {
 						var uriDec = A3a.vpl.Canvas.decodeURI(drawArr[i]["uri"]);
 						if (uriDec.f !== f) {
-							info("In block \"" + name + "\", multiple svg");
+							msg += "In block \"" + name + "\", multiple svg\n";
 							errorCount++;
 						} else {
 							if (!svg.hasElement(uriDec.id)) {
-								info("In block \"" + name + "\", uri \"" + drawArr[i]["uri"] + "\" not found");
+								msg += "In block \"" + name + "\", uri \"" + drawArr[i]["uri"] + "\" not found\n";
 								errorCount++;
 							}
 						}
@@ -92,20 +90,20 @@ A3a.vpl.validateUI = function (ui) {
 		if (buttons) {
 			buttons.forEach(function (button) {
 				if (!svg.hasElement(button["id"])) {
-					info("In block \"" + name + "\", button id \"" + button["id"] + "\" not found");
+					msg += "In block \"" + name + "\", button id \"" + button["id"] + "\" not found\n";
 					errorCount++;
 				} else if (!belongsToDisplayedElement(button["id"])) {
-					info("In block \"" + name + "\", button id \"" + button["id"] + "\" not displayed");
+					msg += "In block \"" + name + "\", button id \"" + button["id"] + "\" not displayed\n";
 					errorCount++;
 				}
 				if (button["val"] == undefined) {
-					info("In block \"" + name + "\", missing property \"val\"");
+					msg += "In block \"" + name + "\", missing property \"val\"\n";
 					errorCount++;
 				} else if (button["st"] == undefined) {
-					info("In block \"" + name + "\", missing property \"st\"");
+					msg += "In block \"" + name + "\", missing property \"st\"\n";
 					errorCount++;
 				} else if (button["val"].length !== button["st"].length) {
-					info("In block \"" + name + "\", properties \"val\" and \"st\" have different lengths");
+					msg += "In block \"" + name + "\", properties \"val\" and \"st\" have different lengths\n";
 					errorCount++;
 				}
 			})
@@ -113,23 +111,23 @@ A3a.vpl.validateUI = function (ui) {
 		if (radiobuttons) {
 			radiobuttons.forEach(function (radiobutton) {
 				if (!svg.hasElement(radiobutton["id"])) {
-					info("In block \"" + name + "\", radiobutton id \"" + radiobutton["id"] + "\" not found");
+					msg += "In block \"" + name + "\", radiobutton id \"" + radiobutton["id"] + "\" not found\n";
 					errorCount++;
 				} else if (!belongsToDisplayedElement(radiobutton["id"])) {
-					info("In block \"" + name + "\", radiobutton id \"" + radiobutton["id"] + "\" not displayed");
+					msg += "In block \"" + name + "\", radiobutton id \"" + radiobutton["id"] + "\" not displayed\n";
 					errorCount++;
 				} else {
 					if (radiobutton["val"] == undefined) {
-						info("In block \"" + name + "\", missing property \"val\"");
+						msg += "In block \"" + name + "\", missing property \"val\"\n";
 						errorCount++;
 					} else if (radiobutton["val"] instanceof Array) {
-						info("In block \"" + name + "\", illegal array in property \"val\"");
+						msg += "In block \"" + name + "\", illegal array in property \"val\"\n";
 						errorCount++;
 					} else if (radiobutton["st"] == undefined) {
-						info("In block \"" + name + "\", missing property \"st\"");
+						msg += "In block \"" + name + "\", missing property \"st\"\n";
 						errorCount++;
 					} else if (radiobutton["st"].length !== 2) {
-						info("In block \"" + name + "\", property \"st\" must have length 2");
+						msg += "In block \"" + name + "\", property \"st\" must have length 2\n";
 						errorCount++;
 					}
 				}
@@ -138,30 +136,30 @@ A3a.vpl.validateUI = function (ui) {
 		if (sliders) {
 			sliders.forEach(function (slider) {
 				if (!svg.hasElement(slider["id"])) {
-					info("In block \"" + name + "\", slider id \"" + slider["id"] + "\" not found");
+					msg += "In block \"" + name + "\", slider id \"" + slider["id"] + "\" not found\n";
 					errorCount++;
 				} else if (!belongsToDisplayedElement(slider["id"])) {
-					info("In block \"" + name + "\", slider id \"" + slider["id"] + "\" not displayed");
+					msg += "In block \"" + name + "\", slider id \"" + slider["id"] + "\" not displayed\n";
 					errorCount++;
 				}
 				if (!svg.hasElement(slider["thumbId"])) {
-					info("In block \"" + name + "\", slider thumbId \"" + slider["thumbId"] + "\" not found");
+					msg += "In block \"" + name + "\", slider thumbId \"" + slider["thumbId"] + "\" not found\n";
 					errorCount++;
 				} else if (!belongsToDisplayedElement(slider["thumbId"])) {
-					info("In block \"" + name + "\", slider thumbId \"" + slider["thumbId"] + "\" not displayed");
+					msg += "In block \"" + name + "\", slider thumbId \"" + slider["thumbId"] + "\" not displayed\n";
 					errorCount++;
 				}
 				if (slider["min"] == undefined) {
-					info("In block \"" + name + "\", slider min undefined");
+					msg += "In block \"" + name + "\", slider min undefined\n";
 					errorCount++;
 				}
 				if (slider["max"] == undefined) {
-					info("In block \"" + name + "\", slider max undefined");
+					msg += "In block \"" + name + "\", slider max undefined\n";
 					errorCount++;
 				}
 				if (slider["lowerPartId"]) {
 					if (!svg.hasElement(slider["lowerPartId"])) {
-						info("In block \"" + name + "\", slider lowerPartId \"" + slider["lowerPartId"] + "\" not found");
+						msg += "In block \"" + name + "\", slider lowerPartId \"" + slider["lowerPartId"] + "\" not found\n";
 						errorCount++;
 					}
 				}
@@ -171,11 +169,11 @@ A3a.vpl.validateUI = function (ui) {
 						for (var i = 0; i < snap.length; i++) {
 							if (typeof snap[i] === "string") {
 								if (!/^`.+`$/.test(snap[i])) {
-									info("In block \"" + name + "\", invalid slider snap expression");
+									msg += "In block \"" + name + "\", invalid slider snap expression\n";
 									errorCount++;
 								}
 							} else if (typeof snap[i] !== "number") {
-								info("In block \"" + name + "\", slider snap must be a number or a string");
+								msg += "In block \"" + name + "\", slider snap must be a number or a string\n";
 								errorCount++;
 							}
 						}
@@ -192,56 +190,56 @@ A3a.vpl.validateUI = function (ui) {
 				var centerIdFound = false;
 				var thumbIdFound = false;
 				if (!svg.hasElement(id)) {
-					info("In block \"" + name + "\", rotating id \"" + id + "\" not found");
+					msg += "In block \"" + name + "\", rotating id \"" + id + "\" not found\n";
 					errorCount++;
 				} else if (!belongsToDisplayedElement(id)) {
-					info("In block \"" + name + "\", rotating id \"" + id + "\" not displayed");
+					msg += "In block \"" + name + "\", rotating id \"" + id + "\" not displayed\n";
 					errorCount++;
 				}
 				if (!svg.hasElement(centerId)) {
-					info("In block \"" + name + "\", rotating centerId \"" + centerId + "\" not found");
+					msg += "In block \"" + name + "\", rotating centerId \"" + centerId + "\" not found\n";
 					errorCount++;
 				}
 				if (!svg.hasElement(thumbId)) {
-					info("In block \"" + name + "\", rotating thumbId \"" + thumbId + "\" not found");
+					msg += "In block \"" + name + "\", rotating thumbId \"" + thumbId + "\" not found\n";
 					errorCount++;
 				} else if (!belongsToDisplayedElement(thumbId)) {
-					info("In block \"" + name + "\", rotating thumbId \"" + thumbId + "\" not displayed");
+					msg += "In block \"" + name + "\", rotating thumbId \"" + thumbId + "\" not displayed\n";
 					errorCount++;
 				}
 				if (!svg.hasAncestor(thumbId, id)) {
-					info("In block \"" + name + "\", rotating thumbId \"" + thumbId + "\" not a descendent of id \"" + id + "\"");
+					msg += "In block \"" + name + "\", rotating thumbId \"" + thumbId + "\" not a descendent of id \"" + id + "\"\n";
 					errorCount++;
 				}
 			})
 		}
 		if (diffwheelmotion) {
 			if (!svg.hasElement(diffwheelmotion["id"])) {
-				info("In block \"" + name + "\", diffwheelmotion id \"" + diffwheelmotion["id"] + "\" not found");
+				msg += "In block \"" + name + "\", diffwheelmotion id \"" + diffwheelmotion["id"] + "\" not found\n";
 				errorCount++;
 			} else if (!belongsToDisplayedElement(diffwheelmotion["id"])) {
-				info("In block \"" + name + "\", diffwheelmotion id \"" + diffwheelmotion["id"] + "\" not displayed");
+				msg += "In block \"" + name + "\", diffwheelmotion id \"" + diffwheelmotion["id"] + "\" not displayed\n";
 				errorCount++;
 			}
 		}
 		if (score) {
 			if (!svg.hasElement(score["id"])) {
-				info("In block \"" + name + "\", score id \"" + score["id"] + "\" not found");
+				msg += "In block \"" + name + "\", score id \"" + score["id"] + "\" not found\n";
 				errorCount++;
 			} else if (!belongsToDisplayedElement(score["id"])) {
-				info("In block \"" + name + "\", score id \"" + score["id"] + "\" not displayed");
+				msg += "In block \"" + name + "\", score id \"" + score["id"] + "\" not displayed\n";
 				errorCount++;
 			}
 			if (typeof score["numHeights"] !== "number" ||
 				score["numHeights"] !== Math.round(score["numHeights"]) ||
 				score["numHeights"] <= 0) {
-				info("In block \"" + name + "\", score numHeights must be a strictly positive integer");
+				msg += "In block \"" + name + "\", score numHeights must be a strictly positive integer\n";
 				errorCount++;
 			}
 		}
 
 		if ((buttons || radiobuttons || sliders || rotating || score || otherParameters > 0) && !defParam) {
-			info("In block \"" + name + "\", missing defaultParameters");
+			msg += "In block \"" + name + "\", missing defaultParameters\n";
 			errorCount++;
 		}
 
@@ -264,8 +262,8 @@ A3a.vpl.validateUI = function (ui) {
 			}
 			nParams += otherParameters;
 			if (nParams !== defParam.length) {
-				info("In block \"" + name + "\", defaultParameters.length=" + defParam.length +
-						", needs " + nParams + " parameters");
+				msg += "In block \"" + name + "\", defaultParameters.length=" + defParam.length +
+						", needs " + nParams + " parameters\n";
 				errorCount++;
 			}
 		}
@@ -280,8 +278,8 @@ A3a.vpl.validateUI = function (ui) {
 		});
 	}
 	if (errorCount > 0) {
-		info(errorCount + " error" + (errorCount > 1 ? "s" : ""));
+		msg += errorCount + " error" + (errorCount > 1 ? "s" : "") + "\n";
 	}
 
-	return errorCount === 0;
+	return msg || null;
 };
