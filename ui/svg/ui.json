@@ -560,198 +560,6 @@
 			]
 		},
 		{
-			"name": "horiz prox front",
-			"type": "event",
-			"modes": ["basic"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_ProxH_Front_med"
-				}
-			],
-			"defaultParameters": [0, 0, 0, 0, 0],
-			"buttons": [
-				{
-					"id": "Btn3_Prox0",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox1",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox2",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox3",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox4",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				}
-			],
-			"validation": [
-				{
-					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
-					"warning": "No proximity sensor specified"
-				}
-			]
-		},
-		{
-			"name": "horiz prox back",
-			"type": "event",
-			"modes": ["basic"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_ProxH_Back_med"
-				}
-			],
-			"defaultParameters": [0, 0],
-			"buttons": [
-				{
-					"id": "Btn3_Prox5",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox6",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				}
-			],
-			"validation": [
-				{
-					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
-					"warning": "No proximity sensor specified"
-				}
-			]
-		},
-		{
-			"name": "horiz prox front adv",
-			"type": "event",
-			"modes": ["advanced"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_ProxH_Front_adv"
-				},
-				{
-					"js": "ctx.strokeStyle = '#6200ea'; ctx.lineWidth = 20; ctx.lineCap = 'round'; var r = 950 - 300 * $[5]; var w = 90 - 50 * $[5]; $.slice(0,-1).forEach(function (b, i) { if (b) { var phi = 0.298 * (i + 0.65); ctx.moveTo(r * Math.sin(phi) - w * Math.cos(phi), 1000 - r * Math.cos(phi) - w * Math.sin(phi)); ctx.lineTo(r * Math.sin(phi) + w * Math.cos(phi), 1000 - r * Math.cos(phi) + w * Math.sin(phi)); } }); ctx.stroke();"
-				}
-			],
-			"styles": [
-				{
-					"id": "Obstacles-3",
-					"st": "visibility:hidden"
-				}
-			],
-			"defaultParameters": [0, 0, 0, 0, 0, 0.5],
-			"sliders": [
-				{
-					"id": "Slid_threshold",
-					"thumbId": "cursor_threshold",
-					"min": 1,
-					"max": 0
-				}
-			],
-			"buttons": [
-				{
-					"id": "Btn3_Prox0_adv",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox1_adv",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox2_adv",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox3_adv",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox4_adv",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				}
-			],
-			"validation": [
-				{
-					"assert": "`$.slice(0,5).reduce(function (acc, p) { return acc || p != 0; }, false)`",
-					"warning": "No proximity sensor specified"
-				}
-			]
-		},
-		{
-			"name": "horiz prox back adv",
-			"type": "event",
-			"modes": ["advanced"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_ProxH_Back_adv"
-				},
-				{
-					"js": "ctx.strokeStyle = '#6200ea'; ctx.lineWidth = 20; ctx.lineCap = 'round'; var p = 900 - 500 * $[2]; var w = 100 - 50 * $[2]; $.slice(0,-1).forEach(function (b, i) { if (b) { var x = 260 + 330 * i; ctx.moveTo(x - w, p); ctx.lineTo(x + w, p); } }); ctx.stroke();"
-				}
-			],
-			"styles": [
-				{
-					"id": "Obstacles-4",
-					"st": "visibility:hidden"
-				}
-			],
-			"defaultParameters": [0, 0, 0],
-			"sliders": [
-				{
-					"id": "Slid_threshold-2",
-					"thumbId": "cursor_threshold-2",
-					"min": 0,
-					"max": 1
-				}
-			],
-			"buttons": [
-				{
-					"id": "Btn3_Prox5_adv",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox6_adv",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				}
-			],
-			"validation": [
-				{
-					"assert": "`$.slice(0,2).reduce(function (acc, p) { return acc || p != 0; }, false)`",
-					"warning": "No proximity sensor specified"
-				}
-			]
-		},
-		{
 			"name": "ground mean",
 			"type": "event",
 			"modes": ["basic"],
@@ -845,6 +653,224 @@
 			]
 		},
 		{
+			"name": "horiz prox front",
+			"type": "event",
+			"modes": ["basic"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ev_ProxH_Front_med"
+				},
+				{
+					"js": "ctx.lineWidth = 20; ctx.strokeStyle = '#6200ea'; ctx.lineCap = 'round'; var r = 620; var w = 70; $.forEach(function (b, i) { if (b) { var phi = 0.33 * (i - 2); ctx.beginPath(); ctx.moveTo(500 + r * Math.sin(phi) - w * Math.cos(phi), 750 - r * Math.cos(phi) - w * Math.sin(phi)); ctx.lineTo(500 + r * Math.sin(phi) + w * Math.cos(phi), 750 - r * Math.cos(phi) + w * Math.sin(phi)); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.stroke(); } });"
+				}
+			],
+			"styles": [
+				{
+					"id": "Obstacles",
+					"st": "visibility:hidden"
+				}
+			],
+			"defaultParameters": [0, 0, 0, 0, 0],
+			"buttons": [
+				{
+					"id": "Btn3_Prox0",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox1",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox2",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox3",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox4",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No proximity sensor specified"
+				}
+			]
+		},
+		{
+			"name": "horiz prox back",
+			"type": "event",
+			"modes": ["basic"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ev_ProxH_Back_med"
+				},
+				{
+					"js": "ctx.strokeStyle = '#6200ea'; ctx.lineWidth = 20; ctx.lineCap = 'round'; var p = 875; var w = 70; $.forEach(function (b, i) { if (b) { var x = 335 + 330 * i; ctx.beginPath(); ctx.moveTo(x - w, p); ctx.lineTo(x + w, p); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.stroke(); } });"
+				}
+			],
+			"styles": [
+				{
+					"id": "Obstacles-2",
+					"st": "visibility:hidden"
+				},
+				{
+					"id": "Led_5",
+					"st": "visibility:`$[0]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_6",
+					"st": "visibility:`$[1]>0?'visible':'hidden'`"
+				}
+			],
+			"defaultParameters": [0, 0],
+			"buttons": [
+				{
+					"id": "Btn3_Prox5",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox6",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No proximity sensor specified"
+				}
+			]
+		},
+		{
+			"name": "horiz prox front adv",
+			"type": "event",
+			"modes": ["advanced"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ev_ProxH_Front_adv"
+				},
+				{
+					"js": "ctx.lineWidth = 20; ctx.strokeStyle = '#6200ea'; ctx.lineCap = 'round'; var r = 950 - 300 * $[5]; var w = 90 - 50 * $[5]; $.slice(0,-1).forEach(function (b, i) { if (b) { var phi = 0.298 * (i + 0.65); ctx.beginPath(); ctx.moveTo(r * Math.sin(phi) - w * Math.cos(phi), 1000 - r * Math.cos(phi) - w * Math.sin(phi)); ctx.lineTo(r * Math.sin(phi) + w * Math.cos(phi), 1000 - r * Math.cos(phi) + w * Math.sin(phi)); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.stroke(); } });"
+				}
+			],
+			"styles": [
+				{
+					"id": "Obstacles-3",
+					"st": "visibility:hidden"
+				}
+			],
+			"defaultParameters": [0, 0, 0, 0, 0, 0.5],
+			"sliders": [
+				{
+					"id": "Slid_threshold",
+					"thumbId": "cursor_threshold",
+					"min": 1,
+					"max": 0
+				}
+			],
+			"buttons": [
+				{
+					"id": "Btn3_Prox0_adv",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox1_adv",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox2_adv",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox3_adv",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox4_adv",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.slice(0,5).reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No proximity sensor specified"
+				}
+			]
+		},
+		{
+			"name": "horiz prox back adv",
+			"type": "event",
+			"modes": ["advanced"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ev_ProxH_Back_adv"
+				},
+				{
+					"js": "ctx.strokeStyle = '#6200ea'; ctx.lineWidth = 20; ctx.lineCap = 'round'; var p = 900 - 500 * $[2]; var w = 100 - 50 * $[2]; $.slice(0,-1).forEach(function (b, i) { if (b) { var x = 260 + 330 * i; ctx.beginPath(); ctx.moveTo(x - w, p); ctx.lineTo(x + w, p); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.stroke(); } });"
+				}
+			],
+			"styles": [
+				{
+					"id": "Obstacles-4",
+					"st": "visibility:hidden"
+				}
+			],
+			"defaultParameters": [0, 0, 0],
+			"sliders": [
+				{
+					"id": "Slid_threshold-2",
+					"thumbId": "cursor_threshold-2",
+					"min": 0,
+					"max": 1
+				}
+			],
+			"buttons": [
+				{
+					"id": "Btn3_Prox5_adv",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_Prox6_adv",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.slice(0,2).reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No proximity sensor specified"
+				}
+			]
+		},
+		{
 			"name": "remote control arrows",
 			"type": "event",
 			"modes": ["advanced"],
@@ -856,7 +882,7 @@
 					"uri": "Blocks.svg#Ev_Remote1"
 				}
 			],
-			"defaultParameters": [0],
+			"defaultParameters": [1],
 			"radiobuttons": [
 				{
 					"id": "Btn2_Remote1_85",
