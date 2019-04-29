@@ -574,6 +574,99 @@
 			]
 		},
 		{
+			"name": "ground mean",
+			"type": "event",
+			"modes": ["basic"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ev_ProxGr_bas"
+				}
+			],
+			"defaultParameters": [true],
+			"buttons": [
+				{
+					"id": "btn2_ProxGd_detection",
+					"val": [true, false],
+					"st": ["fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
+				}
+			]
+		},
+		{
+			"name": "ground",
+			"type": "event",
+			"modes": ["basic"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ev_ProxGr_med"
+				}
+			],
+			"defaultParameters": [0, 0],
+			"buttons": [
+				{
+					"id": "Btn3_ProxGd0",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_ProxGd1",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No ground sensor specified"
+				}
+			]
+		},
+		{
+			"name": "ground 1",
+			"type": "event",
+			"modes": ["advanced"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ev_ProxGround_adv"
+				}
+			],
+			"defaultParameters": [0, 0, 0],
+			"sliders": [
+				{
+					"id": "slider_threshold_proxGd",
+					"thumbId": "Cursor_proxGd",
+					"min": 0,
+					"max": 1
+				}
+			],
+			"buttons": [
+				{
+					"id": "Btn3_ProxGd0_adv",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				},
+				{
+					"id": "Btn3_ProxGd1_adv",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.slice(0, 2).reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No ground sensor specified"
+				}
+			]
+		},
+		{
 			"name": "horiz prox front",
 			"type": "event",
 			"modes": ["basic"],
@@ -765,99 +858,7 @@
 				}
 			]
 		},
-		{
-			"name": "ground mean",
-			"type": "event",
-			"modes": ["basic"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_ProxGr_bas"
-				}
-			],
-			"defaultParameters": [true],
-			"buttons": [
-				{
-					"id": "btn2_ProxGd_detection",
-					"val": [true, false],
-					"st": ["fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
-				}
-			]
-		},
-		{
-			"name": "ground",
-			"type": "event",
-			"modes": ["basic"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_ProxGr_med"
-				}
-			],
-			"defaultParameters": [0, 0],
-			"buttons": [
-				{
-					"id": "Btn3_ProxGd0",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_ProxGd1",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				}
-			],
-			"validation": [
-				{
-					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
-					"warning": "No ground sensor specified"
-				}
-			]
-		},
-		{
-			"name": "ground 1",
-			"type": "event",
-			"modes": ["advanced"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_ProxGround_adv"
-				}
-			],
-			"defaultParameters": [0, 0, 0],
-			"sliders": [
-				{
-					"id": "slider_threshold_proxGd",
-					"thumbId": "Cursor_proxGd",
-					"min": 0,
-					"max": 1
-				}
-			],
-			"buttons": [
-				{
-					"id": "Btn3_ProxGd0_adv",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_ProxGd1_adv",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				}
-			],
-			"validation": [
-				{
-					"assert": "`$.slice(0, 2).reduce(function (acc, p) { return acc || p != 0; }, false)`",
-					"warning": "No ground sensor specified"
-				}
-			]
-		},
+		
 		{
 			"name": "remote control arrows",
 			"type": "event",
@@ -1784,7 +1785,7 @@ vpl.top {
 }
 
 button.vpl.top {
-	font-size: 2wh;
+	font-size: 1.2vw;
 	font-weight: 300;
 	font-family: 'Rubik', sans-serif;
 }
@@ -1867,7 +1868,7 @@ block-library {
 	margin: 0px;
 	border-left: 2px solid #eceff1;
 	border-right: 2px solid #eceff1;
-	overflow: scroll;
+	/*overflow: scroll;*/
 }
 
 /* simulator */
@@ -2931,11 +2932,7 @@ sim-playground {
 			"!!stretch"
 		],
 		"editor": [
-			"!!stretch",
-			"src:locked",
-			"!space",
-			"src:language",
-			"!stretch"
+			
 
 		],
 		"simulator": [
