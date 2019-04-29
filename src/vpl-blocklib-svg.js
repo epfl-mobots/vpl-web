@@ -503,7 +503,7 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 		if (el["js"]) {
 			var fun = new Function("ctx", "$", el["js"]);
 			this.ctx.save();
-			this.ctx.scale(this.dims.blockSize, this.dims.blockSize);
+			this.ctx.scale(this.dims.blockSize / 1000, this.dims.blockSize / 1000);
 			this.ctx.beginPath();
 			fun(this.ctx, block.param);
 			this.ctx.restore();
