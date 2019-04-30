@@ -739,7 +739,7 @@ A3a.vpl.Canvas.prototype.makeZoomedClone = function (item) {
 		ctx.translate(item1.x, item1.y);
 		ctx.scale(sc, sc);
 		ctx.translate(-item1.x, -item1.y);
-		item.drawContent(ctx, c, item1.x - c.x, item1.y - c.y);
+		item.drawContent(canvas, c, item1.x - c.x, item1.y - c.y);
 		ctx.restore();
 	};
 	if (item.drawOverlay) {
