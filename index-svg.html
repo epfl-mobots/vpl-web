@@ -606,6 +606,16 @@
 					"uri": "Blocks.svg#Ev_ProxGr_med"
 				}
 			],
+			"styles": [
+				{
+					"id": "Led_Gd0",
+					"st": "visibility:`$[0]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_Gd1",
+					"st": "visibility:`$[1]>0?'visible':'hidden'`"
+				}
+			],
 			"defaultParameters": [0, 0],
 			"buttons": [
 				{
@@ -635,7 +645,28 @@
 					"uri": "Blocks.svg#Events_bg"
 				},
 				{
+					"js": "var gth = Math.floor($[2] * 255.99).toString(10); var g = 'rgb(' + [gth,gth,gth].join(',') + ')'; $.slice(0, 2).forEach(function (b, i) { if (b) { var lg = ctx.createLinearGradient(0, 40, 0, 460); lg.addColorStop(0, b > 0 ? 'white' : g); lg.addColorStop(1, b > 0 ? g : 'black'); ctx.fillStyle = lg; ctx.fillRect(40 + i * 325, 40, 325, 460); } });"
+				},
+				{
 					"uri": "Blocks.svg#Ev_ProxGround_adv"
+				}
+			],
+			"styles": [
+				{
+					"id": "Gradient_proxGd_0",
+					"st": "visibility:hidden"
+				},
+				{
+					"id": "Gradient_proxGd_1",
+					"st": "visibility:hidden"
+				},
+				{
+					"id": "Led_Gd0-2",
+					"st": "visibility:`$[0]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_Gd1-2",
+					"st": "visibility:`$[1]>0?'visible':'hidden'`"
 				}
 			],
 			"defaultParameters": [0, 0, 0],
@@ -651,12 +682,12 @@
 				{
 					"id": "Btn3_ProxGd0_adv",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:black;stroke-linecap:round"]
 				},
 				{
 					"id": "Btn3_ProxGd1_adv",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:black;stroke-linecap:round"]
 				}
 			],
 			"validation": [
