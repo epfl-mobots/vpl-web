@@ -1250,7 +1250,7 @@ SVG.Preparsed.prototype.draw = function (ctx, options) {
 					if (style["opacity"]) {
 						ctx.globalAlpha *= parseFloat(style["opacity"]);
 					}
-					if (style["fill"] && style["fill"] !== "none") {
+					if (!style["fill"] || style["fill"] !== "none") {
 						ctx.fillStyle = style["fill"] === "white" || style["fill"] === "#fff" || style["fill"] === "#ffffff"
 							? "white"
 							: decodeFillStyle(style["fill"]) || "none";
