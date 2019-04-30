@@ -1106,6 +1106,38 @@
 				{
 					"id": "BelowValue",
 					"st": "visibility:`$[0]===2?'visible':'hidden'`"
+				},
+				{
+					"id": "Btn2_State0-2",
+					"st": "fill:`$[1]&1?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State7-2",
+					"st": "fill:`$[1]&2?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State6-2",
+					"st": "fill:`$[1]&4?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State5-2",
+					"st": "fill:`$[1]&8?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State4-2",
+					"st": "fill:`$[1]&16?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State3-2",
+					"st": "fill:`$[1]&32?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State2-2",
+					"st": "fill:`$[1]&64?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State1-2",
+					"st": "fill:`$[1]&128?'#84edcf':'transparent'`"
 				}
 			]
 		},
@@ -1752,6 +1784,38 @@
 				{
 					"id": "Divide",
 					"st": "visibility:hidden"
+				},
+				{
+					"id": "Btn2_State0-3",
+					"st": "fill:`$[1]&1?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State7-3",
+					"st": "fill:`$[1]&2?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State6-3",
+					"st": "fill:`$[1]&4?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State5-3",
+					"st": "fill:`$[1]&8?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State4-3",
+					"st": "fill:`$[1]&16?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State3-3",
+					"st": "fill:`$[1]&32?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State2-3",
+					"st": "fill:`$[1]&64?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn2_State1-3",
+					"st": "fill:`$[1]&128?'#84edcf':'transparent'`"
 				}
 			]
 		}
