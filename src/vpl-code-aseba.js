@@ -165,7 +165,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 			}
 			if (line.length > 0) {
 				var preDec = startsWithAnyOf(["else", "elseif", "end", "onevent", "sub"]);
-				var postInc = startsWithAnyOf(["if", "for", "onevent", "sub", "when", "while"]);
+				var postInc = startsWithAnyOf(["if", "else", "elseif", "for", "onevent", "sub", "when", "while"]);
 				if (preDec) {
 					indent = Math.max(indent - 1, 0);
 				}

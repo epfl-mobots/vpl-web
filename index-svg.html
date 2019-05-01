@@ -1758,24 +1758,32 @@
 					"js": "ctx.font = 'bold 170px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(['=','+','\u2212','\u00d7','\u00f7'][$[0]], 340, 520); ctx.fillText($[1].toString(10), 650, 520);"
 				}
 			],
-			"defaultParameters": [0, 0],
-			"otherParameters": 2,
+			"defaultParameters": [0, 0, false],
+			"otherParameters": 3,
 			"pushbuttons": [
 				{
 					"id": "ComparatorDown-2",
-					"newParameters": "`[Math.max($[0]-1,0),$[1]]`"
+					"newParameters": "`[($[0]+4)%5,$[1],$[2]]`"
 				},
 				{
 					"id": "ComparatorUp-2",
-					"newParameters": "`[Math.min($[0]+1,4),$[1]]`"
+					"newParameters": "`[($[0]+1)%5,$[1],$[2]]`"
 				},
 				{
 					"id": "ValueDown-2",
-					"newParameters": "`[$[0],($[1]+255)%256]`"
+					"newParameters": "`[$[0],($[1]+255)%256,$[2]]`"
 				},
 				{
 					"id": "ValueUp-2",
-					"newParameters": "`[$[0],($[1]+1)%256]`"
+					"newParameters": "`[$[0],($[1]+1)%256,$[2]]`"
+				},
+				{
+					"id": "Btn_Saturate_On",
+					"newParameters": "`[$[0],$[1],!$[2]]`"
+				},
+				{
+					"id": "Btn_Saturate_Off",
+					"newParameters": "`[$[0],$[1],!$[2]]`"
 				}
 			],
 			"styles": [
@@ -1830,6 +1838,14 @@
 				{
 					"id": "Btn2_State1-3",
 					"st": "fill:`$[1]&128?'#84edcf':'transparent'`"
+				},
+				{
+					"id": "Btn_Saturate_On",
+					"st": "visibility:`$[2]?'visible':'hidden'`"
+				},
+				{
+					"id": "Btn_Saturate_Off",
+					"st": "visibility:`$[2]?'hidden':'visible'`"
 				}
 			]
 		}
@@ -2476,7 +2492,7 @@ sim-playground {
 					"state256 = 0\n"
 				],
 				"statement":
-					"state256 `['','+','-','*','/'][$[0]]`= `$[1]`\n"
+					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if state256 ' + ($[0] == 2 ? '< ' + $[1] + ' then\\nstate256 = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ' then\\nstate256 = 255\\n') + 'else\\nstate256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\nend' : 'state256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1]`\n"
 			}
 		}
 	]
@@ -2871,7 +2887,7 @@ sim-playground {
 					"state256 = 0;\n"
 				],
 				"statement":
-					"state256 `['','+','-','*','/'][$[0]]`= `$[1]`;\n"
+					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if (state256 ' + ($[0] == 2 ? '< ' + $[1] + ') {\\nstate256 = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ') {\\nstate256 = 255\\n') + '} else {\\nstate256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\n}\\n' : 'state256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + ';\\n'`"
 			}
 		}
 	]
