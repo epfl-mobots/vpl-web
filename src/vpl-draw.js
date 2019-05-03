@@ -1081,12 +1081,11 @@ A3a.vpl.Canvas.prototype.slider = function (val, pos, vert, thumbColor, levelTyp
 
 	ctx.lineWidth = dims.blockLineWidth;
 	ctx.fillStyle = "white";
-	ctx.strokeStyle = "#aaa";
+	ctx.strokeStyle = "black";
 	sliderPath(0, 1);
 	ctx.fill();
 	ctx.stroke();
 	ctx.fillStyle = thumbColor;
-	ctx.strokeStyle = "#666";
 	switch (levelType || A3a.vpl.draw.levelType.none) {
 	case A3a.vpl.draw.levelType.low:
 		sliderPath(0, val);

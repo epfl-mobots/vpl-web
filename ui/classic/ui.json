@@ -9,6 +9,6 @@
 
 	"fragments": {
 		"about.html": "<iframe src=\"vpl-about.html\" style=\"width:100%;height:100%;border:none;\"></iframe>",
-		"vpl-export-html.css": "td.events, td.then, td.actions {\n\tborder: solid 2px silver;\n\tborder-style: solid none;\n}\ntd.block {\n\tpadding: 15px;\n}\ntd.events {\n    border-left-style: solid;\n    border-top-left-radius: 20px; \n    border-bottom-left-radius: 20px;\n}\ntd.actions {\n    border-right-style: solid;\n    border-bottom-right-radius: 20px; \n    border-top-right-radius: 20px; \n}\ntable.program {\n\tborder-collapse: separate;\n\tborder-spacing: 0 10px;\n\tmargin-left: auto;\n\tmargin-right: auto;\n}\n"
+		"vpl-export-html.css": "td.events, td.then, td.actions {\n\tborder: solid 2px silver;\n\tborder-style: solid none;\n}\ntd.block {\n\tpadding: 15px;\n}\ntd.events {\n    min-width: 20px;\n    border-left-style: solid;\n    border-top-left-radius: 20px; \n    border-bottom-left-radius: 20px;\n}\ntd.actions {\n    min-width: 20px;\n    border-right-style: solid;\n    border-bottom-right-radius: 20px; \n    border-top-right-radius: 20px; \n}\ntable.program {\n\tborder-collapse: separate;\n\tborder-spacing: 0 10px;\n\tmargin-left: auto;\n\tmargin-right: auto;\n}\n"
 	}
 }

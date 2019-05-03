@@ -42,10 +42,15 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:save", {
 		action: function (app, modifier) {
-			// var aesl = app.program.exportAsAESLFile();
-			// A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
-			var json = app.program.exportToJSON();
-			A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
+			if (modifier) {
+				var html = app.toHTMLDocument(app.css);
+				A3a.vpl.Program.downloadText(html, "vpl-program.html", "text/html");
+			} else {
+				// var aesl = app.program.exportAsAESLFile();
+				// A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
+				var json = app.program.exportToJSON();
+				A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
+			}
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.isEmpty();
