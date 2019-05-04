@@ -453,15 +453,17 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	// find first error, or first warning if there is no error
 	this.vplMessage = "";
 	this.vplMessageIsWarning = false;
-	for (var i = 0; i < program.program.length; i++) {
-		if (program.program[i].error) {
-			if (!program.program[i].error.isWarning) {
-				this.vplMessage = program.program[i].error.msg;
-				this.vplMessageIsWarning = false;
-				break;	// stop at first error
-			} else if (!this.vplMessage) {
-				this.vplMessage = program.program[i].error.msg;
-				this.vplMessageIsWarning = true;
+	if (!uiConfig.customizationMode) {
+		for (var i = 0; i < program.program.length; i++) {
+			if (program.program[i].error) {
+				if (!program.program[i].error.isWarning) {
+					this.vplMessage = program.program[i].error.msg;
+					this.vplMessageIsWarning = false;
+					break;	// stop at first error
+				} else if (!this.vplMessage) {
+					this.vplMessage = program.program[i].error.msg;
+					this.vplMessageIsWarning = true;
+				}
 			}
 		}
 	}
