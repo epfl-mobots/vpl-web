@@ -2504,8 +2504,11 @@ sim-playground {
 				"initCodeExec": [
 					"state256 = 0\n"
 				],
+				"initCodeDecl": [
+					"sub display_state256\ncall leds.circle((state256&1)*32,(state256&128)/4,(state256&64)/2,state256&32,(state256&16)*2,(state256&8)*4,(state256&4)*8,(state256&2)*16)\n"
+				],
 				"statement":
-					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if state256 ' + ($[0] == 2 ? '< ' + $[1] + ' then\\nstate256 = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ' then\\nstate256 = 255\\n') + 'else\\nstate256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\nend' : 'state256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1]`\n"
+					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if state256 ' + ($[0] == 2 ? '< ' + $[1] + ' then\\nstate256 = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ' then\\nstate256 = 255\\n') + 'else\\nstate256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\nend' : 'state256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1]`\ncallsub display_state256\n"
 			}
 		}
 	]
@@ -2833,6 +2836,20 @@ sim-playground {
 			}
 		},
 		{
+			"name": "bottom color 8",
+			"l2": {
+				"initVarDecl": [
+					"// RGB color of the bottom led\nint bottomColor[3];\n"
+				],
+				"initCodeExec": [
+					"bottomColor = [0, 0, 0];\n",
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"leds.bottom.left(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`);\nleds.bottom.right(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`);\nbottomColor = [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`];\n"
+			}
+		},
+		{
 			"name": "top color",
 			"l2": {
 				"initVarDecl": [
@@ -2846,6 +2863,54 @@ sim-playground {
 					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\ntopColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`];\n",
 				"statementWithoutInit":
 					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n"
+			}
+		},
+		{
+			"name": "bottom color",
+			"l2": {
+				"initVarDecl": [
+					"// RGB color of the bottom led\nint bottomColor[3];\n"
+				],
+				"initCodeExec": [
+					"bottomColor = [0, 0, 0];\n",
+					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+				],
+				"statement":
+					"leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\nleds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\nbottomColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`];\n",
+				"statementWithoutInit":
+					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n"
+			}
+		},
+		{
+			"name": "set state 256",
+			"l2": {
+				"initVarDecl": [
+					"int state256;\n"
+				],
+				"initCodeExec": [
+					"state256 = 0;\n"
+				],
+				"initCodeDecl": [
+					"void display_state256() {\nleds.circle((state256&1)*32,(state256&128)/4,(state256&64)/2,state256&32,(state256&16)*2,(state256&8)*4,(state256&4)*8,(state256&2)*16);\n}\n"
+				],
+				"statement":
+					"state256 = `$.reduce(function (a, b, i) { return b ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`;\ndisplay_state256();\n"
+			}
+		},
+		{
+			"name": "set state 256 with mask",
+			"l2": {
+				"initVarDecl": [
+					"int state256;\n"
+				],
+				"initCodeExec": [
+					"state256 = 0;\n"
+				],
+				"initCodeDecl": [
+					"void display_state256() {\nleds.circle((state256&1)*32,(state256&128)/4,(state256&64)/2,state256&32,(state256&16)*2,(state256&8)*4,(state256&4)*8,(state256&2)*16);\n}\n"
+				],
+				"statement":
+					"state256 = state256 & `$.reduce(function (a, b, i) { return b === 0 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)` | `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`;\ndisplay_state256();\n"
 			}
 		},
 		{
@@ -2903,8 +2968,11 @@ sim-playground {
 				"initCodeExec": [
 					"state256 = 0;\n"
 				],
+				"initCodeDecl": [
+					"void display_state256() {\nleds.circle((state256&1)*32,(state256&128)/4,(state256&64)/2,state256&32,(state256&16)*2,(state256&8)*4,(state256&4)*8,(state256&2)*16);\n}\n"
+				],
 				"statement":
-					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if (state256 ' + ($[0] == 2 ? '< ' + $[1] + ') {\\nstate256 = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ') {\\nstate256 = 255\\n') + '} else {\\nstate256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\n}\\n' : 'state256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + ';\\n'`"
+					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if (state256 ' + ($[0] == 2 ? '< ' + $[1] + ') {\\nstate256 = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ') {\\nstate256 = 255\\n') + '} else {\\nstate256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\n}\\n' : 'state256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + ';\\n'`display_state256();\n"
 			}
 		}
 	]
