@@ -70,6 +70,14 @@ A3a.vpl.patchL2Blocks = function () {
 		"int topColor[3];\n";
 
 	/** @const */
+	A3a.vpl.BlockTemplate.initTopColorStateDecll2 =
+		"int topColor0[3];\n";
+
+	/** @const */
+	A3a.vpl.BlockTemplate.clauseInitTopColorl2 =
+		"topColor0 = topColor;\n";
+
+	/** @const */
 	A3a.vpl.BlockTemplate.initTopColorInit2 =
 		"topColor = [0, 0, 0];\n";
 
@@ -439,16 +447,18 @@ A3a.vpl.patchL2Blocks = function () {
 			"color state": function (block) {
 				var cond = block.param
 					.map(function (p, i) {
-						return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
+						return "topColor0[" + i + "] / 11 == " + Math.floor(p * 2.99);
 					})
 					.join(" && ");
 				return {
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initTopColorDecl2
+						A3a.vpl.BlockTemplate.initTopColorDecl2,
+						A3a.vpl.BlockTemplate.initTopColorStateDecll2
 					],
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initTopColorInit2
 					],
+					clauseInit: A3a.vpl.BlockTemplate.clauseInitTopColorl2,
 					clause: cond
 				};
 			},

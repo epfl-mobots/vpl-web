@@ -63,6 +63,14 @@ A3a.vpl.BlockTemplate.initTopColorDecl =
 	"var topColor[3]\n";
 
 /** @const */
+A3a.vpl.BlockTemplate.initTopColorStateDecl =
+	"var topColor0[3]\n";
+
+/** @const */
+A3a.vpl.BlockTemplate.clauseInitTopColor =
+	"topColor0 = topColor\n";
+
+/** @const */
 A3a.vpl.BlockTemplate.initTopColorInit =
 	"topColor = [0, 0, 0]\n";
 
@@ -1353,17 +1361,19 @@ A3a.vpl.BlockTemplate.lib =	[
 			"aseba": function (block) {
 				var cond = block.param
 					.map(function (p, i) {
-						return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
+						return "topColor0[" + i + "] / 11 == " + Math.floor(p * 2.99);
 					})
 					.join(" and ");
 				return {
 					sectionPriority: 1,
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initTopColorDecl
+						A3a.vpl.BlockTemplate.initTopColorDecl,
+						A3a.vpl.BlockTemplate.initTopColorStateDecl
 					],
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initTopColorInit
 					],
+					clauseInit: A3a.vpl.BlockTemplate.clauseInitTopColor,
 					clause: cond
 				};
 			}
