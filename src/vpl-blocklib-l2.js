@@ -462,20 +462,19 @@ A3a.vpl.patchL2Blocks = function () {
 					clause: cond
 				};
 			},
-			"color state 8": function (block) {
-				var cond = block.param
-					.map(function (p, i) {
-						return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
-					})
-					.join(" && ");
+			"color 8 state": function (block) {
 				return {
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initTopColorDecl2
+						A3a.vpl.BlockTemplate.initTopColorDecl2,
+						A3a.vpl.BlockTemplate.initTopColorStateDecll2
 					],
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initTopColorInit2
 					],
-					clause: cond
+					clauseInit: A3a.vpl.BlockTemplate.clauseInitTopColorl2,
+					clause: "topColor0[0] " + (block.param[0] % 2 ? '>=' : '<') +
+						" 16 && topColor0[1] " + (block.param[0] % 4 >= 2 ? '>=' : '<') +
+							" 16 && topColor0[2] " + (block.param[0] >= 4 ? '>=' : '<') + " 16"
 				};
 			},
 			"motor state": function (block) {
@@ -541,6 +540,8 @@ A3a.vpl.patchL2Blocks = function () {
 				};
 			},
 			"top color 8": function (block) {
+				var rgbStr = [(block.param & 1) * 32, (block.param & 2) * 16, (block.param & 4) * 8]
+					.join(", ");
 				return {
 					initVarDecl: [
 						A3a.vpl.BlockTemplate.initTopColorDecl2
@@ -550,12 +551,8 @@ A3a.vpl.patchL2Blocks = function () {
 						A3a.vpl.BlockTemplate.initOutputs2
 					],
 					statement:
-						"leds.top(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						");\n" +
-						"topColor = [" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						"];\n"
+						"leds.top(" + rgbStr + ");\n" +
+						"topColor = [" + rgbStr + "];\n"
 				};
 			},
 			"bottom color": function (block) {
@@ -595,39 +592,37 @@ A3a.vpl.patchL2Blocks = function () {
 				};
 			},
 			"bottom color 8": function (block) {
+				var rgbStr = [(block.param & 1) * 32, (block.param & 2) * 16, (block.param & 4) * 8]
+					.join(", ");
 				return {
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initOutputs2
 					],
 					statement:
-						"leds.bottom.left(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						");\n" +
-						"leds.bottom.right(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						");\n"
+						"leds.bottom.left(" + rgbStr + ");\n" +
+						"leds.bottom.right(" + rgbStr + ");\n"
 				};
 			},
 			"bottom-left color 8": function (block) {
+				var rgbStr = [(block.param & 1) * 32, (block.param & 2) * 16, (block.param & 4) * 8]
+					.join(", ");
 				return {
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initOutputs2
 					],
 					statement:
-						"leds.bottom.left(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						");\n"
+						"leds.bottom.left(" + rgbStr + ");\n"
 				};
 			},
 			"bottom-right color 8": function (block) {
+				var rgbStr = [(block.param & 1) * 32, (block.param & 2) * 16, (block.param & 4) * 8]
+					.join(", ");
 				return {
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initOutputs2
 					],
 					statement:
-						"leds.bottom.right(" +
-						block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-						");\n"
+						"leds.bottom.right(" + rgbStr + ");\n"
 				};
 			},
 			"notes": function (block) {

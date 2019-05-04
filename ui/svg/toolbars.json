@@ -44,6 +44,7 @@
 
 		],
 		"simulator": [
+			"sim:close",
 			"!stretch",
 			"sim:restart",
 			"sim:pause",

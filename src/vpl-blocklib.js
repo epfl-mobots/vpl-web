@@ -1113,7 +1113,7 @@ A3a.vpl.BlockTemplate.lib =	[
 	}),
 	new A3a.vpl.BlockTemplate({
 		name: "init",
-		modes: [A3a.vpl.mode.advanced],
+		modes: [A3a.vpl.mode.basic, A3a.vpl.mode.advanced],
 		type: A3a.vpl.blockType.event,
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
@@ -1324,7 +1324,7 @@ A3a.vpl.BlockTemplate.lib =	[
 	})()),
 	new A3a.vpl.BlockTemplate({
 		name: "color state",
-		modes: [A3a.vpl.mode.advanced],
+		modes: [A3a.vpl.mode.custom],
 		type: A3a.vpl.blockType.state,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0, 0, 0]; },
@@ -1383,23 +1383,23 @@ A3a.vpl.BlockTemplate.lib =	[
 		var sz = 1.4;
 		var buttons = [
 			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
-			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
 			{sh: "r", x: -0.3, y: 0, size: sz, str: "red", fillStyle: "red", strokeStyle: "white"},
 			{sh: "r", x: 0, y: 0, size: sz, str: "green", fillStyle: "#0c0", strokeStyle: "white"},
 			{sh: "r", x: 0.3, y: 0, size: sz, str: "yellow", fillStyle: "yellow", strokeStyle: "silver"},
 			{sh: "r", x: -0.3, y: -0.3, size: sz, str: "blue", fillStyle: "blue", strokeStyle: "white"},
 			{sh: "r", x: 0, y: -0.3, size: sz, str: "magenta", fillStyle: "magenta", strokeStyle: "white"},
 			{sh: "r", x: 0.3, y: -0.3, size: sz, str: "cyan", fillStyle: "cyan", strokeStyle: "white"},
+			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
 		];
 		return {
-			name: "color state 8",
-			modes: [A3a.vpl.mode.custom],
+			name: "color 8 state",
+			modes: [A3a.vpl.mode.advanced],
 			type: A3a.vpl.blockType.state,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
-			defaultParam: function () { return [0, 0, 0]; },
+			defaultParam: function () { return [0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop({rgb: block.param});
+				canvas.robotTop({rgb: [block.param & 1, (block.param & 2) / 2, (block.param & 4) / 4]});
 				canvas.buttons(buttons, [
 					block.param[0] < 1 ? -2 : 0,
 					block.param[0] > -1 ? -2 : 0
@@ -1410,51 +1410,25 @@ A3a.vpl.BlockTemplate.lib =	[
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
 					block.prepareChange();
-					switch (i) {
-					case 0:
-						block.param = [0, 0, 0];
-						break;
-					case 1:
-						block.param = [1, 1, 1];
-						break;
-					case 2:
-						block.param = [1, 0, 0];
-						break;
-					case 3:
-						block.param = [0, 1, 0];
-						break;
-					case 4:
-						block.param = [1, 1, 0];
-						break;
-					case 5:
-						block.param = [0, 0, 1];
-						break;
-					case 6:
-						block.param = [1, 0, 1];
-						break;
-					case 7:
-						block.param = [0, 1, 1];
-						break;
-					}
+					block.param = [i];
 				}
 				return i;
 			},
 			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 			genCode: {
 				"aseba": function (block) {
-					var cond = block.param
-						.map(function (p, i) {
-							return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
-						})
-						.join(" and ");
 					return {
 						initVarDecl: [
-							A3a.vpl.BlockTemplate.initTopColorDecl
+							A3a.vpl.BlockTemplate.initTopColorDecl,
+							A3a.vpl.BlockTemplate.initTopColorStateDecl
 						],
 						initCodeExec: [
 							A3a.vpl.BlockTemplate.initTopColorInit
 						],
-						clause: cond
+						clauseInit: A3a.vpl.BlockTemplate.clauseInitTopColor,
+						clause: "topColor0[0] " + (block.param[0] % 2 ? '>=' : '<') +
+							" 16 and topColor0[1] " + (block.param[0] % 4 >= 2 ? '>=' : '<') +
+ 							" 16 and topColor0[2] " + (block.param[0] >= 4 ? '>=' : '<') + " 16"
 					};
 				}
 			}
@@ -1777,23 +1751,23 @@ A3a.vpl.BlockTemplate.lib =	[
 		var sz = 1.4;
 		var buttons = [
 			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
-			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
 			{sh: "r", x: -0.3, y: 0, size: sz, str: "red", fillStyle: "red", strokeStyle: "white"},
 			{sh: "r", x: 0, y: 0, size: sz, str: "green", fillStyle: "#0c0", strokeStyle: "white"},
 			{sh: "r", x: 0.3, y: 0, size: sz, str: "yellow", fillStyle: "yellow", strokeStyle: "silver"},
 			{sh: "r", x: -0.3, y: -0.3, size: sz, str: "blue", fillStyle: "blue", strokeStyle: "white"},
 			{sh: "r", x: 0, y: -0.3, size: sz, str: "magenta", fillStyle: "magenta", strokeStyle: "white"},
 			{sh: "r", x: 0.3, y: -0.3, size: sz, str: "cyan", fillStyle: "cyan", strokeStyle: "white"},
+			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
 		];
 		return {
 			name: "top color 8",
 			modes: [A3a.vpl.mode.basic],
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
-			defaultParam: function () { return [0, 0, 0]; },
+			defaultParam: function () { return [0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop({rgb: block.param});
+				canvas.robotTop({rgb: [block.param & 1, (block.param & 2) / 2, (block.param & 4) / 4]});
 				canvas.buttons(buttons, [
 					block.param[0] < 1 ? -2 : 0,
 					block.param[0] > -1 ? -2 : 0
@@ -1804,38 +1778,15 @@ A3a.vpl.BlockTemplate.lib =	[
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
 					block.prepareChange();
-					switch (i) {
-					case 0:
-						block.param = [0, 0, 0];
-						break;
-					case 1:
-						block.param = [1, 1, 1];
-						break;
-					case 2:
-						block.param = [1, 0, 0];
-						break;
-					case 3:
-						block.param = [0, 1, 0];
-						break;
-					case 4:
-						block.param = [1, 1, 0];
-						break;
-					case 5:
-						block.param = [0, 0, 1];
-						break;
-					case 6:
-						block.param = [1, 0, 1];
-						break;
-					case 7:
-						block.param = [0, 1, 1];
-						break;
-					}
+					block.param = [i];
 				}
 				return i;
 			},
 			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 			genCode: {
 				"aseba": function (block) {
+					var rgbStr = [(block.param & 1) * 32, (block.param & 2) * 16, (block.param & 4) * 8]
+						.join(", ");
 					return {
 						initVarDecl: [
 							A3a.vpl.BlockTemplate.initTopColorDecl
@@ -1845,16 +1796,10 @@ A3a.vpl.BlockTemplate.lib =	[
 							A3a.vpl.BlockTemplate.initOutputs
 						],
 						statement:
-							"call leds.top(" +
-							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-							")\n" +
-							"topColor = [" +
-							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-							"]\n",
+							"call leds.top(" + rgbStr + ")\n" +
+							"topColor = [" + rgbStr + "]\n",
 						statementWithoutInit:
-							"call leds.top(" +
-							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-							")\n"
+							"call leds.top(" + rgbStr + ")\n"
 					};
 				}
 			}
@@ -2020,23 +1965,23 @@ A3a.vpl.BlockTemplate.lib =	[
 		var sz = 1.4;
 		var buttons = [
 			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
-			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
 			{sh: "r", x: -0.3, y: 0, size: sz, str: "red", fillStyle: "red", strokeStyle: "white"},
 			{sh: "r", x: 0, y: 0, size: sz, str: "green", fillStyle: "#0c0", strokeStyle: "white"},
 			{sh: "r", x: 0.3, y: 0, size: sz, str: "yellow", fillStyle: "yellow", strokeStyle: "silver"},
 			{sh: "r", x: -0.3, y: -0.3, size: sz, str: "blue", fillStyle: "blue", strokeStyle: "white"},
 			{sh: "r", x: 0, y: -0.3, size: sz, str: "magenta", fillStyle: "magenta", strokeStyle: "white"},
 			{sh: "r", x: 0.3, y: -0.3, size: sz, str: "cyan", fillStyle: "cyan", strokeStyle: "white"},
+			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
 		];
 		return {
 			name: "bottom color 8",
 			modes: [A3a.vpl.mode.basic],
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
-			defaultParam: function () { return [0, 0, 0]; },
+			defaultParam: function () { return [0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop({withWheels: true, rgb: block.param});
+				canvas.robotTop({withWheels: true, rgb: [block.param & 1, (block.param & 2) / 2, (block.param & 4) / 4]});
 				canvas.buttons(buttons, [
 					block.param[0] < 1 ? -2 : 0,
 					block.param[0] > -1 ? -2 : 0
@@ -2047,49 +1992,22 @@ A3a.vpl.BlockTemplate.lib =	[
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
 					block.prepareChange();
-					switch (i) {
-					case 0:
-						block.param = [0, 0, 0];
-						break;
-					case 1:
-						block.param = [1, 1, 1];
-						break;
-					case 2:
-						block.param = [1, 0, 0];
-						break;
-					case 3:
-						block.param = [0, 1, 0];
-						break;
-					case 4:
-						block.param = [1, 1, 0];
-						break;
-					case 5:
-						block.param = [0, 0, 1];
-						break;
-					case 6:
-						block.param = [1, 0, 1];
-						break;
-					case 7:
-						block.param = [0, 1, 1];
-						break;
-					}
+					block.param = [i];
 				}
 				return i;
 			},
 			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 			genCode: {
 				"aseba": function (block) {
+					var rgbStr = [(block.param & 1) * 32, (block.param & 2) * 16, (block.param & 4) * 8]
+						.join(", ");
 					return {
 						initCodeExec: [
 							A3a.vpl.BlockTemplate.initOutputs
 						],
 						statement:
-							"call leds.bottom.left(" +
-							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-							")\n" +
-							"call leds.bottom.right(" +
-							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-							")\n"
+							"call leds.bottom.left(" + rgbStr + ")\n" +
+							"call leds.bottom.right(" + rgbStr + ")\n"
 					};
 				}
 			}
@@ -2099,23 +2017,23 @@ A3a.vpl.BlockTemplate.lib =	[
 		var sz = 1.4;
 		var buttons = [
 			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
-			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
 			{sh: "r", x: -0.3, y: 0, size: sz, str: "red", fillStyle: "red", strokeStyle: "white"},
 			{sh: "r", x: 0, y: 0, size: sz, str: "green", fillStyle: "#0c0", strokeStyle: "white"},
 			{sh: "r", x: 0.3, y: 0, size: sz, str: "yellow", fillStyle: "yellow", strokeStyle: "silver"},
 			{sh: "r", x: -0.3, y: -0.3, size: sz, str: "blue", fillStyle: "blue", strokeStyle: "white"},
 			{sh: "r", x: 0, y: -0.3, size: sz, str: "magenta", fillStyle: "magenta", strokeStyle: "white"},
 			{sh: "r", x: 0.3, y: -0.3, size: sz, str: "cyan", fillStyle: "cyan", strokeStyle: "white"},
+			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
 		];
 		return {
 			name: "bottom-left color 8",
 			modes: [A3a.vpl.mode.custom],
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
-			defaultParam: function () { return [0, 0, 0]; },
+			defaultParam: function () { return [0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop({withWheels: true, rgb: block.param, side: "left"});
+				canvas.robotTop({withWheels: true, rgb: [block.param & 1, (block.param & 2) / 2, (block.param & 4) / 4], side: "left"});
 				canvas.buttons(buttons, [
 					block.param[0] < 1 ? -2 : 0,
 					block.param[0] > -1 ? -2 : 0
@@ -2126,46 +2044,21 @@ A3a.vpl.BlockTemplate.lib =	[
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
 					block.prepareChange();
-					switch (i) {
-					case 0:
-						block.param = [0, 0, 0];
-						break;
-					case 1:
-						block.param = [1, 1, 1];
-						break;
-					case 2:
-						block.param = [1, 0, 0];
-						break;
-					case 3:
-						block.param = [0, 1, 0];
-						break;
-					case 4:
-						block.param = [1, 1, 0];
-						break;
-					case 5:
-						block.param = [0, 0, 1];
-						break;
-					case 6:
-						block.param = [1, 0, 1];
-						break;
-					case 7:
-						block.param = [0, 1, 1];
-						break;
-					}
+					block.param = [i];
 				}
 				return i;
 			},
 			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 			genCode: {
 				"aseba": function (block) {
+					var rgbStr = [(block.param & 1) * 32, (block.param & 2) * 16, (block.param & 4) * 8]
+						.join(", ");
 					return {
 						initCodeExec: [
 							A3a.vpl.BlockTemplate.initOutputs
 						],
 						statement:
-							"call leds.bottom.left(" +
-							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-							")\n"
+							"call leds.bottom.left(" + rgbStr + ")\n"
 					};
 				}
 			}
@@ -2175,23 +2068,23 @@ A3a.vpl.BlockTemplate.lib =	[
 		var sz = 1.4;
 		var buttons = [
 			{sh: "r", x: -0.15, y: 0.3, size: sz, str: "black", fillStyle: "#666", strokeStyle: "white"},
-			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
 			{sh: "r", x: -0.3, y: 0, size: sz, str: "red", fillStyle: "red", strokeStyle: "white"},
 			{sh: "r", x: 0, y: 0, size: sz, str: "green", fillStyle: "#0c0", strokeStyle: "white"},
 			{sh: "r", x: 0.3, y: 0, size: sz, str: "yellow", fillStyle: "yellow", strokeStyle: "silver"},
 			{sh: "r", x: -0.3, y: -0.3, size: sz, str: "blue", fillStyle: "blue", strokeStyle: "white"},
 			{sh: "r", x: 0, y: -0.3, size: sz, str: "magenta", fillStyle: "magenta", strokeStyle: "white"},
 			{sh: "r", x: 0.3, y: -0.3, size: sz, str: "cyan", fillStyle: "cyan", strokeStyle: "white"},
+			{sh: "r", x: 0.15, y: 0.3, size: sz, str: "white", fillStyle: "white", strokeStyle: "silver"},
 		];
 		return {
 			name: "bottom-right color 8",
 			modes: [A3a.vpl.mode.custom],
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
-			defaultParam: function () { return [0, 0, 0]; },
+			defaultParam: function () { return [0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
-				canvas.robotTop({withWheels: true, rgb: block.param, side: "right"});
+				canvas.robotTop({withWheels: true, rgb: [block.param & 1, (block.param & 2) / 2, (block.param & 4) / 4], side: "right"});
 				canvas.buttons(buttons, [
 					block.param[0] < 1 ? -2 : 0,
 					block.param[0] > -1 ? -2 : 0
@@ -2202,46 +2095,21 @@ A3a.vpl.BlockTemplate.lib =	[
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
 					block.prepareChange();
-					switch (i) {
-					case 0:
-						block.param = [0, 0, 0];
-						break;
-					case 1:
-						block.param = [1, 1, 1];
-						break;
-					case 2:
-						block.param = [1, 0, 0];
-						break;
-					case 3:
-						block.param = [0, 1, 0];
-						break;
-					case 4:
-						block.param = [1, 1, 0];
-						break;
-					case 5:
-						block.param = [0, 0, 1];
-						break;
-					case 6:
-						block.param = [1, 0, 1];
-						break;
-					case 7:
-						block.param = [0, 1, 1];
-						break;
-					}
+					block.param = [i];
 				}
 				return i;
 			},
 			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 			genCode: {
 				"aseba": function (block) {
+					var rgbStr = [(block.param & 1) * 32, (block.param & 2) * 16, (block.param & 4) * 8]
+						.join(", ");
 					return {
 						initCodeExec: [
 							A3a.vpl.BlockTemplate.initOutputs
 						],
 						statement:
-							"call leds.bottom.right(" +
-							block.param.map(function (x) { return Math.round(32 * x); }).join(", ") +
-							")\n"
+							"call leds.bottom.right(" + rgbStr + ")\n"
 					};
 				}
 			}

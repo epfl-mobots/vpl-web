@@ -78,7 +78,7 @@ crossout-line {
  	color: rgba(120,120,120,0.5);
 }
 crossout-line.vpl {
-	
+
 }
 
 #widget-then {
@@ -116,10 +116,13 @@ block-library {
 sim-controller {
 	background: #eee;
 	margin: 5px;
+	padding: 1vw;
 }
 
-button-small {
-	margin: 5px;
+button.event {
+	width: 2vw;
+	height: 2vw;
+	margin: 0.2vw;
 }
 
 sim-playground-area {

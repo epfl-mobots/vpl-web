@@ -446,32 +446,32 @@
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedGreen",
+					"id": "Btn2_SelectedRed",
 					"val": 1,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedCyan",
+					"id": "Btn2_SelectedGreen",
 					"val": 2,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedBlue",
+					"id": "Btn2_SelectedYel",
 					"val": 3,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedMagenta",
+					"id": "Btn2_SelectedBlue",
 					"val": 4,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedRed",
+					"id": "Btn2_SelectedMagenta",
 					"val": 5,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedYel",
+					"id": "Btn2_SelectedCyan",
 					"val": 6,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
@@ -484,7 +484,7 @@
 			"styles": [
 				{
 					"id": "Gradient_Top_basic",
-					"st": "fill:`['transparent','#3f0','cyan','blue','magenta','red','yellow','white'][$[0]]`"
+					"st": "fill:`['transparent','red','#3f0','yellow','blue','magenta','cyan','white'][$[0]]`"
 				}
 			]
 		},
@@ -517,32 +517,32 @@
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedGreen-2",
+					"id": "Btn2_SelectedRed-2",
 					"val": 1,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedCyan-2",
+					"id": "Btn2_SelectedGreen-2",
 					"val": 2,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedBlue-2",
+					"id": "Btn2_SelectedYel-2",
 					"val": 3,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedMagenta-2",
+					"id": "Btn2_SelectedBlue-2",
 					"val": 4,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedRed-2",
+					"id": "Btn2_SelectedMagenta-2",
 					"val": 5,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedYel-2",
+					"id": "Btn2_SelectedCyan-2",
 					"val": 6,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
@@ -555,7 +555,7 @@
 			"styles": [
 				{
 					"id": "Gradient_Bottom_basic",
-					"st": "fill:`['transparent','#3f0','cyan','blue','magenta','red','yellow','white'][$[0]]`"
+					"st": "fill:`['transparent','red','#3f0','yellow','blue','magenta','cyan','white'][$[0]]`"
 				}
 			]
 		},
@@ -1295,32 +1295,32 @@
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedGreen",
+					"id": "Btn2_SelectedRed",
 					"val": 1,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedCyan",
+					"id": "Btn2_SelectedGreen",
 					"val": 2,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedBlue",
+					"id": "Btn2_SelectedYel",
 					"val": 3,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedMagenta",
+					"id": "Btn2_SelectedBlue",
 					"val": 4,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedRed",
+					"id": "Btn2_SelectedMagenta",
 					"val": 5,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedYel",
+					"id": "Btn2_SelectedCyan",
 					"val": 6,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
@@ -1333,7 +1333,7 @@
 			"styles": [
 				{
 					"id": "Gradient_Top_basic",
-					"st": "fill:`['transparent','#3f0','cyan','blue','magenta','red','yellow','white'][$[0]]`"
+					"st": "fill:`['transparent','red','#3f0','yellow','blue','magenta','cyan','white'][$[0]]`"
 				}
 			]
 		},
@@ -1366,32 +1366,32 @@
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedGreen-2",
+					"id": "Btn2_SelectedRed-2",
 					"val": 1,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedCyan-2",
+					"id": "Btn2_SelectedGreen-2",
 					"val": 2,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedBlue-2",
+					"id": "Btn2_SelectedYel-2",
 					"val": 3,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedMagenta-2",
+					"id": "Btn2_SelectedBlue-2",
 					"val": 4,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedRed-2",
+					"id": "Btn2_SelectedMagenta-2",
 					"val": 5,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
 				{
-					"id": "Btn2_SelectedYel-2",
+					"id": "Btn2_SelectedCyan-2",
 					"val": 6,
 					"st": ["fill:transparent", "fill:rgba(255,255,255,.3);stroke:#263238;stroke-width:2px;stroke-linejoin:round"]
 				},
@@ -1404,7 +1404,7 @@
 			"styles": [
 				{
 					"id": "Gradient_Bottom_basic",
-					"st": "fill:`['transparent','#3f0','cyan','blue','magenta','red','yellow','white'][$[0]]`"
+					"st": "fill:`['transparent','red','#3f0','yellow','blue','magenta','cyan','white'][$[0]]`"
 				}
 			]
 		},

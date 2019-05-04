@@ -151,24 +151,28 @@
 			"name": "color 8 state",
 			"l2": {
 				"initVarDecl": [
-					"// RGB color of the top led\nint topColor[3];\n"
+					"// RGB color of the top led\nint topColor[3];\n",
+					"int topColor0[3];\n"
 				],
 				"initCodeExec": [
 					"topColor = [0, 0, 0];\n"
 				],
-				"clause": "topColor[0] `$[0] >= 4 ? '>=' : '<'` 16 && topColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && topColor[0] `$[0] % 2 ? '>=' : '<'` 16"
+				"clauseInit": "topColor0 = topColor;\n",
+				"clause": "topColor0[0] `$[0] % 2 ? '>=' : '<'` 16 && topColor0[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && topColor0[2] `$[0] >= 4 ? '>=' : '<'` 16"
 			}
 		},
 		{
 			"name": "bottom color 8 state",
 			"l2": {
 				"initVarDecl": [
-					"// RGB color of the bottom led\nint bottomColor[3];\n"
+					"// RGB color of the bottom led\nint bottomColor[3];\n",
+					"int bottomColor0[3];\n"
 				],
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0];\n"
 				],
-				"clause": "bottomColor[0] `$[0] >= 4 ? '>=' : '<'` 16 && bottomColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && bottomColor[0] `$[0] % 2 ? '>=' : '<'` 16"
+				"clauseInit": "bottomColor0 = bottomColor;\n",
+				"clause": "bottomColor0[0] `$[0] % 2 ? '>=' : '<'` 16 && bottomColor0[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && bottomColor0[2] `$[0] >= 4 ? '>=' : '<'` 16"
 			}
 		},
 		{
@@ -310,7 +314,7 @@
 					"// reset outputs\nsound.system(-1);\nleds.top(0, 0, 0);\nleds.bottom.left(0, 0, 0);\nleds.bottom.right(0, 0, 0);\nleds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
 				],
 				"statement":
-					"leds.top(`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`);\ntopColor = [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`];\n"
+					"leds.top(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`);\ntopColor = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`];\n"
 			}
 		},
 		{

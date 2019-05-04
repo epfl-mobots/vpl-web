@@ -407,7 +407,7 @@ A3a.vpl.patchJSBlocks = function () {
 					clause: cond
 				};
 			},
-			"color state 8": function (block) {
+			"color 8 state": function (block) {
 				var cond = block.param
 					.map(function (p, i) {
 						return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
