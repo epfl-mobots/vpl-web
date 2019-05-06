@@ -23,8 +23,8 @@ A3a.vpl.Application.prototype.installThymioTDM = function () {
 			try {
 				window["tdmInit"](vplGetHashOption("w"),
 					vplGetHashOption("uuid"),
-					function () {
-						app.runGlue.state = {};
+					function (connected) {
+						app.runGlue.state = connected ? {} : null;
 						app.vplCanvas.update();
 					});
 			} catch (e) {

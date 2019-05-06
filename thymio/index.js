@@ -29,8 +29,9 @@ Build:
 
 // default for websocketURL: "ws://localhost:8597" (local tdm)
 // default for uuid: none (pick last connected node)
-// default for success (function called once done): null (none)
-tdmInit(websocketURL, uuid, success);
+// default for change (change(true) called when connected, change(false) when disconnected): null (none)
+// default for success (function called once code sent success): null (none)
+tdmInit(websocketURL, uuid, change);
 var b = tdmCanRun();
 tdmRun(asebaSourceCode, success);
 
@@ -40,7 +41,7 @@ import {createClient, Node, NodeStatus, Request, setup} from '@mobsya/thymio-api
 
 window.tdmSelectedNode = undefined;
 
-window.tdmInit = function (url, uuid, success) {
+window.tdmInit = function (url, uuid, change) {
 
     // Connect to the switch
     // We will need some way to get that url, via the launcher
@@ -61,6 +62,7 @@ window.tdmInit = function (url, uuid, success) {
                     && node.status != NodeStatus.ready && node.status != NodeStatus.available) {
                     // tdmSelectedNode lost
                     window.tdmSelectedNode = null;
+                    change && change(false);
                 }
                 if ((!window.tdmSelectedNode || window.tdmSelectedNode.status != NodeStatus.ready)
                     && node.status == NodeStatus.available
@@ -73,7 +75,7 @@ window.tdmInit = function (url, uuid, success) {
                         // We can lock as many nodes as we want
                         await node.lock();
                         console.log("Node locked");
-                        success && success();
+                        change && change(true);
                     } catch (e) {
                         console.log(`Unable To Lock ${node.id} (${node.name})`)
                     }
