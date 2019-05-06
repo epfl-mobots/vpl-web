@@ -31,7 +31,7 @@ vpl.top {
 }
 
 button.vpl.top {
-	font-size: 2wh;
+	font-size: 1.2vw;
 	font-weight: 300;
 	font-family: 'Rubik', sans-serif;
 }
@@ -50,7 +50,7 @@ separator {
 }
 
 vpl {
-	padding: 16px;
+	padding: 16px 0 16px 0;
 	margin: 0px;
 	border-radius: 4px;
 	background: #fbfcfc;
@@ -58,11 +58,15 @@ vpl {
 }
 
 block {
-	width: 8ww;
-	height: 8ww;
+	width: 7.8ww;
+	height: 7.8ww;
 	min-width: 72px;
 	min-height: 72px;
 	margin: 8px;
+}
+
+block.small{
+	width: 9.4ww;
 }
 
 rule {
@@ -78,12 +82,11 @@ crossout-line {
  	color: rgba(120,120,120,0.5);
 }
 crossout-line.vpl {
-
 }
 
 #widget-then {
-	padding-left: 20px;
-	padding-right: 20px;
+	padding-left: 16px;
+	padding-right: 16px;
 	width: 2ww;
 	height: 2ww;
 }
@@ -108,7 +111,15 @@ block-library {
 	margin: 0px;
 	border-left: 2px solid #eceff1;
 	border-right: 2px solid #eceff1;
-	overflow: scroll;
+	/*overflow: scroll;*/
+}
+
+block.library {
+	width: 5.1ww;
+	height: 5.1ww;
+	min-width: 48px;
+	min-height: 48px;
+	margin: 6px;
 }
 
 /* simulator */

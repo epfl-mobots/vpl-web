@@ -58,17 +58,17 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 	}
 	var self = this;
 	var item = new A3a.vpl.CanvasItem(block,
-		canvas.dims.blockSize * (opts && opts.scale || 1),
-		canvas.dims.blockSize * (opts && opts.scale || 1),
+		box.width, box.height,
 		x, y,
 		// draw
 		function (canvas, item, dx, dy) {
 			var ctx = canvas.ctx;
 			ctx.save();
-			if (opts && opts.scale) {
+			var scale = box.width / canvas.dims.blockSize;
+			if (Math.abs(scale - 1) > 1e-3) {
 				var dims0 = canvas.dims;
 				box.drawAt(ctx, item.x + dx, item.y + dy);
-				canvas.dims = A3a.vpl.Canvas.calcDims(canvas.dims.blockSize * opts.scale, canvas.dims.controlSize * opts.scale);
+				canvas.dims = A3a.vpl.Canvas.calcDims(canvas.dims.blockSize * scale, canvas.dims.controlSize * scale);
 				block.blockTemplate.renderToCanvas(canvas,
 					/** @type {A3a.vpl.Block} */(item.data),
 					item.x + dx, item.y + dy);
@@ -162,7 +162,6 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 			notInteractive: true,
 			notDropTarget: true,
 			notDraggable: this.noVPL,
-			scale: canvas.dims.templateScale,
 			disabled: disabled,
 			/** @type {?A3a.vpl.CanvasItem.mousedown} */
 			mousedown: this.uiConfig.customizationMode && !this.noVPL
@@ -590,14 +589,6 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	toolbarBox.setTotalWidth(viewBox.width);
 	toolbarBox.height = toolbarItemHeight;
 	toolbarBox.setPosition(viewBox.x, viewBox.y);
-	blockEventLibItemBox.height = canvas.dims.blockSize * canvas.dims.templateScale;
-	blockEventLibItemBox.width = canvas.dims.blockSize * canvas.dims.templateScale;
-	blockActionLibItemBox.height = canvas.dims.blockSize * canvas.dims.templateScale;
-	blockActionLibItemBox.width = canvas.dims.blockSize * canvas.dims.templateScale;
-	blockStateLibItemBox.height = canvas.dims.blockSize * canvas.dims.templateScale;
-	blockStateLibItemBox.width = canvas.dims.blockSize * canvas.dims.templateScale;
-	blockCommentLibItemBox.height = canvas.dims.blockSize * canvas.dims.templateScale;
-	blockCommentLibItemBox.width = canvas.dims.blockSize * canvas.dims.templateScale;
 	blockEventLibBox.setTotalHeight(viewBox.height - toolbarBox.totalHeight());
 	var maxBlPerCol =  Math.max(
 		Math.floor(blockEventLibBox.height / blockEventLibItemBox.totalHeight()),
@@ -700,7 +691,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var eventLibWidth = 0;
 	var actionLibWidth = 0;
 	if (blockEventLibBox.scroll) {
-		eventLibWidth = canvas.dims.blockSize * canvas.dims.templateScale + blockEventLibItemBox.nonContentWidth();
+		eventLibWidth = blockEventLibItemBox.totalWidth();
 		renderingState.eventScroll.setTotalHeight(nEvTemplates * stepEvent);
 		blockEventLibBox.width = eventLibWidth;
 		blockEventLibBox.height = blockEventLibBox.height;
@@ -769,7 +760,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		}, this);
 	}
 	if (blockActionLibBox.scroll) {
-		actionLibWidth = canvas.dims.blockSize * canvas.dims.templateScale + blockActionLibItemBox.nonContentWidth();
+		actionLibWidth = blockActionLibItemBox.totalWidth();
 		renderingState.actionScroll.setTotalHeight(nAcTemplates * stepAction);
 		blockActionLibBox.width = actionLibWidth;
 		blockActionLibBox.height = blockActionLibBox.height;
