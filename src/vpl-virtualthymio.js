@@ -127,8 +127,8 @@ A3a.vpl.VirtualThymio.prototype["reset"] = function (t0) {
 				if (i >= val["f"].length) {
 					return;
 				}
-				if (self.audioContext == null) {
-					self.audioContext = new (window["AudioContext"] || window["webkitAudioContext"]);
+				if (!self.audioContext) {
+					self.audioContext = new (window["AudioContext"] || window["webkitAudioContext"])();
 				}
 				var oscNode = self.audioContext.createOscillator();
 				oscNode.type = 'sawtooth';

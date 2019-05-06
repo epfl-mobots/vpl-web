@@ -1194,7 +1194,6 @@ A3a.vpl.BlockTemplate.lib =	[
 					}
 				}
 				return {
-					sectionPriority: 1,
 					initVarDecl: [
 						A3a.vpl.BlockTemplate.initStatesDecl
 					],
@@ -1231,7 +1230,6 @@ A3a.vpl.BlockTemplate.lib =	[
 		genCode: {
 			"aseba": function (block) {
 				return {
-					sectionPriority: 1,
 					initVarDecl: [
 						A3a.vpl.BlockTemplate.initState8Decl
 					],
@@ -1308,7 +1306,6 @@ A3a.vpl.BlockTemplate.lib =	[
 						(block.param[0] === 0 ? "==" : block.param[0] > 0 ? ">=" : "<=") +
 						" " + block.param[1];
 					return {
-						sectionPriority: 1,
 						initVarDecl: [
 							A3a.vpl.BlockTemplate.initCounterDecl
 						],
@@ -1365,7 +1362,6 @@ A3a.vpl.BlockTemplate.lib =	[
 					})
 					.join(" and ");
 				return {
-					sectionPriority: 1,
 					initVarDecl: [
 						A3a.vpl.BlockTemplate.initTopColorDecl,
 						A3a.vpl.BlockTemplate.initTopColorStateDecl
