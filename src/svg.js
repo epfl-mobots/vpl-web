@@ -26,6 +26,9 @@ var SVG = function (src) {
 	this.elementBoundsCache = {};
 };
 
+/** @const */
+SVG.noGradient = true;	// gradientTransform not completely implemented
+
 /** @typedef {{
 		globalTransform: (function(CanvasRenderingContext2D,Array.<number>):void | undefined),
 		elementStyle: (string | undefined),
@@ -256,6 +259,79 @@ SVG.parseStyle = function (dict, style) {
 	});
 }
 
+/** Decode transform parameters and apply them using callbacks
+	@param {string} tr value of attribute "transform"
+	@param {function(number,number):void} doTranslate
+	@param {function(number):void} doRotate
+	@param {function(number,number):void} doScale
+	@param {function(number,number,number,number,number,number):void} doApplyMatrix
+	@return {void}
+*/
+SVG.applyTransform = function (tr, doTranslate, doRotate, doScale, doApplyMatrix) {
+	if (tr) {
+		tr = tr
+			.replace(/\s*\(\s*/g, "(")
+			.replace(/\s*\)\s*/g, ")")
+			.replace(/ +,/g, ",")
+			.replace(/, +/g, ",")
+			.replace(/ +/g, ",");
+		var tra = tr.split(")");
+		tra.slice(0, -1).forEach(function (t) {
+			var c = t.split("(")[0];
+			var args = t.split("(")[1].split(",")
+				.map(function (s) { return parseFloat(s); });
+			switch (c) {
+			case "translate":
+				doTranslate(args[0] || 0, args[1] || 0);
+				break;
+			case "rotate":
+				var a = (args[0] || 0) * Math.PI / 180;
+				var x0 = args[1] || 0;
+				var y0 = args[2] || 0;
+				if (x0 !== 0 || y0 !== 0) {
+					doTranslate(-x0, -y0);
+					doRotate(a);
+					doTranslate(x0, y0);
+				} else {
+					doRotate(a);
+				}
+				break;
+			case "scale":
+				var scx = args[0] || 1;
+				var scy = args[1] || scx;
+				doScale(scx, scy);
+				break;
+			case "matrix":
+				doApplyMatrix(args[0], args[1], args[2], args[3], args[4], args[5]);
+				break;
+			default:
+				throw "transform not implemented: " + c;
+			}
+		});
+	}
+};
+
+/** Decode transform parameters and apply them to a transform object
+	@param {string} transformString value of attribute "transform"
+	@param {SVG.Transform} transform
+	@return {void}
+*/
+SVG.applyTransformTo = function (transformString, transform) {
+	SVG.applyTransform(transformString,
+		function (dx, dy) {
+			transform.translate(dx, dy);
+		},
+		function (a) {
+			transform.rotate(a);
+		},
+		function (scx, scy) {
+			transform.scale(scx, scy);
+		},
+		function (a, b, c, d, e, f) {
+			transform.matrix(a, b, c, d, e, f);
+		});
+};
+
 /** Draw SVG from source code
 	@param {CanvasRenderingContext2D} ctx
 	@param {SVG.Options=} options
@@ -421,56 +497,23 @@ SVG.prototype.draw = function (ctx, options) {
 		@return {void}
 	*/
 	function applyTransform(tr) {
-		if (tr) {
-			tr = tr
-				.replace(/\s*\(\s*/g, "(")
-				.replace(/\s*\)\s*/g, ")")
-				.replace(/ +,/g, ",")
-				.replace(/, +/g, ",")
-				.replace(/ +/g, ",");
-			var tra = tr.split(")");
-			tra.slice(0, -1).forEach(function (t) {
-				var c = t.split("(")[0];
-				var args = t.split("(")[1].split(",")
-					.map(function (s) { return parseFloat(s); });
-				switch (c) {
-				case "translate":
-					ctx && ctx.translate(args[0] || 0, args[1] || 0);
-					transform.translate(args[0] || 0, args[1] || 0);
-					break;
-				case "rotate":
-					var a = (args[0] || 0) * Math.PI / 180;
-					var x0 = args[1] || 0;
-					var y0 = args[2] || 0;
-					if (x0 !== 0 || y0 !== 0) {
-						if (ctx) {
-							ctx.translate(-x0, -y0);
-							ctx.rotate(a);
-							ctx.translate(x0, y0);
-						}
-						transform.translate(-x0, -y0);
-						transform.rotate(a);
-						transform.translate(x0, y0);
-					} else {
-						ctx && ctx.rotate(a);
-						transform.rotate(a);
-					}
-					break;
-				case "scale":
-					var scx = args[0] || 1;
-					var scy = args[1] || scx;
-					ctx && ctx.scale(scx, scy);
-					transform.scale(scx, scy);
-					break;
-				case "matrix":
-					ctx && ctx.transform(args[0], args[1], args[2], args[3], args[4], args[5]);
-					transform.matrix(args[0], args[1], args[2], args[3], args[4], args[5]);
-					break;
-				default:
-					throw "transform not implemented: " + c;
-				}
+		SVG.applyTransform(tr,
+			function (dx, dy) {
+				ctx && ctx.translate(dx, dy);
+				transform.translate(dx, dy);
+			},
+			function (a) {
+				ctx && ctx.rotate(a);
+				transform.rotate(a);
+			},
+			function (scx, scy) {
+				ctx && ctx.scale(scx, scy);
+				transform.scale(scx, scy);
+			},
+			function (a, b, c, d, e, f) {
+				ctx && ctx.transform(a, b, c, d, e, f);
+				transform.matrix(a, b, c, d, e, f);
 			});
-		}
 	}
 
 	/** Draw an element recursively
@@ -871,7 +914,7 @@ SVG.prototype.draw = function (ctx, options) {
 			function fillStopArray(stops, stopEl) {
 				if (stopEl.length > 0) {
 					stops.splice(0, stops.length);
-					for (var i = 0; i < stopEl.length; i++) {
+					for (var i = 0; i < stopEl.length && (!SVG.noGradient || i < 1); i++) {
 						var str = (stopEl[i].getAttribute("offset") || "0").trim();
 						var offset = /%$/.test(str) ? parseFloat(str.slice(0, -1)) / 100 : parseFloat(str);
 						var style = stopEl[i].getAttribute("style");
@@ -947,6 +990,12 @@ SVG.prototype.draw = function (ctx, options) {
 				props.y1 = el.attributes["y1"] ? parseFloat(el.getAttribute("y1")) : props.y1 || 0;
 				props.x2 = el.attributes["x2"] ? parseFloat(el.getAttribute("x2")) : props.x2 || 0;
 				props.y2 = el.attributes["y2"] ? parseFloat(el.getAttribute("y2")) : props.y2 || 0;
+				props.gradientUnits = el.attributes["gradientUnits"]
+					? el.getAttribute("gradientUnits")
+					: props.gradientUnits || "objectBoundingBox";
+				props.gradientTransform = el.attributes["gradientTransform"]
+					? el.getAttribute("gradientTransform")
+					: props.gradientTransform || "";
 
 				// local children
 				props.stops = props.stops || [];
@@ -977,6 +1026,12 @@ SVG.prototype.draw = function (ctx, options) {
 				props.cx = el.attributes["cx"] ? parseFloat(el.getAttribute("cx")) : props.cx || 0;
 				props.cy = el.attributes["cy"] ? parseFloat(el.getAttribute("cy")) : props.cy || 0;
 				props.r = el.attributes["r"] ? parseFloat(el.getAttribute("r")) : props.r || 0;
+				props.gradientUnits = el.attributes["gradientUnits"]
+					? el.getAttribute("gradientUnits")
+					: props.gradientUnits || "objectBoundingBox";
+				props.gradientTransform = el.attributes["gradientTransform"]
+					? el.getAttribute("gradientTransform")
+					: props.gradientTransform || "";
 
 				// local children
 				props.stops = props.stops || [];
@@ -994,6 +1049,14 @@ SVG.prototype.draw = function (ctx, options) {
 					switch (targetEl.tagName) {
 					case "linearGradient":
 						var lg = fillLinearGradientProps(targetEl, {});
+						if (lg.gradientUnits === "objectBoundingBox") {
+							throw "objectBoundingBox not supported";
+						}
+						if (lg.gradientTransform) {
+							var gradientTransform = new SVG.Transform();
+							SVG.applyTransformTo(lg.gradientTransform, gradientTransform);
+							throw "gradientTransform not supported";
+						}
 						var linearGradient = ctx.createLinearGradient(lg.x1, lg.y1, lg.x2, lg.y2);
 						for (var i = 0; i < lg.stops.length; i++) {
 							linearGradient.addColorStop(lg.stops[i].offset, lg.stops[i].color);
@@ -1001,6 +1064,18 @@ SVG.prototype.draw = function (ctx, options) {
 						return linearGradient;
 					case "radialGradient":
 						var rg = fillRadialGradientProps(targetEl, {});
+						if (rg.gradientUnits === "objectBoundingBox") {
+							throw "objectBoundingBox not supported";
+						}
+						if (rg.gradientTransform) {
+							var gradientTransform = new SVG.Transform();
+							SVG.applyTransformTo(rg.gradientTransform, gradientTransform);
+							var centerTr = gradientTransform.applyInverse(/** @type {SVG.Transform.Point} */({x: rg.cx, y: rg.cy}));
+							var radiusTr = rg.r / gradientTransform.getScale();
+							rg.cx = centerTr.x;
+							rg.cy = centerTr.y;
+							rg.r = radiusTr;
+						}
 						var radialGradient = ctx.createRadialGradient(rg.cx, rg.cy, 0, rg.cx, rg.cy, rg.r);
 						for (var i = 0; i < rg.stops.length; i++) {
 							radialGradient.addColorStop(rg.stops[i].offset, rg.stops[i].color);

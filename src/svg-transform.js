@@ -29,8 +29,52 @@ SVG.Transform.prototype.copy = function () {
 	@return {SVG.Transform.Point}
 */
 SVG.Transform.prototype.apply = function (pt) {
-	return new SVG.Transform.Point(this.mat[0] * pt.x + this.mat[1] * pt.y + this.mat[2],
-		this.mat[3] * pt.x + this.mat[4] * pt.y + this.mat[5]);
+	return new SVG.Transform.Point(
+		this.mat[0] * pt.x + this.mat[1] * pt.y + this.mat[2],
+		this.mat[3] * pt.x + this.mat[4] * pt.y + this.mat[5]
+	);
+};
+
+/** Apply transform to a vector (don't apply translation)
+	@param {SVG.Transform.Point} pt
+	@return {SVG.Transform.Point}
+*/
+SVG.Transform.prototype.applyToVector = function (pt) {
+	return new SVG.Transform.Point(
+		this.mat[0] * pt.x + this.mat[1] * pt.y,
+		this.mat[3] * pt.x + this.mat[4] * pt.y
+	);
+};
+
+/** Get geometric mean scale
+	@return {number}
+*/
+SVG.Transform.prototype.getScale = function () {
+	return Math.sqrt(Math.abs(this.mat[0] * this.mat[4]));
+};
+
+/** Apply inverse transform to a point
+	@param {SVG.Transform.Point} pt
+	@return {SVG.Transform.Point}
+*/
+SVG.Transform.prototype.applyInverse = function (pt) {
+	var det = this.mat[0] * this.mat[4] - this.mat[3] * this.mat[1];
+	return new SVG.Transform.Point(
+		(this.mat[4] * pt.x - this.mat[1] * pt.y + this.mat[1] * this.mat[5] - this.mat[4] * this.mat[2]) / det,
+		(-this.mat[3] * pt.x + this.mat[0] * pt.y + this.mat[3] * this.mat[2] - this.mat[0] * this.mat[5]) / det
+	);
+};
+
+/** Apply inverse transform to a vector (don't apply translation)
+	@param {SVG.Transform.Point} pt
+	@return {SVG.Transform.Point}
+*/
+SVG.Transform.prototype.applyInverseToVector = function (pt) {
+	var det = this.mat[0] * this.mat[4] - this.mat[3] * this.mat[1];
+	return new SVG.Transform.Point(
+		(this.mat[4] * pt.x - this.mat[1] * pt.y) / det,
+		(-this.mat[3] * pt.x + this.mat[0] * pt.y) / det
+	);
 };
 
 /** Translate

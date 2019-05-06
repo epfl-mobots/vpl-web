@@ -449,152 +449,6 @@ SVG.Preparsed.prototype.parse = function () {
 			return cmds;
 		}
 
-		/** Convert fill style to fill string or object with gradient description
-			@param {string} fill
-			@return {(string|{name:string,args:Object})}
-		*/
-		function decodeFillStyle(fill) {
-			/** Decode stops array
-				@param {Array.<{offset:number,color:string}>} stops
-				@param {NodeList<!Element>} stopEl
-				@return {void}
-			*/
-			function fillStopArray(stops, stopEl) {
-				if (stopEl.length > 0) {
-					stops.splice(0, stops.length);
-					for (var i = 0; i < stopEl.length; i++) {
-						var str = (stopEl[i].getAttribute("offset") || "0").trim();
-						var offset = /%$/.test(str) ? parseFloat(str.slice(0, -1)) / 100 : parseFloat(str);
-						var style = stopEl[i].getAttribute("style");
-						var styleDict = {};
-						if (style) {
-							SVG.parseStyle(styleDict, style);
-						}
-						if (!isNaN(offset)) {
-							var color = stopEl[i].getAttribute("stop-color") || styleDict["stop-color"] || "#000";
-							if (SVG.colorDict.hasOwnProperty(color)) {
-								color = SVG.colorDict[color];
-							}
-							str = (stopEl[i].getAttribute("stop-opacity") || styleDict["stop-opacity"] || "1").trim();
-							var opacity = /%$/.test(str) ? parseFloat(str.slice(0, -1)) / 100 : parseFloat(str);
-							if (opacity !== 1) {
-								// convert color and opacity to a single css rgba(...) or hsla(...) spec
-								if (/^#[0-9a-f]{3}$/i.test(color)) {
-									// #RGB
-									color = "rgba(" +
-										color
-											.slice(1)
-											.split("")
-											.map(function (s) { return parseInt(s, 16) * 17; })
-											.map(function (x) { return x.toString(10); })
-											.join(",") +
-										"," + opacity.toFixed(2) + ")";
-								} else if (/^#[0-9a-f]{6}$/i.test(color)) {
-									// #RGB
-									color = "rgba(" +
-										[color.slice(1, 3), color.slice(3, 5), color.slice(5)]
-											.map(function (s) { return parseInt(s, 16); })
-											.map(function (x) { return x.toString(10); })
-											.join(",") +
-										"," + opacity.toFixed(2) + ")";
-								} else if (/^rgb(\d+%?(,|\s+)\d+%?(,|\s+)\d+%?)$/i.test(color)) {
-									// rgb(r,g,b) or rgb(r g b)
-									color = color.slice(0, -1).replace(/\s+/g, ",") +
-										"," + opacity.toFixed(2) + ")";
-								} else if (/^hsl(\d+%?(,|\s+)\d+%?(,|\s+)\d+%?)$/i.test(color)) {
-									// hsl(h,s,l) with h in degrees and s,l as percentages
-									color = color.slice(0, -1).replace(/\s+/g, ",") +
-										"," + opacity.toFixed(2) + ")";
-								}
-							}
-							stops.push({
-								offset: offset,
-								color: color
-							});
-						}
-					}
-				}
-			}
-
-			/** Fill linearGradient prop object with element attributes
-				@param {Element} el
-				@param {Object} props
-				@return {Object}
-			*/
-			function fillLinearGradientProps(el, props) {
-				// follow link
-				if (el.attributes["xlink:href"]) {
-					var href = el.getAttribute("xlink:href");
-					if (href[0] === "#") {
-						var targetEl = self.dom.getElementById(href.slice(1));
-						if (targetEl) {
-							props = fillLinearGradientProps(targetEl, props);
-						}
-					}
-				}
-
-				// local attributes
-				props.x1 = el.attributes["x1"] ? parseFloat(el.getAttribute("x1")) : props.x1 || 0;
-				props.y1 = el.attributes["y1"] ? parseFloat(el.getAttribute("y1")) : props.y1 || 0;
-				props.x2 = el.attributes["x2"] ? parseFloat(el.getAttribute("x2")) : props.x2 || 0;
-				props.y2 = el.attributes["y2"] ? parseFloat(el.getAttribute("y2")) : props.y2 || 0;
-
-				// local children
-				props.stops = props.stops || [];
-				var stopEl = el.getElementsByTagName("stop");
-				fillStopArray(props.stops, stopEl);
-
-				return props;
-			}
-
-			/** Fill radialGradient prop object with element attributes
-				@param {Element} el
-				@param {Object} props
-				@return {Object}
-			*/
-			function fillRadialGradientProps(el, props) {
-				// follow link
-				if (el.attributes["xlink:href"]) {
-					var href = el.getAttribute("xlink:href");
-					if (href[0] === "#") {
-						var targetEl = self.dom.getElementById(href.slice(1));
-						if (targetEl) {
-							props = fillRadialGradientProps(targetEl, props);
-						}
-					}
-				}
-
-				// local attributes
-				props.cx = el.attributes["cx"] ? parseFloat(el.getAttribute("cx")) : props.cx || 0;
-				props.cy = el.attributes["cy"] ? parseFloat(el.getAttribute("cy")) : props.cy || 0;
-				props.r = el.attributes["r"] ? parseFloat(el.getAttribute("r")) : props.r || 0;
-
-				// local children
-				props.stops = props.stops || [];
-				var stopEl = el.getElementsByTagName("stop");
-				fillStopArray(props.stops, stopEl);
-
-				return props;
-			}
-
-			// "url(#id)"
-			var id = /^url\(#(.+)\)$/.exec(fill);
-			if (id && id[1]) {
-				var targetEl = self.dom.getElementById(id[1]);
-				if (targetEl) {
-					switch (targetEl.tagName) {
-					case "linearGradient":
-						var lg = fillLinearGradientProps(targetEl, {});
-						return {name: targetEl.tagName, args: lg};
-					case "radialGradient":
-						var rg = fillRadialGradientProps(targetEl, {});
-						return {name: targetEl.tagName, args: rg};
-					}
-				}
-			}
-			return fill;
-		}
-
 		var idAttr = el.getAttribute("id");
 		var style = getStyle();
 
@@ -702,6 +556,41 @@ SVG.Preparsed.prototype.findById = function (id) {
 		this.idCache[id] = obj;
 	}
 	return obj;
+};
+
+/** Decode transform parameters and apply them using callbacks
+	@param {Array.<{cmd:string,args:Array.<number>}>} tr parsed attribute "transform"
+	@param {function(number,number):void} doTranslate
+	@param {function(number):void} doRotate
+	@param {function(number,number):void} doScale
+	@param {function(number,number,number,number,number,number):void} doApplyMatrix
+	@return {void}
+*/
+SVG.Preparsed.applyTransform = function (tr, doTranslate, doRotate, doScale, doApplyMatrix) {
+	if (tr) {
+		tr.forEach(function (t) {
+			switch (t.cmd) {
+			case "translate":
+				doTranslate(t.args[0], t.args[1]);
+				break;
+			case "rotate":
+				if (t.args[1] !== 0 || t.args[2] !== 0) {
+					doTranslate(-t.args[1], -t.args[2]);
+					doRotate(t.args[0]);
+					doTranslate(t.args[1], t.args[2]);
+				} else {
+					doRotate(t.args[0]);
+				}
+				break;
+			case "scale":
+				doScale(t.args[0], t.args[1]);
+				break;
+			case "matrix":
+				doApplyMatrix(t.args[0], t.args[1], t.args[2], t.args[3], t.args[4], t.args[5]);
+				break;
+			}
+		});
+	}
 };
 
 /** @inheritDoc
@@ -827,39 +716,23 @@ SVG.Preparsed.prototype.draw = function (ctx, options) {
 		@return {void}
 	*/
 	function applyTransform(tr) {
-		if (tr) {
-			tr.forEach(function (t) {
-				switch (t.cmd) {
-				case "translate":
-					ctx && ctx.translate(t.args[0], t.args[1]);
-					transform.translate(t.args[0], t.args[1]);
-					break;
-				case "rotate":
-					if (t.args[1] !== 0 || t.args[2] !== 0) {
-						if (ctx) {
-							ctx.translate(-t.args[1], -t.args[2]);
-							ctx.rotate(t.args[0]);
-							ctx.translate(t.args[1], t.args[2]);
-						}
-						transform.translate(-t.args[1], -t.args[2]);
-						transform.rotate(t.args[0]);
-						transform.translate(t.args[1], t.args[2]);
-					} else {
-						ctx && ctx.rotate(t.args[0]);
-						transform.rotate(t.args[0]);
-					}
-					break;
-				case "scale":
-					ctx && ctx.scale(t.args[0], t.args[1]);
-					transform.scale(t.args[0], t.args[1]);
-					break;
-				case "matrix":
-					ctx && ctx.transform(t.args[0], t.args[1], t.args[2], t.args[3], t.args[4], t.args[5]);
-					transform.matrix(t.args[0], t.args[1], t.args[2], t.args[3], t.args[4], t.args[5]);
-					break;
-				}
+		SVG.Preparsed.applyTransform(tr,
+			function (dx, dy) {
+				ctx && ctx.translate(dx, dy);
+				transform.translate(dx, dy);
+			},
+			function (a) {
+				ctx && ctx.rotate(a);
+				transform.rotate(a);
+			},
+			function (scx, scy) {
+				ctx && ctx.scale(scx, scy);
+				transform.scale(scx, scy);
+			},
+			function (a, b, c, d, e, f) {
+				ctx && ctx.transform(a, b, c, d, e, f);
+				transform.matrix(a, b, c, d, e, f);
 			});
-		}
 	}
 
 	/** Draw an element recursively
@@ -1066,7 +939,7 @@ SVG.Preparsed.prototype.draw = function (ctx, options) {
 			function fillStopArray(stops, stopEl) {
 				if (stopEl.length > 0) {
 					stops.splice(0, stops.length);
-					for (var i = 0; i < stopEl.length; i++) {
+					for (var i = 0; i < stopEl.length && (!SVG.noGradient || i < 1); i++) {
 						var str = (stopEl[i].getAttribute("offset") || "0").trim();
 						var offset = /%$/.test(str) ? parseFloat(str.slice(0, -1)) / 100 : parseFloat(str);
 						var style = stopEl[i].getAttribute("style");
@@ -1142,6 +1015,12 @@ SVG.Preparsed.prototype.draw = function (ctx, options) {
 				props.y1 = el.attributes["y1"] ? parseFloat(el.getAttribute("y1")) : props.y1 || 0;
 				props.x2 = el.attributes["x2"] ? parseFloat(el.getAttribute("x2")) : props.x2 || 0;
 				props.y2 = el.attributes["y2"] ? parseFloat(el.getAttribute("y2")) : props.y2 || 0;
+				props.gradientUnits = el.attributes["gradientUnits"]
+					? el.getAttribute("gradientUnits")
+					: props.gradientUnits || "objectBoundingBox";
+				props.gradientTransform = el.attributes["gradientTransform"]
+					? el.getAttribute("gradientTransform")
+					: props.gradientTransform || "";
 
 				// local children
 				props.stops = props.stops || [];
@@ -1172,6 +1051,12 @@ SVG.Preparsed.prototype.draw = function (ctx, options) {
 				props.cx = el.attributes["cx"] ? parseFloat(el.getAttribute("cx")) : props.cx || 0;
 				props.cy = el.attributes["cy"] ? parseFloat(el.getAttribute("cy")) : props.cy || 0;
 				props.r = el.attributes["r"] ? parseFloat(el.getAttribute("r")) : props.r || 0;
+				props.gradientUnits = el.attributes["gradientUnits"]
+					? el.getAttribute("gradientUnits")
+					: props.gradientUnits || "objectBoundingBox";
+				props.gradientTransform = el.attributes["gradientTransform"]
+					? el.getAttribute("gradientTransform")
+					: props.gradientTransform || "";
 
 				// local children
 				props.stops = props.stops || [];
@@ -1189,6 +1074,14 @@ SVG.Preparsed.prototype.draw = function (ctx, options) {
 					switch (targetEl.tagName) {
 					case "linearGradient":
 						var lg = fillLinearGradientProps(targetEl, {});
+						if (lg.gradientUnits === "objectBoundingBox") {
+							throw "objectBoundingBox not supported";
+						}
+						if (lg.gradientTransform) {
+							var gradientTransform = new SVG.Transform();
+							SVG.applyTransformTo(lg.gradientTransform, gradientTransform);
+							throw "gradientTransform not supported";
+						}
 						var linearGradient = ctx.createLinearGradient(lg.x1, lg.y1, lg.x2, lg.y2);
 						for (var i = 0; i < lg.stops.length; i++) {
 							linearGradient.addColorStop(lg.stops[i].offset, lg.stops[i].color);
@@ -1196,6 +1089,18 @@ SVG.Preparsed.prototype.draw = function (ctx, options) {
 						return linearGradient;
 					case "radialGradient":
 						var rg = fillRadialGradientProps(targetEl, {});
+						if (rg.gradientUnits === "objectBoundingBox") {
+							throw "objectBoundingBox not supported";
+						}
+						if (rg.gradientTransform) {
+							var gradientTransform = new SVG.Transform();
+							SVG.applyTransformTo(rg.gradientTransform, gradientTransform);
+							var centerTr = gradientTransform.applyInverse(/** @type {SVG.Transform.Point} */({x: rg.cx, y: rg.cy}));
+							var radiusTr = rg.r / gradientTransform.getScale();
+							rg.cx = centerTr.x;
+							rg.cy = centerTr.y;
+							rg.r = radiusTr;
+						}
 						var radialGradient = ctx.createRadialGradient(rg.cx, rg.cy, 0, rg.cx, rg.cy, rg.r);
 						for (var i = 0; i < rg.stops.length; i++) {
 							radialGradient.addColorStop(rg.stops[i].offset, rg.stops[i].color);
