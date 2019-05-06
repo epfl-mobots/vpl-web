@@ -333,6 +333,8 @@ Box properties:
 - background (for background-color property only)
 - box-shadow ("inset" and spread radius ignored, one shadow only)
 - width, height
+- min-width, min-height (priority over max-width and max-height if inconsistent)
+- max-width, max-height
 - color
 - font
 - overflow (used in block-library only)
@@ -362,14 +364,14 @@ Box elements:
 - separator (classes: vpl, sim, src, top, bottom)
 - toolbar (classes: vpl, sim, src, top, bottom)
 - vpl
-- block (classes: event, action, state, comment, library; pseudo-class: small)
+- block (classes: event, action, state, comment (class of block), library (as displayed in block-library elements); pseudo-class: small (when they must be zoomed for interaction))
 - block-container (classes: error, warning; used only in rules, not in block-library)
 - rule (pseudo-class: small)
-- block-library (classes: event, action)
-- button-small
-- sim-controller
-- sim-playground-area
-- sim-playground
+- block-library (classes: event (for event and state blocks), action (for action and comment blocks))
+- button-small (small buttons in simulator)
+- sim-controller (area where robot control buttons and indicators are displayed)
+- sim-playground-area (box which fills the area where the playground is displayed)
+- sim-playground (box which fits tightly the area where maps are displayed and the robot can be located)
 
 Line elements:
 
@@ -386,7 +388,6 @@ Some global style settings can be specified in a top-level object named "style".
 - "scrollbarWidth" (number, default: 5): scrollbar width in css pixels
 
 - "blockLineWidth" (number, default: based on block size): line width used in blocks
-- "templateScale" (number, default: 0.666): reduction factor to get size of blocks in libraries
 - "minTemplateSize" (number, default: 32): minimum block size in libraries
 - "minInteractiveBlockSize" (number, default: 60): minimum block size where direct manipulation of interactive controls (buttons, sliders etc.) is possible; if smaller, a zoomed version is displayed when the block is clicked or touched
 - "eventRightAlign" (boolean, number: false): true to align event blocks on the right

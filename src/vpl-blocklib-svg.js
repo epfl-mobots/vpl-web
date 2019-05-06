@@ -831,7 +831,6 @@ A3a.vpl.patchBlocksSVG = function (uiConfig) {
 			eventRightAlign: uiConfig["styles"]["eventRightAlign"] === undefined ? false : uiConfig["styles"]["eventRightAlign"],
 			blockLineWidth: uiConfig["styles"]["blockLineWidth"] === undefined ? Math.max(1, Math.min(3, blockSize / 40)) : uiConfig["styles"]["blockLineWidth"],
 			blockFont: Math.round(blockSize / 4).toString(10) + "px sans-serif",
-			templateScale: Math.max(uiConfig["styles"]["templateScale"] || 0.666, (uiConfig["styles"]["minTemplateSize"] || 32) / blockSize),
 			controlColor: uiConfig["styles"]["controlColor"] || "navy",
 			controlDownColor: uiConfig["styles"]["controlDownColor"] || "#37f",
 			controlActiveColor: uiConfig["styles"]["controlActiveColor"] || "#06f",

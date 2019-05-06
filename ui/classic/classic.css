@@ -127,6 +127,13 @@ block-library {
 	padding-top: 0;
 }
 
+block.library {
+	width: 4vw;
+	height: 4vw;
+	min-width: 32px;
+	min-height: 32px;
+}
+
 /* simulator */
 
 sim-controller {
