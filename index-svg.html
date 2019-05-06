@@ -1512,6 +1512,61 @@
 			]
 		},
 		{
+			"name": "notes",
+			"type": "action",
+			"modes": ["basic"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Actions_bg"
+				},
+				{
+					"uri": "Blocks.svg#zones_Bg"
+				},
+				{
+					"uri": "Blocks.svg#NoteIcon"
+				}
+			],
+			"defaultParameters": [0, 1, 1, 1, 2, 1, 0, 1, 2, 1, 4, 2],
+			"score": {
+				"id": "zones_Bg",
+				"numHeights": 5,
+				"noteSize": 0.9
+			}
+		},
+		{
+			"name": "notes with speed",
+			"type": "action",
+			"modes": ["advanced"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Actions_bg"
+				},
+				{
+					"uri": "Blocks.svg#zones_Bg"
+				},
+				{
+					"uri": "Blocks.svg#beat"
+				},
+				{
+					"uri": "Blocks.svg#Music_Slider"
+				}
+			],
+			"defaultParameters": [0, 0, 1, 1, 1, 2, 1, 0, 1, 2, 1, 4, 2],
+			"sliders": [
+				{
+					"id": "slid_tempo",
+					"thumbId": "cursor_tempo",
+					"min": -1,
+					"max": 1
+				}
+			],
+			"score": {
+				"id": "zones_Bg",
+				"numHeights": 5,
+				"noteSize": 0.9
+			}
+		},
+		{
 			"name": "set state 256",
 			"type": "action",
 			"modes": ["basic"],
@@ -1666,61 +1721,6 @@
 					"st": "visibility:`$[7]?'visible':'hidden'`"
 				}
 			]
-		},
-		{
-			"name": "notes",
-			"type": "action",
-			"modes": ["basic"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Actions_bg"
-				},
-				{
-					"uri": "Blocks.svg#zones_Bg"
-				},
-				{
-					"uri": "Blocks.svg#NoteIcon"
-				}
-			],
-			"defaultParameters": [0, 1, 1, 1, 2, 1, 0, 1, 2, 1, 4, 2],
-			"score": {
-				"id": "zones_Bg",
-				"numHeights": 5,
-				"noteSize": 0.9
-			}
-		},
-		{
-			"name": "notes with speed",
-			"type": "action",
-			"modes": ["advanced"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Actions_bg"
-				},
-				{
-					"uri": "Blocks.svg#zones_Bg"
-				},
-				{
-					"uri": "Blocks.svg#beat"
-				},
-				{
-					"uri": "Blocks.svg#Music_Slider"
-				}
-			],
-			"defaultParameters": [0, 0, 1, 1, 1, 2, 1, 0, 1, 2, 1, 4, 2],
-			"sliders": [
-				{
-					"id": "slid_tempo",
-					"thumbId": "cursor_tempo",
-					"min": -1,
-					"max": 1
-				}
-			],
-			"score": {
-				"id": "zones_Bg",
-				"numHeights": 5,
-				"noteSize": 0.9
-			}
 		},
 		{
 			"name": "set timer",
