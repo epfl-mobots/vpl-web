@@ -133,6 +133,8 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 	case "height":
 	case "min-width":
 	case "min-height":
+	case "max-width":
+	case "max-height":
 	case "font-size":
 		// one length value
 		return this.convertLength(val);
@@ -483,6 +485,10 @@ CSSParser.VPL.Box.prototype.constructor = CSSParser.VPL.Box;
 CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 	var width = -1;
 	var height = -1;
+	var minWidth = -1;
+	var minHeight = -1;
+	var maxWidth = 1e9;
+	var maxHeight = 1e9;
 	for (var key in props) {
 		switch (key) {
 		case "margin-left":
@@ -707,16 +713,28 @@ CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 			}
 			break;
 		case "width":
+			width = props[key].toValue(lengthBase);
+			break;
 		case "min-width":
-			width = Math.max(props[key].toValue(lengthBase), width);
+			minWidth = props[key].toValue(lengthBase);
+			break;
+		case "max-width":
+			maxWidth = props[key].toValue(lengthBase);
 			break;
 		case "height":
+			height = props[key].toValue(lengthBase);
+			break;
 		case "min-height":
-			height = Math.max(props[key].toValue(lengthBase), height);
+			minHeight = props[key].toValue(lengthBase);
+			break;
+		case "max-height":
+			maxHeight = props[key].toValue(lengthBase);
 			break;
 		}
 	}
 
+	width = Math.max(Math.min(width, maxWidth), minWidth);
+	height = Math.max(Math.min(height, maxHeight), minHeight);
 	if (width >= 0) {
 		this.width = width;
 	}

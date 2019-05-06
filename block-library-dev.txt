@@ -333,6 +333,8 @@ Box properties:
 - background (for background-color property only)
 - box-shadow ("inset" and spread radius ignored, one shadow only)
 - width, height
+- min-width, min-height (priority over max-width and max-height if inconsistent)
+- max-width, max-height
 - color
 - font
 - overflow (used in block-library only)
