@@ -9,41 +9,56 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
-/** Rectangular area with vertical scrollbar
+/** Rectangular area with horizontal and/or vertical scrollbar
 	@constructor
+	@param {number} wTotal
 	@param {number} hTotal
 	@param {number=} x
 	@param {number=} y
-	@param {number=} w
+	@param {number=} wView
 	@param {number=} hView
 */
-A3a.vpl.VertScrollArea = function (hTotal, x, y, w, hView) {
+A3a.vpl.ScrollArea = function (wTotal, hTotal, x, y, wView, hView) {
+	this.wTotal = wTotal;
 	this.hTotal = hTotal;
 	/** @type {number} */
 	this.x = x || 0;
 	/** @type {number} */
 	this.y = y || 0;
 	/** @type {number} */
-	this.w = w || 0;
+	this.wView = wView || 0;
 	/** @type {number} */
 	this.hView = hView || 0;
 
 	// options
+	this.topScrollbar = false;
 	this.leftScrollbar = false;
 	this.backgroundStyle = "";
 
 	// state
+	this.horScroll = 0;
+	this.x0 = 0;
 	this.vertScroll = 0;
 	this.y0 = 0;
 	/** @type {A3a.vpl.Canvas} */
 	this.canvas = null;
 };
 
+/** Set total width
+	@param {number} wTotal
+	@return {void}
+*/
+A3a.vpl.ScrollArea.prototype.setTotalWidth = function (wTotal) {
+	this.wTotal = wTotal;
+
+	this.horScroll = Math.max(0, Math.min(this.horScroll, this.wTotal - this.wView));
+};
+
 /** Set total height
 	@param {number} hTotal
 	@return {void}
 */
-A3a.vpl.VertScrollArea.prototype.setTotalHeight = function (hTotal) {
+A3a.vpl.ScrollArea.prototype.setTotalHeight = function (hTotal) {
 	this.hTotal = hTotal;
 
 	this.vertScroll = Math.max(0, Math.min(this.vertScroll, this.hTotal - this.hView));
@@ -52,16 +67,17 @@ A3a.vpl.VertScrollArea.prototype.setTotalHeight = function (hTotal) {
 /** Resize scroll area
 	@param {number} x
 	@param {number} y
-	@param {number} w
+	@param {number} wView
 	@param {number} hView
 	@return {void}
 */
-A3a.vpl.VertScrollArea.prototype.resize = function (x, y, w, hView) {
+A3a.vpl.ScrollArea.prototype.resize = function (x, y, wView, hView) {
 	this.x = x;
 	this.y = y;
-	this.w = w;
+	this.wView = wView;
 	this.hView = hView;
 
+	this.horScroll = Math.max(0, Math.min(this.horScroll, this.wTotal - this.wView));
 	this.vertScroll = Math.max(0, Math.min(this.vertScroll, this.hTotal - this.hView));
 };
 
@@ -69,27 +85,35 @@ A3a.vpl.VertScrollArea.prototype.resize = function (x, y, w, hView) {
 	@param {A3a.vpl.Canvas} canvas
 	@return {void}
 */
-A3a.vpl.VertScrollArea.prototype.begin = function (canvas) {
+A3a.vpl.ScrollArea.prototype.begin = function (canvas) {
 	this.canvas = canvas;
 	var self = this;
 	var item = new A3a.vpl.CanvasItem(null,
-		this.w, this.hView, this.x, this.y,
+		this.wView, this.hView, this.x, this.y,
 		null,
-		this.hTotal > this.hView
+		this.wTotal > this.wView || this.hTotal > this.hView
 			? {
 				/** @type {A3a.vpl.CanvasItem.mousedown} */
 				mousedown: function (canvas, data, width, height, x, y, downEvent) {
+					self.x0 = downEvent.x;
 					self.y0 = downEvent.y;
 					return 0;
 				},
 				/** @type {A3a.vpl.CanvasItem.mousedrag} */
 				mousedrag: function (canvas, data, dragging, width, height, x, y, dragEvent) {
-					var delta = Math.max(Math.min(
+					var deltaX = Math.max(Math.min(
+						dragEvent.x - self.x0,	// mouse-specified shift
+						self.horScroll),	// min
+						self.horScroll - self.wTotal + self.wView);	// max
+					self.horScroll -= deltaX;
+					self.x0 += deltaX;
+
+					var deltaY = Math.max(Math.min(
 						dragEvent.y - self.y0,	// mouse-specified shift
 						self.vertScroll),	// min
 						self.vertScroll - self.hTotal + self.hView);	// max
-					self.vertScroll -= delta;
-					self.y0 += delta;
+					self.vertScroll -= deltaY;
+					self.y0 += deltaY;
 				}
 			}
 			: null,
@@ -97,7 +121,7 @@ A3a.vpl.VertScrollArea.prototype.begin = function (canvas) {
 		null);
 	item.draggable = false;
 	item.doScroll = function (dx, dy) {
-		self.scrollCanvas(dy);
+		self.scrollCanvas(dx, dy);
 		canvas.onUpdate();
 	};
 	canvas.setItem(item);
@@ -107,62 +131,102 @@ A3a.vpl.VertScrollArea.prototype.begin = function (canvas) {
 		canvas.addDecoration(function (ctx) {
 			ctx.save();
 			ctx.fillStyle = self.backgroundStyle;
-			ctx.fillRect(self.x, self.y, self.w, self.hView);
+			ctx.fillRect(self.x, self.y, self.wView, self.hView);
 			ctx.restore();
 		});
 	}
 
-	// scrollbar
-	if (this.hTotal > this.hView) {
+	// scrollbar(s)
+	if (this.wTotal > this.wView || this.hTotal > this.hView) {
 		canvas.addDecoration(function (ctx) {
-			var scrollbarRelLength = self.hView / self.hTotal;
-			var scrollbarAbsLength = Math.max(scrollbarRelLength * self.hView,
-				Math.min(20, self.hView));
-			var scrollbarMaxMotion = self.hView - scrollbarAbsLength;
-			var scrollbarRelMotion = self.vertScroll / (self.hTotal - self.hView);
-			var scrollbarMotion = scrollbarRelMotion * scrollbarMaxMotion;
 			ctx.save();
-			ctx.fillStyle = canvas.dims.scrollbarBackgroundColor;
-			ctx.fillRect(self.leftScrollbar ? self.x - 2 - canvas.dims.scrollbarWidth : self.x + self.w + 2,
-				self.y,
-				canvas.dims.scrollbarWidth, self.hView);
-			ctx.fillStyle = canvas.dims.scrollbarThumbColor;
-			ctx.fillRect(self.leftScrollbar ? self.x - 2 - canvas.dims.scrollbarWidth : self.x + self.w + 2,
-				self.y + scrollbarMotion,
-				canvas.dims.scrollbarWidth, scrollbarAbsLength);
+
+			// horizontal scrollbar
+			if (self.wTotal > self.wView) {
+				var scrollbarRelLength = self.wView / self.wTotal;
+				var scrollbarAbsLength = Math.max(scrollbarRelLength * self.wView,
+					Math.min(20, self.wView));
+				var scrollbarMaxMotion = self.wView - scrollbarAbsLength;
+				var scrollbarRelMotion = self.horScroll / (self.wTotal - self.wView);
+				var scrollbarMotion = scrollbarRelMotion * scrollbarMaxMotion;
+				ctx.fillStyle = canvas.dims.scrollbarBackgroundColor;
+				ctx.fillRect(self.x,
+					self.topScrollbar ? self.y - 2 - canvas.dims.scrollbarWidth : self.y + self.hView + 2,
+					self.wView, canvas.dims.scrollbarWidth);
+				ctx.fillStyle = canvas.dims.scrollbarThumbColor;
+				ctx.fillRect(self.x + scrollbarMotion,
+					self.topScrollbar ? self.y - 2 - canvas.dims.scrollbarWidth : self.y + self.hView + 2,
+					scrollbarAbsLength, canvas.dims.scrollbarWidth);
+			}
+
+			// vertical scrollbar
+			if (self.hTotal > self.hView) {
+				var scrollbarRelLength = self.hView / self.hTotal;
+				var scrollbarAbsLength = Math.max(scrollbarRelLength * self.hView,
+					Math.min(20, self.hView));
+				var scrollbarMaxMotion = self.hView - scrollbarAbsLength;
+				var scrollbarRelMotion = self.vertScroll / (self.hTotal - self.hView);
+				var scrollbarMotion = scrollbarRelMotion * scrollbarMaxMotion;
+				ctx.save();
+				ctx.fillStyle = canvas.dims.scrollbarBackgroundColor;
+				ctx.fillRect(self.leftScrollbar ? self.x - 2 - canvas.dims.scrollbarWidth : self.x + self.wView + 2,
+					self.y,
+					canvas.dims.scrollbarWidth, self.hView);
+				ctx.fillStyle = canvas.dims.scrollbarThumbColor;
+				ctx.fillRect(self.leftScrollbar ? self.x - 2 - canvas.dims.scrollbarWidth : self.x + self.wView + 2,
+					self.y + scrollbarMotion,
+					canvas.dims.scrollbarWidth, scrollbarAbsLength);
+			}
+
 			ctx.restore();
 		});
 	}
 
-	canvas.beginClip(this.x, this.y, this.w, this.hView,
-		0, -this.vertScroll);
+	canvas.beginClip(this.x, this.y, this.wView, this.hView,
+		-this.horScroll, -this.vertScroll);
 };
 
 /** End adding items to the scrolling area
 	@return {void}
 */
-A3a.vpl.VertScrollArea.prototype.end = function () {
+A3a.vpl.ScrollArea.prototype.end = function () {
 	this.canvas.endClip();
 };
 
 /** Scroll canvas, typically because of wheel or keyboard event
+	@param {number} dx
 	@param {number} dy
 	@return {void}
 */
-A3a.vpl.VertScrollArea.prototype.scrollCanvas = function (dy) {
+A3a.vpl.ScrollArea.prototype.scrollCanvas = function (dx, dy) {
+	this.horScroll += dx;
 	this.vertScroll += dy;
+};
+
+/** Check if scroll is commpletely left
+	@return {boolean}
+*/
+A3a.vpl.ScrollArea.prototype.isLeft = function () {
+	return this.horScroll <= this.wView * 0.001;
+};
+
+/** Check if scroll is commpletely right
+	@return {boolean}
+*/
+A3a.vpl.ScrollArea.prototype.isRight = function () {
+	return this.horScroll >= this.wTotal - this.wView * 1.001;
 };
 
 /** Check if scroll is commpletely up
 	@return {boolean}
 */
-A3a.vpl.VertScrollArea.prototype.isTop = function () {
+A3a.vpl.ScrollArea.prototype.isTop = function () {
 	return this.vertScroll <= this.hView * 0.001;
 };
 
 /** Check if scroll is commpletely down
 	@return {boolean}
 */
-A3a.vpl.VertScrollArea.prototype.isBottom = function () {
+A3a.vpl.ScrollArea.prototype.isBottom = function () {
 	return this.vertScroll >= this.hTotal - this.hView * 1.001;
 };

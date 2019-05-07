@@ -434,9 +434,7 @@ function vplSetup(gui) {
 	if (filter) {
 		app.vplCanvas.setFilter(filter);
 	}
-	if (transform) {
-		app.vplCanvas.transform = transform;
-	}
+	app.vplCanvas.initTransform(transform);
 
 	// accept dropped aesl files
 	document.getElementsByTagName("body")[0].addEventListener("dragover", function(e) {

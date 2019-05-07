@@ -221,6 +221,8 @@ A3a.vpl.Canvas = function (canvas, options) {
 	this.height = this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin);
 	this.visible = true;
 	/** @type {?Array.<number>} */
+	this.transform0 = null;
+	/** @type {?Array.<number>} */
 	this.transform = null;
 	/** @type {CanvasRenderingContext2D} */
 	this.ctx = this.canvas.getContext("2d");
@@ -509,6 +511,31 @@ A3a.vpl.Canvas.prototype.hide = function () {
 */
 A3a.vpl.Canvas.prototype.setFilter = function (filter) {
 	this.canvas["style"]["filter"] = filter;
+};
+
+/** Initialize transform
+	@param {?Array.<number>} transform transform as a column-wise 2x3 homogeneous matrix
+	(null for identity [1,0,0,1,0,0])
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.initTransform = function (transform) {
+	this.transform0 = transform && transform.slice();
+	this.transform = this.transform0;
+};
+
+/** Reset transform
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.resetTransform = function () {
+	this.transform = this.transform0;
+};
+
+/** Set scaling factor, without changing physical displayed area
+	@param {number} sc
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.setScale = function (sc) {
+	this.transform = (this.transform0 || [1, 0, 0, 1, 0, 0]).map(function (x) { return x * sc; });
 };
 
 /** Apply transform to point

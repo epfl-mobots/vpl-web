@@ -25,10 +25,10 @@ vpl program in remaining area
 	@struct
 */
 A3a.vpl.Program.CanvasRenderingState = function () {
-	this.programScroll = new A3a.vpl.VertScrollArea(1);
-	this.eventScroll = new A3a.vpl.VertScrollArea(1);
+	this.programScroll = new A3a.vpl.ScrollArea(1, 1);
+	this.eventScroll = new A3a.vpl.ScrollArea(1, 1);
 	this.eventScroll.leftScrollbar = true;
-	this.actionScroll = new A3a.vpl.VertScrollArea(1);
+	this.actionScroll = new A3a.vpl.ScrollArea(1, 1);
 };
 
 /** Add a block to a canvas
@@ -830,9 +830,6 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		}, this);
 	}
 
-	// program scroll region
-	renderingState.programScroll.setTotalHeight(program.program.length * ruleBox.totalHeight());
-
 	if (uiConfig.customizationMode) {
 		// draw vpl:customization widget
 		var customizationBox = canvas.css.getBox({tag: "widget", id: "vpl-customize"});
@@ -857,6 +854,11 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			});
 		});
 	} else {
+		// program scroll region
+		var vplWidth = ruleBox.totalWidth() + vplBox.paddingLeft + vplBox.paddingRight;
+		renderingState.programScroll.setTotalWidth(vplWidth);
+		renderingState.programScroll.setTotalHeight(program.program.length * ruleBox.totalHeight());
+
 		// program
 		renderingState.programScroll.resize(vplBox.x, vplBox.y,
 			vplBox.width,	vplBox.height);
@@ -866,6 +868,10 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		renderingState.programScroll.begin(canvas);
 		eventX0 += (eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
 		actionX0 += (eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
+		if (vplWidth > vplBox.width) {
+			eventX0 += (vplWidth - vplBox.width) / 2 + vplBox.paddingLeft + vplBox.marginLeft;
+			actionX0 += (vplWidth - vplBox.width) / 2 + vplBox.paddingLeft + vplBox.marginLeft;
+		}
 		var errorMsg = "";
 		var isWarning = false;
 		program.program.forEach(function (eventHandler, i) {
