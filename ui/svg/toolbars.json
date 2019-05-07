@@ -17,6 +17,7 @@
 			"vpl:stop",
 			"!stretch",
 			"vpl:advanced",
+			"vpl:sim",
 			"vpl:text-toggle",
 			"!stretch",
 			"vpl:teacher-reset",
@@ -36,12 +37,6 @@
 			"!!stretch"
 		],
 		"editor": [
-			"!!stretch",
-			"src:locked",
-			"!space",
-			"src:language",
-			"!stretch"
-
 		],
 		"simulator": [
 			"sim:close",

@@ -103,9 +103,7 @@
 			"name": "vpl:text-toggle",
 			"state": ["selected"],
 			"draw": [
-				{
-					"uri": "Icons.svg#Pressed_bg"
-				},
+
 				{
 					"uri": "Icons.svg#textMode_highlight"
 				}
@@ -125,7 +123,7 @@
 			"state": [],
 			"draw": [
 				{
-					"uri": "Icons.svg#locked_highlight"
+					"uri": "Icons.svg#locked_default"
 				}
 			]
 		},
@@ -140,10 +138,22 @@
 		},
 		{
 			"name": "vpl:connected",
+			"state": ["unselected"],
+			"draw": [
+			{
+					"uri": "Icons.svg#Selected_bg"
+				},
+				{
+					"uri": "Icons.svg#disconnect_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:connected",
 			"state": ["selected"],
 			"draw": [
 				{
-					"uri": "Icons.svg#Circle_bg"
+					"uri": "Icons.svg#Selected_bg"
 				},
 				{
 					"uri": "Icons.svg#robotConnect_default"
@@ -155,8 +165,10 @@
 			"state": [],
 			"draw": [
 				{
-					"uri": "Icons.svg#robotConnect_default",
-					"alpha": 0.5
+					"uri": "Icons.svg#Selected_bg"
+				},
+				{
+					"uri": "Icons.svg#robotConnect_default"
 				}
 			]
 		},
@@ -206,11 +218,13 @@
 				}
 			]
 		},
-
 		{
 			"name": "vpl:stop",
 			"state": ["pressed"],
 			"draw": [
+			{
+					"uri": "Icons.svg#Pressed_bg"
+				},
 				{
 					"uri": "Icons.svg#stop_highlight"
 				}
@@ -403,10 +417,14 @@
 		},
 		{
 			"name": "vpl:advanced",
-			"state": ["unselected"],
+			"state": ["pressed"],
 			"draw": [
+
 				{
-					"uri": "Icons.svg#basicMode_default"
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#mediumMode_default"
 				}
 			]
 		},
@@ -421,10 +439,10 @@
 		},
 		{
 			"name": "vpl:advanced",
-			"state": ["pressed"],
+			"state": [],
 			"draw": [
 				{
-					"uri": "Icons.svg#Pressed_bg"
+					"uri": "Icons.svg#basicMode_default"
 				}
 			]
 		},

@@ -14,7 +14,7 @@
 	@constructor
 	@param {string} textareaId id of textarea element, which should be
 	enclosed in a div and follow a pre
-	@param {string} preId id of pre element for line numbers (element before textarea)
+	@param {?string} preId id of pre element for line numbers (element before textarea), or null if none
 	@param {number=} topMargin
 	@param {number=} leftMargin
 */
@@ -23,7 +23,7 @@ A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
 	this.textarea.value = "";
 
 	this.div = this.textarea.parentElement;
-    this.pre = document.getElementById(preId);
+    this.pre = preId ? null : document.getElementById(/** @type {string} */(preId));
 
     // style
 	this.topMargin = topMargin || 0;
@@ -31,7 +31,7 @@ A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
     var width = window.innerWidth - this.leftMargin;
 	var height = window.innerHeight - this.topMargin;
     var taStyle = window.getComputedStyle(this.textarea);
-	var taWidth = width - this.pre.getBoundingClientRect().width - 10 -
+	var taWidth = width - (this.pre ? this.pre.getBoundingClientRect().width : 0) - 10 -
 		parseInt(taStyle.paddingLeft, 10) - parseInt(taStyle.paddingRight, 10);
 
     this.textarea.style.width = taWidth + "px";
@@ -39,22 +39,25 @@ A3a.vpl.TextEditor = function (textareaId, preId, topMargin, leftMargin) {
     this.textarea.style.outline = "none";
     this.textarea.style.resize = "none";
     this.textarea.style.whiteSpace = "pre";
-    this.textarea.style.overflowX = "hidden";    // scrollbar would break sync with pre
     this.textarea.setAttribute("wrap", "off");    // required in WebKit
 
-    this.pre.style.height = height + "px";
-    this.pre.style.fontFamily = taStyle.fontFamily;
-    this.pre.style.fontSize = taStyle.fontSize;
-    this.pre.style.height = taStyle.height;
-    this.pre.style.maxHeight = taStyle.height;
+	if (this.pre) {
+	    this.pre.style.height = height + "px";
+	    this.pre.style.fontFamily = taStyle.fontFamily;
+	    this.pre.style.fontSize = taStyle.fontSize;
+	    this.pre.style.height = taStyle.height;
+	    this.pre.style.maxHeight = taStyle.height;
 
-	var self = this;
-    this.textarea.addEventListener("scroll", function (e) {
-        self.pre.scrollTop = this.scrollTop;
-    }, false);
-    this.textarea.addEventListener("input", function (e) {
-        self.updateLineNumbers();
-    }, false);
+		var self = this;
+	    this.textarea.addEventListener("scroll", function (e) {
+	        self.pre.scrollTop = this.scrollTop;
+	    }, false);
+	    this.textarea.addEventListener("input", function (e) {
+	        self.updateLineNumbers();
+	    }, false);
+
+    	this.textarea.style.overflowX = "hidden";    // scrollbar would break sync with pre
+	}
 
 	this.breakpointsEnabled = false;
 
@@ -129,41 +132,45 @@ A3a.vpl.TextEditor.prototype.resize = function () {
     var width = parentBB.width - this.leftMargin;
 	var height = window.innerHeight - this.topMargin;
     var taStyle = window.getComputedStyle(this.textarea);
-	var taWidth = width - this.pre.getBoundingClientRect().width - 10 -
+	var taWidth = width - (this.pre ? this.pre.getBoundingClientRect().width : 0) - 10 -
 		parseInt(taStyle.paddingLeft, 10) - parseInt(taStyle.paddingRight, 10);
 
     this.textarea.style.width = taWidth + "px";
-    this.pre.style.height = height + "px";
-    this.pre.style.maxHeight = height + "px";
+	if (this.pre) {
+	    this.pre.style.height = height + "px";
+	    this.pre.style.maxHeight = height + "px";
+	}
 };
 
-/** Update the line number text in the pre element
+/** Update the line number text in the pre element if it exists
     @return {void}
 */
 A3a.vpl.TextEditor.prototype.updateLineNumbers = function () {
-    var lineCount = this.textarea.value.split("\n").length;
-    var preLineCount = this.pre.textContent.split("\n").length;
-	/** @type {Array.<string>} */
-    var txt = [];
-    for (var i = 0; i < lineCount; i++) {
-		txt.push((i + 1 === this.currentLine ? "\u25b6 "
-			: this.breakpoints.indexOf(i + 1) >= 0 ? "\u25ce " : "  ") +
-				(i + 1).toString(10));
-    }
-	while (this.pre.firstElementChild) {
-		this.pre.removeChild(this.pre.firstElementChild);
-	}
-	var self = this;
-    txt.forEach(function (t, i) {
-		var el = document.createElement("span");
-		el.textContent = t + "\n";
-		if (this.breakpointsEnabled) {
-			el.addEventListener("click", function () {
-				self.toggleBreakpoint(i + 1);
-			});
+	if (this.pre) {
+	    var lineCount = this.textarea.value.split("\n").length;
+	    var preLineCount = this.pre.textContent.split("\n").length;
+		/** @type {Array.<string>} */
+	    var txt = [];
+	    for (var i = 0; i < lineCount; i++) {
+			txt.push((i + 1 === this.currentLine ? "\u25b6 "
+				: this.breakpoints.indexOf(i + 1) >= 0 ? "\u25ce " : "  ") +
+					(i + 1).toString(10));
+	    }
+		while (this.pre.firstElementChild) {
+			this.pre.removeChild(this.pre.firstElementChild);
 		}
-		this.pre.appendChild(el);
-	}, this);
+		var self = this;
+	    txt.forEach(function (t, i) {
+			var el = document.createElement("span");
+			el.textContent = t + "\n";
+			if (this.breakpointsEnabled) {
+				el.addEventListener("click", function () {
+					self.toggleBreakpoint(i + 1);
+				});
+			}
+			this.pre.appendChild(el);
+		}, this);
+	}
 }
 
 /** Change text editor content
@@ -174,7 +181,9 @@ A3a.vpl.TextEditor.prototype.setContent = function (text) {
 	this.textarea.value = text;
     var height = this.div.clientHeight;
     var taStyle = window.getComputedStyle(this.textarea);
-    this.pre.style.height = taStyle.height;
-    this.pre.style.maxHeight = taStyle.height;
-    this.updateLineNumbers();
+	if (this.pre) {
+	    this.pre.style.height = taStyle.height;
+	    this.pre.style.maxHeight = taStyle.height;
+	    this.updateLineNumbers();
+	}
 }
