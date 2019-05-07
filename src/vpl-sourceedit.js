@@ -151,6 +151,22 @@ A3a.vpl.VPLSourceEditor.prototype.selectRange = function (begin, end) {
 };
 
 /** Calculate the toolbar height
+	@return {{height:number,totalHeight:number}}
+*/
+A3a.vpl.VPLSourceEditor.prototype.toolbarHeight = function () {
+	// buttonBox and toolbarBox: don't care about width
+	var buttonBox = this.tbCanvas.css.getBox({tag: "button", clas: ["src", "top"]});
+	buttonBox.height = this.tbCanvas.dims.controlSize;
+	var toolbarBox = this.tbCanvas.css.getBox({tag: "toolbar", clas: ["src", "top"]});
+	toolbarBox.height = buttonBox.totalHeight();
+
+	return {
+		height: toolbarBox.height,
+		totalHeight: toolbarBox.totalHeight()
+	}
+};
+
+/** Calculate the editor position and size
 	@return {{left:number,top:number,width:number,height:number}}
 */
 A3a.vpl.VPLSourceEditor.prototype.editorArea = function () {
@@ -159,18 +175,12 @@ A3a.vpl.VPLSourceEditor.prototype.editorArea = function () {
 	viewBox.setTotalWidth(canvasSize.width);
 	viewBox.setTotalHeight(canvasSize.height);
 	viewBox.setPosition(0, 0);
-	// buttonBox and toolbarBox: don't care about width
-	var buttonBox = this.tbCanvas.css.getBox({tag: "button", clas: ["src", "top"]});
-	buttonBox.height = this.tbCanvas.dims.controlSize;
-	var toolbarBox = this.tbCanvas.css.getBox({tag: "toolbar", clas: ["src", "top"]});
-	toolbarBox.height = buttonBox.totalHeight();
-	toolbarBox.setPosition(viewBox.x, viewBox.y);
-
+	var toolbarHeight = this.toolbarHeight();
 	return {
 		left: viewBox.x,
-		top: viewBox.y + toolbarBox.totalHeight(),
+		top: viewBox.y + toolbarHeight.totalHeight,
 		width: viewBox.width,
-		height: viewBox.height - toolbarBox.totalHeight()
+		height: viewBox.height - toolbarHeight.totalHeight
 	};
 };
 
@@ -205,7 +215,7 @@ A3a.vpl.Application.prototype.renderSourceEditorToolbar = function () {
 		"src:teacher"
 	];
 	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, toolbarConfig, ["src", "top"]);
-	var toolbarItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
+	var toolbarItemHeight = editor.toolbarHeight().height;
 
 	// boxes
 	var canvasSize = editor.tbCanvas.getSize();
