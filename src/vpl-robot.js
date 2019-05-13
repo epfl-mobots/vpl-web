@@ -86,11 +86,9 @@ A3a.vpl.Robot.prototype["sendEvent"] = function (name, val) {
 };
 
 /** Start or restart simulation, sending an init event
-	@param {number} t0
 	@return {void}
 */
-A3a.vpl.Robot.prototype["start"] = function (t0) {
-	this["reset"](t0);
+A3a.vpl.Robot.prototype["start"] = function () {
 	this["sendEvent"]("init", null);
 };
 

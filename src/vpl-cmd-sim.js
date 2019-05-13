@@ -25,7 +25,8 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 	this.commands.add("sim:restart", {
 		action: function (app, modifier) {
 			app.restoreGround();
-			app.sim2d.robot["start"](A3a.vpl.VPLSim2DViewer.currentTime());
+			app.sim2d.robot["reset"](A3a.vpl.VPLSim2DViewer.currentTime());
+			app.sim2d.robot["start"]();
 			app.sim2d.running = true;
 			app.sim2d.paused = false;
 			app.renderSim2dViewer();

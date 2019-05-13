@@ -337,8 +337,8 @@ function vplSetup(gui) {
 	}
 
 	if (!language) {
-		language = app.runGlue
-			? app.runGlue.preferredLanguage
+		language = app.currentRobotIndex >= 0
+			? app.robots[app.currentRobotIndex].runGlue.preferredLanguage
 			: A3a.vpl.defaultLanguage;
 	}
 
@@ -354,22 +354,28 @@ function vplSetup(gui) {
 		robot = "sim";
 	}
 
-	switch (robot) {
- 	case "thymio":
-		app.installThymio();
-		app.runGlue && app.runGlue.init(language);
-		break;
-	case "thymio-tdm":
-		app.installThymioTDM();
-		app.runGlue && app.runGlue.init(language);
-		break;
- 	case "sim":
-		app.installRobotSimulator({canvasFilter: filter, canvasTransform: transform});
-		app.runGlue && app.runGlue.init(language);
-		break;
-	default:
-		app.runGlue = null;
-	}
+	robot.replace(/[+;]/g, ",").split(",").forEach(function (robotName) {
+		/** @type {A3a.vpl.RunGlue} */
+		var runGlue = null;
+		switch (robotName) {
+	 	case "thymio":
+			runGlue = app.installThymio();
+			runGlue.init(language);
+			break;
+		case "thymio-tdm":
+			runGlue = app.installThymioTDM();
+			runGlue.init(language);
+			break;
+	 	case "sim":
+			runGlue = app.installRobotSimulator({canvasFilter: filter, canvasTransform: transform});
+			runGlue.init(language);
+			break;
+		}
+		if (runGlue) {
+			app.robots.push({name: robotName, runGlue: runGlue});
+		}
+	});
+	app.currentRobotIndex = app.robots.length >= 0 ? 0 : -1;
 
 	if (!A3a.vpl.Program.codeGenerator[language]) {
 		throw "Unsupported language " + language;
@@ -420,14 +426,6 @@ function vplSetup(gui) {
 		}
 		app.sim2d.toolbarDrawButton = drawButton;
 		app.sim2d.toolbarGetButtonBounds = getButtonBounds;
-	}
-
-	if (app.runGlue) {
-		var stopBlock = A3a.vpl.BlockTemplate.findByName("!stop");
-		var stopGenCode = stopBlock && stopBlock.genCode[language];
-		if (stopGenCode) {
-			app.runGlue.setStopCode(stopGenCode(null).statement, language);
-		}
 	}
 
 	// apply canvas filters and transforms

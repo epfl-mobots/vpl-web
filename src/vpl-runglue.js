@@ -29,9 +29,6 @@ A3a.vpl.RunGlue = function (options) {
 	this.preferredLanguage = options && options.preferredLanguage ? options.preferredLanguage : "aseba";
 	this.languages = options && options.languages ? options.languages : [this.preferredLanguage];
 	this.state = options && options.state ? options.state : null;
-
-	/** @type {Object<string,string>} */
-	this.stopCode = {};
 };
 
 /** Check if the RunGlue interface is enabled for a specific language
@@ -69,24 +66,5 @@ A3a.vpl.RunGlue.prototype.init = function (language) {
 A3a.vpl.RunGlue.prototype.run = function (code, language) {
 	if (this.isEnabled(language)) {
 		this.runFun(language, code);
-	}
-};
-
-/** Add source code to stop the robot
-	@param {string} code
-	@param {string} language
-	@return {void}
-*/
-A3a.vpl.RunGlue.prototype.setStopCode = function (code, language) {
-	this.stopCode[language] = code;
-};
-
-/** Run stop code
-	@param {string} language
-	@return {void}
-*/
-A3a.vpl.RunGlue.prototype.stop = function (language) {
-	if (this.isEnabled(language) && this.stopCode[language]) {
-		this.runFun(language, this.stopCode[language]);
 	}
 };

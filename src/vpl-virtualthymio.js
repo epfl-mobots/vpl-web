@@ -306,6 +306,9 @@ A3a.vpl.VirtualThymio.prototype["run"] = function (tStop, traceFun) {
 	// keeping the same initial simulation time and end real time tStop:
 	// this.t0 -= (f - 1)(tStop - this.t)
 	// this.t -= (f - 1)(tStop - this.t)
+	if (this.t0 === 0) {
+		this["reset"](tStop);
+	}
 	if (this.speedupFactor !== 1) {
 		this.t0 -= (this.speedupFactor - 1) * (tStop - this.t);
 		this.t = this.speedupFactor * (this.t - tStop) + tStop;

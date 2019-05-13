@@ -217,6 +217,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:run": run the VPL program with the Thymio or the simulator (state is "empty", "running", "error", "canLoad", or "canReload" depending on the VPL program and whether it's been run and modified)
 - "vpl:stop": stop the VPL program
 - "vpl:connected": connection indicator (no action, always disabled; selected if connected, unselected if no connection)
+- "vpl:robot": toggle between all the robots specified in option "robot" in the query string (see below; hidden unless there are at least two robots; state is the robot name, such as "thymio" or "sim")
 - "vpl:sim": switch to the simulator view
 - "vpl:duplicate": duplicate a rule (drag target)
 - "vpl:disable": toggle a rule or block between disabled and enabled states (drag target)
@@ -425,6 +426,6 @@ The following options are supported:
 - "blur": radius of blur filter applied to canvas in 0.1px units (default 0), to simulate vision deficiency.
 - "grayscale": percentage of grayscale filter applied to canvas (default 0), to simulate grayscale printing, low-quality displays such as beamers where color shifts are common, or vision deficiency.
 - "view": list of initial views (default "vpl"). Views ("vpl", "src" or "sim") are separated by '+'.
-- "robot": device code is sent to for execution. "thymio" for a Thymio via asebahttp (supported language: "aseba"), "thymio-tdm" for a Thymio via the Thymio Device Manager (supported language: "aseba"), "sim" for the simulator (supported languages: "aseba", "l2", and "js"), or undefined for no execution.
+- "robot": device(s) code is sent to for execution. "thymio" for a Thymio via asebahttp (supported language: "aseba"), "thymio-tdm" for a Thymio via the Thymio Device Manager (supported language: "aseba"), "sim" for the simulator (supported languages: "aseba", "l2", and "js"), or undefined for no execution. Multiple devices can be specified, separated with (unquoted) '+'; e.g. "robot=thymio-tdm+sim". In that case, button "vpl:robot" toggles between devices.
 - "role": "student" (default) or "teacher" (options to customize the user interface and vpl blocks).
 - "ui": filename of the main json file (default "ui.json")

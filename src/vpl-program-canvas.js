@@ -540,6 +540,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		"!stretch",
 		"vpl:run",
 		"vpl:stop",
+		"vpl:robot",
 		"!stretch",
 		"vpl:sim",
 		"vpl:text",

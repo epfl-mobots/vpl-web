@@ -10,11 +10,11 @@
 */
 
 /** Install connection with Thymio via Thymio Device Manager
-	@return {void}
+	@return {A3a.vpl.RunGlue}
 */
 A3a.vpl.Application.prototype.installThymioTDM = function () {
 	var app = this;
-	this.runGlue = new A3a.vpl.RunGlue({
+	return new A3a.vpl.RunGlue({
 		run: function (language, code) {
 			window["tdmRun"](code);
 		},
@@ -24,7 +24,7 @@ A3a.vpl.Application.prototype.installThymioTDM = function () {
 				window["tdmInit"](vplGetHashOption("w"),
 					vplGetHashOption("uuid"),
 					function (connected) {
-						app.runGlue.state = connected ? {} : null;
+						app.robots[app.currentRobotIndex].runGlue.state = connected ? {} : null;
 						app.vplCanvas.update();
 					});
 			} catch (e) {
@@ -33,10 +33,10 @@ A3a.vpl.Application.prototype.installThymioTDM = function () {
 			}
 		},
 		isConnected: function () {
-			return app.runGlue.state != null && window["tdmIsConnected"]();;
+			return app.robots[app.currentRobotIndex].runGlue.state != null && window["tdmIsConnected"]();;
 		},
 		isEnabled: function (language) {
-			return language === "aseba" && app.runGlue.state != null && window["tdmCanRun"]();
+			return language === "aseba" && app.robots[app.currentRobotIndex].runGlue.state != null && window["tdmCanRun"]();
 		},
 		preferredLanguage: "aseba",
 		languages: ["aseba"],

@@ -10,13 +10,13 @@
 */
 
 /** Install connection with Thymio
-	@return {void}
+	@return {A3a.vpl.RunGlue}
 */
 A3a.vpl.Application.prototype.installThymio = function () {
 	var app = this;
-	this.runGlue = new A3a.vpl.RunGlue({
+	return new A3a.vpl.RunGlue({
 		run: function (language, code) {
-			/** @type {A3a.Node} */(app.runGlue.state).putA3aCodeAsync(code);
+			/** @type {A3a.Node} */(app.robots[app.currentRobotIndex].runGlue.state).putA3aCodeAsync(code);
 		},
 		init: function (language) {
 			// initialize the list of nodes
@@ -25,7 +25,7 @@ A3a.vpl.Application.prototype.installThymio = function () {
 					? "http://127.0.0.1:3000"
 					: document.location.origin;
 				A3a.NodeProxy.init(origin, function () {
-					app.runGlue.state = A3a.Node.getNodeList()[0];
+					app.robots[app.currentRobotIndex].runGlue.state = A3a.Node.getNodeList()[0];
 					app.vplCanvas.update();
 				});
 			} catch (e) {
@@ -34,10 +34,10 @@ A3a.vpl.Application.prototype.installThymio = function () {
 			}
 		},
 		isConnected: function () {
-			return app.runGlue.state != null;
+			return app.robots[app.currentRobotIndex].runGlue.state != null;
 		},
 		isEnabled: function (language) {
-			return language === "aseba" && app.runGlue.state != null;
+			return language === "aseba" && app.robots[app.currentRobotIndex].runGlue.state != null;
 		},
 		preferredLanguage: "aseba",
 		languages: ["aseba", "l2"],

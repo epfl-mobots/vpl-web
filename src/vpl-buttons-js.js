@@ -89,6 +89,27 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 		ctx.restore();
 	}
 
+	function drawRobot() {
+		ctx.beginPath();
+		// middle rear
+		ctx.moveTo(0, 0.5 * dims.controlSize);
+		// right side
+		ctx.lineTo(0.5 * dims.controlSize, 0.5 * dims.controlSize);
+		ctx.lineTo(0.5 * dims.controlSize, -0.25 * dims.controlSize);
+		ctx.bezierCurveTo(0.3 * dims.controlSize, -0.5 * dims.controlSize,
+			dims.controlSize * 0.02, -0.5 * dims.controlSize,
+			0, -0.5 * dims.controlSize);
+		// left side
+		ctx.lineTo(0, -0.5 * dims.controlSize);
+		ctx.bezierCurveTo(-0.02 * dims.controlSize, -0.5 * dims.controlSize,
+			-0.3 * dims.controlSize, -0.5 * dims.controlSize,
+			-0.5 * dims.controlSize, -0.25 * dims.controlSize);
+		ctx.lineTo(-0.5 * dims.controlSize, 0.5 * dims.controlSize);
+		ctx.closePath();
+		ctx.fillStyle = isEnabled ? "white" : "#777";
+		ctx.fill();
+	}
+
 	var draw = {
 		// vpl
 		"vpl:close": function () {
@@ -443,6 +464,54 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 			ctx.fillStyle = isEnabled ? "white" : "#777";
 			ctx.fillText("C", dims.controlSize * 0.5, dims.controlSize * 0.5);
 		},
+		"vpl:robot": function () {
+			ctx.fillStyle = isPressed
+				? dims.controlDownColor
+				: dims.controlColor;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			switch (state) {
+			case "thymio":
+				ctx.save();
+				ctx.translate(dims.controlSize / 2, dims.controlSize * 0.35);
+				ctx.scale(0.3, 0.3);
+				ctx.rotate(0.2);
+				drawRobot();
+				ctx.restore();
+				break;
+			case "thymio-tdm":
+				ctx.save();
+				ctx.translate(dims.controlSize / 2, dims.controlSize * 0.35);
+				ctx.scale(0.3, 0.3);
+				ctx.rotate(0.2);
+				drawRobot();
+				ctx.restore();
+				ctx.fillStyle = "white";
+				ctx.fillRect(dims.controlSize * 0.4, dims.controlSize * 0.65,
+					dims.controlSize * 0.2, dims.controlSize * 0.2);
+				break;
+			case "sim":
+				ctx.save();
+				ctx.translate(dims.controlSize / 2, dims.controlSize * 0.35);
+				ctx.scale(0.3, 0.3);
+				ctx.rotate(0.2);
+				drawRobot();
+				ctx.beginPath();
+				ctx.strokeStyle = "white";
+				ctx.lineWidth = dims.controlLineWidth / 0.3;
+				ctx.strokeRect(-dims.controlSize, -0.8 * dims.controlSize,
+					2 * dims.controlSize, 1.6 * dims.controlSize);
+				ctx.restore();
+				break;
+			}
+			ctx.beginPath();
+			ctx.moveTo(dims.controlSize * 0.2, dims.controlSize * 0.75);
+			ctx.lineTo(dims.controlSize * 0.5, dims.controlSize * 0.75);
+			ctx.lineTo(dims.controlSize * 0.5, dims.controlSize * (state === "sim" ? 0.6 : 0.3));
+			ctx.strokeStyle = "white";
+			ctx.lineWidth = dims.controlLineWidth;
+			ctx.stroke();
+		},
 		"vpl:sim": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
@@ -453,24 +522,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 			ctx.translate(dims.controlSize / 2, dims.controlSize * 0.35);
 			ctx.scale(0.4, 0.4);
 			ctx.rotate(0.2);
-			ctx.beginPath();
-			// middle rear
-			ctx.moveTo(0, 0.5 * dims.controlSize);
-			// right side
-			ctx.lineTo(0.5 * dims.controlSize, 0.5 * dims.controlSize);
-			ctx.lineTo(0.5 * dims.controlSize, -0.25 * dims.controlSize);
-			ctx.bezierCurveTo(0.3 * dims.controlSize, -0.5 * dims.controlSize,
-				dims.controlSize * 0.02, -0.5 * dims.controlSize,
-				0, -0.5 * dims.controlSize);
-			// left side
-			ctx.lineTo(0, -0.5 * dims.controlSize);
-			ctx.bezierCurveTo(-0.02 * dims.controlSize, -0.5 * dims.controlSize,
-				-0.3 * dims.controlSize, -0.5 * dims.controlSize,
-				-0.5 * dims.controlSize, -0.25 * dims.controlSize);
-			ctx.lineTo(-0.5 * dims.controlSize, 0.5 * dims.controlSize);
-			ctx.closePath();
-			ctx.fillStyle = isEnabled ? "white" : "#777";
-			ctx.fill();
+			drawRobot();
 			ctx.beginPath();
 			ctx.arc(dims.controlSize, 0.5 * dims.controlSize, 1.4 * dims.controlSize,
 				-3.2, -3.8, true);

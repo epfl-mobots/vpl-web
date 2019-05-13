@@ -56,8 +56,10 @@ A3a.vpl.Application = function (canvasEl) {
 	/** @type {A3a.vpl.VPLSim2DViewer} */
 	this.sim2d = null;
 
-	/** @type {A3a.vpl.RunGlue} */
-	this.runGlue = null;
+	/** @type {Array.<{name:string,runGlue:A3a.vpl.RunGlue}>} */
+	this.robots = [];
+	/** @type {number} */
+	this.currentRobotIndex = -1;
 
 	this.multipleViews = false;
 	this.useLocalStorage = false;
@@ -265,4 +267,26 @@ A3a.vpl.Application.prototype.vplResize = function () {
 
 	// modal boxes
 	this.aboutBox.center();
+};
+
+/** Stop robot
+	@return {void}
+*/
+A3a.vpl.Application.prototype.stopRobot = function () {
+	if (this.currentRobotIndex >= 0) {
+		var stopBlock = A3a.vpl.BlockTemplate.findByName("!stop");
+		var language = this.program.currentLanguage;
+		var stopGenCode = stopBlock && stopBlock.genCode[language];
+		if (stopGenCode) {
+			this.robots[this.currentRobotIndex].runGlue.run(stopGenCode(null).statement, language);
+		}
+	}
+};
+
+/** Check if stopRobot is enabled
+	@return {boolean}
+*/
+A3a.vpl.Application.prototype.canStopRobot = function () {
+	return !this.program.noVPL &&
+		this.robots[this.currentRobotIndex].runGlue.isEnabled(this.program.currentLanguage);
 };

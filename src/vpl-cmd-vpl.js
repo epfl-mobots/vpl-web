@@ -173,12 +173,12 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	this.commands.add("vpl:run", {
 		action: function (app, modifier) {
 			var code = app.program.getCode(app.program.currentLanguage);
-			app.runGlue.run(code, app.program.currentLanguage);
+			app.robots[app.currentRobotIndex].runGlue.run(code, app.program.currentLanguage);
 			app.program.uploaded = true;
 			app.program.notUploadedYet = false;
 		},
 		isEnabled: function (app) {
-			if (app.program.noVPL || !app.runGlue.isEnabled(app.program.currentLanguage)) {
+			if (app.program.noVPL || !app.robots[app.currentRobotIndex].runGlue.isEnabled(app.program.currentLanguage)) {
 				return false;
 			}
 			var error = app.program.getError();
@@ -208,7 +208,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				if (draggedItem.data.eventHandlerContainer) {
 					// action from an event handler: just send it
 					var code = app.program.codeForBlock(/** @type {A3a.vpl.Block} */(draggedItem.data), app.program.currentLanguage);
-					app.runGlue.run(code, app.program.currentLanguage);
+					app.robots[app.currentRobotIndex].runGlue.run(code, app.program.currentLanguage);
 				} else {
 					// action from the templates: display in a zoomed state to set the parameters
 					// (disabled by canDrop below)
@@ -216,11 +216,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				}
 			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
 				var code = app.program.codeForActions(/** @type {A3a.vpl.EventHandler} */(draggedItem.data), app.program.currentLanguage);
-				app.runGlue.run(code, app.program.currentLanguage);
+				app.robots[app.currentRobotIndex].runGlue.run(code, app.program.currentLanguage);
 			}
 		},
 		canDrop: function (app, draggedItem) {
-			return app.runGlue.isEnabled(app.program.currentLanguage) &&
+			return app.robots[app.currentRobotIndex].runGlue.isEnabled(app.program.currentLanguage) &&
 				draggedItem.data instanceof A3a.vpl.EventHandler &&
 						/** @type {A3a.vpl.EventHandler} */(draggedItem.data).hasBlockOfType(A3a.vpl.blockType.action) ||
 				draggedItem.data instanceof A3a.vpl.Block &&
@@ -230,20 +230,20 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.runGlue != null;
+			return app.currentRobotIndex >= 0;
 		}
 	});
 	this.commands.add("vpl:stop", {
 		action: function (app, modifier) {
-			app.runGlue.stop(app.program.currentLanguage);
+			app.stopRobot();
 			app.program.uploaded = false;
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL && app.runGlue.isEnabled(app.program.currentLanguage);
+			return app.canStopRobot();
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.runGlue != null;
+			return app.currentRobotIndex >= 0;
 		}
 	});
 	this.commands.add("vpl:connected", {
@@ -251,11 +251,23 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return false;
 		},
 		isSelected: function (app) {
-			return !app.program.noVPL && app.runGlue.isConnected();
+			return !app.program.noVPL && app.robots[app.currentRobotIndex].runGlue.isConnected();
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.runGlue != null;
+			return app.currentRobotIndex >= 0;
+		}
+	});
+	this.commands.add("vpl:robot", {
+		action: function (app) {
+			app.currentRobotIndex = (app.currentRobotIndex + 1) % app.robots.length;
+		},
+		getState: function (app) {
+			return app.robots[app.currentRobotIndex].name;
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.robots.length > 1;
 		}
 	});
 	this.commands.add("vpl:sim", {
@@ -271,7 +283,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.runGlue != null && app.sim2d != null &&
+			return app.currentRobotIndex >= 0 && app.sim2d != null &&
 				app.views.indexOf("sim") < 0;
 		}
 	});

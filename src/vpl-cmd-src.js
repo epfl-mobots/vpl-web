@@ -133,7 +133,7 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 	this.commands.add("src:run", {
 		action: function (app, modifier) {
 			var code = app.editor.getCode();
-			app.runGlue.run(code, app.editor.language);
+			app.robots[app.currentRobotIndex].runGlue.run(code, app.editor.language);
 		},
 		getState: function (app) {
 			var code = app.editor.getCode();
@@ -145,25 +145,29 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.runGlue != null;
+			return app.currentRobotIndex >= 0;
 		}
 	});
 	this.commands.add("src:stop", {
 		action: function (app, modifier) {
-			app.runGlue.stop(app.editor.language);
+			app.stopRobot();
+		},
+		isEnabled: function (app) {
+			return app.canStopRobot();
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.runGlue != null;
+			return app.currentRobotIndex >= 0;
 		}
 	});
 	this.commands.add("src:connected", {
 		isEnabled: function (app) {
-			return !app.program.noVPL && app.runGlue.isConnected();
+			return !app.program.noVPL && app.currentRobotIndex >= 0 &&
+				app.robots[app.currentRobotIndex].runGlue.isConnected();
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.runGlue != null;
+			return app.robots.length > 0;
 		}
 	});
 	this.commands.add("src:sim", {
@@ -176,7 +180,7 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.runGlue != null && app.sim2d != null &&
+			return app.robots.find(function (r) { return r.name === "sim"; }) != null && app.sim2d != null &&
 				app.views.indexOf("sim") < 0;
 		}
 	});

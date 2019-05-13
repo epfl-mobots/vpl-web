@@ -11,19 +11,18 @@
 
 /** Install robot simulator
 	@param {Object} options
-	@return {void}
+	@return {A3a.vpl.RunGlue}
 */
 A3a.vpl.Application.prototype.installRobotSimulator = function (options) {
 	this.simCanvas = new A3a.vpl.Canvas(this.canvasEl, {css: this.css});
 
 	var app = this;
 	var intervalId = null;
-	this.runGlue = new A3a.vpl.RunGlue({
+	return new A3a.vpl.RunGlue({
  		run: function (language, code) {
 			var sim2d = app.sim2d;
 
 			// load code
-			sim2d.robot["reset"](0);
 			sim2d.robot["loadCode"](language, code);
 
 			// (re)launch real-time simulator
