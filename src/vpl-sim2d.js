@@ -1187,10 +1187,20 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 
 	simCanvas.redraw();
 
-	if (!sim2d.paused && robot["shouldRunContinuously"]() && !sim2d.renderingPending) {
-		sim2d.renderingPending = true;
+	if (!sim2d.paused && robot["shouldRunContinuously"]()) {
+		this.requestRendering();
+	}
+};
+
+/** Request rendering viewer
+	@return {void}
+*/
+A3a.vpl.Application.prototype.requestRendering = function () {
+	if (!this.sim2d.renderingPending) {
+		this.sim2d.renderingPending = true;
+		var self = this;
 		window.requestAnimationFrame(function () {
-			sim2d.renderingPending = false;
+			self.sim2d.renderingPending = false;
 			self.renderSim2dViewer();
 		});
 	}

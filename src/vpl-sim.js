@@ -40,6 +40,8 @@ A3a.vpl.Application.prototype.installRobotSimulator = function (options) {
 						sim2d.drawPen(shape, param);
 					}));
 			}, 10);
+			sim2d.robot.suspended = sim2d.paused;	// don't change paused state
+			app.requestRendering();
 		},
 		init: function (language) {
 			var robot = new A3a.vpl.VirtualThymioVM();
