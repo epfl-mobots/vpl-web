@@ -768,6 +768,109 @@
 				}
 			]
 		},
+			{
+			"name": "timer",
+			"type": "event",
+			"modes": ["advanced"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ev_TimersUp"
+				}
+			]
+		},
+		{
+			"name": "counter comparison",
+			"type": "state",
+			"modes": ["advanced"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#EvCounter"
+				},
+				{
+					"js": "ctx.font = 'bold 170px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText($[1].toString(10), 640, 520);"
+				}
+			],
+			"defaultParameters": [0, 0],
+			"otherParameters": 2,
+			"pushbuttons": [
+				{
+					"id": "ComparatorDown",
+					"newParameters": "`[Math.max($[0]-1,-2),$[1]]`"
+				},
+				{
+					"id": "ComparatorUp",
+					"newParameters": "`[Math.min($[0]+1,2),$[1]]`"
+				},
+				{
+					"id": "ValueDown",
+					"newParameters": "`[$[0],($[1]+255)%256]`"
+				},
+				{
+					"id": "ValueUp",
+					"newParameters": "`[$[0],($[1]+1)%256]`"
+				}
+			],
+			"styles": [
+				{
+					"id": "AboveValue",
+					"st": "visibility:`$[0]===-2?'visible':'hidden'`"
+				},
+				{
+					"id": "AboveValue-2",
+					"st": "visibility:`$[0]===-1?'visible':'hidden'`"
+				},
+				{
+					"id": "Equals",
+					"st": "visibility:`$[0]===0?'visible':'hidden'`"
+				},
+				{
+					"id": "StrictBelowValue",
+					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "BelowValue",
+					"st": "visibility:`$[0]===2?'visible':'hidden'`"
+				},
+				{
+					"id": "Btn2_State0-2",
+					"st": "fill:`$[1]&1?'#a6f7d8':'transparent'`"
+				},
+				{
+					"id": "Btn2_State7-2",
+					"st": "fill:`$[1]&2?'#a6f7d8':'transparent'`"
+				},
+				{
+					"id": "Btn2_State6-2",
+					"st": "fill:`$[1]&4?'#a6f7d8':'transparent'`"
+				},
+				{
+					"id": "Btn2_State5-2",
+					"st": "fill:`$[1]&8?'#a6f7d8':'transparent'`"
+				},
+				{
+					"id": "Btn2_State4-2",
+					"st": "fill:`$[1]&16?'#a6f7d8':'transparent'`"
+				},
+				{
+					"id": "Btn2_State3-2",
+					"st": "fill:`$[1]&32?'#a6f7d8':'transparent'`"
+				},
+				{
+					"id": "Btn2_State2-2",
+					"st": "fill:`$[1]&64?'#a6f7d8':'transparent'`"
+				},
+				{
+					"id": "Btn2_State1-2",
+					"st": "fill:`$[1]&128?'#a6f7d8':'transparent'`"
+				}
+			]
+		},
 		{
 			"name": "state 256",
 			"type": "state",
@@ -1057,109 +1160,6 @@
 				{
 					"id": "Gradient_Bottom_basic",
 					"st": "fill:`['transparent','red','#3f0','yellow','blue','magenta','cyan','white'][$[0]]`"
-				}
-			]
-		},
-		{
-			"name": "timer",
-			"type": "event",
-			"modes": ["advanced"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_TimersUp"
-				}
-			]
-		},
-		{
-			"name": "counter comparison",
-			"type": "state",
-			"modes": ["advanced"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#EvCounter"
-				},
-				{
-					"js": "ctx.font = 'bold 170px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText($[1].toString(10), 640, 520);"
-				}
-			],
-			"defaultParameters": [0, 0],
-			"otherParameters": 2,
-			"pushbuttons": [
-				{
-					"id": "ComparatorDown",
-					"newParameters": "`[Math.max($[0]-1,-2),$[1]]`"
-				},
-				{
-					"id": "ComparatorUp",
-					"newParameters": "`[Math.min($[0]+1,2),$[1]]`"
-				},
-				{
-					"id": "ValueDown",
-					"newParameters": "`[$[0],($[1]+255)%256]`"
-				},
-				{
-					"id": "ValueUp",
-					"newParameters": "`[$[0],($[1]+1)%256]`"
-				}
-			],
-			"styles": [
-				{
-					"id": "AboveValue",
-					"st": "visibility:`$[0]===-2?'visible':'hidden'`"
-				},
-				{
-					"id": "AboveValue-2",
-					"st": "visibility:`$[0]===-1?'visible':'hidden'`"
-				},
-				{
-					"id": "Equals",
-					"st": "visibility:`$[0]===0?'visible':'hidden'`"
-				},
-				{
-					"id": "StrictBelowValue",
-					"st": "visibility:`$[0]===1?'visible':'hidden'`"
-				},
-				{
-					"id": "BelowValue",
-					"st": "visibility:`$[0]===2?'visible':'hidden'`"
-				},
-				{
-					"id": "Btn2_State0-2",
-					"st": "fill:`$[1]&1?'#a6f7d8':'transparent'`"
-				},
-				{
-					"id": "Btn2_State7-2",
-					"st": "fill:`$[1]&2?'#a6f7d8':'transparent'`"
-				},
-				{
-					"id": "Btn2_State6-2",
-					"st": "fill:`$[1]&4?'#a6f7d8':'transparent'`"
-				},
-				{
-					"id": "Btn2_State5-2",
-					"st": "fill:`$[1]&8?'#a6f7d8':'transparent'`"
-				},
-				{
-					"id": "Btn2_State4-2",
-					"st": "fill:`$[1]&16?'#a6f7d8':'transparent'`"
-				},
-				{
-					"id": "Btn2_State3-2",
-					"st": "fill:`$[1]&32?'#a6f7d8':'transparent'`"
-				},
-				{
-					"id": "Btn2_State2-2",
-					"st": "fill:`$[1]&64?'#a6f7d8':'transparent'`"
-				},
-				{
-					"id": "Btn2_State1-2",
-					"st": "fill:`$[1]&128?'#a6f7d8':'transparent'`"
 				}
 			]
 		},
