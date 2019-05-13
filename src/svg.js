@@ -17,7 +17,7 @@ var SVG = function (src) {
 	this.src = src;
 	this.domParser = new DOMParser();
 	this.dom = this.domParser.parseFromString(src, "text/xml");
-	this.root = this.dom["rootElement"];
+	this.root = this.dom.documentElement;
 	this.viewBox = (this.root.getAttribute("viewBox") || "0 0 1 1")
 		.split(" ")
 		.map(function (s) { return parseFloat(s); });
