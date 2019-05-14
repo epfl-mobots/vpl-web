@@ -88,17 +88,9 @@ A3a.vpl.patchJSBlocks = function () {
 						"this.set(\"motor.right\", 0);\n"
 				};
 			},
-			"button": function (block) {
+			"button 1": function (block) {
 				var cond = "";
-				for (var i = 0; i < 5; i++) {
-					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " && ") +
-							"this.get(\"button." + ["center", "forward", "backward", "right", "left"][i] + "\")";
-					}
-				}
-				if (cond === "") {
-					cond = "this.get(\"button.center\") || this.get(\"button.forward\") || this.get(\"button.backward\") || this.get(\"button.right\") || this.get(\"button.left\")";
-				}
+				cond += "this.get(\"button." + ["center", "forward", "backward", "right", "left"][block.param[0]] + "\")";
 				return {
 					sectionBegin: "this.addEventListener(\"buttons\", function (name, param) {\n",
 					sectionEnd: "});\n",

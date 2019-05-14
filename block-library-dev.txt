@@ -122,6 +122,7 @@ In json, block contain the following properties:
 	- "clause" (string, optional, event block): clause expression (condition) used in "when" Aseba statement for the whole block.
 	- "clauseAnd" (string, optional, event block): clause subsexpression. "clause" and "clauseAnd" cannot be used in the same block. "clauseAnd" expressions are produced for each parameter; the whole clause is obtained by joining "clauseAnd" expressions with the "and" operator.
 	- "statement" (string, required, action block): code fragment for action.
+    - "statement1" (string, optional, action or event block): code subfragment for action. "statement" and "statement1" cannot be used in the same block. "statement1" statements are produced for each parameter; the whole statement is obtained by concatenating "statement1" statements.
 
 - "l2" (object, optional): code fragments to generate L2 language source code. Same properties as "aseba".
 
@@ -166,7 +167,7 @@ Backtick-expressions
 Code fragments, styles, and some other properties can contain backtick-expressions, i.e. JavaScript expressions enclosed between backticks in normal double-quoted JSON strings. The expression is evaluated and its result replaces the whole backtick-expression in the string. A string can contain multiple backtick-expressions. The following variables are defined:
 
 - $: array of block parameters
-- i: index of the parameter (used in clauseAnd code fragments and in slider's snap property)
+- i: index of the parameter (used in "clauseAnd" and "statement1" code fragments and in slider's snap property)
 - rgb: function which converts an array of RGB values between 0 and 1 to an RGB value suited for representing an RGB led (saturated colors are mapped to themselves, but [0,0,0] (led switched off) is mapped to gray).
 
 Miscellaneous settings

@@ -128,22 +128,29 @@ A3a.vpl.patchL2Blocks = function () {
 						"motor.right.target = 0;\n"
 				};
 			},
-			"button": function (block) {
-				var cond = "";
-				for (var i = 0; i < 5; i++) {
-					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " && ") +
-							"button." + ["center", "forward", "backward", "right", "left"][i];
-					}
-				}
-				if (cond === "") {
-					cond = "button.center || button.forward || button.backward || button.right || button.left";
-				}
+			"button 1": function (block) {
+				var v = ["buttonCenter", "buttonForward", "buttonBackward", "buttonRight", "buttonLeft"][block.param[0]];
+				var cond = v;
+				var stmt = v + " = false;\n";
 				return {
-					sectionBegin: "onevent buttons {\n",
-					sectionEnd: "}\n",
-					sectionPriority: 10,
-					clause: cond
+					initVarDecl: [
+						"bool buttonCenter = false;\n" +
+						"bool buttonForward = false;\n" +
+						"bool buttonBackward = false;\n" +
+						"bool buttonRight = false;\n" +
+						"bool buttonLeft = false;\n"
+					],
+					initCodeDecl: [
+						"onevent buttons {\n" +
+						"when (button.center) {\nbuttonCenter = true;\n}\n" +
+						"when (button.forward) {\nbuttonForward = true;\n}\n" +
+						"when (button.backward) {\nbuttonBackward = true;\n}\n" +
+						"when (button.right) {\nbuttonRight = true;\n}\n" +
+						"when (button.left) {\nbuttonLeft = true;\n}\n" +
+						"}\n"
+					],
+					clause: cond,
+					statement: stmt
 				};
 			},
 			"horiz prox": function (block) {

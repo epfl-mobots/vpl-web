@@ -69,7 +69,7 @@
 			"type": "hidden"
 		},
 		{
-			"name": "button",
+			"name": "button 1",
 			"type": "event",
 			"modes": ["basic", "advanced"],
 			"draw": [
@@ -109,12 +109,6 @@
 					"id": "Btn2_Left",
 					"val": 4,
 					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
-				}
-			],
-			"validation": [
-				{
-					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
-					"warning": "No button specified"
 				}
 			]
 		},
@@ -606,7 +600,7 @@
 					"id": "Led_4_adv",
 					"st": "visibility:`$[4]>0?'visible':'hidden'`"
 				}
-			
+
 			],
 			"defaultParameters": [0, 0, 0, 0, 0, 0.5],
 			"sliders": [
@@ -2159,11 +2153,16 @@ sim-playground {
 			}
 		},
 		{
-			"name": "button",
+			"name": "button 1",
 			"aseba": {
-				"sectionBegin": "onevent buttons\n",
-				"sectionPriority": 10,
-				"clause": "button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]` != 0"
+				"initVarDecl": [
+					"var buttonCenter = 0\nvar buttonForward = 0\nvar buttonBackward = 0\nvar buttonRight = 0\nvar buttonLeft = 0\n"
+				],
+				"initCodeDecl": [
+					"onevent buttons\nwhen button.center == 1 do\nbuttonCenter = 1\nend\nwhen button.forward == 1 do\nbuttonForward = 1\nend\nwhen button.backward == 1 do\nbuttonBackward = 1\nend\nwhen button.right == 1 do\nbuttonRight = 1\nend\nwhen button.left == 1 do\nbuttonLeft = 1\nend\n"
+				],
+				"clause": "button`['Center', 'Forward', 'Backward', 'Right', 'Left'][$[0]]` != 0",
+				"statement": "button`['Center', 'Forward', 'Backward', 'Right', 'Left'][$[0]]` = 0\n"
 			}
 		},
 		{
@@ -2324,9 +2323,14 @@ sim-playground {
 		{
 			"name": "horiz prox front",
 			"aseba": {
-				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 1,
-				"clauseAnd": "`$[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
+				"initVarDecl": [
+					"var proxClose[] = [0, 0, 0, 0, 0, 0, 0]\nvar proxFar[] = [0, 0, 0, 0, 0, 0, 0]\nvar groundDark[] = [0, 0]\nvar groundLight[] = [0, 0]\n"
+				],
+				"initCodeDecl": [
+					"onevent prox\nwhen prox.horizontal[0] > 2000 do\nproxClose[0] = 1\nend\nwhen prox.horizontal[1] > 2000 do\nproxClose[1] = 1\nend\nwhen prox.horizontal[2] > 2000 do\nproxClose[2] = 1\nend\nwhen prox.horizontal[3] > 2000 do\nproxClose[3] = 1\nend\nwhen prox.horizontal[4] > 2000 do\nproxClose[4] = 1\nend\nwhen prox.horizontal[5] > 2000 do\nproxClose[5] = 1\nend\nwhen prox.horizontal[6] > 2000 do\nproxClose[6] = 1\nend\nwhen prox.horizontal[0] < 1000 do\nproxFar[0] = 1\nend\nwhen prox.horizontal[1] < 1000 do\nproxFar[1] = 1\nend\nwhen prox.horizontal[2] < 1000 do\nproxFar[2] = 1\nend\nwhen prox.horizontal[3] < 1000 do\nproxFar[3] = 1\nend\nwhen prox.horizontal[4] < 1000 do\nproxFar[4] = 1\nend\nwhen prox.horizontal[5] < 1000 do\nproxFar[5] = 1\nend\nwhen prox.horizontal[6] < 1000 do\nproxFar[6] = 1\nend\nwhen prox.ground.delta[0] > 450 do\ngroundLight[0] = 1\nend\nwhen prox.ground.delta[1] > 450 do\ngroundLight[1] = 1\nend\nwhen prox.ground.delta[0] < 400 do\ngroundDark[0] = 1\nend\nwhen prox.ground.delta[1] < 400 do\ngroundDark[1] = 1\nend\n"
+				],
+				"clauseAnd": "`$[i] ? 'prox' + ($[i] > 0 ? 'Close' : 'Far') + '[' + i + '] == 1' : ''`",
+				"statement1": "`$[i] ? 'prox' + ($[i] > 0 ? 'Close' : 'Far') + '[' + i + '] = 0\\n' : ''`"
 			}
 		},
 		{
@@ -2617,7 +2621,7 @@ sim-playground {
 			}
 		},
 		{
-			"name": "button",
+			"name": "button 1",
 			"l2": {
 				"sectionBegin": "onevent buttons {\n",
 				"sectionEnd": "}\n",
@@ -3065,7 +3069,7 @@ sim-playground {
 {
 	"blocks": [
 		{
-			"name": "button",
+			"name": "button 1",
 			"js": {
 				"sectionBegin": "this.addEventListener(\"buttons\", function (name, param) {\n",
 				"sectionEnd": "});\n",
@@ -3168,7 +3172,7 @@ sim-playground {
 {
 	"blocks": [
 		{
-			"name": "button"
+			"name": "button 1"
 		},
 		{
 			"name": "roll"

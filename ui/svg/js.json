@@ -1,7 +1,7 @@
 {
 	"blocks": [
 		{
-			"name": "button",
+			"name": "button 1",
 			"js": {
 				"sectionBegin": "this.addEventListener(\"buttons\", function (name, param) {\n",
 				"sectionEnd": "});\n",

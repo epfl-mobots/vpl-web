@@ -88,17 +88,8 @@ A3a.vpl.patchPythonBlocks = function () {
 						"self.set(\"motor.right\", 0)\n"
 				};
 			},
-			"button": function (block) {
-				var cond = "";
-				for (var i = 0; i < 5; i++) {
-					if (block.param[i]) {
-						cond += (cond.length === 0 ? "" : " and ") +
-							"self.get(\"button." + ["center", "forward", "backward", "right", "left"][i] + "\")";
-					}
-				}
-				if (cond === "") {
-					cond = "self.get(\"button.center\") || self.get(\"button.forward\") || self.get(\"button.backward\") || self.get(\"button.right\") || self.get(\"button.left\")";
-				}
+			"button 1": function (block) {
+				var cond = "self.get(\"button." + ["center", "forward", "backward", "right", "left"][block.param[0]] + "\")";
 				return {
 					sectionBegin: "def event_buttons(self):\n",
 					sectionEnd: "<\n",

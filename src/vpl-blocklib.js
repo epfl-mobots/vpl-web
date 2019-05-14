@@ -19,6 +19,35 @@ A3a.vpl.BlockTemplate.initOutputs =
 	"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n";
 
 /** @const */
+A3a.vpl.BlockTemplate.varProx =
+	"var proxClose[] = [0, 0, 0, 0, 0, 0, 0]\n" +
+	"var proxFar[] = [0, 0, 0, 0, 0, 0, 0]\n" +
+	"var groundDark[] = [0, 0]\n" +
+	"var groundLight[] = [0, 0]\n";
+
+/** @const */
+A3a.vpl.BlockTemplate.initProx =
+	"onevent prox\n" +
+	"when prox.horizontal[0] > 2000 do\nproxClose[0] = 1\nend\n" +
+	"when prox.horizontal[1] > 2000 do\nproxClose[1] = 1\nend\n" +
+	"when prox.horizontal[2] > 2000 do\nproxClose[2] = 1\nend\n" +
+	"when prox.horizontal[3] > 2000 do\nproxClose[3] = 1\nend\n" +
+	"when prox.horizontal[4] > 2000 do\nproxClose[4] = 1\nend\n" +
+	"when prox.horizontal[5] > 2000 do\nproxClose[5] = 1\nend\n" +
+	"when prox.horizontal[6] > 2000 do\nproxClose[6] = 1\nend\n" +
+	"when prox.horizontal[0] < 1000 do\nproxFar[0] = 1\nend\n" +
+	"when prox.horizontal[1] < 1000 do\nproxFar[1] = 1\nend\n" +
+	"when prox.horizontal[2] < 1000 do\nproxFar[2] = 1\nend\n" +
+	"when prox.horizontal[3] < 1000 do\nproxFar[3] = 1\nend\n" +
+	"when prox.horizontal[4] < 1000 do\nproxFar[4] = 1\nend\n" +
+	"when prox.horizontal[5] < 1000 do\nproxFar[5] = 1\nend\n" +
+	"when prox.horizontal[6] < 1000 do\nproxFar[6] = 1\nend\n" +
+	"when prox.ground.delta[0] > 450 do\ngroundLight[0] = 1\nend\n" +
+	"when prox.ground.delta[1] > 450 do\ngroundLight[1] = 1\nend\n" +
+	"when prox.ground.delta[0] < 400 do\ngroundDark[0] = 1\nend\n" +
+	"when prox.ground.delta[1] < 400 do\ngroundDark[1] = 1\nend\n";
+
+/** @const */
 A3a.vpl.BlockTemplate.initStatesDecl =
 	"var state[4]\n" +
 	"var state0[4]\n";
@@ -155,51 +184,49 @@ A3a.vpl.BlockTemplate.lib =	[
 			{sh: "t", x: -0.3, y: 0, r: -Math.PI / 2},
 		];
 		return {
-			name: "button",
+			name: "button 1",
 			type: A3a.vpl.blockType.event,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
-			defaultParam: function () { return [false, false, false, false, false]; },
+			defaultParam: function () { return [0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
-				canvas.buttons(buttons, block.param);
+				var i = block.param[0];
+				canvas.buttons(buttons, [i == 0, i == 1, i == 2, i == 3, i == 4]);
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
 					block.prepareChange();
-					block.param[i] = !block.param[i];
+					block.param[0] = i;
 				}
 				return i;
-			},
-			/** @type {A3a.vpl.BlockTemplate.validateFun} */
-			validate: function (block) {
-				for (var i = 0; i < 5; i++) {
-					if (block.param[i]) {
-						return null;
-					}
-				}
-				return new A3a.vpl.Error("No button specified", true);
 			},
 			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 			genCode: {
 				"aseba": function (block) {
-					var cond = "";
-					for (var i = 0; i < 5; i++) {
-						if (block.param[i]) {
-							cond += (cond.length === 0 ? "" : " and ") +
-								"button." + ["center", "forward", "backward", "right", "left"][i] +
-								" == 1";
-						}
-					}
-					if (cond === "") {
-						cond = "button.center == 1 or button.forward == 1 or button.backward == 1 or button.right == 1 or button.left == 1";
-					}
+					var v = ["buttonCenter", "buttonForward", "buttonBackward", "buttonRight", "buttonLeft"][block.param[0]];
+					var cond = v + " == 1";
+					var stmt = v + " = 0\n";
 					return {
-						sectionBegin: "onevent buttons\n",
-						sectionPriority: 10,
-						clause: cond
+						initVarDecl: [
+							"var buttonCenter = 0\n" +
+							"var buttonForward = 0\n" +
+							"var buttonBackward = 0\n" +
+							"var buttonRight = 0\n" +
+							"var buttonLeft = 0\n"
+						],
+						initCodeDecl: [
+							"onevent buttons\n" +
+							"when button.center == 1 do\nbuttonCenter = 1\nend\n" +
+							"when button.forward == 1 do\nbuttonForward = 1\nend\n" +
+							"when button.backward == 1 do\nbuttonBackward = 1\nend\n" +
+							"when button.right == 1 do\nbuttonRight = 1\nend\n" +
+							"when button.left == 1 do\nbuttonLeft = 1\nend\n"
+						],
+						clause: cond,
+						statement: stmt
 					};
 				}
 			}
@@ -264,23 +291,31 @@ A3a.vpl.BlockTemplate.lib =	[
 			genCode: {
 				"aseba": function (block) {
 					var cond = "";
+					var stmt = "";
 					for (var i = 0; i < 7; i++) {
 						if (block.param[i]) {
-							cond += (cond.length === 0 ? "" : " and ") +
-								"prox.horizontal[" + buttons[i].str + "] " +
-								(block.param[i] > 0 ? ">= 2" : "<= 1") + "000";
+							var v = "prox" + (block.param[i] > 0 ? "Close" : "Far") +
+								"[" + buttons[i].str + "]";
+							cond += (cond.length === 0 ? "" : " and ") + v + " == 1";
+							stmt += v + " = 0\n";
 						}
 					}
 					if (cond === "") {
 						for (var i = 0; i < 7; i++) {
-							cond += " or prox.horizontal[" + buttons[i].str + "] >= 2000";
+							cond += " or proxClose[" + buttons[i].str + "] == 1";
+							stmt += "proxClose[" + buttons[i].str + "] = 0\n";
 						}
 						cond = cond.slice(4);	// crop initial " or "
 					}
 					return {
-						sectionBegin: "onevent prox\n",
-						sectionPriority: 1,
-						clause: cond
+						initVarDecl: [
+							A3a.vpl.BlockTemplate.varProx
+						],
+						initCodeDecl: [
+							A3a.vpl.BlockTemplate.initProx
+						],
+						clause: cond,
+						statement: stmt
 					};
 				}
 			}
@@ -560,23 +595,31 @@ A3a.vpl.BlockTemplate.lib =	[
 			genCode: {
 				"aseba": function (block) {
 					var cond = "";
+					var stmt = "";
 					for (var i = 0; i < 2; i++) {
 						if (block.param[i]) {
-							cond += (cond.length === 0 ? "" : " and ") +
-								"prox.ground.delta[" + buttons[i].str + "] " +
-								(block.param[i] > 0 ? ">= 450" : "<= 400");
+							var v = "ground" + (block.param[i] > 0 ? "Light" : "Dark") +
+								"[" + buttons[i].str + "]";
+							cond += (cond.length === 0 ? "" : " and ") + v + " == 1";
+							stmt += v + " = 0\n";
 						}
 					}
 					if (cond === "") {
 						for (var i = 0; i < 2; i++) {
-							cond += " or prox.ground.delta[" + buttons[i].str + "] >= 450";
+							cond += " or groundLight[" + buttons[i].str + "] == 1";
+							stmt += "groundLight[" + buttons[i].str + "] = 0\n";
 						}
 						cond = cond.slice(4);	// crop initial " or "
 					}
 					return {
-						sectionBegin: "onevent prox\n",
-						sectionPriority: 1,
-						clause: cond
+						initVarDecl: [
+							A3a.vpl.BlockTemplate.varProx
+						],
+						initCodeDecl: [
+							A3a.vpl.BlockTemplate.initProx
+						],
+						clause: cond,
+						statement: stmt
 					};
 				}
 			}

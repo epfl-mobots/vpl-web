@@ -156,7 +156,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 	for (var i = 0; i < eventHandler.events.length; i++) {
 		if (!eventHandler.events[i].disabled) {
 			if (eventHandler.events[i].blockTemplate.type === A3a.vpl.blockType.event) {
-				hasEvent = true;
+				hasEvent = eventHandler.events[i].generateCode(this.language).sectionPriority > 0;
 				if (eventHandler.events[i].blockTemplate.validate) {
 					var err = eventHandler.events[i].blockTemplate.validate(eventHandler.events[i]);
 					if (err) {
@@ -226,6 +226,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 	/** @type {Array.<string>} */
 	var clauses = [];
 	var clauseInit = "";
+	var str = "";
 	eventHandler.events.forEach(function (event, i) {
 		var code = event.generateCode(this.language);
 		if (code.sectionPriority > priPri) {
@@ -250,6 +251,9 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 		if (code.initCodeDecl) {
 			initCodeDecl = initCodeDecl.concat(code.initCodeDecl);
 		}
+		if (code.statement) {
+			str += this.bracket(code.statement, event);
+		}
 	}, this);
 	if (clauseless.length > 1) {
 		var err = new A3a.vpl.Error("Incompatible events in the same rule");
@@ -261,7 +265,6 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 	var clause = clauses.length === 0 ? ""
 		: clauses.length === 1 ? clauses[0]
 		: clauses.map(function (c) { return "(" + c + ")"; }).join(" " + this.andOperator + " ");
-	var str = "";
 	for (var i = 0; i < eventHandler.actions.length; i++) {
 		var code = eventHandler.actions[i].generateCode(this.language);
 		str += code.statement ? this.bracket(code.statement, eventHandler.actions[i]) : "";

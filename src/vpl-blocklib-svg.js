@@ -786,7 +786,13 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 		 				c.clause = A3a.vpl.BlockTemplate.substInline(b[lang]["clause"], block);
 					}
 					c.clauseOptional = /** @type {boolean} */(b[lang]["clauseOptional"]) || false;
-					b[lang]["statement"] && (c.statement = A3a.vpl.BlockTemplate.substInline(b[lang]["statement"], block));
+					if (b[lang]["statement1"]) {
+						c.statement = block.param.map(function (p, i) {
+							return A3a.vpl.BlockTemplate.substInline(b[lang]["statement1"], block, i);
+						}).join("");
+					} else if (b[lang]["statement"]) {
+						c.statement = A3a.vpl.BlockTemplate.substInline(b[lang]["statement"], block);
+					}
 					b[lang]["error"] && (c.clause = A3a.vpl.BlockTemplate.substInline(b["error"]["error"], block));
 					return c;
 				};

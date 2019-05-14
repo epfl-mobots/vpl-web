@@ -375,7 +375,7 @@ function vplSetup(gui) {
 			app.robots.push({name: robotName, runGlue: runGlue});
 		}
 	});
-	app.currentRobotIndex = app.robots.length >= 0 ? 0 : -1;
+	app.currentRobotIndex = app.robots.length > 0 ? 0 : -1;
 
 	if (!A3a.vpl.Program.codeGenerator[language]) {
 		throw "Unsupported language " + language;

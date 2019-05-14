@@ -55,7 +55,7 @@
 			"type": "hidden"
 		},
 		{
-			"name": "button",
+			"name": "button 1",
 			"type": "event",
 			"modes": ["basic", "advanced"],
 			"draw": [
@@ -95,12 +95,6 @@
 					"id": "Btn2_Left",
 					"val": 4,
 					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
-				}
-			],
-			"validation": [
-				{
-					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
-					"warning": "No button specified"
 				}
 			]
 		},
@@ -592,7 +586,7 @@
 					"id": "Led_4_adv",
 					"st": "visibility:`$[4]>0?'visible':'hidden'`"
 				}
-			
+
 			],
 			"defaultParameters": [0, 0, 0, 0, 0, 0.5],
 			"sliders": [
