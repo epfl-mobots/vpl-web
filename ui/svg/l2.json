@@ -102,7 +102,7 @@
 				"sectionEnd": "}\n",
 				"sectionPriority": 1,
 				"clauseInit":
-					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+					"fixed yawAngle = atan2(acc[1], -acc[0]);\n",
 				"clause": "yawAngle >= `(Math.PI / 12 * (-$[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * (-$[0] + 0.5)).toFixed(2)`"
 			}
 		},
@@ -113,7 +113,7 @@
 				"sectionEnd": "}\n",
 				"sectionPriority": 1,
 				"clauseInit":
-					"fixed pitchAngle = atan2(acc[1], acc[2]);\n",
+					"fixed pitchAngle = atan2(-acc[1], acc[2]);\n",
 				"clause": "pitchAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
 			}
 		},

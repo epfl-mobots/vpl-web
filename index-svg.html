@@ -2175,7 +2175,7 @@ sim-playground {
 				"sectionBegin": "onevent acc\n",
 				"sectionPriority": 1,
 				"clauseInit":
-					"call math.atan2(yawAngle, acc[0], acc[1])\n",
+					"call math.atan2(yawAngle, acc[1], -acc[0])\n",
 				"clause": "yawAngle >= `Math.round(-2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(-2730.67 * $[0] + 1365.33)`"
 			}
 		},
@@ -2188,7 +2188,7 @@ sim-playground {
 				"sectionBegin": "onevent acc\n",
 				"sectionPriority": 1,
 				"clauseInit":
-					"call math.atan2(pitchAngle, acc[1], acc[2])\n",
+					"call math.atan2(pitchAngle, -acc[1], acc[2])\n",
 				"clause": "pitchAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and pitchAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
@@ -2629,7 +2629,7 @@ sim-playground {
 				"sectionEnd": "}\n",
 				"sectionPriority": 1,
 				"clauseInit":
-					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+					"fixed yawAngle = atan2(acc[1], -acc[0]);\n",
 				"clause": "yawAngle >= `(Math.PI / 12 * (-$[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * (-$[0] + 0.5)).toFixed(2)`"
 			}
 		},
@@ -2640,7 +2640,7 @@ sim-playground {
 				"sectionEnd": "}\n",
 				"sectionPriority": 1,
 				"clauseInit":
-					"fixed pitchAngle = atan2(acc[1], acc[2]);\n",
+					"fixed pitchAngle = atan2(-acc[1], acc[2]);\n",
 				"clause": "pitchAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
 			}
 		},
