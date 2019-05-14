@@ -83,31 +83,31 @@
 					"uri": "Blocks.svg#Ev_Buttons"
 				}
 			],
-			"defaultParameters": [false, false, false, false, false],
-			"buttons": [
+			"defaultParameters": [0],
+			"radiobuttons": [
 				{
 					"id": "Btn2_Center",
-					"val": [false, true],
+					"val": 0,
 					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Forward",
-					"val": [false, true],
+					"val": 1,
 					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Backward",
-					"val": [false, true],
+					"val": 2,
 					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Right",
-					"val": [false, true],
+					"val": 3,
 					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Left",
-					"val": [false, true],
+					"val": 4,
 					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
 				}
 			],
@@ -2090,7 +2090,7 @@ sim-playground {
 			"aseba": {
 				"sectionBegin": "onevent buttons\n",
 				"sectionPriority": 10,
-				"clauseAnd": "`$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''`"
+				"clause": "button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]` != 0"
 			}
 		},
 		{
@@ -2549,7 +2549,7 @@ sim-playground {
 				"sectionBegin": "onevent buttons {\n",
 				"sectionEnd": "}\n",
 				"sectionPriority": 10,
-				"clauseAnd": "`$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''`"
+				"clause": "button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]` != 0"
 			}
 		},
 		{

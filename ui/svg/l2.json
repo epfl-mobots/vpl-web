@@ -22,7 +22,7 @@
 				"sectionBegin": "onevent buttons {\n",
 				"sectionEnd": "}\n",
 				"sectionPriority": 10,
-				"clauseAnd": "`$[i] ? 'button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + ' != 0' : ''`"
+				"clause": "button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]` != 0"
 			}
 		},
 		{
