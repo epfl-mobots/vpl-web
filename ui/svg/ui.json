@@ -403,7 +403,7 @@
 					"uri": "Blocks.svg#Ev_ProxH_Front_med"
 				},
 				{
-					"js": "ctx.lineWidth = 20; ctx.strokeStyle = '#6200ea'; ctx.lineCap = 'round'; var rg = ctx.createRadialGradient(0, 0, 300, 0, 0, 750); rg.addColorStop(0, 'red'); rg.addColorStop(1, 'rgba(255,0,0,0)'); ctx.fillStyle = rg; var r = 620; var w = 70; var sl = 0.2; $.forEach(function (b, i) { if (b) { var phi = 0.33 * (i - 2); ctx.save(); ctx.translate(500, 750); ctx.rotate(phi); var rgr = b > 0 ? 320 : 450; ctx.beginPath(); ctx.moveTo(-sl * 200, -300-200); ctx.lineTo(-sl * rgr, -300 - rgr); ctx.lineTo(sl * rgr, -300 - rgr); ctx.lineTo(sl * 200, -300-200); ctx.fill(); ctx.beginPath(); ctx.moveTo(-w, -r); ctx.lineTo(w, -r); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.stroke(); ctx.restore(); } });"
+					"js": "ctx.lineWidth = 20; ctx.strokeStyle = '#6200ea'; ctx.lineCap = 'round'; var rg = ctx.createRadialGradient(0, 0, 300, 0, 0, 750); rg.addColorStop(0, 'red'); rg.addColorStop(1, 'rgba(255,0,0,0)'); ctx.fillStyle = rg; var r = 620; var w = 70; var sl = 0.2; $.forEach(function (b, i) { if (b) { var phi = 0.33 * (i - 2); ctx.save(); ctx.translate(500, 750); ctx.rotate(phi); var rgr = b > 0 ? 320 : 450; ctx.beginPath(); ctx.moveTo(-sl * 200, -300-200); ctx.lineTo(-sl * rgr, -300 - rgr); ctx.lineTo(sl * rgr, -300 - rgr); ctx.lineTo(sl * 200, -300-200); ctx.fill(); ctx.beginPath(); ctx.moveTo(-w, -r); ctx.lineTo(w, -r); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.strokeStyle = b < 0 ? '#607d8b' : '#6200ea'; ctx.stroke(); ctx.restore(); } });"
 				}
 			],
 			"styles": [
@@ -418,6 +418,30 @@
 				{
 					"id": "IR_gradients_empty",
 					"st": "visibility:hidden"
+				},
+				{
+					"id": "Led_0",
+					"st": "visibility:`$[0]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_1",
+					"st": "visibility:`$[1]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_2",
+					"st": "visibility:`$[2]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_2_",
+					"st": "visibility:`$[2]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_3",
+					"st": "visibility:`$[3]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_4",
+					"st": "visibility:`$[4]>0?'visible':'hidden'`"
 				}
 			],
 			"defaultParameters": [0, 0, 0, 0, 0],
@@ -467,7 +491,7 @@
 					"uri": "Blocks.svg#Ev_ProxH_Back_med"
 				},
 				{
-					"js": "ctx.lineWidth = 20; ctx.strokeStyle = '#6200ea'; ctx.lineCap = 'round'; var rg = ctx.createRadialGradient(0, 0, 300, 0, 0, 750); rg.addColorStop(0, 'red'); rg.addColorStop(1, 'rgba(255,0,0,0)'); ctx.fillStyle = rg; var r = 620; var w = 70; var sl = 0.2; $.forEach(function (b, i) { if (b) { ctx.save(); ctx.translate(335 + 330 * i, 250); ctx.rotate(Math.PI); var rgr = b > 0 ? 320 : 450; ctx.beginPath(); ctx.moveTo(-sl * 200, -300-200); ctx.lineTo(-sl * rgr, -300 - rgr); ctx.lineTo(sl * rgr, -300 - rgr); ctx.lineTo(sl * 200, -300-200); ctx.fill(); ctx.beginPath(); ctx.moveTo(-w, -r); ctx.lineTo(w, -r); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.stroke(); ctx.restore(); } });"
+					"js": "ctx.lineWidth = 20; ctx.strokeStyle = '#6200ea'; ctx.lineCap = 'round'; var rg = ctx.createRadialGradient(0, 0, 300, 0, 0, 750); rg.addColorStop(0, 'red'); rg.addColorStop(1, 'rgba(255,0,0,0)'); ctx.fillStyle = rg; var r = 620; var w = 70; var sl = 0.2; $.forEach(function (b, i) { if (b) { ctx.save(); ctx.translate(335 + 330 * i, 250); ctx.rotate(Math.PI); var rgr = b > 0 ? 320 : 450; ctx.beginPath(); ctx.moveTo(-sl * 200, -300-200); ctx.lineTo(-sl * rgr, -300 - rgr); ctx.lineTo(sl * rgr, -300 - rgr); ctx.lineTo(sl * 200, -300-200); ctx.fill(); ctx.beginPath(); ctx.moveTo(-w, -r); ctx.lineTo(w, -r); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.strokeStyle = b < 0 ? '#607d8b' : '#6200ea'; ctx.stroke(); ctx.restore(); } });"
 				}
 			],
 			"styles": [
@@ -488,7 +512,15 @@
 					"st": "visibility:`$[0]>0?'visible':'hidden'`"
 				},
 				{
+					"id": "Led_5_",
+					"st": "visibility:`$[0]>0?'visible':'hidden'`"
+				},
+				{
 					"id": "Led_6",
+					"st": "visibility:`$[1]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_6_",
 					"st": "visibility:`$[1]>0?'visible':'hidden'`"
 				}
 			],
@@ -524,7 +556,7 @@
 					"uri": "Blocks.svg#Ev_ProxH_Front_adv"
 				},
 				{
-					"js": "ctx.lineWidth = 20; ctx.strokeStyle = '#6200ea'; ctx.lineCap = 'round'; var rg = ctx.createRadialGradient(0, 0, 300, 0, 0, 1000); rg.addColorStop(0, 'red'); rg.addColorStop(1, 'rgba(255,0,0,0)'); ctx.fillStyle = rg; var r = 950 - 300 * $[5]; var sl = 0.2; var w = sl * (r - 300); $.slice(0, -1).forEach(function (b, i) { if (b) { var phi = 0.298 * (i + 0.65); ctx.save(); ctx.translate(0, 1000); ctx.rotate(phi); var rgr = b > 0 ? r - 300 : 950; ctx.beginPath(); ctx.moveTo(-sl * 300, -300-300); ctx.lineTo(-sl * rgr, -300 - rgr); ctx.lineTo(sl * rgr, -300 - rgr); ctx.lineTo(sl * 300, -300-300); ctx.fill(); ctx.beginPath(); ctx.moveTo(-w, -r); ctx.lineTo(w, -r); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.stroke(); ctx.restore(); } });"
+					"js": "ctx.lineWidth = 20; ctx.strokeStyle = '#6200ea'; ctx.lineCap = 'round'; var rg = ctx.createRadialGradient(0, 0, 300, 0, 0, 1000); rg.addColorStop(0, 'red'); rg.addColorStop(1, 'rgba(255,0,0,0)'); ctx.fillStyle = rg; var r = 950 - 300 * $[5]; var sl = 0.2; var w = sl * (r - 300); $.slice(0, -1).forEach(function (b, i) { if (b) { var phi = 0.298 * (i + 0.65); ctx.save(); ctx.translate(0, 1000); ctx.rotate(phi); var rgr = b > 0 ? r - 300 : 950; ctx.beginPath(); ctx.moveTo(-sl * 300, -300-300); ctx.lineTo(-sl * rgr, -300 - rgr); ctx.lineTo(sl * rgr, -300 - rgr); ctx.lineTo(sl * 300, -300-300); ctx.fill(); ctx.beginPath(); ctx.moveTo(-w, -r); ctx.lineTo(w, -r); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.strokeStyle = b < 0 ? '#607d8b' : '#6200ea'; ctx.stroke(); ctx.restore(); } });"
 				}
 			],
 			"styles": [
@@ -535,7 +567,32 @@
 				{
 					"id": "IR_gradients_adv_empty",
 					"st": "visibility:hidden"
+				},
+				{
+					"id": "Led_0_adv",
+					"st": "visibility:`$[0]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_1_adv",
+					"st": "visibility:`$[1]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_2_adv",
+					"st": "visibility:`$[2]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_2_adv_",
+					"st": "visibility:`$[2]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_3_adv",
+					"st": "visibility:`$[3]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_4_adv",
+					"st": "visibility:`$[4]>0?'visible':'hidden'`"
 				}
+			
 			],
 			"defaultParameters": [0, 0, 0, 0, 0, 0.5],
 			"sliders": [
@@ -607,6 +664,22 @@
 				{
 					"id": "IR_gradients_back_adv_empty",
 					"st": "visibility:hidden"
+				},
+				{
+					"id": "Led_5_adv",
+					"st": "visibility:`$[0]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_5_adv_",
+					"st": "visibility:`$[0]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_6_adv",
+					"st": "visibility:`$[1]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_6_adv_",
+					"st": "visibility:`$[1]>0?'visible':'hidden'`"
 				}
 			],
 			"defaultParameters": [0, 0, 0],
@@ -1752,7 +1825,7 @@
 					"js": "ctx.font = 'bold 170px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(['=','+','\u2212','\u00d7','\u00f7'][$[0]], 340, 520); ctx.fillText($[1].toString(10), 650, 520);"
 				}
 			],
-			"defaultParameters": [0, 0, false],
+			"defaultParameters": [0, 0, true],
 			"otherParameters": 3,
 			"pushbuttons": [
 				{
