@@ -156,7 +156,11 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 	for (var i = 0; i < eventHandler.events.length; i++) {
 		if (!eventHandler.events[i].disabled) {
 			if (eventHandler.events[i].blockTemplate.type === A3a.vpl.blockType.event) {
-				hasEvent = eventHandler.events[i].generateCode(this.language).sectionPriority > 0;
+				if (eventHandler.events[i].generateCode(this.language).sectionPriority > 0) {
+					hasEvent = true;
+				} else {
+					hasState = true;
+				}
 				if (eventHandler.events[i].blockTemplate.validate) {
 					var err = eventHandler.events[i].blockTemplate.validate(eventHandler.events[i]);
 					if (err) {
