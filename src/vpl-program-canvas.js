@@ -77,7 +77,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 				}
 				if (block.disabled || opts.disabled) {
 					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize,
-						["block"]);
+						["block"], ["block"]);
 				}
 				canvas.dims = dims0;
 			} else {
@@ -90,7 +90,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 				}
 				if (block.disabled) {
 					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize,
-						["block"]);
+						["block"], ["block"]);
 				}
 			}
 			ctx.restore();
@@ -314,7 +314,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	);
 	if (eventHandler.disabled) {
 		item.drawOverlay = function (ctx, item, dx, dy) {
-			canvas.disabledMark(item.x + dx, item.y + dy, item.width, item.height, ["rule"]);
+			canvas.disabledMark(item.x + dx, item.y + dy, item.width, item.height, ["rule"], ["rule"]);
 		};
 	}
 	if (this.noVPL) {
@@ -904,7 +904,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			canvas.addDecoration(function (ctx) {
 				canvas.disabledMark(vplBox.x, vplBox.y,
 					vplBox.width, vplBox.height,
-					["vpl"]);
+					["vpl"], ["vpl"]);
 			});
 		}
 	}

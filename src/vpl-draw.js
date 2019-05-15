@@ -22,24 +22,46 @@ A3a.vpl.Canvas.prototype.clearBlockBackground = function () {
 	this.ctx.restore();
 };
 
+/** Draw overlay rectangle for an item specified by bounding box
+	@param {number} top
+	@param {number} left
+	@param {number} width
+	@param {number} height
+	@param {Array.<string>=} overlayRectClasses css classes for overlay rectangle
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.overlayRect = function (left, top, width, height, overlayRectClasses) {
+	var overlayRect = this.css.getBox({
+		tag: "overlay-rectangle",
+		clas: overlayRectClasses || []
+	});
+	overlayRect.x = left;
+	overlayRect.y = top;
+	overlayRect.width = width;
+	overlayRect.height = height;
+	overlayRect.draw(this.ctx);
+};
+
 /** Draw disabled mark for an item specified by bounding box (block or event handler)
 	@param {number} top
 	@param {number} left
 	@param {number} width
 	@param {number} height
-	@param {Array.<string>=} clas css classes for crossout-line
+	@param {Array.<string>=} overlayRectClasses css classes for overlay rectangle
+	@param {Array.<string>=} crossoutLineClasses css classes for crossout-line
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height, clas) {
-	this.ctx.save();
-	this.ctx.fillStyle = "#fff";
-	this.ctx.globalAlpha = 0.5;
-	this.ctx.fillRect(left, top, width, height);
-	this.ctx.restore();
+A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height,
+	overlayRectClasses, crossoutLineClasses) {
+	this.overlayRect(left, top, width, height, (overlayRectClasses || []).concat("disabled"));
+	var overlayRect = this.css.getBox({
+		tag: "overlay-rectangle",
+		clas: overlayRectClasses || []
+	});
 	this.ctx.save();
 	var crossoutLine = this.css.getLine({
 		tag: "crossout-line",
-		clas: clas || []
+		clas: crossoutLineClasses || []
 	});
 	this.ctx.beginPath();
 	this.ctx.moveTo(left - this.dims.blockSize * 0.1, top + height * 0.7);
