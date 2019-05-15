@@ -12,17 +12,42 @@
 		{
 			"name": "!stop",
 			"aseba": {
-				"statement": "motor.left.target = 0\nmotor.right.target = 0\n"
+				"statement": [
+					"motor.left.target = 0\n",
+					"motor.right.target = 0\n"
+				]
 			}
 		},
 		{
 			"name": "button 1",
 			"aseba": {
 				"initVarDecl": [
-					"var buttonCenter = 0\nvar buttonForward = 0\nvar buttonBackward = 0\nvar buttonRight = 0\nvar buttonLeft = 0\n"
+					[
+						"var buttonCenter = 0\n",
+						"var buttonForward = 0\n",
+						"var buttonBackward = 0\n",
+						"var buttonRight = 0\n",
+						"var buttonLeft = 0\n"
+					]
 				],
 				"initCodeDecl": [
-					"onevent buttons\nwhen button.center == 1 do\nbuttonCenter = 1\nend\nwhen button.forward == 1 do\nbuttonForward = 1\nend\nwhen button.backward == 1 do\nbuttonBackward = 1\nend\nwhen button.right == 1 do\nbuttonRight = 1\nend\nwhen button.left == 1 do\nbuttonLeft = 1\nend\n"
+					[
+						"onevent buttons\n",
+						"when button.center == 1 do\n",
+						"buttonCenter = 1\n",
+						"end\n",
+						"when button.forward == 1 do\n",
+						"buttonForward = 1\n",
+						"end\n",
+						"when button.backward == 1 do\n",
+						"buttonBackward = 1\n",
+						"end\n",
+						"when button.right == 1 do\n",
+						"buttonRight = 1\n",
+						"end\n",
+						"when button.left == 1 do\n",
+						"buttonLeft = 1\nend\n"
+					]
 				],
 				"clause": "button`['Center', 'Forward', 'Backward', 'Right', 'Left'][$[0]]` != 0",
 				"statement": "button`['Center', 'Forward', 'Backward', 'Right', 'Left'][$[0]]` = 0\n"
@@ -71,7 +96,10 @@
 			"name": "roll",
 			"aseba": {
 				"initVarDecl": [
-					"# roll angle from accelerometer\nvar rollAngle\n"
+					[
+						"# roll angle from accelerometer\n",
+						"var rollAngle\n"
+					]
 				],
 				"sectionBegin": "onevent acc\n",
 				"sectionPriority": 1,
@@ -84,7 +112,10 @@
 			"name": "acc side",
 			"aseba": {
 				"initVarDecl": [
-					"# roll angle from accelerometer\nvar rollAngle\n"
+					[
+						"# roll angle from accelerometer\n",
+						"var rollAngle\n"
+					]
 				],
 				"sectionBegin": "onevent acc\n",
 				"sectionPriority": 1,
@@ -118,7 +149,10 @@
 			"name": "pitch",
 			"aseba": {
 				"initVarDecl": [
-					"# pitch angle from accelerometer\nvar pitchAngle\n"
+					[
+						"# pitch angle from accelerometer\n",
+						"var pitchAngle\n"
+					]
 				],
 				"sectionBegin": "onevent acc\n",
 				"sectionPriority": 1,
@@ -131,7 +165,10 @@
 			"name": "clap",
 			"aseba": {
 				"initCodeExec": [
-					"# setup threshold for detecting claps\nmic.threshold = 250\n"
+					[
+						"# setup threshold for detecting claps\n",
+						"mic.threshold = 250\n"
+					]
 				],
 				"sectionBegin": "onevent mic\n",
 				"sectionPriority": 1,
@@ -159,7 +196,10 @@
 			"name": "color 8 state",
 			"aseba": {
 				"initVarDecl": [
-					"# RGB color of the top led\nvar topColor[3]\n",
+					[
+						"# RGB color of the top led\n",
+						"var topColor[3]\n"
+					],
 					"var topColor0[3]\n"
 				],
 				"initCodeExec": [
@@ -173,7 +213,10 @@
 			"name": "bottom color 8 state",
 			"aseba": {
 				"initVarDecl": [
-					"# RGB color of the bottom led\nvar bottomColor[3]\n",
+					[
+						"# RGB color of the bottom led\n",
+						"var bottomColor[3]\n"
+					],
 					"var bottomColor0[3]\n"
 				],
 				"initCodeExec": [
@@ -187,10 +230,71 @@
 			"name": "horiz prox front",
 			"aseba": {
 				"initVarDecl": [
-					"var proxClose[] = [0, 0, 0, 0, 0, 0, 0]\nvar proxFar[] = [0, 0, 0, 0, 0, 0, 0]\nvar groundDark[] = [0, 0]\nvar groundLight[] = [0, 0]\n"
+					[
+						"var proxClose[] = [0, 0, 0, 0, 0, 0, 0]\n",
+						"var proxFar[] = [0, 0, 0, 0, 0, 0, 0]\n",
+						"var groundDark[] = [0, 0]\n",
+						"var groundLight[] = [0, 0]\n"
+					]
 				],
 				"initCodeDecl": [
-					"onevent prox\nwhen prox.horizontal[0] > 2000 do\nproxClose[0] = 1\nend\nwhen prox.horizontal[1] > 2000 do\nproxClose[1] = 1\nend\nwhen prox.horizontal[2] > 2000 do\nproxClose[2] = 1\nend\nwhen prox.horizontal[3] > 2000 do\nproxClose[3] = 1\nend\nwhen prox.horizontal[4] > 2000 do\nproxClose[4] = 1\nend\nwhen prox.horizontal[5] > 2000 do\nproxClose[5] = 1\nend\nwhen prox.horizontal[6] > 2000 do\nproxClose[6] = 1\nend\nwhen prox.horizontal[0] < 1000 do\nproxFar[0] = 1\nend\nwhen prox.horizontal[1] < 1000 do\nproxFar[1] = 1\nend\nwhen prox.horizontal[2] < 1000 do\nproxFar[2] = 1\nend\nwhen prox.horizontal[3] < 1000 do\nproxFar[3] = 1\nend\nwhen prox.horizontal[4] < 1000 do\nproxFar[4] = 1\nend\nwhen prox.horizontal[5] < 1000 do\nproxFar[5] = 1\nend\nwhen prox.horizontal[6] < 1000 do\nproxFar[6] = 1\nend\nwhen prox.ground.delta[0] > 450 do\ngroundLight[0] = 1\nend\nwhen prox.ground.delta[1] > 450 do\ngroundLight[1] = 1\nend\nwhen prox.ground.delta[0] < 400 do\ngroundDark[0] = 1\nend\nwhen prox.ground.delta[1] < 400 do\ngroundDark[1] = 1\nend\n"
+					[
+						"onevent prox\n",
+						"when prox.horizontal[0] > 2000 do\n",
+						"proxClose[0] = 1\n",
+						"end\n",
+						"when prox.horizontal[1] > 2000 do\n",
+						"proxClose[1] = 1\n",
+						"end\n",
+						"when prox.horizontal[2] > 2000 do\n",
+						"proxClose[2] = 1\n",
+						"end\n",
+						"when prox.horizontal[3] > 2000 do\n",
+						"proxClose[3] = 1\n",
+						"end\n",
+						"when prox.horizontal[4] > 2000 do\n",
+						"proxClose[4] = 1\n",
+						"end\n",
+						"when prox.horizontal[5] > 2000 do\n",
+						"proxClose[5] = 1\n",
+						"end\n",
+						"when prox.horizontal[6] > 2000 do\n",
+						"proxClose[6] = 1\n",
+						"end\n",
+						"when prox.horizontal[0] < 1000 do\n",
+						"proxFar[0] = 1\n",
+						"end\n",
+						"when prox.horizontal[1] < 1000 do\n",
+						"proxFar[1] = 1\n",
+						"end\n",
+						"when prox.horizontal[2] < 1000 do\n",
+						"proxFar[2] = 1\n",
+						"end\n",
+						"when prox.horizontal[3] < 1000 do\n",
+						"proxFar[3] = 1\n",
+						"end\n",
+						"when prox.horizontal[4] < 1000 do\n",
+						"proxFar[4] = 1\n",
+						"end\n",
+						"when prox.horizontal[5] < 1000 do\n",
+						"proxFar[5] = 1\n",
+						"end\n",
+						"when prox.horizontal[6] < 1000 do\n",
+						"proxFar[6] = 1\n",
+						"end\n",
+						"when prox.ground.delta[0] > 450 do\n",
+						"groundLight[0] = 1\n",
+						"end\n",
+						"when prox.ground.delta[1] > 450 do\n",
+						"groundLight[1] = 1\n",
+						"end\n",
+						"when prox.ground.delta[0] < 400 do\n",
+						"groundDark[0] = 1\n",
+						"end\n",
+						"when prox.ground.delta[1] < 400 do\n",
+						"groundDark[1] = 1\n",
+						"end\n"
+					]
 				],
 				"clauseAnd": "`$[i] ? 'prox' + ($[i] > 0 ? 'Close' : 'Far') + '[' + i + '] == 1' : ''`",
 				"statement1": "`$[i] ? 'prox' + ($[i] > 0 ? 'Close' : 'Far') + '[' + i + '] = 0\\n' : ''`"
@@ -264,9 +368,15 @@
 			"name": "timer",
 			"aseba": {
 				"initCodeExec": [
-					"# stop timer 0\ntimer.period[0] = 0\n"
+					[
+						"# stop timer 0\n",
+						"timer.period[0] = 0\n"
+					]
 				],
-				"sectionBegin": "onevent timer0\ntimer.period[0] = 0\n",
+				"sectionBegin": [
+					"onevent timer0\n",
+					"timer.period[0] = 0\n"
+				],
 				"sectionPriority": 1000
 			}
 		},
@@ -290,48 +400,94 @@
 			"name": "motor",
 			"aseba": {
 				"initCodeExec": [
-					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					[
+						"# reset outputs\n",
+						"call sound.system(-1)\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
 				],
 				"statement":
-					"motor.left.target = `Math.round(500 * $[0])`\nmotor.right.target = `Math.round(500 * $[1])`\n"
+					[
+						"motor.left.target = `Math.round(500 * $[0])`\n",
+						"motor.right.target = `Math.round(500 * $[1])`\n"
+					]
 			}
 		},
 		{
 			"name": "move",
 			"aseba": {
 				"initCodeExec": [
-					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					[
+						"# reset outputs\n",
+						"call sound.system(-1)\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
 				],
 				"statement":
-					"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`\nmotor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`\n"
+					[
+						"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`\n",
+						"motor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`\n"
+					]
 			}
 		},
 		{
 			"name": "top color 8",
 			"aseba": {
 				"initVarDecl": [
-					"# RGB color of the top led\nvar topColor[3]\n"
+					[
+						"# RGB color of the top led\n",
+						"var topColor[3]\n"
+					]
 				],
 				"initCodeExec": [
 					"topColor = [0, 0, 0]\n",
-					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					[
+						"# reset outputs\n",
+						"call sound.system(-1)\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
 				],
 				"statement":
-					"call leds.top(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`)\ntopColor = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n"
+					[
+						"call leds.top(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`)\n",
+						"topColor = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n"
+					]
 			}
 		},
 		{
 			"name": "bottom color 8",
 			"aseba": {
 				"initVarDecl": [
-					"# RGB color of the bottom led\nvar bottomColor[3]\n"
+					[
+						"# RGB color of the bottom led\n",
+						"var bottomColor[3]\n"
+					]
 				],
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0]\n",
-					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					[
+						"# reset outputs\n",
+						"call sound.system(-1)\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
 				],
-				"statement":
-					"call leds.bottom.left(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`)\ncall leds.bottom.right(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`)\nbottomColor = [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`]\n"
+				"statement": [
+					"call leds.bottom.left(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`)\n",
+					"call leds.bottom.right(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`)\n",
+					"bottomColor = [`['0,0,0','0,32,0','0,32,32','0,0,32','32,0,32','32,0,0','32,32,0','32,32,32'][$[0]]`]\n"
+				]
 			}
 		},
 		{
@@ -342,10 +498,19 @@
 				],
 				"initCodeExec": [
 					"topColor = [0, 0, 0]\n",
-					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					[
+						"# reset outputs\n",
+						"call sound.system(-1)\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
 				],
-				"statement":
-					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\ntopColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
+				"statement": [
+					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n",
+					"topColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
+				],
 				"statementWithoutInit":
 					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
 			}
@@ -354,14 +519,29 @@
 			"name": "bottom color",
 			"aseba": {
 				"initVarDecl": [
-					"# RGB color of the bottom led\nvar bottomColor[3]\n"
+					[
+						[
+							"# RGB color of the bottom led\n",
+							"var bottomColor[3]\n"
+						]
+					]
 				],
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0]\n",
-					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					[
+						"# reset outputs\n",
+						"call sound.system(-1)\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
 				],
-				"statement":
-					"call leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\ncall leds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\nbottomColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
+				"statement": [
+					"call leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n",
+					"call leds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n",
+					"bottomColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
+				],
 				"statementWithoutInit":
 					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
 			}
@@ -376,10 +556,15 @@
 					"state256 = 0\n"
 				],
 				"initCodeDecl": [
-					"sub display_state256\ncall leds.circle((state256&1)*32,(state256&128)/4,(state256&64)/2,state256&32,(state256&16)*2,(state256&8)*4,(state256&4)*8,(state256&2)*16)\n"
+					[
+						"sub display_state256\n",
+						"call leds.circle((state256&1)*32,(state256&128)/4,(state256&64)/2,state256&32,(state256&16)*2,(state256&8)*4,(state256&4)*8,(state256&2)*16)\n"
+					]
 				],
-				"statement":
-					"state256 = `$.reduce(function (a, b, i) { return b ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`\ncallsub display_state256\n"
+				"statement": [
+					"state256 = `$.reduce(function (a, b, i) { return b ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`\n",
+					"callsub display_state256\n"
+				]
 			}
 		},
 		{
@@ -392,7 +577,10 @@
 					"state256 = 0\n"
 				],
 				"initCodeDecl": [
-					"sub display_state256\ncall leds.circle((state256&1)*32,(state256&128)/4,(state256&64)/2,state256&32,(state256&16)*2,(state256&8)*4,(state256&4)*8,(state256&2)*16)\n"
+					[
+						"sub display_state256\n",
+						"call leds.circle((state256&1)*32,(state256&128)/4,(state256&64)/2,state256&32,(state256&16)*2,(state256&8)*4,(state256&4)*8,(state256&2)*16)\n"
+					]
 				],
 				"statement":
 					"state256 = state256 & `$.reduce(function (a, b, i) { return b === 0 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)` | `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`\ncallsub display_state256\n"
@@ -402,43 +590,127 @@
 			"name": "notes",
 			"aseba": {
 				"initVarDecl": [
-					"# variables for notes\nvar notes[6]\nvar durations[6]\nvar note_index\nvar note_count\nvar wave[142]\nvar i\nvar wave_phase\nvar wave_intensity\n"
+					[
+						"# variables for notes\n",
+						"var notes[6]\n",
+						"var durations[6]\n",
+						"var note_index\n",
+						"var note_count\n",
+						"var wave[142]\n",
+						"var i\n",
+						"var wave_phase\n",
+						"var wave_intensity\n"
+					]
 				],
 				"initCodeExec": [
-					"# init. variables for notes\nnote_index = 6\nnote_count = 6\n",
-					"# compute a sinus wave for sound\nfor i in 0 : 141 do\nwave_phase = (i - 70) * 468\ncall math.cos(wave_intensity, wave_phase)\nwave[i] = wave_intensity / 256\nend\ncall sound.wave(wave)\n",
-					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					[
+						"# init. variables for notes\n",
+						"note_index = 6\n",
+						"note_count = 6\n"
+					],
+					[
+						"# compute a sinus wave for sound\n",
+						"for i in 0 : 141 do\n",
+						"wave_phase = (i - 70) * 468\n",
+						"call math.cos(wave_intensity, wave_phase)\n",
+						"wave[i] = wave_intensity / 256\n",
+						"end\ncall sound.wave(wave)\n"
+					],
+					[
+						"# reset outputs\n",
+						"call sound.system(-1)\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
 				],
 				"initCodeDecl": [
-					"# when a note is finished, play the next one\nonevent sound.finished\nif note_index != note_count then\ncall sound.freq(notes[note_index], durations[note_index])\nnote_index++\nend\n"
+					[
+						"# when a note is finished, play the next one\n",
+						"onevent sound.finished\n",
+						"if note_index != note_count then\n",
+						"call sound.freq(notes[note_index], durations[note_index])\n",
+						"note_index++\n",
+						"end\n"
+					]
 				],
-				"statement":
-					"notes = [`$.filter(function (a, i) { return i % 2 == 0; }).map(function (h, i) { return $[2 * i + 1] ? [262, 311, 370, 440, 524, 370][h] : 0; }).join(', ')`]\ndurations = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return d ? 7 * d : 28; }).join(', ')`]\nnote_index = 1\nnote_count = 6\ncall sound.freq(notes[0], durations[0])\n"
+				"statement": [
+					"notes = [`$.filter(function (a, i) { return i % 2 == 0; }).map(function (h, i) { return $[2 * i + 1] ? [262, 311, 370, 440, 524, 370][h] : 0; }).join(', ')`]\n",
+					"durations = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return d ? 7 * d : 28; }).join(', ')`]\n",
+					"note_index = 1\n",
+					"note_count = 6\n",
+					"call sound.freq(notes[0], durations[0])\n"
+				]
 			}
 		},
 		{
 			"name": "notes with speed",
 			"aseba": {
 				"initVarDecl": [
-					"# variables for notes\nvar notes[6]\nvar durations[6]\nvar note_index\nvar note_count\nvar wave[142]\nvar i\nvar wave_phase\nvar wave_intensity\n"
+					[
+						"# variables for notes\n",
+						"var notes[6]\n",
+						"var durations[6]\n",
+						"var note_index\n",
+						"var note_count\n",
+						"var wave[142]\n",
+						"var i\n",
+						"var wave_phase\n",
+						"var wave_intensity\n"
+					]
 				],
 				"initCodeExec": [
-					"# init. variables for notes\nnote_index = 6\nnote_count = 6\n",
-					"# compute a sinus wave for sound\nfor i in 0 : 141 do\nwave_phase = (i - 70) * 468\ncall math.cos(wave_intensity, wave_phase)\nwave[i] = wave_intensity / 256\nend\ncall sound.wave(wave)\n",
-					"# reset outputs\ncall sound.system(-1)\ncall leds.top(0, 0, 0)\ncall leds.bottom.left(0, 0, 0)\ncall leds.bottom.right(0, 0, 0)\ncall leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					[
+						"# init. variables for notes\n",
+						"note_index = 6\n",
+						"note_count = 6\n"
+					],
+					[
+						"# compute a sinus wave for sound\n",
+						"for i in 0 : 141 do\n",
+						"wave_phase = (i - 70) * 468\n",
+						"call math.cos(wave_intensity, wave_phase)\n",
+						"wave[i] = wave_intensity / 256\n",
+						"end\n",
+						"call sound.wave(wave)\n"
+					],
+					[
+						"# reset outputs\n",
+						"call sound.system(-1)\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
 				],
 				"initCodeDecl": [
-					"# when a note is finished, play the next one\nonevent sound.finished\nif note_index != note_count then\ncall sound.freq(notes[note_index], durations[note_index])\nnote_index++\nend\n"
+					[
+						"# when a note is finished, play the next one\n",
+						"onevent sound.finished\n",
+						"if note_index != note_count then\n",
+						"call sound.freq(notes[note_index], durations[note_index])\n",
+						"note_index++\n",
+						"end\n"
+					]
 				],
-				"statement":
-					"notes = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h, i) { return $[2 * i + 2] ? [262, 311, 370, 440, 524, 370][h] : 0; }).join(', ')`]\ndurations = [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * (d ? d : 4); }).join(', ')`]\nnote_index = 1\nnote_count = 6\ncall sound.freq(notes[0], durations[0])\n"
+				"statement": [
+					"notes = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h, i) { return $[2 * i + 2] ? [262, 311, 370, 440, 524, 370][h] : 0; }).join(', ')`]\n",
+					"durations = [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * (d ? d : 4); }).join(', ')`]\n",
+					"note_index = 1\n",
+					"note_count = 6\n",
+					"call sound.freq(notes[0], durations[0])\n"
+				]
 			}
 		},
 		{
 			"name": "set timer",
 			"aseba": {
 				"initCodeExec": [
-					"# stop timer 0\ntimer.period[0] = 0\n"
+					[
+						"# stop timer 0\n",
+						"timer.period[0] = 0\n"
+					]
 				],
 				"statement":
 					"timer.period[0] = `Math.round(1000 * $[0])`\n"
@@ -454,10 +726,15 @@
 					"state256 = 0\n"
 				],
 				"initCodeDecl": [
-					"sub display_state256\ncall leds.circle((state256&1)*32,(state256&128)/4,(state256&64)/2,state256&32,(state256&16)*2,(state256&8)*4,(state256&4)*8,(state256&2)*16)\n"
+					[
+						"sub display_state256\n",
+						"call leds.circle((state256&1)*32,(state256&128)/4,(state256&64)/2,state256&32,(state256&16)*2,(state256&8)*4,(state256&4)*8,(state256&2)*16)\n"
+					]
 				],
-				"statement":
-					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if state256 ' + ($[0] == 2 ? '< ' + $[1] + ' then\\nstate256 = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ' then\\nstate256 = 255\\n') + 'else\\nstate256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\nend' : 'state256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1]`\ncallsub display_state256\n"
+				"statement": [
+					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if state256 ' + ($[0] == 2 ? '< ' + $[1] + ' then\\nstate256 = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ' then\\nstate256 = 255\\n') + 'else\\nstate256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\nend' : 'state256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1]`\n",
+					"callsub display_state256\n"
+				]
 			}
 		}
 	]

@@ -111,7 +111,7 @@ In json, block contain the following properties:
     - "id" (string, required): id of the svg element style is applied to
     - "st" (string, required): style string; usually contains backtick-expressions
 
-- "aseba" (object, optional): code fragments to generate Aseba language source code. Code fragments contain Aseba source code. Except for "clause" and "clauseAnd" which contain expression fragments, they can contain muliple lines, comments, empty lines, terminated by linefeeds ("\n"). Backticks mark JavaScript expressions which are evaluated to substitute block parameters; see below. The object contains the following properties:
+- "aseba" (object, optional): code fragments to generate Aseba language source code. Code fragments contain Aseba source code. Except for "clause" and "clauseAnd" which contain expression fragments, they can contain muliple lines, comments, empty lines, terminated by linefeeds ("\n"). Backticks mark JavaScript expressions which are evaluated to substitute block parameters; see below. The object contains the following properties (strings can be replaced with array of strings which are concatenated, to make the json file easier to read):
 	- "initVarDecl" (array of strings, optional): code fragments for (global) variable declarations. Identical fragments (after backtick-expressions evaluation) are output only once.
 	- "initCodeDecl" (array of strings, optional): code fragments for subroutine declarations. Identical fragments (after backtick-expressions evaluation) are output only once.
 	- "initCodeExec" (array of strings, optional): code fragments for initialization. Identical fragments (after backtick-expressions evaluation) are output only once.
