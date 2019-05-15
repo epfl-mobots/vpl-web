@@ -42,6 +42,8 @@ A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, d
 	this.drawOverlay = null;
 	this.clickable = true;
 	this.draggable = true;
+	/** @type {?A3a.vpl.CanvasItem.makeDraggedItem} */
+	this.makeDraggedItem = null;
 	this.interactiveCB = interactiveCB || null;
 	this.doDrop = doDrop || null;
 	this.canDrop = canDrop || null;
@@ -147,6 +149,11 @@ A3a.vpl.CanvasItem.prototype.toDataURL = function (dims, scale, mimetype) {
 	@typedef {function(A3a.vpl.Canvas,A3a.vpl.CanvasItem,number,number):void}
 */
 A3a.vpl.CanvasItem.draw;
+
+/**
+	@typedef {function(A3a.vpl.CanvasItem):A3a.vpl.CanvasItem}
+*/
+A3a.vpl.CanvasItem.makeDraggedItem;
 
 /**
 	@typedef {{x:number,y:number,modifier:boolean}}
@@ -340,9 +347,10 @@ A3a.vpl.Canvas = function (canvas, options) {
 			}
 			if (item.draggable) {
 				// drag item itself
+				var draggedItem = item.makeDraggedItem ? item.makeDraggedItem(item) : item;
 				/** @type {A3a.vpl.CanvasItem} */
 				var dropTargetItem = null;
-				var d = item.getTranslation();
+				var d = draggedItem.getTranslation();
 				var x0 = mouseEvent.x - d.dx;
 				var y0 = mouseEvent.y - d.dy;
 				A3a.vpl.dragFun = function (dragEvent, isUp) {
@@ -352,8 +360,8 @@ A3a.vpl.Canvas = function (canvas, options) {
 							self.zoomedItemIndex = indices[0];
 							self.zoomedItemProxy = item.zoomOnLongPress(item);
 						} else if (dropTargetItem && dropTargetItem.doDrop
-							&& (!dropTargetItem.canDrop || dropTargetItem.canDrop(dropTargetItem, item))) {
-							dropTargetItem.doDrop(dropTargetItem, item);
+							&& (!dropTargetItem.canDrop || dropTargetItem.canDrop(dropTargetItem, draggedItem))) {
+							dropTargetItem.doDrop(dropTargetItem, draggedItem);
 						}
 						self.redraw();
 						self.canvas.style.cursor = "default";
@@ -364,7 +372,7 @@ A3a.vpl.Canvas = function (canvas, options) {
 						for (var i = 0; !canDrop && i < targetIndices.length; i++) {
 							dropTargetItem = self.items[targetIndices[i]];
 							canDrop = dropTargetItem.doDrop
-								&& (!dropTargetItem.canDrop || dropTargetItem.canDrop(dropTargetItem, item));
+								&& (!dropTargetItem.canDrop || dropTargetItem.canDrop(dropTargetItem, draggedItem));
 						}
 						if (canDrop && dropTargetItem != null) {
 							dropTargetItem.dropTarget = true;
@@ -389,12 +397,12 @@ A3a.vpl.Canvas = function (canvas, options) {
 						}
 						ctx.translate(self.canvasWidth * self.relativeArea.xmin, self.canvasHeight * self.relativeArea.ymin);
 						ctx.globalAlpha = 0.5;
-						item.draw(self, mouseEvent.x - x0, mouseEvent.y - y0);
-						item.attachedItems.forEach(function (attachedItem) {
+						draggedItem.draw(self, mouseEvent.x - x0, mouseEvent.y - y0);
+						draggedItem.attachedItems.forEach(function (attachedItem) {
 							attachedItem.draw(self, mouseEvent.x - x0, mouseEvent.y - y0);
 							attachedItem.draw(self, mouseEvent.x - x0, mouseEvent.y - y0, true);
 						});
-						item.draw(self, mouseEvent.x - x0, mouseEvent.y - y0, true);
+						draggedItem.draw(self, mouseEvent.x - x0, mouseEvent.y - y0, true);
 						ctx.restore();
 						self.canvas.style.cursor = canDrop ? "copy" : "default";
 					}

@@ -252,6 +252,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.event,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0, 0, 0, 0, 0]; },
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			typicalParam: function () { return [0, 1, -1, 1, -1, 0, 0]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
@@ -343,6 +345,13 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () {
 				return [
 					0, 0, 0, 0, 0, 0, 0,	// sensor modes
+					0.4, 0.1	// levels (700+0.4*3300 approx 2000, 700+0.1*3300 approx 1000)
+				];
+			},
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			typicalParam: function () {
+				return [
+					0, 1, -1, 1, -1, 0, 0,	// sensor modes
 					0.4, 0.1	// levels (700+0.4*3300 approx 2000, 700+0.1*3300 approx 1000)
 				];
 			},
@@ -461,6 +470,13 @@ A3a.vpl.BlockTemplate.lib =	[
 					0.25	// levels (700+0.25*3300 approx 1500)
 				];
 			},
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			typicalParam: function () {
+				return [
+					0, 1, -1, 1, -1, 0, 0,	// sensor modes
+					0.25	// levels (700+0.25*3300 approx 1500)
+				];
+			},
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
@@ -558,6 +574,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.event,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0]; },
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			typicalParam: function () { return [1, -1]; },
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true});
@@ -642,6 +660,13 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () {
 				return [
 					0, 0,	// sensor modes
+					0.6, 0.4	// levels (0.6*1000=600, 0.4*1000=400)
+				];
+			},
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			typicalParam: function () {
+				return [
+					1, -1,	// sensor modes
 					0.6, 0.4	// levels (0.6*1000=600, 0.4*1000=400)
 				];
 			},
@@ -749,6 +774,13 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () {
 				return [
 					0, 0,	// sensor modes
+					0.5	// levels (0.5*1000=500)
+				];
+			},
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			typicalParam: function () {
+				return [
+					1, -1,	// sensor modes
 					0.5	// levels (0.5*1000=500)
 				];
 			},
@@ -985,6 +1017,12 @@ A3a.vpl.BlockTemplate.lib =	[
 				0 // integer from -12 to 11
 			];
 		},
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		typicalParam: function () {
+			return [
+				2 // integer from -12 to 11
+			];
+		},
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			/** @type {number} */
@@ -1037,6 +1075,12 @@ A3a.vpl.BlockTemplate.lib =	[
 				0 // integer from -12 to 11
 			];
 		},
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		typicalParam: function () {
+			return [
+				2 // integer from -12 to 11
+			];
+		},
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			/** @type {number} */
@@ -1087,6 +1131,12 @@ A3a.vpl.BlockTemplate.lib =	[
 		defaultParam: function () {
 			return [
 				0 // integer from -12 to 11
+			];
+		},
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		typicalParam: function () {
+			return [
+				2 // integer from -12 to 11
 			];
 		},
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
@@ -1200,6 +1250,8 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.state,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0, 0, 0, 0]; },
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		typicalParam: function () { return [1, 0, 0, -1]; },
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotTop();
@@ -1567,6 +1619,8 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.action,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0, 0]; },
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		typicalParam: function () { return [0.5, 0.2]; },
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			var rw = 0.19;
@@ -2244,6 +2298,8 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.action,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0, 0, 0, 0]; },
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		typicalParam: function () { return [0, 1, -1, 0]; },
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotTop();

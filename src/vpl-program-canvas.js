@@ -154,10 +154,13 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 */
 A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemplate, box, x, y) {
 	var block = new A3a.vpl.Block(blockTemplate, null, null);
+	if (blockTemplate.typicalParam) {
+		block.param = blockTemplate.typicalParam();
+	}
 	var disabled = (this.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
 		.indexOf(blockTemplate.name) < 0;
 	var self = this;
-	this.addBlockToCanvas(canvas, block, box, x, y,
+	var canvasItem = this.addBlockToCanvas(canvas, block, box, x, y,
 		{
 			notInteractive: true,
 			notDropTarget: true,
@@ -176,6 +179,14 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 				}
 				: null
 		});
+	if (blockTemplate.typicalParam) {
+		canvasItem.makeDraggedItem = function (item) {
+			// drag a copy with default parameters, not typical parameters
+			var draggedItem = item.clone();
+			draggedItem.data = new A3a.vpl.Block(blockTemplate, null, null);
+			return draggedItem;
+		};
+	}
 };
 
 /** Add an event handler to a canvas

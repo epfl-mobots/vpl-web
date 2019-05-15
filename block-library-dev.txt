@@ -56,6 +56,8 @@ In json, block contain the following properties:
 
 - "defaultParameters" (array of number, boolean or string values, optional): default values of the block parameters which define the state, in this order, of buttons (one value per button), radiobuttons (a single values for all radiobuttons), sliders (one value per slider), rotating controls (one value per control).
 
+- "typicalParameters" (same type and length as "defaultParameters", optional): values of the block parameters used to display the block in the block library.
+
 - "buttons" (array of objects, optional): multi-state button definitions. Each button is described by an object with the following properties:
 
 	- "id" (string, required): id of the svg element corresponding to the button. It should be contained in the element identified by "main".

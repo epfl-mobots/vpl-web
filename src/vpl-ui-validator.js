@@ -36,6 +36,7 @@ A3a.vpl.validateUI = function (ui) {
 		}
 
 		var defParam = b["defaultParameters"];
+		var typicalParam = b["typicalParameters"];
 		var buttons = b["buttons"];
 		var radiobuttons = b["radiobuttons"];
 		var sliders = b["sliders"];
@@ -263,6 +264,10 @@ A3a.vpl.validateUI = function (ui) {
 			nParams += otherParameters;
 			if (nParams !== defParam.length) {
 				msg += "In block \"" + name + "\", defaultParameters.length=" + defParam.length +
+						", needs " + nParams + " parameters\n";
+				errorCount++;
+			} else if (typicalParam && typicalParam.length != nParams) {
+				msg += "In block \"" + name + "\", typicalParameters.length=" + typicalParam.length +
 						", needs " + nParams + " parameters\n";
 				errorCount++;
 			}
