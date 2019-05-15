@@ -376,20 +376,9 @@ A3a.vpl.Canvas = function (canvas, options) {
 						var ctx = self.ctx;
 						if (canDrop && !dropTargetItem.noDropHint) {
 							// draw frame around target
-							ctx.save();
-							if (self.transform) {
-								ctx.translate(self.width / 2, self.height / 2);
-								CanvasRenderingContext2D.prototype.transform.apply(ctx, self.transform);
-								ctx.translate(-self.width / 2, -self.height / 2);
-							}
-							ctx.translate(self.canvasWidth * self.relativeArea.xmin, self.canvasHeight * self.relativeArea.ymin);
-							dropTargetItem.applyClipping(ctx);
-							ctx.lineWidth = 2 * self.dims.blockLineWidth;
-							ctx.strokeStyle = "#aaa";
-							var d = dropTargetItem.getTranslation();
-							ctx.strokeRect(dropTargetItem.x + d.dx, dropTargetItem.y + d.dy,
-								dropTargetItem.width, dropTargetItem.height);
-							ctx.restore();
+							self.overlayRect(dropTargetItem.x + d.dx, dropTargetItem.y + d.dy,
+								dropTargetItem.width, dropTargetItem.height,
+								["drop-target"]);
 						}
 						ctx.save();
 						self.clip();

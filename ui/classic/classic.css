@@ -104,6 +104,11 @@ overlay-rectangle.disabled {
 	background: rgba(255,255,255,0.5);
 }
 
+overlay-rectangle.drop-target {
+	border: 0.2vw rgba(0,0,0,0.5);
+	border-radius: 0.2vw;
+}
+
 crossout-line {
 	line-width: 0.75vw;
  	color: rgba(120,120,120,0.5);
