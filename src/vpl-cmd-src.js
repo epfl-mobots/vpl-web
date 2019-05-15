@@ -37,7 +37,7 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 			// var src = app.editor.getCode();
 			// var aesl = A3a.vpl.Program.toAESLFile(src);
 			// A3a.vpl.Program.downloadText(aesl, "code.aesl");
-			var json = app.program.exportToJSON();
+			var json = app.program.exportToJSON({lib: false});
 			A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
 		},
 		isEnabled: function (app) {

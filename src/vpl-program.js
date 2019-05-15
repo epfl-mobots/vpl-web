@@ -278,18 +278,21 @@ A3a.vpl.Program.prototype.enforceSingleTrailingEmptyEventHandler = function () {
 };
 
 /** Export program to a plain object which can be serialized
-	@param {boolean=} noProgram true to export only the block lib & ui settings
+	@param {{lib:boolean,prog:boolean}=} opt .lib=true to export the block lib & ui settings,
+	.prog=true to export the program (default: {lib:true,prog:true})
 	@return {Object}
 */
-A3a.vpl.Program.prototype.exportToObject = function (noProgram) {
-	if (noProgram) {
-		return {
-			"advanced": this.mode === A3a.vpl.mode.advanced,
-			"basicBlocks": this.enabledBlocksBasic,
-			"basicMultiEvent": this.multiEventBasic,
-			"advancedBlocks": this.enabledBlocksAdvanced,
-			"disabledUI": this.uiConfig.disabledUI
-		};
+A3a.vpl.Program.prototype.exportToObject = function (opt) {
+	var obj = {};
+	if (!opt || opt.lib !== false) {
+		obj["advanced"] = this.mode === A3a.vpl.mode.advanced;
+		obj["basicBlocks"] = this.enabledBlocksBasic;
+		obj["basicMultiEvent"] = this.multiEventBasic;
+		obj["advancedBlocks"] = this.enabledBlocksAdvanced;
+		obj["disabledUI"] = this.uiConfig.disabledUI;
+	}
+	if (opt && opt.prog === false) {
+		return obj;
 	}
 
 	var src = this.getEditedSourceCodeFun ? this.getEditedSourceCodeFun() : null;
@@ -328,24 +331,18 @@ A3a.vpl.Program.prototype.exportToObject = function (noProgram) {
 		});
 	}
 
-	return {
-		"advanced": this.mode === A3a.vpl.mode.advanced,
-		"basicBlocks": this.enabledBlocksBasic,
-		"basicMultiEvent": this.multiEventBasic,
-		"advancedBlocks": this.enabledBlocksAdvanced,
-		"disabledUI": this.uiConfig.disabledUI,
-		"program": p,
-		"code": src
-	};
+	obj["program"] = p;
+	obj["code"] = src;
+	return obj;
 };
 
 /** Export program to JSON
-	@param {boolean=} noProgram true to export only the block lib & ui settings
-	(default: false)
+	@param {{lib:boolean,prog:boolean}=} opt .lib=true to export the block lib & ui settings,
+	.prog=true to export the program (default: {lib:true,prog:true})
 	@return {string}
 */
-A3a.vpl.Program.prototype.exportToJSON = function (noProgram) {
-	return JSON.stringify(this.exportToObject(noProgram), null, "\t");
+A3a.vpl.Program.prototype.exportToJSON = function (opt) {
+	return JSON.stringify(this.exportToObject(opt), null, "\t");
 };
 
 /** Import program from an object, as created by exportToObject
