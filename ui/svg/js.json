@@ -5,7 +5,7 @@
 			"js": {
 				"sectionBegin": "this.addEventListener(\"buttons\", function (name, param) {\n",
 				"sectionEnd": "});\n",
-				"sectionPriority": 10,
+				"sectionPriority": 30,
 				"clauseAnd": "`$[i] ? 'this.get(\"button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + '\")' : ''`"
 			}
 		},
@@ -22,7 +22,7 @@
 			"name": "init",
 			"js": {
 				"sectionBegin": "// init block\n",
-				"sectionPriority": 10000
+				"sectionPriority": 300
 			}
 		},
 		{
@@ -30,7 +30,7 @@
 			"js": {
 				"sectionBegin": "this.addEventListener(\"mic\", function (name, param) {\n",
 				"sectionEnd": "});\n",
-				"sectionPriority": 1
+				"sectionPriority": 50
 			}
 		},
 		{

@@ -6,7 +6,8 @@
 				"initCodeExec": [
 					"timer.period[1] = 100\n"
 				],
-				"sectionBegin": "onevent timer1\n"
+				"sectionBegin": "onevent timer1\n",
+				"sectionPriority": 99
 			}
 		},
 		{
@@ -57,7 +58,7 @@
 			"name": "init",
 			"aseba": {
 				"sectionBegin": "# initialization\n",
-				"sectionPriority": 10000
+				"sectionPriority": 300
 			}
 		},
 		{
@@ -102,7 +103,7 @@
 					]
 				],
 				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 1,
+				"sectionPriority": 40,
 				"clauseInit":
 					"call math.atan2(rollAngle, -acc[0], acc[2])\n",
 				"clause": "rollAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and rollAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
@@ -118,7 +119,7 @@
 					]
 				],
 				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 1,
+				"sectionPriority": 40,
 				"clauseInit":
 					"call math.atan2(rollAngle, acc[0], acc[2])\n",
 				"clause": "abs(abs(rollAngle) - 16384) < 1365"
@@ -128,7 +129,7 @@
 			"name": "acc upside down",
 			"aseba": {
 				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 1,
+				"sectionPriority": 40,
 				"clause": "-acc[2] / 2 > abs(acc[0]) + abs(acc[1])"
 			}
 		},
@@ -139,7 +140,7 @@
 					"# yaw angle from accelerometer\nvar yawAngle\n"
 				],
 				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 1,
+				"sectionPriority": 40,
 				"clauseInit":
 					"call math.atan2(yawAngle, acc[1], -acc[0])\n",
 				"clause": "yawAngle >= `Math.round(-2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(-2730.67 * $[0] + 1365.33)`"
@@ -155,7 +156,7 @@
 					]
 				],
 				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 1,
+				"sectionPriority": 40,
 				"clauseInit":
 					"call math.atan2(pitchAngle, -acc[1], acc[2])\n",
 				"clause": "pitchAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and pitchAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
@@ -171,7 +172,7 @@
 					]
 				],
 				"sectionBegin": "onevent mic\n",
-				"sectionPriority": 1,
+				"sectionPriority": 30,
 				"clause": "mic.intensity > mic.threshold",
 				"clauseOptional": true
 			}
@@ -180,16 +181,15 @@
 			"name": "fall",
 			"aseba": {
 				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 1,
+				"sectionPriority": 40,
 				"clause": "abs(acc[0]) + abs(acc[1]) + abs(acc[2]) < 16"
 			}
 		},
 		{
 			"name": "tap",
 			"aseba": {
-				"sectionBegin":
-					"onevent tap\n",
-				"sectionPriority": 1000
+				"sectionBegin": "onevent tap\n",
+				"sectionPriority": 50
 			}
 		},
 		{
@@ -304,7 +304,7 @@
 			"name": "horiz prox back",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 1,
+				"sectionPriority": 20,
 				"clauseAnd": "`$[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
 			}
 		},
@@ -312,7 +312,7 @@
 			"name": "horiz prox front adv",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 1,
+				"sectionPriority": 20,
 				"clauseAnd": "`i < 5 && $[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[5]) + '00' : ''`"
 			}
 		},
@@ -320,7 +320,7 @@
 			"name": "horiz prox back adv",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 1,
+				"sectionPriority": 20,
 				"clauseAnd": "`i < 2 && $[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[2]) + '00' : ''`"
 			}
 		},
@@ -328,7 +328,7 @@
 			"name": "ground mean",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 1,
+				"sectionPriority": 10,
 				"clause": "prox.ground.delta[0] + prox.ground.delta[1] `$[0] ? '>= 900' : '<= 800'`"
 			}
 		},
@@ -336,7 +336,7 @@
 			"name": "ground",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 1,
+				"sectionPriority": 10,
 				"clauseAnd": "`$[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= 450' : '<= 400') : ''`"
 			}
 		},
@@ -344,7 +344,7 @@
 			"name": "ground 1",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 1,
+				"sectionPriority": 10,
 				"clauseAnd": "`i < 2 && $[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + 25 * Math.round(40 * $[2]) : ''`"
 			}
 		},
@@ -352,7 +352,7 @@
 			"name": "remote control arrows",
 			"aseba": {
 				"sectionBegin": "onevent rc5\n",
-				"sectionPriority": 10,
+				"sectionPriority": 100,
 				"clause": "`[[85, 17], [80, 32], [81, 33], [86, 16, 78], [87, 13]][$[0]].map(function (c) { return 'rc5.command == ' + c; }).join(' or ')`"
 			}
 		},
@@ -360,7 +360,7 @@
 			"name": "remote control keypad",
 			"aseba": {
 				"sectionBegin": "onevent rc5\n",
-				"sectionPriority": 10,
+				"sectionPriority": 100,
 				"clause": "rc5.command == `$[0]`"
 			}
 		},
@@ -377,7 +377,7 @@
 					"onevent timer0\n",
 					"timer.period[0] = 0\n"
 				],
-				"sectionPriority": 1000
+				"sectionPriority": 200
 			}
 		},
 		{

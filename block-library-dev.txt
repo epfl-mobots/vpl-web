@@ -117,7 +117,7 @@ In json, block contain the following properties:
 	- "initCodeExec" (array of strings, optional): code fragments for initialization. Identical fragments (after backtick-expressions evaluation) are output only once.
 	- "sectionBegin" (string, optional, event block): beginning of a section (typically an onevent block). Identical sections are collected and a single sectionBegin and sectionEnd are output.
 	- "sectionEnd" (string, optional, event block): end of a section (typically unused for Aseba code).
-	- "sectionPriority" (number, optional, event block): section priority
+	- "sectionPriority" (number, optional, event block): section priority (undefined for state, 10 when based on values changing slowly like those related to motion or ground, 20 when based on light intensity or proximity sensors, 30 when based on capacitive buttons, 40 when based on accelerometers for measuring levels, 50 when based on accelerometers for measuring shocks, 100 for events occurring once (enforced by firmware) such as network events or remote controller, 200 for timer, 300 for init handler)
 	- "clauseInit" (string, optional, event block): code fragments for clause initialization. Identical fragments in the same section (after backtick-expressions evaluation) are output only once after "sectionBegin". Used to initialize temporary values used in clauses.
 	- "clause" (string, optional, event block): clause expression (condition) used in "when" Aseba statement for the whole block.
 	- "clauseAnd" (string, optional, event block): clause subsexpression. "clause" and "clauseAnd" cannot be used in the same block. "clauseAnd" expressions are produced for each parameter; the whole clause is obtained by joining "clauseAnd" expressions with the "and" operator.

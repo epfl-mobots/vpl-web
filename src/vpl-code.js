@@ -214,11 +214,14 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 		}
 	}
 
+	var defaultEvent = A3a.vpl.BlockTemplate.findByName("!default event");
+	var defaultEventPri = defaultEvent.genCode[this.language]().sectionPriority;
+
 	// find the event with the highest sectionPriority, check compatibility
 	// and collect init code
 	var priIx = -1;
 	var priEv = null;
-	var priPri = -1;
+	var priPri = defaultEventPri;
 	/** @typedef {Array.<number>} */
 	var clauseless = [];
 	/** @typedef {Array.<string>} */
@@ -297,9 +300,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 	if ((priEv || !hasEvent) && str.length > 0) {
 		var eventCode = priEv
 			? priEv.generateCode(this.language)
-			: A3a.vpl.BlockTemplate
-				.findByName("!default event")
-				.genCode[this.language](null);
+			: defaultEvent.genCode[this.language](null);
 		if (eventCode.initVarDecl) {
 			eventCode.initVarDecl.forEach(function (frag) {
 				if (initVarDecl.indexOf(frag) < 0) {

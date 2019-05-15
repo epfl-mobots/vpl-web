@@ -429,7 +429,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					}
 					return {
 						sectionBegin: "onevent prox\n",
-						sectionPriority: 1,
+						sectionPriority: 20,
 						clause: cond
 					};
 				}
@@ -536,7 +536,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					}
 					return {
 						sectionBegin: "onevent prox\n",
-						sectionPriority: 1,
+						sectionPriority: 20,
 						clause: cond
 					};
 				}
@@ -725,7 +725,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					}
 					return {
 						sectionBegin: "onevent prox\n",
-						sectionPriority: 1,
+						sectionPriority: 10,
 						clause: cond
 					};
 				}
@@ -826,7 +826,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					}
 					return {
 						sectionBegin: "onevent prox\n",
-						sectionPriority: 1,
+						sectionPriority: 10,
 						clause: cond
 					};
 				}
@@ -858,7 +858,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			"aseba": function (block) {
 				return {
 					sectionBegin: "onevent tap\n",
-					sectionPriority: 1000
+					sectionPriority: 50
 				};
 			}
 		}
@@ -944,7 +944,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						// tap
 						return {
 							sectionBegin: "onevent tap\n",
-							sectionPriority: 1000
+							sectionPriority: 50
 						};
 					} else {
 						/** @type {number} */
@@ -965,7 +965,7 @@ A3a.vpl.BlockTemplate.lib =	[
 								"# " + name + " angle from accelerometer\nvar " + name + "Angle\n"
 							],
 							sectionBegin: "onevent acc\n",
-							sectionPriority: 1,
+							sectionPriority: 40,
 							clauseInit:
 								"call math.atan2(" + name + "Angle, acc[" + (dir === 2 ? "1" : "0") + "], acc[2])\n",
 							clause: cond
@@ -1014,7 +1014,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						"# roll angle from accelerometer\nvar rollAngle\n"
 					],
 					sectionBegin: "onevent acc\n",
-					sectionPriority: 1,
+					sectionPriority: 40,
 					clauseInit:
 						"call math.atan2(rollAngle, -acc[0], acc[2])\n",
 					clause:
@@ -1066,7 +1066,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						"# pitch angle from accelerometer\nvar pitchAngle\n"
 					],
 					sectionBegin: "onevent acc\n",
-					sectionPriority: 1,
+					sectionPriority: 40,
 					clauseInit:
 						"call math.atan2(pitchAngle, acc[1], acc[2])\n",
 					clause:
@@ -1118,7 +1118,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						"# yaw angle from accelerometer\nvar yawAngle\n"
 					],
 					sectionBegin: "onevent acc\n",
-					sectionPriority: 1,
+					sectionPriority: 40,
 					clauseInit:
 						"call math.atan2(yawAngle, acc[0], acc[1])\n",
 					clause:
@@ -1147,7 +1147,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						"mic.threshold = 250\n"
 					],
 					sectionBegin: "onevent mic\n",
-					sectionPriority: 1,
+					sectionPriority: 50,
 					clause: "mic.intensity > mic.threshold",
 					clauseOptional: true
 				};
@@ -1168,7 +1168,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			"aseba": function (block) {
 				return {
 					sectionBegin: "# initialization\n",
-					sectionPriority: 10000
+					sectionPriority: 300
 				};
 			}
 		}
@@ -1189,7 +1189,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						A3a.vpl.BlockTemplate.resetTimer
 					],
 					sectionBegin: "onevent timer0\ntimer.period[0] = 0\n",
-					sectionPriority: 1000
+					sectionPriority: 200
 				};
 			}
 		}

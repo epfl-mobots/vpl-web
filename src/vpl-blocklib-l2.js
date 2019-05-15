@@ -171,7 +171,7 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent prox {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 1,
+					sectionPriority: 20,
 					clause: cond
 				};
 			},
@@ -196,7 +196,7 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent prox {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 1,
+					sectionPriority: 20,
 					clause: cond
 				};
 			},
@@ -219,7 +219,7 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent prox {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 1,
+					sectionPriority: 20,
 					clause: cond
 				};
 			},
@@ -241,7 +241,7 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent prox {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 1,
+					sectionPriority: 10,
 					clause: cond
 				};
 			},
@@ -265,7 +265,7 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent prox {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 1,
+					sectionPriority: 10,
 					clause: cond
 				};
 			},
@@ -288,7 +288,7 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent prox {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 1,
+					sectionPriority: 10,
 					clause: cond
 				};
 			},
@@ -296,7 +296,7 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent tap {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 1000
+					sectionPriority: 50
 				};
 			},
 			"accelerometer": function (block) {
@@ -306,7 +306,7 @@ A3a.vpl.patchL2Blocks = function () {
 					return {
 						sectionBegin: "onevent tap {\n",
 						sectionEnd: "}\n",
-						sectionPriority: 1000
+						sectionPriority: 50
 					};
 				} else {
 					/** @type {number} */
@@ -325,7 +325,7 @@ A3a.vpl.patchL2Blocks = function () {
 					return {
 						sectionBegin: "onevent acc {\n",
 						sectionEnd: "}\n",
-						sectionPriority: 1,
+						sectionPriority: 40,
 						clauseInit:
 							dir === 2
 								? "fixed pitchAngle = atan2(acc[1], acc[2]);\n"
@@ -340,7 +340,7 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent acc {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 1,
+					sectionPriority: 40,
 					clauseInit:
 						"fixed rollAngle = atan2(acc[0], acc[2]);\n",
 					clause:
@@ -354,7 +354,7 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent acc {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 1,
+					sectionPriority: 40,
 					clauseInit:
 						"fixed pitchAngle = atan2(acc[1], acc[2]);\n",
 					clause:
@@ -368,7 +368,7 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent acc {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 1,
+					sectionPriority: 40,
 					clauseInit:
 						"fixed yawAngle = atan2(acc[0], acc[1]);\n",
 					clause:
@@ -384,7 +384,7 @@ A3a.vpl.patchL2Blocks = function () {
 					],
 					sectionBegin: "onevent mic {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 1,
+					sectionPriority: 50,
 					clause: "mic.intensity > mic.threshold",
 					clauseOptional: true
 				};
@@ -392,7 +392,7 @@ A3a.vpl.patchL2Blocks = function () {
 			"init": function (block) {
 				return {
 					sectionBegin: "// init block\n",
-					sectionPriority: 10000
+					sectionPriority: 300
 				};
 			},
 			"timer": function (block) {
@@ -402,7 +402,7 @@ A3a.vpl.patchL2Blocks = function () {
 					],
 					sectionBegin: "onevent timer0 {\ntimer.period[0] = 0;\n",
 					sectionEnd: "}\n",
-					sectionPriority: 1000
+					sectionPriority: 200
 				};
 			},
 			"state": function (block) {
