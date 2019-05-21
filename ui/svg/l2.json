@@ -1,16 +1,6 @@
 {
 	"blocks": [
 		{
-			"name": "!default event",
-			"l2": {
-				"initCodeExec": [
-					"timer.period[1] = 100;\n"
-				],
-				"sectionBegin": "onevent timer1 {\n",
-				"sectionEnd": "}\n"
-			}
-		},
-		{
 			"name": "!stop",
 			"l2": {
 				"statement": [

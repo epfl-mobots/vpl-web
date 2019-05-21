@@ -11,41 +11,10 @@
 
 /** @const */
 A3a.vpl.BlockTemplate.initOutputs =
-	"# reset outputs\n" +
-	"call sound.system(-1)\n" +
 	"call leds.top(0, 0, 0)\n" +
 	"call leds.bottom.left(0, 0, 0)\n" +
 	"call leds.bottom.right(0, 0, 0)\n" +
 	"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n";
-
-/** @const */
-A3a.vpl.BlockTemplate.varProx =
-	"var proxClose[] = [0, 0, 0, 0, 0, 0, 0]\n" +
-	"var proxFar[] = [0, 0, 0, 0, 0, 0, 0]\n" +
-	"var groundDark[] = [0, 0]\n" +
-	"var groundLight[] = [0, 0]\n";
-
-/** @const */
-A3a.vpl.BlockTemplate.initProx =
-	"onevent prox\n" +
-	"when prox.horizontal[0] > 2000 do\nproxClose[0] = 1\nend\n" +
-	"when prox.horizontal[1] > 2000 do\nproxClose[1] = 1\nend\n" +
-	"when prox.horizontal[2] > 2000 do\nproxClose[2] = 1\nend\n" +
-	"when prox.horizontal[3] > 2000 do\nproxClose[3] = 1\nend\n" +
-	"when prox.horizontal[4] > 2000 do\nproxClose[4] = 1\nend\n" +
-	"when prox.horizontal[5] > 2000 do\nproxClose[5] = 1\nend\n" +
-	"when prox.horizontal[6] > 2000 do\nproxClose[6] = 1\nend\n" +
-	"when prox.horizontal[0] < 1000 do\nproxFar[0] = 1\nend\n" +
-	"when prox.horizontal[1] < 1000 do\nproxFar[1] = 1\nend\n" +
-	"when prox.horizontal[2] < 1000 do\nproxFar[2] = 1\nend\n" +
-	"when prox.horizontal[3] < 1000 do\nproxFar[3] = 1\nend\n" +
-	"when prox.horizontal[4] < 1000 do\nproxFar[4] = 1\nend\n" +
-	"when prox.horizontal[5] < 1000 do\nproxFar[5] = 1\nend\n" +
-	"when prox.horizontal[6] < 1000 do\nproxFar[6] = 1\nend\n" +
-	"when prox.ground.delta[0] > 450 do\ngroundLight[0] = 1\nend\n" +
-	"when prox.ground.delta[1] > 450 do\ngroundLight[1] = 1\nend\n" +
-	"when prox.ground.delta[0] < 400 do\ngroundDark[0] = 1\nend\n" +
-	"when prox.ground.delta[1] < 400 do\ngroundDark[1] = 1\nend\n";
 
 /** @const */
 A3a.vpl.BlockTemplate.initStatesDecl =
@@ -136,20 +105,6 @@ A3a.vpl.BlockTemplate.lib =	[
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
-		name: "!default event",
-		type: A3a.vpl.blockType.hidden,
-		genCode: {
-			"aseba": function (block) {
-				return {
-					initCodeExec: [
-						"timer.period[1] = 100\n"
-					],
-					sectionBegin: "onevent timer1\n"
-				};
-			}
-		}
-	}),
-	new A3a.vpl.BlockTemplate({
 		name: "!empty action",
 		type: A3a.vpl.blockType.hidden,
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
@@ -166,7 +121,8 @@ A3a.vpl.BlockTemplate.lib =	[
 				return {
 					statement:
 						"motor.left.target = 0\n" +
-						"motor.right.target = 0\n"
+						"motor.right.target = 0\n" +
+						"call sound.system(-1)\n"
 				};
 			}
 		}
@@ -206,27 +162,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 			genCode: {
 				"aseba": function (block) {
-					var v = ["buttonCenter", "buttonForward", "buttonBackward", "buttonRight", "buttonLeft"][block.param[0]];
-					var cond = v + " == 1";
-					var stmt = v + " = 0\n";
 					return {
-						initVarDecl: [
-							"var buttonCenter = 0\n" +
-							"var buttonForward = 0\n" +
-							"var buttonBackward = 0\n" +
-							"var buttonRight = 0\n" +
-							"var buttonLeft = 0\n"
-						],
-						initCodeDecl: [
-							"onevent buttons\n" +
-							"when button.center == 1 do\nbuttonCenter = 1\nend\n" +
-							"when button.forward == 1 do\nbuttonForward = 1\nend\n" +
-							"when button.backward == 1 do\nbuttonBackward = 1\nend\n" +
-							"when button.right == 1 do\nbuttonRight = 1\nend\n" +
-							"when button.left == 1 do\nbuttonLeft = 1\nend\n"
-						],
-						clause: cond,
-						statement: stmt
+						sectionBegin: "onevent buttons\n",
+						clause: "button." + ["center", "forward", "backward", "right", "left"][block.param[0]] + " != 0"
 					};
 				}
 			}
@@ -293,31 +231,21 @@ A3a.vpl.BlockTemplate.lib =	[
 			genCode: {
 				"aseba": function (block) {
 					var cond = "";
-					var stmt = "";
 					for (var i = 0; i < 7; i++) {
 						if (block.param[i]) {
-							var v = "prox" + (block.param[i] > 0 ? "Close" : "Far") +
-								"[" + buttons[i].str + "]";
-							cond += (cond.length === 0 ? "" : " and ") + v + " == 1";
-							stmt += v + " = 0\n";
+							cond += (cond.length === 0 ? "" : " and ") +
+								"prox.horizontal[" + buttons[i].str + "] " +
+								(block.param[i] > 0 ? ">= 2" : "<= 1") + "000";
 						}
 					}
 					if (cond === "") {
 						for (var i = 0; i < 7; i++) {
-							cond += " or proxClose[" + buttons[i].str + "] == 1";
-							stmt += "proxClose[" + buttons[i].str + "] = 0\n";
+							cond += " or prox.horizontal[" + buttons[i].str + "] >= 2000";
 						}
 						cond = cond.slice(4);	// crop initial " or "
 					}
 					return {
-						initVarDecl: [
-							A3a.vpl.BlockTemplate.varProx
-						],
-						initCodeDecl: [
-							A3a.vpl.BlockTemplate.initProx
-						],
-						clause: cond,
-						statement: stmt
+						clause: cond
 					};
 				}
 			}
@@ -438,7 +366,6 @@ A3a.vpl.BlockTemplate.lib =	[
 					}
 					return {
 						sectionBegin: "onevent prox\n",
-						sectionPriority: 20,
 						clause: cond
 					};
 				}
@@ -552,7 +479,6 @@ A3a.vpl.BlockTemplate.lib =	[
 					}
 					return {
 						sectionBegin: "onevent prox\n",
-						sectionPriority: 20,
 						clause: cond
 					};
 				}
@@ -613,31 +539,22 @@ A3a.vpl.BlockTemplate.lib =	[
 			genCode: {
 				"aseba": function (block) {
 					var cond = "";
-					var stmt = "";
 					for (var i = 0; i < 2; i++) {
 						if (block.param[i]) {
-							var v = "ground" + (block.param[i] > 0 ? "Light" : "Dark") +
-								"[" + buttons[i].str + "]";
-							cond += (cond.length === 0 ? "" : " and ") + v + " == 1";
-							stmt += v + " = 0\n";
+							cond += (cond.length === 0 ? "" : " and ") +
+								"prox.ground.delta[" + buttons[i].str + "] " +
+								(block.param[i] > 0 ? ">= 450" : "<= 400");
 						}
 					}
 					if (cond === "") {
 						for (var i = 0; i < 2; i++) {
-							cond += " or groundLight[" + buttons[i].str + "] == 1";
-							stmt += "groundLight[" + buttons[i].str + "] = 0\n";
+							cond += " or prox.ground.delta[" + buttons[i].str + "] >= 450";
 						}
 						cond = cond.slice(4);	// crop initial " or "
 					}
 					return {
-						initVarDecl: [
-							A3a.vpl.BlockTemplate.varProx
-						],
-						initCodeDecl: [
-							A3a.vpl.BlockTemplate.initProx
-						],
-						clause: cond,
-						statement: stmt
+						sectionBegin: "onevent prox\n",
+						clause: cond
 					};
 				}
 			}
@@ -750,7 +667,6 @@ A3a.vpl.BlockTemplate.lib =	[
 					}
 					return {
 						sectionBegin: "onevent prox\n",
-						sectionPriority: 10,
 						clause: cond
 					};
 				}
@@ -858,7 +774,6 @@ A3a.vpl.BlockTemplate.lib =	[
 					}
 					return {
 						sectionBegin: "onevent prox\n",
-						sectionPriority: 10,
 						clause: cond
 					};
 				}
@@ -889,8 +804,16 @@ A3a.vpl.BlockTemplate.lib =	[
 		genCode: {
 			"aseba": function (block) {
 				return {
-					sectionBegin: "onevent tap\n",
-					sectionPriority: 50
+					initVarDecl: [
+						"var tapped\n"
+					],
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.resetTimer,
+						"tapped = 0\n"
+					],
+					sectionBegin: "onevent tap\ntapped = 1\n",
+						// there must be a real tap event block in the program
+					clause: "tapped != 0"
 				};
 			}
 		}
@@ -975,8 +898,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					if (dir === 0) {
 						// tap
 						return {
-							sectionBegin: "onevent tap\n",
-							sectionPriority: 50
+							sectionBegin: "onevent tap\n"
 						};
 					} else {
 						/** @type {number} */
@@ -997,7 +919,6 @@ A3a.vpl.BlockTemplate.lib =	[
 								"# " + name + " angle from accelerometer\nvar " + name + "Angle\n"
 							],
 							sectionBegin: "onevent acc\n",
-							sectionPriority: 40,
 							clauseInit:
 								"call math.atan2(" + name + "Angle, acc[" + (dir === 2 ? "1" : "0") + "], acc[2])\n",
 							clause: cond
@@ -1052,7 +973,6 @@ A3a.vpl.BlockTemplate.lib =	[
 						"# roll angle from accelerometer\nvar rollAngle\n"
 					],
 					sectionBegin: "onevent acc\n",
-					sectionPriority: 40,
 					clauseInit:
 						"call math.atan2(rollAngle, -acc[0], acc[2])\n",
 					clause:
@@ -1110,7 +1030,6 @@ A3a.vpl.BlockTemplate.lib =	[
 						"# pitch angle from accelerometer\nvar pitchAngle\n"
 					],
 					sectionBegin: "onevent acc\n",
-					sectionPriority: 40,
 					clauseInit:
 						"call math.atan2(pitchAngle, acc[1], acc[2])\n",
 					clause:
@@ -1168,7 +1087,6 @@ A3a.vpl.BlockTemplate.lib =	[
 						"# yaw angle from accelerometer\nvar yawAngle\n"
 					],
 					sectionBegin: "onevent acc\n",
-					sectionPriority: 40,
 					clauseInit:
 						"call math.atan2(yawAngle, acc[0], acc[1])\n",
 					clause:
@@ -1197,7 +1115,6 @@ A3a.vpl.BlockTemplate.lib =	[
 						"mic.threshold = 250\n"
 					],
 					sectionBegin: "onevent mic\n",
-					sectionPriority: 50,
 					clause: "mic.intensity > mic.threshold",
 					clauseOptional: true
 				};
@@ -1218,7 +1135,6 @@ A3a.vpl.BlockTemplate.lib =	[
 			"aseba": function (block) {
 				return {
 					sectionBegin: "# initialization\n",
-					sectionPriority: 300
 				};
 			}
 		}
@@ -1235,11 +1151,16 @@ A3a.vpl.BlockTemplate.lib =	[
 		genCode: {
 			"aseba": function (block) {
 				return {
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.resetTimer
+					initVarDecl: [
+						"var timerElapsed\n"
 					],
-					sectionBegin: "onevent timer0\ntimer.period[0] = 0\n",
-					sectionPriority: 200
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.resetTimer,
+						"timerElapsed = 0\n"
+					],
+					sectionBegin: "onevent timer0\ntimerElapsed = 1\ntimer.period[0] = 0\n",
+						// there must be a real timer event block in the program
+					clause: "timerElapsed != 0"
 				};
 			}
 		}
@@ -2272,7 +2193,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						"wave[i] = wave_intensity / 256\n" +
 						"end\n" +
 						"call sound.wave(wave)\n",
-						A3a.vpl.BlockTemplate.initOutputs
+						"call sound.system(-1)\n"
 					],
 					initCodeDecl: [
 						"# when a note is finished, play the next one\n" +
@@ -2636,10 +2557,15 @@ A3a.vpl.BlockTemplate.lib =	[
 		genCode: {
 			"aseba": function (block) {
 				return {
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.resetTimer
+					initVarDecl: [
+						"var timerElapsed\n"
 					],
-					statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + "\n"
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.resetTimer,
+						"timerElapsed = 0\n"
+					],
+					statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + "\n" +
+						"timerElapsed = 0\n"
 				};
 			}
 		}
@@ -2671,10 +2597,15 @@ A3a.vpl.BlockTemplate.lib =	[
 		genCode: {
 			"aseba": function (block) {
 				return {
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.resetTimer
+					initVarDecl: [
+						"var timerElapsed\n"
 					],
-					statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + "\n"
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.resetTimer,
+						"timerElapsed = 0\n"
+					],
+					statement: "timer.period[0] = " + Math.round(1000 * block.param[0]) + "\n" +
+						"timerElapsed = 0\n"
 				};
 			}
 		}

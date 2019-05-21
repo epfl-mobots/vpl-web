@@ -214,40 +214,37 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 		}
 	}
 
-	var defaultEvent = A3a.vpl.BlockTemplate.findByName("!default event");
-	var defaultEventPri = defaultEvent.genCode[this.language]().sectionPriority;
-
 	// find the event with the highest sectionPriority, check compatibility
 	// and collect init code
-	var priIx = -1;
-	var priEv = null;
-	var priPri = defaultEventPri;
-	/** @typedef {Array.<number>} */
-	var clauseless = [];
-	/** @typedef {Array.<string>} */
-	var initVarDecl = [];
-	/** @typedef {Array.<string>} */
-	var initCodeExec = [];
-	/** @typedef {Array.<string>} */
-	var initCodeDecl = [];
 	/** @type {Array.<string>} */
-	var clauses = [];
+	var initVarDecl = [];
+	/** @type {Array.<string>} */
+	var initCodeExec = [];
+	/** @type {Array.<string>} */
+	var initCodeDecl = [];
+	/** @type {string} */
+	var clause = "";
+	/** @type {Array.<string>} */
+	var auxClauses = [];
+	/** @type {string} */
 	var clauseInit = "";
+	/** @type {Array.<string>} */
+	var auxClausesInit = [];
 	var str = "";
 	eventHandler.events.forEach(function (event, i) {
 		var code = event.generateCode(this.language);
-		if (code.sectionPriority > priPri) {
-			priPri = code.sectionPriority;
-			priIx = i;
-			priEv = event;
-		}
 		if (code.clause) {
-			clauses.push(this.bracket(code.clause, event));
-			if (code.clauseInit) {
-				clauseInit += code.clauseInit;
+			if (i === 0 && code.sectionBegin) {
+				clause = this.bracket(code.clause, event);
+				if (code.clauseInit) {
+					clauseInit += code.clauseInit;
+				}
+			} else {
+				auxClauses.push(this.bracket(code.clause, event));
+				if (code.clauseInit) {
+					auxClausesInit = auxClausesInit.concat(code.clauseInit);
+				}
 			}
-		} else if (code.sectionBegin) {
-			clauseless.push(i);
 		}
 		if (code.initVarDecl) {
 			initVarDecl = initVarDecl.concat(code.initVarDecl);
@@ -262,16 +259,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 			str += this.bracket(code.statement, event);
 		}
 	}, this);
-	if (clauseless.length > 1) {
-		var err = new A3a.vpl.Error("Incompatible events in the same rule");
-		err.addEventError(clauseless);
-		eventHandler.error = err;
-		return {error: err};
-	}
 
-	var clause = clauses.length === 0 ? ""
-		: clauses.length === 1 ? clauses[0]
-		: clauses.map(function (c) { return "(" + c + ")"; }).join(" " + this.andOperator + " ");
 	for (var i = 0; i < eventHandler.actions.length; i++) {
 		var code = eventHandler.actions[i].generateCode(this.language);
 		str += code.statement ? this.bracket(code.statement, eventHandler.actions[i]) : "";
@@ -297,25 +285,25 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 			});
 		}
 	}
-	if ((priEv || !hasEvent) && str.length > 0) {
-		var eventCode = priEv
-			? priEv.generateCode(this.language)
-			: defaultEvent.genCode[this.language](null);
-		if (eventCode.initVarDecl) {
+	if (str.length > 0) {
+		var eventCode = eventHandler.events[0].blockTemplate.type === A3a.vpl.blockType.event
+			? eventHandler.events[0].generateCode(this.language)
+			: null;
+		if (eventCode && eventCode.initVarDecl) {
 			eventCode.initVarDecl.forEach(function (frag) {
 				if (initVarDecl.indexOf(frag) < 0) {
 					initVarDecl.push(frag);
 				}
 			});
 		}
-		if (eventCode.initCodeExec) {
+		if (eventCode && eventCode.initCodeExec) {
 			eventCode.initCodeExec.forEach(function (frag) {
 				if (initCodeExec.indexOf(frag) < 0) {
 					initCodeExec.push(frag);
 				}
 			});
 		}
-		if (eventCode.initCodeDecl) {
+		if (eventCode && eventCode.initCodeDecl) {
 			eventCode.initCodeDecl.forEach(function (frag) {
 				if (initCodeDecl.indexOf(frag) < 0) {
 					initCodeDecl.push(frag);
@@ -326,11 +314,13 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 			initVarDecl: initVarDecl,
 			initCodeExec: initCodeExec,
 			initCodeDecl: initCodeDecl,
-			sectionBegin: eventCode.sectionBegin,
-			sectionEnd: eventCode.sectionEnd,
+			sectionBegin: eventCode ? eventCode.sectionBegin : "",
+			sectionEnd: eventCode ? eventCode.sectionEnd : "",
 			clauseInit: clauseInit,
+			auxClausesInit: auxClausesInit,
 			clause: clause,
-			statement: (eventCode.statement || "") + str
+			auxClauses: auxClauses.join(" " + this.andOperator + " "),
+			statement: (eventCode && eventCode.statement || "") + str
 		};
 	} else {
 		return {};

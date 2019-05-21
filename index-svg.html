@@ -61,10 +61,6 @@
 			]
 		},
 		{
-			"name": "!default event",
-			"type": "hidden"
-		},
-		{
 			"name": "!stop",
 			"type": "hidden"
 		},
@@ -2148,16 +2144,6 @@ sim-playground {
 {
 	"blocks": [
 		{
-			"name": "!default event",
-			"aseba": {
-				"initCodeExec": [
-					"timer.period[1] = 100\n"
-				],
-				"sectionBegin": "onevent timer1\n",
-				"sectionPriority": 99
-			}
-		},
-		{
 			"name": "!stop",
 			"aseba": {
 				"statement": [
@@ -2891,16 +2877,6 @@ sim-playground {
 <script type="application/json" id="l2.json">
 {
 	"blocks": [
-		{
-			"name": "!default event",
-			"l2": {
-				"initCodeExec": [
-					"timer.period[1] = 100;\n"
-				],
-				"sectionBegin": "onevent timer1 {\n",
-				"sectionEnd": "}\n"
-			}
-		},
 		{
 			"name": "!stop",
 			"l2": {

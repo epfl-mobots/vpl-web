@@ -16,7 +16,6 @@ A3a.vpl.patchL2Blocks = function () {
 
 	A3a.vpl.BlockTemplate.initOutputs2 =
 		"// reset outputs\n" +
-		"sound.system(-1);\n" +
 		"leds.top(0, 0, 0);\n" +
 		"leds.bottom.left(0, 0, 0);\n" +
 		"leds.bottom.right(0, 0, 0);\n" +
@@ -112,45 +111,19 @@ A3a.vpl.patchL2Blocks = function () {
 	(function () {
 		/** @const */
 		var libPatchLang2 = {
-			"!default event": function (block) {
-				return {
-					initCodeExec: [
-						"timer.period[1] = 100;\n"
-					],
-					sectionBegin: "onevent timer1 {\n",
-					sectionEnd: "}\n"
-				};
-			},
 			"!stop": function (block) {
 				return {
 					statement:
 						"motor.left.target = 0;\n" +
-						"motor.right.target = 0;\n"
+						"motor.right.target = 0;\n" +
+						"sound.system(-1);\n"
 				};
 			},
 			"button 1": function (block) {
-				var v = ["buttonCenter", "buttonForward", "buttonBackward", "buttonRight", "buttonLeft"][block.param[0]];
-				var cond = v;
-				var stmt = v + " = false;\n";
 				return {
-					initVarDecl: [
-						"bool buttonCenter = false;\n" +
-						"bool buttonForward = false;\n" +
-						"bool buttonBackward = false;\n" +
-						"bool buttonRight = false;\n" +
-						"bool buttonLeft = false;\n"
-					],
-					initCodeDecl: [
-						"onevent buttons {\n" +
-						"when (button.center) {\nbuttonCenter = true;\n}\n" +
-						"when (button.forward) {\nbuttonForward = true;\n}\n" +
-						"when (button.backward) {\nbuttonBackward = true;\n}\n" +
-						"when (button.right) {\nbuttonRight = true;\n}\n" +
-						"when (button.left) {\nbuttonLeft = true;\n}\n" +
-						"}\n"
-					],
-					clause: cond,
-					statement: stmt
+					sectionBegin: "onevent buttons {\n",
+					sectionEnd: "}\n",
+					clause: "button." + ["center", "forward", "backward", "right", "left"][block.param[0]] + " != 0"
 				};
 			},
 			"horiz prox": function (block) {
@@ -661,7 +634,8 @@ A3a.vpl.patchL2Blocks = function () {
 						"wave[i] = 128 * sin(fixed(i) / size(wave) * 2 * pi);\n" +
 						"}\n" +
 						"sound.wave(wave);\n" +
-						"note_index = 6;\n",
+						"note_index = 6;\n" +
+						"sound.system(-1);\n",
 						A3a.vpl.BlockTemplate.initOutputs2
 					],
 					initCodeDecl: [

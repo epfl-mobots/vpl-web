@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -72,10 +72,11 @@ A3a.vpl.Block.prototype.prepareChange = function () {
 		initCodeExec: (Array.<string>|undefined),
 		sectionBegin: (string|undefined),
 		sectionEnd: (string|undefined),
-		sectionPriority: (number|undefined),
 		clauseInit: (string|undefined),
 		clause: (string|undefined),
 		clauseOptional: (boolean|undefined),
+		auxClausesInit: (Array.<string>|undefined),
+		auxClauses: (string|undefined),
 		statement: (string|undefined),
 		error: (A3a.vpl.Error|undefined)
 	}}

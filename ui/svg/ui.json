@@ -47,10 +47,6 @@
 			]
 		},
 		{
-			"name": "!default event",
-			"type": "hidden"
-		},
-		{
 			"name": "!stop",
 			"type": "hidden"
 		},

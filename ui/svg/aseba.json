@@ -1,16 +1,6 @@
 {
 	"blocks": [
 		{
-			"name": "!default event",
-			"aseba": {
-				"initCodeExec": [
-					"timer.period[1] = 100\n"
-				],
-				"sectionBegin": "onevent timer1\n",
-				"sectionPriority": 99
-			}
-		},
-		{
 			"name": "!stop",
 			"aseba": {
 				"statement": [

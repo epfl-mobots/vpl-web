@@ -985,10 +985,10 @@ A3a.vpl.Canvas.prototype.drawState = function (state) {
 	var ctx = this.ctx;
 
 	ctx.save();
-	this.drawArc(Math.PI * 0.6, Math.PI * 0.9, state[0]);
-	this.drawArc(Math.PI * 0.1, Math.PI * 0.4, state[1]);
-	this.drawArc(Math.PI * 1.1, Math.PI * 1.4, state[2]);
-	this.drawArc(Math.PI * 1.6, Math.PI * 1.9, state[3]);
+	this.drawArc(Math.PI * 0.65, Math.PI * 0.85, state[0]);
+	this.drawArc(Math.PI * 0.15, Math.PI * 0.35, state[1]);
+	this.drawArc(Math.PI * 1.15, Math.PI * 1.35, state[2]);
+	this.drawArc(Math.PI * 1.65, Math.PI * 1.85, state[3]);
 	ctx.restore();
 };
 
