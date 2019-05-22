@@ -288,7 +288,7 @@
 				{
 					"id": "btn2_ProxGd_detection",
 					"val": [true, false],
-					"st": ["fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
+					"st": ["fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:4 6;stroke-dashoffset:.8;stroke-linecap:round"]
 				}
 			]
 		},
@@ -2062,11 +2062,12 @@ rule {
 
 overlay-rectangle.disabled {
 	background: rgba(120,144,156,0.4);
+	border-radius: 8px;
 }
 
 overlay-rectangle.drop-target {
 	border: 0.1vw #6200ea;
-	border-radius: 0.2vw;
+	border-radius: 8px;
 }
 
 crossout-line {
@@ -2100,7 +2101,7 @@ conflict-line {
 }
 
 block-library {
-	padding: 4px 8px 4px 8px;
+	padding: 8px;
 	margin: 0px;
 	border-left: 2px solid #eceff1;
 	border-right: 2px solid #eceff1;
