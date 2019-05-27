@@ -83,6 +83,7 @@ In json, block contain the following properties:
 	- "min" (number, required): minimum value, stored in the block parameters.
 	- "max" (number, required): maximum value, stored in the block parameters.
 	- "snap" (array of numbers and/or strings, default: []): snap values to which the slider is attracted when the slider is within a relative distance of 10%. Numbers are fixed values; strings must contain a backtick-expression and are evaluated. They can refer to other parameters, typically other slider values (see "backtick-expressions" below).
+	- "discrete" (non-empty array of numbers, default: null (continuous values possible)): like snap, but no other values are possible.
 
 - "rotating" (array of objects, optional): rotating control definitions. Each control is described by an object with the following properties:
 

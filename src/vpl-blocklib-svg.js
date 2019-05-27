@@ -327,15 +327,24 @@ A3a.vpl.Canvas.prototype.mousedragSVGSlider = function (block, dragIndex, aux, w
 				this.clientData.vert ? pt.y : pt.x);
 	var min = this.clientData.sliderAux["min"];
 	var max = this.clientData.sliderAux["max"];
-	var snap = this.clientData.sliderAux["snap"];
-	snap && snap.forEach(function (s, i) {
-		if (typeof s === "string" && /^`.+`$/.test(s)) {
-			s = /** @type {number} */(A3a.vpl.BlockTemplate.substInline(s, block, i, true));
-		}
-		if (Math.abs(val - s) < Math.abs(max - min) / 10) {
-			val = s;
-		}
-	});
+	var discrete = this.clientData.sliderAux["discrete"];
+	if (discrete && discrete.length > 0) {
+		val = discrete.reduce(function (acc, cur) {
+			return Math.abs(val - cur) < Math.abs(val - acc)
+				? cur
+				: acc;
+		}, discrete[0]);
+	} else {
+		var snap = this.clientData.sliderAux["snap"];
+		snap && snap.forEach(function (s, i) {
+			if (typeof s === "string" && /^`.+`$/.test(s)) {
+				s = /** @type {number} */(A3a.vpl.BlockTemplate.substInline(s, block, i, true));
+			}
+			if (Math.abs(val - s) < Math.abs(max - min) / 10) {
+				val = s;
+			}
+		});
+	}
 	var ix0 = (aux["buttons"] ? aux["buttons"].length : 0) +
 		(aux["radiobuttons"] ? 1 : 0);
 	block.param[ix0 + dragIndex] = Math.max(Math.min(min, max), Math.min(Math.max(min, max), val));
