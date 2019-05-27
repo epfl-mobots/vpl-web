@@ -431,7 +431,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				if (dragIndex >= 7) {
 					var val = canvas.sliderDrag(false, width, height, left, top, ev);
-					block.param[dragIndex] = Math.max(0, Math.min(1, val));
+					block.param[dragIndex] = Math.max(0.25, Math.min(0.75, Math.round(val * 4) / 4));
 				}
 			},
 			/** @type {A3a.vpl.BlockTemplate.validateFun} */
@@ -468,7 +468,7 @@ A3a.vpl.BlockTemplate.lib =	[
 							cond += (cond.length === 0 ? "" : " and ") +
 								"prox.horizontal[" + buttons[i].str + "] " +
 								(block.param[i] > 0 ? ">=" : "<") + " " +
-								Math.round(7 + 33 * block.param[7]) + "00";
+								Math.round(4000 * block.param[7]);
 						}
 					}
 					if (cond === "") {
@@ -727,7 +727,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				if (dragIndex >= 2) {
 					var val = canvas.sliderDrag(false, width, height, left, top, ev);
-					block.param[dragIndex] = Math.max(0, Math.min(1, val));
+					block.param[dragIndex] = Math.max(0.25, Math.min(0.75, Math.round(4 * val) / 4));
 				}
 			},
 			/** @type {A3a.vpl.BlockTemplate.validateFun} */
@@ -763,7 +763,7 @@ A3a.vpl.BlockTemplate.lib =	[
 								"prox.ground.delta[" + buttons[i].str + "] " +
 								(block.param[i] > 0
 									? ">= " : "< ") +
-								25 * Math.round(40 * block.param[2]);
+								Math.round(1000 * block.param[2]);
 						}
 					}
 					if (cond === "") {
