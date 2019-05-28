@@ -87,9 +87,10 @@ In json, block contain the following properties:
 
 - "rotating" (array of objects, optional): rotating control definitions. Each control is described by an object with the following properties:
 
-	- "id" (string, required): id of the svg element corresponding to the slider, including the thumb. If the element's height is larger than the element's width, the slider is vertical, else it's horizontal.
+	- "id" (string, required): id of the svg element corresponding to the rotating element, including the thumb.
 	- "centerId" (string, required): id of the svg element whose center is the center of rotation.
 	- "thumbId" (string, required): id of the svg element corresponding to the control part which can be moved.
+    - "numSteps" (integer number): number of steps, positive for counting counter-clockwise, negative for counting clockwise. 0 means no rotation; if numSteps is even, minimum value is -numSteps/2 (for a 180-degree rotation) and maximum value is numSteps/2; if numSteps is odd, minimum value is -(numSteps-1)/2 and maximum value is (numSteps-1)/2. If "numSteps" property is not defined, value is in radians, counterclockwise, between -pi and pi.
 
 - "diffwheelmotion" (object, optional): robot with differential wheel motion. The robot, seen from above, is defined by a svg element, with wheel axis on the x axis and positive motion up. Wheel motion is specified with two sliders which should be defined with "sliders". Contains the following properties:
 

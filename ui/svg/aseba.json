@@ -5,50 +5,22 @@
 			"aseba": {
 				"statement": [
 					"motor.left.target = 0\n",
-					"motor.right.target = 0\n"
+					"motor.right.target = 0\n",
+					"call sound.system(-1)\n"
 				]
 			}
 		},
 		{
 			"name": "button 1",
 			"aseba": {
-				"initVarDecl": [
-					[
-						"var buttonCenter = 0\n",
-						"var buttonForward = 0\n",
-						"var buttonBackward = 0\n",
-						"var buttonRight = 0\n",
-						"var buttonLeft = 0\n"
-					]
-				],
-				"initCodeDecl": [
-					[
-						"onevent buttons\n",
-						"when button.center == 1 do\n",
-						"buttonCenter = 1\n",
-						"end\n",
-						"when button.forward == 1 do\n",
-						"buttonForward = 1\n",
-						"end\n",
-						"when button.backward == 1 do\n",
-						"buttonBackward = 1\n",
-						"end\n",
-						"when button.right == 1 do\n",
-						"buttonRight = 1\n",
-						"end\n",
-						"when button.left == 1 do\n",
-						"buttonLeft = 1\nend\n"
-					]
-				],
-				"clause": "button`['Center', 'Forward', 'Backward', 'Right', 'Left'][$[0]]` != 0",
-				"statement": "button`['Center', 'Forward', 'Backward', 'Right', 'Left'][$[0]]` = 0\n"
+				"sectionBegin": "onevent buttons\n",
+				"clause": "button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]` != 0"
 			}
 		},
 		{
 			"name": "init",
 			"aseba": {
-				"sectionBegin": "# initialization\n",
-				"sectionPriority": 300
+				"sectionBegin": "# initialization\n"
 			}
 		},
 		{
@@ -93,10 +65,9 @@
 					]
 				],
 				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 40,
 				"clauseInit":
 					"call math.atan2(rollAngle, -acc[0], acc[2])\n",
-				"clause": "rollAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and rollAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+				"clause": "`$[0] === -12 ? 'rollAngle >= 31403 or rollAngle < -31403' : 'rollAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -109,7 +80,6 @@
 					]
 				],
 				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 40,
 				"clauseInit":
 					"call math.atan2(rollAngle, acc[0], acc[2])\n",
 				"clause": "abs(abs(rollAngle) - 16384) < 1365"
@@ -119,7 +89,6 @@
 			"name": "acc upside down",
 			"aseba": {
 				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 40,
 				"clause": "-acc[2] / 2 > abs(acc[0]) + abs(acc[1])"
 			}
 		},
@@ -130,10 +99,9 @@
 					"# yaw angle from accelerometer\nvar yawAngle\n"
 				],
 				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 40,
 				"clauseInit":
-					"call math.atan2(yawAngle, acc[1], -acc[0])\n",
-				"clause": "yawAngle >= `Math.round(-2730.67 * $[0] - 1365.33)` and yawAngle < `Math.round(-2730.67 * $[0] + 1365.33)`"
+					"call math.atan2(yawAngle, -acc[0], acc[1])\n",
+				"clause": "`$[0] === -12 ? 'yawAngle >= 31403 or yawAngle < -31403' : 'yawAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -146,10 +114,9 @@
 					]
 				],
 				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 40,
 				"clauseInit":
 					"call math.atan2(pitchAngle, -acc[1], acc[2])\n",
-				"clause": "pitchAngle >= `Math.round(2730.67 * $[0] - 1365.33)` and pitchAngle < `Math.round(2730.67 * $[0] + 1365.33)`"
+				"clause": "`$[0] === -12 ? 'pitchAngle >= 31403 or pitchAngle < -31403' : 'pitchAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -162,7 +129,6 @@
 					]
 				],
 				"sectionBegin": "onevent mic\n",
-				"sectionPriority": 30,
 				"clause": "mic.intensity > mic.threshold",
 				"clauseOptional": true
 			}
@@ -171,15 +137,20 @@
 			"name": "fall",
 			"aseba": {
 				"sectionBegin": "onevent acc\n",
-				"sectionPriority": 40,
 				"clause": "abs(acc[0]) + abs(acc[1]) + abs(acc[2]) < 16"
 			}
 		},
 		{
 			"name": "tap",
 			"aseba": {
-				"sectionBegin": "onevent tap\n",
-				"sectionPriority": 50
+				"initVarDecl": [
+					"var tapped\n"
+				],
+				"initCodeExec": [
+					"tapped = 0\n"
+				],
+				"sectionBegin": "onevent tap\ntapped = 1\n",
+				"clause": "tapped != 0"
 			}
 		},
 		{
@@ -219,90 +190,21 @@
 		{
 			"name": "horiz prox front",
 			"aseba": {
-				"initVarDecl": [
-					[
-						"var proxClose[] = [0, 0, 0, 0, 0, 0, 0]\n",
-						"var proxFar[] = [0, 0, 0, 0, 0, 0, 0]\n",
-						"var groundDark[] = [0, 0]\n",
-						"var groundLight[] = [0, 0]\n"
-					]
-				],
-				"initCodeDecl": [
-					[
-						"onevent prox\n",
-						"when prox.horizontal[0] > 2000 do\n",
-						"proxClose[0] = 1\n",
-						"end\n",
-						"when prox.horizontal[1] > 2000 do\n",
-						"proxClose[1] = 1\n",
-						"end\n",
-						"when prox.horizontal[2] > 2000 do\n",
-						"proxClose[2] = 1\n",
-						"end\n",
-						"when prox.horizontal[3] > 2000 do\n",
-						"proxClose[3] = 1\n",
-						"end\n",
-						"when prox.horizontal[4] > 2000 do\n",
-						"proxClose[4] = 1\n",
-						"end\n",
-						"when prox.horizontal[5] > 2000 do\n",
-						"proxClose[5] = 1\n",
-						"end\n",
-						"when prox.horizontal[6] > 2000 do\n",
-						"proxClose[6] = 1\n",
-						"end\n",
-						"when prox.horizontal[0] < 1000 do\n",
-						"proxFar[0] = 1\n",
-						"end\n",
-						"when prox.horizontal[1] < 1000 do\n",
-						"proxFar[1] = 1\n",
-						"end\n",
-						"when prox.horizontal[2] < 1000 do\n",
-						"proxFar[2] = 1\n",
-						"end\n",
-						"when prox.horizontal[3] < 1000 do\n",
-						"proxFar[3] = 1\n",
-						"end\n",
-						"when prox.horizontal[4] < 1000 do\n",
-						"proxFar[4] = 1\n",
-						"end\n",
-						"when prox.horizontal[5] < 1000 do\n",
-						"proxFar[5] = 1\n",
-						"end\n",
-						"when prox.horizontal[6] < 1000 do\n",
-						"proxFar[6] = 1\n",
-						"end\n",
-						"when prox.ground.delta[0] > 450 do\n",
-						"groundLight[0] = 1\n",
-						"end\n",
-						"when prox.ground.delta[1] > 450 do\n",
-						"groundLight[1] = 1\n",
-						"end\n",
-						"when prox.ground.delta[0] < 400 do\n",
-						"groundDark[0] = 1\n",
-						"end\n",
-						"when prox.ground.delta[1] < 400 do\n",
-						"groundDark[1] = 1\n",
-						"end\n"
-					]
-				],
-				"clauseAnd": "`$[i] ? 'prox' + ($[i] > 0 ? 'Close' : 'Far') + '[' + i + '] == 1' : ''`",
-				"statement1": "`$[i] ? 'prox' + ($[i] > 0 ? 'Close' : 'Far') + '[' + i + '] = 0\\n' : ''`"
+				"sectionBegin": "onevent prox\n",
+				"clauseAnd": "`$[i] ? 'prox.horizontal' + '[' + i + '] ' + ($[i] > 0 ? '>= 2000' : '<= 1000') : ''`"
 			}
 		},
 		{
 			"name": "horiz prox back",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 20,
-				"clauseAnd": "`$[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
+				"clauseAnd": "`$[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= 2000' : '<= 1000') : ''`"
 			}
 		},
 		{
 			"name": "horiz prox front adv",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 20,
 				"clauseAnd": "`i < 5 && $[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[5]) + '00' : ''`"
 			}
 		},
@@ -310,7 +212,6 @@
 			"name": "horiz prox back adv",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 20,
 				"clauseAnd": "`i < 2 && $[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[2]) + '00' : ''`"
 			}
 		},
@@ -318,7 +219,6 @@
 			"name": "ground mean",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 10,
 				"clause": "prox.ground.delta[0] + prox.ground.delta[1] `$[0] ? '>= 900' : '<= 800'`"
 			}
 		},
@@ -326,7 +226,6 @@
 			"name": "ground",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 10,
 				"clauseAnd": "`$[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= 450' : '<= 400') : ''`"
 			}
 		},
@@ -334,7 +233,6 @@
 			"name": "ground 1",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"sectionPriority": 10,
 				"clauseAnd": "`i < 2 && $[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + 25 * Math.round(40 * $[2]) : ''`"
 			}
 		},
@@ -342,7 +240,6 @@
 			"name": "remote control arrows",
 			"aseba": {
 				"sectionBegin": "onevent rc5\n",
-				"sectionPriority": 100,
 				"clause": "`[[85, 17], [80, 32], [81, 33], [86, 16, 78], [87, 13]][$[0]].map(function (c) { return 'rc5.command == ' + c; }).join(' or ')`"
 			}
 		},
@@ -350,7 +247,6 @@
 			"name": "remote control keypad",
 			"aseba": {
 				"sectionBegin": "onevent rc5\n",
-				"sectionPriority": 100,
 				"clause": "rc5.command == `$[0]`"
 			}
 		},
@@ -366,8 +262,7 @@
 				"sectionBegin": [
 					"onevent timer0\n",
 					"timer.period[0] = 0\n"
-				],
-				"sectionPriority": 200
+				]
 			}
 		},
 		{
@@ -392,7 +287,6 @@
 				"initCodeExec": [
 					[
 						"# reset outputs\n",
-						"call sound.system(-1)\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -412,7 +306,6 @@
 				"initCodeExec": [
 					[
 						"# reset outputs\n",
-						"call sound.system(-1)\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -439,7 +332,6 @@
 					"topColor = [0, 0, 0]\n",
 					[
 						"# reset outputs\n",
-						"call sound.system(-1)\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -466,7 +358,6 @@
 					"bottomColor = [0, 0, 0]\n",
 					[
 						"# reset outputs\n",
-						"call sound.system(-1)\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -490,7 +381,6 @@
 					"topColor = [0, 0, 0]\n",
 					[
 						"# reset outputs\n",
-						"call sound.system(-1)\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -520,7 +410,6 @@
 					"bottomColor = [0, 0, 0]\n",
 					[
 						"# reset outputs\n",
-						"call sound.system(-1)\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -607,12 +496,7 @@
 						"end\ncall sound.wave(wave)\n"
 					],
 					[
-						"# reset outputs\n",
-						"call sound.system(-1)\n",
-						"call leds.top(0, 0, 0)\n",
-						"call leds.bottom.left(0, 0, 0)\n",
-						"call leds.bottom.right(0, 0, 0)\n",
-						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+						"call sound.system(-1)\n"
 					]
 				],
 				"initCodeDecl": [

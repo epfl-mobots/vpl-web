@@ -63,7 +63,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 				evCode.clauseIndex = clauses.length;
 				clauses.push(A3a.vpl.CodeGenerator.Mark.remove(evCode.clause || evCode.sectionBegin));
 
-	 			if (folding[evCode.sectionBegin]) {
+	 			if (folding[evCode.sectionBegin] != undefined) {
 					// fold evCode into c[folding[evCode.sectionBegin]]
 					var foldedFrag = c[folding[evCode.sectionBegin]];
 					if (evCode.clauseInit &&
@@ -143,6 +143,10 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 				str += "\n";
 				str += (c[i].sectionBegin || "") + (c[i].statement || "") + (c[i].sectionEnd || "");
 			}
+		}
+		// timer1 for actions
+		if (program.program.length > 0) {
+			str += "timer.period[1] = 50\n";
 		}
 	}
 	// init fragments defining sub and onevent

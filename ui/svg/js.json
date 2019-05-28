@@ -5,7 +5,6 @@
 			"js": {
 				"sectionBegin": "this.addEventListener(\"buttons\", function (name, param) {\n",
 				"sectionEnd": "});\n",
-				"sectionPriority": 30,
 				"clauseAnd": "`$[i] ? 'this.get(\"button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + '\")' : ''`"
 			}
 		},
@@ -21,16 +20,14 @@
 		{
 			"name": "init",
 			"js": {
-				"sectionBegin": "// init block\n",
-				"sectionPriority": 300
+				"sectionBegin": "// init block\n"
 			}
 		},
 		{
 			"name": "clap",
 			"js": {
 				"sectionBegin": "this.addEventListener(\"mic\", function (name, param) {\n",
-				"sectionEnd": "});\n",
-				"sectionPriority": 50
+				"sectionEnd": "});\n"
 			}
 		},
 		{

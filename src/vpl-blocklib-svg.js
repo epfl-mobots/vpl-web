@@ -195,7 +195,7 @@ A3a.vpl.Canvas.prototype.getDisplacements = function (aux, svg, param) {
 	if (aux["rotating"] != undefined) {
 		for (var i = 0; i < aux["rotating"].length; i++) {
 			var rotatingAux = aux["rotating"][i];
-			var f = rotatingAux["numSteps"] ? 2 * Math.PI / parseInt(rotatingAux["numSteps"], 10) : 1;
+			var f = rotatingAux["numSteps"] ? 2 * Math.PI / rotatingAux["numSteps"] : 1;
 			var bndsCenter = svg.getElementBounds(rotatingAux["centerId"]);
 			// rotate element
 			displacements[rotatingAux["id"]] = {
@@ -372,7 +372,7 @@ A3a.vpl.Canvas.prototype.mousedownSVGRotating = function (block, width, height, 
 			x: (bnds.xmin + bnds.xmax) / 2,
 			y: (bnds.ymin + bnds.ymax) / 2
 		};
-		var f = rotating[i]["numSteps"] ? 2 * Math.PI / parseInt(rotating[i]["numSteps"], 10) : 1;
+		var f = rotating[i]["numSteps"] ? 2 * Math.PI / rotating[i]["numSteps"] : 1;
 		var pt0 = {
 			x: c.x + (pt.x - c.x) * Math.cos(param[i] * f) + (pt.y - c.y) * Math.sin(param[i] * f),
 			y: c.y - (pt.x - c.x) * Math.sin(param[i] * f) + (pt.y - c.y) * Math.cos(param[i] * f)
@@ -403,7 +403,7 @@ A3a.vpl.Canvas.prototype.mousedragSVGRotating = function (block, dragIndex, aux,
 	var pt = this.canvasToSVGCoord(ev.x - left, ev.y - top, width, height);
 	var val = (Math.atan2(pt.y - this.clientData.c.y, pt.x - this.clientData.c.x) - this.clientData.phi0 + Math.PI) %
 		(2 * Math.PI) - Math.PI;	// in [-pi,pi)
-	var f = aux["rotating"][dragIndex]["numSteps"] ? 2 * Math.PI / parseInt(aux["rotating"][dragIndex]["numSteps"], 10) : 1;
+	var f = aux["rotating"][dragIndex]["numSteps"] ? 2 * Math.PI / aux["rotating"][dragIndex]["numSteps"] : 1;
 	var ix0 = (aux["buttons"] ? aux["buttons"].length : 0) +
 		(aux["radiobuttons"] ? 1 : 0) +
 		(aux["sliders"] ? aux["sliders"].length : 0);

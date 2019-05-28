@@ -72,25 +72,27 @@ block.small{
 }
 
 rule {
-	background: #f5f7f8;
+	background: #f1f2f4;
 	border: solid #eceff1;
-	border-radius: 4px;
+	border-radius: 8px;
 	padding: 8px;
 	margin: 16px;
 }
 
 overlay-rectangle.disabled {
-	background: rgba(255,255,255,0.5);
+	background: rgba(120,144,156,0.4);
+	border-radius: 8px;
 }
 
 overlay-rectangle.drop-target {
-	border: 0.2vw rgba(0,0,0,0.5);
-	border-radius: 0.2vw;
+	border: 0.1vw #6200ea;
+	border-radius: 8px;
 }
 
 crossout-line {
-	line-width: 0.2ww;
- 	color: rgba(120,120,120,0.5);
+	/*line-width: 0.2ww;
+ 	color: rgba(120,120,120,0.5);*/
+ 	visibility:none;
 }
 crossout-line.vpl {
 }
@@ -103,8 +105,8 @@ crossout-line.vpl {
 }
 
 #widget-error, #widget-warning {
-	width: 3ww;
-	height: 3ww;
+	width: 2ww;
+	height: 2ww;
 }
 
 #widget-moreLow, #widget-moreHigh {
@@ -118,7 +120,7 @@ conflict-line {
 }
 
 block-library {
-	padding: 4px 8px 4px 8px;
+	padding: 8px;
 	margin: 0px;
 	border-left: 2px solid #eceff1;
 	border-right: 2px solid #eceff1;

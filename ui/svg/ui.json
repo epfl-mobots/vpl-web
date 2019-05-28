@@ -129,7 +129,7 @@
 					"id": "Acc1",
 					"centerId": "RotationCenter1",
 					"thumbId": "Btn2_HandleAcc1",
-					"numSteps": 12
+					"numSteps": 24
 				}
 			]
 		},
@@ -186,7 +186,7 @@
 					"id": "Acc2",
 					"centerId": "RotationCenter2",
 					"thumbId": "Btn2_HandleAcc2",
-					"numSteps": 12
+					"numSteps": 24
 				}
 			]
 		},
@@ -211,7 +211,7 @@
 					"id": "Acc0",
 					"centerId": "RotationCenter0",
 					"thumbId": "Btn2_HandleAcc0",
-					"numSteps": 12
+					"numSteps": 24
 				}
 			]
 		},
@@ -274,7 +274,7 @@
 				{
 					"id": "btn2_ProxGd_detection",
 					"val": [true, false],
-					"st": ["fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:2 4;stroke-dashoffset:.8;stroke-linecap:round"]
+					"st": ["fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:4 6;stroke-dashoffset:.8;stroke-linecap:round"]
 				}
 			]
 		},
@@ -353,13 +353,18 @@
 					"st": "visibility:`$[1]>0?'visible':'hidden'`"
 				}
 			],
-			"defaultParameters": [0, 0, 0],
+			"defaultParameters": [0, 0, 0.5],
 			"sliders": [
 				{
 					"id": "slider_threshold_proxGd",
 					"thumbId": "Cursor_proxGd",
 					"min": 0,
-					"max": 1
+					"max": 1,
+					"discrete": [
+						0.25,
+						0.5,
+						0.75
+					]
 				}
 			],
 			"buttons": [
@@ -590,7 +595,12 @@
 					"id": "Slid_threshold",
 					"thumbId": "cursor_threshold",
 					"min": 1,
-					"max": 0
+					"max": 0,
+					"discrete": [
+						0.25,
+						0.5,
+						0.75
+					]
 				}
 			],
 			"buttons": [
@@ -672,13 +682,18 @@
 					"st": "visibility:`$[1]>0?'visible':'hidden'`"
 				}
 			],
-			"defaultParameters": [0, 0, 0],
+			"defaultParameters": [0, 0, 0.5],
 			"sliders": [
 				{
 					"id": "Slid_threshold_back",
 					"thumbId": "cursor_threshold_back",
 					"min": 0,
-					"max": 1
+					"max": 1,
+					"discrete": [
+						0.25,
+						0.5,
+						0.75
+					]
 				}
 			],
 			"buttons": [

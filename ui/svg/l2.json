@@ -5,7 +5,8 @@
 			"l2": {
 				"statement": [
 					"motor.left.target = 0;\n",
-					"motor.right.target = 0;\n"
+					"motor.right.target = 0;\n",
+					"sound.system(-1);\n"
 				]
 			}
 		},
@@ -14,15 +15,13 @@
 			"l2": {
 				"sectionBegin": "onevent buttons {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 30,
 				"clause": "button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]` != 0"
 			}
 		},
 		{
 			"name": "init",
 			"l2": {
-				"sectionBegin": "// init block\n",
-				"sectionPriority": 300
+				"sectionBegin": "// init block\n"
 			}
 		},
 		{
@@ -62,10 +61,9 @@
 			"l2": {
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 40,
 				"clauseInit":
 					"fixed rollAngle = atan2(-acc[0], acc[2]);\n",
-				"clause": "rollAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` && rollAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+				"clause": "`$[0] === -12 ? 'rollAngle >= 31403 || rollAngle < -31403' : 'rollAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' && rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -73,7 +71,6 @@
 			"l2": {
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}",
-				"sectionPriority": 40,
 				"clauseInit":
 					"fixed rollAngle = atan2(acc[0], acc[2]);\n",
 				"clause": "abs(abs(rollAngle) - 0.5) < 0.02"
@@ -84,7 +81,6 @@
 			"l2": {
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 40,
 				"clause": "-acc[2] / 2 > abs(acc[0]) + abs(acc[1])"
 			}
 		},
@@ -93,10 +89,9 @@
 			"l2": {
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 40,
 				"clauseInit":
-					"fixed yawAngle = atan2(acc[1], -acc[0]);\n",
-				"clause": "yawAngle >= `(Math.PI / 12 * (-$[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * (-$[0] + 0.5)).toFixed(2)`"
+					"fixed yawAngle = atan2(-acc[0], acc[1]);\n",
+				"clause": "`$[0] === -12 ? 'yawAngle >= 31403 || yawAngle < -31403' : 'yawAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' && yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -104,10 +99,9 @@
 			"l2": {
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 40,
 				"clauseInit":
 					"fixed pitchAngle = atan2(-acc[1], acc[2]);\n",
-				"clause": "pitchAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` and yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+				"clause": "`$[0] === -12 ? 'pitchAngle >= 31403 || pitchAngle < -31403' : 'pitchAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' && pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -121,7 +115,6 @@
 				],
 				"sectionBegin": "onevent mic {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 50,
 				"clause": "mic.intensity > mic.threshold",
 				"clauseOptional": true
 			}
@@ -131,7 +124,6 @@
 			"l2": {
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 40,
 				"clause": "abs(acc[0]) + abs(acc[1]) + abs(acc[2]) < 16"
 			}
 		},
@@ -139,8 +131,7 @@
 			"name": "tap",
 			"l2": {
 				"sectionBegin": "onevent tap {\n",
-				"sectionEnd": "}\n",
-				"sectionPriority": 50
+				"sectionEnd": "}\n"
 			}
 		},
 		{
@@ -182,7 +173,6 @@
 			"l2": {
 				"sectionBegin": "onevent prox {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 20,
 				"clauseAnd": "`$[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
 			}
 		},
@@ -191,7 +181,6 @@
 			"l2": {
 				"sectionBegin": "onevent prox {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 20,
 				"clauseAnd": "`$[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
 			}
 		},
@@ -200,7 +189,6 @@
 			"l2": {
 				"sectionBegin": "onevent prox {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 20,
 				"clauseAnd": "`i < 5 && $[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[5]) + '00' : ''`"
 			}
 		},
@@ -209,7 +197,6 @@
 			"l2": {
 				"sectionBegin": "onevent prox {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 20,
 				"clauseAnd": "`i < 2 && $[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[2]) + '00' : ''`"
 			}
 		},
@@ -218,7 +205,6 @@
 			"l2": {
 				"sectionBegin": "onevent prox {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 10,
 				"clause": "prox.ground.delta[0] + prox.ground.delta[1] `$[0] ? '>= 900' : '<= 800'`"
 			}
 		},
@@ -227,7 +213,6 @@
 			"l2": {
 				"sectionBegin": "onevent prox {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 10,
 				"clauseAnd": "`$[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= 450' : '<= 400') : ''`"
 			}
 		},
@@ -236,7 +221,6 @@
 			"l2": {
 				"sectionBegin": "onevent prox {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 10,
 				"clauseAnd": "`i < 2 && $[i] ? 'prox.ground.delta[' + i + '] ' + ($[i] > 0 ? '>= ' : '<= ') + 25 * Math.round(40 * $[2]) : ''`"
 			}
 		},
@@ -245,7 +229,6 @@
 			"l2": {
 				"sectionBegin": "onevent rc5 {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 100,
 				"clause": "`[[85, 17], [80, 32], [81, 33], [86, 16, 78], [87, 13]][$[0]].map(function (c) { return 'rc5.command == ' + c; }).join(' or ')`"
 			}
 		},
@@ -254,7 +237,6 @@
 			"l2": {
 				"sectionBegin": "onevent rc5 {\n",
 				"sectionEnd": "}\n",
-				"sectionPriority": 100,
 				"clause": "rc5.command == `$[0]`"
 			}
 		},
@@ -271,8 +253,7 @@
 					"onevent timer0 {\n",
 					"timer.period[0] = 0;\n"
 				],
-				"sectionEnd": "}\n",
-				"sectionPriority": 200
+				"sectionEnd": "}\n"
 			}
 		},
 		{
