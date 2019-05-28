@@ -401,7 +401,8 @@ A3a.vpl.Canvas.prototype.mousedownSVGRotating = function (block, width, height, 
 */
 A3a.vpl.Canvas.prototype.mousedragSVGRotating = function (block, dragIndex, aux, width, height, left, top, ev) {
 	var pt = this.canvasToSVGCoord(ev.x - left, ev.y - top, width, height);
-	var val = Math.atan2(pt.y - this.clientData.c.y, pt.x - this.clientData.c.x) - this.clientData.phi0;
+	var val = (Math.atan2(pt.y - this.clientData.c.y, pt.x - this.clientData.c.x) - this.clientData.phi0 + Math.PI) %
+		(2 * Math.PI) - Math.PI;	// in [-pi,pi)
 	var f = aux["rotating"][dragIndex]["numSteps"] ? 2 * Math.PI / parseInt(aux["rotating"][dragIndex]["numSteps"], 10) : 1;
 	var ix0 = (aux["buttons"] ? aux["buttons"].length : 0) +
 		(aux["radiobuttons"] ? 1 : 0) +
