@@ -71,6 +71,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 				canvas.dims = A3a.vpl.Canvas.calcDims(canvas.dims.blockSize * scale, canvas.dims.controlSize * scale);
 				block.blockTemplate.renderToCanvas(canvas,
 					/** @type {A3a.vpl.Block} */(item.data),
+					box,
 					item.x + dx, item.y + dy);
 				if (block.locked) {
 					canvas.lockedMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize, true);
@@ -84,6 +85,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 				box.drawAt(ctx, item.x + dx, item.y + dy);
 				block.blockTemplate.renderToCanvas(canvas,
 					/** @type {A3a.vpl.Block} */(item.data),
+					box,
 					item.x + dx, item.y + dy);
 				if (block.locked) {
 					canvas.lockedMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize, true);
@@ -197,25 +199,13 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 	@param {number} eventX0
 	@param {number} actionX0
 	@param {number} y
-	@param {CSSParser.VPL.Box} blockEventBox
-	@param {CSSParser.VPL.Box} blockActionBox
-	@param {CSSParser.VPL.Box} blockStateBox
-	@param {CSSParser.VPL.Box} blockCommentBox
-	@param {CSSParser.VPL.Box} blockContainerBox
-	@param {CSSParser.VPL.Box} blockContainerErrorBox
-	@param {CSSParser.VPL.Box} blockContainerWarningBox
-	@param {CSSParser.VPL.Box} ruleBox
-	@param {CSSParser.VPL.Box} separatorBox
-	@param {CSSParser.VPL.Box} errorWidgetBox
-	@param {CSSParser.VPL.Box} warningWidgetBox
+	@param {Object} cssBoxes
 	@return {void}
 */
 A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	function (canvas, eventHandler, displaySingleEvent, maxEventBlockCount,
 		eventX0, actionX0, y,
-		blockEventBox, blockActionBox, blockStateBox, blockCommentBox,
-		blockContainerBox, blockContainerErrorBox, blockContainerWarningBox,
-		ruleBox, separatorBox, errorWidgetBox, warningWidgetBox) {
+		cssBoxes) {
 
 	/** Get block box for the specified type
 		@param {A3a.vpl.Block} block
@@ -224,13 +214,13 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	function boxForBlockType(block) {
 		switch (block.blockTemplate.type) {
 		case A3a.vpl.blockType.event:
-			return blockEventBox;
+			return cssBoxes.blockEventBox;
 		case A3a.vpl.blockType.action:
-			return blockActionBox;
+			return cssBoxes.blockActionBox;
 		case A3a.vpl.blockType.state:
-			return blockStateBox;
+			return cssBoxes.blockStateBox;
 		case A3a.vpl.blockType.comment:
-			return blockCommentBox;
+			return cssBoxes.blockCommentBox;
 		default:
 			throw "internal";	// hidden or undef, shouldn't be in event handler
 		}
@@ -238,29 +228,29 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 
 	var canvasSize = canvas.getSize();
 	var x = eventX0;
-	var step = blockContainerBox.totalWidth();
+	var step = cssBoxes.blockContainerBox.totalWidth();
 
 	var self = this;
 	var item = new A3a.vpl.CanvasItem(eventHandler,
-		ruleBox.paddedWidth(),
-		ruleBox.paddedHeight(),
-		x - ruleBox.paddingLeft - blockContainerBox.offsetLeft() - blockEventBox.offsetLeft(),
-		y - ruleBox.paddingTop - blockContainerBox.offsetTop() - blockEventBox.offsetTop(),
+		cssBoxes.ruleBox.paddedWidth(),
+		cssBoxes.ruleBox.paddedHeight(),
+		x - cssBoxes.ruleBox.paddingLeft - cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockEventBox.offsetLeft(),
+		y - cssBoxes.ruleBox.paddingTop - cssBoxes.blockContainerBox.offsetTop() - cssBoxes.blockEventBox.offsetTop(),
 		// draw
 		function (canvas, item, dx, dy) {
 			var ctx = canvas.ctx;
 			// strip
-			ruleBox.drawAt(ctx, item.x + dx, item.y + dy, true);
+			cssBoxes.ruleBox.drawAt(ctx, item.x + dx, item.y + dy, true);
 			// event/action separator
-			var separatorWidth = separatorBox.totalWidth();
-			separatorBox.drawAt(ctx,
-				actionX0 - separatorBox.width - separatorBox.marginRight - separatorBox.paddingRight -
-					blockContainerBox.offsetLeft() - blockActionBox.offsetLeft() + dx,
-				item.y + (ruleBox.paddedHeight() - separatorBox.height) / 2 + dy);
+			var separatorWidth = cssBoxes.ruleSeparatorBox.totalWidth();
+			cssBoxes.ruleSeparatorBox.drawAt(ctx,
+				actionX0 - cssBoxes.ruleSeparatorBox.width - cssBoxes.ruleSeparatorBox.marginRight - cssBoxes.ruleSeparatorBox.paddingRight -
+					cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockActionBox.offsetLeft() + dx,
+				item.y + (cssBoxes.ruleBox.paddedHeight() - cssBoxes.ruleSeparatorBox.height) / 2 + dy);
 			canvas.drawWidget("vpl:then",
-				actionX0 - separatorBox.totalWidth() / 2 - blockContainerBox.offsetLeft() - blockActionBox.offsetLeft() + dx,
-				item.y + ruleBox.paddedHeight() / 2 + dy,
-				separatorBox);
+				actionX0 - cssBoxes.ruleSeparatorBox.totalWidth() / 2 - cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockActionBox.offsetLeft() + dx,
+				item.y + cssBoxes.ruleBox.paddedHeight() / 2 + dy,
+				cssBoxes.ruleSeparatorBox);
 			if (eventHandler.locked) {
 				canvas.lockedMark(item.x, item.y, item.width, item.height,
 					false, eventHandler.disabled ? "#ddd" : "");
@@ -268,21 +258,21 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			// block container boxes
 			events.forEach(function (event, j) {
 				var box = eventHandler.error && eventHandler.error.eventErrorIndices.indexOf(j) >= 0
-					? eventHandler.error.isWarning ? blockContainerWarningBox : blockContainerErrorBox
-					: blockContainerBox;
+					? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
+					: cssBoxes.blockContainerBox;
 				box.drawAt(ctx,
-					item.x + dx + ruleBox.paddingLeft + blockContainerBox.marginLeft +
+					item.x + dx + cssBoxes.ruleBox.paddingLeft + cssBoxes.blockContainerBox.marginLeft +
 						((maxEventBlockCount > 0 ? maxEventBlockCount - events.length : 0) + j) * step,
-					item.y + dy + ruleBox.paddingTop + blockContainerBox.marginTop,
+					item.y + dy + cssBoxes.ruleBox.paddingTop + cssBoxes.blockContainerBox.marginTop,
 					true);
 			});
 			actions.forEach(function (action, j) {
 				var box = eventHandler.error && eventHandler.error.actionErrorIndices.indexOf(j) >= 0
-					? eventHandler.error.isWarning ? blockContainerWarningBox : blockContainerErrorBox
-					: blockContainerBox;
+					? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
+					: cssBoxes.blockContainerBox;
 				box.drawAt(ctx,
-					item.x + dx + ruleBox.paddingLeft + actionX0 - eventX0 + blockContainerBox.marginLeft + j * step,
-					item.y + dy + ruleBox.paddingTop + blockContainerBox.marginTop,
+					item.x + dx + cssBoxes.ruleBox.paddingLeft + actionX0 - eventX0 + cssBoxes.blockContainerBox.marginLeft + j * step,
+					item.y + dy + cssBoxes.ruleBox.paddingTop + cssBoxes.blockContainerBox.marginTop,
 					true);
 			});
 		},
@@ -354,7 +344,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			childItem = this.addBlockToCanvas(canvas,
 				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.event, eventHandler,
 					{eventSide: true, index: j}),
-				blockEventBox,
+				cssBoxes.blockEmptyEventBox,
 				eventX0 + step * ((maxEventBlockCount > 0 ? maxEventBlockCount - events.length : 0) + j),
 				y,
 				{
@@ -383,7 +373,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			childItem = this.addBlockToCanvas(canvas,
 				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.action, eventHandler,
 					{eventSide: false, index: j}),
-				blockActionBox,
+				cssBoxes.blockEmptyActionBox,
 				actionX0 + step * j,
 				y,
 				{notDropTarget: false, notClickable: true, notDraggable: true});
@@ -394,11 +384,11 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	// error widgets
 	canvas.addDecoration(function (ctx) {
 		if (eventHandler.error !== null) {
-			var box = eventHandler.error.isWarning ? warningWidgetBox : errorWidgetBox;
+			var box = eventHandler.error.isWarning ? cssBoxes.warningWidgetBox : cssBoxes.errorWidgetBox;
 			canvas.drawWidget(eventHandler.error.isWarning ? "vpl:warning" : "vpl:error",
-				x - ruleBox.paddingLeft - ruleBox.marginLeft - blockContainerBox.offsetLeft() - blockEventBox.offsetLeft() -
+				x - cssBoxes.ruleBox.paddingLeft - cssBoxes.ruleBox.marginLeft - cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockEventBox.offsetLeft() -
 					box.width / 2 - box.marginRight - box.paddingRight,
-				y + blockEventBox.height * 0.5,
+				y + cssBoxes.blockEventBox.height * 0.5,
 				box);
 		}
 	});
@@ -409,25 +399,23 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	@param {number} x left side of first event block
 	@param {number} y1 top side of blocks in first rule
 	@param {number} y2 top side of blocks in second rule (below)
-	@param {CSSParser.VPL.Box} ruleBox
-	@param {CSSParser.VPL.Box} blockContainerBox
-	@param {CSSParser.VPL.Box} blockEventBox
-	@param {CSSParser.VPL.Box} widgetBox
+	@param {Object} cssBoxes
 	@param {boolean} isWarning
 	@return {void}
 */
-A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas, x, y1, y2, ruleBox, blockContainerBox, blockEventBox, widgetBox, isWarning) {
+A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas, x, y1, y2, cssBoxes, isWarning) {
 	var self = this;
+	var widgetBox = isWarning ? cssBoxes.warningWidgetBox : cssBoxes.errorWidgetBox;
 	canvas.addDecoration(function (ctx) {
 		// pink line
 		var errorLine = canvas.css.getLine({
 			tag: "conflict-line",
 			clas: [isWarning ? "warning" : "error"]
 		});
-		var xc = x - ruleBox.paddingLeft - ruleBox.marginLeft - blockContainerBox.offsetLeft() - blockEventBox.offsetLeft() -
+		var xc = x - cssBoxes.ruleBox.paddingLeft - cssBoxes.ruleBox.marginLeft - cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockEventBox.offsetLeft() -
 			widgetBox.width / 2 - widgetBox.marginRight - widgetBox.paddingRight;
-		var yc1 = y1 + (blockContainerBox.height + widgetBox.height) / 2;
-		var yc2 = y2 + (blockContainerBox.height - widgetBox.height) / 2;
+		var yc1 = y1 + (cssBoxes.blockContainerBox.height + widgetBox.height) / 2;
+		var yc2 = y2 + (cssBoxes.blockContainerBox.height - widgetBox.height) / 2;
 		ctx.beginPath();
 		ctx.moveTo(xc, yc1);
 		ctx.lineTo(xc, yc2);
@@ -441,6 +429,43 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 	});
 };
 
+/** Get css boxes
+	@param {CSSParser.VPL} css
+	@return {Object}
+*/
+A3a.vpl.Application.prototype.getCSSBoxes = function (css) {
+	var cssBoxes = {};
+	var zoomBlocks = this.program.zoomBlocks;
+	cssBoxes.viewBox = css.getBox({tag: "view", clas: ["vpl"]});
+	cssBoxes.toolbarSeparatorBox = css.getBox({tag: "separator", clas: ["vpl", "top"]});
+	cssBoxes.toolbarSeparator2Box = css.getBox({tag: "separator", clas: ["vpl", "bottom"]});
+	cssBoxes.toolbarBox = css.getBox({tag: "toolbar", clas: ["vpl", "top"]});
+	cssBoxes.toolbar2Box = css.getBox({tag: "toolbar", clas: ["vpl", "bottom"]});
+	cssBoxes.vplBox = css.getBox({tag: "vpl", id: "scrolling-vpl"});
+	cssBoxes.blockEventBox = css.getBox({tag: "block", clas: ["event"], pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.blockActionBox = css.getBox({tag: "block", clas: ["action"], pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.blockStateBox = css.getBox({tag: "block", clas: ["state"], pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.blockCommentBox = css.getBox({tag: "block", clas: ["comment"], pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.blockEmptyEventBox = css.getBox({tag: "block", clas: ["event", "empty"], pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.blockEmptyActionBox = css.getBox({tag: "block", clas: ["action", "empty"], pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.blockEmptyStateBox = css.getBox({tag: "block", clas: ["state", "empty"], pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.blockEmptyCommentBox = css.getBox({tag: "block", clas: ["comment", "empty"], pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.blockContainerBox = css.getBox({tag: "block-container"});
+	cssBoxes.blockContainerErrorBox = css.getBox({tag: "block-container", clas: ["error"]});
+	cssBoxes.blockContainerWarningBox = css.getBox({tag: "block-container", clas: ["warning"]});
+	cssBoxes.ruleBox = css.getBox({tag: "rule", pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.ruleSeparatorBox = css.getBox({tag: "widget", id: "widget-then", pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.blockEventLibItemBox = css.getBox({tag: "block", clas: ["library", "event"]});
+	cssBoxes.blockActionLibItemBox = css.getBox({tag: "block", clas: ["library", "action"]});
+	cssBoxes.blockStateLibItemBox = css.getBox({tag: "block", clas: ["library", "state"]});
+	cssBoxes.blockCommentLibItemBox = css.getBox({tag: "block", clas: ["library", "comment"]});
+	cssBoxes.blockEventLibBox = css.getBox({tag: "block-library", clas: ["event"]});
+	cssBoxes.blockActionLibBox = css.getBox({tag: "block-library", clas: ["action"]});
+	cssBoxes.errorWidgetBox = css.getBox({tag: "widget", id: "widget-error", pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.warningWidgetBox = css.getBox({tag: "widget", id: "widget-warning", pseudoClass: zoomBlocks ? ["small"] : []});
+	return cssBoxes;
+};
+
 /** Render the program to a single canvas
 	@return {void}
 */
@@ -448,6 +473,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var uiConfig = this.uiConfig;
 	var canvas = this.vplCanvas;
 	var program = this.program;
+	var cssBoxes = this.getCSSBoxes(canvas.css);
 
 	canvas.recalcSize();
 
@@ -495,7 +521,6 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 
 	// program item counts
 	var displaySingleEvent = program.displaySingleEvent();
-	var nMaxEventHandlers = program.program.length;
 	var nMaxEventHandlerELength = 0;
 	var nMaxEventHandlerALength = 0;
 	program.program.forEach(function (eventHandler) {
@@ -560,104 +585,81 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		"vpl:teacher-save",
 		"vpl:teacher"
 	];
+
+	// box sizes
 	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, toolbarConfig, ["vpl", "top"]);
 	var toolbarItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
 	var toolbar2ItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, toolbar2Config, ["vpl", "bottom"]);
 	var toolbar2ItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
 
-	// boxes
-	var viewBox = canvas.css.getBox({tag: "view", clas: ["vpl"]});
-	var separatorBox = canvas.css.getBox({tag: "separator", clas: ["vpl", "top"]});
-	var separator2Box = canvas.css.getBox({tag: "separator", clas: ["vpl", "bottom"]});
-	var toolbarBox = canvas.css.getBox({tag: "toolbar", clas: ["vpl", "top"]});
-	var toolbar2Box = canvas.css.getBox({tag: "toolbar", clas: ["vpl", "bottom"]});
-	var vplBox = canvas.css.getBox({tag: "vpl", id: "scrolling-vpl"});
-	var blockEventBox = canvas.css.getBox({tag: "block", clas: ["event"], pseudoClass: program.zoomBlocks ? ["small"] : []});
-	var blockActionBox = canvas.css.getBox({tag: "block", clas: ["action"], pseudoClass: program.zoomBlocks ? ["small"] : []});
-	var blockStateBox = canvas.css.getBox({tag: "block", clas: ["state"], pseudoClass: program.zoomBlocks ? ["small"] : []});
-	var blockCommentBox = canvas.css.getBox({tag: "block", clas: ["comment"], pseudoClass: program.zoomBlocks ? ["small"] : []});
-	var blockContainerBox = canvas.css.getBox({tag: "block-container"});
-	var blockContainerErrorBox = canvas.css.getBox({tag: "block-container", clas: ["error"]});
-	var blockContainerWarningBox = canvas.css.getBox({tag: "block-container", clas: ["warning"]});
-	var ruleBox = canvas.css.getBox({tag: "rule", pseudoClass: program.zoomBlocks ? ["small"] : []});
-	var ruleSeparatorBox = canvas.css.getBox({tag: "widget", id: "widget-then", pseudoClass: program.zoomBlocks ? ["small"] : []});
-	var blockEventLibItemBox = canvas.css.getBox({tag: "block", clas: ["library", "event"]});
-	var blockActionLibItemBox = canvas.css.getBox({tag: "block", clas: ["library", "action"]});
-	var blockStateLibItemBox = canvas.css.getBox({tag: "block", clas: ["library", "state"]});
-	var blockCommentLibItemBox = canvas.css.getBox({tag: "block", clas: ["library", "comment"]});
-	var blockEventLibBox = canvas.css.getBox({tag: "block-library", clas: ["event"]});
-	var blockActionLibBox = canvas.css.getBox({tag: "block-library", clas: ["action"]});
-	var errorWidgetBox = canvas.css.getBox({tag: "widget", id: "widget-error", pseudoClass: self.zoomBlocks ? ["small"] : []});
-	var warningWidgetBox = canvas.css.getBox({tag: "widget", id: "widget-warning", pseudoClass: self.zoomBlocks ? ["small"] : []});
-
-	// box sizes
-	viewBox.setTotalWidth(canvasSize.width);
-	viewBox.setTotalHeight(canvasSize.height);
-	viewBox.setPosition(0, 0);
-	toolbarBox.setTotalWidth(viewBox.width);
-	toolbarBox.height = toolbarItemHeight;
-	toolbarBox.setPosition(viewBox.x, viewBox.y);
-	blockEventLibBox.setTotalHeight(viewBox.height - toolbarBox.totalHeight());
+	cssBoxes.viewBox.setTotalWidth(canvasSize.width);
+	cssBoxes.viewBox.setTotalHeight(canvasSize.height);
+	cssBoxes.viewBox.setPosition(0, 0);
+	cssBoxes.toolbarBox.setTotalWidth(cssBoxes.viewBox.width);
+	cssBoxes.toolbarBox.height = toolbarItemHeight;
+	cssBoxes.toolbarBox.setPosition(cssBoxes.viewBox.x, cssBoxes.viewBox.y);
+	cssBoxes.blockEventLibBox.setTotalHeight(cssBoxes.viewBox.height - cssBoxes.toolbarBox.totalHeight());
 	var maxBlPerCol =  Math.max(
-		Math.floor(blockEventLibBox.height / blockEventLibItemBox.totalHeight()),
+		Math.floor(cssBoxes.blockEventLibBox.height / cssBoxes.blockEventLibItemBox.totalHeight()),
 		1
 	);
-	var evCol = blockEventLibBox.scroll
+	var evCol = cssBoxes.blockEventLibBox.scroll
 		? 1
 		: Math.ceil(nEvTemplates / maxBlPerCol);
-	blockEventLibBox.width = evCol * blockEventLibItemBox.totalWidth();
-	blockEventLibBox.setPosition(viewBox.x, viewBox.y + toolbarBox.totalHeight());
-	blockActionLibBox.setTotalHeight(viewBox.height - toolbarBox.totalHeight());
-	var acCol = blockActionLibBox.scroll
+	cssBoxes.blockEventLibBox.width = evCol * cssBoxes.blockEventLibItemBox.totalWidth();
+	cssBoxes.blockEventLibBox.setPosition(cssBoxes.viewBox.x, cssBoxes.viewBox.y + cssBoxes.toolbarBox.totalHeight());
+	cssBoxes.blockActionLibBox.setTotalHeight(cssBoxes.viewBox.height - cssBoxes.toolbarBox.totalHeight());
+	var acCol = cssBoxes.blockActionLibBox.scroll
 		? 1
 		: Math.ceil(nAcTemplates / maxBlPerCol);
-	blockActionLibBox.width = acCol * blockActionLibItemBox.totalWidth();
-	blockActionLibBox.setPosition(viewBox.x + viewBox.width - blockActionLibBox.totalWidth(),
-		viewBox.y + toolbarBox.totalHeight());
-	toolbar2Box.setTotalWidth(viewBox.width - blockEventLibBox.totalWidth() - blockActionLibBox.totalWidth());
-	toolbar2Box.height = toolbar2ItemHeight;
-	toolbar2Box.setPosition(viewBox.x + blockEventLibBox.totalWidth(),
-		viewBox.y + viewBox.height - toolbar2Box.totalHeight());
-	vplBox.setTotalWidth(viewBox.width - blockEventLibBox.totalWidth() - blockActionLibBox.totalWidth());
-	vplBox.setTotalHeight(viewBox.height - toolbarBox.totalHeight() -
-		(toolbar2HasAvButtons ? toolbar2Box.totalHeight() : 0));
-	vplBox.setPosition(viewBox.x + blockEventLibBox.totalWidth(), viewBox.y + toolbarBox.totalHeight());
-	blockEventBox.width = canvas.dims.blockSize;
-	blockEventBox.height = canvas.dims.blockSize;
-	blockActionBox.width = canvas.dims.blockSize;
-	blockActionBox.height = canvas.dims.blockSize;
-	blockStateBox.width = canvas.dims.blockSize;
-	blockStateBox.height = canvas.dims.blockSize;
-	blockCommentBox.width = canvas.dims.blockSize;
-	blockCommentBox.height = canvas.dims.blockSize;
-	blockContainerBox.width = blockContainerErrorBox.width = blockContainerWarningBox.width = blockEventBox.totalWidth();
-	blockContainerBox.height = blockContainerErrorBox.height = blockContainerWarningBox.height = blockEventBox.totalHeight();
-	var ruleSeparatorWidth = ruleSeparatorBox.totalWidth();
-	var blockStep = blockContainerBox.totalWidth();
+	cssBoxes.blockActionLibBox.width = acCol * cssBoxes.blockActionLibItemBox.totalWidth();
+	cssBoxes.blockActionLibBox.setPosition(cssBoxes.viewBox.x + cssBoxes.viewBox.width - cssBoxes.blockActionLibBox.totalWidth(),
+		cssBoxes.viewBox.y + cssBoxes.toolbarBox.totalHeight());
+	cssBoxes.toolbar2Box.setTotalWidth(cssBoxes.viewBox.width - cssBoxes.blockEventLibBox.totalWidth() - cssBoxes.blockActionLibBox.totalWidth());
+	cssBoxes.toolbar2Box.height = toolbar2ItemHeight;
+	cssBoxes.toolbar2Box.setPosition(cssBoxes.viewBox.x + cssBoxes.blockEventLibBox.totalWidth(),
+		cssBoxes.viewBox.y + cssBoxes.viewBox.height - cssBoxes.toolbar2Box.totalHeight());
+	cssBoxes.vplBox.setTotalWidth(cssBoxes.viewBox.width - cssBoxes.blockEventLibBox.totalWidth() - cssBoxes.blockActionLibBox.totalWidth());
+	cssBoxes.vplBox.setTotalHeight(cssBoxes.viewBox.height - cssBoxes.toolbarBox.totalHeight() -
+		(toolbar2HasAvButtons ? cssBoxes.toolbar2Box.totalHeight() : 0));
+	cssBoxes.vplBox.setPosition(cssBoxes.viewBox.x + cssBoxes.blockEventLibBox.totalWidth(), cssBoxes.viewBox.y + cssBoxes.toolbarBox.totalHeight());
+	cssBoxes.blockEventBox.width = canvas.dims.blockSize;
+	cssBoxes.blockEventBox.height = canvas.dims.blockSize;
+	cssBoxes.blockActionBox.width = canvas.dims.blockSize;
+	cssBoxes.blockActionBox.height = canvas.dims.blockSize;
+	cssBoxes.blockStateBox.width = canvas.dims.blockSize;
+	cssBoxes.blockStateBox.height = canvas.dims.blockSize;
+	cssBoxes.blockCommentBox.width = canvas.dims.blockSize;
+	cssBoxes.blockCommentBox.height = canvas.dims.blockSize;
+	cssBoxes.blockContainerBox.width = cssBoxes.blockContainerErrorBox.width = cssBoxes.blockContainerWarningBox.width = cssBoxes.blockEventBox.totalWidth();
+	cssBoxes.blockContainerBox.height = cssBoxes.blockContainerErrorBox.height = cssBoxes.blockContainerWarningBox.height = cssBoxes.blockEventBox.totalHeight();
+	var ruleSeparatorWidth = cssBoxes.ruleSeparatorBox.totalWidth();
+	var blockStep = cssBoxes.blockContainerBox.totalWidth();
 	var ruleWidth = (nMaxEventHandlerELength + nMaxEventHandlerALength) * blockStep + ruleSeparatorWidth;
 	// position of first event block in program (will be adjusted to make room for lists of events and actions)
-	var eventX0 = viewBox.x + (viewBox.width - ruleWidth + errorWidgetBox.totalWidth()) / 2;
+	var eventX0 = cssBoxes.viewBox.x + (cssBoxes.viewBox.width - ruleWidth + cssBoxes.errorWidgetBox.totalWidth()) / 2;
 	// position of first action block in program (will be adjusted to make room for lists of events and actions)
 	var actionX0 = eventX0 +
 		blockStep * nMaxEventHandlerELength +
 		ruleSeparatorWidth;
-	ruleBox.width = ruleWidth;
-	ruleBox.height = blockContainerBox.totalHeight();
+	cssBoxes.ruleBox.width = ruleWidth;
+	cssBoxes.ruleBox.height = cssBoxes.blockContainerBox.totalHeight();
 
 	/** Get box for the specified block template
+		@param {Object} cssBoxes
 		@param {A3a.vpl.BlockTemplate} blockTemplate
 		@return {CSSParser.VPL.Box}
 	*/
-	function boxForBlockTemplate(blockTemplate) {
+	function boxForBlockTemplate(cssBoxes, blockTemplate) {
 		switch (blockTemplate.type) {
 		case A3a.vpl.blockType.event:
-			return blockEventLibItemBox;
+			return cssBoxes.blockEventLibItemBox;
 		case A3a.vpl.blockType.action:
-			return blockActionLibItemBox;
+			return cssBoxes.blockActionLibItemBox;
 		case A3a.vpl.blockType.state:
-			return blockStateLibItemBox;
+			return cssBoxes.blockStateLibItemBox;
 		case A3a.vpl.blockType.comment:
-			return blockCommentLibItemBox;
+			return cssBoxes.blockCommentLibItemBox;
 		default:
 			throw "internal";	// hidden or undef, shouldn't be in block library
 		}
@@ -668,7 +670,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 
 	// view (background)
 	canvas.addDecoration(function (ctx) {
-		viewBox.draw(ctx);
+		cssBoxes.viewBox.draw(ctx);
 	});
 
 	// top controls
@@ -678,8 +680,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		["vpl", "top"],
 		program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
 		program.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
-	controlBar.calcLayout(toolbarBox, toolbarItemBoxes, separatorBox);
-	controlBar.addToCanvas(toolbarBox, toolbarItemBoxes);
+	controlBar.calcLayout(cssBoxes.toolbarBox, toolbarItemBoxes, cssBoxes.toolbarSeparatorBox);
+	controlBar.addToCanvas(cssBoxes.toolbarBox, toolbarItemBoxes);
 
 	// 2nd toolbar at bottom between templates
 	if (toolbar2HasAvButtons > 0) {
@@ -689,26 +691,26 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			["vpl", "bottom"],
 			program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
 			program.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
-		controlBar2.calcLayout(toolbar2Box, toolbar2ItemBoxes, separator2Box);
-		controlBar2.addToCanvas(toolbar2Box, toolbar2ItemBoxes);
+		controlBar2.calcLayout(cssBoxes.toolbar2Box, toolbar2ItemBoxes, cssBoxes.toolbarSeparator2Box);
+		controlBar2.addToCanvas(cssBoxes.toolbar2Box, toolbar2ItemBoxes);
 	}
 
 	// templates
-	var stepEvent = blockEventLibItemBox.totalHeight();
-	var stepAction = blockActionLibItemBox.totalHeight();
+	var stepEvent = cssBoxes.blockEventLibItemBox.totalHeight();
+	var stepAction = cssBoxes.blockActionLibItemBox.totalHeight();
 	var eventLibWidth = 0;
 	var actionLibWidth = 0;
-	if (blockEventLibBox.scroll) {
-		eventLibWidth = blockEventLibItemBox.totalWidth();
+	if (cssBoxes.blockEventLibBox.scroll) {
+		eventLibWidth = cssBoxes.blockEventLibItemBox.totalWidth();
 		renderingState.eventScroll.setTotalHeight(nEvTemplates * stepEvent);
-		blockEventLibBox.width = eventLibWidth;
-		blockEventLibBox.height = blockEventLibBox.height;
-		renderingState.eventScroll.resize(blockEventLibBox.x,
-			blockEventLibBox.y,
-			blockEventLibBox.width,
-			blockEventLibBox.height);
+		cssBoxes.blockEventLibBox.width = eventLibWidth;
+		cssBoxes.blockEventLibBox.height = cssBoxes.blockEventLibBox.height;
+		renderingState.eventScroll.resize(cssBoxes.blockEventLibBox.x,
+			cssBoxes.blockEventLibBox.y,
+			cssBoxes.blockEventLibBox.width,
+			cssBoxes.blockEventLibBox.height);
 		canvas.addDecoration(function (ctx) {
-			blockEventLibBox.draw(ctx);
+			cssBoxes.blockEventLibBox.draw(ctx);
 		});
 		renderingState.eventScroll.begin(canvas);
 		var row = 0;
@@ -718,10 +720,10 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				(uiConfig.customizationMode ||
 					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 						.indexOf(blockTemplate.name) >= 0)) {
-				var box = boxForBlockTemplate(blockTemplate);
+				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
 				program.addBlockTemplateToCanvas(canvas, blockTemplate, box,
-					blockEventLibBox.x + box.offsetLeft(),
-					blockEventLibBox.y + box.offsetTop() + row * stepEvent);
+					cssBoxes.blockEventLibBox.x + box.offsetLeft(),
+					cssBoxes.blockEventLibBox.y + box.offsetTop() + row * stepEvent);
 				row++;
 			}
 		}, this);
@@ -734,23 +736,23 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			if (!renderingState.eventScroll.isTop()) {
 				// more to see above
 				canvas.drawWidget("vpl:moreHigh",
-					blockEventLibBox.x + blockEventLibBox.width / 2,
-					blockEventLibBox.y + moreHighBox.totalHeight() / 2,
+					cssBoxes.blockEventLibBox.x + cssBoxes.blockEventLibBox.width / 2,
+					cssBoxes.blockEventLibBox.y + moreHighBox.totalHeight() / 2,
 					moreHighBox);
 			}
 			if (!renderingState.eventScroll.isBottom()) {
 				// more to see below
 				canvas.drawWidget("vpl:moreLow",
-					blockEventLibBox.x + blockEventLibBox.width / 2,
-					blockEventLibBox.y + blockEventLibBox.height - moreLowBox.totalHeight() / 2,
+					cssBoxes.blockEventLibBox.x + cssBoxes.blockEventLibBox.width / 2,
+					cssBoxes.blockEventLibBox.y + cssBoxes.blockEventLibBox.height - moreLowBox.totalHeight() / 2,
 					moreLowBox);
 			}
 		});
 	} else {
 		canvas.addDecoration(function (ctx) {
-			blockEventLibBox.draw(ctx);
+			cssBoxes.blockEventLibBox.draw(ctx);
 		});
-		eventLibWidth = evCol * stepEvent + blockEventLibBox.nonContentWidth();
+		eventLibWidth = evCol * stepEvent + cssBoxes.blockEventLibBox.nonContentWidth();
 		var colLen = Math.ceil(nEvTemplates / evCol);
 		var row = 0;
 		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
@@ -759,25 +761,25 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				(uiConfig.customizationMode ||
 					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 						.indexOf(blockTemplate.name) >= 0)) {
-				var box = boxForBlockTemplate(blockTemplate);
-				var x = blockEventLibBox.x + box.offsetLeft() + Math.floor(row / colLen) * stepEvent;
-				var y = blockEventLibBox.y + box.offsetTop() + stepEvent * (row % colLen);
+				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
+				var x = cssBoxes.blockEventLibBox.x + box.offsetLeft() + Math.floor(row / colLen) * stepEvent;
+				var y = cssBoxes.blockEventLibBox.y + box.offsetTop() + stepEvent * (row % colLen);
 				program.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y);
 				row++;
 			}
 		}, this);
 	}
-	if (blockActionLibBox.scroll) {
-		actionLibWidth = blockActionLibItemBox.totalWidth();
+	if (cssBoxes.blockActionLibBox.scroll) {
+		actionLibWidth = cssBoxes.blockActionLibItemBox.totalWidth();
 		renderingState.actionScroll.setTotalHeight(nAcTemplates * stepAction);
-		blockActionLibBox.width = actionLibWidth;
-		blockActionLibBox.height = blockActionLibBox.height;
-		renderingState.actionScroll.resize(blockActionLibBox.x,
-			blockActionLibBox.y,
-			blockActionLibBox.width,
-			blockActionLibBox.height);
+		cssBoxes.blockActionLibBox.width = actionLibWidth;
+		cssBoxes.blockActionLibBox.height = cssBoxes.blockActionLibBox.height;
+		renderingState.actionScroll.resize(cssBoxes.blockActionLibBox.x,
+			cssBoxes.blockActionLibBox.y,
+			cssBoxes.blockActionLibBox.width,
+			cssBoxes.blockActionLibBox.height);
 		canvas.addDecoration(function (ctx) {
-			blockActionLibBox.draw(ctx);
+			cssBoxes.blockActionLibBox.draw(ctx);
 		});
 		renderingState.actionScroll.begin(canvas);
 		row = 0;
@@ -787,10 +789,10 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				(uiConfig.customizationMode ||
 					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 						.indexOf(blockTemplate.name) >= 0)) {
-				var box = boxForBlockTemplate(blockTemplate);
+				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
 				program.addBlockTemplateToCanvas(canvas, blockTemplate, box,
-					blockActionLibBox.x + blockActionLibItemBox.offsetLeft(),
-					blockActionLibBox.y + blockActionLibItemBox.offsetTop() + row * stepAction);
+					cssBoxes.blockActionLibBox.x + cssBoxes.blockActionLibItemBox.offsetLeft(),
+					cssBoxes.blockActionLibBox.y + cssBoxes.blockActionLibItemBox.offsetTop() + row * stepAction);
 				row++;
 			}
 		}, this);
@@ -803,23 +805,23 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			if (!renderingState.actionScroll.isTop()) {
 				// more to see above
 				canvas.drawWidget("vpl:moreHigh",
-					blockActionLibBox.x + blockActionLibBox.width / 2,
-					blockActionLibBox.y + moreHighBox.totalHeight() / 2,
+					cssBoxes.blockActionLibBox.x + cssBoxes.blockActionLibBox.width / 2,
+					cssBoxes.blockActionLibBox.y + moreHighBox.totalHeight() / 2,
 					moreHighBox);
 			}
 			if (!renderingState.actionScroll.isBottom()) {
 				// more to see below
 				canvas.drawWidget("vpl:moreLow",
-					blockActionLibBox.x + blockActionLibBox.width / 2,
-					blockActionLibBox.y + blockActionLibBox.height - moreLowBox.totalHeight() / 2,
+					cssBoxes.blockActionLibBox.x + cssBoxes.blockActionLibBox.width / 2,
+					cssBoxes.blockActionLibBox.y + cssBoxes.blockActionLibBox.height - moreLowBox.totalHeight() / 2,
 					moreLowBox);
 			}
 		});
 	} else {
 		canvas.addDecoration(function (ctx) {
-			blockActionLibBox.draw(ctx);
+			cssBoxes.blockActionLibBox.draw(ctx);
 		});
-		actionLibWidth = acCol * stepAction + blockActionLibBox.nonContentWidth();
+		actionLibWidth = acCol * stepAction + cssBoxes.blockActionLibBox.nonContentWidth();
 		colLen = Math.ceil(nAcTemplates / acCol);
 		row = 0;
 		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
@@ -828,10 +830,10 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				(uiConfig.customizationMode ||
 					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 						.indexOf(blockTemplate.name) >= 0)) {
-				var box = boxForBlockTemplate(blockTemplate);
-				var x = blockActionLibBox.x + box.offsetLeft() + blockActionLibBox.width -
+				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
+				var x = cssBoxes.blockActionLibBox.x + box.offsetLeft() + cssBoxes.blockActionLibBox.width -
 					(acCol - Math.floor(row / colLen)) * stepAction;
-				var y = blockActionLibBox.y + box.offsetTop() + stepAction * (row % colLen);
+				var y = cssBoxes.blockActionLibBox.y + box.offsetTop() + stepAction * (row % colLen);
 				program.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y);
 				row++;
 			}
@@ -841,11 +843,11 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	if (uiConfig.customizationMode) {
 		// draw vpl:customization widget
 		var customizationBox = canvas.css.getBox({tag: "widget", id: "vpl-customize"});
-		customizationBox.width = vplBox.width / 4;
-		customizationBox.height = vplBox.height / 4;
+		customizationBox.width = cssBoxes.vplBox.width / 4;
+		customizationBox.height = cssBoxes.vplBox.height / 4;
 		canvas.addDecoration(function (ctx) {
 			canvas.drawWidget("vpl:customize",
-				vplBox.x + vplBox.width / 2, vplBox.y + vplBox.height / 2,
+				cssBoxes.vplBox.x + cssBoxes.vplBox.width / 2, cssBoxes.vplBox.y + cssBoxes.vplBox.height / 2,
 				customizationBox);
 		});
 	} else if (program.message) {
@@ -855,30 +857,30 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			ctx.font = fontSize + "px sans-serif";
 			ctx.textAlign = "start";
 			ctx.textBaseline = "top";
-			var x0 = vplBox.x + fontSize;
-			var y0 = vplBox.y + fontSize;
+			var x0 = cssBoxes.vplBox.x + fontSize;
+			var y0 = cssBoxes.vplBox.y + fontSize;
 			lines.forEach(function (line, i) {
 				ctx.fillText(line, x0, y0 + fontSize * 1.2 * i);
 			});
 		});
 	} else {
 		// program scroll region
-		var vplWidth = ruleBox.totalWidth() + vplBox.paddingLeft + vplBox.paddingRight + errorWidgetBox.totalWidth();
+		var vplWidth = cssBoxes.ruleBox.totalWidth() + cssBoxes.vplBox.paddingLeft + cssBoxes.vplBox.paddingRight + cssBoxes.errorWidgetBox.totalWidth();
 		renderingState.programScroll.setTotalWidth(vplWidth);
-		renderingState.programScroll.setTotalHeight(program.program.length * ruleBox.totalHeight());
+		renderingState.programScroll.setTotalHeight(program.program.length * cssBoxes.ruleBox.totalHeight());
 
 		// program
-		renderingState.programScroll.resize(vplBox.x, vplBox.y,
-			vplBox.width,	vplBox.height);
+		renderingState.programScroll.resize(cssBoxes.vplBox.x, cssBoxes.vplBox.y,
+			cssBoxes.vplBox.width, cssBoxes.vplBox.height);
 		canvas.addDecoration(function (ctx) {
-			vplBox.draw(ctx);
+			cssBoxes.vplBox.draw(ctx);
 		});
 		renderingState.programScroll.begin(canvas);
 		eventX0 += (eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
 		actionX0 += (eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
-		if (vplWidth > vplBox.width) {
-			eventX0 += (vplWidth - vplBox.width) / 2 + vplBox.paddingLeft + vplBox.marginLeft;
-			actionX0 += (vplWidth - vplBox.width) / 2 + vplBox.paddingLeft + vplBox.marginLeft;
+		if (vplWidth > cssBoxes.vplBox.width) {
+			eventX0 += (vplWidth - cssBoxes.vplBox.width) / 2 + cssBoxes.vplBox.paddingLeft + cssBoxes.vplBox.marginLeft;
+			actionX0 += (vplWidth - cssBoxes.vplBox.width) / 2 + cssBoxes.vplBox.paddingLeft + cssBoxes.vplBox.marginLeft;
 		}
 		var errorMsg = "";
 		var isWarning = false;
@@ -886,10 +888,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			program.addEventHandlerToCanvas(canvas, eventHandler,
 				displaySingleEvent, canvas.dims.eventRightAlign ? nMaxEventHandlerELength : -1,
 				eventX0, actionX0,
-				vplBox.y + ruleBox.totalHeight() * i + ruleBox.offsetTop() + blockContainerBox.offsetTop(),
-				blockEventBox, blockActionBox, blockStateBox, blockCommentBox,
-				blockContainerBox, blockContainerErrorBox, blockContainerWarningBox,
-				ruleBox, ruleSeparatorBox, errorWidgetBox, warningWidgetBox);
+				cssBoxes.vplBox.y + cssBoxes.ruleBox.totalHeight() * i + cssBoxes.ruleBox.offsetTop() + cssBoxes.blockContainerBox.offsetTop(),
+				cssBoxes);
 			if (eventHandler.error !== null && errorMsg === "") {
 				errorMsg = eventHandler.error.msg;
 				isWarning = eventHandler.error.isWarning;
@@ -898,10 +898,9 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 						if (program.program[j] === eventHandler.error.conflictEventHandler) {
 							program.addEventHandlerConflictLinkToCanvas(canvas,
 								eventX0,
-								vplBox.y + ruleBox.totalHeight() * i + ruleBox.offsetTop() + blockContainerBox.offsetTop(),
-								vplBox.y + ruleBox.totalHeight() * j + ruleBox.offsetTop() + blockContainerBox.offsetTop(),
-								ruleBox, blockContainerBox, blockEventBox,
-								eventHandler.error.isWarning ? warningWidgetBox : errorWidgetBox,
+								cssBoxes.vplBox.y + cssBoxes.ruleBox.totalHeight() * i + cssBoxes.ruleBox.offsetTop() + cssBoxes.blockContainerBox.offsetTop(),
+								cssBoxes.vplBox.y + cssBoxes.ruleBox.totalHeight() * j + cssBoxes.ruleBox.offsetTop() + cssBoxes.blockContainerBox.offsetTop(),
+								cssBoxes,
 								eventHandler.error.isWarning);
 							break;
 						}
@@ -913,8 +912,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 
 		if (program.noVPL) {
 			canvas.addDecoration(function (ctx) {
-				canvas.disabledMark(vplBox.x, vplBox.y,
-					vplBox.width, vplBox.height,
+				canvas.disabledMark(cssBoxes.vplBox.x, cssBoxes.vplBox.y,
+					cssBoxes.vplBox.width, cssBoxes.vplBox.height,
 					["vpl"], ["vpl"]);
 			});
 		}

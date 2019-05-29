@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -30,37 +30,37 @@ A3a.vpl.EmptyBlock.templates = {
  	"e": new A3a.vpl.BlockTemplate({
 		name: "empty e",
 		type: A3a.vpl.blockType.event,
-		draw: function (canvas, block) {
+		draw: function (canvas, block, box) {
 			var blockTemplate = A3a.vpl.BlockTemplate.findByName("!empty event");
 			if (blockTemplate) {
-				blockTemplate.draw(canvas, block);
+				blockTemplate.draw(canvas, block, box);
 			} else {
-				canvas.clearBlockBackground();
+				canvas.clearBlockBackground(box);
 			}
 		}
 	}),
 	"a": new A3a.vpl.BlockTemplate({
 		name: "empty a",
 		type: A3a.vpl.blockType.action,
-		draw: function (canvas, block) {
+		draw: function (canvas, block, box) {
 			var blockTemplate = A3a.vpl.BlockTemplate.findByName("!empty action");
 			if (blockTemplate) {
-				blockTemplate.draw(canvas, block);
+				blockTemplate.draw(canvas, block, box);
 			} else {
-				canvas.clearBlockBackground();
+				canvas.clearBlockBackground(box);
 			}
 		}
 	}),
 	"s": new A3a.vpl.BlockTemplate({
 		name: "empty s",
 		type: A3a.vpl.blockType.state,
-		draw: function (canvas, block) {
+		draw: function (canvas, block, box) {
 			var blockTemplate = A3a.vpl.BlockTemplate.findByName("!empty state") ||
 				A3a.vpl.BlockTemplate.findByName("!empty event");
 			if (blockTemplate) {
-				blockTemplate.draw(canvas, block);
+				blockTemplate.draw(canvas, block, box);
 			} else {
-				canvas.clearBlockBackground();
+				canvas.clearBlockBackground(box);
 			}
 		}
 	})
