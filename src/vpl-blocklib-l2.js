@@ -24,57 +24,34 @@ A3a.vpl.patchL2Blocks = function () {
 	/** @const */
 	A3a.vpl.BlockTemplate.initStatesDecl2 =
 		"// variables for state\n" +
-		"bool state[4];\n" +
-		"bool state0[4];\n";
+		"bool state[4];\n";
 
 	/** @const */
 	A3a.vpl.BlockTemplate.initStatesInit2 =
 		"state = [false, false, false, false];\n";
 
 	/** @const */
-	A3a.vpl.BlockTemplate.clauseInitState2 =
-		"state0 = state;\n";
-
-	/** @const */
 	A3a.vpl.BlockTemplate.initState8Decl2 =
 		"// variables for exclusive state\n" +
-		"int state8;\n" +
-		"int state80;\n";
+		"int state8;\n";
 
 	/** @const */
 	A3a.vpl.BlockTemplate.initState8Init2 =
 		"state8 = 0;\n";
 
 	/** @const */
-	A3a.vpl.BlockTemplate.clauseInitState82 =
-		"state80 = state8;\n";
-
-	/** @const */
 	A3a.vpl.BlockTemplate.initCounterDecl2 =
 		"// variables for counter\n" +
-		"int counter;\n" +
-		"int counter0;\n";
+		"int counter;\n";
 
 	/** @const */
 	A3a.vpl.BlockTemplate.initCounterInit2 =
 		"counter = 0;\n";
 
 	/** @const */
-	A3a.vpl.BlockTemplate.clauseInitCounter2 =
-		"counter0 = counter;\n";
-
-	/** @const */
 	A3a.vpl.BlockTemplate.initTopColorDecl2 =
 		"// RGB color of the top led\n" +
 		"int topColor[3];\n";
-
-	/** @const */
-	A3a.vpl.BlockTemplate.initTopColorStateDecll2 =
-		"int topColor0[3];\n";
-
-	/** @const */
-	A3a.vpl.BlockTemplate.clauseInitTopColorl2 =
-		"topColor0 = topColor;\n";
 
 	/** @const */
 	A3a.vpl.BlockTemplate.initTopColorInit2 =
@@ -123,7 +100,7 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent buttons {\n",
 					sectionEnd: "}\n",
-					clause: "button." + ["center", "forward", "backward", "right", "left"][block.param[0]] + " != 0"
+					clause: "button." + ["center", "forward", "backward", "right", "left"][block.param[0]]
 				};
 			},
 			"horiz prox": function (block) {
@@ -383,7 +360,7 @@ A3a.vpl.patchL2Blocks = function () {
 				for (var i = 0; i < 4; i++) {
 					if (block.param[i]) {
 						cond += (cond.length === 0 ? "" : " && ") +
-							(block.param[i] > 0 ? "" : "!") + "state0[" + i + "]";
+							(block.param[i] > 0 ? "" : "!") + "state[" + i + "]";
 					}
 				}
 				return {
@@ -393,7 +370,6 @@ A3a.vpl.patchL2Blocks = function () {
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initStatesInit2
 					],
-					clauseInit: A3a.vpl.BlockTemplate.clauseInitState2,
 					clause: cond
 				};
 			},
@@ -405,12 +381,11 @@ A3a.vpl.patchL2Blocks = function () {
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initState8Init2
 					],
-					clauseInit: A3a.vpl.BlockTemplate.clauseInitState82,
-					clause: "state80 == " + block.param[0].toString(10)
+					clause: "state8 == " + block.param[0].toString(10)
 				};
 			},
 			"counter comparison": function (block) {
-					var cond = "counter0 " +
+					var cond = "counter " +
 						(block.param[0] === 0 ? "==" : block.param[0] > 0 ? ">=" : "<=") +
 						" " + block.param[1];
 					return {
@@ -420,41 +395,36 @@ A3a.vpl.patchL2Blocks = function () {
 						initCodeExec: [
 							A3a.vpl.BlockTemplate.initCounterInit2
 						],
-						clauseInit: A3a.vpl.BlockTemplate.clauseInitCounter2,
 						clause: cond
 					};
 			},
 			"color state": function (block) {
 				var cond = block.param
 					.map(function (p, i) {
-						return "topColor0[" + i + "] / 11 == " + Math.floor(p * 2.99);
+						return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
 					})
 					.join(" && ");
 				return {
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initTopColorDecl2,
-						A3a.vpl.BlockTemplate.initTopColorStateDecll2
+						A3a.vpl.BlockTemplate.initTopColorDecl2
 					],
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initTopColorInit2
 					],
-					clauseInit: A3a.vpl.BlockTemplate.clauseInitTopColorl2,
 					clause: cond
 				};
 			},
 			"color 8 state": function (block) {
 				return {
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initTopColorDecl2,
-						A3a.vpl.BlockTemplate.initTopColorStateDecll2
+						A3a.vpl.BlockTemplate.initTopColorDecl2
 					],
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initTopColorInit2
 					],
-					clauseInit: A3a.vpl.BlockTemplate.clauseInitTopColorl2,
-					clause: "topColor0[0] " + (block.param[0] % 2 ? '>=' : '<') +
-						" 16 && topColor0[1] " + (block.param[0] % 4 >= 2 ? '>=' : '<') +
-							" 16 && topColor0[2] " + (block.param[0] >= 4 ? '>=' : '<') + " 16"
+					clause: "topColor[0] " + (block.param[0] % 2 ? '>=' : '<') +
+						" 16 && topColor[1] " + (block.param[0] % 4 >= 2 ? '>=' : '<') +
+							" 16 && topColor[2] " + (block.param[0] >= 4 ? '>=' : '<') + " 16"
 				};
 			},
 			"motor state": function (block) {

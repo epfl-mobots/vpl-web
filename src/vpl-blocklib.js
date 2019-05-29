@@ -18,55 +18,32 @@ A3a.vpl.BlockTemplate.initOutputs =
 
 /** @const */
 A3a.vpl.BlockTemplate.initStatesDecl =
-	"var state[4]\n" +
-	"var state0[4]\n";
+	"var state[4]\n";
 
 /** @const */
 A3a.vpl.BlockTemplate.initStatesInit =
 	"state = [0, 0, 0, 0]\n";
 
 /** @const */
-A3a.vpl.BlockTemplate.clauseInitState =
-	"state0 = state\n";
-
-/** @const */
 A3a.vpl.BlockTemplate.initState8Decl =
-	"var state8\n" +
-	"var state80\n";
+	"var state8\n";
 
 /** @const */
 A3a.vpl.BlockTemplate.initState8Init =
 	"state8 = 0\n";
 
 /** @const */
-A3a.vpl.BlockTemplate.clauseInitState8 =
-	"state80 = state8\n";
-
-/** @const */
 A3a.vpl.BlockTemplate.initCounterDecl =
-	"var counter\n" +
-	"var counter0\n";
+	"var counter\n";
 
 /** @const */
 A3a.vpl.BlockTemplate.initCounterInit =
 	"counter = 0\n";
 
 /** @const */
-A3a.vpl.BlockTemplate.clauseInitCounter =
-	"counter0 = counter\n";
-
-/** @const */
 A3a.vpl.BlockTemplate.initTopColorDecl =
 	"# RGB color of the top led\n" +
 	"var topColor[3]\n";
-
-/** @const */
-A3a.vpl.BlockTemplate.initTopColorStateDecl =
-	"var topColor0[3]\n";
-
-/** @const */
-A3a.vpl.BlockTemplate.clauseInitTopColor =
-	"topColor0 = topColor\n";
 
 /** @const */
 A3a.vpl.BlockTemplate.initTopColorInit =
@@ -1190,7 +1167,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				for (var i = 0; i < 4; i++) {
 					if (block.param[i]) {
 						cond += (cond.length === 0 ? "" : " and ") +
-							"state0[" + i + "] == " + (block.param[i] > 0 ? "1" : "0");
+							"state[" + i + "] == " + (block.param[i] > 0 ? "1" : "0");
 					}
 				}
 				return {
@@ -1200,7 +1177,6 @@ A3a.vpl.BlockTemplate.lib =	[
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initStatesInit
 					],
-					clauseInit: A3a.vpl.BlockTemplate.clauseInitState,
 					clause: cond
 				};
 			}
@@ -1236,8 +1212,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initState8Init
 					],
-					clauseInit: A3a.vpl.BlockTemplate.clauseInitState8,
-					clause: "state80 == " + block.param[0].toString(10)
+					clause: "state8 == " + block.param[0].toString(10)
 				};
 			}
 		}
@@ -1302,7 +1277,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 			genCode: {
 				"aseba": function (block) {
-					var cond = "counter0 " +
+					var cond = "counter " +
 						(block.param[0] === 0 ? "==" : block.param[0] > 0 ? ">=" : "<=") +
 						" " + block.param[1];
 					return {
@@ -1312,7 +1287,6 @@ A3a.vpl.BlockTemplate.lib =	[
 						initCodeExec: [
 							A3a.vpl.BlockTemplate.initCounterInit
 						],
-						clauseInit: A3a.vpl.BlockTemplate.clauseInitCounter,
 						clause: cond
 					};
 				}
@@ -1358,18 +1332,16 @@ A3a.vpl.BlockTemplate.lib =	[
 			"aseba": function (block) {
 				var cond = block.param
 					.map(function (p, i) {
-						return "topColor0[" + i + "] / 11 == " + Math.floor(p * 2.99);
+						return "topColor[" + i + "] / 11 == " + Math.floor(p * 2.99);
 					})
 					.join(" and ");
 				return {
 					initVarDecl: [
-						A3a.vpl.BlockTemplate.initTopColorDecl,
-						A3a.vpl.BlockTemplate.initTopColorStateDecl
+						A3a.vpl.BlockTemplate.initTopColorDecl
 					],
 					initCodeExec: [
 						A3a.vpl.BlockTemplate.initTopColorInit
 					],
-					clauseInit: A3a.vpl.BlockTemplate.clauseInitTopColor,
 					clause: cond
 				};
 			}
@@ -1415,16 +1387,14 @@ A3a.vpl.BlockTemplate.lib =	[
 				"aseba": function (block) {
 					return {
 						initVarDecl: [
-							A3a.vpl.BlockTemplate.initTopColorDecl,
-							A3a.vpl.BlockTemplate.initTopColorStateDecl
+							A3a.vpl.BlockTemplate.initTopColorDecl
 						],
 						initCodeExec: [
 							A3a.vpl.BlockTemplate.initTopColorInit
 						],
-						clauseInit: A3a.vpl.BlockTemplate.clauseInitTopColor,
-						clause: "topColor0[0] " + (block.param[0] % 2 ? '>=' : '<') +
-							" 16 and topColor0[1] " + (block.param[0] % 4 >= 2 ? '>=' : '<') +
- 							" 16 and topColor0[2] " + (block.param[0] >= 4 ? '>=' : '<') + " 16"
+						clause: "topColor[0] " + (block.param[0] % 2 ? '>=' : '<') +
+							" 16 and topColor[1] " + (block.param[0] % 4 >= 2 ? '>=' : '<') +
+ 							" 16 and topColor[2] " + (block.param[0] >= 4 ? '>=' : '<') + " 16"
 					};
 				}
 			}
