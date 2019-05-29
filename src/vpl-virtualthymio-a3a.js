@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -33,7 +33,7 @@ A3a.vpl.VirtualThymioVM = function () {
 	this.vthymio.onVarChanged = function (name, index, newValue, oldValue) {
 		switch (name) {
 		case "timer.period":
-			self["setTimer"](index, newValue * 0.001);
+			self["setTimer"](index, newValue * 0.001, true);
 			break;
 		}
 	};

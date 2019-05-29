@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -41,8 +41,8 @@ A3a.vpl.VirtualThymio = function () {
 	/** @type {?A3a.vpl.VirtualThymio.OnMoveFunction} */
 	this.onMove = null;
 	this.clientState = {};
-	/** @type {Array.<number>} */
-	this.timers = [];	// trigger times
+	/** @type {Array.<{next:number,period:number}>} */
+	this.timers = [];	// trigger times and periods (or -1 if single-shot)
 	this.eventListeners = {};
 
 	this.ledsCircleUsed = false;
@@ -237,15 +237,18 @@ A3a.vpl.VirtualThymio.prototype["sendEvent"] = function (name, val) {
 /**
 	@inheritDoc
 */
-A3a.vpl.VirtualThymio.prototype["setTimer"] = function (id, period) {
-	this.timers[id] = this.t - this.t0 + period;
+A3a.vpl.VirtualThymio.prototype["setTimer"] = function (id, period, isPeriodic) {
+	this.timers[id] = {
+		next: this.t - this.t0 + period,
+		period: isPeriodic ? period : -1
+	};
 };
 
 /**
 	@inheritDoc
 */
 A3a.vpl.VirtualThymio.prototype["getTimer"] = function (id) {
-	return this.timers[id] === undefined || this.timers[id] < 0
+	return this.timers[id] === undefined || this.timers[id].next < 0
 		? -1
 		: this.t0 + this.timers[id] - this.t;
 };
@@ -276,7 +279,7 @@ A3a.vpl.VirtualThymio.prototype["shouldRunContinuously"] = function () {
 
 	// check timers
 	for (var i = 0; i < this.timers.length; i++) {
-		if (this.timers[i] > 0) {
+		if (this.timers[i] && this.timers[i].next > 0) {
 			return true;
 		}
 	}
@@ -349,8 +352,8 @@ A3a.vpl.VirtualThymio.prototype["run"] = function (tStop, traceFun) {
 		this["sendEvent"]("prox", null);
 		// call elapsed timer events
 		for (var i = 0; i < this.timers.length; i++) {
-			if (this.timers[i] > 0 && this.t >= this.t0 + this.timers[i] + this.noise(0.01)) {
-				this.timers[i] = -1;
+			if (this.timers[i] && this.timers[i].next > 0 && this.t >= this.t0 + this.timers[i].next + this.noise(0.01)) {
+				this.timers[i].next = this.timers[i].period >= 0 ? this.timers[i].next + this.timers[i].period : -1;
 				this["sendEvent"]("timer" + i.toString(10), null);
 			}
 		}

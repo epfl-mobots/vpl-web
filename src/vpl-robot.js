@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -95,9 +95,10 @@ A3a.vpl.Robot.prototype["start"] = function () {
 /** Set a timer
 	@param {number} id
 	@param {number} period period in s, or -1 to stop it
+	@param {boolean=} isPeriodic
 	@return {void}
 */
-A3a.vpl.Robot.prototype["setTimer"] = function (id, period) {
+A3a.vpl.Robot.prototype["setTimer"] = function (id, period, isPeriodic) {
 };
 
 /** Get a timer
