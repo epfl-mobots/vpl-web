@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -60,7 +60,7 @@ A3a.vpl.BlockTemplate = function (blockParams) {
 				}
 		};
 	/** @type {A3a.vpl.BlockTemplate.drawFun} */
-	this.draw = blockParams.draw || function (canvas, block) {
+	this.draw = blockParams.draw || function (canvas, block, box) {
 		canvas.text(block.blockTemplate.name);
 	};
 	/** @type {A3a.vpl.BlockTemplate.mousedownFun|null} */
@@ -102,7 +102,7 @@ A3a.vpl.BlockTemplate.validateFun;
 A3a.vpl.BlockTemplate.genCodeFun;
 
 /**
-	@typedef {function(A3a.vpl.Canvas,A3a.vpl.Block):void}
+	@typedef {function(A3a.vpl.Canvas,A3a.vpl.Block,CSSParser.VPL.Box):void}
 */
 A3a.vpl.BlockTemplate.drawFun;
 
@@ -149,14 +149,15 @@ A3a.vpl.BlockTemplate.params;
 /** Render block on a canvas
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.Block} block
+	@param {CSSParser.VPL.Box} box
 	@param {number} x0 position of left side
 	@param {number} y0 position of top side
 	@return {void}
 */
-A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, x0, y0) {
+A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, box, x0, y0) {
 	canvas.ctx.save();
 	canvas.ctx.translate(x0, y0);
-	this.draw(canvas, block);
+	this.draw(canvas, block, box);
 	canvas.ctx.restore();
 };
 

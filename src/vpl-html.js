@@ -49,6 +49,7 @@ A3a.vpl.Block.prototype.toDataURL = function (css, dims, scale) {
 			box.drawAt(canvas.ctx, x, y);
 			self.blockTemplate.renderToCanvas(canvas,
 				/** @type {A3a.vpl.Block} */(item.data),
+				box,
 				x, y);
 		});
 	return item.toDataURL(dims, scale || 1);

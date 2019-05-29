@@ -10,15 +10,16 @@
 */
 
 /** Clear block background
+	@param {CSSParser.VPL.Box} box
 	@return {void}
 */
-A3a.vpl.Canvas.prototype.clearBlockBackground = function () {
+A3a.vpl.Canvas.prototype.clearBlockBackground = function (box) {
 	this.ctx.save();
 	this.ctx.fillStyle = "#ddd";
 	this.ctx.fillRect(this.dims.blockLineWidth,
 		this.dims.blockLineWidth,
-		this.dims.blockSize - 2 * this.dims.blockLineWidth,
-		this.dims.blockSize - 2 * this.dims.blockLineWidth);
+		box.width - 2 * this.dims.blockLineWidth,
+		box.height - 2 * this.dims.blockLineWidth);
 	this.ctx.restore();
 };
 
