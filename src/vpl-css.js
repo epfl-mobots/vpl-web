@@ -172,6 +172,7 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 			throw "Unknown line cap";
 		}
 		return val;
+	case "border-color":
 	case "border-left-color":
 	case "border-right-color":
 	case "border-top-color":
@@ -539,9 +540,21 @@ CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 			break;
 		case "border-width":
 			this.borderTopWidth = props[key][0].toValue(lengthBase);
+			if (this.borderTopStyle === "none" && this.borderTopWidth > 0) {
+				this.borderTopStyle = null;
+			}
 			this.borderRightWidth = props[key][1].toValue(lengthBase);
+			if (this.borderRightStyle === "none" && this.borderRightWidth > 0) {
+				this.borderRightStyle = null;
+			}
 			this.borderBottomWidth = props[key][2].toValue(lengthBase);
+			if (this.borderBottomStyle === "none" && this.borderBottomWidth > 0) {
+				this.borderBottomStyle = null;
+			}
 			this.borderLeftWidth = props[key][3].toValue(lengthBase);
+			if (this.borderLeftStyle === "none" && this.borderLeftWidth > 0) {
+				this.borderLeftStyle = null;
+			}
 			break;
 		case "padding":
 			this.paddingTop = props[key][0].toValue(lengthBase);
@@ -564,6 +577,12 @@ CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 		case "border-bottom-style":
 			this.borderBottomStyle = props[key];
 			this.sameBorder = false;
+			break;
+		case "border-color":
+			this.borderLeftColor = props[key];
+			this.borderRightColor = props[key];
+			this.borderTopColor = props[key];
+			this.borderBottomColor = props[key];
 			break;
 		case "border-left-color":
 			this.borderLeftColor = props[key];
