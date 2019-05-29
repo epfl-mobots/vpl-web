@@ -27,32 +27,26 @@
 			"name": "state 256",
 			"aseba": {
 				"initVarDecl": [
-					"var state256\n",
-					"var state2560\n"
+					"var state256\n"
 				],
 				"initCodeExec": [
 					"state256 = 0\n"
 				],
-				"clauseInit":
-					"state2560 = state256\n",
 				"clause":
-					"state2560 == `$.reduce(function (a, b, i) { return b ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`"
+					"state256 == `$.reduce(function (a, b, i) { return b ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`"
 			}
 		},
 		{
 			"name": "state 256 with mask",
 			"aseba": {
 				"initVarDecl": [
-					"var state256\n",
-					"var state2560\n"
+					"var state256\n"
 				],
 				"initCodeExec": [
 					"state256 = 0\n"
 				],
-				"clauseInit":
-					"state2560 = state256\n",
 				"clause":
-					"(state2560 & `$.reduce(function (a, b, i) { return b !== 0 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`) == `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`"
+					"(state256 & `$.reduce(function (a, b, i) { return b !== 0 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`) == `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`"
 			}
 		},
 		{
@@ -160,14 +154,12 @@
 					[
 						"# RGB color of the top led\n",
 						"var topColor[3]\n"
-					],
-					"var topColor0[3]\n"
+					]
 				],
 				"initCodeExec": [
 					"topColor = [0, 0, 0]\n"
 				],
-				"clauseInit": "topColor0 = topColor\n",
-				"clause": "topColor0[0] `$[0] % 2 ? '>=' : '<'` 16 and topColor0[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 and topColor0[2] `$[0] >= 4 ? '>=' : '<'` 16"
+				"clause": "topColor[0] `$[0] % 2 ? '>=' : '<'` 16 and topColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 and topColor[2] `$[0] >= 4 ? '>=' : '<'` 16"
 			}
 		},
 		{
@@ -177,14 +169,12 @@
 					[
 						"# RGB color of the bottom led\n",
 						"var bottomColor[3]\n"
-					],
-					"var bottomColor0[3]\n"
+					]
 				],
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0]\n"
 				],
-				"clauseInit": "bottomColor0 = bottomColor\n",
-				"clause": "bottomColor0[0] `$[0] % 2 ? '>=' : '<'` 16 and bottomColor0[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 and bottomColor0[2] `$[0] >= 4 ? '>=' : '<'` 16"
+				"clause": "bottomColor[0] `$[0] % 2 ? '>=' : '<'` 16 and bottomColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 and bottomColor[2] `$[0] >= 4 ? '>=' : '<'` 16"
 			}
 		},
 		{
@@ -269,16 +259,13 @@
 			"name": "counter comparison",
 			"aseba": {
 				"initVarDecl": [
-					"var state256\n",
-					"var state2560\n"
+					"var state256\n"
 				],
 				"initCodeExec": [
 					"state256 = 0\n"
 				],
-				"clauseInit":
-					"state2560 = state256\n",
 				"clause":
-					"state2560 `['<=','<','==','>','>='][$[0] + 2]` `$[1]`"
+					"state256 `['<=','<','==','>','>='][$[0] + 2]` `$[1]`"
 			}
 		},
 		{

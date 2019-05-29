@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -125,11 +125,54 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 		}
 	}
 
+	// collect action code
+	/** @type {Array.<string>} */
+	var auxClausesInit = [];
+	var actionsTestCode = "";
+	var actionsExecCode = "";
+	var actionTestCount = 0;
+	for (var i = 0; i < program.program.length; i++) {
+		if (initEventIndices.indexOf(i) < 0 && c[i].clauseIndex >= 0) {
+			c[i].auxClausesInit && c[i].auxClausesInit.forEach(function (cl) {
+				if (auxClausesInit.indexOf(cl) < 0) {
+					auxClausesInit.push(cl);
+				}
+			});
+			actionsTestCode += "if eventCache[" + c[i].clauseIndex + "] != 0" +
+				(c[i].auxClauses ? " and " + c[i].auxClauses : "") +
+				" then\n" +
+				"todo[" + actionTestCount + "] = 1\n" +
+				"end\n";
+			actionsExecCode += "if todo[" + actionTestCount + "] != 0 then\n" +
+				c[i].statement +
+				"eventCache[" + c[i].clauseIndex + "] = 0\n" +
+				"todo[" + actionTestCount + "] = 0\n" +
+				"end\n";
+			actionTestCount++;
+		} else if (c[i].auxClauses) {
+			actionTestCount += "when " + c[i].auxClauses + " do\n" +
+				"todo[" + actionTestCount + "] = 1\n" +
+				"end\n";
+			actionsExecCode += "if todo[" + actionTestCount + "] != 0 then\n" +
+				c[i].statement +
+				"todo[" + actionTestCount + "] = 0\n" +
+				"end\n";
+			actionTestCount++;
+		}
+	}
+
 	// build program from fragments:
 	// init fragments (var declarations first, then code, without sub/onevent)
 	var str = initVarDecl.length > 0 ? "\n" + initVarDecl.join("\n") : "";
 	if (clauses.length > 0) {
-		str += "var eventCache[] = [" + clauses.map(function () { return "0"; }).join(", ") + "]"
+		str += "var eventCache[] = [" + clauses.map(function () { return "0"; }).join(", ") + "]\n"
+	}
+	if (actionTestCount > 0) {
+		str += "var todo[] = [";
+		for (var i = 0; i < actionTestCount; i++) {
+			str += i > 0 ? ", 0" : "0";
+		}
+		str += "]\n";
 	}
 	if (runBlocks) {
 		str += "\n" + runBlocksCodeStatement;
@@ -160,30 +203,9 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 			str += (c[i].sectionBegin || "") + (c[i].clauseInit || "") + (c[i].clauseAssignment || "") + (c[i].sectionEnd || "");
 		}
 	}
-	/** @type {Array.<string>} */
-	var auxClausesInit = [];
-	var actionsCode = "";
-	for (var i = 0; i < program.program.length; i++) {
-		if (initEventIndices.indexOf(i) < 0 && c[i].clauseIndex >= 0) {
-			c[i].auxClausesInit && c[i].auxClausesInit.forEach(function (cl) {
-				if (auxClausesInit.indexOf(cl) < 0) {
-					auxClausesInit.push(cl);
-				}
-			});
-			actionsCode += "if eventCache[" + c[i].clauseIndex + "] != 0" +
-				(c[i].auxClauses ? " and " + c[i].auxClauses : "") +
-				" then\n" +
-				c[i].statement +
-				"eventCache[" + c[i].clauseIndex + "] = 0\n" +
-				"end\n";
-		} else if (c[i].auxClauses) {
-			actionsCode += "when " + c[i].auxClauses + " do\n" +
-				c[i].statement +
-				"end\n";
-		}
-	}
-	if (actionsCode) {
-		str += "\nonevent timer1\n" + auxClausesInit.join("") + actionsCode;
+	// add onevent timer1
+	if (actionsTestCode) {
+		str += "\nonevent timer1\n" + auxClausesInit.join("") + actionsTestCode + actionsExecCode;
 	}
 	// remove initial lf
 	if (str[0] === "\n") {
