@@ -112,6 +112,7 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 	var auxClausesInit = [];
 	var actionsTestCode = "";
 	var actionsExecCode = "";
+	var actionsScheduleReset = "";
 	var actionTestCount = 0;
 	for (var i = 0; i < program.program.length; i++) {
 		if (initEventIndices.indexOf(i) < 0 && c[i].clauseIndex >= 0) {
@@ -128,8 +129,8 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 			actionsExecCode += "if (todo[" + actionTestCount + "]) {\n" +
 				c[i].statement +
 				"eventCache[" + c[i].clauseIndex + "] = false;\n" +
-				"todo[" + actionTestCount + "] = false;\n" +
 				"}\n";
+			actionsScheduleReset += "todo[" + actionTestCount + "] = false;\n";
 			actionTestCount++;
 		} else if (c[i].auxClauses) {
 			actionTestCount += "when (" + c[i].auxClauses + ") {\n" +
@@ -137,8 +138,8 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 				"}\n";
 			actionsExecCode += "if (todo[" + actionTestCount + "]) {\n" +
 				c[i].statement +
-				"todo[" + actionTestCount + "] = false;\n" +
 				"}\n";
+			actionsScheduleReset += "todo[" + actionTestCount + "] = false;\n";
 			actionTestCount++;
 		}
 	}
@@ -187,7 +188,7 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 	}
 	// add onevent timer1
 	if (actionsTestCode) {
-		str += "onevent timer1 {\n" + auxClausesInit.join("") + actionsTestCode + actionsExecCode + "}\n";
+		str += "onevent timer1 {\n" + auxClausesInit.join("") + actionsTestCode + actionsExecCode + actionsScheduleReset + "}\n";
 	}
 	// remove initial lf
 	if (str[0] === "\n") {
