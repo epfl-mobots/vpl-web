@@ -384,7 +384,9 @@ A3a.vpl.Canvas = function (canvas, options) {
 						var ctx = self.ctx;
 						if (canDrop && !dropTargetItem.noDropHint) {
 							// draw frame around target
-							self.overlayRect(dropTargetItem.x + d.dx, dropTargetItem.y + d.dy,
+							var dropTargetTranslation = dropTargetItem.getTranslation();
+							self.overlayRect(dropTargetItem.x + dropTargetTranslation.dx,
+								dropTargetItem.y + dropTargetTranslation.dy,
 								dropTargetItem.width, dropTargetItem.height,
 								["drop-target"]);
 						}
