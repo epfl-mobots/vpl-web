@@ -150,7 +150,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 				"end\n";
 			actionTestCount++;
 		} else if (c[i].auxClauses) {
-			actionTestCount += "when " + c[i].auxClauses + " do\n" +
+			actionsTestCode += "when " + c[i].auxClauses + " do\n" +
 				"todo[" + actionTestCount + "] = 1\n" +
 				"end\n";
 			actionsExecCode += "if todo[" + actionTestCount + "] != 0 then\n" +
