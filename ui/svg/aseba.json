@@ -243,16 +243,22 @@
 		{
 			"name": "timer",
 			"aseba": {
+				"initVarDecl": [
+					"var timerElapsed\n"
+				],
 				"initCodeExec": [
 					[
 						"# stop timer 0\n",
 						"timer.period[0] = 0\n"
-					]
+					],
+					"timerElapsed = 0\n"
 				],
 				"sectionBegin": [
 					"onevent timer0\n",
+					"timerElapsed = 1\n",
 					"timer.period[0] = 0\n"
-				]
+				],
+				"clause": "timerElapsed != 0"
 			}
 		},
 		{

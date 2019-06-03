@@ -2410,16 +2410,22 @@ sim-playground {
 		{
 			"name": "timer",
 			"aseba": {
+				"initVarDecl": [
+					"var timerElapsed\n"
+				],
 				"initCodeExec": [
 					[
 						"# stop timer 0\n",
 						"timer.period[0] = 0\n"
-					]
+					],
+					"timerElapsed = 0\n"
 				],
 				"sectionBegin": [
 					"onevent timer0\n",
+					"timerElapsed = 1\n",
 					"timer.period[0] = 0\n"
-				]
+				],
+				"clause": "timerElapsed != 0"
 			}
 		},
 		{
@@ -3005,17 +3011,23 @@ sim-playground {
 		{
 			"name": "timer",
 			"l2": {
+				"initVarDecl": [
+					"bool timerElapsed;\n"
+				],
 				"initCodeExec": [
 					[
 						"// stop timer 0\n",
 						"timer.period[0] = 0;\n"
-					]
+					],
+					"timerElapsed = false;\n"
 				],
 				"sectionBegin": [
 					"onevent timer0 {\n",
+					"timerElapsed = true;\n",
 					"timer.period[0] = 0;\n"
 				],
-				"sectionEnd": "}\n"
+				"sectionEnd": "}\n",
+				"clause": "timerElapsed"
 			}
 		},
 		{
