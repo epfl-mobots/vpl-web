@@ -38,8 +38,6 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 	/** @dict */
 	var folding = {};
 		// folding[sectionBegin] = index in c fragments with same sectionBegin are folded into
-	/** @type {Array.<number>} */
-	var initEventIndices = [];
 	c.forEach(function (evCode, i) {
 		evCode.initVarDecl && evCode.initVarDecl.forEach(function (fr) {
 			if (initVarDecl.indexOf(fr) < 0) {
@@ -90,9 +88,6 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 		if (!evCode.sectionBegin) {
 			evCode.statement = this.bracket(evCode.statement || "", program.program[i]);
 		}
-		if (program.program[i].getEventBlockByType("init")) {
-			initEventIndices.push(i);
-		}
 	}, this);
 
 	// compile runBlocks
@@ -132,7 +127,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 	var actionsExecCode = "";
 	var actionTestCount = 0;
 	for (var i = 0; i < program.program.length; i++) {
-		if (initEventIndices.indexOf(i) < 0 && c[i].clauseIndex >= 0) {
+		if (c[i].clauseIndex >= 0) {
 			c[i].auxClausesInit && c[i].auxClausesInit.forEach(function (cl) {
 				if (auxClausesInit.indexOf(cl) < 0) {
 					auxClausesInit.push(cl);
@@ -177,13 +172,6 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 		if (initCodeExec.length > 0) {
 			str += "\n" + initCodeExec.join("\n");
 		}
-		// init implicit event
-		for (var i = 0; i < program.program.length; i++) {
-			if (initEventIndices.indexOf(i) >= 0 && c[i].statement) {
-				str += "\n";
-				str += (c[i].sectionBegin || "") + (c[i].statement || "") + (c[i].sectionEnd || "");
-			}
-		}
 		// timer1 for actions
 		if (program.program.length > 0) {
 			str += "timer.period[1] = 50\n";
@@ -195,7 +183,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 	}
 	// explicit events
 	for (var i = 0; i < program.program.length; i++) {
-		if (initEventIndices.indexOf(i) < 0 && c[i].clauseAssignment) {
+		if (c[i].clauseAssignment) {
 			str += "\n";
 			str += (c[i].sectionBegin || "") + (c[i].clauseInit || "") + (c[i].clauseAssignment || "") + (c[i].sectionEnd || "");
 		}
