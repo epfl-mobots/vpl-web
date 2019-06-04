@@ -467,7 +467,7 @@ Box elements:
 - separator (classes: vpl, sim, src, top, bottom)
 - toolbar (classes: vpl, sim, src, top, bottom)
 - vpl
-- block (classes: event, action, state, comment (class of block), empty, library (as displayed in block-library elements); pseudo-class: small (when they must be zoomed for interaction), only-child (for class "empty" only))
+- block (classes: event, event-main, event-aux, action, state, comment (class of block), empty, library (as displayed in block-library elements); pseudo-class: small (when they must be zoomed for interaction), only-child (for class "empty" only))
 - block-container (classes: error, warning; used only in rules, not in block-library)
 - rule (pseudo-class: small)
 - block-library (classes: event (for event and state blocks), action (for action and comment blocks))

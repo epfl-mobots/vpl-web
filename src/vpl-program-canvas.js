@@ -207,7 +207,7 @@ A3a.vpl.Application.measureEventHandlerWidth = function (eventHandler, displaySi
 			: cssBoxes.blockContainerBox;
 		box.width = event == null
 			? (events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventBox).totalWidth()
-			: A3a.vpl.Program.boxForBlockType(event, cssBoxes).totalWidth();
+			: A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes).totalWidth();
 		totalEvents += box.totalWidth();
 		return cssBoxes.blockContainerBox.width;
 	});
@@ -230,7 +230,7 @@ A3a.vpl.Application.measureEventHandlerWidth = function (eventHandler, displaySi
 			: cssBoxes.blockContainerBox;
 		box.width = action == null
 			? (actions.length === 1 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox).totalWidth()
-			: A3a.vpl.Program.boxForBlockType(action, cssBoxes).totalWidth();
+			: A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes).totalWidth();
 		totalActions += box.totalWidth();
 		return box.totalWidth();
 	});
@@ -254,13 +254,14 @@ A3a.vpl.Application.measureEventHandlerWidth = function (eventHandler, displaySi
 
 /** Get block box for the specified type
 	@param {A3a.vpl.Block} block
+	@param {boolean} isFirst
 	@param {Object} cssBoxes
 	@return {CSSParser.VPL.Box}
 */
-A3a.vpl.Program.boxForBlockType = function (block, cssBoxes) {
+A3a.vpl.Program.boxForBlockType = function (block, isFirst, cssBoxes) {
 	switch (block.blockTemplate.type) {
 	case A3a.vpl.blockType.event:
-		return cssBoxes.blockEventBox;
+		return isFirst ? cssBoxes.blockEventMainBox : cssBoxes.blockEventAuxBox;
 	case A3a.vpl.blockType.action:
 		return cssBoxes.blockActionBox;
 	case A3a.vpl.blockType.state:
@@ -294,11 +295,14 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	var widths = A3a.vpl.Application.measureEventHandlerWidth(eventHandler, displaySingleEvent, cssBoxes);
 
 	var self = this;
+	var block0Box = eventHandler.events.length > 0 && eventHandler.events[0].blockTemplate.type === A3a.vpl.blockType.event
+		? cssBoxes.blockEventMainBox
+		: cssBoxes.blockEventAuxBox;
 	var item = new A3a.vpl.CanvasItem(eventHandler,
 		cssBoxes.ruleBox.paddedWidth(),
 		cssBoxes.ruleBox.paddedHeight(),
-		x - cssBoxes.ruleBox.paddingLeft - cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockEventBox.offsetLeft(),
-		y - cssBoxes.ruleBox.paddingTop - cssBoxes.blockContainerBox.offsetTop() - cssBoxes.blockEventBox.offsetTop(),
+		x - cssBoxes.ruleBox.paddingLeft - cssBoxes.blockContainerBox.offsetLeft() - block0Box.offsetLeft(),
+		y - cssBoxes.ruleBox.paddingTop - cssBoxes.blockContainerBox.offsetTop() - block0Box.offsetTop(),
 		// draw
 		function (canvas, item, dx, dy) {
 			var ctx = canvas.ctx;
@@ -329,7 +333,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 					: cssBoxes.blockContainerBox;
 				box.width = event == null
 					? (events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventBox).totalWidth()
-					: A3a.vpl.Program.boxForBlockType(event, cssBoxes).totalWidth();
+					: A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes).totalWidth();
 				box.drawAt(ctx,
 					x + box.marginLeft,
 					item.y + dy + cssBoxes.ruleBox.paddingTop + cssBoxes.blockContainerBox.marginTop,
@@ -343,7 +347,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 					: cssBoxes.blockContainerBox;
 				box.width = action == null
 					? (actions.length === 1 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox).totalWidth()
-					: A3a.vpl.Program.boxForBlockType(action, cssBoxes).totalWidth();
+					: A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes).totalWidth();
 				box.drawAt(ctx,
 					x + box.marginLeft,
 					item.y + dy + cssBoxes.ruleBox.paddingTop + cssBoxes.blockContainerBox.marginTop,
@@ -414,8 +418,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		if (event) {
-			box.width = A3a.vpl.Program.boxForBlockType(event, cssBoxes).totalWidth();
-			childItem = this.addBlockToCanvas(canvas, event, A3a.vpl.Program.boxForBlockType(event, cssBoxes),
+			box.width = A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes).totalWidth();
+			childItem = this.addBlockToCanvas(canvas, event, A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes),
 				x, y,
 				{
 					notInteractive: eventHandler.disabled || this.noVPL,
@@ -449,8 +453,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		if (action) {
-			box.width = A3a.vpl.Program.boxForBlockType(action, cssBoxes).totalWidth();
-			childItem = this.addBlockToCanvas(canvas, action, A3a.vpl.Program.boxForBlockType(action, cssBoxes),
+			box.width = A3a.vpl.Program.boxForBlockType(action, j == 0, cssBoxes).totalWidth();
+			childItem = this.addBlockToCanvas(canvas, action, A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes),
 				x, y,
 				{
 					notInteractive: eventHandler.disabled || this.noVPL,
@@ -476,9 +480,9 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		if (eventHandler.error !== null) {
 			var box = eventHandler.error.isWarning ? cssBoxes.warningWidgetBox : cssBoxes.errorWidgetBox;
 			canvas.drawWidget(eventHandler.error.isWarning ? "vpl:warning" : "vpl:error",
-				eventX0 - cssBoxes.ruleBox.paddingLeft - cssBoxes.ruleBox.marginLeft - cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockEventBox.offsetLeft() -
+				eventX0 - cssBoxes.ruleBox.paddingLeft - cssBoxes.ruleBox.marginLeft - cssBoxes.blockContainerBox.offsetLeft() - block0Box.offsetLeft() -
 					box.width / 2 - box.marginRight - box.paddingRight,
-				y + cssBoxes.blockEventBox.height * 0.5,
+				y + block0Box.height * 0.5,
 				box);
 		}
 	});
@@ -502,7 +506,7 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 			tag: "conflict-line",
 			clas: [isWarning ? "warning" : "error"]
 		});
-		var xc = x - cssBoxes.ruleBox.paddingLeft - cssBoxes.ruleBox.marginLeft - cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockEventBox.offsetLeft() -
+		var xc = x - cssBoxes.ruleBox.paddingLeft - cssBoxes.ruleBox.marginLeft - cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockEventMainBox.offsetLeft() -
 			widgetBox.width / 2 - widgetBox.marginRight - widgetBox.paddingRight;
 		var yc1 = y1 + (cssBoxes.blockContainerBox.height + widgetBox.height) / 2;
 		var yc2 = y2 + (cssBoxes.blockContainerBox.height - widgetBox.height) / 2;
@@ -532,7 +536,8 @@ A3a.vpl.Application.prototype.getCSSBoxes = function (css) {
 	cssBoxes.toolbarBox = css.getBox({tag: "toolbar", clas: ["vpl", "top"]});
 	cssBoxes.toolbar2Box = css.getBox({tag: "toolbar", clas: ["vpl", "bottom"]});
 	cssBoxes.vplBox = css.getBox({tag: "vpl", id: "scrolling-vpl"});
-	cssBoxes.blockEventBox = css.getBox({tag: "block", clas: ["event"], pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.blockEventMainBox = css.getBox({tag: "block", clas: ["event", "event-main"], pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.blockEventAuxBox = css.getBox({tag: "block", clas: ["event", "event-aux"], pseudoClass: zoomBlocks ? ["small"] : []});
 	cssBoxes.blockActionBox = css.getBox({tag: "block", clas: ["action"], pseudoClass: zoomBlocks ? ["small"] : []});
 	cssBoxes.blockStateBox = css.getBox({tag: "block", clas: ["state"], pseudoClass: zoomBlocks ? ["small"] : []});
 	cssBoxes.blockCommentBox = css.getBox({tag: "block", clas: ["comment"], pseudoClass: zoomBlocks ? ["small"] : []});
@@ -719,16 +724,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	cssBoxes.vplBox.setTotalHeight(cssBoxes.viewBox.height - cssBoxes.toolbarBox.totalHeight() -
 		(toolbar2HasAvButtons ? cssBoxes.toolbar2Box.totalHeight() : 0));
 	cssBoxes.vplBox.setPosition(cssBoxes.viewBox.x + cssBoxes.blockEventLibBox.totalWidth(), cssBoxes.viewBox.y + cssBoxes.toolbarBox.totalHeight());
-	cssBoxes.blockEventBox.width = canvas.dims.blockSize;
-	cssBoxes.blockEventBox.height = canvas.dims.blockSize;
-	cssBoxes.blockActionBox.width = canvas.dims.blockSize;
-	cssBoxes.blockActionBox.height = canvas.dims.blockSize;
-	cssBoxes.blockStateBox.width = canvas.dims.blockSize;
-	cssBoxes.blockStateBox.height = canvas.dims.blockSize;
-	cssBoxes.blockCommentBox.width = canvas.dims.blockSize;
-	cssBoxes.blockCommentBox.height = canvas.dims.blockSize;
-	cssBoxes.blockContainerBox.width = cssBoxes.blockContainerErrorBox.width = cssBoxes.blockContainerWarningBox.width = cssBoxes.blockEventBox.totalWidth();
-	cssBoxes.blockContainerBox.height = cssBoxes.blockContainerErrorBox.height = cssBoxes.blockContainerWarningBox.height = cssBoxes.blockEventBox.totalHeight();
+	cssBoxes.blockContainerBox.width = cssBoxes.blockContainerErrorBox.width = cssBoxes.blockContainerWarningBox.width = cssBoxes.blockEventMainBox.totalWidth();
+	cssBoxes.blockContainerBox.height = cssBoxes.blockContainerErrorBox.height = cssBoxes.blockContainerWarningBox.height = cssBoxes.blockEventMainBox.totalHeight();
 	var ruleSeparatorWidth = cssBoxes.ruleSeparatorBox.totalWidth();
 	var blockStep = cssBoxes.blockContainerBox.totalWidth();
 	var ruleWidth = maxEventsWidth + maxActionsWidth + ruleSeparatorWidth;
