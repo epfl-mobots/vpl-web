@@ -311,6 +311,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 			});
 		}
 		return {
+			firstEventType: eventHandler.events[0] ? eventHandler.events[0].blockTemplate.name : "",
 			initVarDecl: initVarDecl,
 			initCodeExec: initCodeExec,
 			initCodeDecl: initCodeDecl,

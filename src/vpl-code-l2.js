@@ -38,6 +38,7 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 	/** @dict */
 	var folding = {};
 		// folding[sectionBegin] = index in c fragments with same sectionBegin are folded into
+	var initSection = -1;	// will be output first if it exists, before onevent sections
 	c.forEach(function (evCode, i) {
 		evCode.initVarDecl && evCode.initVarDecl.forEach(function (fr) {
 			if (initVarDecl.indexOf(fr) < 0) {
@@ -82,6 +83,9 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 							"eventCache[" + evCode.clauseIndex + "] = true;\n" +
 							"}\n"
 						: "eventCache[" + evCode.clauseIndex + "] = true;\n";
+					if (c[i].firstEventType === "init") {
+						initSection = i;
+					}
 				}
 			}
 		}
@@ -156,13 +160,20 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 			str += "timer.period[1] = 50;\n";
 		}
 	}
+	// explicit init events
+	if (initSection >= 0) {
+		if (c[initSection].clauseAssignment) {
+			str += "\n";
+			str += (c[initSection].sectionBegin || "") + (c[initSection].clauseInit || "") + (c[initSection].clauseAssignment || "") + (c[initSection].sectionEnd || "");
+		}
+	}
 	// init fragments defining functions and onevent
 	if (initCodeDecl.length > 0) {
 		str += "\n" + initCodeDecl.join("\n");
 	}
 	// explicit events
 	for (var i = 0; i < program.program.length; i++) {
-		if (c[i].clauseAssignment) {
+		if (i !== initSection && c[i].clauseAssignment) {
 			str += "\n";
 			str += (c[i].sectionBegin || "") + (c[i].clauseInit || "") + (c[i].clauseAssignment || "") + (c[i].sectionEnd || "");
 		}
