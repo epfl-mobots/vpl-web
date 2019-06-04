@@ -112,7 +112,6 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 	var auxClausesInit = [];
 	var actionsTestCode = "";
 	var actionsExecCode = "";
-	var actionsScheduleReset = "";
 	var actionTestCount = 0;
 	for (var i = 0; i < program.program.length; i++) {
 		if (initEventIndices.indexOf(i) < 0 && c[i].clauseIndex >= 0) {
@@ -128,9 +127,7 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 				"}\n";
 			actionsExecCode += "if (todo[" + actionTestCount + "]) {\n" +
 				c[i].statement +
-				"eventCache[" + c[i].clauseIndex + "] = false;\n" +
 				"}\n";
-			actionsScheduleReset += "todo[" + actionTestCount + "] = false;\n";
 			actionTestCount++;
 		} else if (c[i].auxClauses) {
 			actionTestCount += "when (" + c[i].auxClauses + ") {\n" +
@@ -139,7 +136,6 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 			actionsExecCode += "if (todo[" + actionTestCount + "]) {\n" +
 				c[i].statement +
 				"}\n";
-			actionsScheduleReset += "todo[" + actionTestCount + "] = false;\n";
 			actionTestCount++;
 		}
 	}
@@ -149,9 +145,6 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 	var str = initVarDecl.length > 0 ? "\n" + initVarDecl.join("\n") : "";
 	if (clauses.length > 0) {
 		str += "bool eventCache[" + clauses.length + "] = false;\n"
-	}
-	if (actionTestCount > 0) {
-		str += "bool todo[" + actionTestCount + "] = false;\n";
 	}
 	if (runBlocks) {
 		str += "\n" + runBlocksCode;
@@ -181,14 +174,20 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 	}
 	// explicit events
 	for (var i = 0; i < program.program.length; i++) {
-		if (initEventIndices.indexOf(i) < 0 && c[i].statement) {
+		if (initEventIndices.indexOf(i) < 0 && c[i].clauseAssignment) {
 			str += "\n";
 			str += (c[i].sectionBegin || "") + (c[i].clauseInit || "") + (c[i].clauseAssignment || "") + (c[i].sectionEnd || "");
 		}
 	}
 	// add onevent timer1
 	if (actionsTestCode) {
-		str += "onevent timer1 {\n" + auxClausesInit.join("") + actionsTestCode + actionsExecCode + actionsScheduleReset + "}\n";
+		str += "onevent timer1 {\n";
+		if (actionTestCount > 0) {
+			str += "bool todo[" + actionTestCount + "] = false;\n";
+		}
+		str += auxClausesInit.join("") + actionsTestCode + actionsExecCode +
+			"eventCache = false;\n" +
+			"}\n";
 	}
 	// remove initial lf
 	if (str[0] === "\n") {
