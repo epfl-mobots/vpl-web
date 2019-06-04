@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -425,12 +425,27 @@ A3a.Device.prototype.step = function () {
 		this.pc += toSigned12(opl) - 1;
 		break;
 	case A3a.VM.op.conditionalBranch:
+		var isWhen = op & 0x100;
 		execOp((A3a.VM.op.binaryOp << 12) | (op & 0xff));
 		var cond = this.stack.pop() != 0;
 		this.pc++;
 		var relAddr = toSigned16(this.bytecode[this.pc]);
-		if (!cond) {
-			this.pc += relAddr - 2;
+		if (isWhen) {
+			// when: skip if lastWhenCond or !cond
+			var lastWhenCond = op & 0x200;
+			if (lastWhenCond || !cond) {
+				this.pc += relAddr - 2;
+			}
+			if (cond) {
+				this.bytecode[this.pc - 1] |= 0x200;
+			} else {
+				this.bytecode[this.pc - 1] &= ~0x200;
+			}
+		} else {
+			// if: skip if !cond
+			if (!cond) {
+				this.pc += relAddr - 2;
+			}
 		}
 		break;
 	case A3a.VM.op.emit:
