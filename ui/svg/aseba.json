@@ -143,8 +143,7 @@
 				"initCodeExec": [
 					"tapped = 0\n"
 				],
-				"sectionBegin": "onevent tap\ntapped = 1\n",
-				"clause": "tapped != 0"
+				"sectionBegin": "onevent tap\ntapped = 1\n"
 			}
 		},
 		{
@@ -152,7 +151,6 @@
 			"aseba": {
 				"initVarDecl": [
 					[
-						"# RGB color of the top led\n",
 						"var topColor[3]\n"
 					]
 				],
@@ -167,7 +165,6 @@
 			"aseba": {
 				"initVarDecl": [
 					[
-						"# RGB color of the bottom led\n",
 						"var bottomColor[3]\n"
 					]
 				],
@@ -257,8 +254,7 @@
 					"onevent timer0\n",
 					"timerElapsed = 1\n",
 					"timer.period[0] = 0\n"
-				],
-				"clause": "timerElapsed != 0"
+				]
 			}
 		},
 		{
@@ -279,7 +275,6 @@
 			"aseba": {
 				"initCodeExec": [
 					[
-						"# reset outputs\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -298,7 +293,6 @@
 			"aseba": {
 				"initCodeExec": [
 					[
-						"# reset outputs\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -317,14 +311,12 @@
 			"aseba": {
 				"initVarDecl": [
 					[
-						"# RGB color of the top led\n",
 						"var topColor[3]\n"
 					]
 				],
 				"initCodeExec": [
 					"topColor = [0, 0, 0]\n",
 					[
-						"# reset outputs\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -343,14 +335,12 @@
 			"aseba": {
 				"initVarDecl": [
 					[
-						"# RGB color of the bottom led\n",
 						"var bottomColor[3]\n"
 					]
 				],
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0]\n",
 					[
-						"# reset outputs\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -368,12 +358,11 @@
 			"name": "top color",
 			"aseba": {
 				"initVarDecl": [
-					"# RGB color of the top led\nvar topColor[3]\n"
+					"var topColor[3]\n"
 				],
 				"initCodeExec": [
 					"topColor = [0, 0, 0]\n",
 					[
-						"# reset outputs\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -394,7 +383,6 @@
 				"initVarDecl": [
 					[
 						[
-							"# RGB color of the bottom led\n",
 							"var bottomColor[3]\n"
 						]
 					]
@@ -402,7 +390,6 @@
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0]\n",
 					[
-						"# reset outputs\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -543,12 +530,13 @@
 						"call sound.wave(wave)\n"
 					],
 					[
-						"# reset outputs\n",
-						"call sound.system(-1)\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
 						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					],
+					[
+						"call sound.system(-1)\n"
 					]
 				],
 				"initCodeDecl": [
@@ -577,10 +565,13 @@
 					[
 						"# stop timer 0\n",
 						"timer.period[0] = 0\n"
-					]
+					],
+					"timerElapsed = 0\n"
 				],
-				"statement":
-					"timer.period[0] = `Math.round(1000 * $[0])`\n"
+				"statement": [
+					"timer.period[0] = `Math.round(1000 * $[0])`\n",
+					"timerElapsed = 0\n"
+				]
 			}
 		},
 		{

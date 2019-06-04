@@ -852,7 +852,7 @@
 				}
 			]
 		},
-			{
+		{
 			"name": "timer",
 			"type": "event",
 			"modes": ["advanced"],
@@ -2310,8 +2310,7 @@ sim-playground {
 				"initCodeExec": [
 					"tapped = 0\n"
 				],
-				"sectionBegin": "onevent tap\ntapped = 1\n",
-				"clause": "tapped != 0"
+				"sectionBegin": "onevent tap\ntapped = 1\n"
 			}
 		},
 		{
@@ -2319,7 +2318,6 @@ sim-playground {
 			"aseba": {
 				"initVarDecl": [
 					[
-						"# RGB color of the top led\n",
 						"var topColor[3]\n"
 					]
 				],
@@ -2334,7 +2332,6 @@ sim-playground {
 			"aseba": {
 				"initVarDecl": [
 					[
-						"# RGB color of the bottom led\n",
 						"var bottomColor[3]\n"
 					]
 				],
@@ -2424,8 +2421,7 @@ sim-playground {
 					"onevent timer0\n",
 					"timerElapsed = 1\n",
 					"timer.period[0] = 0\n"
-				],
-				"clause": "timerElapsed != 0"
+				]
 			}
 		},
 		{
@@ -2446,7 +2442,6 @@ sim-playground {
 			"aseba": {
 				"initCodeExec": [
 					[
-						"# reset outputs\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -2465,7 +2460,6 @@ sim-playground {
 			"aseba": {
 				"initCodeExec": [
 					[
-						"# reset outputs\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -2484,14 +2478,12 @@ sim-playground {
 			"aseba": {
 				"initVarDecl": [
 					[
-						"# RGB color of the top led\n",
 						"var topColor[3]\n"
 					]
 				],
 				"initCodeExec": [
 					"topColor = [0, 0, 0]\n",
 					[
-						"# reset outputs\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -2510,14 +2502,12 @@ sim-playground {
 			"aseba": {
 				"initVarDecl": [
 					[
-						"# RGB color of the bottom led\n",
 						"var bottomColor[3]\n"
 					]
 				],
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0]\n",
 					[
-						"# reset outputs\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -2535,12 +2525,11 @@ sim-playground {
 			"name": "top color",
 			"aseba": {
 				"initVarDecl": [
-					"# RGB color of the top led\nvar topColor[3]\n"
+					"var topColor[3]\n"
 				],
 				"initCodeExec": [
 					"topColor = [0, 0, 0]\n",
 					[
-						"# reset outputs\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -2561,7 +2550,6 @@ sim-playground {
 				"initVarDecl": [
 					[
 						[
-							"# RGB color of the bottom led\n",
 							"var bottomColor[3]\n"
 						]
 					]
@@ -2569,7 +2557,6 @@ sim-playground {
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0]\n",
 					[
-						"# reset outputs\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
@@ -2710,12 +2697,13 @@ sim-playground {
 						"call sound.wave(wave)\n"
 					],
 					[
-						"# reset outputs\n",
-						"call sound.system(-1)\n",
 						"call leds.top(0, 0, 0)\n",
 						"call leds.bottom.left(0, 0, 0)\n",
 						"call leds.bottom.right(0, 0, 0)\n",
 						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					],
+					[
+						"call sound.system(-1)\n"
 					]
 				],
 				"initCodeDecl": [
@@ -2744,10 +2732,13 @@ sim-playground {
 					[
 						"# stop timer 0\n",
 						"timer.period[0] = 0\n"
-					]
+					],
+					"timerElapsed = 0\n"
 				],
-				"statement":
-					"timer.period[0] = `Math.round(1000 * $[0])`\n"
+				"statement": [
+					"timer.period[0] = `Math.round(1000 * $[0])`\n",
+					"timerElapsed = 0\n"
+				]
 			}
 		},
 		{
@@ -2799,7 +2790,7 @@ sim-playground {
 		{
 			"name": "init",
 			"l2": {
-				"sectionBegin": "// init block\n"
+				"sectionBegin": "// initialization\n"
 			}
 		},
 		{
@@ -2911,7 +2902,6 @@ sim-playground {
 			"l2": {
 				"initVarDecl": [
 					[
-						"// RGB color of the top led\n",
 						"int topColor[3];\n"
 					]
 				],
@@ -2926,7 +2916,6 @@ sim-playground {
 			"l2": {
 				"initVarDecl": [
 					[
-						"// RGB color of the bottom led\n",
 						"int bottomColor[3];\n"
 					]
 				],
@@ -3026,8 +3015,7 @@ sim-playground {
 					"timerElapsed = true;\n",
 					"timer.period[0] = 0;\n"
 				],
-				"sectionEnd": "}\n",
-				"clause": "timerElapsed"
+				"sectionEnd": "}\n"
 			}
 		},
 		{
@@ -3079,7 +3067,7 @@ sim-playground {
 			"name": "top color 8",
 			"l2": {
 				"initVarDecl": [
-					"// RGB color of the top led\nint topColor[3];\n"
+					"int topColor[3];\n"
 				],
 				"initCodeExec": [
 					"topColor = [0, 0, 0];\n",
@@ -3099,7 +3087,7 @@ sim-playground {
 			"name": "bottom color 8",
 			"l2": {
 				"initVarDecl": [
-					"// RGB color of the bottom led\nint bottomColor[3];\n"
+					"int bottomColor[3];\n"
 				],
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0];\n",
@@ -3119,7 +3107,7 @@ sim-playground {
 			"name": "top color",
 			"l2": {
 				"initVarDecl": [
-					"// RGB color of the top led\nint topColor[3];\n"
+					"int topColor[3];\n"
 				],
 				"initCodeExec": [
 					"topColor = [0, 0, 0];\n",
@@ -3141,7 +3129,7 @@ sim-playground {
 			"name": "bottom color",
 			"l2": {
 				"initVarDecl": [
-					"// RGB color of the bottom led\nint bottomColor[3];\n"
+					"int bottomColor[3];\n"
 				],
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0];\n",
@@ -3346,7 +3334,7 @@ sim-playground {
 		{
 			"name": "init",
 			"js": {
-				"sectionBegin": "// init block\n"
+				"sectionBegin": "// initialization\n"
 			}
 		},
 		{

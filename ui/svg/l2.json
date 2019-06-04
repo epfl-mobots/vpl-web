@@ -21,7 +21,7 @@
 		{
 			"name": "init",
 			"l2": {
-				"sectionBegin": "// init block\n"
+				"sectionBegin": "// initialization\n"
 			}
 		},
 		{
@@ -133,7 +133,6 @@
 			"l2": {
 				"initVarDecl": [
 					[
-						"// RGB color of the top led\n",
 						"int topColor[3];\n"
 					]
 				],
@@ -148,7 +147,6 @@
 			"l2": {
 				"initVarDecl": [
 					[
-						"// RGB color of the bottom led\n",
 						"int bottomColor[3];\n"
 					]
 				],
@@ -248,8 +246,7 @@
 					"timerElapsed = true;\n",
 					"timer.period[0] = 0;\n"
 				],
-				"sectionEnd": "}\n",
-				"clause": "timerElapsed"
+				"sectionEnd": "}\n"
 			}
 		},
 		{
@@ -301,7 +298,7 @@
 			"name": "top color 8",
 			"l2": {
 				"initVarDecl": [
-					"// RGB color of the top led\nint topColor[3];\n"
+					"int topColor[3];\n"
 				],
 				"initCodeExec": [
 					"topColor = [0, 0, 0];\n",
@@ -321,7 +318,7 @@
 			"name": "bottom color 8",
 			"l2": {
 				"initVarDecl": [
-					"// RGB color of the bottom led\nint bottomColor[3];\n"
+					"int bottomColor[3];\n"
 				],
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0];\n",
@@ -341,7 +338,7 @@
 			"name": "top color",
 			"l2": {
 				"initVarDecl": [
-					"// RGB color of the top led\nint topColor[3];\n"
+					"int topColor[3];\n"
 				],
 				"initCodeExec": [
 					"topColor = [0, 0, 0];\n",
@@ -363,7 +360,7 @@
 			"name": "bottom color",
 			"l2": {
 				"initVarDecl": [
-					"// RGB color of the bottom led\nint bottomColor[3];\n"
+					"int bottomColor[3];\n"
 				],
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0];\n",

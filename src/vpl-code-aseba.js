@@ -56,7 +56,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 				initCodeDecl.push(fr);
 			}
 		});
-		if (evCode.clause && evCode.sectionBegin) {
+		if (evCode.sectionBegin) {
 			evCode.clauseIndex = clauses.indexOf(A3a.vpl.CodeGenerator.Mark.remove(evCode.clause || evCode.sectionBegin));
 			if (evCode.clauseIndex < 0) {
 				// first time this exact clause is found

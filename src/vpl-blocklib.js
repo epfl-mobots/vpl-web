@@ -42,7 +42,6 @@ A3a.vpl.BlockTemplate.initCounterInit =
 
 /** @const */
 A3a.vpl.BlockTemplate.initTopColorDecl =
-	"# RGB color of the top led\n" +
 	"var topColor[3]\n";
 
 /** @const */
@@ -772,9 +771,8 @@ A3a.vpl.BlockTemplate.lib =	[
 					initCodeExec: [
 						"tapped = 0\n"
 					],
-					sectionBegin: "onevent tap\ntapped = 1\n",
+					sectionBegin: "onevent tap\ntapped = 1\n"
 						// there must be a real tap event block in the program
-					clause: "tapped != 0"
 				};
 			}
 		}
@@ -1119,9 +1117,8 @@ A3a.vpl.BlockTemplate.lib =	[
 						A3a.vpl.BlockTemplate.resetTimer,
 						"timerElapsed = 0\n"
 					],
-					sectionBegin: "onevent timer0\ntimerElapsed = 1\ntimer.period[0] = 0\n",
+					sectionBegin: "onevent timer0\ntimerElapsed = 1\ntimer.period[0] = 0\n"
 						// there must be a real timer event block in the program
-					clause: "timerElapsed != 0"
 				};
 			}
 		}

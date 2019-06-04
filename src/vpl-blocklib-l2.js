@@ -41,7 +41,6 @@ A3a.vpl.patchL2Blocks = function () {
 
 	/** @const */
 	A3a.vpl.BlockTemplate.initCounterDecl2 =
-		"// variables for counter\n" +
 		"int counter;\n";
 
 	/** @const */
@@ -50,7 +49,6 @@ A3a.vpl.patchL2Blocks = function () {
 
 	/** @const */
 	A3a.vpl.BlockTemplate.initTopColorDecl2 =
-		"// RGB color of the top led\n" +
 		"int topColor[3];\n";
 
 	/** @const */
@@ -121,7 +119,6 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent prox {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 20,
 					clause: cond
 				};
 			},
@@ -146,7 +143,6 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent prox {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 20,
 					clause: cond
 				};
 			},
@@ -169,7 +165,6 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent prox {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 20,
 					clause: cond
 				};
 			},
@@ -191,7 +186,6 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent prox {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 10,
 					clause: cond
 				};
 			},
@@ -215,7 +209,6 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent prox {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 10,
 					clause: cond
 				};
 			},
@@ -238,15 +231,13 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent prox {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 10,
 					clause: cond
 				};
 			},
 			"tap": function (block) {
 				return {
 					sectionBegin: "onevent tap {\n",
-					sectionEnd: "}\n",
-					sectionPriority: 50
+					sectionEnd: "}\n"
 				};
 			},
 			"accelerometer": function (block) {
@@ -255,8 +246,7 @@ A3a.vpl.patchL2Blocks = function () {
 					// tap
 					return {
 						sectionBegin: "onevent tap {\n",
-						sectionEnd: "}\n",
-						sectionPriority: 50
+						sectionEnd: "}\n"
 					};
 				} else {
 					/** @type {number} */
@@ -275,7 +265,6 @@ A3a.vpl.patchL2Blocks = function () {
 					return {
 						sectionBegin: "onevent acc {\n",
 						sectionEnd: "}\n",
-						sectionPriority: 40,
 						clauseInit:
 							dir === 2
 								? "fixed pitchAngle = atan2(acc[1], acc[2]);\n"
@@ -290,7 +279,6 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent acc {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 40,
 					clauseInit:
 						"fixed rollAngle = atan2(acc[0], acc[2]);\n",
 					clause:
@@ -304,7 +292,6 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent acc {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 40,
 					clauseInit:
 						"fixed pitchAngle = atan2(acc[1], acc[2]);\n",
 					clause:
@@ -318,7 +305,6 @@ A3a.vpl.patchL2Blocks = function () {
 				return {
 					sectionBegin: "onevent acc {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 40,
 					clauseInit:
 						"fixed yawAngle = atan2(acc[0], acc[1]);\n",
 					clause:
@@ -334,25 +320,26 @@ A3a.vpl.patchL2Blocks = function () {
 					],
 					sectionBegin: "onevent mic {\n",
 					sectionEnd: "}\n",
-					sectionPriority: 50,
 					clause: "mic.intensity > mic.threshold",
 					clauseOptional: true
 				};
 			},
 			"init": function (block) {
 				return {
-					sectionBegin: "// init block\n",
-					sectionPriority: 300
+					sectionBegin: "// initialization\n"
 				};
 			},
 			"timer": function (block) {
 				return {
-					initCodeExec: [
-						A3a.vpl.BlockTemplate.resetTimer2
+					initVarDecl: [
+						"bool timerElapsed;\n"
 					],
-					sectionBegin: "onevent timer0 {\ntimer.period[0] = 0;\n",
-					sectionEnd: "}\n",
-					sectionPriority: 200
+					initCodeExec: [
+						A3a.vpl.BlockTemplate.resetTimer2,
+						"timerElapsed = false;\n"
+					],
+					sectionBegin: "onevent timer0 {\ntimerElapsed = true;\ntimer.period[0] = 0;\n",
+					sectionEnd: "}\n"
 				};
 			},
 			"state": function (block) {
