@@ -325,6 +325,11 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 			throw "Unknown overflow mode";
 		}
 		return val;
+	case "vertical-align":
+		if (["top", "middle", "bottom"].indexOf(val) < 0) {
+			throw "Unknown vertical-align mode";
+		}
+		return val;
 	default:
 		return val;
 	}
@@ -465,6 +470,7 @@ CSSParser.VPL.Box = function (props, lengthBase) {
 	this.fontWeight = "";
 
 	this.scroll = false;	// false=overflow:wrap, true=overflow:scroll
+	this.verticalAlign = "middle";
 
 	this.shadowOffset = null;
 	this.shadowBlurRadius = 0;
@@ -723,6 +729,9 @@ CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 		case "overflow":
 			this.scroll = props[key] === "scroll";
 			break;
+		case "vertical-align":
+			this.verticalAlign = props[key];
+			break;
 		case "box-shadow":
 			if (props[key].shadowOffset !== null) {
 				this.shadowOffset = props[key].offset.map(function (l) { return l ? l.toValue(lengthBase) : 0; });
@@ -859,6 +868,7 @@ CSSParser.VPL.Box.prototype.copy = function () {
 	box.fontWeight = this.fontWeight;
 
 	box.scroll = this.scroll;
+	box.verticalAlign = this.verticalAlign;
 
 	box.shadowOffset = this.shadowOffset;
 	box.shadowBlurRadius = this.shadowBlurRadius;

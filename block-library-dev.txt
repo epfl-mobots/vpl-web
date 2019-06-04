@@ -441,6 +441,7 @@ Box properties:
 - color
 - font
 - overflow (used in block-library only)
+- vertical-align (used to align blocks in rules)
 
 Line properties:
 
@@ -458,6 +459,7 @@ Values:
 - font: see <https://www.w3.org/TR/2018/REC-css-fonts-3-20180920/#font-prop>
 - border-left, border-right, border-top, border-bottom, line: 1, 2 or 3 properties for line width (length), color and line style in any order
 - overflow: wrap (default) or scroll
+- vertical-align: top, middle (default), or bottom
 
 Box elements:
 

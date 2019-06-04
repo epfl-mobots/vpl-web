@@ -414,26 +414,38 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		x += maxWidthForEventRightAlign - widths.totalEvents;
 	}
 	events.forEach(function (event, j) {
-		var box = eventHandler.error && eventHandler.error.eventErrorIndices.indexOf(j) >= 0
+		var blockBox = event
+			? A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes)
+			: events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventBox;
+		var containerBox = eventHandler.error && eventHandler.error.eventErrorIndices.indexOf(j) >= 0
 			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
+		var vertOffset = 0;
+		containerBox.height = blockBox.totalHeight();
+		switch (blockBox.verticalAlign) {
+		case "middle":
+			vertOffset = (cssBoxes.ruleBox.height - containerBox.totalHeight()) / 2;
+			break;
+		case "bottom":
+			vertOffset = cssBoxes.ruleBox.height - containerBox.totalHeight();
+			break;
+		}
 		if (event) {
-			box.width = A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes).totalWidth();
-			childItem = this.addBlockToCanvas(canvas, event, A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes),
-				x, y,
+			containerBox.width = blockBox.totalWidth();
+			childItem = this.addBlockToCanvas(canvas, event, blockBox,
+				x, y + vertOffset,
 				{
 					notInteractive: eventHandler.disabled || this.noVPL,
 					notClickable: eventHandler.disabled || this.noVPL,
 					notDraggable: this.noVPL
 				});
 		} else {
-			var emptyBlockBox = events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventBox;
-			box.width = emptyBlockBox.totalWidth();
+			containerBox.width = blockBox.totalWidth();
 			childItem = this.addBlockToCanvas(canvas,
 				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.event, eventHandler,
 					{eventSide: true, index: j}),
-				emptyBlockBox,
-				x, y,
+				blockBox,
+				x, y + vertOffset,
 				{
 					notDropTarget: eventHandler.disabled,
 					notClickable: true,
@@ -441,7 +453,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				});
 		}
 		item.attachItem(childItem);
-		x += box.totalWidth();
+		x += containerBox.totalWidth();
 	}, this);
 	var actions = eventHandler.actions;
 	if (actions.length === 0 || actions[actions.length - 1] !== null) {
@@ -449,30 +461,42 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	}
 	x = actionX0;
 	actions.forEach(function (action, j) {
-		var box = eventHandler.error && eventHandler.error.actionErrorIndices.indexOf(j) >= 0
+		var blockBox = action
+			? A3a.vpl.Program.boxForBlockType(action, j == 0, cssBoxes)
+			: actions.length === 1 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox;
+		var containerBox = eventHandler.error && eventHandler.error.actionErrorIndices.indexOf(j) >= 0
 			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
+		var vertOffset = 0;
+		containerBox.height = blockBox.totalHeight();
+		switch (blockBox.verticalAlign) {
+		case "middle":
+			vertOffset = (cssBoxes.ruleBox.height - containerBox.totalHeight()) / 2;
+			break;
+		case "bottom":
+			vertOffset = cssBoxes.ruleBox.height - containerBox.totalHeight();
+			break;
+		}
 		if (action) {
-			box.width = A3a.vpl.Program.boxForBlockType(action, j == 0, cssBoxes).totalWidth();
+			containerBox.width = blockBox.totalWidth();
 			childItem = this.addBlockToCanvas(canvas, action, A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes),
-				x, y,
+				x, y + vertOffset,
 				{
 					notInteractive: eventHandler.disabled || this.noVPL,
 					notClickable: eventHandler.disabled || this.noVPL,
 					notDraggable: this.noVPL
 				});
 		} else {
-			var emptyBlockBox = actions.length === 1 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox;
-			box.width = emptyBlockBox.totalWidth();
+			containerBox.width = blockBox.totalWidth();
 			childItem = this.addBlockToCanvas(canvas,
 				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.action, eventHandler,
 					{eventSide: false, index: j}),
-				emptyBlockBox,
+				blockBox,
 				x, y,
 				{notDropTarget: false, notClickable: true, notDraggable: true});
 		}
 		item.attachItem(childItem);
-		x += box.totalWidth();
+		x += containerBox.totalWidth();
 	}, this);
 
 	// error widgets
