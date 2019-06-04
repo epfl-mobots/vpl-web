@@ -90,6 +90,11 @@ block.empty {
 	width: 1.5vw;
 	min-width: 8px;
 }
+block.empty.event-aux {
+	height: 5vw;
+	min-height: 27px;
+	vertical-align: bottom;
+}
 block.empty:only-child {
 	width: 6vw;
 	min-width: 32px;

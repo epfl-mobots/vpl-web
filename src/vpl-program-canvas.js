@@ -206,7 +206,7 @@ A3a.vpl.Application.measureEventHandlerWidth = function (eventHandler, displaySi
 			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		box.width = event == null
-			? (events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventBox).totalWidth()
+			? (events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox).totalWidth()
 			: A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes).totalWidth();
 		totalEvents += box.totalWidth();
 		return cssBoxes.blockContainerBox.width;
@@ -214,7 +214,7 @@ A3a.vpl.Application.measureEventHandlerWidth = function (eventHandler, displaySi
 	if (eventHandler.events.length === 0 || !displaySingleEvent && eventHandler.events[eventHandler.events.length - 1] !== null) {
 		// add empty block
 		cssBoxes.blockContainerBox.width =
-			(eventHandler.events.length === 0 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventBox).totalWidth();
+			(eventHandler.events.length === 0 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox).totalWidth();
 		events.push(cssBoxes.blockContainerBox.width);
 		totalEvents += cssBoxes.blockContainerBox.totalWidth();
 	}
@@ -332,7 +332,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 					? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 					: cssBoxes.blockContainerBox;
 				box.width = event == null
-					? (events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventBox).totalWidth()
+					? (events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox).totalWidth()
 					: A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes).totalWidth();
 				box.drawAt(ctx,
 					x + box.marginLeft,
@@ -416,7 +416,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	events.forEach(function (event, j) {
 		var blockBox = event
 			? A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes)
-			: events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventBox;
+			: events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox;
 		var containerBox = eventHandler.error && eventHandler.error.eventErrorIndices.indexOf(j) >= 0
 			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
@@ -567,8 +567,12 @@ A3a.vpl.Application.prototype.getCSSBoxes = function (css) {
 	cssBoxes.blockCommentBox = css.getBox({tag: "block", clas: ["comment"], pseudoClass: zoomBlocks ? ["small"] : []});
 	cssBoxes.blockEmptyEventBox = css.getBox({tag: "block", clas: ["event", "empty"], pseudoClass: zoomBlocks ? ["small"] : []});
 	cssBoxes.blockEmptyActionBox = css.getBox({tag: "block", clas: ["action", "empty"], pseudoClass: zoomBlocks ? ["small"] : []});
-	cssBoxes.blockEmptyEventOnlyChildBox = css.getBox({tag: "block", clas: ["event", "empty"], pseudoClass: zoomBlocks ? ["only-child", "small"] : ["only-child"]});
-	cssBoxes.blockEmptyActionOnlyChildBox = css.getBox({tag: "block", clas: ["action", "empty"], pseudoClass: zoomBlocks ? ["only-child", "small"] : ["only-child"]});
+	cssBoxes.blockEmptyEventOnlyChildBox = css.getBox({tag: "block", clas: ["event", "empty"],
+		pseudoClass: zoomBlocks ? ["only-child", "small"] : ["only-child"]});
+	cssBoxes.blockEmptyEventAuxBox = css.getBox({tag: "block", clas: ["event", "event-aux", "empty"],
+		pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.blockEmptyActionOnlyChildBox = css.getBox({tag: "block", clas: ["action", "empty"],
+		pseudoClass: zoomBlocks ? ["only-child", "small"] : ["only-child"]});
 	cssBoxes.blockContainerBox = css.getBox({tag: "block-container"});
 	cssBoxes.blockContainerErrorBox = css.getBox({tag: "block-container", clas: ["error"]});
 	cssBoxes.blockContainerWarningBox = css.getBox({tag: "block-container", clas: ["warning"]});
