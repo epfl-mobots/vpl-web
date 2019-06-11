@@ -130,8 +130,21 @@ A3a.vpl.Application.prototype.toHTMLDocument = function (css) {
 					"<td class='events'>\n" +
 					"<table class='events'>\n" +
 					"<tr class='events'>\n" +
-					rule.events.map(function (event) {
-						return "<td class='block'>" + event.toImgElement(css, dims, scale) + "</td>\n";
+					rule.events.map(function (event, i) {
+						var classes = "block";
+						switch (event.blockTemplate.type) {
+						case A3a.vpl.blockType.event:
+							classes += " event";
+							classes += i === 0 ? " event-main" : " event-aux";
+							break;
+						case A3a.vpl.blockType.state:
+							classes += " state";
+							break;
+						case A3a.vpl.blockType.comment:
+							classes += " comment";
+							break;
+						}
+						return "<td class='" + classes + "'>" + event.toImgElement(css, dims, scale) + "</td>\n";
 					}).join("") +
 					"</tr>\n" +
 					"</table>\n" +
@@ -141,7 +154,16 @@ A3a.vpl.Application.prototype.toHTMLDocument = function (css) {
 					"<table class='actions'>\n" +
 					"<tr class='actions'>\n" +
 					rule.actions.map(function (action) {
-						return "<td class='block'>" + action.toImgElement(css, dims, scale) + "</td>\n";
+						var classes = "block";
+						switch (action.blockTemplate.type) {
+						case A3a.vpl.blockType.action:
+							classes += " action";
+							break;
+						case A3a.vpl.blockType.comment:
+							classes += " comment";
+							break;
+						}
+						return "<td class='" + classes + "'>" + action.toImgElement(css, dims, scale) + "</td>\n";
 					}).join("") +
 					"</tr>\n" +
 					"</table>\n" +
