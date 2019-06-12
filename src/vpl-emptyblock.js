@@ -34,8 +34,6 @@ A3a.vpl.EmptyBlock.templates = {
 			var blockTemplate = A3a.vpl.BlockTemplate.findByName("!empty event");
 			if (blockTemplate) {
 				blockTemplate.draw(canvas, block, box);
-			} else {
-				canvas.clearBlockBackground(box);
 			}
 		}
 	}),
@@ -46,8 +44,6 @@ A3a.vpl.EmptyBlock.templates = {
 			var blockTemplate = A3a.vpl.BlockTemplate.findByName("!empty action");
 			if (blockTemplate) {
 				blockTemplate.draw(canvas, block, box);
-			} else {
-				canvas.clearBlockBackground(box);
 			}
 		}
 	}),
@@ -59,8 +55,6 @@ A3a.vpl.EmptyBlock.templates = {
 				A3a.vpl.BlockTemplate.findByName("!empty event");
 			if (blockTemplate) {
 				blockTemplate.draw(canvas, block, box);
-			} else {
-				canvas.clearBlockBackground(box);
 			}
 		}
 	})
