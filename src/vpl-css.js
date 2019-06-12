@@ -158,6 +158,7 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 		default:
 			throw "Wrong number of lengths";
 		}
+	case "border-style":
 	case "border-left-style":
 	case "border-right-style":
 	case "border-top-style":
@@ -567,6 +568,12 @@ CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 			this.paddingRight = props[key][1].toValue(lengthBase);
 			this.paddingBottom = props[key][2].toValue(lengthBase);
 			this.paddingLeft = props[key][3].toValue(lengthBase);
+			break;
+		case "border-style":
+			this.borderLeftStyle = props[key];
+			this.borderRightStyle = props[key];
+			this.borderTopStyle = props[key];
+			this.borderBottomStyle = props[key];
 			break;
 		case "border-left-style":
 			this.borderLeftStyle = props[key];
