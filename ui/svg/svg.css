@@ -83,13 +83,6 @@ block.action{
 	border-color:#80b6ff;
 }
 
-block.event-aux, block.state {
-	height: 5ww;
-	width: 5ww;
-	min-width: 36px;
-	min-height: 60px;
-	vertical-align: bottom;
-}
 
 block.empty {
 	border-width: 2px;
@@ -97,6 +90,14 @@ block.empty {
 	background: transparent;
 	width: 3.6ww;
 	border-radius: 4px;
+}
+
+block.event-aux, block.state {
+	height: 6ww;
+	width: 6ww;
+	min-width: 36px;
+	min-height: 60px;
+	vertical-align: bottom;
 }
 
 block.empty:only-child {
