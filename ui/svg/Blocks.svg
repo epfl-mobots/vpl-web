@@ -29,7 +29,7 @@
         fill: #93c1ff;
       }
 
-      .cls-107, .cls-11, .cls-114, .cls-116, .cls-117, .cls-119, .cls-121, .cls-13, .cls-15, .cls-18, .cls-25, .cls-31, .cls-32, .cls-34, .cls-36, .cls-38, .cls-41, .cls-42, .cls-43, .cls-56, .cls-57, .cls-72, .cls-8, .cls-82, .cls-86 {
+      .cls-107, .cls-11, .cls-114, .cls-116, .cls-117, .cls-119, .cls-121, .cls-13, .cls-15, .cls-18, .cls-25, .cls-31, .cls-32, .cls-34, .cls-36, .cls-38, .cls-41, .cls-42, .cls-43, .cls-56, .cls-57, .cls-72, .cls-8, .cls-82, .cls-86, .cls-91 {
         fill: none;
       }
 
@@ -41,7 +41,7 @@
         stroke-miterlimit: 10;
       }
 
-      .cls-104, .cls-105, .cls-11, .cls-111, .cls-112, .cls-114, .cls-116, .cls-117, .cls-118, .cls-119, .cls-120, .cls-121, .cls-122, .cls-13, .cls-15, .cls-17, .cls-18, .cls-20, .cls-21, .cls-25, .cls-26, .cls-27, .cls-31, .cls-32, .cls-34, .cls-36, .cls-38, .cls-40, .cls-41, .cls-56, .cls-57, .cls-65, .cls-72, .cls-73, .cls-8, .cls-82, .cls-84, .cls-86, .cls-9, .cls-92 {
+      .cls-104, .cls-105, .cls-11, .cls-111, .cls-112, .cls-114, .cls-116, .cls-117, .cls-118, .cls-119, .cls-120, .cls-121, .cls-122, .cls-13, .cls-15, .cls-17, .cls-18, .cls-20, .cls-21, .cls-25, .cls-26, .cls-27, .cls-31, .cls-32, .cls-34, .cls-36, .cls-38, .cls-40, .cls-41, .cls-56, .cls-57, .cls-65, .cls-72, .cls-73, .cls-8, .cls-82, .cls-84, .cls-86, .cls-9, .cls-91, .cls-92 {
         stroke-width: 2px;
       }
 
@@ -57,7 +57,7 @@
         stroke-linecap: round;
       }
 
-      .cls-100, .cls-101, .cls-102, .cls-108, .cls-11, .cls-111, .cls-112, .cls-114, .cls-117, .cls-118, .cls-119, .cls-120, .cls-121, .cls-122, .cls-17, .cls-18, .cls-26, .cls-27, .cls-32, .cls-38, .cls-40, .cls-65, .cls-72, .cls-73, .cls-84, .cls-9, .cls-92, .cls-95, .cls-96, .cls-97, .cls-98, .cls-99 {
+      .cls-100, .cls-101, .cls-102, .cls-108, .cls-11, .cls-111, .cls-112, .cls-114, .cls-117, .cls-118, .cls-119, .cls-120, .cls-121, .cls-122, .cls-17, .cls-18, .cls-26, .cls-27, .cls-32, .cls-38, .cls-40, .cls-65, .cls-72, .cls-73, .cls-84, .cls-9, .cls-91, .cls-92, .cls-95, .cls-96, .cls-97, .cls-98, .cls-99 {
         stroke-linejoin: round;
       }
 
@@ -323,7 +323,8 @@
       }
 
       .cls-91 {
-        fill: url(#linear-gradient-3);
+        stroke-linecap: square;
+        stroke: url(#linear-gradient-3);
       }
 
       .cls-93 {
@@ -496,7 +497,7 @@
       <stop offset="1" stop-color="#fff"/>
     </linearGradient>
     <linearGradient id="linear-gradient-2" x1="50.1" y1="3.35" x2="50.55" y2="48.83" xlink:href="#linear-gradient"/>
-    <linearGradient id="linear-gradient-3" x1="76.19" y1="80.8" x2="76.19" y2="12.07" gradientUnits="userSpaceOnUse">
+    <linearGradient id="linear-gradient-3" x1="78.97" y1="77.47" x2="78.97" y2="18.58" gradientUnits="userSpaceOnUse">
       <stop offset="0"/>
       <stop offset="0.5" stop-color="#888"/>
       <stop offset="1" stop-color="#fff"/>
@@ -517,7 +518,7 @@
     <radialGradient id="radial-gradient-51" cx="48.01" cy="65.17" r="34.09" gradientTransform="translate(-6.36 -11.12) scale(1.13 1.18)" xlink:href="#radial-gradient-49"/>
     <radialGradient id="radial-gradient-52" cx="48.01" cy="29.23" r="34.09" gradientTransform="translate(-6.36 -15.21) scale(1.13 1.36)" xlink:href="#radial-gradient-49"/>
   </defs>
-  <title>Blocks_Asset 706</title>
+  <title>BlocksAsset 707</title>
   <g id="Layer_2" data-name="Layer 2">
     <g id="Ev_Empty">
       <path id="AddEvent" class="cls-1" d="M56.76,46.77h-7.5v-7.5a1.25,1.25,0,0,0-2.5,0v7.5h-7.5a1.25,1.25,0,0,0,0,2.5h7.5v7.5a1.25,1.25,0,0,0,2.5,0v-7.5h7.5a1.25,1.25,0,0,0,0-2.5Z"/>
@@ -1198,11 +1199,23 @@
         <path class="cls-82" d="M35,23.21A38.37,38.37,0,0,0,7.85,34.38a2.85,2.85,0,0,0-.81,2L7,76.82a2.33,2.33,0,0,0,2.33,2.33l51.3.06A2.34,2.34,0,0,0,63,76.88l0-40.46a2.84,2.84,0,0,0-.8-2A38.41,38.41,0,0,0,35,23.21Z"/>
       </g>
       <g id="Slid_threshold_proxGd">
-        <rect id="slider_threshold_proxGd" class="cls-91" x="74.19" y="7.32" width="4" height="76" rx="2"/>
+        <g id="slider_threshold_proxGd">
+          <line id="value_threshold_back_off-2" data-name="value_threshold_back_off" class="cls-72" x1="78.97" y1="13.02" x2="78.97" y2="83.02"/>
+          <g id="value_threshold_back-2" data-name="value_threshold_back">
+            <line id="value_thresholdBack-2" data-name="value_thresholdBack" class="cls-91" x1="78.97" y1="19.58" x2="78.97" y2="76.47"/>
+            <g id="crans-3" data-name="crans">
+              <line class="cls-9" x1="74.9" y1="76.47" x2="73.9" y2="76.47"/>
+              <line class="cls-9" x1="74.9" y1="48.02" x2="73.9" y2="48.02"/>
+              <line class="cls-9" x1="74.9" y1="62.25" x2="73.9" y2="62.25"/>
+              <line class="cls-9" x1="74.9" y1="33.8" x2="73.9" y2="33.8"/>
+              <line class="cls-9" x1="74.9" y1="19.58" x2="73.9" y2="19.58"/>
+            </g>
+          </g>
+        </g>
         <g id="Cursor_proxGd">
-          <rect id="White" class="cls-84" x="83.06" y="37.19" width="8" height="8"/>
-          <line id="position" class="cls-73" x1="91.06" y1="45.19" x2="73.04" y2="45.19"/>
-          <rect id="Black" class="cls-92" x="83.06" y="45.19" width="7.99" height="7.99" transform="translate(-0.05 0.09) rotate(-0.06)"/>
+          <rect id="White" class="cls-84" x="83.06" y="40.02" width="8" height="8"/>
+          <line id="position" class="cls-73" x1="91.06" y1="48.02" x2="77.95" y2="48.02"/>
+          <rect id="Black" class="cls-92" x="83.06" y="48.03" width="7.99" height="7.99" transform="translate(-0.06 0.09) rotate(-0.06)"/>
         </g>
       </g>
       <g id="ProxGd1_group-2" data-name="ProxGd1_group">
