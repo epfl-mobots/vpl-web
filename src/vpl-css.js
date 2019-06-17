@@ -327,10 +327,9 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 		}
 		return val;
 	case "vertical-align":
-		if (["top", "middle", "bottom"].indexOf(val) < 0) {
-			throw "Unknown vertical-align mode";
-		}
-		return val;
+		return ["top", "middle", "bottom"].indexOf(val) >= 0
+			? val
+			: this.convertLength(val);
 	default:
 		return val;
 	}
@@ -737,7 +736,7 @@ CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 			this.scroll = props[key] === "scroll";
 			break;
 		case "vertical-align":
-			this.verticalAlign = props[key];
+			this.verticalAlign = props[key] instanceof CSSParser.Length ? props[key].toValue(lengthBase) : props[key];
 			break;
 		case "box-shadow":
 			if (props[key].shadowOffset !== null) {
@@ -808,8 +807,8 @@ CSSParser.VPL.Box.prototype.totalHeight = function () {
 */
 CSSParser.VPL.Box.prototype.setTotalWidth = function (totalWidth) {
 	this.width = totalWidth -
-		(this.marginLeft + this.paddingLeft +
-			this.paddingRight + this.marginRight);
+		(this.marginLeft + this.borderLeftWidth + this.paddingLeft +
+			this.paddingRight + this.borderRightWidth + this.marginRight);
 };
 
 /** Set the total height of the box, including margin and padding
@@ -818,8 +817,8 @@ CSSParser.VPL.Box.prototype.setTotalWidth = function (totalWidth) {
 */
 CSSParser.VPL.Box.prototype.setTotalHeight = function (totalHeight) {
 	this.height = totalHeight -
-		(this.marginTop + this.paddingTop +
-			this.paddingBottom + this.marginBottom);
+		(this.marginTop + this.borderTopWidth + this.paddingTop +
+			this.paddingBottom + this.borderBottomWidth + this.marginBottom);
 };
 
 /** Create copy

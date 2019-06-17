@@ -106,7 +106,9 @@ block-container {
 	padding-bottom: 0.4vw;
 	margin: 0.6vw;
 	margin-bottom: 0.2vw;
+	border-bottom: transparent 3px;
 }
+
 block-container.error {
 	border-bottom: #e44 3px;
 }

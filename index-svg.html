@@ -42,7 +42,6 @@
 	},
 
 	"blocks": [
-		
 		{
 			"name": "!stop",
 			"type": "hidden"
@@ -602,7 +601,6 @@
 						0,
 						0.5,
 						1
-					
 					]
 				}
 			],
@@ -2045,13 +2043,7 @@ vpl {
 	background: #fbfcfc;
 	/*box-shadow: 0px 0px 8px #aabbcc;*/
 }
-block.library {
-	width: 5.1ww;
-	height: 5.1ww;
-	min-width: 54px;
-	min-height: 54px;
-	margin: 6px;
-}
+
 block {
 	width: 7.8ww;
 	height: 7.8ww;
@@ -2061,44 +2053,49 @@ block {
 	max-height: 112px;
 	margin: 8px;
 	background: transparent;
-
+	vertical-align: bottom;
 }
 
-
-block.small{
+block.small {
 	width: 9.4ww;
 }
 
-block.event{
-border-color:#ffa799;
-background: transparent;
-
+block.event {
+	border-color:#ffa799;
+	background: transparent;
 }
 
 block.action{
-border-color:#80b6ff;
-
+	border-color:#80b6ff;
 }
+
+block.event-aux, block.state {
+	height: 5ww;
+	width: 5ww;
+	min-width: 36px;
+	min-height: 60px;
+	vertical-align: bottom;
+}
+
 block.empty {
 	border-width: 2px;
 	border-style: dashed;
 	background: transparent;
 	width: 3.6ww;
 	border-radius: 4px;
-
 }
+
 block.empty:only-child {
 	width: 7.8ww;
-
 }
 
-block.event-aux, block.state {
-	height: 5ww;
-	min-width: 36px;
-	min-height: 36px;
-	vertical-align: bottom;
+block.library {
+	width: 5.1ww;
+	height: 5.1ww;
+	min-width: 54px;
+	min-height: 54px;
+	margin: 6px;
 }
-
 
 block-container {
 	background: #f1f2f4;
@@ -2106,13 +2103,11 @@ block-container {
 	padding: 16px;
 }
 
-
 rule {
 	/*background: transparent;
 	border: solid #eceff1;
 	border-radius: 4px;
 	padding: 8px;*/
-	
 	margin: 16px;
 }
 
@@ -2129,7 +2124,7 @@ overlay-rectangle.drop-target {
 crossout-line {
 	/*line-width: 0.2ww;
  	color: rgba(120,120,120,0.5);*/
- 	visibility:none;
+ 	visibility: none;
 }
 crossout-line.vpl {
 }
@@ -2163,8 +2158,6 @@ block-library {
 	border-right: 2px solid #eceff1;
 	/*overflow: scroll;*/
 }
-
-
 
 /* simulator */
 
@@ -3596,7 +3589,6 @@ sim-playground {
 			"name": "vpl:new",
 			"state": ["disabled"],
 			"draw": [
-				
 				{
 					"uri": "Icons.svg#new2_default",
 					"alpha": 0.5
@@ -3651,7 +3643,6 @@ sim-playground {
 			"name": "vpl:save",
 			"state": ["disabled"],
 			"draw": [
-				
 				{
 					"uri": "Icons.svg#download_default",
 					"alpha": 0.5
@@ -4089,7 +4080,8 @@ sim-playground {
 </script>
 
 <!--appearance of interface icons -->
-<script type="image/svg+xml" id="Icons.svg"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48.01">
+<script type="image/svg+xml" id="Icons.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48.01">
   <defs>
     <style>
       .cls-1, .cls-13, .cls-15 {

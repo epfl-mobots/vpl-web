@@ -57,6 +57,8 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 			type === A3a.vpl.blockType.comment;
 	}
 	var self = this;
+	var blockSize = Math.min(box.width, box.height);
+	var scale = blockSize / canvas.dims.blockSize;
 	var item = new A3a.vpl.CanvasItem(block,
 		box.width, box.height,
 		x, y,
@@ -64,37 +66,21 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 		function (canvas, item, dx, dy) {
 			var ctx = canvas.ctx;
 			ctx.save();
-			var scale = Math.max(box.width, box.height) / canvas.dims.blockSize;
-			if (Math.abs(scale - 1) > 1e-3) {
-				var dims0 = canvas.dims;
-				box.drawAt(ctx, item.x + dx, item.y + dy);
-				canvas.dims = A3a.vpl.Canvas.calcDims(canvas.dims.blockSize * scale, canvas.dims.controlSize * scale);
-				block.blockTemplate.renderToCanvas(canvas,
-					/** @type {A3a.vpl.Block} */(item.data),
-					box,
-					item.x + dx, item.y + dy);
-				if (block.locked) {
-					canvas.lockedMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize, true);
-				}
-				if (block.disabled || opts.disabled) {
-					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize,
-						["block"], ["block"]);
-				}
-				canvas.dims = dims0;
-			} else {
-				box.drawAt(ctx, item.x + dx, item.y + dy);
-				block.blockTemplate.renderToCanvas(canvas,
-					/** @type {A3a.vpl.Block} */(item.data),
-					box,
-					item.x + dx, item.y + dy);
-				if (block.locked) {
-					canvas.lockedMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize, true);
-				}
-				if (block.disabled) {
-					canvas.disabledMark(item.x + dx, item.y + dy, canvas.dims.blockSize, canvas.dims.blockSize,
-						["block"], ["block"]);
-				}
+			var dims0 = canvas.dims;
+			canvas.dims = A3a.vpl.Canvas.calcDims(blockSize, canvas.dims.controlSize * scale);
+			box.drawAt(ctx, item.x + dx, item.y + dy);
+			block.blockTemplate.renderToCanvas(canvas,
+				/** @type {A3a.vpl.Block} */(item.data),
+				box,
+				item.x + dx, item.y + dy);
+			if (block.locked) {
+				canvas.lockedMark(item.x + dx, item.y + dy, blockSize, blockSize, true);
 			}
+			if (block.disabled || opts.disabled) {
+				canvas.disabledMark(item.x + dx, item.y + dy, blockSize, blockSize,
+					["block"], ["block"]);
+			}
+			canvas.dims = dims0;
 			ctx.restore();
 		},
 		// interactiveCB
@@ -421,13 +407,19 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		var vertOffset = 0;
-		containerBox.height = blockBox.totalHeight();
 		switch (blockBox.verticalAlign) {
 		case "middle":
-			vertOffset = (cssBoxes.ruleBox.height - containerBox.totalHeight()) / 2;
+			vertOffset = (containerBox.height - blockBox.totalHeight()) / 2;
 			break;
 		case "bottom":
-			vertOffset = cssBoxes.ruleBox.height - containerBox.totalHeight();
+			vertOffset = containerBox.height - blockBox.totalHeight();
+			break;
+		case "top":
+			// no shift
+			break;
+		default:
+			// offset from bottom, positive = upward
+			vertOffset = containerBox.height - blockBox.totalHeight() - /** @type {number} */(blockBox.verticalAlign);
 			break;
 		}
 		if (event) {
@@ -468,7 +460,6 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		var vertOffset = 0;
-		containerBox.height = blockBox.totalHeight();
 		switch (blockBox.verticalAlign) {
 		case "middle":
 			vertOffset = (cssBoxes.ruleBox.height - containerBox.totalHeight()) / 2;
