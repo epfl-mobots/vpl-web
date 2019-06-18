@@ -34,7 +34,7 @@
 					"state256 = 0;\n"
 				],
 				"clause":
-					"state256 == `$.reduce(function (a, b, i) { return b ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`"
+					"state256 == `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`"
 			}
 		},
 		{
@@ -47,7 +47,7 @@
 					"state256 = 0;\n"
 				],
 				"clause":
-					"(state256 & `$.reduce(function (a, b, i) { return b !== 0 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`) == `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`"
+					"(state256 & `$.reduce(function (a, b, i) { return b !== 0 ? a | (1 << i) : a; }, 0)`) == `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << i) : a; }, 0)`"
 			}
 		},
 		{
@@ -395,7 +395,7 @@
 					]
 				],
 				"statement":
-					"state256 = `$.reduce(function (a, b, i) { return b ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`;\ndisplay_state256();\n"
+					"state256 = `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`;\ndisplay_state256();\n"
 			}
 		},
 		{
@@ -415,7 +415,7 @@
 					]
 				],
 				"statement":
-					"state256 = state256 & `$.reduce(function (a, b, i) { return b === 0 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)` | `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << [0,7,6,5,4,3,2,1][i]) : a; }, 0)`;\ndisplay_state256();\n"
+					"state256 = state256 & `$.reduce(function (a, b, i) { return b === 0 ? a | (1 << i) : a; }, 0)` | `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << i) : a; }, 0)`;\ndisplay_state256();\n"
 			}
 		},
 		{

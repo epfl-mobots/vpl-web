@@ -65,24 +65,26 @@ block {
 	min-height: 72px;
 	max-width: 112px;
 	max-height: 112px;
-	margin: 8px;
 	background: transparent;
 	vertical-align: bottom;
+	border-radius: 4px;
+	border-width: 1.5px;
 }
 
-block.small {
-	width: 9.4ww;
+block:small {
+	border-width: 2px;
+	border-color: white;
 }
 
-block.event {
-	border-color:#ffa799;
-	background: transparent;
+block.event-aux, block.state {
+	height: 7ww;
+	width: 7ww;
+	min-width: 65px;
+	min-height: 65px;
+	max-width: 100px;
+	max-height: 100px;
+	vertical-align: bottom;
 }
-
-block.action{
-	border-color:#80b6ff;
-}
-
 
 block.empty {
 	border-width: 2px;
@@ -90,18 +92,30 @@ block.empty {
 	background: transparent;
 	width: 3.6ww;
 	border-radius: 4px;
+	vertical-align: bottom;
 }
 
-block.event-aux, block.state {
-	height: 6ww;
-	width: 6ww;
-	min-width: 36px;
-	min-height: 60px;
+block.empty.event-aux {
+	height: 7ww;
+	min-height: 65px;
 	vertical-align: bottom;
+}
+
+block.event {
+	border-color: #ffa799;
+}
+
+block.action {
+	border-color: #80b6ff;
+}
+
+block.state {
+	border-color: #ffa799;
 }
 
 block.empty:only-child {
 	width: 7.8ww;
+	max-width: 112px;
 }
 
 block.library {
