@@ -29,19 +29,23 @@ Build:
 
 // default for websocketURL: "ws://localhost:8597" (local tdm)
 // default for uuid: none (pick last connected node)
-// default for change (change(true) called when connected, change(false) when disconnected): null (none)
+// options: dict of options (default: none)
+// options.change: function(connected) called upon connection change
+// options.variables: function(v) called upon variable change, or "auto" to only enable tdmGetVariable
 // default for success (function called once code sent success): null (none)
-tdmInit(websocketURL, uuid, change);
+tdmInit(websocketURL, uuid, options);
 var b = tdmCanRun();
 tdmRun(asebaSourceCode, success);
 
 */
 
-import {createClient, Node, NodeStatus, Request, setup} from '@mobsya/thymio-api'
+import {createClient, Node, NodeStatus, Request, setup, mobsya} from '@mobsya/thymio-api'
 
 window.tdmSelectedNode = undefined;
 
-window.tdmInit = function (url, uuid, change) {
+window.tdmVariables = {};
+
+window.tdmInit = function (url, uuid, options) {
 
     // Connect to the switch
     // We will need some way to get that url, via the launcher
@@ -62,7 +66,7 @@ window.tdmInit = function (url, uuid, change) {
                     && node.status != NodeStatus.ready && node.status != NodeStatus.available) {
                     // tdmSelectedNode lost
                     window.tdmSelectedNode = null;
-                    change && change(false);
+                    options && options.change && options.change(false);
                 }
                 if ((!window.tdmSelectedNode || window.tdmSelectedNode.status != NodeStatus.ready)
                     && node.status == NodeStatus.available
@@ -75,9 +79,33 @@ window.tdmInit = function (url, uuid, change) {
                         // We can lock as many nodes as we want
                         await node.lock();
                         console.log("Node locked");
-                        change && change(true);
+                        options && options.change && options.change(true);
                     } catch (e) {
                         console.log(`Unable To Lock ${node.id} (${node.name})`)
+                    }
+                }
+                if (!window.tdmSelectedNode) {
+                    continue;
+                }
+                if (options && options.variables) {
+                    if (options.variables === "auto") {
+                        window.tdmSelectedNode.onVariablesChanged = (vars) => {
+                            // store variables from map to global object tdmVariables
+                            vars.forEach((val, key) => {
+                                window.tdmVariables[key] = val;
+                            });
+                        }
+                    } else {
+                        window.tdmSelectedNode.onVariablesChanged = (vars) => {
+                            // convert variables from map to object
+                            var vObj = {};
+                            vars.forEach((val, key) => {
+                                window.tdmVariables[key] = val;
+                                vObj[key] = val;
+                            });
+
+                            options.variables(vObj);
+                        };
                     }
                 }
             }
@@ -89,6 +117,22 @@ window.tdmInit = function (url, uuid, change) {
 
 window.tdmIsConnected = function () {
     return window.tdmSelectedNode != null;
+};
+
+window.tdmSetVariables = function (v) {
+    // convert variables from object to map
+    var map = new Map();
+    for (var v1 in v) {
+        if (v.hasOwnProperty(v1)) {
+            map.set(v1, v[v1]);
+        }
+    }
+
+    window.tdmSelectedNode.setVariables(map);
+};
+
+window.tdmGetVariable = function (name) {
+    return window.tdmVariables[name];
 };
 
 window.tdmCanRun = function () {
