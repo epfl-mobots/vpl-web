@@ -85,7 +85,6 @@ A3a.vpl.patchJSBlocks = function () {
 				return {
 					sectionBegin: "this.addEventListener(\"buttons\", function (name, param) {\n",
 					sectionEnd: "});\n",
-					sectionPriority: 30,
 					clause: cond
 				};
 			},
@@ -107,7 +106,6 @@ A3a.vpl.patchJSBlocks = function () {
 				return {
 					sectionBegin: "this.addEventListener(\"prox\", function (name, param) {\n",
 					sectionEnd: "});\n",
-					sectionPriority: 20,
 					clause: cond
 				};
 			},
@@ -131,7 +129,6 @@ A3a.vpl.patchJSBlocks = function () {
 				return {
 					sectionBegin: "this.addEventListener(\"prox\", function (name, param) {\n",
 					sectionEnd: "});\n",
-					sectionPriority: 20,
 					clause: cond
 				};
 			},
@@ -154,7 +151,6 @@ A3a.vpl.patchJSBlocks = function () {
 				return {
 					sectionBegin: "this.addEventListener(\"prox\", function (name, param) {\n",
 					sectionEnd: "});\n",
-					sectionPriority: 20,
 					clause: cond
 				};
 			},
@@ -176,7 +172,6 @@ A3a.vpl.patchJSBlocks = function () {
 				return {
 					sectionBegin: "this.addEventListener(\"prox\", function (name, param) {\n",
 					sectionEnd: "});\n",
-					sectionPriority: 10,
 					clause: cond
 				};
 			},
@@ -200,7 +195,6 @@ A3a.vpl.patchJSBlocks = function () {
 				return {
 					sectionBegin: "this.addEventListener(\"prox\", function (name, param) {\n",
 					sectionEnd: "});\n",
-					sectionPriority: 10,
 					clause: cond
 				};
 			},
@@ -223,15 +217,13 @@ A3a.vpl.patchJSBlocks = function () {
 				return {
 					sectionBegin: "this.addEventListener(\"prox\", function (name, param) {\n",
 					sectionEnd: "});\n",
-					sectionPriority: 10,
 					clause: cond
 				};
 			},
 			"tap": function (block) {
 				return {
 					sectionBegin: "this.addEventListener(\"tap\", function (name, param) {\n",
-					sectionEnd: "});\n",
-					sectionPriority: 50
+					sectionEnd: "});\n"
 				};
 			},
 			"accelerometer": function (block) {
@@ -240,8 +232,7 @@ A3a.vpl.patchJSBlocks = function () {
 					// tap
 					return {
 						sectionBegin: "this.addEventListener(\"tap\", function (name, param) {\n",
-						sectionEnd: "});\n",
-						sectionPriority: 50
+						sectionEnd: "});\n"
 					};
 				} else {
 					/** @type {number} */
@@ -260,7 +251,6 @@ A3a.vpl.patchJSBlocks = function () {
 					return {
 						sectionBegin: "this.addEventListener(\"acc\", function (name, param) {\n",
 						sectionEnd: "});\n",
-						sectionPriority: 40,
 						clauseInit:
 							dir === 2
 								? "var pitchAngle = Math.atan2(acc[1], acc[2]);\n"
@@ -275,7 +265,6 @@ A3a.vpl.patchJSBlocks = function () {
 				return {
 					sectionBegin: "this.addEventListener(\"acc\", function (name, param) {\n",
 					sectionEnd: "});\n",
-					sectionPriority: 40,
 					clauseInit:
 						"var rollAngle = Math.atan2(acc[0], acc[2]);\n",
 					clause:
@@ -289,7 +278,6 @@ A3a.vpl.patchJSBlocks = function () {
 				return {
 					sectionBegin: "this.addEventListener(\"acc\", function (name, param) {\n",
 					sectionEnd: "});\n",
-					sectionPriority: 40,
 					clauseInit:
 						"var pitchAngle = Math.atan2(acc[1], acc[2]);\n",
 					clause:
@@ -303,7 +291,6 @@ A3a.vpl.patchJSBlocks = function () {
 				return {
 					sectionBegin: "this.addEventListener(\"acc\", function (name, param) {\n",
 					sectionEnd: "});\n",
-					sectionPriority: 40,
 					clauseInit:
 						"var yawAngle = Math.atan2(acc[0], acc[1]);\n",
 					clause:
@@ -314,14 +301,12 @@ A3a.vpl.patchJSBlocks = function () {
 			"clap": function (block) {
 				return {
 					sectionBegin: "this.addEventListener(\"mic\", function (name, param) {\n",
-					sectionEnd: "});\n",
-					sectionPriority: 50
+					sectionEnd: "});\n"
 				};
 			},
 			"init": function (block) {
 				return {
-					sectionBegin: "// init block\n",
-					sectionPriority: 300
+					sectionBegin: "// init block\n"
 				};
 			},
 			"timer": function (block) {
@@ -330,8 +315,7 @@ A3a.vpl.patchJSBlocks = function () {
 						A3a.vpl.BlockTemplate.resetTimerJS
 					],
 					sectionBegin: "this.addEventListener(\"timer0\", function (name, param) {\n",
-					sectionEnd: "});\n",
-					sectionPriority: 200
+					sectionEnd: "});\n"
 				};
 			},
 			"state": function (block) {
@@ -462,7 +446,7 @@ A3a.vpl.patchJSBlocks = function () {
 					],
 					statement:
 						"this.set(\"leds.top\", [" +
-						block.param.map(function (x) { return x.toString(10); }).join(", ") +
+						['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][block.param[0]] +
 						"]);\n"
 				};
 			},
@@ -509,10 +493,10 @@ A3a.vpl.patchJSBlocks = function () {
 					],
 					statement:
 						"this.set(\"leds.bottom.left\", [" +
-						block.param.map(function (x) { return x.toString(10); }).join(", ") +
+						['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][block.param[0]] +
 						"]);\n" +
 						"this.set(\"leds.bottom.right\", [" +
-						block.param.map(function (x) { return x.toString(10); }).join(", ") +
+						['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][block.param[0]] +
 						"]);\n"
 				};
 			},
@@ -523,7 +507,7 @@ A3a.vpl.patchJSBlocks = function () {
 					],
 					statement:
 						"this.set(\"leds.bottom.left\", [" +
-						block.param.map(function (x) { return x.toString(10); }).join(", ") +
+						['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][block.param[0]] +
 						"]);\n"
 				};
 			},
@@ -534,7 +518,7 @@ A3a.vpl.patchJSBlocks = function () {
 					],
 					statement:
 						"this.set(\"leds.bottom.right\", [" +
-						block.param.map(function (x) { return x.toString(10); }).join(", ") +
+						['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][block.param[0]] +
 						"]);\n"
 				};
 			},

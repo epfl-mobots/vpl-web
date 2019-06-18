@@ -789,7 +789,6 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 					b[lang]["initCodeExec"] && (c.initCodeExec = substInlineA(b[lang]["initCodeExec"].map(str), block));
 					b[lang]["sectionBegin"] && (c.sectionBegin = A3a.vpl.BlockTemplate.substInline(str(b[lang]["sectionBegin"]), block));
 					b[lang]["sectionEnd"] && (c.sectionEnd = A3a.vpl.BlockTemplate.substInline(str(b[lang]["sectionEnd"]), block));
-					c.sectionPriority = /** @type {(number|undefined)} */(b[lang]["sectionPriority"]);
 					b[lang]["clauseInit"] && (c.clauseInit = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clauseInit"]), block));
 					if (b[lang]["clauseAnd"]) {
 						var clause = "";
@@ -799,7 +798,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 								clause += (clause.length > 0 ? " " + A3a.vpl.Program.codeGenerator[lang].andOperator + " " : "") + cl;
 							}
 						});
-						c.clause = /** @type {string} */(clause || "1 == 1");
+						c.clause = /** @type {string} */(clause || A3a.vpl.Program.codeGenerator[lang].trueConstant);
 					} else if (b[lang]["clause"]) {
 		 				c.clause = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clause"]), block);
 					}

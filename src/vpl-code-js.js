@@ -14,7 +14,7 @@
 	@extends {A3a.vpl.CodeGenerator}
 */
 A3a.vpl.CodeGeneratorJS = function () {
-	A3a.vpl.CodeGenerator.call(this, "js", "&&");
+	A3a.vpl.CodeGenerator.call(this, "js", "&&", "true");
 };
 A3a.vpl.CodeGeneratorJS.prototype = Object.create(A3a.vpl.CodeGenerator.prototype);
 A3a.vpl.CodeGeneratorJS.prototype.constructor = A3a.vpl.CodeGeneratorJS;
@@ -200,8 +200,7 @@ A3a.vpl.CodeGeneratorJS.prototype.generateMissingCodeForBlock = function (block)
 	case A3a.vpl.blockType.state:
 		return {
 			clauseInit: code,
-			clause: "true",
-			sectionPriority: 1
+			clause: "true"
 		};
 	case A3a.vpl.blockType.action:
 		return {

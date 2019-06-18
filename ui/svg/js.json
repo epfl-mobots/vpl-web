@@ -5,23 +5,29 @@
 			"js": {
 				"sectionBegin": "this.addEventListener(\"buttons\", function (name, param) {\n",
 				"sectionEnd": "});\n",
-				"clauseAnd": "`$[i] ? 'this.get(\"button.' + ['center', 'forward', 'backward', 'right', 'left'][i] + '\")' : ''`"
+				"clause": "this.get(\"button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]`\")"
+			}
+		},
+		{
+			"name": "init",
+			"js": {
+				"sectionBegin": "// initialization\n"
 			}
 		},
 		{
 			"name": "roll"
 		},
 		{
+			"name": "acc side"
+		},
+		{
+			"name": "acc upside down"
+		},
+		{
 			"name": "yaw"
 		},
 		{
 			"name": "pitch"
-		},
-		{
-			"name": "init",
-			"js": {
-				"sectionBegin": "// init block\n"
-			}
 		},
 		{
 			"name": "clap",
@@ -34,13 +40,72 @@
 			"name": "fall"
 		},
 		{
-			"name": "tap"
+			"name": "tap",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"tap\", function (name, param) {\n",
+				"sectionEnd": "});\n"
+			}
+		},
+		{
+			"name": "ground mean",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"prox\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clauseInit": [
+					"var proxGroundDelta = this.get(\"prox.ground.delta\");\n"
+				],
+				"clause": "proxGroundDelta[0] + proxGroundDelta[1] `$[0] ? '>= 0.45' : '<= 0.4'`"
+			}
+		},
+		{
+			"name": "ground",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"prox\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clauseInit": [
+					"var proxGroundDelta = this.get(\"prox.ground.delta\");\n"
+				],
+				"clauseAnd": "`$[i] ? 'proxGroundDelta[' + i + '] ' + ($[i] > 0 ? '>= 0.225' : '<= 0.2') : ''`"
+			}
+		},
+		{
+			"name": "ground 1"
+		},
+		{
+			"name": "horiz prox front"
+		},
+		{
+			"name": "horiz prox back"
+		},
+		{
+			"name": "horiz prox front adv"
+		},
+		{
+			"name": "horiz prox back adv"
 		},
 		{
 			"name": "remote control arrows"
 		},
 		{
 			"name": "remote control keypad"
+		},
+		{
+			"name": "timer"
+		},
+		{
+			"name": "counter comparison"
+		},
+		{
+			"name": "state 256"
+		},
+		{
+			"name": "state 256 with mask"
+		},
+		{
+			"name": "color 8 state"
+		},
+		{
+			"name": "bottom color 8 state"
 		},
 		{
 			"name": "motor",
@@ -69,7 +134,22 @@
 					"this.set(\"leds.top\", [0, 0, 0]);\n"
 				],
 				"statement":
-					"this.set(\"leds.top\", [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]);\n"
+					"this.set(\"leds.top\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`]);\n"
+			}
+		},
+		{
+			"name": "bottom color 8",
+			"js": {
+				"initCodeExec": [
+					[
+						"this.set(\"leds.bottom.left\", [0, 0, 0]);\n",
+						"this.set(\"leds.bottom.right\", [0, 0, 0]);\n"
+					]
+				],
+				"statement": [
+					"this.set(\"leds.bottom.left\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`]);\n",
+					"this.set(\"leds.bottom.right\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`]);\n"
+				]
 			}
 		},
 		{
@@ -83,6 +163,32 @@
 			}
 		},
 		{
+			"name": "bottom color",
+			"js": {
+				"initCodeExec": [
+					[
+						"this.set(\"leds.bottom.left\", [0, 0, 0]);\n",
+						"this.set(\"leds.bottom.right\", [0, 0, 0]);\n"
+					]
+				],
+				"statement": [
+					"this.set(\"leds.bottom.left\", [`$.map(function (x) { return x.toFixed(2); }).join(', ')`]);\n",
+					"this.set(\"leds.bottom.right\", [`$.map(function (x) { return x.toFixed(2); }).join(', ')`]);\n"
+				]
+			}
+		},
+		{
+			"name": "notes",
+			"js": {
+				"initCodeExec": [
+					"// init notes\nthis.set(\"sound\", {});\n",
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"sound\", {\"f\": [`$.filter(function (a, i) { return i % 2 == 0; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`], \"d\": [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return 7 * d; }).join(', ')`]});\n"
+			}
+		},
+		{
 			"name": "notes with speed",
 			"js": {
 				"initCodeExec": [
@@ -91,6 +197,63 @@
 				],
 				"statement":
 					"this.set(\"sound\", {\"f\": [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (h) { return [262, 311, 370, 440, 524, 370][h]; }).join(', ')`], \"d\": [`$.slice(1).filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return Math.round(Math.pow(2, $[0]) * 7) * d; }).join(', ')`]});\n"
+			}
+		},
+		{
+			"name": "set state 256",
+			"js": {
+				"initVarDecl": [
+					[
+						"// variable for counter\n",
+						"this.setClientState(\"counter\", 0);\n"
+					]
+				],
+				"initCodeExec": [
+					"this.setClientState(\"counter\", 0);\n"
+				],
+				"statement": [
+					"var counter = `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`;\n",
+					"this.setClientState(\"counter\", counter);\n",
+					"this.set(\"leds.circle\", [counter&1?1:0,counter&2?1:0,counter&4?1:0,counter&8?1:0,counter&16?1:0,counter&32?1:0,counter&64?1:0,counter&128?1:0]);\n"
+				]
+			}
+		},
+		{
+			"name": "set state 256 with mask",
+			"js": {
+				"initVarDecl": [
+					[
+						"// variable for counter\n",
+						"this.setClientState(\"counter\", 0);\n"
+					]
+				],
+				"initCodeExec": [
+					"this.setClientState(\"counter\", 0);\n"
+				],
+				"statement": [
+					"var counter = counter & `$.reduce(function (a, b, i) { return b === 0 ? a | (1 << i) : a; }, 0)` | `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << i) : a; }, 0)`;\n",
+					"this.setClientState(\"counter\", counter);\n",
+					"this.set(\"leds.circle\", [counter&1?1:0,counter&2?1:0,counter&4?1:0,counter&8?1:0,counter&16?1:0,counter&32?1:0,counter&64?1:0,counter&128?1:0]);\n"
+				]
+			}
+		},
+		{
+			"name": "set timer"
+		},
+		{
+			"name": "arithmetic",
+			"js": {
+				"initVarDecl": [
+					[
+						"// variable for counter\n",
+						"this.setClientState(\"counter\", 0);\n"
+					]
+				],
+				"initCodeExec": [
+					"this.setClientState(\"counter\", 0);\n"
+				],
+				"statement":
+					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if (state256 ' + ($[0] == 2 ? '< ' + $[1] + ') {\\nstate256 = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ') {\\nstate256 = 255\\n') + '} else {\\nstate256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\n}\\n' : 'state256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + ';\\n'`display_state256();\n"
 			}
 		}
 	]
