@@ -129,7 +129,7 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 				"}\n";
 			actionTestCount++;
 		} else if (c[i].auxClauses) {
-			actionTestCount += "when (" + c[i].auxClauses + ") {\n" +
+			actionsTestCode += "when (" + c[i].auxClauses + ") {\n" +
 				"todo[" + actionTestCount + "] = true;\n" +
 				"}\n";
 			actionsExecCode += "if (todo[" + actionTestCount + "]) {\n" +
@@ -180,7 +180,7 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 	}
 	// add onevent timer1
 	if (actionsTestCode) {
-		str += "onevent timer1 {\n";
+		str += "\nonevent timer1 {\n";
 		if (actionTestCount > 0) {
 			str += "bool todo[" + actionTestCount + "] = false;\n";
 		}
