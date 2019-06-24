@@ -359,9 +359,11 @@
 					"min": 0,
 					"max": 1,
 					"discrete": [
-						0.25,
+						0.1,
+						0.3,
 						0.5,
-						0.75
+						0.7,
+						0.9
 					]
 				}
 			],
@@ -589,18 +591,19 @@
 				}
 
 			],
-			"defaultParameters": [0, 0, 0, 0, 0, 0.5],
-			"typicalParameters": [0, 0, 1, 0, 0, 0.5],
+			"defaultParameters": [0, 0, 0, 0, 0, 0.4],
+			"typicalParameters": [0, 0, 1, 0, 0, 0.4],
 			"sliders": [
 				{
 					"id": "value_threshold",
 					"thumbId": "cursor_threshold",
-					"min": 1,
-					"max": 0,
+					"min": 0.2,
+					"max": 0.8,
 					"discrete": [
-						0,
-						0.5,
-						1
+						0.2,
+						0.4,
+						0.6,
+						0.8
 					]
 				}
 			],
@@ -683,18 +686,19 @@
 					"st": "visibility:`$[1]>0?'visible':'hidden'`"
 				}
 			],
-			"defaultParameters": [0, 0, 0.5],
-			"typicalParameters": [1, 1, 0.5],
+			"defaultParameters": [0, 0, 0.4],
+			"typicalParameters": [1, 1, 0.4],
 			"sliders": [
 				{
 					"id": "value_threshold_back",
 					"thumbId": "cursor_threshold_back",
-					"min": 0,
-					"max": 1,
+					"min": 0.2,
+					"max": 0.8,
 					"discrete": [
-						0,
-						0.5,
-						1
+						0.2,
+						0.4,
+						0.6,
+						0.8
 					]
 				}
 			],
