@@ -390,7 +390,7 @@
 				"initCodeDecl": [
 					[
 						"void display_state256() {\n",
-						"leds.circle((state256&1)*32,(state256&2)*16,(state256&4)*8,(state256&8)*4,(state256&16)*2,state256&32,(state256&64)/2,(state256&128)/4);\n"
+						"leds.circle((state256&1)*32,(state256&2)*16,(state256&4)*8,(state256&8)*4,(state256&16)*2,state256&32,(state256&64)/2,(state256&128)/4);\n",
 						"}\n"
 					]
 				],
@@ -410,7 +410,7 @@
 				"initCodeDecl": [
 					[
 						"void display_state256() {\n",
-						"leds.circle((state256&1)*32,(state256&2)*16,(state256&4)*8,(state256&8)*4,(state256&16)*2,state256&32,(state256&64)/2,(state256&128)/4);\n"
+						"leds.circle((state256&1)*32,(state256&2)*16,(state256&4)*8,(state256&8)*4,(state256&16)*2,state256&32,(state256&64)/2,(state256&128)/4);\n",
 						"}\n"
 					]
 				],
@@ -530,7 +530,7 @@
 				"initCodeDecl": [
 					[
 						"void display_state256() {\n",
-						"leds.circle((state256&1)*32,(state256&2)*16,(state256&4)*8,(state256&8)*4,(state256&16)*2,state256&32,(state256&64)/2,(state256&128)/4);\n"
+						"leds.circle((state256&1)*32,(state256&2)*16,(state256&4)*8,(state256&8)*4,(state256&16)*2,state256&32,(state256&64)/2,(state256&128)/4);\n",
 						"}\n"
 					]
 				],
