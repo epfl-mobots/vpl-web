@@ -21,6 +21,11 @@ CSSParser.VPL = function () {
 
 	this.rules = [];
 
+	/** @type {Object.<string,!CSSParser.VPL.Box>} */
+	this.boxCache = {};
+	/** @type {Object.<string,!CSSParser.VPL.Line>} */
+	this.lineCache = {};
+
 	/** @type {Array.<string>} */
 	this.borderStyles = [
 		"none",
@@ -362,8 +367,14 @@ CSSParser.VPL.prototype.getProperties = function (opt) {
 	@return {!CSSParser.VPL.Box}
 */
 CSSParser.VPL.prototype.getBox = function (opt) {
+	var key = CSSParser.Selector.stringifyOptions(opt, this.lengthBase);
+	if (this.boxCache[key]) {
+		return this.boxCache[key];
+	}
 	var props = this.getProperties(opt);
-	return new CSSParser.VPL.Box(props, this.lengthBase);
+	var box = new CSSParser.VPL.Box(props, this.lengthBase);
+	this.boxCache[key] = box;
+	return box;
 };
 
 /** Get line specified by selector
@@ -371,8 +382,14 @@ CSSParser.VPL.prototype.getBox = function (opt) {
 	@return {!CSSParser.VPL.Line}
 */
 CSSParser.VPL.prototype.getLine = function (opt) {
+	var key = CSSParser.Selector.stringifyOptions(opt, this.lengthBase);
+	if (this.lineCache[key]) {
+		return this.lineCache[key];
+	}
 	var props = this.getProperties(opt);
-	return new CSSParser.VPL.Line(props, this.lengthBase);
+	var line = new CSSParser.VPL.Line(props, this.lengthBase);
+	this.lineCache[key] = line;
+	return line;
 };
 
 /**

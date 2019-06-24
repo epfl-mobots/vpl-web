@@ -549,6 +549,27 @@ CSSParser.Selector = function (opt) {
 */
 CSSParser.Selector.Options;
 
+/** Convert selector description to a string which can be used as a key in a cache
+	@param {CSSParser.Selector.Options} opt
+	@param {CSSParser.LengthBase} lengthBase
+	@return {string}
+*/
+CSSParser.Selector.stringifyOptions = function (opt, lengthBase) {
+	var str = opt.id
+		? "#" + opt.id
+		: (opt.tag || "") +
+			(opt.clas && opt.clas.length > 0 ? "." + opt.clas.join(".") : "") +
+			(opt.pseudoClass && opt.pseudoClass.length > 0 ? ":" + opt.pseudoClass.join(".") : "") || "*";
+	if (lengthBase) {
+		str += "/" + (Math.round(lengthBase.base).toString(10)) +
+			"," + (Math.round(lengthBase.vw).toString(10)) +
+			"," + (Math.round(lengthBase.vh).toString(10)) +
+			"," + (Math.round(lengthBase.ww).toString(10)) +
+			"," + (Math.round(lengthBase.wh).toString(10));
+	}
+	return str;
+};
+
 /** Check if options match a selector
 	@param {CSSParser.Selector.Options} opt
 	@return {boolean}
