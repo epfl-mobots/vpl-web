@@ -1,0 +1,413 @@
+<!--
+
+VPL3 web app based on a subset of whole JavaScript source code minus thymio connection and svg ui and blocks
+
+full:
++ base vpl3
++ js blocks
++ aseba
++ l2
++ js
++ python
+- support for svg ui
+- support for svg blocks
+- thymio
+- thymio-tdm,
++ simulator
+
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, height=device-height, maximum-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
+<!-- definition of the user interface and blocks -->
+<script type="application/json" id="ui.json">
+{
+	"blocks": null,
+	"buttons": null,
+	"widgets": null,
+
+	"css": [
+		"classic.css"
+	],
+
+	"fragments": {
+		"about.html": "<iframe src=\"../vpl-about.html\" style=\"width:100%;height:100%;border:none;\"></iframe>",
+		"vpl-export-html.css": "td.events, td.then, td.actions {\n\tborder: solid 2px silver;\n\tborder-style: solid none;\n}\ntd.block {\n\tpadding: 15px;\n}\ntd.events {\n    min-width: 20px;\n    border-left-style: solid;\n    border-top-left-radius: 20px; \n    border-bottom-left-radius: 20px;\n}\ntd.event-aux {    transform: scale(0.8) translate(0,10px);\n}\ntd.actions {\n    min-width: 20px;\n    border-right-style: solid;\n    border-bottom-right-radius: 20px; \n    border-top-right-radius: 20px; \n}\ntable.program {\n\tborder-collapse: separate;\n\tborder-spacing: 0 10px;\n\tmargin-left: auto;\n\tmargin-right: auto;\n}\n"
+	}
+}
+</script>
+
+<script type="text/x-vpl-css" id="classic.css">
+/*
+	CSS for VPL3 application
+    Classic version (blocks, buttons and widgets defined in JavaScript)
+	Copyright 2019, ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE
+*/
+
+view {
+	background: white;
+}
+
+toolbar {
+	padding: 5px;
+	margin: 0;
+}
+
+button {
+	width: 3.0ww;
+	height: 3.0ww;
+	min-width: 20px;
+	min-height: 20px;
+	margin: 0.2vw;
+}
+
+#vpl-close, #src-close, #sim-close {
+	width: 1.5ww;
+	min-width: 10px;
+}
+
+button.vpl.bottom {
+	font: 1.7vw sans-serif;
+}
+
+#vpl-message-error {
+	color: #e44;
+	width: 20vw;
+}
+
+#vpl-message-warning {
+	color: #f88;
+	width: 20vw;
+}
+
+separator {
+	width: 5px;
+	height: 5px;
+}
+
+vpl {
+	padding: 5px;
+	margin: 5px;
+	background: #eee;
+}
+
+block {
+	width: 6vw;
+	height: 6vw;
+	min-width: 32px;
+	min-height: 32px;
+}
+
+block.library {
+	margin: 4px;
+}
+
+block.event {
+	background: #f70;
+	border: none #f70;
+}
+block.event-aux, block.state {
+	width: 5vw;
+	height: 5vw;
+	min-width: 27px;
+	min-height: 27px;
+	vertical-align: bottom;
+}
+block.action {
+	background: #38f;
+	border: none #38f;
+}
+block.state {
+	background: #0c0;
+	border: none #0c0;
+}
+block.comment {
+	background: #aaa;
+	border: none #aaa;
+}
+block.empty {
+	border-width: 2px;
+	background: transparent;
+	width: 1.5vw;
+	min-width: 8px;
+}
+block.empty.event-aux {
+	height: 5vw;
+	min-height: 27px;
+	vertical-align: bottom;
+}
+block.empty:only-child {
+	width: 6vw;
+	min-width: 32px;
+}
+
+block-container {
+	padding: 0;
+	padding-bottom: 0.4vw;
+	margin: 0.6vw;
+	margin-bottom: 0.2vw;
+	border-bottom: transparent 3px;
+}
+
+block-container.error {
+	border-bottom: #e44 3px;
+}
+block-container.warning {
+	border-bottom: #f88 3px;
+}
+
+rule {
+	background: #ddd;
+	border: solid #666;
+	border-radius: 0.6vw;
+	padding: 0.3vw;
+	margin:0.6vw;
+}
+
+rule:small {
+	background: white;
+}
+
+overlay-rectangle.disabled {
+	background: rgba(255,255,255,0.5);
+}
+
+overlay-rectangle.drop-target {
+	border: 0.2vw rgba(0,0,0,0.5);
+	border-radius: 0.2vw;
+}
+
+crossout-line {
+	line-width: 0.75vw;
+ 	color: rgba(120,120,120,0.5);
+}
+crossout-line.vpl {
+	line-width: 5vw;
+}
+
+#widget-error, #widget-warning {
+	width: 3vw;
+	height: 3vw;
+	margin-right: 1vw;
+}
+
+conflict-line.error {
+	line: 3px #e44 dashed;
+}
+conflict-line.warning {
+	line: 3px #f88;
+}
+
+#widget-then {
+	width: 3vw;
+	height: 3vw;
+	padding: 1vw;
+}
+
+block-library {
+	padding: 5px;
+	padding-top: 0;
+}
+
+block.library {
+	width: 4vw;
+	height: 4vw;
+	min-width: 32px;
+	min-height: 32px;
+}
+
+/* simulator */
+
+sim-controller {
+	background: #eee;
+	margin: 5px;
+	padding: 1vw;
+}
+
+button.event {
+	width: 2vw;
+	height: 2vw;
+	margin: 0.2vw;
+}
+
+sim-playground-area {
+	background: #eee;
+	margin: 5px;
+	padding: 5px;
+}
+
+sim-playground {
+	border: 2px silver;
+}
+</script>
+
+<title>VPL</title>
+
+<style>
+html {
+	height: 100%;
+}
+body {
+	height: 100%;
+	margin: 0;
+}
+#programCanvas {
+	width: 100%;
+	height: 100%;
+	display: block;
+	z-index: 10;
+}
+#src-editor {
+	width: 100%;
+	position: fixed;
+	z-index: 20;
+}
+#editor {
+	height: 100%;
+	display: block;
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 5pt;
+	padding-right: 5pt;
+	margin: 0;
+	border: 0;
+	box-sizing: border-box;
+	tab-size: 4;
+	font-family: monospace;
+	font-size: 11pt;
+}
+pre#editor-lines {
+	background-color: silver;
+    width: 70px;
+    float: left;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 5pt;
+    text-align: right;
+    overflow: hidden;
+	user-select: none;
+}
+
+#input {
+	position: absolute;
+	z-index: 1000;
+	font-family: sans-serif;
+	font-size: 15pt;
+	top: 10px;
+	left: 10px;
+	display: none;
+}
+
+@media only screen and (max-device-width: 1024px) {
+	#editor {
+		tab-size: 2;
+		font-size: 10pt;
+	}
+}
+</style>
+
+<script src="../src/a3a-ns.js"></script>
+<script src="../src/svg.js"></script>
+<script src="../src/svg-preparsed.js"></script>
+<script src="../src/svg-transform.js"></script>
+<script src="../src/vpl-ns.js"></script>
+<script src="../src/vpl-blocktemplate.js"></script>
+<script src="../src/vpl-block.js"></script>
+<script src="../src/vpl-emptyblock.js"></script>
+<script src="../src/css.js"></script>
+<script src="../src/vpl-css.js"></script>
+<script src="../src/vpl-css-draw.js"></script>
+<script src="../src/vpl-canvas.js"></script>
+<script src="../src/vpl-canvas-scroll.js"></script>
+<script src="../src/vpl-blocklibutil.js"></script>
+<script src="../src/vpl-blocklib.js"></script>
+<script src="../src/vpl-blocklib-l2.js"></script>
+<script src="../src/vpl-blocklib-js.js"></script>
+<script src="../src/vpl-blocklib-python.js"></script>
+<script src="../src/vpl-eventhandler.js"></script>
+<script src="../src/vpl-uiconfig.js"></script>
+<script src="../src/vpl-program.js"></script>
+<script src="../src/vpl-code.js"></script>
+<script src="../src/vpl-code-aseba.js"></script>
+<script src="../src/vpl-code-l2.js"></script>
+<script src="../src/vpl-code-js.js"></script>
+<script src="../src/vpl-code-python.js"></script>
+<script src="../src/vpl-cmd.js"></script>
+<script src="../src/vpl-app.js"></script>
+<script src="../src/vpl-ui-validator.js"></script>
+<script src="../src/vpl-cmd-vpl.js"></script>
+<script src="../src/vpl-controlbar.js"></script>
+<script src="../src/vpl-buttons-js.js"></script>
+<script src="../src/vpl-controlbar-btn.js"></script>
+<script src="../src/vpl-widgets-js.js"></script>
+<script src="../src/vpl-program-canvas.js"></script>
+<script src="../src/vpl-error.js"></script>
+<script src="../src/vpl-draw.js"></script>
+<script src="../src/vpl-undo.js"></script>
+<script src="../src/vpl-html.js"></script>
+<script src="../src/vpl-aeslfile.js"></script>
+<script src="../src/vpl-texteditor.js"></script>
+<script src="../src/vpl-sourceedit.js"></script>
+<script src="../src/vpl-cmd-src.js"></script>
+<script src="../src/vpl-runglue.js"></script>
+<script src="../src/vpl-about.js"></script>
+<script src="../src/vpl-files.js"></script>
+<script src="../src/vpl-load.js"></script>
+<script src="../src/vpl-main.js"></script>
+
+<script src="../src/a3a-nodebase.js"></script>
+<script src="../src/a3a-nodeproxy.js"></script>
+
+<script src="../src/vpl-robot.js"></script>
+<script src="../src/vpl-virtualthymio.js"></script>
+<script src="../src/compiler-ns.js"></script>
+<script src="../src/compiler-vm.js"></script>
+<script src="../src/compiler-dis.js"></script>
+<script src="../src/compiler.js"></script>
+<script src="../src/compiler-macros.js"></script>
+<script src="../src/compiler-l2.js"></script>
+<script src="../src/compiler-macros-l2.js"></script>
+<script src="../src/compiler-thymio.js"></script>
+<script src="../src/inputbuffer.js"></script>
+<script src="../src/a3a-idmapping.js"></script>
+<script src="../src/a3a-com.js"></script>
+<script src="../src/a3a-device.js"></script>
+<script src="../src/a3a-virtual-thymio.js"></script>
+<script src="../src/vpl-virtualthymio-a3a.js"></script>
+<script src="../src/vpl-obstacles.js"></script>
+<script src="../src/vpl-sim.js"></script>
+<script src="../src/vpl-sim2d.js"></script>
+<script src="../src/vpl-cmd-sim.js"></script>
+
+</head>
+
+<body>
+
+<div id="vpl-editor">
+
+<canvas id="programCanvas" width="900" height="700"></canvas>
+
+<input id="input">
+
+</div>
+
+<div id="src-editor">
+<pre id="editor-lines"></pre>
+<textarea id="editor" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+</textarea>
+</div>
+
+</body>
+
+</html>

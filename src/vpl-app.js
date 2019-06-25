@@ -117,13 +117,14 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 	}
 	this.views = views;
 
-	document.getElementById("src-editor").style.display = views.indexOf("src") >= 0 ? "block" : "none";
-
 	if (this.sim2d != null) {
 		this.simCanvas.hide();
 	}
 	this.vplCanvas.hide();
-	this.editor.tbCanvas.hide();
+	if (this.editor != null) {
+		document.getElementById("src-editor").style.display = views.indexOf("src") >= 0 ? "block" : "none";
+		this.editor.tbCanvas.hide();
+	}
 	if (views.indexOf("vpl") >= 0) {
 		this.vplCanvas.show();
 	}
@@ -143,7 +144,9 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 				if (!app.program.noVPL) {
 					app.program.invalidateCode();
 					app.program.enforceSingleTrailingEmptyEventHandler();
-					app.editor.changeCode(app.program.getCode(app.program.currentLanguage));
+					if (app.editor) {
+						app.editor.changeCode(app.program.getCode(app.program.currentLanguage));
+					}
 				}
 				app.renderProgramToCanvas();
 			};
@@ -173,7 +176,7 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 	if (this.vplCanvas) {
 		this.vplCanvas.onDraw = onDraw;
 	}
-	if (this.editor.tbCanvas) {
+	if (this.editor && this.editor.tbCanvas) {
 		this.editor.tbCanvas.onDraw = onDraw;
 	}
 	if (this.simCanvas) {
@@ -245,7 +248,9 @@ A3a.vpl.Application.prototype.vplResize = function () {
 
 	// vpl, editor and simulator
 	this.vplCanvas.resize(width, height);
-	this.editor.resize();
+	if (this.editor) {
+		this.editor.resize();
+	}
 	if (this.sim2d) {
 		this.simCanvas.resize(width, height);
 	}

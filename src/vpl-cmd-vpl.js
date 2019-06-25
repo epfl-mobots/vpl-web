@@ -123,7 +123,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.views.indexOf("src") < 0;
+			return app.editor && app.views.indexOf("src") < 0;
 		}
 	});
 	this.commands.add("vpl:text-toggle", {

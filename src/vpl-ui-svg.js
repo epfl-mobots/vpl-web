@@ -110,6 +110,7 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 
 		// default: js version for those enumerated in defaultToJS, else brown square
 		if (defaultToJS.indexOf(id) >= 0) {
+			// error message etc.
 			A3a.vpl.Commands.drawButtonJS(id, ctx, dims, css, cssClasses, isEnabled, isSelected, isPressed, state);
 		} else {
 			// default: brown square

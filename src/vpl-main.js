@@ -226,7 +226,7 @@ function vplSetup(gui) {
 	window["vplApp"] = app;
 
 	// validate ui (correct usage of blocks, control elements etc.)
-	if (gui) {
+	if (gui && A3a.vpl.validateUI) {
 		app.program.message = A3a.vpl.validateUI(gui);
 		if (app.program.message) {
 			window["console"]["info"](app.program.message);
@@ -384,23 +384,12 @@ function vplSetup(gui) {
 	app.uiConfig.setDisabledFeatures(advancedFeatures ? [] : ["src:language"]);
 
 	app.program.currentLanguage = language;
-	app.editor = new A3a.vpl.VPLSourceEditor(app,
-		app.program.noVPL,
-		language);
-	app.editor.tbCanvas.setFilter(filter);
-	app.program.getEditedSourceCodeFun = function () {
-		return app.editor.doesMatchVPL() ? null : app.editor.getCode();
-	};
-	app.program.setEditedSourceCodeFun = function (code) {
-		app.editor.setCode(code);
-	};
 	app.vplCanvas.state.vpl = new A3a.vpl.Program.CanvasRenderingState();
 	app.vplCanvas.widgets = widgets;
 	app.program.addEventHandler(true);
 	if (app.simCanvas != null) {
 		app.simCanvas.widgets = widgets;
 	}
-	app.editor.tbCanvas.widgets = widgets;
 
 	app.addVPLCommands();
 	if (!isClassic && gui && gui["toolbars"]) {
@@ -411,14 +400,31 @@ function vplSetup(gui) {
 			app.program.toolbar2Config = gui["toolbars"]["vpl2"];
 		}
 	}
-	app.addSrcCommands();
-	if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["editor"]) {
-		app.editor.toolbarConfig = gui["toolbars"]["editor"];
-	}
+
 	app.program.toolbarDrawButton = drawButton;
 	app.program.toolbarGetButtonBounds = getButtonBounds;
-	app.editor.toolbarDrawButton = drawButton;
-	app.editor.toolbarGetButtonBounds = getButtonBounds;
+
+	if (A3a.vpl.VPLSourceEditor) {
+		app.editor = new A3a.vpl.VPLSourceEditor(app,
+			app.program.noVPL,
+			language);
+		app.editor.tbCanvas.setFilter(filter);
+		app.program.getEditedSourceCodeFun = function () {
+			return app.editor.doesMatchVPL() ? null : app.editor.getCode();
+		};
+		app.program.setEditedSourceCodeFun = function (code) {
+			app.editor.setCode(code);
+		};
+		app.editor.tbCanvas.widgets = widgets;
+		app.addSrcCommands();
+		if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["editor"]) {
+			app.editor.toolbarConfig = gui["toolbars"]["editor"];
+		}
+		app.editor.toolbarDrawButton = drawButton;
+		app.editor.toolbarGetButtonBounds = getButtonBounds;
+		app.editor.setTeacherRole(vplGetQueryOption("role") === "teacher");
+	}
+
 	if (app.sim2d != null) {
 	 	app.addSim2DCommands();
 		if (!isClassic && gui && gui["toolbars"] && gui["toolbars"]["simulator"]) {
@@ -508,13 +514,14 @@ function vplSetup(gui) {
 		app.program.experimentalFeatures = experimentalFeatures;
 		app.program.setTeacherRole(vplGetQueryOption("role") === "teacher");
 		app.renderProgramToCanvas();
-		document.getElementById("editor").textContent = app.program.getCode(app.program.currentLanguage);
+		if (app.editor) {
+			document.getElementById("editor").textContent = app.program.getCode(app.program.currentLanguage);
+		}
 	}
 
-	app.editor.setTeacherRole(vplGetQueryOption("role") === "teacher");
 	/** @const */
 	var languageList = ["aseba", "l2", "js", "python"];
-	if (languageList.indexOf(language) >= 0) {
+	if (app.editor && languageList.indexOf(language) >= 0) {
 		/** @const */
 		app.editor.setUpdateCodeLanguageFunction(function () {
 			language = languageList[(languageList.indexOf(language) + 1) % languageList.length];
@@ -527,30 +534,32 @@ function vplSetup(gui) {
 		});
 	}
 
-	var asebaNode = new A3a.A3aNode(A3a.thymioDescr);
 	if (advancedFeatures) {
-		app.editor.disass = function (language, src) {
-			/** @type {A3a.Compiler}*/
-			var c;
-			try {
-				switch (language) {
-				case "aseba":
-					c = new A3a.Compiler(asebaNode, src);
-					c.functionLib = A3a.A3aNode.stdMacros;
-					break;
-				case "l2":
-					c = new A3a.Compiler.L2(asebaNode, src);
-					c.functionLib = A3a.A3aNode.stdMacrosL2;
-					break;
-				default:
-					return null;
+		if (app.editor) {
+			var asebaNode = new A3a.A3aNode(A3a.thymioDescr);
+			app.editor.disass = function (language, src) {
+				/** @type {A3a.Compiler}*/
+				var c;
+				try {
+					switch (language) {
+					case "aseba":
+						c = new A3a.Compiler(asebaNode, src);
+						c.functionLib = A3a.A3aNode.stdMacros;
+						break;
+					case "l2":
+						c = new A3a.Compiler.L2(asebaNode, src);
+						c.functionLib = A3a.A3aNode.stdMacrosL2;
+						break;
+					default:
+						return null;
+					}
+					var bytecode = c.compile();
+					return A3a.vm.disToListing(bytecode);
+				} catch (e) {
+					return "; " + e;
 				}
-				var bytecode = c.compile();
-				return A3a.vm.disToListing(bytecode);
-			} catch (e) {
-				return "; " + e;
-			}
-		};
+			};
+		}
 	}
 
 	// about box
