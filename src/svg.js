@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Implementation of class SVG, an SVG parser with support to override element
+style, get element bounding box, and render to a canvas.
+
+*/
+
 /** SVG top Object
 	@constructor
 	@param {string} src

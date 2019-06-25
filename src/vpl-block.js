@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of class A3a.vpl.Block, instances of VPL blocks in a program
+based on the block definiton in A3a.vpl.BlockTemplate.
+
+*/
+
 /**
 	@constructor
 	@struct

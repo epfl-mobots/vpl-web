@@ -9,6 +9,12 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Support for buttons and widgets defined in SVG.
+
+*/
+
 /** Make a function which draws buttons with SVG
 	@param {Object} gui
 	@return {A3a.vpl.ControlBar.drawButton}

@@ -9,6 +9,14 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Support for VPL3 blocks defined in SVG for their appearance and in json
+for the description of the block interactive controls, the parameters and the
+code generation.
+
+*/
+
 /** @const */
 A3a.vpl.BlockTemplate.initStatesDecl8 =
 	"var state[8]\n";

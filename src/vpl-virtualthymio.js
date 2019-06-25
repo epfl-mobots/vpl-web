@@ -9,6 +9,16 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of a virtual Thymio, a subclass of A3a.vpl.Robot which represents
+a Thymio II in the simulator. The robot functionality is accessed with
+JavaScript methods and the sensor and actuator values are normalized. Aimed
+at programs provided as JavaScript, i.e. the output of VPL3 programs converted
+to JavaScript.
+
+*/
+
 /** JavaScript-based virtual Thymio class
 	@constructor
 	@extends {A3a.vpl.Robot}

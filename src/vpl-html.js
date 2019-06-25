@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Additional methods for classes A3a.vpl.Block, A3a.vpl.Canvas, and
+A3a.vpl.Application to export a VPL program to an HTML file.
+
+*/
+
 /** Export to data URL
 	@param {CSSParser.VPL} css
 	@param {A3a.vpl.Canvas.dims} dims

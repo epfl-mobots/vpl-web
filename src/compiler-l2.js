@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -7,6 +7,16 @@
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
 	https://opensource.org/licenses/BSD-3-Clause
+*/
+
+/** @fileoverview
+
+Compiler from L2 source code to Aseba VM bytecode, implemented as a subclass
+of the Aseba compiler. L2 is an alternative language with support for
+typed variables, fixed-point numbers, local variables, multi-dim arrays,
+functions with arguments and return value, and a syntax similar to C. The
+compiled code is fully compatible with the Thymio II VM.
+
 */
 
 /** Compiler for new language

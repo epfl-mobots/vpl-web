@@ -9,6 +9,12 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Drawing of CSS boxes and lines.
+
+*/
+
 CSSParser.VPL.debug = false;
 
 /** Set line style

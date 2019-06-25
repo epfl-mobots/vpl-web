@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Implementation of an A3a.vpl.Application methods which creates an
+A3a.vpl.RunGlue object for the simulator.
+
+*/
+
 /** Install robot simulator
 	@param {Object} options
 	@return {A3a.vpl.RunGlue}

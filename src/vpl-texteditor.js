@@ -9,6 +9,12 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Implementation of a generic text editor with support for line numbers.
+
+*/
+
 /** Text editor in a textarea HTML element with line numbers and
 	widgets for breakpoints and current execution position
 	@constructor

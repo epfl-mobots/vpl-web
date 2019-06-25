@@ -9,6 +9,14 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of class A3a.vpl.ScrollArea which adds area with scrolling
+capability along horizontal and/or vertical axes and scrollbars to
+A3a.vpl.Canvas.
+
+*/
+
 /** Rectangular area with horizontal and/or vertical scrollbar
 	@constructor
 	@param {number} wTotal

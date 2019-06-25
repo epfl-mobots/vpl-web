@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -7,6 +7,16 @@
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
 	https://opensource.org/licenses/BSD-3-Clause
+*/
+
+/** @fileoverview
+
+Implementation of A3a.vpl.EventHandler, a class which contains a VPL3 event
+handler (a single rule). An event handler contains an array of event, state
+and comment blocks, (the "left" part), and an array of actions and comment
+blocks (the "right" part). A VPL program, as represented by an A3a.vpl.Program
+object, is basically a collection of A3a.vpl.EventHandler objects.
+
 */
 
 /** Event handler (rule with an event and zero or more actions)

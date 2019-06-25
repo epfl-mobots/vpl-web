@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Implementation of an A3a.vpl.Application method which creates an
+A3a.vpl.RunGlue object for the Thymio II robot via asebahttp (Aseba 1.6).
+
+*/
+
 /** Install connection with Thymio
 	@return {A3a.vpl.RunGlue}
 */

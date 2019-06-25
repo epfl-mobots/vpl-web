@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Implementation of class A3a.vpl.BlockTemplate and auxiliary types,
+which describes the different types of blocks.
+
+*/
+
 /** @enum {string} */
 A3a.vpl.blockType = {
 	event: "e",

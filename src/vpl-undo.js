@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of class A3a.vpl.Undo which implements generic support for
+multi-level undo/redo.
+
+*/
+
 /**
 	@constructor
 	@struct

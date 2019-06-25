@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of class A3a.vpl.CodeGeneratorA3a (a subclass of
+A3a.vpl.CodeGenerator), which generate Aseba source code from a VPL3 program.
+
+*/
+
 /** Code generator for Aseba
 	@constructor
 	@extends {A3a.vpl.CodeGenerator}

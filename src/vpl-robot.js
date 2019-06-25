@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Implementation of A3a.vpl.Robot, the base class representing the robot
+in the simulator.
+
+*/
+
 /** Robot base class
 	@constructor
 */

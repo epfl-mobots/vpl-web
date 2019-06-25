@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Methods extending A3a.vpl.Program which implement the interactive
+VPL3 programming view.
+
+*/
+
 /*
 General layout:
 

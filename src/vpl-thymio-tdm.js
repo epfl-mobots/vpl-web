@@ -9,6 +9,14 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Implementation of an A3a.vpl.Application method which creates an
+A3a.vpl.RunGlue object for the Thymio II robot via the Thymio Device
+Manager (Thymio Suite 2.0).
+
+*/
+
 /** Install connection with Thymio via Thymio Device Manager
 	@return {A3a.vpl.RunGlue}
 */

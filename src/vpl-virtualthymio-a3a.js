@@ -9,6 +9,15 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of a virtual Thymio with an Aseba VM, a subclass of
+A3a.vpl.VirtualThymio which represents a Thymio II in the simulator. Aimed
+at programs provided as bytecode, i.e. the output produced by the Aseba or
+L2 compilers.
+
+*/
+
 /** A3a-VM-based virtual Thymio class for VPL
 	@constructor
 	@extends {A3a.vpl.VirtualThymio}

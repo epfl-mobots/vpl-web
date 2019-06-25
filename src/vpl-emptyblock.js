@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of class A3a.vpl.EmptyBlock (an A3a.cpl.Block subclass) which
+represents empty slots in the VPL program user interface.
+
+*/
+
 /**
 	@constructor
 	@extends {A3a.vpl.Block}

@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -7,6 +7,14 @@
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
 	https://opensource.org/licenses/BSD-3-Clause
+*/
+
+/** @fileoverview
+
+Implementation of A3a.vpl.RunGlue, the interface to what runs the source code
+produced by VPL3 or entered directly in the source code editor: a Thymio II
+robot connected via asebahttp or the Thymio Device Manager or the simulator.
+
 */
 
 /** Interface to run a program on a robot or a simulator

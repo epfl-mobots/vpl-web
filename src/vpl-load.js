@@ -9,6 +9,12 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Modal box for selecting a file.
+
+*/
+
 /** Load modal box
 	@param {A3a.vpl.Application} app
 	@constructor
@@ -95,7 +101,7 @@ A3a.vpl.Load = function (app) {
 	el.appendChild(closebox);
 };
 
-/** Show about box
+/** Show Load modal box
 	@return {void}
 */
 A3a.vpl.Load.prototype.show = function () {
@@ -105,7 +111,7 @@ A3a.vpl.Load.prototype.show = function () {
 	this.div.style.marginTop = (-boundingBox.height / 2) + "px";
 };
 
-/** Hide about box
+/** Hide Load modal box
 	@return {void}
 */
 A3a.vpl.Load.prototype.hide = function () {

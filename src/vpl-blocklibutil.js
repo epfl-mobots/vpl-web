@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of additional A3a.vpl.BlockTemplate methods related to
+block library in array A3a.vpl.BlockTemplate.lib.
+
+*/
+
 /** Find a block template specified by name
 	@param {string} name
 	@return {A3a.vpl.BlockTemplate}

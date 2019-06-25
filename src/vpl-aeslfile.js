@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -7,6 +7,15 @@
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
 	https://opensource.org/licenses/BSD-3-Clause
+*/
+
+/** @fileoverview
+
+Methods for class A3a.vpl.Program to support reading from and writing
+to AESL files. Compatibility with VPL 1 is obtained if compatible blocks
+are defined (A3a.vpl.BlockTemplate instances with the same name and
+parameters and compatible code generation).
+
 */
 
 /** Export as AESL file

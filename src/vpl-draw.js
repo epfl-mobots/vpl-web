@@ -9,6 +9,12 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Methods for basic drawing in a A3a.vpl.Canvas object related to VPL.
+
+*/
+
 /** Clear block background
 	@param {CSSParser.VPL.Box} box
 	@return {void}

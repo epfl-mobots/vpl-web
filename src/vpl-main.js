@@ -9,6 +9,14 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Code executed to setup the VPL3 web application: decodes options
+passed in query string and hash string, instantiates A3a.vpl.Application,
+and installs global event listeners.
+
+*/
+
 /** @dict */
 A3a.vpl.blockLib = {};
 

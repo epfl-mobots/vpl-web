@@ -9,6 +9,14 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Class which implements a collection of commands, identified by
+string ids, with properties such as enabled/disabled or selected/unselected.
+Buttons defined in the user interface are linked to command ids.
+
+*/
+
 /** Collection of commands
 	@constructor
 */

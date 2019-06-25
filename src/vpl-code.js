@@ -9,6 +9,14 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of class A3a.vpl.CodeGenerator, the base class of classes
+which generate source code from a VPL3 program. Subclassed for specific
+programming languages such as Aseba or L2.
+
+*/
+
 /** Code generator base class
 	@constructor
 	@param {string} language language name

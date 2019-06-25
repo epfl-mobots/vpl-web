@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -7,6 +7,13 @@
 	you may not use this file except in compliance with the License.
 	You may obtain a copy of the License at
 	https://opensource.org/licenses/BSD-3-Clause
+*/
+
+/** @fileoverview
+
+Implementation of A3a.Device.VirtualThymio (a subclass of A3a.Device), with
+definitions of the system variables and the native functions of the Thymio II.
+
 */
 
 /** Virtual Thymio device

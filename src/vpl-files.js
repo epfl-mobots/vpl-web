@@ -9,6 +9,14 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Support for file input: VPL3 program files (aesl or json), and image
+files for the simulator (native image format handled by the browser,
+or SVG for the obstacle map).
+
+*/
+
 /** Load a program file (aesl or json)
 	@param {File} file
 	@return {boolean} true if file suffix was recognized as a program

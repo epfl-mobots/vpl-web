@@ -9,6 +9,12 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Drawing of buttons defined in JavaScript.
+
+*/
+
 /** Draw a button
 	@param {string} id
 	@param {CanvasRenderingContext2D} ctx canvas 2d context

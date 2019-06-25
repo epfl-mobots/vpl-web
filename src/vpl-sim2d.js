@@ -9,6 +9,12 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Implementation of the Thymio II simulator and its user interface.
+
+*/
+
 /** Playground for robot simulator
 	@constructor
 	@param {number} width

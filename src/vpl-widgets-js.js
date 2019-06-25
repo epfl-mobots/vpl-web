@@ -9,6 +9,12 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Drawing of widgets defined in JavaScript.
+
+*/
+
 /** @const
 	@type {Object.<string,A3a.vpl.Canvas.drawWidget>}
 */

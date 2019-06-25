@@ -9,6 +9,14 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Support for CSS boxes and lines for the user interface of the VPL3 web app.
+Definition of all the properties and functions to obtain them with an
+object selector, taking care of cascades.
+
+*/
+
 /** CSS parser with support for VPL properties (boxes, lines, text)
 	@constructor
 	@extends {CSSParser}

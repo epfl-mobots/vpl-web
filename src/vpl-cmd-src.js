@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of a A3a.vpl.Application method to populate its collection of
+commands with commands related to the source-code editor.
+
+*/
+
 /** Install commands for source code editor
 	@return {void}
 */

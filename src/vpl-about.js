@@ -9,6 +9,12 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Modal box for the About panel, with content provided as HTML.
+
+*/
+
 /** About box
 	@constructor
 	@param {string} html html content of the about box
@@ -71,6 +77,9 @@ A3a.vpl.About.prototype.hide = function () {
 	this.backgroundDiv.style.display = "none";
 };
 
+/** Center about box
+	@return {void}
+*/
 A3a.vpl.About.prototype.center = function () {
 	var boundingBox = this.div.getBoundingClientRect();
 	this.div.style.marginLeft = (-boundingBox.width / 2) + "px";

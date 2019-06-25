@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of L2 code generation for VPL3 blocks in array
+A3a.vpl.BlockTemplate.lib.
+
+*/
+
 /** Patch standard blocks to generate L2 code
 	@return {void}
 */

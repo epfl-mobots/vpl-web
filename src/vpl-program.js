@@ -9,6 +9,14 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Implementation of A3a.vpl.Program, a class which contains a VPL3 program
+(basically a collection of A3a.vpl.EventHandler objects), and settings related
+to programming.
+
+*/
+
 /**
 	@constructor
 	@param {A3a.vpl.mode=} mode

@@ -120,6 +120,10 @@ vpl-min.js: $(JS)
 clean:
 	rm -Rf vpl-min.js
 
+.PHONY: doc
+doc: $(JS)
+	jsdoc -d=doc-js $^
+
 .PHONY: oh
 oh:
 	ohcount src

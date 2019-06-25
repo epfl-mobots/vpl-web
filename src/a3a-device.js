@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Implementation of A3a.Device, a class which implements device with an Aseba VM.
+Can be subclassed to simulate Aseba-based robots such as the Thymio II.
+
+*/
+
 /** A3a device with its VM
 	@constructor
 	@param {{

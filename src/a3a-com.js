@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -9,7 +9,11 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
-// A3a communication for node.js
+/** @fileoverview
+
+Implementation of the Aseba message format used for communication.
+
+*/
 
 /** Message for A3a protocol
 	@constructor

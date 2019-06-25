@@ -9,6 +9,12 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of methods for A3a.vpl.ControlBar which add support for buttons.
+
+*/
+
 /**
 	@typedef {function (
 		string,

@@ -9,6 +9,12 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Validation of the json definition of the user interface.
+
+*/
+
 /** Validate ui (correct usage of blocks, control elements etc.)
 	@param {Object} ui
 	@return {?string} null if ok, or error messages (lf-terminated lines)

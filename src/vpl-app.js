@@ -9,6 +9,13 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Implementation of class A3a.vpl.Application, the main class of the
+VPL3 web application.
+
+*/
+
 /** Main application class (container for VPL, editor and simulator)
 	@constructor
 	@param {Element} canvasEl

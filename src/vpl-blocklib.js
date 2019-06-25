@@ -9,6 +9,16 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of VPL3 blocks in JavaScript stored in array
+A3a.vpl.BlockTemplate.lib. An alternative to definitions with SVG for the block
+appearance and JSON for the block interactive controls and code generation.
+Only Aseba code generation is defined; generation for other programming
+languages is defined elsewhere.
+
+*/
+
 /** @const */
 A3a.vpl.BlockTemplate.initOutputs =
 	"call leds.top(0, 0, 0)\n" +

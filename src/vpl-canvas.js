@@ -9,6 +9,14 @@
 	https://opensource.org/licenses/BSD-3-Clause
 */
 
+/** @fileoverview
+
+Definition of classes A3a.vpl.Canvas and A3a.vpl.CanvasItem, the base
+drawing bricks for user interface elements, manipulation, drag-and-drop,
+and layout.
+
+*/
+
 /**
 	@constructor
 	@struct
