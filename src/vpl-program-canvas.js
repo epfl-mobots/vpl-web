@@ -188,7 +188,8 @@ A3a.vpl.Application.measureEventHandlerWidth = function (eventHandler, displaySi
 	var events = [];
 	var totalEvents = 0;
 	events = eventHandler.events.map(function (event, j) {
-		var box = eventHandler.error && eventHandler.error.eventErrorIndices.indexOf(j) >= 0
+		var box = eventHandler.error && eventHandler.error.eventError &&
+			(eventHandler.error.eventErrorIndices.length === 0 || eventHandler.error.eventErrorIndices.indexOf(j) >= 0)
 			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		box.width = event == null
@@ -211,7 +212,8 @@ A3a.vpl.Application.measureEventHandlerWidth = function (eventHandler, displaySi
 	var actions = [];
 	var totalActions = 0;
 	actions = eventHandler.actions.map(function (action, j) {
-		var box = eventHandler.error && eventHandler.error.actionErrorIndices.indexOf(j) >= 0
+		var box = eventHandler.error && !eventHandler.error.eventError &&
+			(eventHandler.error.actionErrorIndices.length === 0 || eventHandler.error.actionErrorIndices.indexOf(j) >= 0)
 			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		box.width = action == null
@@ -314,7 +316,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				x += maxWidthForEventRightAlign - widths.totalEvents;
 			}
 			events.forEach(function (event, j) {
-				var box = eventHandler.error && eventHandler.error.eventErrorIndices.indexOf(j) >= 0
+				var box = eventHandler.error && eventHandler.error.eventError &&
+					(eventHandler.error.eventErrorIndices.length === 0 || eventHandler.error.eventErrorIndices.indexOf(j) >= 0)
 					? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 					: cssBoxes.blockContainerBox;
 				box.width = event == null
@@ -328,7 +331,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			});
 			x = item.x + dx + cssBoxes.ruleBox.paddingLeft + actionX0 - eventX0;
 			actions.forEach(function (action, j) {
-				var box = eventHandler.error && eventHandler.error.actionErrorIndices.indexOf(j) >= 0
+				var box = eventHandler.error && !eventHandler.error.eventError &&
+					(eventHandler.error.actionErrorIndices.length === 0 || eventHandler.error.actionErrorIndices.indexOf(j) >= 0)
 					? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 					: cssBoxes.blockContainerBox;
 				box.width = action == null
@@ -403,7 +407,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		var blockBox = event
 			? A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes)
 			: events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox;
-		var containerBox = eventHandler.error && eventHandler.error.eventErrorIndices.indexOf(j) >= 0
+		var containerBox = eventHandler.error && eventHandler.error.eventError &&
+			(eventHandler.error.eventErrorIndices.length === 0 || eventHandler.error.eventErrorIndices.indexOf(j) >= 0)
 			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		var vertOffset = 0;
@@ -456,7 +461,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		var blockBox = action
 			? A3a.vpl.Program.boxForBlockType(action, j == 0, cssBoxes)
 			: actions.length === 1 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox;
-		var containerBox = eventHandler.error && eventHandler.error.actionErrorIndices.indexOf(j) >= 0
+		var containerBox = eventHandler.error && !eventHandler.error.eventError &&
+			(eventHandler.error.actionErrorIndices.length === 0 || eventHandler.error.actionErrorIndices.indexOf(j) >= 0)
 			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		var vertOffset = 0;

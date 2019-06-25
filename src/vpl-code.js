@@ -165,8 +165,6 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 						err.addEventError([i]);
 						if (!err.isWarning || !eventHandler.error) {
 							eventHandler.error = err;
-						}
-						if (!err.isWarning) {
 							return {error: err};
 						}
 					}
