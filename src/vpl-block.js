@@ -20,12 +20,12 @@ based on the block definiton in A3a.vpl.BlockTemplate.
 	@constructor
 	@struct
 	@param {A3a.vpl.BlockTemplate} blockTemplate
-	@param {A3a.vpl.EventHandler} eventHandlerContainer
+	@param {A3a.vpl.Rule} ruleContainer
 	@param {?A3a.vpl.positionInContainer} positionInContainer
 */
-A3a.vpl.Block = function (blockTemplate, eventHandlerContainer, positionInContainer) {
+A3a.vpl.Block = function (blockTemplate, ruleContainer, positionInContainer) {
 	this.blockTemplate = blockTemplate;
-	this.eventHandlerContainer = eventHandlerContainer;
+	this.ruleContainer = ruleContainer;
 	this.positionInContainer = positionInContainer;
 	this.disabled = false;
 	this.locked = false;
@@ -46,14 +46,14 @@ A3a.vpl.Block = function (blockTemplate, eventHandlerContainer, positionInContai
 A3a.vpl.positionInContainer;
 
 /** Make a copy of this
-	@param {A3a.vpl.EventHandler} eventHandlerContainer
+	@param {A3a.vpl.Rule} ruleContainer
 	@param {?A3a.vpl.positionInContainer} positionInContainer
 	@param {?function():void} onPrepareChange
 	@return {A3a.vpl.Block}
 */
-A3a.vpl.Block.prototype.copy = function (eventHandlerContainer, positionInContainer, onPrepareChange) {
+A3a.vpl.Block.prototype.copy = function (ruleContainer, positionInContainer, onPrepareChange) {
 	var newBlock = new A3a.vpl.Block(this.blockTemplate,
-		eventHandlerContainer, positionInContainer);
+		ruleContainer, positionInContainer);
 	newBlock.disabled = this.disabled;
 	newBlock.onPrepareChange = onPrepareChange;
 	if (this.param) {

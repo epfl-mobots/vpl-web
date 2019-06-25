@@ -28,7 +28,7 @@ A3a.vpl.Error = function (msg, isWarning) {
 	this.eventError = false;
 	this.eventErrorIndices = [];
 	this.actionErrorIndices = [];
-	/** @type {A3a.vpl.EventHandler} */
+	/** @type {A3a.vpl.Rule} */
 	this.conflictEventHandler = null;
 };
 
@@ -43,7 +43,7 @@ A3a.vpl.Error.prototype.addEventError = function (eventIndices) {
 };
 
 /** Specify that the event (and state) is the cause of a conflict error
-	@param {A3a.vpl.EventHandler} conflictEventHandler other event handler which conflicts
+	@param {A3a.vpl.Rule} conflictEventHandler other event handler which conflicts
 	@return {void}
 */
 A3a.vpl.Error.prototype.addEventConflictError = function (conflictEventHandler) {

@@ -108,16 +108,16 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return !app.program.noVPL;
 		},
 		doDrop: function (app, draggedItem) {
-			if (draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.eventHandlerContainer) {
+			if (draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.ruleContainer) {
 				var block = /** @type {A3a.vpl.Block} */(draggedItem.data);
 				var span = app.program.getCodeLocation(app.program.currentLanguage, block);
 				if (span) {
 					app.setView(["src"]);
 					app.editor.selectRange(span.begin, span.end);
 				}
-			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
-				var eventHandler = /** @type {A3a.vpl.EventHandler} */(draggedItem.data);
-				var span = app.program.getCodeLocation(app.program.currentLanguage, eventHandler);
+			} else if (draggedItem.data instanceof A3a.vpl.Rule) {
+				var rule = /** @type {A3a.vpl.Rule} */(draggedItem.data);
+				var span = app.program.getCodeLocation(app.program.currentLanguage, rule);
 				if (span) {
 					app.setView(["src"]);
 					app.editor.selectRange(span.begin, span.end);
@@ -125,8 +125,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			}
 		},
 		canDrop: function (app, draggedItem) {
-			return draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.eventHandlerContainer != null ||
-				draggedItem.data instanceof A3a.vpl.EventHandler;
+			return draggedItem.data instanceof A3a.vpl.Block && draggedItem.data.ruleContainer != null ||
+				draggedItem.data instanceof A3a.vpl.Rule;
 		},
 		object: this,
 		isAvailable: function (app) {
@@ -212,7 +212,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		doDrop: function (app, draggedItem) {
 			if (draggedItem.data instanceof A3a.vpl.Block) {
-				if (draggedItem.data.eventHandlerContainer) {
+				if (draggedItem.data.ruleContainer) {
 					// action from an event handler: just send it
 					var code = app.program.codeForBlock(/** @type {A3a.vpl.Block} */(draggedItem.data), app.program.currentLanguage);
 					app.robots[app.currentRobotIndex].runGlue.run(code, app.program.currentLanguage);
@@ -221,17 +221,17 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 					// (disabled by canDrop below)
 					app.vplCanvas.zoomedItemProxy = app.vplCanvas.makeZoomedClone(draggedItem);
 				}
-			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
-				var code = app.program.codeForActions(/** @type {A3a.vpl.EventHandler} */(draggedItem.data), app.program.currentLanguage);
+			} else if (draggedItem.data instanceof A3a.vpl.Rule) {
+				var code = app.program.codeForActions(/** @type {A3a.vpl.Rule} */(draggedItem.data), app.program.currentLanguage);
 				app.robots[app.currentRobotIndex].runGlue.run(code, app.program.currentLanguage);
 			}
 		},
 		canDrop: function (app, draggedItem) {
 			return app.robots[app.currentRobotIndex].runGlue.isEnabled(app.program.currentLanguage) &&
-				draggedItem.data instanceof A3a.vpl.EventHandler &&
-						/** @type {A3a.vpl.EventHandler} */(draggedItem.data).hasBlockOfType(A3a.vpl.blockType.action) ||
+				draggedItem.data instanceof A3a.vpl.Rule &&
+						/** @type {A3a.vpl.Rule} */(draggedItem.data).hasBlockOfType(A3a.vpl.blockType.action) ||
 				draggedItem.data instanceof A3a.vpl.Block &&
-					/** @type {A3a.vpl.Block} */(draggedItem.data).eventHandlerContainer != null &&
+					/** @type {A3a.vpl.Block} */(draggedItem.data).ruleContainer != null &&
 					/** @type {A3a.vpl.Block} */(draggedItem.data).blockTemplate.type ===
 						A3a.vpl.blockType.action;
 		},
@@ -308,8 +308,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			}
 		},
 		canDrop: function (app, draggedItem) {
-            return draggedItem.data instanceof A3a.vpl.EventHandler &&
-				!/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty();
+            return draggedItem.data instanceof A3a.vpl.Rule &&
+				!/** @type {A3a.vpl.Rule} */(draggedItem.data).isEmpty();
 		},
 		object: this
 	});
@@ -323,7 +323,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				app.program.saveStateBeforeChange();
 				draggedItem.data.disabled = !draggedItem.data.disabled;
 				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
-			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
+			} else if (draggedItem.data instanceof A3a.vpl.Rule) {
 				app.program.saveStateBeforeChange();
 				draggedItem.data.toggleDisable();
 				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
@@ -331,10 +331,10 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		canDrop: function (app, draggedItem) {
 			// accept non-empty event handler or block in event handler
-			return draggedItem.data instanceof A3a.vpl.EventHandler
-				? !/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty()
+			return draggedItem.data instanceof A3a.vpl.Rule
+				? !/** @type {A3a.vpl.Rule} */(draggedItem.data).isEmpty()
 				: draggedItem.data instanceof A3a.vpl.Block &&
-					draggedItem.data.eventHandlerContainer !== null;
+					draggedItem.data.ruleContainer !== null;
 		},
 		object: this
 	});
@@ -348,7 +348,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				app.program.saveStateBeforeChange();
 				draggedItem.data.locked = !draggedItem.data.locked;
 				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
-			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
+			} else if (draggedItem.data instanceof A3a.vpl.Rule) {
 				app.program.saveStateBeforeChange();
 				draggedItem.data.locked = !draggedItem.data.locked;
 				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
@@ -356,10 +356,10 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		canDrop: function (app, draggedItem) {
 			// accept non-empty event handler or block in event handler
-			return draggedItem.data instanceof A3a.vpl.EventHandler
-				? !/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty()
+			return draggedItem.data instanceof A3a.vpl.Rule
+				? !/** @type {A3a.vpl.Rule} */(draggedItem.data).isEmpty()
 				: draggedItem.data instanceof A3a.vpl.Block &&
-					draggedItem.data.eventHandlerContainer !== null;
+					draggedItem.data.ruleContainer !== null;
 		},
 		object: this,
 		isAvailable: function (app) {
@@ -373,13 +373,13 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		doDrop: function (app, draggedItem) {
 			// remove block or event handler
 			if (draggedItem.data instanceof A3a.vpl.Block) {
-				if (draggedItem.data.eventHandlerContainer !== null) {
+				if (draggedItem.data.ruleContainer !== null) {
 					app.program.saveStateBeforeChange();
-					draggedItem.data.eventHandlerContainer.removeBlock(
+					draggedItem.data.ruleContainer.removeBlock(
 						/** @type {A3a.vpl.positionInContainer} */(draggedItem.data.positionInContainer));
 					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 				}
-			} else if (draggedItem.data instanceof A3a.vpl.EventHandler) {
+			} else if (draggedItem.data instanceof A3a.vpl.Rule) {
 				var i = app.program.program.indexOf(draggedItem.data);
 				if (i >= 0) {
 					app.program.saveStateBeforeChange();
@@ -391,11 +391,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		canDrop: function (app, draggedItem) {
 			// accept non-empty unlocked event handler or block in event handler
 			return draggedItem.data instanceof A3a.vpl.Block
-				? draggedItem.data.eventHandlerContainer !== null && !draggedItem.data.locked
-				: draggedItem.data instanceof A3a.vpl.EventHandler &&
-					(!/** @type {A3a.vpl.EventHandler} */(draggedItem.data).isEmpty() ||
+				? draggedItem.data.ruleContainer !== null && !draggedItem.data.locked
+				: draggedItem.data instanceof A3a.vpl.Rule &&
+					(!/** @type {A3a.vpl.Rule} */(draggedItem.data).isEmpty() ||
  						app.program.program.indexOf(draggedItem.data) + 1 < app.program.program.length) &&
- 					!/** @type {A3a.vpl.EventHandler} */(draggedItem.data).locked;
+ 					!/** @type {A3a.vpl.Rule} */(draggedItem.data).locked;
 		},
 		object: this
 	});

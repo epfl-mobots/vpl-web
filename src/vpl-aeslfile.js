@@ -48,8 +48,8 @@ A3a.vpl.Program.prototype.toXML = function () {
 		'<ThymioVisualProgramming>',
 		'<vplroot xml-format-version="1">',
 		'<program advanced_mode="' + (advanced ? 1 : 0) + '">'
-	].concat(this.program.map(function (eventHandler) {
-		return eventHandler.toAESLXML(advanced);
+	].concat(this.program.map(function (rule) {
+		return rule.toAESLXML(advanced);
 	})).concat([
 		'</program>',
 		'</vplroot>',
@@ -88,12 +88,12 @@ A3a.vpl.Program.prototype.importFromAESLFile = function (xml) {
 	this.new();
 	this.mode = advanced ? A3a.vpl.mode.advanced : A3a.vpl.mode.basic;
 	for (var i = 0; i < el.length; i++) {
-		var eventHandler = A3a.vpl.EventHandler.parseFromAESLSetElement(el[i],
+		var rule = A3a.vpl.Rule.parseFromAESLSetElement(el[i],
 			advanced,
 			function () {
 				self.saveStateBeforeChange();
 			});
-		this.program.push(eventHandler);
+		this.program.push(rule);
 	}
 };
 
@@ -109,16 +109,16 @@ A3a.vpl.Program.prototype.exportImportAESLFile = function () {
 	@param {Element} setElement
 	@param {boolean} advanced
 	@param {?function():void} onPrepareChange
-	@return {A3a.vpl.EventHandler}
+	@return {A3a.vpl.Rule}
 */
-A3a.vpl.EventHandler.parseFromAESLSetElement = function (setElement, advanced, onPrepareChange) {
+A3a.vpl.Rule.parseFromAESLSetElement = function (setElement, advanced, onPrepareChange) {
 	var blocks = setElement.getElementsByTagName("block");
-	var eventHandler = new A3a.vpl.EventHandler();
+	var rule = new A3a.vpl.Rule();
 	for (var i = 0; i < blocks.length; i++) {
 		var block = A3a.vpl.Block.parseFromAESLBlockElement(blocks[i], advanced);
-		eventHandler.setBlock(block, null, onPrepareChange, true);
+		rule.setBlock(block, null, onPrepareChange, true);
 	}
-	return eventHandler;
+	return rule;
 };
 
 /** Parse AESL "block" element
@@ -134,8 +134,8 @@ A3a.vpl.Block.parseFromAESLBlockElement = function (blockElement, advanced) {
 		"comment": A3a.vpl.blockType.comment
 	}[blockElement.getAttribute("type")] || A3a.vpl.blockType.action;
 	var aeslName = blockElement.getAttribute("name");
-	var vplName = A3a.vpl.EventHandler.aesl2vpl[aeslName];
-	var descr = A3a.vpl.EventHandler.vpl2aesl[vplName];
+	var vplName = A3a.vpl.Rule.aesl2vpl[aeslName];
+	var descr = A3a.vpl.Rule.vpl2aesl[vplName];
 	if (descr === undefined) {
 		throw "unknown AESL block " + aeslName;
 	}
@@ -150,7 +150,7 @@ A3a.vpl.Block.parseFromAESLBlockElement = function (blockElement, advanced) {
 	}
 	if (advanced && descr.adv) {
 		vplName = descr.adv;
-		descr = A3a.vpl.EventHandler.vpl2aesl[vplName];
+		descr = A3a.vpl.Rule.vpl2aesl[vplName];
 	}
 	var blockTemplate = A3a.vpl.BlockTemplate.findByName(vplName);
 	var block = new A3a.vpl.Block(blockTemplate, null, null);
@@ -228,7 +228,7 @@ A3a.vpl.Program.downloadText = (function () {
 	@param {boolean} advanced
 	@return {string}
 */
-A3a.vpl.EventHandler.prototype.toAESLXML = function (advanced) {
+A3a.vpl.Rule.prototype.toAESLXML = function (advanced) {
 	if (this.isEmpty()) {
 		return "";
 	}
@@ -242,16 +242,16 @@ A3a.vpl.EventHandler.prototype.toAESLXML = function (advanced) {
 	return "<set>\n" + str + "</set>";
 };
 
-A3a.vpl.EventHandler.functionEmpty = function () {
+A3a.vpl.Rule.functionEmpty = function () {
 	return [];
 };
 
-A3a.vpl.EventHandler.functionNop = function (v) {
+A3a.vpl.Rule.functionNop = function (v) {
 	return v;
 };
 
 /** @const */
-A3a.vpl.EventHandler.vpl2aesl = {
+A3a.vpl.Rule.vpl2aesl = {
 	"accelerometer": {
 		name: "acc",
 		paramToValues: function (param) {
@@ -290,8 +290,8 @@ A3a.vpl.EventHandler.vpl2aesl = {
 	},
 	"clap": {
 		name: "clap",
-		paramToValues: A3a.vpl.EventHandler.functionEmpty,
-		valuesToParam: A3a.vpl.EventHandler.functionEmpty
+		paramToValues: A3a.vpl.Rule.functionEmpty,
+		valuesToParam: A3a.vpl.Rule.functionEmpty
 	},
 	"color state": {
 		name: "colorstate",
@@ -382,8 +382,8 @@ A3a.vpl.EventHandler.vpl2aesl = {
 	"init": {
 		name: "init",
 		incompatible: true,
-		paramToValues: A3a.vpl.EventHandler.functionEmpty,
-		valuesToParam: A3a.vpl.EventHandler.functionEmpty
+		paramToValues: A3a.vpl.Rule.functionEmpty,
+		valuesToParam: A3a.vpl.Rule.functionEmpty
 	},
 	"motor": {
 		name: "move",
@@ -481,12 +481,12 @@ A3a.vpl.EventHandler.vpl2aesl = {
 		paramToValues: function () {
 			return [0, 0];
 		},
-		valuesToParam: A3a.vpl.EventHandler.functionEmpty
+		valuesToParam: A3a.vpl.Rule.functionEmpty
 	},
 	"timer": {
 		name: "timeout",
-		paramToValues: A3a.vpl.EventHandler.functionEmpty,
-		valuesToParam: A3a.vpl.EventHandler.functionEmpty
+		paramToValues: A3a.vpl.Rule.functionEmpty,
+		valuesToParam: A3a.vpl.Rule.functionEmpty
 	},
 	"picture comment": {
 		name: "commentpict",
@@ -502,14 +502,14 @@ A3a.vpl.EventHandler.vpl2aesl = {
 };
 
 /** @const */
-A3a.vpl.EventHandler.aesl2vpl = (function () {
+A3a.vpl.Rule.aesl2vpl = (function () {
 	var dict = {};
-	for (var entry in A3a.vpl.EventHandler.vpl2aesl) {
-		if (A3a.vpl.EventHandler.vpl2aesl.hasOwnProperty(entry)) {
-			var aeslName = A3a.vpl.EventHandler.vpl2aesl[entry].name;
+	for (var entry in A3a.vpl.Rule.vpl2aesl) {
+		if (A3a.vpl.Rule.vpl2aesl.hasOwnProperty(entry)) {
+			var aeslName = A3a.vpl.Rule.vpl2aesl[entry].name;
 			// keep variant with adv property if it exists
 			if (!dict[aeslName]
-				|| !A3a.vpl.EventHandler.vpl2aesl[dict[aeslName]].adv) {
+				|| !A3a.vpl.Rule.vpl2aesl[dict[aeslName]].adv) {
 				dict[aeslName] = entry;
 			}
 		}
@@ -521,7 +521,7 @@ A3a.vpl.EventHandler.aesl2vpl = (function () {
 	@return {string}
 */
 A3a.vpl.Block.prototype.toAESLXML = function () {
-	var m = A3a.vpl.EventHandler.vpl2aesl[this.blockTemplate.name];
+	var m = A3a.vpl.Rule.vpl2aesl[this.blockTemplate.name];
 	return '<block type="' +
 		{"e": "event", "a": "action", "s": "state"}[this.blockTemplate.type] +
 		'" name="' + (m.name || this.blockTemplate.name) +

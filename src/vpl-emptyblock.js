@@ -20,13 +20,13 @@ represents empty slots in the VPL program user interface.
 	@constructor
 	@extends {A3a.vpl.Block}
 	@param {A3a.vpl.blockType} blockType
-	@param {A3a.vpl.EventHandler} eventHandlerContainer
+	@param {A3a.vpl.Rule} ruleContainer
 	@param {A3a.vpl.positionInContainer} positionInContainer
 */
-A3a.vpl.EmptyBlock = function (blockType, eventHandlerContainer, positionInContainer) {
+A3a.vpl.EmptyBlock = function (blockType, ruleContainer, positionInContainer) {
 	A3a.vpl.Block.call(this,
 		A3a.vpl.EmptyBlock.templates[blockType],
-		eventHandlerContainer,
+		ruleContainer,
 		positionInContainer);
 };
 A3a.vpl.EmptyBlock.prototype = Object.create(A3a.vpl.Block.prototype);

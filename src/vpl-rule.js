@@ -11,11 +11,11 @@
 
 /** @fileoverview
 
-Implementation of A3a.vpl.EventHandler, a class which contains a VPL3 event
+Implementation of A3a.vpl.Rule, a class which contains a VPL3 event
 handler (a single rule). An event handler contains an array of event, state
 and comment blocks, (the "left" part), and an array of actions and comment
 blocks (the "right" part). A VPL program, as represented by an A3a.vpl.Program
-object, is basically a collection of A3a.vpl.EventHandler objects.
+object, is basically a collection of A3a.vpl.Rule objects.
 
 */
 
@@ -23,7 +23,7 @@ object, is basically a collection of A3a.vpl.EventHandler objects.
 	@constructor
 	@struct
 */
-A3a.vpl.EventHandler = function () {
+A3a.vpl.Rule = function () {
 	/** @type {Array.<A3a.vpl.Block>} */
 	this.events = [];
 	/** @type {Array.<A3a.vpl.Block>} */
@@ -36,10 +36,10 @@ A3a.vpl.EventHandler = function () {
 };
 
 /** Copy this
-	@return {A3a.vpl.EventHandler}
+	@return {A3a.vpl.Rule}
 */
-A3a.vpl.EventHandler.prototype.copy = function () {
-	var eh = new A3a.vpl.EventHandler();
+A3a.vpl.Rule.prototype.copy = function () {
+	var eh = new A3a.vpl.Rule();
 	for (var i = 0; i < this.events.length; i++) {
 		eh.setBlock(this.events[i], null, null);
 	}
@@ -52,14 +52,14 @@ A3a.vpl.EventHandler.prototype.copy = function () {
 /** Check if empty (no event, no actions)
 	@return {boolean}
 */
-A3a.vpl.EventHandler.prototype.isEmpty = function () {
+A3a.vpl.Rule.prototype.isEmpty = function () {
 	return this.events.length === 0 && this.actions.length === 0;
 };
 
 /** Toggle between enabled and disabled state
 	@return {void}
 */
-A3a.vpl.EventHandler.prototype.toggleDisable = function () {
+A3a.vpl.Rule.prototype.toggleDisable = function () {
 	this.disabled = !this.disabled;
 	if (this.disabled) {
 		this.error = null;
@@ -70,7 +70,7 @@ A3a.vpl.EventHandler.prototype.toggleDisable = function () {
 	@param {A3a.vpl.blockType} type
 	@return {boolean}
 */
-A3a.vpl.EventHandler.prototype.hasBlockOfType = function (type) {
+A3a.vpl.Rule.prototype.hasBlockOfType = function (type) {
 	for (var i = 0; i < this.events.length; i++) {
 		if (this.events[i].blockTemplate.type === type) {
 			return true;
@@ -88,7 +88,7 @@ A3a.vpl.EventHandler.prototype.hasBlockOfType = function (type) {
 	@param {string} name
 	@return {?A3a.vpl.Block}
 */
-A3a.vpl.EventHandler.prototype.getEventBlockByType = function (name) {
+A3a.vpl.Rule.prototype.getEventBlockByType = function (name) {
 	for (var i = 0; i < this.events.length; i++) {
 		if (this.events[i].blockTemplate.name === name) {
 			return this.events[i];
@@ -104,13 +104,13 @@ A3a.vpl.EventHandler.prototype.getEventBlockByType = function (name) {
 	@param {boolean=} noCopy true to use block itself instead of a copy (default: false)
 	@return {void}
 */
-A3a.vpl.EventHandler.prototype.setBlock = function (block, posInEventHandler, onPrepareChange, noCopy) {
+A3a.vpl.Rule.prototype.setBlock = function (block, posInEventHandler, onPrepareChange, noCopy) {
 	if (block) {
 		// replace
 		switch (block.blockTemplate.type) {
 		case A3a.vpl.blockType.event:
 		case A3a.vpl.blockType.state:
-			if (block.eventHandlerContainer === this) {
+			if (block.ruleContainer === this) {
 				// reorder events in the same event handler
 				if (posInEventHandler) {
 					this.events.splice(block.positionInContainer.index, 1);
@@ -142,7 +142,7 @@ A3a.vpl.EventHandler.prototype.setBlock = function (block, posInEventHandler, on
 			break;
 		case A3a.vpl.blockType.action:
 		case A3a.vpl.blockType.comment:
-			if (block.eventHandlerContainer === this) {
+			if (block.ruleContainer === this) {
 				// reorder actions in the same event handler
 				if (posInEventHandler) {
 					this.removeBlock(/** @type {A3a.vpl.positionInContainer} */(block.positionInContainer));
@@ -181,7 +181,7 @@ A3a.vpl.EventHandler.prototype.setBlock = function (block, posInEventHandler, on
 	@param {A3a.vpl.positionInContainer} posInEventHandler
 	@return {void}
 */
-A3a.vpl.EventHandler.prototype.removeBlock = function (posInEventHandler) {
+A3a.vpl.Rule.prototype.removeBlock = function (posInEventHandler) {
 	if (posInEventHandler.eventSide) {
 		if (this.events[posInEventHandler.index]) {
 			this.events.splice(posInEventHandler.index, 1);
@@ -193,20 +193,20 @@ A3a.vpl.EventHandler.prototype.removeBlock = function (posInEventHandler) {
 	}
 };
 
-/** For each block in this event handler, set its eventHandlerContainer
+/** For each block in this event handler, set its ruleContainer
 	and positionInContainer
 	@return {void}
 */
-A3a.vpl.EventHandler.prototype.fixBlockContainerRefs = function () {
+A3a.vpl.Rule.prototype.fixBlockContainerRefs = function () {
 	this.events.forEach(function (event, i) {
-		event.eventHandlerContainer = this;
+		event.ruleContainer = this;
 		event.positionInContainer = {
 			eventSide: true,
 			index: i
 		};
 	}, this);
 	this.actions.forEach(function (action, i) {
-		action.eventHandlerContainer = this;
+		action.ruleContainer = this;
 		action.positionInContainer = {
 			eventSide: false,
 			index: i
@@ -218,7 +218,7 @@ A3a.vpl.EventHandler.prototype.fixBlockContainerRefs = function () {
 	one
 	@return {boolean} true if there is a conflict
 */
-A3a.vpl.EventHandler.prototype.checkConflicts = function (otherEventHandler) {
+A3a.vpl.Rule.prototype.checkConflicts = function (otherEventHandler) {
 	/** Compare function for sorting events
 		@param {A3a.vpl.Block} a
 		@param {A3a.vpl.Block} b
@@ -257,12 +257,12 @@ A3a.vpl.EventHandler.prototype.checkConflicts = function (otherEventHandler) {
 	}
 
 	/** Check if all event blocks in an event handler are disabled
-		@param {A3a.vpl.EventHandler} eventHandler
+		@param {A3a.vpl.Rule} rule
 		@return {boolean}
 	*/
-	function areEventBlocksDisabled(eventHandler) {
-		for (var i = 0; i < eventHandler.events.length; i++) {
-			if (!eventHandler.events[i].disabled) {
+	function areEventBlocksDisabled(rule) {
+		for (var i = 0; i < rule.events.length; i++) {
+			if (!rule.events[i].disabled) {
 				return false;
 			}
 		}

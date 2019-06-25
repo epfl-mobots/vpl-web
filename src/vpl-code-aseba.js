@@ -31,8 +31,8 @@ A3a.vpl.CodeGeneratorA3a.prototype.constructor = A3a.vpl.CodeGeneratorA3a;
 */
 A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 	this.reset();
-	var c = program.program.map(function (eh) {
-		return this.generateCodeForEventHandler(eh);
+	var c = program.program.map(function (rule) {
+		return this.generateCodeForEventHandler(rule);
 	}, this);
 	/** @type {Array.<string>} */
 	var initVarDecl = [];
@@ -104,13 +104,13 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 	// compile runBlocks
 	var runBlocksCodeStatement = "";
 	if (runBlocks) {
-		var eh = new A3a.vpl.EventHandler();
+		var rule = new A3a.vpl.Rule();
 		var initBlock = new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("init"), null, null);
-		eh.setBlock(initBlock, null, null);
+		rule.setBlock(initBlock, null, null);
 		runBlocks.forEach(function (block) {
-			eh.setBlock(block, null, null);
+			rule.setBlock(block, null, null);
 		});
-		var runBlocksCode = this.generateCodeForEventHandler(eh);
+		var runBlocksCode = this.generateCodeForEventHandler(rule);
 		// check if initVarDecl and initCodeDecl are defined in the main program
 		var runBlockPrerequisite = true;
 		runBlocksCode.initVarDecl.forEach(function (fr) {

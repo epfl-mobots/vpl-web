@@ -93,7 +93,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 		// interactiveCB
 		opts && opts.notInteractive ||
 			block.disabled ||
-			block.locked || (block.eventHandlerContainer && block.eventHandlerContainer.locked) ||
+			block.locked || (block.ruleContainer && block.ruleContainer.locked) ||
 			!block.blockTemplate.mousedown
 			? opts && opts.mousedown
 				? {
@@ -107,9 +107,9 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 			},
 		// doDrop: for block in event handler, be replaced by dropped block
 		opts && opts.notDropTarget ? null : function (targetBlockItem, newBlockItem) {
-			if (targetBlockItem.data.eventHandlerContainer) {
+			if (targetBlockItem.data.ruleContainer) {
 				self.saveStateBeforeChange();
-				targetBlockItem.data.eventHandlerContainer.setBlock(newBlockItem.data,
+				targetBlockItem.data.ruleContainer.setBlock(newBlockItem.data,
 					targetBlockItem.data.positionInContainer,
 					function () {
 						self.saveStateBeforeChange();
@@ -185,19 +185,19 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 };
 
 /** Measure the width of all the event handler parts (content of the rule box)
-	@param {A3a.vpl.EventHandler} eventHandler
+	@param {A3a.vpl.Rule} rule
 	@param {boolean} displaySingleEvent
 	@param {Object} cssBoxes
 	@return {{total:number,totalEvents:number,events:Array.<number>,totalActions:number,actions:Array.<number>,sep:number}}
 */
-A3a.vpl.Application.measureEventHandlerWidth = function (eventHandler, displaySingleEvent, cssBoxes) {
+A3a.vpl.Application.measureEventHandlerWidth = function (rule, displaySingleEvent, cssBoxes) {
 	/** @type {Array.<number>} */
 	var events = [];
 	var totalEvents = 0;
-	events = eventHandler.events.map(function (event, j) {
-		var box = eventHandler.error && eventHandler.error.eventError &&
-			(eventHandler.error.eventErrorIndices.length === 0 || eventHandler.error.eventErrorIndices.indexOf(j) >= 0)
-			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
+	events = rule.events.map(function (event, j) {
+		var box = rule.error && rule.error.eventError &&
+			(rule.error.eventErrorIndices.length === 0 || rule.error.eventErrorIndices.indexOf(j) >= 0)
+			? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		box.width = event == null
 			? (events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox).totalWidth()
@@ -205,10 +205,10 @@ A3a.vpl.Application.measureEventHandlerWidth = function (eventHandler, displaySi
 		totalEvents += box.totalWidth();
 		return cssBoxes.blockContainerBox.width;
 	});
-	if (eventHandler.events.length === 0 || !displaySingleEvent && eventHandler.events[eventHandler.events.length - 1] !== null) {
+	if (rule.events.length === 0 || !displaySingleEvent && rule.events[rule.events.length - 1] !== null) {
 		// add empty block
 		cssBoxes.blockContainerBox.width =
-			(eventHandler.events.length === 0 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox).totalWidth();
+			(rule.events.length === 0 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox).totalWidth();
 		events.push(cssBoxes.blockContainerBox.width);
 		totalEvents += cssBoxes.blockContainerBox.totalWidth();
 	}
@@ -218,10 +218,10 @@ A3a.vpl.Application.measureEventHandlerWidth = function (eventHandler, displaySi
 	/** @type {Array.<number>} */
 	var actions = [];
 	var totalActions = 0;
-	actions = eventHandler.actions.map(function (action, j) {
-		var box = eventHandler.error && !eventHandler.error.eventError &&
-			(eventHandler.error.actionErrorIndices.length === 0 || eventHandler.error.actionErrorIndices.indexOf(j) >= 0)
-			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
+	actions = rule.actions.map(function (action, j) {
+		var box = rule.error && !rule.error.eventError &&
+			(rule.error.actionErrorIndices.length === 0 || rule.error.actionErrorIndices.indexOf(j) >= 0)
+			? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		box.width = action == null
 			? (actions.length === 1 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox).totalWidth()
@@ -229,10 +229,10 @@ A3a.vpl.Application.measureEventHandlerWidth = function (eventHandler, displaySi
 		totalActions += box.totalWidth();
 		return box.totalWidth();
 	});
-	if (eventHandler.actions.length === 0 || eventHandler.actions[eventHandler.actions.length - 1] !== null) {
+	if (rule.actions.length === 0 || rule.actions[rule.actions.length - 1] !== null) {
 		// add empty block
 		cssBoxes.blockContainerBox.width =
-			(eventHandler.actions.length === 0 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox).totalWidth();
+			(rule.actions.length === 0 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox).totalWidth();
 		actions.push(cssBoxes.blockContainerBox.width);
 		totalActions += cssBoxes.blockContainerBox.totalWidth();
 	}
@@ -270,7 +270,7 @@ A3a.vpl.Program.boxForBlockType = function (block, isFirst, cssBoxes) {
 
 /** Add an event handler to a canvas
 	@param {A3a.vpl.Canvas} canvas
-	@param {A3a.vpl.EventHandler} eventHandler
+	@param {A3a.vpl.Rule} rule
 	@param {boolean} displaySingleEvent
 	@param {number} maxWidthForEventRightAlign
 	@param {number} eventX0
@@ -280,20 +280,20 @@ A3a.vpl.Program.boxForBlockType = function (block, isFirst, cssBoxes) {
 	@return {void}
 */
 A3a.vpl.Program.prototype.addEventHandlerToCanvas =
-	function (canvas, eventHandler, displaySingleEvent, maxWidthForEventRightAlign,
+	function (canvas, rule, displaySingleEvent, maxWidthForEventRightAlign,
 		eventX0, actionX0, y,
 		cssBoxes) {
 
 	var canvasSize = canvas.getSize();
 	var x = eventX0;
 
-	var widths = A3a.vpl.Application.measureEventHandlerWidth(eventHandler, displaySingleEvent, cssBoxes);
+	var widths = A3a.vpl.Application.measureEventHandlerWidth(rule, displaySingleEvent, cssBoxes);
 
 	var self = this;
-	var block0Box = eventHandler.events.length > 0 && eventHandler.events[0].blockTemplate.type === A3a.vpl.blockType.event
+	var block0Box = rule.events.length > 0 && rule.events[0].blockTemplate.type === A3a.vpl.blockType.event
 		? cssBoxes.blockEventMainBox
 		: cssBoxes.blockEventAuxBox;
-	var item = new A3a.vpl.CanvasItem(eventHandler,
+	var item = new A3a.vpl.CanvasItem(rule,
 		cssBoxes.ruleBox.paddedWidth(),
 		cssBoxes.ruleBox.paddedHeight(),
 		x - cssBoxes.ruleBox.paddingLeft - cssBoxes.blockContainerBox.offsetLeft() - block0Box.offsetLeft(),
@@ -313,9 +313,9 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				actionX0 - cssBoxes.ruleSeparatorBox.totalWidth() / 2 - cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockActionBox.offsetLeft() + dx,
 				item.y + cssBoxes.ruleBox.paddedHeight() / 2 + dy,
 				cssBoxes.ruleSeparatorBox);
-			if (eventHandler.locked) {
+			if (rule.locked) {
 				canvas.lockedMark(item.x, item.y, item.width, item.height,
-					false, eventHandler.disabled ? "#ddd" : "");
+					false, rule.disabled ? "#ddd" : "");
 			}
 			// block container boxes
 			var x = item.x + dx + cssBoxes.ruleBox.paddingLeft;
@@ -323,9 +323,9 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 				x += maxWidthForEventRightAlign - widths.totalEvents;
 			}
 			events.forEach(function (event, j) {
-				var box = eventHandler.error && eventHandler.error.eventError &&
-					(eventHandler.error.eventErrorIndices.length === 0 || eventHandler.error.eventErrorIndices.indexOf(j) >= 0)
-					? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
+				var box = rule.error && rule.error.eventError &&
+					(rule.error.eventErrorIndices.length === 0 || rule.error.eventErrorIndices.indexOf(j) >= 0)
+					? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 					: cssBoxes.blockContainerBox;
 				box.width = event == null
 					? (events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox).totalWidth()
@@ -338,9 +338,9 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			});
 			x = item.x + dx + cssBoxes.ruleBox.paddingLeft + actionX0 - eventX0;
 			actions.forEach(function (action, j) {
-				var box = eventHandler.error && !eventHandler.error.eventError &&
-					(eventHandler.error.actionErrorIndices.length === 0 || eventHandler.error.actionErrorIndices.indexOf(j) >= 0)
-					? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
+				var box = rule.error && !rule.error.eventError &&
+					(rule.error.actionErrorIndices.length === 0 || rule.error.actionErrorIndices.indexOf(j) >= 0)
+					? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 					: cssBoxes.blockContainerBox;
 				box.width = action == null
 					? (actions.length === 1 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox).totalWidth()
@@ -356,8 +356,8 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		null,
 		// doDrop: reorder event handler or add dropped block
 		function (targetItem, droppedItem) {
-			if (droppedItem.data instanceof A3a.vpl.EventHandler) {
-				var targetIndex = self.program.indexOf(/** @type {A3a.vpl.EventHandler} */(targetItem.data));
+			if (droppedItem.data instanceof A3a.vpl.Rule) {
+				var targetIndex = self.program.indexOf(/** @type {A3a.vpl.Rule} */(targetItem.data));
 				var droppedIndex = self.program.indexOf(droppedItem.data);
 				if (targetIndex >= 0 && droppedIndex >= 0) {
 					self.saveStateBeforeChange();
@@ -377,11 +377,11 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
         // canDrop
         function (targetItem, droppedItem) {
             // not event handler on itself, or child block, or event block in basic mode
-            return droppedItem.data instanceof A3a.vpl.EventHandler
+            return droppedItem.data instanceof A3a.vpl.Rule
                 // event handler: ok to another one
                 ? droppedItem.data !== targetItem.data
                 // block: not in parent event handler
-                : droppedItem.data.eventHandlerContainer !== targetItem.data &&
+                : droppedItem.data.ruleContainer !== targetItem.data &&
                     // ...and not a new event in basic mode
                     (self.mode === A3a.vpl.mode.advanced ||
                         targetItem.data.events.length === 0 ||
@@ -389,7 +389,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
                             droppedItem.data.blockTemplate.type === A3a.vpl.blockType.action));
         }
 	);
-	if (eventHandler.disabled) {
+	if (rule.disabled) {
 		item.drawOverlay = function (ctx, item, dx, dy) {
 			canvas.disabledMark(item.x + dx, item.y + dy, item.width, item.height, ["rule"], ["rule"]);
 		};
@@ -402,7 +402,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	/** @type {A3a.vpl.CanvasItem} */
 	var childItem;
 
-	var events = eventHandler.events;
+	var events = rule.events;
 	if (events.length === 0 || (!displaySingleEvent && events[events.length - 1] !== null)) {
 		events = events.concat(null);
 	}
@@ -414,9 +414,9 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		var blockBox = event
 			? A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes)
 			: events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox;
-		var containerBox = eventHandler.error && eventHandler.error.eventError &&
-			(eventHandler.error.eventErrorIndices.length === 0 || eventHandler.error.eventErrorIndices.indexOf(j) >= 0)
-			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
+		var containerBox = rule.error && rule.error.eventError &&
+			(rule.error.eventErrorIndices.length === 0 || rule.error.eventErrorIndices.indexOf(j) >= 0)
+			? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		var vertOffset = 0;
 		switch (blockBox.verticalAlign) {
@@ -439,19 +439,19 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			childItem = this.addBlockToCanvas(canvas, event, blockBox,
 				x, y + vertOffset,
 				{
-					notInteractive: eventHandler.disabled || this.noVPL,
-					notClickable: eventHandler.disabled || this.noVPL,
+					notInteractive: rule.disabled || this.noVPL,
+					notClickable: rule.disabled || this.noVPL,
 					notDraggable: this.noVPL
 				});
 		} else {
 			containerBox.width = blockBox.totalWidth();
 			childItem = this.addBlockToCanvas(canvas,
-				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.event, eventHandler,
+				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.event, rule,
 					{eventSide: true, index: j}),
 				blockBox,
 				x, y + vertOffset,
 				{
-					notDropTarget: eventHandler.disabled,
+					notDropTarget: rule.disabled,
 					notClickable: true,
 					notDraggable: true
 				});
@@ -459,7 +459,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		item.attachItem(childItem);
 		x += containerBox.totalWidth();
 	}, this);
-	var actions = eventHandler.actions;
+	var actions = rule.actions;
 	if (actions.length === 0 || actions[actions.length - 1] !== null) {
 		actions = actions.concat(null);
 	}
@@ -468,9 +468,9 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 		var blockBox = action
 			? A3a.vpl.Program.boxForBlockType(action, j == 0, cssBoxes)
 			: actions.length === 1 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox;
-		var containerBox = eventHandler.error && !eventHandler.error.eventError &&
-			(eventHandler.error.actionErrorIndices.length === 0 || eventHandler.error.actionErrorIndices.indexOf(j) >= 0)
-			? eventHandler.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
+		var containerBox = rule.error && !rule.error.eventError &&
+			(rule.error.actionErrorIndices.length === 0 || rule.error.actionErrorIndices.indexOf(j) >= 0)
+			? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
 		var vertOffset = 0;
 		switch (blockBox.verticalAlign) {
@@ -486,14 +486,14 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 			childItem = this.addBlockToCanvas(canvas, action, A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes),
 				x, y + vertOffset,
 				{
-					notInteractive: eventHandler.disabled || this.noVPL,
-					notClickable: eventHandler.disabled || this.noVPL,
+					notInteractive: rule.disabled || this.noVPL,
+					notClickable: rule.disabled || this.noVPL,
 					notDraggable: this.noVPL
 				});
 		} else {
 			containerBox.width = blockBox.totalWidth();
 			childItem = this.addBlockToCanvas(canvas,
-				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.action, eventHandler,
+				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.action, rule,
 					{eventSide: false, index: j}),
 				blockBox,
 				x, y,
@@ -505,9 +505,9 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 
 	// error widgets
 	canvas.addDecoration(function (ctx) {
-		if (eventHandler.error !== null) {
-			var box = eventHandler.error.isWarning ? cssBoxes.warningWidgetBox : cssBoxes.errorWidgetBox;
-			canvas.drawWidget(eventHandler.error.isWarning ? "vpl:warning" : "vpl:error",
+		if (rule.error !== null) {
+			var box = rule.error.isWarning ? cssBoxes.warningWidgetBox : cssBoxes.errorWidgetBox;
+			canvas.drawWidget(rule.error.isWarning ? "vpl:warning" : "vpl:error",
 				eventX0 - cssBoxes.ruleBox.paddingLeft - cssBoxes.ruleBox.marginLeft - cssBoxes.blockContainerBox.offsetLeft() - block0Box.offsetLeft() -
 					box.width / 2 - box.marginRight - box.paddingRight,
 				y + block0Box.height * 0.5,
@@ -652,17 +652,17 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var nMaxEventHandlerALength = 0;
 	var maxEventsWidth = 0;
 	var maxActionsWidth = 0;
-	program.program.forEach(function (eventHandler) {
-		var blocks = eventHandler.events;
+	program.program.forEach(function (rule) {
+		var blocks = rule.events;
 		nMaxEventHandlerELength = Math.max(nMaxEventHandlerELength,
 			blocks.length
 				+ (blocks.length === 0 || blocks[blocks.length - 1] !== null ? 1 : 0));
-		blocks = eventHandler.actions;
+		blocks = rule.actions;
 		nMaxEventHandlerALength = Math.max(nMaxEventHandlerALength,
 			blocks.length
 				+ (blocks.length === 0 || blocks[blocks.length - 1] !== null ? 1 : 0));
 
-		var details = A3a.vpl.Application.measureEventHandlerWidth(eventHandler, displaySingleEvent, cssBoxes);
+		var details = A3a.vpl.Application.measureEventHandlerWidth(rule, displaySingleEvent, cssBoxes);
 		maxEventsWidth = Math.max(maxEventsWidth, details.totalEvents);
 		maxActionsWidth = Math.max(maxActionsWidth, details.totalActions);
 	});
@@ -1007,25 +1007,25 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		}
 		var errorMsg = "";
 		var isWarning = false;
-		program.program.forEach(function (eventHandler, i) {
-			program.addEventHandlerToCanvas(canvas, eventHandler,
+		program.program.forEach(function (rule, i) {
+			program.addEventHandlerToCanvas(canvas, rule,
 				displaySingleEvent,
 				canvas.dims.eventRightAlign ? maxEventsWidth : 0,
 				eventX0, actionX0,
 				cssBoxes.vplBox.y + cssBoxes.ruleBox.totalHeight() * i + cssBoxes.ruleBox.offsetTop() + cssBoxes.blockContainerBox.offsetTop(),
 				cssBoxes);
-			if (eventHandler.error !== null && errorMsg === "") {
-				errorMsg = eventHandler.error.msg;
-				isWarning = eventHandler.error.isWarning;
-				if (eventHandler.error.conflictEventHandler !== null) {
+			if (rule.error !== null && errorMsg === "") {
+				errorMsg = rule.error.msg;
+				isWarning = rule.error.isWarning;
+				if (rule.error.conflictEventHandler !== null) {
 					for (var j = i + 1; j < program.program.length; j++) {
-						if (program.program[j] === eventHandler.error.conflictEventHandler) {
+						if (program.program[j] === rule.error.conflictEventHandler) {
 							program.addEventHandlerConflictLinkToCanvas(canvas,
 								eventX0,
 								cssBoxes.vplBox.y + cssBoxes.ruleBox.totalHeight() * i + cssBoxes.ruleBox.offsetTop() + cssBoxes.blockContainerBox.offsetTop(),
 								cssBoxes.vplBox.y + cssBoxes.ruleBox.totalHeight() * j + cssBoxes.ruleBox.offsetTop() + cssBoxes.blockContainerBox.offsetTop(),
 								cssBoxes,
-								eventHandler.error.isWarning);
+								rule.error.isWarning);
 							break;
 						}
 					}

@@ -151,41 +151,41 @@ A3a.vpl.CodeGenerator.prototype.findMark = function (ref, isBegin) {
 };
 
 /** Generate code for an event handler
-	@param {A3a.vpl.EventHandler} eventHandler
+	@param {A3a.vpl.Rule} rule
 	@return {A3a.vpl.compiledCode}
 */
-A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHandler) {
-	if (eventHandler.disabled || eventHandler.isEmpty()) {
+A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
+	if (rule.disabled || rule.isEmpty()) {
 		return {};
 	}
 
 	// check errors
-	eventHandler.error = null;
+	rule.error = null;
 	var hasEvent = false;
 	var hasState = false;
-	for (var i = 0; i < eventHandler.events.length; i++) {
-		if (!eventHandler.events[i].disabled) {
-			if (eventHandler.events[i].blockTemplate.type === A3a.vpl.blockType.event) {
+	for (var i = 0; i < rule.events.length; i++) {
+		if (!rule.events[i].disabled) {
+			if (rule.events[i].blockTemplate.type === A3a.vpl.blockType.event) {
 				hasEvent = true;
-				if (eventHandler.events[i].blockTemplate.validate) {
-					var err = eventHandler.events[i].blockTemplate.validate(eventHandler.events[i]);
+				if (rule.events[i].blockTemplate.validate) {
+					var err = rule.events[i].blockTemplate.validate(rule.events[i]);
 					if (err) {
 						err.addEventError([i]);
-						if (!err.isWarning || !eventHandler.error) {
-							eventHandler.error = err;
+						if (!err.isWarning || !rule.error) {
+							rule.error = err;
 							return {error: err};
 						}
 					}
 				}
-			} else if (eventHandler.events[i].blockTemplate.type === A3a.vpl.blockType.state) {
+			} else if (rule.events[i].blockTemplate.type === A3a.vpl.blockType.state) {
 				hasState = true;
 			}
 		}
 	}
 	var hasAction = false;
-	for (var i = 0; i < eventHandler.actions.length; i++) {
-		if (!eventHandler.actions[i].disabled &&
-			eventHandler.actions[i].blockTemplate.type === A3a.vpl.blockType.action) {
+	for (var i = 0; i < rule.actions.length; i++) {
+		if (!rule.actions[i].disabled &&
+			rule.actions[i].blockTemplate.type === A3a.vpl.blockType.action) {
 			hasAction = true;
 			break;
 		}
@@ -196,23 +196,23 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 	if (!hasEvent && !hasState) {
 		var err = new A3a.vpl.Error("Missing event block");
 		err.addEventError([]);
-		eventHandler.error = err;
+		rule.error = err;
 		return {error: err};
 	}
 	if (!hasAction) {
 		var err = new A3a.vpl.Error("Missing action block");
 		err.addActionError(0);
-		eventHandler.error = err;
+		rule.error = err;
 		return {error: err};
 	} else {
-		for (var i = 0; i < eventHandler.actions.length; i++) {
-			for (var j = i + 1; j < eventHandler.actions.length; j++) {
-				if (eventHandler.actions[j].blockTemplate.type === A3a.vpl.blockType.action &&
-					eventHandler.actions[j].blockTemplate === eventHandler.actions[i].blockTemplate) {
+		for (var i = 0; i < rule.actions.length; i++) {
+			for (var j = i + 1; j < rule.actions.length; j++) {
+				if (rule.actions[j].blockTemplate.type === A3a.vpl.blockType.action &&
+					rule.actions[j].blockTemplate === rule.actions[i].blockTemplate) {
 					var err = new A3a.vpl.Error("Duplicate action blocks", true);
 					err.addActionError(i);
 					err.addActionError(j);
-					eventHandler.error = err;
+					rule.error = err;
 				}
 			}
 		}
@@ -235,7 +235,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 	/** @type {Array.<string>} */
 	var auxClausesInit = [];
 	var str = "";
-	eventHandler.events.forEach(function (event, i) {
+	rule.events.forEach(function (event, i) {
 		var code = event.generateCode(this.language);
 		if (code.clause) {
 			if (i === 0 && code.sectionBegin) {
@@ -264,9 +264,9 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 		}
 	}, this);
 
-	for (var i = 0; i < eventHandler.actions.length; i++) {
-		var code = eventHandler.actions[i].generateCode(this.language);
-		str += code.statement ? this.bracket(code.statement, eventHandler.actions[i]) : "";
+	for (var i = 0; i < rule.actions.length; i++) {
+		var code = rule.actions[i].generateCode(this.language);
+		str += code.statement ? this.bracket(code.statement, rule.actions[i]) : "";
 		if (code.initVarDecl) {
 			code.initVarDecl.forEach(function (frag) {
 				if (initVarDecl.indexOf(frag) < 0) {
@@ -290,8 +290,8 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 		}
 	}
 	if (str.length > 0) {
-		var eventCode = eventHandler.events[0].blockTemplate.type === A3a.vpl.blockType.event
-			? eventHandler.events[0].generateCode(this.language)
+		var eventCode = rule.events[0].blockTemplate.type === A3a.vpl.blockType.event
+			? rule.events[0].generateCode(this.language)
 			: null;
 		if (eventCode && eventCode.initVarDecl) {
 			eventCode.initVarDecl.forEach(function (frag) {
@@ -315,7 +315,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (eventHan
 			});
 		}
 		return {
-			firstEventType: eventHandler.events[0] ? eventHandler.events[0].blockTemplate.name : "",
+			firstEventType: rule.events[0] ? rule.events[0].blockTemplate.name : "",
 			initVarDecl: initVarDecl,
 			initCodeExec: initCodeExec,
 			initCodeDecl: initCodeDecl,

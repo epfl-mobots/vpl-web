@@ -32,8 +32,8 @@ A3a.vpl.CodeGeneratorJS.prototype.constructor = A3a.vpl.CodeGeneratorJS;
 */
 A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 	this.reset();
-	var c = program.program.map(function (eh) {
-		return this.generateCodeForEventHandler(eh);
+	var c = program.program.map(function (rule) {
+		return this.generateCodeForEventHandler(rule);
 	}, this);
 	/** @type {Array.<string>} */
 	var initVarDecl = [];
@@ -102,13 +102,13 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 	// compile runBlocks
 	var runBlocksCode = "";
 	if (runBlocks) {
-		var eh = new A3a.vpl.EventHandler();
+		var rule = new A3a.vpl.Rule();
 		var initBlock = new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("init"), null, null);
-		eh.setBlock(initBlock, null, null);
+		rule.setBlock(initBlock, null, null);
 		runBlocks.forEach(function (block) {
-			eh.setBlock(block, null, null);
+			rule.setBlock(block, null, null);
 		});
-		runBlocksCode = this.generateCodeForEventHandler(eh).statement;
+		runBlocksCode = this.generateCodeForEventHandler(rule).statement;
 	}
 
 	if (usesCond) {

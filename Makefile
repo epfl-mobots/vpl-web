@@ -35,7 +35,7 @@ JS = \
 	vpl-blocktemplate.js \
 	vpl-block.js \
 	vpl-emptyblock.js \
-	vpl-eventhandler.js \
+	vpl-rule.js \
 	vpl-uiconfig.js \
 	vpl-program.js \
 	vpl-code.js \

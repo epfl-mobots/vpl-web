@@ -12,7 +12,7 @@
 /** @fileoverview
 
 Implementation of A3a.vpl.Program, a class which contains a VPL3 program
-(basically a collection of A3a.vpl.EventHandler objects), and settings related
+(basically a collection of A3a.vpl.Rule objects), and settings related
 to programming.
 
 */
@@ -28,7 +28,7 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.noVPL = false;	// true for source code editor without vpl counterpart
 	this.teacherRole = true;
 	this.experimentalFeatures = false;
-	/** @type {Array.<A3a.vpl.EventHandler>} */
+	/** @type {Array.<A3a.vpl.Rule>} */
 	this.program = [];
 	this.uploaded = false;	// program matches what's running
 	this.notUploadedYet = true;	// program has never been loaded since last this.new()
@@ -219,7 +219,7 @@ A3a.vpl.Program.prototype.setMode = function (mode) {
 		this.mode = mode;
 
 		// convert blocks
-		this.program.forEach(function (eventHandler) {
+		this.program.forEach(function (rule) {
 			/** Convert block
 				@param {A3a.vpl.Block} block
 				@param {boolean=} isState
@@ -229,11 +229,11 @@ A3a.vpl.Program.prototype.setMode = function (mode) {
 			function convertBlock(block, isState) {
 /*
 				if (block === null) {
-					if (isState && eventHandler.event && mode === A3a.vpl.mode.advanced) {
+					if (isState && rule.event && mode === A3a.vpl.mode.advanced) {
 						// new state block
 						block = new A3a.vpl.Block(A3a.vpl.BlockTemplate.stateBlock,
-							eventHandler, null);
-						block.onPrepareChange = eventHandler.event.onPrepareChange;
+							rule, null);
+						block.onPrepareChange = rule.event.onPrepareChange;
 						return block;
 					}
 					return null;
@@ -241,7 +241,7 @@ A3a.vpl.Program.prototype.setMode = function (mode) {
 				if (block.blockTemplate.changeMode) {
 					var newBlock = block.blockTemplate.changeMode(block, mode);
 					if (newBlock !== null) {
-						newBlock.eventHandlerContainer = block.eventHandlerContainer;
+						newBlock.ruleContainer = block.ruleContainer;
 						newBlock.positionInContainer = block.positionInContainer;
 					}
 					return newBlock;
@@ -250,11 +250,11 @@ A3a.vpl.Program.prototype.setMode = function (mode) {
 				return block;
 			}
 
-			eventHandler.events.forEach(function (event, i) {
-				eventHandler.events[i] = convertBlock(event);
+			rule.events.forEach(function (event, i) {
+				rule.events[i] = convertBlock(event);
 			});
-			eventHandler.actions.forEach(function (action, i) {
-				eventHandler.actions[i] = convertBlock(action);
+			rule.actions.forEach(function (action, i) {
+				rule.actions[i] = convertBlock(action);
 			});
 		});
 	}
@@ -273,7 +273,7 @@ A3a.vpl.Program.prototype.setTeacherRole = function (b) {
 	@return {void}
 */
 A3a.vpl.Program.prototype.addEventHandler = function (withState) {
-	this.program.push(new A3a.vpl.EventHandler());
+	this.program.push(new A3a.vpl.Rule());
 };
 
 /** If there is no trailing event handler, add one; if there are more than one,
@@ -314,7 +314,7 @@ A3a.vpl.Program.prototype.exportToObject = function (opt) {
 	var p = null;
 
 	if (src == null) {
-		p = this.program.map(function (eventHandler) {
+		p = this.program.map(function (rule) {
 			/** @type {Array.<Object>} */
 			var b = [];
 			function addBlock(block) {
@@ -330,16 +330,16 @@ A3a.vpl.Program.prototype.exportToObject = function (opt) {
 					});
 				}
 			}
-			eventHandler.events.forEach(function (event) {
+			rule.events.forEach(function (event) {
 				addBlock(event);
 			});
-			eventHandler.actions.forEach(function (action) {
+			rule.actions.forEach(function (action) {
 				addBlock(action);
 			});
 			return {
 				"blocks": b,
-				"disabled": eventHandler.disabled,
-				"locked": eventHandler.locked
+				"disabled": rule.disabled,
+				"locked": rule.locked
 			};
 		});
 	}
@@ -380,9 +380,9 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 			this.multiEventBasic = obj["basicMultiEvent"] || A3a.vpl.Program.basicMultiEvent;
 			this.enabledBlocksAdvanced = obj["advancedBlocks"] || A3a.vpl.Program.advancedBlocks;
 			if (obj["program"]) {
-				this.program = obj["program"].map(function (eventHandler) {
-					var eh = new A3a.vpl.EventHandler();
-					eventHandler["blocks"].forEach(function (block) {
+				this.program = obj["program"].map(function (rule) {
+					var eh = new A3a.vpl.Rule();
+					rule["blocks"].forEach(function (block) {
 						var bt = A3a.vpl.BlockTemplate.findByName(block["name"]);
 						if (bt) {
 							var b = new A3a.vpl.Block(bt, null, null);
@@ -405,8 +405,8 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 								true);
 						}
 					}, this);
-					eh.disabled = eventHandler["disabled"] || false;
-					eh.locked = eventHandler["locked"] || false;
+					eh.disabled = rule["disabled"] || false;
+					eh.locked = rule["locked"] || false;
 					return eh;
 				}, this);
 			} else {
@@ -466,13 +466,13 @@ A3a.vpl.Program.prototype.getCodeLocation = function (language, ref) {
 };
 
 /** Generate code for the actions of an event handler
-	@param {A3a.vpl.EventHandler} eventHandler
+	@param {A3a.vpl.Rule} rule
 	@param {string} language
 	@return {string}
 */
-A3a.vpl.Program.prototype.codeForActions = function (eventHandler, language) {
+A3a.vpl.Program.prototype.codeForActions = function (rule, language) {
 	var codeGenerator = A3a.vpl.Program.codeGenerator[language];
-	return codeGenerator.generate(this, eventHandler.actions);
+	return codeGenerator.generate(this, rule.actions);
 };
 
 /** Generate code for the actions of an event handler
