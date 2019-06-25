@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -18,6 +18,7 @@ A3a.vpl.Undo = function () {
 	this.undoStack = [];
 	/** @type {Array.<A3a.vpl.Undo.MarkedState>} */
 	this.redoStack = [];
+	this.maxDepth = 20;
 };
 
 /** User state with boolean to mark a single state in the undo stacks
@@ -60,6 +61,9 @@ A3a.vpl.Undo.prototype.saveStateBeforeChange = function (state, mark) {
 		this.clearMark();
 	}
 	this.undoStack.push(new A3a.vpl.Undo.MarkedState(state, mark));
+	if (this.undoStack.length > this.maxDepth) {
+		this.undoStack = this.undoStack.slice(-this.maxDepth);
+	}
 	this.redoStack = [];
 };
 
