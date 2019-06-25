@@ -58,6 +58,7 @@ JS = \
 	vpl-canvas.js \
 	vpl-canvas-scroll.js \
 	vpl-draw.js \
+	vpl-blocklibutil.js \
 	vpl-blocklib.js \
 	svg.js \
 	svg-preparsed.js \
