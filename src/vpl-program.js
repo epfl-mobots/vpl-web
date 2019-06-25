@@ -97,15 +97,20 @@ A3a.vpl.Program.prototype.resetUI = function () {
 };
 
 /** Clear program
+	@param {boolean=} resetUndoStack
 	@return {void}
 */
-A3a.vpl.Program.prototype.new = function () {
+A3a.vpl.Program.prototype.new = function (resetUndoStack) {
+	if (resetUndoStack) {
+		this.undoState.reset();
+	} else {
+		this.saveStateBeforeChange();
+	}
 	this.mode = A3a.vpl.mode.basic;
 	this.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
 	this.multiEventBasic = A3a.vpl.Program.basicMultiEvent;
 	this.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
 	this.program = [];
-	this.undoState.reset();
 	this.code = {};
 	this.notUploadedYet = true;
 };
