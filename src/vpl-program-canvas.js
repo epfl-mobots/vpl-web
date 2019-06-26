@@ -190,7 +190,7 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 	@param {Object} cssBoxes
 	@return {{total:number,totalEvents:number,events:Array.<number>,totalActions:number,actions:Array.<number>,sep:number}}
 */
-A3a.vpl.Application.measureEventHandlerWidth = function (rule, displaySingleEvent, cssBoxes) {
+A3a.vpl.Application.measureRuleWidth = function (rule, displaySingleEvent, cssBoxes) {
 	/** @type {Array.<number>} */
 	var events = [];
 	var totalEvents = 0;
@@ -268,7 +268,7 @@ A3a.vpl.Program.boxForBlockType = function (block, isFirst, cssBoxes) {
 	}
 }
 
-/** Add an event handler to a canvas
+/** Add a rule to a canvas
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.Rule} rule
 	@param {boolean} displaySingleEvent
@@ -279,7 +279,7 @@ A3a.vpl.Program.boxForBlockType = function (block, isFirst, cssBoxes) {
 	@param {Object} cssBoxes
 	@return {void}
 */
-A3a.vpl.Program.prototype.addEventHandlerToCanvas =
+A3a.vpl.Program.prototype.addRuleToCanvas =
 	function (canvas, rule, displaySingleEvent, maxWidthForEventRightAlign,
 		eventX0, actionX0, y,
 		cssBoxes) {
@@ -287,7 +287,7 @@ A3a.vpl.Program.prototype.addEventHandlerToCanvas =
 	var canvasSize = canvas.getSize();
 	var x = eventX0;
 
-	var widths = A3a.vpl.Application.measureEventHandlerWidth(rule, displaySingleEvent, cssBoxes);
+	var widths = A3a.vpl.Application.measureRuleWidth(rule, displaySingleEvent, cssBoxes);
 
 	var self = this;
 	var block0Box = rule.events.length > 0 && rule.events[0].blockTemplate.type === A3a.vpl.blockType.event
@@ -662,7 +662,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			blocks.length
 				+ (blocks.length === 0 || blocks[blocks.length - 1] !== null ? 1 : 0));
 
-		var details = A3a.vpl.Application.measureEventHandlerWidth(rule, displaySingleEvent, cssBoxes);
+		var details = A3a.vpl.Application.measureRuleWidth(rule, displaySingleEvent, cssBoxes);
 		maxEventsWidth = Math.max(maxEventsWidth, details.totalEvents);
 		maxActionsWidth = Math.max(maxActionsWidth, details.totalActions);
 	});
@@ -718,6 +718,20 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		"vpl:teacher-save",
 		"vpl:teacher"
 	];
+
+	// default drop handler to delete blocks and rules dragged outside hor span of rules
+	canvas.addDefaultDoDrop("delete", function (dropTargetItem, draggedItem, x, y) {
+		if (self.commands.canDrop("vpl:trashcan", draggedItem)) {
+			var left = eventX0 - cssBoxes.ruleBox.offsetLeft() -
+				cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockEventMainBox.offsetLeft();
+			var width = cssBoxes.ruleBox.totalWidth();
+			if (x < left || x > left + width) {
+				self.commands.doDrop("vpl:trashcan", draggedItem);
+				return true;
+			}
+		}
+		return false;
+	});
 
 	// box sizes
 	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, toolbarConfig, ["vpl", "top"]);
@@ -1008,7 +1022,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		var errorMsg = "";
 		var isWarning = false;
 		program.program.forEach(function (rule, i) {
-			program.addEventHandlerToCanvas(canvas, rule,
+			program.addRuleToCanvas(canvas, rule,
 				displaySingleEvent,
 				canvas.dims.eventRightAlign ? maxEventsWidth : 0,
 				eventX0, actionX0,
