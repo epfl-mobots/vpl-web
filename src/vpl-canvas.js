@@ -376,7 +376,7 @@ A3a.vpl.Canvas = function (canvas, options) {
 						} else if (dropTargetItem == null || dropTargetItem.doDrop == null ||
 							(dropTargetItem.canDrop && !dropTargetItem.canDrop(dropTargetItem, draggedItem))) {
 							for (var i = 0; i < self.defaultDoDrop.length; i++) {
-								if (self.defaultDoDrop[i].doDrop(dropTargetItem, draggedItem, dragEvent.x, dragEvent.y)) {
+								if (self.defaultDoDrop[i].doDrop(dropTargetItem, draggedItem, mouseEvent.x, mouseEvent.y)) {
 									break;
 								}
 							}
