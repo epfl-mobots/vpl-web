@@ -47,6 +47,20 @@
 			"type": "hidden"
 		},
 		{
+			"name": "init",
+			"type": "event",
+			"modes": ["basic", "advanced"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ev_Start"
+				}
+			],
+			"defaultParameters": []
+		},
+		{
 			"name": "button 1",
 			"type": "event",
 			"modes": ["basic", "advanced"],
@@ -90,20 +104,7 @@
 				}
 			]
 		},
-		{
-			"name": "init",
-			"type": "event",
-			"modes": ["basic", "advanced"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_Start"
-				}
-			],
-			"defaultParameters": []
-		},
+		
 		{
 			"name": "roll",
 			"type": "event",
@@ -212,19 +213,20 @@
 			]
 		},
 		{
-			"name": "clap",
+			"name": "tap",
 			"type": "event",
-			"modes": ["advanced"],
+			"modes": ["basic", "advanced"],
 			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
 				{
-					"uri": "Blocks.svg#Ev_Clap"
+					"uri": "Blocks.svg#Ev_Acc_Hit"
 				}
 			],
 			"defaultParameters": []
 		},
+		
 		{
 			"name": "fall",
 			"type": "event",
@@ -239,16 +241,17 @@
 			],
 			"defaultParameters": []
 		},
+		
 		{
-			"name": "tap",
+			"name": "clap",
 			"type": "event",
-			"modes": ["basic"],
+			"modes": ["advanced"],
 			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
 				{
-					"uri": "Blocks.svg#Ev_Acc_Hit"
+					"uri": "Blocks.svg#Ev_Clap"
 				}
 			],
 			"defaultParameters": []
