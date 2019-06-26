@@ -244,6 +244,9 @@ A3a.vpl.Canvas = function (canvas, options) {
 	/** @type {Object} */
 	this.state = null;	// client data used by callbacks (scroll positions etc.)
 
+	/** @type {Array.<{tag:string,doDrop:A3a.vpl.Canvas.defaultDoDrop}>} */
+	this.defaultDoDrop = [];
+
 	this.clickTimestamp = 0;
 	this.zoomedItemIndex = -1;
 	/** @type {A3a.vpl.CanvasItem} */
@@ -370,6 +373,13 @@ A3a.vpl.Canvas = function (canvas, options) {
 						} else if (dropTargetItem && dropTargetItem.doDrop
 							&& (!dropTargetItem.canDrop || dropTargetItem.canDrop(dropTargetItem, draggedItem))) {
 							dropTargetItem.doDrop(dropTargetItem, draggedItem);
+						} else if (dropTargetItem == null || dropTargetItem.doDrop == null ||
+							(dropTargetItem.canDrop && !dropTargetItem.canDrop(dropTargetItem, draggedItem))) {
+							for (var i = 0; i < self.defaultDoDrop.length; i++) {
+								if (self.defaultDoDrop[i].doDrop(dropTargetItem, draggedItem, dragEvent.x, dragEvent.y)) {
+									break;
+								}
+							}
 						}
 						self.redraw();
 						self.canvas.style.cursor = "default";
@@ -496,6 +506,33 @@ A3a.vpl.Canvas.prototype.setRelativeArea = function (relativeArea) {
 	this.relativeArea = relativeArea || {xmin: 0, xmax: 1, ymin: 0, ymax: 1};
 	this.width = this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin);
 	this.height = this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin);
+};
+
+/** Default drop handler, when dropped over a non-target or a target where !canDrop
+	(arguments: target item, dropped item, x, y; return true if handled, false to continue)
+	@typedef {function(A3a.vpl.CanvasItem,A3a.vpl.CanvasItem,number,number):boolean}
+*/
+A3a.vpl.Canvas.defaultDoDrop;
+
+/** Add a drop handler for default handling of dropped items not over an item
+	with a successful canDrop, avoiding duplicates
+	@param {string} tag
+	@param {A3a.vpl.Canvas.defaultDoDrop} doDrop
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.addDefaultDoDrop = function (tag, doDrop) {
+	// abort if duplicate
+	for (var i = 0; i < this.defaultDoDrop.length; i++) {
+		if (this.defaultDoDrop[i].tag === tag) {
+			this.defaultDoDrop[i].doDrop = doDrop;
+			return;
+		}
+	}
+
+	this.defaultDoDrop.push({
+		tag: tag,
+		doDrop: doDrop
+	});
 };
 
 /** Show content
