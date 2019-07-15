@@ -886,6 +886,30 @@ SVG.prototype.draw = function (ctx, options) {
 							polyDoCollect = false;
 						}
 						break;
+					case "T":
+						for (var i = 0; i + 1 < args.length; i += 2) {
+							ctx && ctx.quadraticCurveTo(xc1, yc1,
+								args[i], args[i + 1]);
+							x = args[i];
+							y = args[i + 1];
+							xc1 = 2 * x - xc1;
+							yc1 = 2 * y - yc1;
+							addPoint(x, y);
+							polyDoCollect = false;
+						}
+						break;
+					case "t":
+						for (var i = 0; i + 1 < args.length; i += 2) {
+							ctx && ctx.quadraticCurveTo(xc1, yc1,
+								x + args[i], y + args[i + 1]);
+							x += args[i];
+							y += args[i + 1];
+							xc1 = 2 * x - xc1;
+							yc1 = 2 * y - yc1;
+							addPoint(x, y);
+							polyDoCollect = false;
+						}
+						break;
 					case "Z":
 					case "z":
 						ctx && ctx.closePath();

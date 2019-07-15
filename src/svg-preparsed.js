@@ -445,6 +445,36 @@ SVG.Preparsed.prototype.parse = function () {
 							y += args[i + 3];
 						}
 						break;
+					case "T":
+						for (var i = 0; i + 1 < args.length; i += 2) {
+							cmds.push({
+								cmd: "Q",
+								args: [
+									xc1, yc1,
+									args[i], args[i + 1]
+								]
+							});
+							x = args[i];
+							y = args[i + 1];
+							xc1 = 2 * x - xc1;
+							yc1 = 2 * y - yc1;
+						}
+						break;
+					case "t":
+						for (var i = 0; i + 1 < args.length; i += 2) {
+							cmds.push({
+								cmd: "Q",
+								args: [
+									xc1, yc1,
+									x + args[i], y + args[i + 1]
+								]
+							});
+							x += args[i];
+							y += args[i + 1];
+							xc1 = 2 * x - xc1;
+							yc1 = 2 * y - yc1;
+						}
+						break;
 					case "Z":
 					case "z":
 						cmds.push({cmd: "Z", args: []});
