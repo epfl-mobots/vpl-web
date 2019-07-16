@@ -2000,7 +2000,7 @@
 */
 
 view {
-	background: #fbfcfc;
+	background: #f5f7f8;
 }
 
 toolbar {
@@ -2008,9 +2008,10 @@ toolbar {
 }
 
 toolbar.top {
-	border-bottom: 2px solid #eceff1;
-	background: #f0f3f5;
-	/*background: #eceff1*/
+	
+	/*background: #f0f3f5;*/
+	background: #fbfcfc;
+	box-shadow: 0px 0px 5px #cfd8dc;
 }
 
 button {
@@ -2022,8 +2023,11 @@ button {
 }
 
 vpl.top {
-	border-bottom: 1px solid #eceff1;
-	background: #f5f7f8;
+
+}
+
+vpl.bottom{
+border-top: 1px solid #eceff1;
 }
 
 button.vpl.top {
@@ -2035,7 +2039,7 @@ button.vpl.top {
 #vpl-message-error, #vpl-message-warning {
 	color: #455a64;
 	width: 20vw;
-	background: #fefefe;
+	background: #f0f3f5;;
 	padding: 0px 4px 0px 4px;
 	border-radius: 2.5wh;
 }
@@ -2049,8 +2053,10 @@ vpl {
 	padding: 24px 0 16px 0;
 	margin: 0px;
 	border-radius: 4px;
-	background: #fbfcfc;
-	/*box-shadow: 0px 0px 8px #aabbcc;*/
+	/*background: #f0f3f5;
+	box-shadow: 0px 0px 2px #aabbcc;*/
+	background: transparent;
+	
 }
 
 block {
@@ -2062,7 +2068,7 @@ block {
 	max-height: 112px;
 	background: transparent;
 	vertical-align: bottom;
-	border-radius: 4px;
+	border-radius: 2px;
 	border-width: 1.5px;
 }
 
@@ -2122,7 +2128,7 @@ block.library {
 }
 
 block-container{
-	/*background: #f0f3f5;*/
+	background: #fbfcfc;
 	border-radius: 4px;
 	padding: 8px;
 }
@@ -2135,12 +2141,12 @@ block-container.warning {
 }
 
 rule {
-	background: #f5f7f8;
-	/*border: solid #eceff1 2px;*/
+	background: #fbfcfc;
+	border: solid #eceff1 2px;
 	border-radius: 4px;
 	padding: 8px;
 	margin: 16px;
-	box-shadow: 0px 0px 8px #f5f7f8;
+	/*box-shadow: 0px 0px 8px #f5f7f8;*/
 }
 
 overlay-rectangle.disabled {
@@ -2186,9 +2192,11 @@ conflict-line {
 block-library {
 	padding: 24px 8px 8px 8px;
 	margin: 0px;
-	border-left: 2px solid #eceff1;
+	backgroun: white;
+	box-shadow: 0px 0px 2px #aabbcc;
+	/*border-left: 2px solid #eceff1;
 	border-right: 2px solid #eceff1;
-	/*overflow: scroll;*/
+	overflow: scroll;*/
 }
 
 /* simulator */
@@ -4886,32 +4894,40 @@ sim-playground {
         fill: #e5f0ff;
       }
 
-      .cls-23, .cls-3 {
-        fill: #ffc8bd;
+      .cls-10, .cls-103, .cls-107, .cls-108, .cls-110, .cls-112, .cls-116, .cls-21, .cls-26, .cls-27, .cls-28, .cls-29, .cls-3, .cls-30, .cls-31, .cls-32, .cls-33, .cls-34, .cls-36, .cls-37, .cls-38, .cls-6, .cls-65, .cls-66, .cls-78, .cls-8, .cls-83, .cls-84 {
+        fill: none;
       }
 
-      .cls-4, .cls-5, .cls-60, .cls-96 {
+      .cls-3 {
+        stroke: #ffbfb2;
+      }
+
+      .cls-10, .cls-105, .cls-107, .cls-15, .cls-17, .cls-21, .cls-26, .cls-29, .cls-3, .cls-30, .cls-31, .cls-33, .cls-36, .cls-37, .cls-38, .cls-78, .cls-8, .cls-83, .cls-97, .cls-98 {
+        stroke-miterlimit: 10;
+      }
+
+      .cls-10, .cls-101, .cls-116, .cls-14, .cls-15, .cls-17, .cls-22, .cls-23, .cls-27, .cls-3, .cls-30, .cls-36, .cls-37, .cls-38, .cls-78, .cls-8, .cls-83, .cls-97, .cls-98 {
+        stroke-width: 1.5px;
+      }
+
+      .cls-4, .cls-5, .cls-58, .cls-95 {
         fill: #90a4ae;
       }
 
-      .cls-120, .cls-34, .cls-4, .cls-6, .cls-60 {
+      .cls-116, .cls-33, .cls-4, .cls-58, .cls-6 {
         stroke: #607d8b;
       }
 
-      .cls-103, .cls-106, .cls-11, .cls-111, .cls-112, .cls-114, .cls-116, .cls-12, .cls-120, .cls-14, .cls-17, .cls-21, .cls-27, .cls-28, .cls-29, .cls-30, .cls-31, .cls-32, .cls-33, .cls-34, .cls-36, .cls-4, .cls-40, .cls-6, .cls-67, .cls-68, .cls-79, .cls-85, .cls-89, .cls-90, .cls-91, .cls-92, .cls-93, .cls-94, .cls-95, .cls-96, .cls-99 {
+      .cls-100, .cls-107, .cls-108, .cls-110, .cls-112, .cls-116, .cls-12, .cls-14, .cls-17, .cls-21, .cls-26, .cls-27, .cls-28, .cls-29, .cls-30, .cls-31, .cls-32, .cls-33, .cls-36, .cls-37, .cls-4, .cls-6, .cls-65, .cls-66, .cls-67, .cls-78, .cls-83, .cls-88, .cls-89, .cls-90, .cls-91, .cls-92, .cls-93, .cls-94, .cls-95, .cls-98, .cls-99 {
         stroke-linecap: round;
       }
 
-      .cls-102, .cls-103, .cls-106, .cls-107, .cls-11, .cls-112, .cls-113, .cls-114, .cls-115, .cls-116, .cls-117, .cls-12, .cls-120, .cls-14, .cls-22, .cls-23, .cls-28, .cls-29, .cls-36, .cls-38, .cls-4, .cls-6, .cls-60, .cls-67, .cls-68, .cls-77, .cls-80, .cls-86, .cls-89, .cls-90, .cls-91, .cls-92, .cls-93, .cls-94, .cls-95, .cls-96 {
+      .cls-100, .cls-101, .cls-103, .cls-108, .cls-109, .cls-110, .cls-111, .cls-112, .cls-113, .cls-116, .cls-12, .cls-14, .cls-22, .cls-23, .cls-27, .cls-28, .cls-35, .cls-4, .cls-58, .cls-6, .cls-65, .cls-66, .cls-67, .cls-76, .cls-84, .cls-85, .cls-88, .cls-89, .cls-90, .cls-91, .cls-92, .cls-93, .cls-94, .cls-95, .cls-99 {
         stroke-linejoin: round;
       }
 
-      .cls-102, .cls-103, .cls-106, .cls-107, .cls-109, .cls-11, .cls-111, .cls-112, .cls-113, .cls-114, .cls-115, .cls-116, .cls-117, .cls-21, .cls-27, .cls-29, .cls-30, .cls-34, .cls-36, .cls-38, .cls-4, .cls-6, .cls-60, .cls-67, .cls-68, .cls-77, .cls-80, .cls-86, .cls-89, .cls-90, .cls-91, .cls-92, .cls-93, .cls-94, .cls-95, .cls-96 {
+      .cls-100, .cls-103, .cls-105, .cls-107, .cls-108, .cls-109, .cls-110, .cls-111, .cls-112, .cls-113, .cls-12, .cls-21, .cls-26, .cls-28, .cls-29, .cls-33, .cls-35, .cls-4, .cls-58, .cls-6, .cls-65, .cls-66, .cls-67, .cls-76, .cls-84, .cls-85, .cls-88, .cls-89, .cls-90, .cls-91, .cls-92, .cls-93, .cls-94, .cls-95, .cls-99 {
         stroke-width: 2px;
-      }
-
-      .cls-10, .cls-101, .cls-102, .cls-111, .cls-112, .cls-114, .cls-116, .cls-12, .cls-120, .cls-21, .cls-27, .cls-28, .cls-29, .cls-30, .cls-31, .cls-32, .cls-33, .cls-34, .cls-36, .cls-40, .cls-41, .cls-6, .cls-67, .cls-79, .cls-8, .cls-85, .cls-86 {
-        fill: none;
       }
 
       .cls-7 {
@@ -4922,32 +4938,24 @@ sim-playground {
         stroke: #90caf9;
       }
 
-      .cls-10, .cls-109, .cls-111, .cls-15, .cls-17, .cls-21, .cls-27, .cls-30, .cls-31, .cls-32, .cls-34, .cls-40, .cls-41, .cls-79, .cls-8, .cls-85, .cls-98, .cls-99 {
-        stroke-miterlimit: 10;
-      }
-
-      .cls-10, .cls-12, .cls-120, .cls-14, .cls-15, .cls-17, .cls-22, .cls-23, .cls-28, .cls-31, .cls-40, .cls-41, .cls-79, .cls-8, .cls-85, .cls-98, .cls-99 {
-        stroke-width: 1.5px;
-      }
-
       .cls-9 {
         fill: #acd7fa;
       }
 
       .cls-10 {
-        stroke: #ffc8bd;
+        stroke: #ffd0c7;
       }
 
-      .cls-11, .cls-19 {
+      .cls-11, .cls-23 {
+        fill: #ffd0c7;
+      }
+
+      .cls-12, .cls-19 {
         fill: #455a64;
       }
 
-      .cls-102, .cls-11, .cls-113, .cls-115, .cls-117, .cls-36, .cls-38, .cls-68, .cls-77, .cls-80 {
+      .cls-103, .cls-109, .cls-111, .cls-113, .cls-12, .cls-35, .cls-66, .cls-67, .cls-76, .cls-85 {
         stroke: #263238;
-      }
-
-      .cls-12 {
-        stroke: #ffb8a1;
       }
 
       .cls-13 {
@@ -4958,15 +4966,15 @@ sim-playground {
         fill: #eceff1;
       }
 
-      .cls-109, .cls-14, .cls-15, .cls-17, .cls-31, .cls-41, .cls-98, .cls-99 {
+      .cls-105, .cls-14, .cls-15, .cls-17, .cls-30, .cls-38, .cls-78, .cls-83, .cls-97, .cls-98 {
         stroke: #455a64;
       }
 
-      .cls-106, .cls-107, .cls-109, .cls-15, .cls-17, .cls-20, .cls-68, .cls-77, .cls-95 {
+      .cls-100, .cls-101, .cls-105, .cls-15, .cls-17, .cls-20, .cls-67, .cls-76, .cls-94 {
         fill: #fff;
       }
 
-      .cls-18, .cls-38 {
+      .cls-18, .cls-35 {
         fill: #aafae3;
       }
 
@@ -4975,328 +4983,303 @@ sim-playground {
       }
 
       .cls-22, .cls-24 {
-        fill: #ffb0a1;
+        fill: #ffbfb2;
       }
 
-      .cls-22, .cls-23, .cls-27, .cls-28 {
+      .cls-101, .cls-22, .cls-23, .cls-26, .cls-27 {
         stroke: #37474f;
       }
 
       .cls-25 {
-        fill: #ffab91;
-      }
-
-      .cls-26 {
         fill: #37474f;
       }
 
-      .cls-29, .cls-30 {
+      .cls-28, .cls-29 {
         stroke: #ff6040;
       }
 
-      .cls-32, .cls-33 {
+      .cls-31, .cls-32 {
         stroke: #d1d1d1;
       }
 
-      .cls-33 {
+      .cls-32 {
         stroke-linejoin: bevel;
       }
 
-      .cls-35 {
-        fill: #405359;
+      .cls-36, .cls-37 {
+        stroke: #b0bec5;
       }
 
       .cls-37 {
-        fill: #263238;
+        stroke-dasharray: 2.02 3.03;
       }
 
       .cls-39 {
         fill: #b0bec5;
       }
 
-      .cls-40, .cls-79, .cls-85 {
-        stroke: #b0bec5;
-      }
-
       .cls-40 {
-        stroke-dasharray: 1.94 2.91;
-      }
-
-      .cls-42 {
         fill: url(#radial-gradient);
       }
 
-      .cls-43 {
+      .cls-41 {
         fill: url(#radial-gradient-2);
       }
 
-      .cls-44 {
+      .cls-42 {
         fill: url(#radial-gradient-3);
       }
 
-      .cls-45 {
+      .cls-43 {
         fill: url(#radial-gradient-4);
       }
 
-      .cls-46 {
+      .cls-44 {
         fill: url(#radial-gradient-5);
       }
 
-      .cls-47 {
+      .cls-45 {
         fill: url(#radial-gradient-11);
       }
 
-      .cls-48 {
+      .cls-46 {
         fill: url(#radial-gradient-12);
       }
 
-      .cls-49 {
+      .cls-47 {
         fill: url(#radial-gradient-13);
       }
 
-      .cls-50 {
+      .cls-48 {
         fill: url(#radial-gradient-14);
       }
 
-      .cls-51 {
+      .cls-49 {
         fill: url(#radial-gradient-15);
       }
 
-      .cls-52 {
+      .cls-50 {
         fill: url(#radial-gradient-16);
       }
 
-      .cls-53 {
+      .cls-51 {
         fill: url(#radial-gradient-17);
       }
 
-      .cls-54 {
+      .cls-52 {
         fill: url(#radial-gradient-18);
       }
 
-      .cls-55 {
+      .cls-53 {
         fill: url(#radial-gradient-21);
       }
 
-      .cls-56 {
+      .cls-54 {
         fill: url(#radial-gradient-22);
       }
 
-      .cls-57 {
+      .cls-55 {
         fill: url(#radial-gradient-23);
       }
 
-      .cls-58 {
+      .cls-56 {
         fill: url(#radial-gradient-24);
       }
 
-      .cls-59 {
+      .cls-57 {
         fill: url(#radial-gradient-25);
       }
 
-      .cls-61 {
+      .cls-59 {
         fill: url(#radial-gradient-30);
       }
 
-      .cls-62 {
+      .cls-60 {
         fill: url(#radial-gradient-31);
       }
 
-      .cls-63 {
+      .cls-61 {
         fill: url(#radial-gradient-32);
       }
 
-      .cls-64 {
+      .cls-62 {
         fill: url(#radial-gradient-33);
       }
 
-      .cls-65 {
+      .cls-63 {
         fill: url(#radial-gradient-34);
       }
 
-      .cls-66 {
+      .cls-64 {
         fill: url(#radial-gradient-35);
       }
 
-      .cls-106, .cls-67 {
+      .cls-100, .cls-65 {
         stroke: #90a4ae;
       }
 
-      .cls-69 {
+      .cls-68 {
         fill: url(#radial-gradient-36);
       }
 
-      .cls-70 {
+      .cls-69 {
         fill: url(#radial-gradient-37);
       }
 
-      .cls-71 {
+      .cls-70 {
         fill: url(#radial-gradient-38);
       }
 
-      .cls-72 {
+      .cls-71 {
         fill: url(#radial-gradient-39);
       }
 
-      .cls-73 {
+      .cls-72 {
         fill: url(#radial-gradient-40);
       }
 
-      .cls-74 {
+      .cls-73 {
         fill: url(#radial-gradient-41);
       }
 
-      .cls-75 {
+      .cls-74 {
         fill: url(#radial-gradient-42);
       }
 
-      .cls-76 {
+      .cls-75 {
         fill: url(#radial-gradient-43);
       }
 
-      .cls-78 {
+      .cls-77 {
         fill: url(#radial-gradient-44);
       }
 
-      .cls-79 {
+      .cls-78 {
         stroke-dasharray: 2.03 3.04;
       }
 
-      .cls-81 {
-        opacity: 0;
+      .cls-79 {
         fill: url(#radial-gradient-45);
       }
 
-      .cls-82 {
+      .cls-80 {
         fill: url(#radial-gradient-46);
       }
 
-      .cls-83 {
+      .cls-81 {
         fill: url(#linear-gradient);
       }
 
-      .cls-84 {
+      .cls-82 {
         fill: url(#linear-gradient-2);
       }
 
-      .cls-85 {
+      .cls-83 {
         stroke-dasharray: 2.08 3.12;
       }
 
-      .cls-86 {
+      .cls-84 {
         stroke-linecap: square;
         stroke: url(#linear-gradient-3);
       }
 
-      .cls-87 {
+      .cls-86 {
         fill: url(#radial-gradient-47);
       }
 
-      .cls-88 {
+      .cls-87 {
         fill: url(#radial-gradient-48);
       }
 
-      .cls-89 {
+      .cls-88 {
         fill: #00ff50;
       }
 
-      .cls-103, .cls-89, .cls-90, .cls-91, .cls-92, .cls-93, .cls-94, .cls-95, .cls-96 {
+      .cls-88, .cls-89, .cls-90, .cls-91, .cls-92, .cls-93, .cls-94, .cls-95, .cls-99 {
         stroke: #546e7a;
       }
 
-      .cls-90 {
+      .cls-89 {
         fill: #1919ff;
       }
 
-      .cls-91 {
+      .cls-90 {
         fill: red;
       }
 
-      .cls-92 {
+      .cls-91 {
         fill: #00e5ff;
       }
 
-      .cls-93 {
+      .cls-92 {
         fill: #ffea00;
       }
 
-      .cls-94 {
+      .cls-93 {
         fill: #ff00fb;
       }
 
-      .cls-117, .cls-97 {
+      .cls-113, .cls-96 {
         fill: #ff3d00;
       }
 
-      .cls-98, .cls-99 {
+      .cls-97, .cls-98 {
         fill: #e7ebed;
       }
 
-      .cls-100 {
-        fill: url(#linear-gradient-4);
-      }
-
-      .cls-103 {
+      .cls-99 {
         fill: #00eaff;
       }
 
-      .cls-104 {
-        fill: url(#linear-gradient-5);
-      }
-
-      .cls-105 {
-        fill: #ffd0c7;
-      }
-
-      .cls-107 {
-        stroke: #424242;
-      }
-
-      .cls-108 {
+      .cls-102 {
         fill: #ff5252;
       }
 
-      .cls-110 {
+      .cls-104 {
+        fill: #263238;
+      }
+
+      .cls-106 {
         fill: url(#radial-gradient-49);
       }
 
-      .cls-111 {
+      .cls-107 {
         stroke: #405359;
       }
 
-      .cls-112 {
+      .cls-108 {
         stroke: blue;
       }
 
-      .cls-113 {
+      .cls-109 {
         fill: blue;
       }
 
-      .cls-114 {
+      .cls-110 {
         stroke: #00e676;
       }
 
-      .cls-115 {
+      .cls-111 {
         fill: #00e676;
       }
 
-      .cls-116 {
+      .cls-112 {
         stroke: #ff3d00;
       }
 
-      .cls-118 {
+      .cls-114 {
         fill: url(#radial-gradient-50);
       }
 
-      .cls-119 {
+      .cls-115 {
         fill: #90caf9;
       }
 
-      .cls-121 {
+      .cls-117 {
         fill: #546e7a;
       }
 
-      .cls-122 {
+      .cls-118 {
         fill-rule: evenodd;
       }
     </style>
@@ -5364,48 +5347,6 @@ sim-playground {
     </linearGradient>
     <radialGradient id="radial-gradient-47" cx="53.83" cy="39.24" r="2" xlink:href="#radial-gradient"/>
     <radialGradient id="radial-gradient-48" cx="14.54" cy="39.37" r="2" gradientTransform="matrix(0.98, -0.21, 0.21, 0.98, -4.24, 4.12)" xlink:href="#radial-gradient"/>
-    <linearGradient id="linear-gradient-4" x1="128.45" y1="128.7" x2="195.38" y2="128.7" gradientTransform="translate(-140.67 -210.75) scale(1.17 2.11)" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#fffb23" stop-opacity="0"/>
-      <stop offset="0.06" stop-color="#fffb23" stop-opacity="0.2"/>
-      <stop offset="0.12" stop-color="#fffb23" stop-opacity="0.41"/>
-      <stop offset="0.18" stop-color="#fffb23" stop-opacity="0.59"/>
-      <stop offset="0.25" stop-color="#fffb23" stop-opacity="0.74"/>
-      <stop offset="0.31" stop-color="#fffb23" stop-opacity="0.85"/>
-      <stop offset="0.38" stop-color="#fffb23" stop-opacity="0.93"/>
-      <stop offset="0.44" stop-color="#fffb23" stop-opacity="0.98"/>
-      <stop offset="0.5" stop-color="#fffb23"/>
-      <stop offset="0.56" stop-color="#fffb27" stop-opacity="0.98"/>
-      <stop offset="0.62" stop-color="#fffb31" stop-opacity="0.93"/>
-      <stop offset="0.69" stop-color="#fffc43" stop-opacity="0.85"/>
-      <stop offset="0.75" stop-color="#fffc5c" stop-opacity="0.74"/>
-      <stop offset="0.82" stop-color="#fffd7d" stop-opacity="0.59"/>
-      <stop offset="0.88" stop-color="#fffda4" stop-opacity="0.41"/>
-      <stop offset="0.94" stop-color="#fffed2" stop-opacity="0.2"/>
-      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="linear-gradient-5" x1="129.56" y1="112.66" x2="194.27" y2="112.66" gradientTransform="translate(-147.18 -247.5) scale(1.21 2.46)" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#1919ff" stop-opacity="0"/>
-      <stop offset="0.01" stop-color="#1919ff" stop-opacity="0.07"/>
-      <stop offset="0.05" stop-color="#1919ff" stop-opacity="0.26"/>
-      <stop offset="0.09" stop-color="#1919ff" stop-opacity="0.44"/>
-      <stop offset="0.13" stop-color="#1919ff" stop-opacity="0.59"/>
-      <stop offset="0.17" stop-color="#1919ff" stop-opacity="0.72"/>
-      <stop offset="0.21" stop-color="#1919ff" stop-opacity="0.82"/>
-      <stop offset="0.26" stop-color="#1919ff" stop-opacity="0.9"/>
-      <stop offset="0.32" stop-color="#1919ff" stop-opacity="0.96"/>
-      <stop offset="0.39" stop-color="#1919ff" stop-opacity="0.99"/>
-      <stop offset="0.5" stop-color="#1919ff"/>
-      <stop offset="0.62" stop-color="#1b1bff" stop-opacity="0.99"/>
-      <stop offset="0.68" stop-color="#2323ff" stop-opacity="0.96"/>
-      <stop offset="0.74" stop-color="#3030ff" stop-opacity="0.9"/>
-      <stop offset="0.79" stop-color="#4242ff" stop-opacity="0.82"/>
-      <stop offset="0.83" stop-color="#5a5aff" stop-opacity="0.72"/>
-      <stop offset="0.88" stop-color="#77f" stop-opacity="0.59"/>
-      <stop offset="0.92" stop-color="#9a9aff" stop-opacity="0.44"/>
-      <stop offset="0.95" stop-color="#c2c2ff" stop-opacity="0.26"/>
-      <stop offset="0.99" stop-color="#eef" stop-opacity="0.07"/>
-      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-    </linearGradient>
     <radialGradient id="radial-gradient-49" cx="47.99" cy="64.8" r="95.76" gradientTransform="translate(28.63 38.99) scale(0.4 0.41)" gradientUnits="userSpaceOnUse">
       <stop offset="0" stop-color="#fff"/>
       <stop offset="0.09" stop-color="#fefefe" stop-opacity="0.97"/>
@@ -5418,7 +5359,7 @@ sim-playground {
     </radialGradient>
     <radialGradient id="radial-gradient-50" cx="47.99" cy="28.8" r="34.09" gradientTransform="translate(-6.4 -17.56) scale(1.13 1.44)" xlink:href="#radial-gradient-49"/>
   </defs>
-  <title>BlocksOKAsset 788</title>
+  <title>BlocksAsset 831</title>
   <g id="Layer_2" data-name="Layer 2">
     <g id="Event_bg">
       <g id="Events_bg">
@@ -5507,37 +5448,37 @@ sim-playground {
       <g id="event_Bg-2" data-name="event_Bg">
         <path id="Ev_Bg_Thymio-2" data-name="Ev_Bg_Thymio" class="cls-10" d="M48.05,6A57.56,57.56,0,0,0,7.28,22.76a4.17,4.17,0,0,0-1.22,3L6,86.42a3.5,3.5,0,0,0,3.49,3.5l77,.08a3.5,3.5,0,0,0,3.5-3.49L90,25.82a4.17,4.17,0,0,0-1.21-3A57.56,57.56,0,0,0,48.05,6Z"/>
         <g>
-          <circle id="center-2" data-name="center" class="cls-3" cx="48.44" cy="48" r="8.38"/>
+          <circle id="center-2" data-name="center" class="cls-11" cx="48.44" cy="48" r="8.38"/>
           <g id="up-2" data-name="up">
-            <path class="cls-3" d="M41.07,32.43c-.55,0-.78-.39-.51-.87l7.3-12.81a.53.53,0,0,1,1,0l7.44,12.72c.28.48,0,.87-.5.88Z"/>
+            <path class="cls-11" d="M41.07,32.43c-.55,0-.78-.39-.51-.87l7.3-12.81a.53.53,0,0,1,1,0l7.44,12.72c.28.48,0,.87-.5.88Z"/>
           </g>
           <g id="down-2" data-name="down">
-            <path class="cls-3" d="M41.07,63.57c-.55,0-.78.39-.51.87l7.3,12.81a.53.53,0,0,0,1,0l7.44-12.72c.28-.48,0-.87-.5-.88Z"/>
+            <path class="cls-11" d="M41.07,63.57c-.55,0-.78.39-.51.87l7.3,12.81a.53.53,0,0,0,1,0l7.44-12.72c.28-.48,0-.87-.5-.88Z"/>
           </g>
           <g id="right-2" data-name="right">
-            <path class="cls-3" d="M64,40.63c0-.55.39-.78.87-.51l12.81,7.3a.53.53,0,0,1,0,1L65,55.87c-.48.28-.87.05-.88-.5Z"/>
+            <path class="cls-11" d="M64,40.63c0-.55.39-.78.87-.51l12.81,7.3a.53.53,0,0,1,0,1L65,55.87c-.48.28-.87.05-.88-.5Z"/>
           </g>
           <g id="left-2" data-name="left">
-            <path class="cls-3" d="M32.87,40.63c0-.55-.39-.78-.87-.51l-12.81,7.3a.53.53,0,0,0,0,1l12.72,7.44c.48.28.87.05.88-.5Z"/>
+            <path class="cls-11" d="M32.87,40.63c0-.55-.39-.78-.87-.51l-12.81,7.3a.53.53,0,0,0,0,1l12.72,7.44c.48.28.87.05.88-.5Z"/>
           </g>
         </g>
       </g>
       <g id="StatesOff">
-        <path id="Btn2_State0" class="cls-11" d="M38.64,16.63a2.7,2.7,0,0,1-2.36-4A2.73,2.73,0,0,1,38,11.33a38.21,38.21,0,0,1,20.06,0,2.73,2.73,0,0,1,1.68,1.33,2.7,2.7,0,0,1-2.37,4,2.8,2.8,0,0,1-.7-.09,32.76,32.76,0,0,0-17.28,0A2.82,2.82,0,0,1,38.64,16.63Z"/>
-        <path id="Btn2_State1" class="cls-11" d="M78.66,33.21a2.7,2.7,0,0,1-2.33-1.35A32.72,32.72,0,0,0,64.11,19.64a2.69,2.69,0,0,1,1.36-5,2.64,2.64,0,0,1,1.34.36A38.21,38.21,0,0,1,81,29.16a2.71,2.71,0,0,1,.25,2.12,2.67,2.67,0,0,1-1.36,1.63A2.62,2.62,0,0,1,78.66,33.21Z"/>
-        <path id="Btn2_State2" class="cls-11" d="M82,60a2.72,2.72,0,0,1-.84-.13,2.68,2.68,0,0,1-1.75-3.26,32.76,32.76,0,0,0,0-17.28,2.68,2.68,0,0,1,1.75-3.25A2.74,2.74,0,0,1,82,36a2.71,2.71,0,0,1,2.61,2,37.93,37.93,0,0,1,0,20.06A2.71,2.71,0,0,1,82,60Z"/>
-        <path id="Btn2_State3" class="cls-11" d="M65.47,81.35a2.69,2.69,0,0,1-1.36-5A32.82,32.82,0,0,0,76.33,64.1a2.69,2.69,0,0,1,2.33-1.34,2.7,2.7,0,0,1,2.58,1.92A2.74,2.74,0,0,1,81,66.81,38.33,38.33,0,0,1,66.82,81,2.81,2.81,0,0,1,65.47,81.35Z"/>
-        <path id="Btn2_State4" class="cls-11" d="M48,86a37.77,37.77,0,0,1-10-1.35,2.7,2.7,0,0,1-1.68-1.33,2.7,2.7,0,0,1,2.36-4,2.83,2.83,0,0,1,.71.1,32.76,32.76,0,0,0,17.28,0,2.82,2.82,0,0,1,.7-.1,2.69,2.69,0,0,1,2.55,1.85,2.66,2.66,0,0,1-.18,2.12A2.7,2.7,0,0,1,58,84.63,37.77,37.77,0,0,1,48,86Z"/>
-        <path id="Btn2_State5" class="cls-11" d="M30.51,81.35A2.78,2.78,0,0,1,29.16,81,38.26,38.26,0,0,1,15,66.81a2.73,2.73,0,0,1-.25-2.13,2.69,2.69,0,0,1,1.36-1.63,2.74,2.74,0,0,1,1.22-.29,2.69,2.69,0,0,1,2.33,1.34A32.82,32.82,0,0,0,31.87,76.33a2.69,2.69,0,0,1-1.36,5Z"/>
-        <path id="Btn2_State6" class="cls-11" d="M13.94,60a2.7,2.7,0,0,1-2.6-2,37.93,37.93,0,0,1,0-20.06A2.71,2.71,0,0,1,14,36a2.74,2.74,0,0,1,.84.14,2.68,2.68,0,0,1,1.75,3.25,32.76,32.76,0,0,0,0,17.28,2.68,2.68,0,0,1-1.75,3.26A2.74,2.74,0,0,1,13.94,60Z"/>
-        <path id="Btn2_State7" class="cls-11" d="M17.32,33.21a2.75,2.75,0,0,1-1.22-.3,2.63,2.63,0,0,1-1.36-1.63A2.71,2.71,0,0,1,15,29.16,38.26,38.26,0,0,1,29.16,15a2.7,2.7,0,0,1,2.71,4.66A32.8,32.8,0,0,0,19.65,31.86,2.7,2.7,0,0,1,17.32,33.21Z"/>
+        <path id="Btn2_State0" class="cls-12" d="M38.64,16.63a2.7,2.7,0,0,1-2.36-4A2.73,2.73,0,0,1,38,11.33a38.21,38.21,0,0,1,20.06,0,2.73,2.73,0,0,1,1.68,1.33,2.7,2.7,0,0,1-2.37,4,2.8,2.8,0,0,1-.7-.09,32.76,32.76,0,0,0-17.28,0A2.82,2.82,0,0,1,38.64,16.63Z"/>
+        <path id="Btn2_State1" class="cls-12" d="M78.66,33.21a2.7,2.7,0,0,1-2.33-1.35A32.72,32.72,0,0,0,64.11,19.64a2.69,2.69,0,0,1,1.36-5,2.64,2.64,0,0,1,1.34.36A38.21,38.21,0,0,1,81,29.16a2.71,2.71,0,0,1,.25,2.12,2.67,2.67,0,0,1-1.36,1.63A2.62,2.62,0,0,1,78.66,33.21Z"/>
+        <path id="Btn2_State2" class="cls-12" d="M82,60a2.72,2.72,0,0,1-.84-.13,2.68,2.68,0,0,1-1.75-3.26,32.76,32.76,0,0,0,0-17.28,2.68,2.68,0,0,1,1.75-3.25A2.74,2.74,0,0,1,82,36a2.71,2.71,0,0,1,2.61,2,37.93,37.93,0,0,1,0,20.06A2.71,2.71,0,0,1,82,60Z"/>
+        <path id="Btn2_State3" class="cls-12" d="M65.47,81.35a2.69,2.69,0,0,1-1.36-5A32.82,32.82,0,0,0,76.33,64.1a2.69,2.69,0,0,1,2.33-1.34,2.7,2.7,0,0,1,2.58,1.92A2.74,2.74,0,0,1,81,66.81,38.33,38.33,0,0,1,66.82,81,2.81,2.81,0,0,1,65.47,81.35Z"/>
+        <path id="Btn2_State4" class="cls-12" d="M48,86a37.77,37.77,0,0,1-10-1.35,2.7,2.7,0,0,1-1.68-1.33,2.7,2.7,0,0,1,2.36-4,2.83,2.83,0,0,1,.71.1,32.76,32.76,0,0,0,17.28,0,2.82,2.82,0,0,1,.7-.1,2.69,2.69,0,0,1,2.55,1.85,2.66,2.66,0,0,1-.18,2.12A2.7,2.7,0,0,1,58,84.63,37.77,37.77,0,0,1,48,86Z"/>
+        <path id="Btn2_State5" class="cls-12" d="M30.51,81.35A2.78,2.78,0,0,1,29.16,81,38.26,38.26,0,0,1,15,66.81a2.73,2.73,0,0,1-.25-2.13,2.69,2.69,0,0,1,1.36-1.63,2.74,2.74,0,0,1,1.22-.29,2.69,2.69,0,0,1,2.33,1.34A32.82,32.82,0,0,0,31.87,76.33a2.69,2.69,0,0,1-1.36,5Z"/>
+        <path id="Btn2_State6" class="cls-12" d="M13.94,60a2.7,2.7,0,0,1-2.6-2,37.93,37.93,0,0,1,0-20.06A2.71,2.71,0,0,1,14,36a2.74,2.74,0,0,1,.84.14,2.68,2.68,0,0,1,1.75,3.25,32.76,32.76,0,0,0,0,17.28,2.68,2.68,0,0,1-1.75,3.26A2.74,2.74,0,0,1,13.94,60Z"/>
+        <path id="Btn2_State7" class="cls-12" d="M17.32,33.21a2.75,2.75,0,0,1-1.22-.3,2.63,2.63,0,0,1-1.36-1.63A2.71,2.71,0,0,1,15,29.16,38.26,38.26,0,0,1,29.16,15a2.7,2.7,0,0,1,2.71,4.66A32.8,32.8,0,0,0,19.65,31.86,2.7,2.7,0,0,1,17.32,33.21Z"/>
       </g>
     </g>
     <g id="CircleLeds_adv">
       <g id="act_Bg_Thymio">
         <path id="Ev_Bg_Thymio-3" data-name="Ev_Bg_Thymio" class="cls-8" d="M48,4.18A60.06,60.06,0,0,0,5.5,21.66a4.34,4.34,0,0,0-1.27,3.1L4.16,89.71a2,2,0,0,0,2,2l83.58.09a2,2,0,0,0,2-2l.07-64.95a4.37,4.37,0,0,0-1.26-3.1A60.07,60.07,0,0,0,48,4.18Z"/>
       </g>
-      <path id="Ev_Bg_Thymio-4" data-name="Ev_Bg_Thymio" class="cls-12" d="M48,4.18A60.09,60.09,0,0,0,5.37,21.78a4,4,0,0,0-1.14,2.8L4.16,89.71a2,2,0,0,0,2,2l83.58.09a2,2,0,0,0,2-2l.07-65.13a4,4,0,0,0-1.14-2.8A60.06,60.06,0,0,0,48,4.18Z"/>
+      <path id="Ev_Bg_Thymio-4" data-name="Ev_Bg_Thymio" class="cls-3" d="M48,4.18A60.09,60.09,0,0,0,5.37,21.78a4,4,0,0,0-1.14,2.8L4.16,89.71a2,2,0,0,0,2,2l83.58.09a2,2,0,0,0,2-2l.07-65.13a4,4,0,0,0-1.14-2.8A60.06,60.06,0,0,0,48,4.18Z"/>
       <g id="StatesOff_adv">
         <path id="Btn3_State0_adv" class="cls-6" d="M38.64,16.63a2.7,2.7,0,0,1-.68-5.3,38.21,38.21,0,0,1,20.06,0,2.71,2.71,0,0,1,1.67,1.33,2.69,2.69,0,0,1-2.36,4,2.74,2.74,0,0,1-.7-.09,32.79,32.79,0,0,0-17.29,0A2.74,2.74,0,0,1,38.64,16.63Z"/>
         <path id="Btn3_State1_adv" class="cls-6" d="M78.66,33.21a2.68,2.68,0,0,1-2.33-1.35A32.8,32.8,0,0,0,64.11,19.64,2.69,2.69,0,0,1,66.81,15,38.28,38.28,0,0,1,81,29.16a2.71,2.71,0,0,1,.25,2.12,2.65,2.65,0,0,1-1.37,1.63A2.55,2.55,0,0,1,78.66,33.21Z"/>
@@ -5621,12 +5562,12 @@ sim-playground {
         <path class="cls-16" d="M41.5,46.14a12.07,12.07,0,0,1-17,17,12.07,12.07,0,1,0,17-17Z"/>
       </g>
       <g id="Fall_lines">
-        <path class="cls-3" d="M64.56,28c-.42-.89-1.53-1.71-3.41-2-5-.87-14.81-4-20.28-6C36.75,18.37,29.92,1,29.92,1H10.22s8.74,13.57,11,16.46S25,25,30.1,28.61c4,2.88,9,4.37,15,7.63,4.34,2.33,8,1.2,8.09-1,0-1.71-1.07-3-5.1-4.39a31.82,31.82,0,0,1-6.56-3.26c7.21,1.84,17.7,4.5,19.56,4.94,2.89.68,5.76-.14,6-2.07S64.56,28,64.56,28Z"/>
+        <path class="cls-11" d="M64.56,28c-.42-.89-1.53-1.71-3.41-2-5-.87-14.81-4-20.28-6C36.75,18.37,29.92,1,29.92,1H10.22s8.74,13.57,11,16.46S25,25,30.1,28.61c4,2.88,9,4.37,15,7.63,4.34,2.33,8,1.2,8.09-1,0-1.71-1.07-3-5.1-4.39a31.82,31.82,0,0,1-6.56-3.26c7.21,1.84,17.7,4.5,19.56,4.94,2.89.68,5.76-.14,6-2.07S64.56,28,64.56,28Z"/>
         <path class="cls-24" d="M17.41,1H10.22s8.74,13.57,11,16.46S25,25,30.1,28.61c4,2.88,9,4.37,15,7.63,2.71,1.46,5.17,1.56,6.65.89L37.51,30.29a20.83,20.83,0,0,1-7.17-6C27.73,20.49,17.41,1,17.41,1Z"/>
-        <path class="cls-25" d="M39.25,25.27c.93.49,1.58,1.48,3.2,2.17,8.16,3.48,17,4.67,18.65,5.05,2.89.68,4.91-.68,5.13-2.61,0,0-1.25,1.47-5.59.6s-16.91-3.7-16.91-3.7S40,24.71,39.25,25.27Z"/>
-        <path class="cls-26" d="M65.21,27.11A5.5,5.5,0,0,0,61.31,25a109.47,109.47,0,0,1-20-5.95C37.34,17.26,32.18,4.66,31,1h-2c0,.1,5.85,17.34,11.53,19.87,1.38.61,3,1.24,4.85,1.87a1,1,0,0,0-.52.65,1,1,0,0,0,.75,1.2L64.33,29h0s1.84.39,1.73,1.34a1.15,1.15,0,0,1-.55.81,5.7,5.7,0,0,1-4.22.41c-2.71-.64-16.18-3.55-17.72-3.88a43.71,43.71,0,0,1-3.78-2.46,1,1,0,0,0-1.39.23,1,1,0,0,0,.23,1.4,35.78,35.78,0,0,0,9.1,4.94c4.13,1.48,4.46,2.51,4.43,3.43a1.14,1.14,0,0,1-.65.94c-1.1.63-3.36.64-6-.76s-4.89-2.44-7-3.38a46.54,46.54,0,0,1-7.92-4.19,22.8,22.8,0,0,1-6.51-7.74,29.45,29.45,0,0,0-2.12-3.25C20.1,14.37,13,3.14,11.45,1H9.23c0,.2,9,14.21,11.26,17.08a26.36,26.36,0,0,1,2,3,24.85,24.85,0,0,0,7.07,8.35,47.75,47.75,0,0,0,8.25,4.38c2.16,1,4.4,2,6.87,3.32a11,11,0,0,0,5.07,1.41,5.63,5.63,0,0,0,2.84-.68,3.13,3.13,0,0,0,1.65-2.62A4.16,4.16,0,0,0,52,31.49c3.78.82,7.62,1.67,8.92,2a9.53,9.53,0,0,0,2.21.27,6.36,6.36,0,0,0,3.62-1,3.11,3.11,0,0,0,1.38-2.21C68.32,28.54,66.51,27.49,65.21,27.11Z"/>
+        <path class="cls-24" d="M39.25,25.27c.93.49,1.58,1.48,3.2,2.17,8.16,3.48,17,4.67,18.65,5.05,2.89.68,4.91-.68,5.13-2.61,0,0-1.25,1.47-5.59.6S45.17,27.1,44.41,26.93a2.69,2.69,0,0,1-1.27-.46C42.77,26.25,40,24.74,39.25,25.27Z"/>
+        <path class="cls-25" d="M65.21,27.11A5.5,5.5,0,0,0,61.31,25a109.47,109.47,0,0,1-20-5.95C37.34,17.26,32.18,4.66,31,1h-2c0,.1,5.85,17.34,11.53,19.87,1.38.61,3,1.24,4.85,1.87a1,1,0,0,0-.52.65,1,1,0,0,0,.75,1.2L64.33,29h0s1.84.39,1.73,1.34a1.15,1.15,0,0,1-.55.81,5.7,5.7,0,0,1-4.22.41c-2.71-.64-16.18-3.55-17.72-3.88a43.71,43.71,0,0,1-3.78-2.46,1,1,0,0,0-1.39.23,1,1,0,0,0,.23,1.4,35.78,35.78,0,0,0,9.1,4.94c4.13,1.48,4.46,2.51,4.43,3.43a1.14,1.14,0,0,1-.65.94c-1.1.63-3.36.64-6-.76s-4.89-2.44-7-3.38a46.54,46.54,0,0,1-7.92-4.19,22.8,22.8,0,0,1-6.51-7.74,29.45,29.45,0,0,0-2.12-3.25C20.1,14.37,13,3.14,11.45,1H9.23c0,.2,9,14.21,11.26,17.08a26.36,26.36,0,0,1,2,3,24.85,24.85,0,0,0,7.07,8.35,47.75,47.75,0,0,0,8.25,4.38c2.16,1,4.4,2,6.87,3.32a11,11,0,0,0,5.07,1.41,5.63,5.63,0,0,0,2.84-.68,3.13,3.13,0,0,0,1.65-2.62A4.16,4.16,0,0,0,52,31.49c3.78.82,7.62,1.67,8.92,2a9.53,9.53,0,0,0,2.21.27,6.36,6.36,0,0,0,3.62-1,3.11,3.11,0,0,0,1.38-2.21C68.32,28.54,66.51,27.49,65.21,27.11Z"/>
       </g>
-      <line id="Ground" class="cls-27" x1="8" y1="69.85" x2="88" y2="69.85"/>
+      <line id="Ground" class="cls-26" x1="8" y1="69.85" x2="88" y2="69.85"/>
       <g id="MotionLinesL">
         <path class="cls-7" d="M23.1,35h-6a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z"/>
         <path class="cls-7" d="M25.11,31a1,1,0,0,1-.5-.13l-5.2-3a1,1,0,0,1,1-1.74l5.2,3a1,1,0,0,1-.5,1.87Z"/>
@@ -5644,8 +5585,8 @@ sim-playground {
         <path class="cls-24" d="M26.27,74a2,2,0,0,1-.44-1.88L38,83.16s.65,1,.27,1.31C38.15,84.56,26.27,74,26.27,74Z"/>
         <path class="cls-24" d="M34.6,86.5C34.48,86.42,22.49,76,22.49,76a1,1,0,0,1-.26-1.37c.05,0,.13-.22.18-.28l11.9,10.51A1.63,1.63,0,0,1,34.84,86C34.85,86.4,34.6,86.5,34.6,86.5Z"/>
         <path class="cls-24" d="M47.79,96c.55-5.81,5.83-9.28,8.67-11.13,4.68-3.05,4.85-4.57,4.85-4.57a1.84,1.84,0,0,1,.61,1.5c-.08.72-.67,1.9-3,3.41-6.42,4.11-7,8.54-7.08,9.8l0,1Z"/>
-        <path class="cls-28" d="M34,87,22.18,76.69a1.92,1.92,0,0,1-.38-2.8c1.52-1.87,3.86.52,3.86.52l12,10.48"/>
-        <line class="cls-28" x1="21.63" y1="79.96" x2="32.01" y2="88.96"/>
+        <path class="cls-27" d="M34,87,22.18,76.69a1.92,1.92,0,0,1-.38-2.8c1.52-1.87,3.86.52,3.86.52l12,10.48"/>
+        <line class="cls-27" x1="21.63" y1="79.96" x2="32.01" y2="88.96"/>
       </g>
       <g id="fx-3" data-name="fx">
         <path class="cls-7" d="M41.51,16.83a1,1,0,0,1-1-1V4.72a1,1,0,1,1,2,0V15.83A1,1,0,0,1,41.51,16.83Z"/>
@@ -5664,14 +5605,14 @@ sim-playground {
     </g>
     <g id="Ev_Accel_bas">
       <g id="Ground_accel_0">
-        <polyline class="cls-29" points="14.83 62.75 12 65.58 9.17 62.75"/>
-        <line class="cls-29" x1="12" y1="65.58" x2="12" y2="53.58"/>
-        <line id="ground-2" data-name="ground" class="cls-30" x1="7.97" y1="69.61" x2="88.03" y2="69.61"/>
+        <polyline class="cls-28" points="14.83 62.75 12 65.58 9.17 62.75"/>
+        <line class="cls-28" x1="12" y1="65.58" x2="12" y2="53.58"/>
+        <line id="ground-2" data-name="ground" class="cls-29" x1="7.97" y1="69.61" x2="88.03" y2="69.61"/>
       </g>
       <g id="Ground_accel_1">
-        <polyline class="cls-29" points="14.83 73.19 12 76.02 9.17 73.19"/>
-        <line class="cls-29" x1="12" y1="76.02" x2="12" y2="64.02"/>
-        <line id="ground-3" data-name="ground" class="cls-30" x1="7.97" y1="80.05" x2="88.03" y2="80.05"/>
+        <polyline class="cls-28" points="14.83 73.19 12 76.02 9.17 73.19"/>
+        <line class="cls-28" x1="12" y1="76.02" x2="12" y2="64.02"/>
+        <line id="ground-3" data-name="ground" class="cls-29" x1="7.97" y1="80.05" x2="88.03" y2="80.05"/>
       </g>
       <g id="ThymioUpsideDown">
         <path class="cls-14" d="M34.06,46.84h4.07c-1.33-.87-1.57-2.63-2-3.32a2.06,2.06,0,0,0-1.63-.85h-.83a2.1,2.1,0,0,0-1.63.85c-.46.69-.7,2.45-2,3.33h4.08Z"/>
@@ -5687,10 +5628,10 @@ sim-playground {
           <path class="cls-14" d="M39.47,76.92h-3a.89.89,0,0,1-.9-.89V70.33a.89.89,0,0,1,.89-.89h3Z"/>
           <path class="cls-14" d="M39.28,31.57H36.51a.91.91,0,0,1-.92-.89V25a.89.89,0,0,1,.89-.89h2.77Z"/>
           <rect class="cls-15" x="21.9" y="39.93" width="55.86" height="20.95" rx="2" transform="translate(100.03 0.37) rotate(89.77)"/>
-          <line class="cls-31" x1="50.38" y1="60.24" x2="50.4" y2="65.48"/>
-          <line class="cls-31" x1="50.38" y1="40.57" x2="50.36" y2="35.33"/>
-          <rect class="cls-32" x="48.14" y="46.32" width="4.54" height="1.25" transform="translate(97.15 -3.65) rotate(89.77)"/>
-          <polygon class="cls-33" points="51.06 52.46 51.08 57 49.82 56.13 49.81 53.33 51.06 52.46"/>
+          <line class="cls-30" x1="50.38" y1="60.24" x2="50.4" y2="65.48"/>
+          <line class="cls-30" x1="50.38" y1="40.57" x2="50.36" y2="35.33"/>
+          <rect class="cls-31" x="48.14" y="46.32" width="4.54" height="1.25" transform="translate(97.15 -3.65) rotate(89.77)"/>
+          <polygon class="cls-32" points="51.06 52.46 51.08 57 49.82 56.13 49.81 53.33 51.06 52.46"/>
           <path class="cls-14" d="M39.39,51.28V47.21c-.87,1.33-2.2,1.57-2.89,2a2.1,2.1,0,0,0-.85,1.63v.82a2.07,2.07,0,0,0,.84,1.63c.69.46,2,.7,2.9,2V51.28Z"/>
         </g>
       </g>
@@ -5698,55 +5639,29 @@ sim-playground {
     <g id="Ev_Accel">
       <g id="Rot360Rail">
         <g id="Gravity_arrow">
-          <polyline class="cls-29" points="10.83 81.17 8 84 5.17 81.17"/>
-          <line class="cls-30" x1="8" y1="84" x2="8" y2="72"/>
-          <line class="cls-30" x1="12" y1="88" x2="4" y2="88"/>
+          <polyline class="cls-28" points="10.83 11.8 8 14.63 5.17 11.8"/>
+          <line class="cls-29" x1="8" y1="14" x2="8" y2="4"/>
+          <line class="cls-29" x1="12" y1="18.63" x2="4" y2="18.63"/>
         </g>
         <g id="_360Rot_rail" data-name="360Rot_rail">
           <g>
-            <path class="cls-34" d="M86.23,36.2a39.91,39.91,0,0,0-8.9-15.41"/>
-            <path class="cls-34" d="M87,56.89A39.87,39.87,0,0,0,87,39.1"/>
-            <path class="cls-34" d="M36.2,9.75a40,40,0,0,0-15.41,8.92"/>
-            <path class="cls-34" d="M39.11,87a40,40,0,0,0,17.78,0"/>
-            <path class="cls-34" d="M59.79,86.21a40,40,0,0,0,15.4-8.9"/>
-            <path class="cls-34" d="M77.31,75.19A39.93,39.93,0,0,0,86.22,59.8"/>
-            <path class="cls-34" d="M75.21,18.67A40,40,0,0,0,59.8,9.75"/>
-            <path class="cls-34" d="M20.81,77.31a40,40,0,0,0,15.4,8.9"/>
-            <path class="cls-34" d="M18.67,20.79A39.91,39.91,0,0,0,9.77,36.2"/>
-            <path class="cls-34" d="M9.78,59.8a39.93,39.93,0,0,0,8.91,15.39"/>
-            <path class="cls-34" d="M56.9,9A39.72,39.72,0,0,0,39.1,9"/>
-            <path class="cls-34" d="M9,39.1A39.87,39.87,0,0,0,9,56.89"/>
-          </g>
-          <g>
-            <g>
-              <circle class="cls-35" cx="28.01" cy="82.54" r="1"/>
-              <circle class="cls-35" cx="67.99" cy="13.3" r="1"/>
-            </g>
-            <g>
-              <circle class="cls-35" cx="48" cy="7.95" r="1"/>
-              <circle class="cls-35" cx="48" cy="87.9" r="1"/>
-            </g>
-            <g>
-              <circle class="cls-35" cx="28.01" cy="13.3" r="1"/>
-              <circle class="cls-35" cx="67.99" cy="82.54" r="1"/>
-            </g>
-            <g>
-              <circle class="cls-35" cx="13.38" cy="27.94" r="1"/>
-              <circle class="cls-35" cx="82.62" cy="67.91" r="1"/>
-            </g>
-            <g>
-              <circle class="cls-35" cx="8.02" cy="47.92" r="1"/>
-              <circle class="cls-35" cx="87.98" cy="47.92" r="1"/>
-            </g>
-            <g>
-              <circle class="cls-35" cx="13.38" cy="67.91" r="1"/>
-              <circle class="cls-35" cx="82.62" cy="27.94" r="1"/>
-            </g>
+            <path class="cls-33" d="M81.9,26.77A39.93,39.93,0,0,0,69.31,14.18"/>
+            <path class="cls-33" d="M88,46.57a39.77,39.77,0,0,0-4.6-17.19"/>
+            <path class="cls-33" d="M26.69,14.16A40.06,40.06,0,0,0,14.11,26.77"/>
+            <path class="cls-33" d="M49.51,88.05a39.7,39.7,0,0,0,17.18-4.61"/>
+            <path class="cls-33" d="M69.3,82A39.87,39.87,0,0,0,81.87,69.36"/>
+            <path class="cls-33" d="M83.37,66.76A39.91,39.91,0,0,0,88,49.58"/>
+            <path class="cls-33" d="M66.71,12.68a40,40,0,0,0-17.2-4.63"/>
+            <path class="cls-33" d="M29.32,83.44A40,40,0,0,0,46.5,88.06"/>
+            <path class="cls-33" d="M12.61,29.37A40,40,0,0,0,8,46.57"/>
+            <path class="cls-33" d="M14.12,69.37a39.8,39.8,0,0,0,12.6,12.57"/>
+            <path class="cls-33" d="M46.5,8.06a40.16,40.16,0,0,0-17.2,4.61"/>
+            <path class="cls-33" d="M8,49.58a40,40,0,0,0,4.61,17.19"/>
           </g>
         </g>
       </g>
       <g id="Acc0">
-        <g id="Bg_Th_Profile-6" data-name="Bg_Th_Profile">
+        <g id="ThymioAcc0">
           <path class="cls-14" d="M68.51,57.54H63.85c1.53,1,1.8,3,2.32,3.8a2.37,2.37,0,0,0,1.87,1H69a2.42,2.42,0,0,0,1.87-1c.52-.79.79-2.8,2.31-3.8Z"/>
           <rect class="cls-15" x="16" y="33.54" width="64" height="24" rx="2"/>
           <path class="cls-16" d="M79,52.71v2.77a1,1,0,0,1-1,1H18a1,1,0,0,1-1-1V52.71Z"/>
@@ -5756,9 +5671,8 @@ sim-playground {
           <path class="cls-16" d="M41.39,40a12.07,12.07,0,0,1-17,17,12.07,12.07,0,1,0,17-17Z"/>
         </g>
         <g id="Rot360_Handle_0">
-          <line class="cls-36" x1="48.01" y1="44.98" x2="48" y2="8.12"/>
-          <circle id="RotationCenter0" class="cls-37" cx="48" cy="48" r="3"/>
-          <circle id="Btn2_HandleAcc0" class="cls-38" cx="48.01" cy="8.12" r="5"/>
+          <circle id="RotationCenter0" class="cls-34" cx="48" cy="48" r="3"/>
+          <circle id="Btn2_HandleAcc0" class="cls-35" cx="48.01" cy="8.12" r="5"/>
         </g>
       </g>
       <g id="Acc1">
@@ -5766,57 +5680,59 @@ sim-playground {
           <path class="cls-14" d="M78.3,57.77v3.41a1,1,0,0,1-1,1H70.77a1,1,0,0,1-1-1V57.8Z"/>
           <path class="cls-14" d="M26.42,58v3.17a1,1,0,0,1-1,1.05H18.88a1,1,0,0,1-1-1V58Z"/>
           <rect class="cls-15" x="16.01" y="33.92" width="63.92" height="23.97" rx="2" transform="translate(-0.19 0.2) rotate(-0.23)"/>
-          <line class="cls-31" x1="59.22" y1="45.28" x2="65.21" y2="45.26"/>
-          <line class="cls-31" x1="36.71" y1="45.27" x2="30.71" y2="45.3"/>
-          <rect class="cls-32" x="41.41" y="44.53" width="5.2" height="1.43" transform="translate(-0.18 0.18) rotate(-0.23)"/>
-          <polygon class="cls-33" points="50.31 44.5 55.51 44.48 54.52 45.91 51.32 45.93 50.31 44.5"/>
+          <line class="cls-30" x1="59.22" y1="45.28" x2="65.21" y2="45.26"/>
+          <line class="cls-30" x1="36.71" y1="45.27" x2="30.71" y2="45.3"/>
+          <rect class="cls-31" x="41.41" y="44.53" width="5.2" height="1.43" transform="translate(-0.18 0.18) rotate(-0.23)"/>
+          <polygon class="cls-32" points="50.31 44.5 55.51 44.48 54.52 45.91 51.32 45.93 50.31 44.5"/>
           <path class="cls-14" d="M49,57.85H44.31c1.52,1,1.8,2.52,2.32,3.32a2.37,2.37,0,0,0,1.86,1h.95a2.39,2.39,0,0,0,1.86-1c.53-.79.8-2.32,2.32-3.32H49Z"/>
         </g>
         <g id="Rot360_Handle_1">
-          <line class="cls-36" x1="48.07" y1="44.99" x2="47.93" y2="8.13"/>
-          <circle id="RotationCenter1" class="cls-37" cx="48" cy="48" r="3"/>
-          <circle id="Btn2_HandleAcc1" class="cls-38" cx="48" cy="8.13" r="5"/>
+          <circle id="RotationCenter1" class="cls-34" cx="48" cy="48" r="3"/>
+          <circle id="Btn2_HandleAcc1" class="cls-35" cx="48" cy="8.13" r="5"/>
         </g>
       </g>
       <g id="Acc2">
         <g id="ThymioAcc2">
-          <path class="cls-39" d="M65.69,50.39a1,1,0,0,1,1,1v2a1,1,0,1,1-2,0v-2A1,1,0,0,1,65.69,50.39Zm0,6a1,1,0,0,1,1,1v2a1,1,0,1,1-2,0v-2A1,1,0,0,1,65.69,56.42Zm0,6a1,1,0,0,1,1,1v2a1,1,0,0,1-2,0v-2A1,1,0,0,1,65.69,62.45ZM71,68a1,1,0,0,1-1,1H68a1,1,0,1,1,0-2h2A1,1,0,0,1,71,68ZM71,47.9a1,1,0,0,1-1,1H68a1,1,0,1,1,0-2h2A1,1,0,0,1,71,47.9Z"/>
-          <path class="cls-39" d="M31.31,51.39v2a1,1,0,1,1-2,0v-2a1,1,0,0,1,2,0Zm0,6v2a1,1,0,1,1-2,0v-2a1,1,0,0,1,2,0Zm0,6v2a1,1,0,0,1-2,0v-2a1,1,0,0,1,2,0ZM26,67h2a1,1,0,1,1,0,2H26a1,1,0,0,1,0-2ZM26,46.9h2a1,1,0,1,1,0,2H26a1,1,0,0,1,0-2Z"/>
+          <path class="cls-20" d="M48,24.06a32.94,32.94,0,0,0-23.3,9.57,2.39,2.39,0,0,0-.69,1.7l0,34.66a2,2,0,0,0,2,2l44,.05a2,2,0,0,0,2-2l0-34.66a2.38,2.38,0,0,0-.68-1.7A32.89,32.89,0,0,0,48,24.06Z"/>
           <g>
-            <path class="cls-20" d="M48,24.06a32.94,32.94,0,0,0-23.3,9.57,2.39,2.39,0,0,0-.69,1.7l0,34.66a2,2,0,0,0,2,2l44,.05a2,2,0,0,0,2-2l0-34.66a2.38,2.38,0,0,0-.68-1.7A32.89,32.89,0,0,0,48,24.06Z"/>
-            <rect class="cls-40" x="65.93" y="48.09" width="6" height="19.98" rx="2"/>
-            <rect class="cls-40" x="23.93" y="48.09" width="6" height="19.98" rx="2"/>
-            <path class="cls-41" d="M48,24.06A32.92,32.92,0,0,0,24.39,33.9,1.48,1.48,0,0,0,24,35l0,35.54A1.49,1.49,0,0,0,25.42,72l45,.05a1.5,1.5,0,0,0,1.5-1.5l0-35.54a1.52,1.52,0,0,0-.43-1.06A32.87,32.87,0,0,0,48,24.06Z"/>
-            <g>
-              <circle id="center-3" data-name="center" class="cls-39" cx="47.93" cy="37.16" r="2.54"/>
-              <path id="up-3" data-name="up" class="cls-39" d="M49.69,41.89c.43,0,.6.3.39.67l-1.75,3.07a.41.41,0,0,1-.77,0l-1.78-3.05c-.22-.36-.05-.67.38-.67Z"/>
-              <path id="down-3" data-name="down" class="cls-39" d="M49.69,32.43c.43,0,.6-.3.39-.67L48.33,28.7c-.21-.37-.56-.38-.77,0l-1.78,3c-.22.37-.05.67.38.68Z"/>
-              <path id="right-3" data-name="right" class="cls-39" d="M43.2,38.93c0,.42-.3.6-.67.39l-3.07-1.75c-.37-.21-.37-.56,0-.78l3-1.78c.37-.21.68,0,.68.39Z"/>
-              <path id="left-3" data-name="left" class="cls-39" d="M52.65,38.93c0,.42.3.6.67.39l3.07-1.75a.41.41,0,0,0,0-.78l-3-1.78c-.37-.21-.68,0-.68.39Z"/>
-            </g>
+            <line class="cls-36" x1="71.92" y1="68.08" x2="70.92" y2="68.08"/>
+            <path class="cls-37" d="M67.9,68.08a2,2,0,0,1-2-2v-16a2,2,0,0,1,2-2h1.48"/>
+            <line class="cls-36" x1="70.92" y1="48.09" x2="71.92" y2="48.09"/>
+          </g>
+          <g>
+            <line class="cls-36" x1="23.93" y1="48.09" x2="24.93" y2="48.09"/>
+            <path class="cls-37" d="M28,48.09a2,2,0,0,1,2,2v16a2,2,0,0,1-2,2H26.44"/>
+            <line class="cls-36" x1="24.93" y1="68.08" x2="23.93" y2="68.08"/>
+          </g>
+          <path class="cls-38" d="M48,24.06A32.92,32.92,0,0,0,24.39,33.9,1.48,1.48,0,0,0,24,35l0,35.54A1.49,1.49,0,0,0,25.42,72l45,.05a1.5,1.5,0,0,0,1.5-1.5l0-35.54a1.52,1.52,0,0,0-.43-1.06A32.87,32.87,0,0,0,48,24.06Z"/>
+          <g>
+            <circle id="center-3" data-name="center" class="cls-39" cx="47.93" cy="37.16" r="2.54"/>
+            <path id="up-3" data-name="up" class="cls-39" d="M49.69,41.89c.43,0,.6.3.39.67l-1.75,3.07a.41.41,0,0,1-.77,0l-1.78-3.05c-.22-.36-.05-.67.38-.67Z"/>
+            <path id="down-3" data-name="down" class="cls-39" d="M49.69,32.43c.43,0,.6-.3.39-.67L48.33,28.7c-.21-.37-.56-.38-.77,0l-1.78,3c-.22.37-.05.67.38.68Z"/>
+            <path id="right-3" data-name="right" class="cls-39" d="M43.2,38.93c0,.42-.3.6-.67.39l-3.07-1.75c-.37-.21-.37-.56,0-.78l3-1.78c.37-.21.68,0,.68.39Z"/>
+            <path id="left-3" data-name="left" class="cls-39" d="M52.65,38.93c0,.42.3.6.67.39l3.07-1.75a.41.41,0,0,0,0-.78l-3-1.78c-.37-.21-.68,0-.68.39Z"/>
           </g>
         </g>
         <g id="Rot360_Handle_2">
-          <line class="cls-36" x1="48" y1="44.98" x2="48" y2="8.12"/>
-          <circle id="RotationCenter2" class="cls-37" cx="48" cy="47.98" r="3"/>
-          <circle id="Btn2_HandleAcc2" class="cls-38" cx="48" cy="8.12" r="5"/>
+          <circle id="RotationCenter2" class="cls-34" cx="48" cy="47.98" r="3"/>
+          <circle id="Btn2_HandleAcc2" class="cls-35" cx="48" cy="8.12" r="5"/>
         </g>
       </g>
     </g>
     <g id="Ev_ProxH_Front_med">
       <g id="IR_gradients_obst">
-        <path class="cls-42" d="M87,26.79a61.51,61.51,0,0,0-5.88-4.43L71.16,41Z"/>
-        <path class="cls-43" d="M70.55,16.75a59.32,59.32,0,0,0-6.95-2.39L60.3,35.24Z"/>
-        <path class="cls-44" d="M51.53,12.37q-1.81-.12-3.66-.12t-3.66.12l3.66,20.76Z"/>
-        <path class="cls-45" d="M32.41,14.28a59.89,59.89,0,0,0-7,2.38l10.3,18.58Z"/>
-        <path class="cls-46" d="M14.88,22.21a64.39,64.39,0,0,0-6,4.45L24.86,41Z"/>
+        <path class="cls-40" d="M87,26.79a61.51,61.51,0,0,0-5.88-4.43L71.16,41Z"/>
+        <path class="cls-41" d="M70.55,16.75a59.32,59.32,0,0,0-6.95-2.39L60.3,35.24Z"/>
+        <path class="cls-42" d="M51.53,12.37q-1.81-.12-3.66-.12t-3.66.12l3.66,20.76Z"/>
+        <path class="cls-43" d="M32.41,14.28a59.89,59.89,0,0,0-7,2.38l10.3,18.58Z"/>
+        <path class="cls-44" d="M14.88,22.21a64.39,64.39,0,0,0-6,4.45L24.86,41Z"/>
       </g>
       <g id="IR_gradients_empty">
-        <path id="IR_4" class="cls-42" d="M93.87,20.56a57.33,57.33,0,0,0-8.25-6.77L71.16,41Z"/>
-        <path id="IR_3" class="cls-43" d="M75.31,8.17A66.34,66.34,0,0,0,65.12,4.72L60.3,35.24Z"/>
-        <path id="IR_2" class="cls-44" d="M53.22,2.8c-1.85-.14-3.73-.23-5.62-.23-1.72,0-3.41.08-5.09.2l5.36,30.36Z"/>
-        <path id="IR_1" class="cls-45" d="M30.87,4.59A67.52,67.52,0,0,0,20.6,8L35.72,35.24Z"/>
-        <path id="IR_0" class="cls-46" d="M10.26,13.52A57.43,57.43,0,0,0,1.87,20.3l23,20.7Z"/>
+        <path id="IR_4" class="cls-40" d="M93.87,20.56a57.33,57.33,0,0,0-8.25-6.77L71.16,41Z"/>
+        <path id="IR_3" class="cls-41" d="M75.31,8.17A66.34,66.34,0,0,0,65.12,4.72L60.3,35.24Z"/>
+        <path id="IR_2" class="cls-42" d="M53.22,2.8c-1.85-.14-3.73-.23-5.62-.23-1.72,0-3.41.08-5.09.2l5.36,30.36Z"/>
+        <path id="IR_1" class="cls-43" d="M30.87,4.59A67.52,67.52,0,0,0,20.6,8L35.72,35.24Z"/>
+        <path id="IR_0" class="cls-44" d="M10.26,13.52A57.43,57.43,0,0,0,1.87,20.3l23,20.7Z"/>
       </g>
       <g id="ThymioTop_Bg">
         <path class="cls-15" d="M48,19.91A49.39,49.39,0,0,0,13.09,34.28a3.6,3.6,0,0,0-1,2.55l-.05,52a3,3,0,0,0,3,3l66,.06a3,3,0,0,0,3-3l0-52a3.61,3.61,0,0,0-1-2.55A49.44,49.44,0,0,0,48,19.91Z"/>
@@ -5825,27 +5741,27 @@ sim-playground {
           <path class="cls-16" d="M49.16,71.09a3.2,3.2,0,0,1,.35,1.45,3.25,3.25,0,0,1-3.25,3.25A3.21,3.21,0,0,1,45,75.5a3.21,3.21,0,0,0,2.88,1.82,3.25,3.25,0,0,0,1.33-6.23Z"/>
         </g>
       </g>
-      <g id="ProxOff">
+      <g id="ProxOff-2" data-name="ProxOff">
         <g id="Prox4_group">
           <rect id="Btn3_Prox4" class="cls-4" x="69.27" y="31.69" width="10" height="10" transform="translate(-1.58 70) rotate(-50)"/>
-          <circle id="Led_4" class="cls-47" cx="80.14" cy="41.15" r="1.7"/>
+          <circle id="Led_4" class="cls-45" cx="80.14" cy="41.15" r="1.7"/>
         </g>
         <g id="Prox3_group">
           <rect id="Btn3_Prox3" class="cls-4" x="57.2" y="24.65" width="10" height="10" transform="translate(14.79 79.64) rotate(-72)"/>
-          <circle id="Led_3" class="cls-48" cx="69.67" cy="30.74" r="1.7"/>
+          <circle id="Led_3" class="cls-46" cx="69.67" cy="30.74" r="1.7"/>
         </g>
         <g id="Prox2_group">
           <rect id="Btn3_Prox2" class="cls-4" x="42.87" y="22" width="10" height="10"/>
-          <circle id="Led_2_" class="cls-49" cx="41.07" cy="26.01" r="1.7"/>
-          <circle id="Led_2" class="cls-50" cx="54.67" cy="26.01" r="1.7"/>
+          <circle id="Led_2_" class="cls-47" cx="41.07" cy="26.01" r="1.7"/>
+          <circle id="Led_2" class="cls-48" cx="54.67" cy="26.01" r="1.7"/>
         </g>
         <g id="Prox1_group">
           <rect id="Btn3_Prox1" class="cls-4" x="28.53" y="24.65" width="10" height="10" transform="translate(-7.52 11.81) rotate(-18)"/>
-          <circle id="Led_1" class="cls-51" cx="26.06" cy="30.74" r="1.7"/>
+          <circle id="Led_1" class="cls-49" cx="26.06" cy="30.74" r="1.7"/>
         </g>
         <g id="Prox0_group">
           <rect id="Btn3_Prox0" class="cls-4" x="16.47" y="31.69" width="10" height="10" transform="translate(-18.56 22.38) rotate(-40)"/>
-          <circle id="Led_0" class="cls-52" cx="15.64" cy="41.15" r="1.7"/>
+          <circle id="Led_0" class="cls-50" cx="15.64" cy="41.15" r="1.7"/>
         </g>
       </g>
       <g id="Obstacles">
@@ -5858,12 +5774,12 @@ sim-playground {
     </g>
     <g id="Ev_ProxH_Back_med">
       <g id="IR_gradients_back_obst">
-        <polygon class="cls-53" points="28.34 84.2 35.75 84.2 32.05 63.21 28.34 84.2"/>
-        <polygon class="cls-54" points="63.92 63.21 60.22 84.2 67.63 84.2 63.92 63.21"/>
+        <polygon class="cls-51" points="28.34 84.2 35.75 84.2 32.05 63.21 28.34 84.2"/>
+        <polygon class="cls-52" points="63.92 63.21 60.22 84.2 67.63 84.2 63.92 63.21"/>
       </g>
       <g id="IR_gradients_back_empty">
-        <path id="IR_signal_5" class="cls-53" d="M26.48,94.72c1.93.15,3.88.24,5.85.24,1.78,0,3.54-.08,5.28-.2L32,63.21Z"/>
-        <path id="IR_signal_6" class="cls-54" d="M58.36,94.72c1.93.15,3.87.24,5.85.24,1.78,0,3.54-.08,5.28-.2L63.92,63.21Z"/>
+        <path id="IR_signal_5" class="cls-51" d="M26.48,94.72c1.93.15,3.88.24,5.85.24,1.78,0,3.54-.08,5.28-.2L32,63.21Z"/>
+        <path id="IR_signal_6" class="cls-52" d="M58.36,94.72c1.93.15,3.87.24,5.85.24,1.78,0,3.54-.08,5.28-.2L63.92,63.21Z"/>
       </g>
       <g id="Thymio_bg_top">
         <path class="cls-15" d="M48,4.57A49.39,49.39,0,0,0,13.09,18.94a3.59,3.59,0,0,0-1,2.54L12,73.5a3,3,0,0,0,3,3l66,.07a3,3,0,0,0,3-3l0-52A3.59,3.59,0,0,0,83,19,49.35,49.35,0,0,0,48,4.57Z"/>
@@ -5875,15 +5791,15 @@ sim-playground {
           <path id="left-4" data-name="left" class="cls-39" d="M54.23,25.22c0,.58.41.83.92.54l4.21-2.4a.57.57,0,0,0,0-1.07l-4.18-2.45c-.51-.29-.92-.05-.93.53Z"/>
         </g>
       </g>
-      <g id="Prox5_group">
+      <g id="Prox5_group-2" data-name="Prox5_group">
         <rect id="Btn3_Prox5" class="cls-4" x="27.05" y="64" width="10" height="10"/>
-        <circle id="Led_5_" class="cls-55" cx="24.25" cy="69.01" r="1.7"/>
-        <circle id="Led_5" class="cls-56" cx="39.85" cy="69.01" r="1.7"/>
+        <circle id="Led_5_" class="cls-53" cx="24.25" cy="69.01" r="1.7"/>
+        <circle id="Led_5" class="cls-54" cx="39.85" cy="69.01" r="1.7"/>
       </g>
-      <g id="Prox6_group">
+      <g id="Prox6_group-2" data-name="Prox6_group">
         <rect id="Btn3_Prox6" class="cls-4" x="58.92" y="64" width="10" height="10"/>
-        <circle id="Led_6_" class="cls-57" cx="56.12" cy="69.01" r="1.7"/>
-        <circle id="Led_6" class="cls-58" cx="71.73" cy="69.01" r="1.7"/>
+        <circle id="Led_6_" class="cls-55" cx="56.12" cy="69.01" r="1.7"/>
+        <circle id="Led_6" class="cls-56" cx="71.73" cy="69.01" r="1.7"/>
       </g>
       <g id="Obstacles-2" data-name="Obstacles">
         <line id="Obst_prox5" class="cls-21" x1="26.05" y1="84.21" x2="38.05" y2="84.21"/>
@@ -5892,11 +5808,11 @@ sim-playground {
     </g>
     <g id="Ev_ProxH_Front_adv">
       <g id="IR_gradients_adv_empty">
-        <path id="IR_4_adv" class="cls-59" d="M42.41,59.08,72.7,37.88a87.3,87.3,0,0,0-7.09-8,87.25,87.25,0,0,0-8-7.08L36.4,53.07c1.08.9,2.13,1.85,3.14,2.87S41.5,58,42.41,59.08Z"/>
-        <path id="IR_3_adv" class="cls-59" d="M52.12,18.94a88.79,88.79,0,0,0-9.31-5.27,88.51,88.51,0,0,0-9.89-4.09L22.75,45.1a49.55,49.55,0,0,1,7.65,3.73Z"/>
-        <path id="IR_2_adv" class="cls-59" d="M85.87,62.56a86.73,86.73,0,0,0-4.1-9.89,87,87,0,0,0-5.26-9.31L46.62,65.09a49,49,0,0,1,3.73,7.64Z"/>
-        <path id="IR_1_adv" class="cls-59" d="M90.47,90a87.53,87.53,0,0,0-.65-10.67,88,88,0,0,0-1.95-10.52L52.54,79.58a48.26,48.26,0,0,1,1,8.45Z"/>
-        <path id="IR_0_adv" class="cls-59" d="M26.7,7.61A88,88,0,0,0,16.18,5.66,87.53,87.53,0,0,0,5.51,5L7.45,41.93a48.26,48.26,0,0,1,8.45,1Z"/>
+        <path id="IR_4_adv" class="cls-57" d="M42.41,59.08,72.7,37.88a87.3,87.3,0,0,0-7.09-8,87.25,87.25,0,0,0-8-7.08L36.4,53.07c1.08.9,2.13,1.85,3.14,2.87S41.5,58,42.41,59.08Z"/>
+        <path id="IR_3_adv" class="cls-57" d="M52.12,18.94a88.79,88.79,0,0,0-9.31-5.27,88.51,88.51,0,0,0-9.89-4.09L22.75,45.1a49.55,49.55,0,0,1,7.65,3.73Z"/>
+        <path id="IR_2_adv" class="cls-57" d="M85.87,62.56a86.73,86.73,0,0,0-4.1-9.89,87,87,0,0,0-5.26-9.31L46.62,65.09a49,49,0,0,1,3.73,7.64Z"/>
+        <path id="IR_1_adv" class="cls-57" d="M90.47,90a87.53,87.53,0,0,0-.65-10.67,88,88,0,0,0-1.95-10.52L52.54,79.58a48.26,48.26,0,0,1,1,8.45Z"/>
+        <path id="IR_0_adv" class="cls-57" d="M26.7,7.61A88,88,0,0,0,16.18,5.66,87.53,87.53,0,0,0,5.51,5L7.45,41.93a48.26,48.26,0,0,1,8.45,1Z"/>
       </g>
       <g id="Thymio_shape">
         <path class="cls-20" d="M1,43.94,4.65,40.3a3.55,3.55,0,0,1,2.54-1.06A49.39,49.39,0,0,1,42.06,53.79,49.36,49.36,0,0,1,56.54,88.7a3.6,3.6,0,0,1-1.07,2.53L51.69,95H1Z"/>
@@ -5904,25 +5820,25 @@ sim-playground {
       </g>
       <g id="ProxOff_adv">
         <g id="Prox2_group-2" data-name="Prox2_group">
-          <rect id="Btn3_Prox2_adv" class="cls-60" x="31.63" y="54.23" width="10" height="10" transform="translate(-31.15 43.25) rotate(-45)"/>
-          <circle id="Led_2_adv" class="cls-61" cx="32.52" cy="53.71" r="1.7"/>
-          <circle id="Led_2_adv_" class="cls-62" cx="42.14" cy="63.33" r="1.7"/>
+          <rect id="Btn3_Prox2_adv" class="cls-58" x="31.63" y="54.23" width="10" height="10" transform="translate(-31.15 43.25) rotate(-45)"/>
+          <circle id="Led_2_adv" class="cls-59" cx="32.52" cy="53.71" r="1.7"/>
+          <circle id="Led_2_adv_" class="cls-60" cx="42.14" cy="63.33" r="1.7"/>
         </g>
         <g id="Prox0_group-2" data-name="Prox0_group">
-          <rect id="Btn3_Prox0_adv" class="cls-60" x="6.38" y="41.79" width="10" height="10" transform="translate(-36.45 52.38) rotate(-83)"/>
-          <circle id="Led_0_adv" class="cls-63" cx="4.24" cy="45.26" r="1.7"/>
+          <rect id="Btn3_Prox0_adv" class="cls-58" x="6.38" y="41.79" width="10" height="10" transform="translate(-36.45 52.38) rotate(-83)"/>
+          <circle id="Led_0_adv" class="cls-61" cx="4.24" cy="45.26" r="1.7"/>
         </g>
         <g id="Prox1_group-2" data-name="Prox1_group">
-          <rect id="Btn3_Prox1_adv" class="cls-60" x="19.93" y="45.95" width="10" height="10" transform="translate(-31.79 51.03) rotate(-64)"/>
-          <circle id="Led_1_adv" class="cls-64" cx="18.94" cy="46.51" r="1.7"/>
+          <rect id="Btn3_Prox1_adv" class="cls-58" x="19.93" y="45.95" width="10" height="10" transform="translate(-31.79 51.03) rotate(-64)"/>
+          <circle id="Led_1_adv" class="cls-62" cx="18.94" cy="46.51" r="1.7"/>
         </g>
         <g id="Prox4_group-2" data-name="Prox4_group">
-          <rect id="Btn3_Prox4_adv" class="cls-60" x="44.07" y="79.48" width="10" height="10" transform="translate(-9.93 6.61) rotate(-7)"/>
-          <circle id="Led_4_adv" class="cls-65" cx="50.6" cy="91.62" r="1.7"/>
+          <rect id="Btn3_Prox4_adv" class="cls-58" x="44.07" y="79.48" width="10" height="10" transform="translate(-9.93 6.61) rotate(-7)"/>
+          <circle id="Led_4_adv" class="cls-63" cx="50.6" cy="91.62" r="1.7"/>
         </g>
         <g id="Prox3_group-2" data-name="Prox3_group">
-          <rect id="Btn3_Prox3_adv" class="cls-60" x="39.91" y="65.93" width="10" height="10" transform="translate(-26.55 26.86) rotate(-26)"/>
-          <circle id="Led_3_adv" class="cls-66" cx="49.35" cy="76.92" r="1.7"/>
+          <rect id="Btn3_Prox3_adv" class="cls-58" x="39.91" y="65.93" width="10" height="10" transform="translate(-26.55 26.86) rotate(-26)"/>
+          <circle id="Led_3_adv" class="cls-64" cx="49.35" cy="76.92" r="1.7"/>
         </g>
       </g>
       <g id="Obstacles-3" data-name="Obstacles">
@@ -5933,9 +5849,9 @@ sim-playground {
         <line id="Obst_prox0_adv" class="cls-21" x1="6.97" y1="21.7" x2="20.82" y2="23.35"/>
       </g>
       <g id="Slid_threshold">
-        <line id="value_threshold_off" class="cls-67" x1="91.04" y1="8" x2="23.04" y2="8"/>
+        <line id="value_threshold_off" class="cls-65" x1="91.04" y1="8" x2="23.04" y2="8"/>
         <g id="value_threshold">
-          <line id="value_threshold-2" data-name="value_threshold" class="cls-36" x1="85.49" y1="8" x2="28.6" y2="8"/>
+          <line id="value_threshold-2" data-name="value_threshold" class="cls-66" x1="85.49" y1="8" x2="28.6" y2="8"/>
           <g id="crans">
             <line class="cls-4" x1="28.6" y1="3.93" x2="28.6" y2="2.93"/>
             <line class="cls-4" x1="47.56" y1="3.93" x2="47.56" y2="2.93"/>
@@ -5943,14 +5859,14 @@ sim-playground {
             <line class="cls-4" x1="85.49" y1="3.93" x2="85.49" y2="2.93"/>
           </g>
         </g>
-        <polygon id="cursor_threshold" class="cls-68" points="43.56 10.65 47.56 6.44 51.56 10.65 51.56 14.44 43.56 14.44 43.56 10.65"/>
+        <polygon id="cursor_threshold" class="cls-67" points="43.56 10.65 47.56 6.44 51.56 10.65 51.56 14.44 43.56 14.44 43.56 10.65"/>
       </g>
     </g>
     <g id="Ev_ProxH_Back_adv">
       <g id="Slid_threshold_back">
-        <line id="value_threshold_back_off" class="cls-67" x1="82.68" y1="84.09" x2="12.68" y2="84.09"/>
+        <line id="value_threshold_back_off" class="cls-65" x1="82.68" y1="84.09" x2="12.68" y2="84.09"/>
         <g id="value_threshold_back">
-          <line id="value_thresholdBack" class="cls-36" x1="76.13" y1="84.09" x2="19.24" y2="84.09"/>
+          <line id="value_thresholdBack" class="cls-66" x1="76.13" y1="84.09" x2="19.24" y2="84.09"/>
           <g id="crans-2" data-name="crans">
             <line class="cls-4" x1="19.24" y1="80.02" x2="19.24" y2="79.02"/>
             <line class="cls-4" x1="38.2" y1="80.02" x2="38.2" y2="79.02"/>
@@ -5958,15 +5874,15 @@ sim-playground {
             <line class="cls-4" x1="76.13" y1="80.02" x2="76.13" y2="79.02"/>
           </g>
         </g>
-        <polygon id="cursor_threshold_back" class="cls-68" points="15.29 87.2 19.29 83 23.29 87.2 23.29 91 15.29 91 15.29 87.2"/>
+        <polygon id="cursor_threshold_back" class="cls-67" points="15.29 87.2 19.29 83 23.29 87.2 23.29 91 15.29 91 15.29 87.2"/>
       </g>
       <g id="IR_gradients_back_adv_empty">
-        <path id="IR_6_adv" class="cls-69" d="M59.7,31.75,53.28,68.16A87.51,87.51,0,0,0,64,68.81a87.46,87.46,0,0,0,10.67-.65L68.2,31.75C66.8,31.86,61.11,31.86,59.7,31.75Z"/>
-        <path id="IR_5_adv" class="cls-70" d="M27.83,31.75,21.4,68.16a87.51,87.51,0,0,0,10.68.65,87.63,87.63,0,0,0,10.68-.65L36.33,31.75C34.93,31.86,29.23,31.86,27.83,31.75Z"/>
+        <path id="IR_6_adv" class="cls-68" d="M59.7,31.75,53.28,68.16A87.51,87.51,0,0,0,64,68.81a87.46,87.46,0,0,0,10.67-.65L68.2,31.75C66.8,31.86,61.11,31.86,59.7,31.75Z"/>
+        <path id="IR_5_adv" class="cls-69" d="M27.83,31.75,21.4,68.16a87.51,87.51,0,0,0,10.68.65,87.63,87.63,0,0,0,10.68-.65L36.33,31.75C34.93,31.86,29.23,31.86,27.83,31.75Z"/>
       </g>
       <g id="IR_gradients_back_adv_obst">
-        <path class="cls-71" d="M68.2,31.75c-1.4.11-7.09.11-8.5,0L56.06,52.38H71.85Z"/>
-        <path class="cls-72" d="M27.83,31.75,24.18,52.38H40L36.33,31.75C34.93,31.86,29.23,31.86,27.83,31.75Z"/>
+        <path class="cls-70" d="M68.2,31.75c-1.4.11-7.09.11-8.5,0L56.06,52.38H71.85Z"/>
+        <path class="cls-71" d="M27.83,31.75,24.18,52.38H40L36.33,31.75C34.93,31.86,29.23,31.86,27.83,31.75Z"/>
       </g>
       <g id="Obstacles-4" data-name="Obstacles">
         <line id="Obst_prox5-2" data-name="Obst_prox5" class="cls-21" x1="24.29" y1="52.38" x2="40.29" y2="52.38"/>
@@ -5979,15 +5895,15 @@ sim-playground {
           <path class="cls-16" d="M49.16,12.27a3.2,3.2,0,0,1,.35,1.45A3.25,3.25,0,0,1,46.26,17,3.21,3.21,0,0,1,45,16.68a3.21,3.21,0,0,0,2.88,1.82,3.25,3.25,0,0,0,1.33-6.23Z"/>
         </g>
       </g>
-      <g id="Prox5_group-2" data-name="Prox5_group">
+      <g id="Prox5_group-3" data-name="Prox5_group">
         <rect id="Btn3_Prox5_adv" class="cls-4" x="27.08" y="19.5" width="10" height="10"/>
-        <circle id="Led_5_adv_" class="cls-73" cx="24.28" cy="24.51" r="1.7"/>
-        <circle id="Led_5_adv" class="cls-74" cx="39.88" cy="24.51" r="1.7"/>
+        <circle id="Led_5_adv_" class="cls-72" cx="24.28" cy="24.51" r="1.7"/>
+        <circle id="Led_5_adv" class="cls-73" cx="39.88" cy="24.51" r="1.7"/>
       </g>
-      <g id="Prox6_group-2" data-name="Prox6_group">
+      <g id="Prox6_group-3" data-name="Prox6_group">
         <rect id="Btn3_Prox6_adv" class="cls-4" x="58.95" y="19.5" width="10" height="10"/>
-        <circle id="Led_6_adv_" class="cls-75" cx="56.15" cy="24.51" r="1.7"/>
-        <circle id="Led_6_adv" class="cls-76" cx="71.76" cy="24.51" r="1.7"/>
+        <circle id="Led_6_adv_" class="cls-74" cx="56.15" cy="24.51" r="1.7"/>
+        <circle id="Led_6_adv" class="cls-75" cx="71.76" cy="24.51" r="1.7"/>
       </g>
     </g>
     <g id="Ev_ProxGr_bas">
@@ -5999,45 +5915,45 @@ sim-playground {
         <path class="cls-5" d="M73.08,40.61H68a.75.75,0,0,1,0-1.5h5.08a.75.75,0,0,1,0,1.5Z"/>
         <path class="cls-5" d="M79.36,40.61H77.45a.75.75,0,0,1,0-1.5h1.91Z"/>
       </g>
-      <rect id="btn2_ProxGd_detection" class="cls-77" x="7.73" y="61.64" width="80.54" height="17.1"/>
-      <circle id="Led_Gd" class="cls-78" cx="76.03" cy="51.63" r="2"/>
+      <rect id="btn2_ProxGd_detection" class="cls-76" x="4" y="61.64" width="88" height="12"/>
+      <circle id="Led_Gd" class="cls-77" cx="76.03" cy="51.63" r="2"/>
     </g>
     <g id="Ev_ProxGr_med">
       <g id="ThymioTop_wheels">
         <path class="cls-20" d="M48.26,17.6A43.91,43.91,0,0,0,17.19,30.37a3.18,3.18,0,0,0-.92,2.26l-.05,46.23a2.66,2.66,0,0,0,2.66,2.66l58.62.06a2.65,2.65,0,0,0,2.67-2.66l0-46.22a3.2,3.2,0,0,0-.92-2.27A43.92,43.92,0,0,0,48.26,17.6Z"/>
         <path class="cls-16" d="M77.85,80.85H76.26V34.75a3.09,3.09,0,0,0-.9-2.19,42.71,42.71,0,0,0-49.24-7.88,42.73,42.73,0,0,1,52.34,6.17A3.07,3.07,0,0,1,79.35,33V79.35A1.5,1.5,0,0,1,77.85,80.85Z"/>
-        <rect class="cls-79" x="72.23" y="49.65" width="7.99" height="26.65" rx="2"/>
-        <rect class="cls-79" x="16.22" y="49.65" width="7.99" height="26.65" rx="2"/>
-        <path class="cls-41" d="M48.26,17.6A43.93,43.93,0,0,0,16.84,30.72a2,2,0,0,0-.57,1.41l-.05,47.39a2,2,0,0,0,2,2l60,.06a2,2,0,0,0,2-2l0-47.39a2,2,0,0,0-.57-1.41A43.92,43.92,0,0,0,48.26,17.6Z"/>
+        <rect class="cls-78" x="72.23" y="49.65" width="7.99" height="26.65" rx="2"/>
+        <rect class="cls-78" x="16.22" y="49.65" width="7.99" height="26.65" rx="2"/>
+        <path class="cls-38" d="M48.26,17.6A43.93,43.93,0,0,0,16.84,30.72a2,2,0,0,0-.57,1.41l-.05,47.39a2,2,0,0,0,2,2l60,.06a2,2,0,0,0,2-2l0-47.39a2,2,0,0,0-.57-1.41A43.92,43.92,0,0,0,48.26,17.6Z"/>
       </g>
       <g id="ProxGround">
         <g id="ProxGd1_group">
-          <rect id="Btn3_ProxGd1" class="cls-80" x="53.12" y="23.22" width="9.99" height="9.99" transform="translate(18.49 79.23) rotate(-78.06)"/>
-          <circle id="Led_Gd1" class="cls-81" cx="66.05" cy="29.53" r="2"/>
+          <rect id="Btn3_ProxGd1" class="cls-58" x="53.12" y="23.22" width="9.99" height="9.99" transform="translate(18.49 79.23) rotate(-78.06)"/>
+          <circle id="Led_Gd1" class="cls-79" cx="66.05" cy="29.53" r="2"/>
         </g>
         <g id="ProxGd0_group">
-          <rect id="Btn3_ProxGd0" class="cls-77" x="33.33" y="23.22" width="9.99" height="9.99" transform="translate(-5.01 8.54) rotate(-11.94)"/>
-          <circle id="Led_Gd0" class="cls-82" cx="30.39" cy="29.53" r="2"/>
+          <rect id="Btn3_ProxGd0" class="cls-58" x="33.33" y="23.22" width="9.99" height="9.99" transform="translate(-5.01 8.54) rotate(-11.94)"/>
+          <circle id="Led_Gd0" class="cls-80" cx="30.39" cy="29.53" r="2"/>
         </g>
       </g>
     </g>
     <g id="Ev_ProxGround_adv">
       <g>
-        <rect id="Gradient_proxGd_0" class="cls-83" x="4.02" y="4" width="31.98" height="44.16"/>
-        <rect id="Gradient_proxGd_1" class="cls-84" x="35.99" y="4" width="31.98" height="44.16"/>
+        <rect id="Gradient_proxGd_0" class="cls-81" x="4.02" y="4" width="31.98" height="44.16"/>
+        <rect id="Gradient_proxGd_1" class="cls-82" x="35.99" y="4" width="31.98" height="44.16"/>
       </g>
       <g id="ThymioTop_wheels-2" data-name="ThymioTop_wheels">
         <path class="cls-20" d="M36,28A38.41,38.41,0,0,0,8.85,39.18a2.81,2.81,0,0,0-.81,2L8,81.6a2.33,2.33,0,0,0,2.33,2.34l51.29,0A2.33,2.33,0,0,0,64,81.66l0-40.44a2.84,2.84,0,0,0-.8-2A38.43,38.43,0,0,0,36,28Z"/>
         <path class="cls-16" d="M62,83H60.28V43a2.72,2.72,0,0,0-.78-1.92A37.38,37.38,0,0,0,16.42,34.2a37.37,37.37,0,0,1,45.79,5.4A2.68,2.68,0,0,1,63,41.52V82A1,1,0,0,1,62,83Z"/>
-        <rect class="cls-85" x="57" y="56.05" width="6.99" height="23.32" rx="2"/>
-        <rect class="cls-85" x="8" y="56.05" width="6.99" height="23.32" rx="2"/>
-        <path class="cls-41" d="M36,28A38.43,38.43,0,0,0,8.54,39.49,1.77,1.77,0,0,0,8,40.72L8,82.19a1.75,1.75,0,0,0,1.75,1.75l52.46,0A1.75,1.75,0,0,0,64,82.24l0-41.46a1.71,1.71,0,0,0-.5-1.23A38.37,38.37,0,0,0,36,28Z"/>
+        <rect class="cls-83" x="57" y="56.05" width="6.99" height="23.32" rx="2"/>
+        <rect class="cls-83" x="8" y="56.05" width="6.99" height="23.32" rx="2"/>
+        <path class="cls-38" d="M36,28A38.43,38.43,0,0,0,8.54,39.49,1.77,1.77,0,0,0,8,40.72L8,82.19a1.75,1.75,0,0,0,1.75,1.75l52.46,0A1.75,1.75,0,0,0,64,82.24l0-41.46a1.71,1.71,0,0,0-.5-1.23A38.37,38.37,0,0,0,36,28Z"/>
       </g>
       <g id="Slid_threshold_proxGd">
         <g id="slider_threshold_proxGd">
-          <line id="value_threshold_back_off-2" data-name="value_threshold_back_off" class="cls-67" x1="78.95" y1="13" x2="78.95" y2="83"/>
+          <line id="value_threshold_back_off-2" data-name="value_threshold_back_off" class="cls-65" x1="78.95" y1="13" x2="78.95" y2="83"/>
           <g id="value_threshold_back-2" data-name="value_threshold_back">
-            <line id="value_thresholdBack-2" data-name="value_thresholdBack" class="cls-86" x1="78.95" y1="19.56" x2="78.95" y2="76.44"/>
+            <line id="value_thresholdBack-2" data-name="value_thresholdBack" class="cls-84" x1="78.95" y1="19.56" x2="78.95" y2="76.44"/>
             <g id="crans-3" data-name="crans">
               <line class="cls-4" x1="74.89" y1="76.44" x2="73.89" y2="76.44"/>
               <line class="cls-4" x1="74.89" y1="48" x2="73.89" y2="48"/>
@@ -6048,98 +5964,96 @@ sim-playground {
           </g>
         </g>
         <g id="Cursor_proxGd">
-          <rect id="White" class="cls-77" x="83.05" y="40" width="8" height="8"/>
-          <line id="position" class="cls-68" x1="91.05" y1="48" x2="77.93" y2="48"/>
-          <rect id="Black" class="cls-80" x="83.05" y="48" width="7.99" height="7.99" transform="translate(-0.06 0.09) rotate(-0.06)"/>
+          <rect id="White" class="cls-76" x="83.05" y="40" width="8" height="8"/>
+          <line id="position" class="cls-67" x1="91.05" y1="48" x2="77.93" y2="48"/>
+          <rect id="Black" class="cls-85" x="83.05" y="48" width="7.99" height="7.99" transform="translate(-0.06 0.09) rotate(-0.06)"/>
         </g>
       </g>
       <g id="ProxGd1_group-2" data-name="ProxGd1_group">
-        <rect id="Btn3_ProxGd1_adv" class="cls-60" x="40.9" y="32.93" width="9.99" height="9.99" transform="translate(-0.7 74.97) rotate(-78.06)"/>
-        <circle id="Led_Gd1-2" data-name="Led_Gd1" class="cls-87" cx="53.83" cy="39.24" r="2"/>
+        <rect id="Btn3_ProxGd1_adv" class="cls-58" x="40.9" y="32.93" width="9.99" height="9.99" transform="translate(-0.7 74.97) rotate(-78.06)"/>
+        <circle id="Led_Gd1-2" data-name="Led_Gd1" class="cls-86" cx="53.83" cy="39.24" r="2"/>
       </g>
       <g id="ProxGd0_group-2" data-name="ProxGd0_group">
-        <rect id="Btn3_ProxGd0_adv" class="cls-60" x="20.99" y="32.93" width="10" height="10" transform="translate(-7.32 6.23) rotate(-12)"/>
-        <circle id="Led_Gd0-2" data-name="Led_Gd0" class="cls-88" cx="18.17" cy="39.61" r="2"/>
+        <rect id="Btn3_ProxGd0_adv" class="cls-58" x="20.99" y="32.93" width="10" height="10" transform="translate(-7.32 6.23) rotate(-12)"/>
+        <circle id="Led_Gd0-2" data-name="Led_Gd0" class="cls-87" cx="18.17" cy="39.61" r="2"/>
       </g>
     </g>
     <g id="ColorTop_basic">
       <g id="ColorPalette">
-        <rect id="Btn2_Green" class="cls-89" x="12" y="8.06" width="17.96" height="17.96"/>
-        <rect id="Btn2_Blue" class="cls-90" x="29.96" y="8.06" width="17.96" height="17.96"/>
-        <rect id="Btn2_Red" class="cls-91" x="47.93" y="8.06" width="17.96" height="17.96"/>
-        <rect id="Btn2_Yellow" class="cls-92" x="12" y="26.03" width="17.96" height="17.96"/>
-        <rect id="Btn2_Cyan" class="cls-93" x="47.93" y="26.03" width="17.96" height="17.96"/>
-        <rect id="Btn2_Magenta" class="cls-94" x="29.96" y="26.03" width="17.96" height="17.96"/>
-        <rect id="Btn2_White_Select" class="cls-95" x="65.89" y="8.06" width="17.96" height="17.96"/>
+        <rect id="Btn2_Green" class="cls-88" x="12" y="8.06" width="17.96" height="17.96"/>
+        <rect id="Btn2_Blue" class="cls-89" x="29.96" y="8.06" width="17.96" height="17.96"/>
+        <rect id="Btn2_Red" class="cls-90" x="47.93" y="8.06" width="17.96" height="17.96"/>
+        <rect id="Btn2_Yellow" class="cls-91" x="12" y="26.03" width="17.96" height="17.96"/>
+        <rect id="Btn2_Cyan" class="cls-92" x="47.93" y="26.03" width="17.96" height="17.96"/>
+        <rect id="Btn2_Magenta" class="cls-93" x="29.96" y="26.03" width="17.96" height="17.96"/>
+        <rect id="Btn2_White_Select" class="cls-94" x="65.89" y="8.06" width="17.96" height="17.96"/>
         <g id="Btn2_NoColor">
-          <rect class="cls-96" x="65.89" y="26.03" width="17.96" height="17.96"/>
-          <polygon class="cls-97" points="68.04 43.25 66.63 43.25 66.63 41.84 81.69 26.78 83.1 26.77 83.1 28.19 68.04 43.25"/>
+          <rect class="cls-95" x="65.89" y="26.03" width="17.96" height="17.96"/>
+          <polygon class="cls-96" points="68.04 43.25 66.63 43.25 66.63 41.84 81.69 26.78 83.1 26.77 83.1 28.19 68.04 43.25"/>
         </g>
       </g>
       <g id="Bg_Thymio_front_color">
         <path class="cls-14" d="M85.92,83.39v4.26a1.26,1.26,0,0,1-1.27,1.28H76.5a1.27,1.27,0,0,1-1.28-1.26V83.44Z"/>
         <path class="cls-14" d="M21.06,83.65v4a1.28,1.28,0,0,1-1.27,1.3H11.64a1.27,1.27,0,0,1-1.28-1.26v-4Z"/>
         <path class="cls-14" d="M49.25,83.49H43.43c1.9,1.25,2.24,3.16,2.9,4.15a3,3,0,0,0,2.33,1.21h1.18a3,3,0,0,0,2.33-1.2c.66-1,1-2.9,2.9-4.15Z"/>
-        <rect class="cls-98" x="8" y="53.39" width="80" height="30" rx="2"/>
-        <line class="cls-99" x1="61.95" y1="67.03" x2="69.39" y2="67.03"/>
-        <line class="cls-99" x1="78.07" y1="67.03" x2="83.99" y2="67.03"/>
-        <line class="cls-99" x1="34.03" y1="67.03" x2="26.6" y2="67.03"/>
-        <line class="cls-99" x1="17.92" y1="67.03" x2="11.99" y2="67.03"/>
-        <line class="cls-99" x1="43.49" y1="67.03" x2="52.34" y2="67.03"/>
+        <rect class="cls-97" x="8" y="53.39" width="80" height="30" rx="2"/>
+        <line class="cls-98" x1="61.95" y1="67.03" x2="69.39" y2="67.03"/>
+        <line class="cls-98" x1="78.07" y1="67.03" x2="83.99" y2="67.03"/>
+        <line class="cls-98" x1="34.03" y1="67.03" x2="26.6" y2="67.03"/>
+        <line class="cls-98" x1="17.92" y1="67.03" x2="11.99" y2="67.03"/>
+        <line class="cls-98" x1="43.49" y1="67.03" x2="52.34" y2="67.03"/>
       </g>
-      <path id="Gradient_Top_basic" class="cls-100" d="M10,54.29H86a1,1,0,0,1,1,1v11a0,0,0,0,1,0,0H9a0,0,0,0,1,0,0v-11A1,1,0,0,1,10,54.29Z"/>
+      <path id="Gradient_Top_basic" class="cls-34" d="M10,54.29H86a1,1,0,0,1,1,1v11a0,0,0,0,1,0,0H9a0,0,0,0,1,0,0v-11A1,1,0,0,1,10,54.29Z"/>
       <g id="SelectedColors">
-        <rect id="Btn2_SelectedWhite" class="cls-101" x="65.4" y="7.57" width="18.94" height="18.95"/>
-        <rect id="Btn2_SelectedRed" class="cls-101" x="47.41" y="7.54" width="19" height="19"/>
-        <rect id="Btn2_SelectedBlue" class="cls-101" x="29.47" y="7.57" width="18.94" height="18.95"/>
-        <rect id="Btn2_SelectedGreen" class="cls-101" x="11.48" y="7.54" width="19" height="19"/>
-        <rect id="Btn2_SelectedNone" class="cls-101" x="65.37" y="25.51" width="19" height="19"/>
-        <rect id="Btn2_SelectedYel" class="cls-101" x="47.41" y="25.51" width="19" height="19"/>
-        <rect id="Btn2_SelectedMagenta" class="cls-101" x="29.44" y="25.51" width="19" height="19"/>
-        <rect id="Btn2_SelectedCyan" class="cls-101" x="11.48" y="25.51" width="19" height="19"/>
+        <rect id="Btn2_SelectedWhite" class="cls-34" x="65.4" y="7.57" width="18.94" height="18.95"/>
+        <rect id="Btn2_SelectedRed" class="cls-34" x="47.41" y="7.54" width="19" height="19"/>
+        <rect id="Btn2_SelectedBlue" class="cls-34" x="29.47" y="7.57" width="18.94" height="18.95"/>
+        <rect id="Btn2_SelectedGreen" class="cls-34" x="11.48" y="7.54" width="19" height="19"/>
+        <rect id="Btn2_SelectedNone" class="cls-34" x="65.37" y="25.51" width="19" height="19"/>
+        <rect id="Btn2_SelectedYel" class="cls-34" x="47.41" y="25.51" width="19" height="19"/>
+        <rect id="Btn2_SelectedMagenta" class="cls-34" x="29.44" y="25.51" width="19" height="19"/>
+        <rect id="Btn2_SelectedCyan" class="cls-34" x="11.48" y="25.51" width="19" height="19"/>
       </g>
-      <rect class="cls-102" x="47.93" y="26.03" width="17.96" height="17.97"/>
     </g>
     <g id="ColorBottom_basic">
       <g id="ColorPalette-2" data-name="ColorPalette">
-        <rect id="Btn2_Green-2" data-name="Btn2_Green" class="cls-89" x="12" y="52.07" width="17.96" height="17.96"/>
-        <rect id="Btn2_Blue-2" data-name="Btn2_Blue" class="cls-90" x="29.96" y="52.07" width="17.96" height="17.96"/>
-        <rect id="Btn2_Red-2" data-name="Btn2_Red" class="cls-91" x="47.93" y="52.07" width="17.96" height="17.96"/>
-        <rect id="Btn2_Yellow-2" data-name="Btn2_Yellow" class="cls-103" x="12" y="70.03" width="17.96" height="17.96"/>
-        <rect id="Btn2_Cyan-2" data-name="Btn2_Cyan" class="cls-93" x="47.93" y="70.03" width="17.96" height="17.96"/>
-        <rect id="Btn2_Magenta-2" data-name="Btn2_Magenta" class="cls-94" x="29.96" y="70.03" width="17.96" height="17.96"/>
+        <rect id="Btn2_Green-2" data-name="Btn2_Green" class="cls-88" x="12" y="52.07" width="17.96" height="17.96"/>
+        <rect id="Btn2_Blue-2" data-name="Btn2_Blue" class="cls-89" x="29.96" y="52.07" width="17.96" height="17.96"/>
+        <rect id="Btn2_Red-2" data-name="Btn2_Red" class="cls-90" x="47.93" y="52.07" width="17.96" height="17.96"/>
+        <rect id="Btn2_Yellow-2" data-name="Btn2_Yellow" class="cls-99" x="12" y="70.03" width="17.96" height="17.96"/>
+        <rect id="Btn2_Cyan-2" data-name="Btn2_Cyan" class="cls-92" x="47.93" y="70.03" width="17.96" height="17.96"/>
+        <rect id="Btn2_Magenta-2" data-name="Btn2_Magenta" class="cls-93" x="29.96" y="70.03" width="17.96" height="17.96"/>
         <g id="Btn2_NoColor-2" data-name="Btn2_NoColor">
-          <rect class="cls-96" x="65.89" y="70.03" width="17.96" height="17.96"/>
-          <polygon class="cls-97" points="68.05 87.25 66.63 87.25 66.63 85.84 81.69 70.78 83.11 70.78 83.11 72.2 68.05 87.25"/>
+          <rect class="cls-95" x="65.89" y="70.03" width="17.96" height="17.96"/>
+          <polygon class="cls-96" points="68.05 87.25 66.63 87.25 66.63 85.84 81.69 70.78 83.11 70.78 83.11 72.2 68.05 87.25"/>
         </g>
-        <rect id="Btn2_White_Select-2" data-name="Btn2_White_Select" class="cls-95" x="65.89" y="52.07" width="17.96" height="17.96"/>
+        <rect id="Btn2_White_Select-2" data-name="Btn2_White_Select" class="cls-94" x="65.89" y="52.07" width="17.96" height="17.96"/>
       </g>
       <g id="Bg_Thymio_front_color-2" data-name="Bg_Thymio_front_color">
         <path class="cls-14" d="M85.92,38v4.26a1.26,1.26,0,0,1-1.27,1.28H76.5a1.27,1.27,0,0,1-1.28-1.27V38.05Z"/>
         <path class="cls-14" d="M21.06,38.26v4a1.28,1.28,0,0,1-1.27,1.3H11.64a1.27,1.27,0,0,1-1.28-1.26v-4Z"/>
         <path class="cls-14" d="M49.25,38.1H43.43c1.9,1.25,2.24,3.16,2.9,4.15a3,3,0,0,0,2.33,1.21h1.18a3,3,0,0,0,2.33-1.21c.66-1,1-2.89,2.9-4.14Z"/>
-        <rect class="cls-98" x="8" y="8" width="80" height="30" rx="2"/>
-        <line class="cls-99" x1="61.95" y1="21.64" x2="69.39" y2="21.64"/>
-        <line class="cls-99" x1="78.07" y1="21.64" x2="83.99" y2="21.64"/>
-        <line class="cls-99" x1="34.03" y1="21.64" x2="26.6" y2="21.64"/>
-        <line class="cls-99" x1="17.92" y1="21.64" x2="11.99" y2="21.64"/>
-        <line class="cls-99" x1="43.49" y1="21.64" x2="52.34" y2="21.64"/>
+        <rect class="cls-97" x="8" y="8" width="80" height="30" rx="2"/>
+        <line class="cls-98" x1="61.95" y1="21.64" x2="69.39" y2="21.64"/>
+        <line class="cls-98" x1="78.07" y1="21.64" x2="83.99" y2="21.64"/>
+        <line class="cls-98" x1="34.03" y1="21.64" x2="26.6" y2="21.64"/>
+        <line class="cls-98" x1="17.92" y1="21.64" x2="11.99" y2="21.64"/>
+        <line class="cls-98" x1="43.49" y1="21.64" x2="52.34" y2="21.64"/>
       </g>
-      <path id="Gradient_Bottom_basic" class="cls-104" d="M9,22.25H87a0,0,0,0,1,0,0v14a1,1,0,0,1-1,1H10a1,1,0,0,1-1-1v-14A0,0,0,0,1,9,22.25Z"/>
+      <path id="Gradient_Bottom_basic" class="cls-34" d="M9,22.25H87a0,0,0,0,1,0,0v14a1,1,0,0,1-1,1H10a1,1,0,0,1-1-1v-14A0,0,0,0,1,9,22.25Z"/>
       <g id="SelectedColors_bottom">
-        <rect id="Btn2_SelectedWhite-2" data-name="Btn2_SelectedWhite" class="cls-101" x="65.96" y="52.06" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedRed-2" data-name="Btn2_SelectedRed" class="cls-101" x="48" y="52.06" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedBlue-2" data-name="Btn2_SelectedBlue" class="cls-101" x="30.04" y="52.06" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedGreen-2" data-name="Btn2_SelectedGreen" class="cls-101" x="12.07" y="52.06" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedNone-2" data-name="Btn2_SelectedNone" class="cls-101" x="65.96" y="70.03" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedYel-2" data-name="Btn2_SelectedYel" class="cls-101" x="48" y="70.03" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedMagenta-2" data-name="Btn2_SelectedMagenta" class="cls-101" x="30.04" y="70.03" width="17.96" height="17.97"/>
-        <rect id="Btn2_SelectedCyan-2" data-name="Btn2_SelectedCyan" class="cls-101" x="12.07" y="70.03" width="17.96" height="17.97"/>
+        <rect id="Btn2_SelectedWhite-2" data-name="Btn2_SelectedWhite" class="cls-34" x="65.96" y="52.06" width="17.96" height="17.97"/>
+        <rect id="Btn2_SelectedRed-2" data-name="Btn2_SelectedRed" class="cls-34" x="48" y="52.06" width="17.96" height="17.97"/>
+        <rect id="Btn2_SelectedBlue-2" data-name="Btn2_SelectedBlue" class="cls-34" x="30.04" y="52.06" width="17.96" height="17.97"/>
+        <rect id="Btn2_SelectedGreen-2" data-name="Btn2_SelectedGreen" class="cls-34" x="12.07" y="52.06" width="17.96" height="17.97"/>
+        <rect id="Btn2_SelectedNone-2" data-name="Btn2_SelectedNone" class="cls-34" x="65.96" y="70.03" width="17.96" height="17.97"/>
+        <rect id="Btn2_SelectedYel-2" data-name="Btn2_SelectedYel" class="cls-34" x="48" y="70.03" width="17.96" height="17.97"/>
+        <rect id="Btn2_SelectedMagenta-2" data-name="Btn2_SelectedMagenta" class="cls-34" x="30.04" y="70.03" width="17.96" height="17.97"/>
+        <rect id="Btn2_SelectedCyan-2" data-name="Btn2_SelectedCyan" class="cls-34" x="12.07" y="70.03" width="17.96" height="17.97"/>
       </g>
-      <rect class="cls-36" x="29.94" y="52.05" width="18" height="18"/>
     </g>
     <g id="EvCounter">
-      <rect id="Bg_SelectedOperator" class="cls-105" x="38" y="18" width="20" height="60" rx="1" transform="translate(96) rotate(90)"/>
+      <rect id="Bg_SelectedOperator" class="cls-11" x="38" y="18" width="20" height="60" rx="1" transform="translate(96) rotate(90)"/>
       <g id="List_operators">
         <g id="AboveValue">
           <path class="cls-7" d="M36,50.36l-6.76-3.2a1.11,1.11,0,0,1-.45-.34,1,1,0,0,1-.13-.48v-.58a.89.89,0,0,1,.13-.49,1.12,1.12,0,0,1,.45-.35L36,41.72a1.24,1.24,0,0,1,.42-.12.38.38,0,0,1,.4.4v1.18a.73.73,0,0,1-.52.72L31.49,46l4.8,2.16a.71.71,0,0,1,.52.72V50.1a.38.38,0,0,1-.12.29.41.41,0,0,1-.28.11A.9.9,0,0,1,36,50.36Zm-7.2,3.88a.49.49,0,0,1-.14-.34V52.82a.45.45,0,0,1,.14-.35.48.48,0,0,1,.34-.13h7.2a.45.45,0,0,1,.48.48V53.9a.48.48,0,0,1-.13.34.45.45,0,0,1-.35.14h-7.2A.49.49,0,0,1,28.79,54.24Z"/>
@@ -6154,14 +6068,14 @@ sim-playground {
         </g>
       </g>
       <g id="ComparatorChange">
-        <polygon id="ComparatorDown" class="cls-68" points="26.73 65.07 38.73 65.07 32.73 74.07 26.73 65.07"/>
-        <polygon id="ComparatorUp" class="cls-68" points="26.73 30.94 32.73 21.94 38.73 30.94 26.73 30.94"/>
+        <polygon id="ComparatorDown" class="cls-67" points="26.73 65.07 38.73 65.07 32.73 74.07 26.73 65.07"/>
+        <polygon id="ComparatorUp" class="cls-67" points="26.73 30.94 32.73 21.94 38.73 30.94 26.73 30.94"/>
       </g>
       <g id="ValueChange">
-        <polygon id="ValueDown" class="cls-68" points="56.07 65.07 68.07 65.07 62.07 74.07 56.07 65.07"/>
-        <polygon id="ValueUp" class="cls-68" points="56.07 30.94 62.07 21.94 68.07 30.94 56.07 30.94"/>
+        <polygon id="ValueDown" class="cls-67" points="56.07 65.07 68.07 65.07 62.07 74.07 56.07 65.07"/>
+        <polygon id="ValueUp" class="cls-67" points="56.07 30.94 62.07 21.94 68.07 30.94 56.07 30.94"/>
       </g>
-      <rect id="ValueField" class="cls-101" x="48.07" y="42.13" width="28" height="12"/>
+      <rect id="ValueField" class="cls-34" x="48.07" y="42.13" width="28" height="12"/>
       <g id="StatesOff-2" data-name="StatesOff">
         <path id="Btn2_State0-2" data-name="Btn2_State0" class="cls-6" d="M38.41,10.71a2.7,2.7,0,0,1-.68-5.3,38.21,38.21,0,0,1,20.06,0,2.71,2.71,0,0,1,1.67,1.33,2.64,2.64,0,0,1,.19,2.11,2.68,2.68,0,0,1-2.55,1.86,2.82,2.82,0,0,1-.7-.1,32.76,32.76,0,0,0-17.28,0A2.83,2.83,0,0,1,38.41,10.71Z"/>
         <path id="Btn2_State1-2" data-name="Btn2_State1" class="cls-6" d="M82.68,29a2.67,2.67,0,0,1-2.32-1.35A33,33,0,0,0,68.13,15.46a2.69,2.69,0,0,1,1.36-5,2.78,2.78,0,0,1,1.35.36A38.28,38.28,0,0,1,85,25a2.71,2.71,0,0,1-1.12,3.76A2.74,2.74,0,0,1,82.68,29Z"/>
@@ -6173,15 +6087,15 @@ sim-playground {
         <path id="Btn2_State7-2" data-name="Btn2_State7" class="cls-6" d="M12.82,29a2.74,2.74,0,0,1-1.22-.29,2.69,2.69,0,0,1-1.36-1.63A2.73,2.73,0,0,1,10.49,25,38.26,38.26,0,0,1,24.66,10.79a2.7,2.7,0,0,1,2.71,4.66A32.8,32.8,0,0,0,15.15,27.67,2.7,2.7,0,0,1,12.82,29Z"/>
       </g>
       <g id="Saturate">
-        <line id="SaturateLever" class="cls-67" x1="30.35" y1="5.96" x2="34.82" y2="16.52"/>
-        <line id="SaturateLever-2" data-name="SaturateLever" class="cls-67" x1="30.35" y1="5.96" x2="18.89" y2="5.96"/>
-        <circle id="SaturatePivot" class="cls-106" cx="30.35" cy="5.96" r="2"/>
+        <line id="SaturateLever" class="cls-65" x1="30.35" y1="5.96" x2="34.82" y2="16.52"/>
+        <line id="SaturateLever-2" data-name="SaturateLever" class="cls-65" x1="30.35" y1="5.96" x2="18.89" y2="5.96"/>
+        <circle id="SaturatePivot" class="cls-100" cx="30.35" cy="5.96" r="2"/>
       </g>
     </g>
     <g id="Ev_TimersUp">
       <g id="Bg_TimerUp">
-        <path id="Bg_Timer" class="cls-3" d="M33.8,88a2,2,0,0,1-2-2V55.56a2,2,0,0,1,1-1.77l11.09-6.34L32.78,41.12a2,2,0,0,1-1-1.77V8a2,2,0,0,1,2-2H62.16a2,2,0,0,1,2,2V39.35a2,2,0,0,1-1,1.77L52.09,47.45l11.08,6.34a2,2,0,0,1,1,1.77V86a2,2,0,0,1-2,2Z"/>
-        <polygon id="Time" class="cls-107" points="34.76 85.46 34.76 69.15 47.98 65.77 61.19 69.15 61.19 85.46 34.76 85.46"/>
+        <path id="Bg_Timer" class="cls-11" d="M33.8,88a2,2,0,0,1-2-2V55.56a2,2,0,0,1,1-1.77l11.09-6.34L32.78,41.12a2,2,0,0,1-1-1.77V8a2,2,0,0,1,2-2H62.16a2,2,0,0,1,2,2V39.35a2,2,0,0,1-1,1.77L52.09,47.45l11.08,6.34a2,2,0,0,1,1,1.77V86a2,2,0,0,1-2,2Z"/>
+        <polygon id="Time" class="cls-101" points="34.76 85.46 34.76 69.15 47.98 65.77 61.19 69.15 61.19 85.46 34.76 85.46"/>
       </g>
       <g>
         <path class="cls-7" d="M23.1,77.3h-6a1,1,0,0,1,0-2h6a1,1,0,1,1,0,2Z"/>
@@ -6204,7 +6118,7 @@ sim-playground {
         <path id="Btn2_FwdLeftDir" class="cls-4" d="M29.61,31.84a20.2,20.2,0,0,0-4.92-5.67l-1.78,3-7.6-13.43,15.43.14-1.95,3.31a27.89,27.89,0,0,1,6.87,7.21l.45.68L30.26,33Z"/>
         <g id="Stop">
           <circle id="Btn2_StopDir" class="cls-4" cx="48.06" cy="47.83" r="9"/>
-          <rect id="StopSign" class="cls-108" x="43.99" y="43.99" width="8" height="8"/>
+          <rect id="StopSign" class="cls-102" x="43.99" y="43.99" width="8" height="8"/>
         </g>
         <path id="Btn2_LeftDir" class="cls-4" d="M30.06,54.36l-13.82-8v4h-.57a4.16,4.16,0,1,1,2.73-7.28l5.26-6a12.15,12.15,0,1,0-8,21.31h.57v4Z"/>
         <path id="Btn2_RightDir" class="cls-4" d="M65.8,54.36l13.82-8v4h.57a4.16,4.16,0,1,0-2.73-7.28l-5.26-6a12.15,12.15,0,1,1,8,21.31h-.57v4Z"/>
@@ -6214,33 +6128,33 @@ sim-playground {
       <g id="Sliders">
         <g id="Slid_right">
           <g id="sliderBg_R">
-            <line id="SliderR_range" class="cls-101" x1="80.05" y1="19.01" x2="80.05" y2="77.01"/>
-            <line class="cls-102" x1="80.05" y1="12.03" x2="80.05" y2="83.99"/>
-            <polygon class="cls-37" points="76.56 12.03 80.05 5.98 83.54 12.03 76.56 12.03"/>
-            <polygon class="cls-37" points="76.56 83.99 80.05 90.03 83.54 83.99 76.56 83.99"/>
+            <line id="SliderR_range" class="cls-34" x1="80.05" y1="19.01" x2="80.05" y2="77.01"/>
+            <line class="cls-103" x1="80.05" y1="12.03" x2="80.05" y2="83.99"/>
+            <polygon class="cls-104" points="76.56 12.03 80.05 5.98 83.54 12.03 76.56 12.03"/>
+            <polygon class="cls-104" points="76.56 83.99 80.05 90.03 83.54 83.99 76.56 83.99"/>
           </g>
           <g id="Cursor_right">
-            <circle id="CursorRight" class="cls-38" cx="80.05" cy="48.01" r="6"/>
-            <circle id="SameSpeed_R" class="cls-37" cx="80.05" cy="48.01" r="2"/>
+            <circle id="CursorRight" class="cls-35" cx="80.05" cy="48.01" r="6"/>
+            <circle id="SameSpeed_R" class="cls-104" cx="80.05" cy="48.01" r="2"/>
           </g>
-          <rect id="StopIndicator_R" class="cls-97" x="77.97" y="45.87" width="4.27" height="4.27"/>
+          <rect id="StopIndicator_R" class="cls-96" x="77.97" y="45.87" width="4.27" height="4.27"/>
         </g>
         <g id="Slid_left">
           <g id="sliderBg_L">
-            <line id="SliderL_range" class="cls-101" x1="16.2" y1="19.01" x2="16.2" y2="77.01"/>
-            <line class="cls-102" x1="16.2" y1="12.03" x2="16.2" y2="83.99"/>
-            <polygon class="cls-37" points="12.73 12.03 16.22 5.98 19.71 12.03 12.73 12.03"/>
-            <polygon class="cls-37" points="12.71 83.99 16.2 90.03 19.69 83.99 12.71 83.99"/>
+            <line id="SliderL_range" class="cls-34" x1="16.2" y1="19.01" x2="16.2" y2="77.01"/>
+            <line class="cls-103" x1="16.2" y1="12.03" x2="16.2" y2="83.99"/>
+            <polygon class="cls-104" points="12.73 12.03 16.22 5.98 19.71 12.03 12.73 12.03"/>
+            <polygon class="cls-104" points="12.71 83.99 16.2 90.03 19.69 83.99 12.71 83.99"/>
           </g>
           <g id="Cursor_left">
-            <circle id="CursorLeft" class="cls-38" cx="16.2" cy="48.01" r="6"/>
-            <circle id="SameSpeed_L" class="cls-37" cx="16.2" cy="48.01" r="2"/>
+            <circle id="CursorLeft" class="cls-35" cx="16.2" cy="48.01" r="6"/>
+            <circle id="SameSpeed_L" class="cls-104" cx="16.2" cy="48.01" r="2"/>
           </g>
-          <rect id="StopIndicator_L" class="cls-97" x="14.12" y="45.87" width="4.27" height="4.27"/>
+          <rect id="StopIndicator_L" class="cls-96" x="14.12" y="45.87" width="4.27" height="4.27"/>
         </g>
       </g>
       <g id="ThymioTop_wheels_mini">
-        <path class="cls-109" d="M48,34.76a13,13,0,0,0-9.18,3.76,1,1,0,0,0-.29.71V52.68a1,1,0,0,0,1,1l16.93,0a1,1,0,0,0,1-1V39.25a1,1,0,0,0-.29-.71A12.93,12.93,0,0,0,48,34.76Z"/>
+        <path class="cls-105" d="M48,34.76a13,13,0,0,0-9.18,3.76,1,1,0,0,0-.29.71V52.68a1,1,0,0,0,1,1l16.93,0a1,1,0,0,0,1-1V39.25a1,1,0,0,0-.29-.71A12.93,12.93,0,0,0,48,34.76Z"/>
         <path class="cls-7" d="M39.54,43.23h1.58a1,1,0,0,1,1,1V50.1a1,1,0,0,1-1,1H39.51"/>
         <path class="cls-7" d="M56.47,51.1H54.88a1,1,0,0,1-1-1V44.23a1,1,0,0,1,1-1H56.5"/>
       </g>
@@ -6251,30 +6165,30 @@ sim-playground {
           <path class="cls-14" d="M82.13,86.6v3.84A1.15,1.15,0,0,1,81,91.59H73.65a1.15,1.15,0,0,1-1.15-1.14V86.64Z"/>
           <path class="cls-14" d="M23.75,86.84l0,3.57a1.18,1.18,0,0,1-1.15,1.18H15.28a1.15,1.15,0,0,1-1.15-1.14V86.88Z"/>
           <path class="cls-14" d="M49.13,86.69H43.89c1.71,1.13,2,2.84,2.61,3.73a2.65,2.65,0,0,0,2.09,1.09h1.07a2.69,2.69,0,0,0,2.09-1.09c.59-.89.9-2.61,2.61-3.73Z"/>
-          <rect class="cls-98" x="12" y="59.6" width="72" height="27" rx="2"/>
-          <line class="cls-99" x1="60.56" y1="71.88" x2="67.25" y2="71.88"/>
-          <line class="cls-99" x1="75.06" y1="71.88" x2="80.39" y2="71.88"/>
-          <line class="cls-99" x1="35.43" y1="71.88" x2="28.74" y2="71.88"/>
-          <line class="cls-99" x1="20.92" y1="71.88" x2="15.59" y2="71.88"/>
-          <line class="cls-99" x1="43.94" y1="71.88" x2="51.9" y2="71.88"/>
+          <rect class="cls-97" x="12" y="59.6" width="72" height="27" rx="2"/>
+          <line class="cls-98" x1="60.56" y1="71.88" x2="67.25" y2="71.88"/>
+          <line class="cls-98" x1="75.06" y1="71.88" x2="80.39" y2="71.88"/>
+          <line class="cls-98" x1="35.43" y1="71.88" x2="28.74" y2="71.88"/>
+          <line class="cls-98" x1="20.92" y1="71.88" x2="15.59" y2="71.88"/>
+          <line class="cls-98" x1="43.94" y1="71.88" x2="51.9" y2="71.88"/>
         </g>
       </g>
-      <path id="Gradient_top" class="cls-110" d="M14,60.58H82a1,1,0,0,1,1,1v9.5a0,0,0,0,1,0,0H13a0,0,0,0,1,0,0v-9.5A1,1,0,0,1,14,60.58Z"/>
+      <path id="Gradient_top" class="cls-106" d="M14,60.58H82a1,1,0,0,1,1,1v9.5a0,0,0,0,1,0,0H13a0,0,0,0,1,0,0v-9.5A1,1,0,0,1,14,60.58Z"/>
       <g id="Sliders_rgb">
         <g id="Slid_blue">
-          <line id="Bg_slid_blue" class="cls-111" x1="20" y1="48.04" x2="76" y2="48.04"/>
-          <line id="Slid_blue_value" class="cls-112" x1="20" y1="48.04" x2="76" y2="48.04"/>
-          <circle id="Cursor_blue" class="cls-113" cx="77.29" cy="48" r="5"/>
+          <line id="Bg_slid_blue" class="cls-107" x1="20" y1="48.04" x2="76" y2="48.04"/>
+          <line id="Slid_blue_value" class="cls-108" x1="20" y1="48.04" x2="76" y2="48.04"/>
+          <circle id="Cursor_blue" class="cls-109" cx="77.29" cy="48" r="5"/>
         </g>
         <g id="Slid_green">
-          <line id="Bg_slid_green" class="cls-111" x1="20" y1="30" x2="76" y2="30"/>
-          <line id="Slid_green_value" class="cls-114" x1="20" y1="30.04" x2="76" y2="30.04"/>
-          <circle id="Cursor_green" class="cls-115" cx="77.29" cy="30.04" r="5"/>
+          <line id="Bg_slid_green" class="cls-107" x1="20" y1="30" x2="76" y2="30"/>
+          <line id="Slid_green_value" class="cls-110" x1="20" y1="30.04" x2="76" y2="30.04"/>
+          <circle id="Cursor_green" class="cls-111" cx="77.29" cy="30.04" r="5"/>
         </g>
         <g id="Slid_red">
-          <line id="Bg_slid_red" class="cls-111" x1="20" y1="12.04" x2="76" y2="12.04"/>
-          <line id="Slid_red_value" class="cls-116" x1="20" y1="12.04" x2="76" y2="12.04"/>
-          <circle id="Cursor_red" class="cls-117" cx="77.29" cy="12.04" r="5"/>
+          <line id="Bg_slid_red" class="cls-107" x1="20" y1="12.04" x2="76" y2="12.04"/>
+          <line id="Slid_red_value" class="cls-112" x1="20" y1="12.04" x2="76" y2="12.04"/>
+          <circle id="Cursor_red" class="cls-113" cx="77.29" cy="12.04" r="5"/>
         </g>
       </g>
     </g>
@@ -6284,100 +6198,100 @@ sim-playground {
           <path class="cls-14" d="M82.13,31.35v3.84A1.15,1.15,0,0,1,81,36.34H73.65A1.15,1.15,0,0,1,72.5,35.2V31.4Z"/>
           <path class="cls-14" d="M23.75,31.59l0,3.57a1.17,1.17,0,0,1-1.15,1.18H15.28a1.14,1.14,0,0,1-1.15-1.14V31.63Z"/>
           <path class="cls-14" d="M49.13,31.45H43.89c1.71,1.12,2,2.84,2.61,3.73a2.66,2.66,0,0,0,2.09,1.08h1.07a2.65,2.65,0,0,0,2.09-1.09c.59-.89.9-2.61,2.61-3.73H49.13Z"/>
-          <rect class="cls-98" x="12" y="4.35" width="72" height="27" rx="2"/>
-          <line class="cls-99" x1="60.56" y1="16.63" x2="67.25" y2="16.63"/>
-          <line class="cls-99" x1="75.06" y1="16.63" x2="80.39" y2="16.63"/>
-          <line class="cls-99" x1="35.43" y1="16.63" x2="28.74" y2="16.63"/>
-          <line class="cls-99" x1="20.92" y1="16.63" x2="15.59" y2="16.63"/>
-          <line class="cls-99" x1="43.94" y1="16.63" x2="51.9" y2="16.63"/>
+          <rect class="cls-97" x="12" y="4.35" width="72" height="27" rx="2"/>
+          <line class="cls-98" x1="60.56" y1="16.63" x2="67.25" y2="16.63"/>
+          <line class="cls-98" x1="75.06" y1="16.63" x2="80.39" y2="16.63"/>
+          <line class="cls-98" x1="35.43" y1="16.63" x2="28.74" y2="16.63"/>
+          <line class="cls-98" x1="20.92" y1="16.63" x2="15.59" y2="16.63"/>
+          <line class="cls-98" x1="43.94" y1="16.63" x2="51.9" y2="16.63"/>
         </g>
       </g>
-      <path id="Gradient_bottom" class="cls-118" d="M13,17.42H83a0,0,0,0,1,0,0V29.67a.75.75,0,0,1-.75.75H13.75a.75.75,0,0,1-.75-.75V17.42A0,0,0,0,1,13,17.42Z"/>
+      <path id="Gradient_bottom" class="cls-114" d="M13,17.42H83a0,0,0,0,1,0,0V29.67a.75.75,0,0,1-.75.75H13.75a.75.75,0,0,1-.75-.75V17.42A0,0,0,0,1,13,17.42Z"/>
       <g id="Sliders_rgb_bot">
         <g id="Slid_blue_bot">
-          <line id="Bg_slid_blue_bot" class="cls-111" x1="20" y1="83.93" x2="76" y2="83.93"/>
-          <line id="Slid_blue_value_bot" class="cls-112" x1="20" y1="83.93" x2="76" y2="83.93"/>
-          <circle id="Cursor_blue_bot" class="cls-113" cx="76" cy="83.89" r="5"/>
+          <line id="Bg_slid_blue_bot" class="cls-107" x1="20" y1="83.93" x2="76" y2="83.93"/>
+          <line id="Slid_blue_value_bot" class="cls-108" x1="20" y1="83.93" x2="76" y2="83.93"/>
+          <circle id="Cursor_blue_bot" class="cls-109" cx="76" cy="83.89" r="5"/>
         </g>
         <g id="Slid_green_bot">
-          <line id="Bg_slid_green_bot" class="cls-111" x1="20" y1="65.9" x2="76" y2="65.9"/>
-          <line id="Slid_green_value_bot" class="cls-114" x1="20" y1="65.93" x2="76" y2="65.93"/>
-          <circle id="Cursor_green_bot" class="cls-115" cx="76" cy="65.93" r="5"/>
+          <line id="Bg_slid_green_bot" class="cls-107" x1="20" y1="65.9" x2="76" y2="65.9"/>
+          <line id="Slid_green_value_bot" class="cls-110" x1="20" y1="65.93" x2="76" y2="65.93"/>
+          <circle id="Cursor_green_bot" class="cls-111" cx="76" cy="65.93" r="5"/>
         </g>
         <g id="Slid_red_bot">
-          <line id="Bg_slid_red_bot" class="cls-111" x1="20" y1="47.93" x2="76" y2="47.93"/>
-          <line id="Slid_red_value_bot" class="cls-116" x1="20" y1="47.93" x2="76" y2="47.93"/>
-          <circle id="Cursor_red_bot" class="cls-117" cx="76" cy="47.93" r="5"/>
+          <line id="Bg_slid_red_bot" class="cls-107" x1="20" y1="47.93" x2="76" y2="47.93"/>
+          <line id="Slid_red_value_bot" class="cls-112" x1="20" y1="47.93" x2="76" y2="47.93"/>
+          <circle id="Cursor_red_bot" class="cls-113" cx="76" cy="47.93" r="5"/>
         </g>
       </g>
     </g>
     <g id="Ac_Music">
       <g id="Music_Slider">
-        <line id="slid_tempo" class="cls-36" x1="80.95" y1="12.83" x2="30.95" y2="12.83"/>
-        <circle id="cursor_tempo" class="cls-38" cx="54.95" cy="12.83" r="5"/>
+        <line id="slid_tempo" class="cls-66" x1="80.95" y1="12.83" x2="30.95" y2="12.83"/>
+        <circle id="cursor_tempo" class="cls-35" cx="54.95" cy="12.83" r="5"/>
       </g>
       <g id="beat">
-        <path class="cls-37" d="M23.11,10.86a.28.28,0,0,1,.08.2v.82a.3.3,0,0,1-.08.2.28.28,0,0,1-.21.08H19.21a.28.28,0,0,1-.21-.07.32.32,0,0,1-.08-.21v-.82a.28.28,0,0,1,.08-.2.29.29,0,0,1,.21-.09H22.9A.29.29,0,0,1,23.11,10.86Z"/>
-        <path class="cls-37" d="M23.11,13.58a.3.3,0,0,1,.08.2v.82a.28.28,0,0,1-.08.2.29.29,0,0,1-.21.09H19.21a.27.27,0,0,1-.29-.29v-.82a.3.3,0,0,1,.08-.2.28.28,0,0,1,.21-.08H22.9A.28.28,0,0,1,23.11,13.58Z"/>
+        <path class="cls-104" d="M23.11,10.86a.28.28,0,0,1,.08.2v.82a.3.3,0,0,1-.08.2.28.28,0,0,1-.21.08H19.21a.28.28,0,0,1-.21-.07.32.32,0,0,1-.08-.21v-.82a.28.28,0,0,1,.08-.2.29.29,0,0,1,.21-.09H22.9A.29.29,0,0,1,23.11,10.86Z"/>
+        <path class="cls-104" d="M23.11,13.58a.3.3,0,0,1,.08.2v.82a.28.28,0,0,1-.08.2.29.29,0,0,1-.21.09H19.21a.27.27,0,0,1-.29-.29v-.82a.3.3,0,0,1,.08-.2.28.28,0,0,1,.21-.08H22.9A.28.28,0,0,1,23.11,13.58Z"/>
         <path id="note_Bg" class="cls-7" d="M16,7.56h0a.65.65,0,0,0-.66.66v6.25a2.65,2.65,0,0,0-2.22-.22,2.67,2.67,0,0,0,1.32,5.15,2.74,2.74,0,0,0,2.23-2.73V8.22A.66.66,0,0,0,16,7.56Z"/>
       </g>
       <path id="NoteIcon" class="cls-7" d="M52,8H45.44a1.16,1.16,0,0,0-1.16,1.15V14.1a2.27,2.27,0,0,0-1.92-.19,2.34,2.34,0,0,0-1.51,1.78,2.31,2.31,0,0,0,2.65,2.69A2.38,2.38,0,0,0,45.44,16v-5.7h6.22V14.1a2.29,2.29,0,0,0-1.93-.19,2.34,2.34,0,0,0-1.51,1.78,2.32,2.32,0,0,0,2.65,2.69A2.37,2.37,0,0,0,52.81,16V8.86A.86.86,0,0,0,52,8Z"/>
       <g id="Notes_pentagram">
         <g id="zones_Bg">
-          <rect class="cls-119" x="11.28" y="74.45" width="72" height="10"/>
-          <rect class="cls-119" x="11.28" y="62.43" width="72" height="10"/>
-          <rect class="cls-119" x="11.28" y="50.41" width="72" height="10"/>
-          <rect class="cls-119" x="11.28" y="38.39" width="72" height="10"/>
-          <rect class="cls-119" x="11.28" y="26.37" width="72" height="10"/>
+          <rect class="cls-115" x="11.28" y="74.45" width="72" height="10"/>
+          <rect class="cls-115" x="11.28" y="62.43" width="72" height="10"/>
+          <rect class="cls-115" x="11.28" y="50.41" width="72" height="10"/>
+          <rect class="cls-115" x="11.28" y="38.39" width="72" height="10"/>
+          <rect class="cls-115" x="11.28" y="26.37" width="72" height="10"/>
         </g>
         <g id="notes">
-          <circle id="Btn3_note1" class="cls-102" cx="17.59" cy="79.45" r="5"/>
-          <circle id="Btn3_note2" class="cls-80" cx="29.2" cy="67.43" r="5"/>
-          <circle id="Btn3_note3" class="cls-77" cx="40.81" cy="55.41" r="5"/>
-          <circle id="Btn3_note4" class="cls-77" cx="52.42" cy="43.39" r="5"/>
-          <circle id="Btn3_note5" class="cls-77" cx="64.03" cy="31.37" r="5"/>
-          <circle id="Btn3_note6" class="cls-77" cx="75.64" cy="43.39" r="5"/>
+          <circle id="Btn3_note1" class="cls-103" cx="17.59" cy="79.45" r="5"/>
+          <circle id="Btn3_note2" class="cls-85" cx="29.2" cy="67.43" r="5"/>
+          <circle id="Btn3_note3" class="cls-76" cx="40.81" cy="55.41" r="5"/>
+          <circle id="Btn3_note4" class="cls-76" cx="52.42" cy="43.39" r="5"/>
+          <circle id="Btn3_note5" class="cls-76" cx="64.03" cy="31.37" r="5"/>
+          <circle id="Btn3_note6" class="cls-76" cx="75.64" cy="43.39" r="5"/>
         </g>
       </g>
     </g>
     <g id="AcCounter">
       <g id="List_count_values">
-        <rect id="Bg_SelectedOperator-2" data-name="Bg_SelectedOperator" class="cls-119" x="38" y="18" width="20" height="60" rx="1" transform="translate(96) rotate(90)"/>
+        <rect id="Bg_SelectedOperator-2" data-name="Bg_SelectedOperator" class="cls-115" x="38" y="18" width="20" height="60" rx="1" transform="translate(96) rotate(90)"/>
       </g>
       <g id="OperatorChange">
-        <polygon id="ComparatorDown-2" data-name="ComparatorDown" class="cls-68" points="26.73 65.07 38.73 65.07 32.73 74.07 26.73 65.07"/>
-        <polygon id="ComparatorUp-2" data-name="ComparatorUp" class="cls-68" points="26.73 30.94 32.73 21.94 38.73 30.94 26.73 30.94"/>
+        <polygon id="ComparatorDown-2" data-name="ComparatorDown" class="cls-67" points="26.73 65.07 38.73 65.07 32.73 74.07 26.73 65.07"/>
+        <polygon id="ComparatorUp-2" data-name="ComparatorUp" class="cls-67" points="26.73 30.94 32.73 21.94 38.73 30.94 26.73 30.94"/>
       </g>
       <g id="ValueChange-2" data-name="ValueChange">
-        <polygon id="ValueDown-2" data-name="ValueDown" class="cls-68" points="56.07 65.07 68.07 65.07 62.07 74.07 56.07 65.07"/>
-        <polygon id="ValueUp-2" data-name="ValueUp" class="cls-68" points="56.07 30.94 62.07 21.94 68.07 30.94 56.07 30.94"/>
+        <polygon id="ValueDown-2" data-name="ValueDown" class="cls-67" points="56.07 65.07 68.07 65.07 62.07 74.07 56.07 65.07"/>
+        <polygon id="ValueUp-2" data-name="ValueUp" class="cls-67" points="56.07 30.94 62.07 21.94 68.07 30.94 56.07 30.94"/>
       </g>
-      <rect id="ValueField-2" data-name="ValueField" class="cls-101" x="48.07" y="42.13" width="28" height="12"/>
+      <rect id="ValueField-2" data-name="ValueField" class="cls-34" x="48.07" y="42.13" width="28" height="12"/>
       <g id="StatesOff-3" data-name="StatesOff">
-        <path id="Btn2_State0-3" data-name="Btn2_State0" class="cls-120" d="M38.41,10.71a2.7,2.7,0,0,1-.68-5.3,38.21,38.21,0,0,1,20.06,0,2.71,2.71,0,0,1,1.67,1.33,2.64,2.64,0,0,1,.19,2.11,2.68,2.68,0,0,1-2.55,1.86,2.82,2.82,0,0,1-.7-.1,32.76,32.76,0,0,0-17.28,0A2.83,2.83,0,0,1,38.41,10.71Z"/>
-        <path id="Btn2_State1-3" data-name="Btn2_State1" class="cls-120" d="M82.68,29a2.67,2.67,0,0,1-2.32-1.35A33,33,0,0,0,68.13,15.46a2.69,2.69,0,0,1,1.36-5,2.78,2.78,0,0,1,1.35.36A38.28,38.28,0,0,1,85,25a2.71,2.71,0,0,1-1.12,3.76A2.74,2.74,0,0,1,82.68,29Z"/>
-        <path id="Btn2_State2-3" data-name="Btn2_State2" class="cls-120" d="M87.8,60.09a2.67,2.67,0,0,1-2.59-3.39,32.76,32.76,0,0,0,0-17.28A2.7,2.7,0,0,1,87.8,36a2.71,2.71,0,0,1,2.61,2,37.93,37.93,0,0,1,0,20.06A2.71,2.71,0,0,1,87.8,60.09Z"/>
-        <path id="Btn2_State3-3" data-name="Btn2_State3" class="cls-120" d="M69.43,85.71a2.69,2.69,0,0,1-1.35-5A32.8,32.8,0,0,0,80.3,68.47a2.66,2.66,0,0,1,2.32-1.34,2.74,2.74,0,0,1,1.22.29,2.6,2.6,0,0,1,1.36,1.63A2.69,2.69,0,0,1,85,71.18,38.26,38.26,0,0,1,70.78,85.35,2.68,2.68,0,0,1,69.43,85.71Z"/>
-        <path id="Btn2_State4-3" data-name="Btn2_State4" class="cls-120" d="M47.76,92.07a38.13,38.13,0,0,1-10-1.35,2.74,2.74,0,0,1-1.68-1.33,2.69,2.69,0,0,1,2.36-4,2.82,2.82,0,0,1,.71.09,32.76,32.76,0,0,0,17.28,0,2.8,2.8,0,0,1,.7-.09,2.7,2.7,0,0,1,2.37,4,2.76,2.76,0,0,1-1.68,1.33A38.19,38.19,0,0,1,47.76,92.07Z"/>
-        <path id="Btn2_State5-3" data-name="Btn2_State5" class="cls-120" d="M26,85.66a2.64,2.64,0,0,1-1.34-.36A38.28,38.28,0,0,1,10.52,71.12a2.7,2.7,0,0,1,1.12-3.76,2.66,2.66,0,0,1,1.21-.29,2.7,2.7,0,0,1,2.33,1.35A32.87,32.87,0,0,0,27.4,80.64a2.69,2.69,0,0,1-1.36,5Z"/>
-        <path id="Btn2_State6-3" data-name="Btn2_State6" class="cls-120" d="M7.71,60.09a2.7,2.7,0,0,1-2.6-2A37.93,37.93,0,0,1,5.11,38a2.7,2.7,0,0,1,2.6-2,2.64,2.64,0,0,1,.84.14,2.67,2.67,0,0,1,1.76,3.25,32.76,32.76,0,0,0,0,17.28A2.68,2.68,0,0,1,8.55,60,2.63,2.63,0,0,1,7.71,60.09Z"/>
-        <path id="Btn2_State7-3" data-name="Btn2_State7" class="cls-120" d="M12.82,29a2.74,2.74,0,0,1-1.22-.29,2.69,2.69,0,0,1-1.36-1.63A2.73,2.73,0,0,1,10.49,25,38.26,38.26,0,0,1,24.66,10.79a2.7,2.7,0,0,1,2.71,4.66A32.8,32.8,0,0,0,15.15,27.67,2.7,2.7,0,0,1,12.82,29Z"/>
+        <path id="Btn2_State0-3" data-name="Btn2_State0" class="cls-116" d="M38.41,10.71a2.7,2.7,0,0,1-.68-5.3,38.21,38.21,0,0,1,20.06,0,2.71,2.71,0,0,1,1.67,1.33,2.64,2.64,0,0,1,.19,2.11,2.68,2.68,0,0,1-2.55,1.86,2.82,2.82,0,0,1-.7-.1,32.76,32.76,0,0,0-17.28,0A2.83,2.83,0,0,1,38.41,10.71Z"/>
+        <path id="Btn2_State1-3" data-name="Btn2_State1" class="cls-116" d="M82.68,29a2.67,2.67,0,0,1-2.32-1.35A33,33,0,0,0,68.13,15.46a2.69,2.69,0,0,1,1.36-5,2.78,2.78,0,0,1,1.35.36A38.28,38.28,0,0,1,85,25a2.71,2.71,0,0,1-1.12,3.76A2.74,2.74,0,0,1,82.68,29Z"/>
+        <path id="Btn2_State2-3" data-name="Btn2_State2" class="cls-116" d="M87.8,60.09a2.67,2.67,0,0,1-2.59-3.39,32.76,32.76,0,0,0,0-17.28A2.7,2.7,0,0,1,87.8,36a2.71,2.71,0,0,1,2.61,2,37.93,37.93,0,0,1,0,20.06A2.71,2.71,0,0,1,87.8,60.09Z"/>
+        <path id="Btn2_State3-3" data-name="Btn2_State3" class="cls-116" d="M69.43,85.71a2.69,2.69,0,0,1-1.35-5A32.8,32.8,0,0,0,80.3,68.47a2.66,2.66,0,0,1,2.32-1.34,2.74,2.74,0,0,1,1.22.29,2.6,2.6,0,0,1,1.36,1.63A2.69,2.69,0,0,1,85,71.18,38.26,38.26,0,0,1,70.78,85.35,2.68,2.68,0,0,1,69.43,85.71Z"/>
+        <path id="Btn2_State4-3" data-name="Btn2_State4" class="cls-116" d="M47.76,92.07a38.13,38.13,0,0,1-10-1.35,2.74,2.74,0,0,1-1.68-1.33,2.69,2.69,0,0,1,2.36-4,2.82,2.82,0,0,1,.71.09,32.76,32.76,0,0,0,17.28,0,2.8,2.8,0,0,1,.7-.09,2.7,2.7,0,0,1,2.37,4,2.76,2.76,0,0,1-1.68,1.33A38.19,38.19,0,0,1,47.76,92.07Z"/>
+        <path id="Btn2_State5-3" data-name="Btn2_State5" class="cls-116" d="M26,85.66a2.64,2.64,0,0,1-1.34-.36A38.28,38.28,0,0,1,10.52,71.12a2.7,2.7,0,0,1,1.12-3.76,2.66,2.66,0,0,1,1.21-.29,2.7,2.7,0,0,1,2.33,1.35A32.87,32.87,0,0,0,27.4,80.64a2.69,2.69,0,0,1-1.36,5Z"/>
+        <path id="Btn2_State6-3" data-name="Btn2_State6" class="cls-116" d="M7.71,60.09a2.7,2.7,0,0,1-2.6-2A37.93,37.93,0,0,1,5.11,38a2.7,2.7,0,0,1,2.6-2,2.64,2.64,0,0,1,.84.14,2.67,2.67,0,0,1,1.76,3.25,32.76,32.76,0,0,0,0,17.28A2.68,2.68,0,0,1,8.55,60,2.63,2.63,0,0,1,7.71,60.09Z"/>
+        <path id="Btn2_State7-3" data-name="Btn2_State7" class="cls-116" d="M12.82,29a2.74,2.74,0,0,1-1.22-.29,2.69,2.69,0,0,1-1.36-1.63A2.73,2.73,0,0,1,10.49,25,38.26,38.26,0,0,1,24.66,10.79a2.7,2.7,0,0,1,2.71,4.66A32.8,32.8,0,0,0,15.15,27.67,2.7,2.7,0,0,1,12.82,29Z"/>
       </g>
       <g id="Btn_Saturate_On_hint">
-        <line id="SaturateLever-3" data-name="SaturateLever" class="cls-67" x1="30.23" y1="5.96" x2="34.7" y2="16.52"/>
-        <circle id="SaturatePivot-2" data-name="SaturatePivot" class="cls-67" cx="30.23" cy="5.96" r="2"/>
+        <line id="SaturateLever-3" data-name="SaturateLever" class="cls-65" x1="30.23" y1="5.96" x2="34.7" y2="16.52"/>
+        <circle id="SaturatePivot-2" data-name="SaturatePivot" class="cls-65" cx="30.23" cy="5.96" r="2"/>
       </g>
       <g id="Btn_Saturate_Off_hint">
-        <line id="SaturateLever-4" data-name="SaturateLever" class="cls-67" x1="30.23" y1="5.96" x2="18.77" y2="5.96"/>
-        <circle id="SaturatePivot-3" data-name="SaturatePivot" class="cls-67" cx="30.23" cy="5.96" r="2"/>
+        <line id="SaturateLever-4" data-name="SaturateLever" class="cls-65" x1="30.23" y1="5.96" x2="18.77" y2="5.96"/>
+        <circle id="SaturatePivot-3" data-name="SaturatePivot" class="cls-65" cx="30.23" cy="5.96" r="2"/>
       </g>
       <g id="Btn_Saturate_On">
-        <line id="SaturateLever-5" data-name="SaturateLever" class="cls-36" x1="30.23" y1="5.96" x2="34.7" y2="16.52"/>
-        <circle id="SaturatePivot-4" data-name="SaturatePivot" class="cls-68" cx="30.23" cy="5.96" r="2"/>
+        <line id="SaturateLever-5" data-name="SaturateLever" class="cls-66" x1="30.23" y1="5.96" x2="34.7" y2="16.52"/>
+        <circle id="SaturatePivot-4" data-name="SaturatePivot" class="cls-67" cx="30.23" cy="5.96" r="2"/>
       </g>
       <g id="Btn_Saturate_Off">
-        <line id="SaturateLever-6" data-name="SaturateLever" class="cls-36" x1="30.23" y1="5.96" x2="18.77" y2="5.96"/>
-        <circle id="SaturatePivot-5" data-name="SaturatePivot" class="cls-68" cx="30.23" cy="5.96" r="2"/>
+        <line id="SaturateLever-6" data-name="SaturateLever" class="cls-66" x1="30.23" y1="5.96" x2="18.77" y2="5.96"/>
+        <circle id="SaturatePivot-5" data-name="SaturatePivot" class="cls-67" cx="30.23" cy="5.96" r="2"/>
       </g>
       <g id="List_Operators-2" data-name="List_Operators">
         <g id="Equals-2" data-name="Equals">
@@ -6393,11 +6307,11 @@ sim-playground {
     </g>
     <g id="Ac_Timer">
       <g>
-        <path class="cls-121" d="M17.61,44a.24.24,0,0,1,0,.33l-1.73,2.38a2.34,2.34,0,0,1,.5-.05,3,3,0,0,1,1.42.4,2.79,2.79,0,0,1,1,1,2.53,2.53,0,0,1,.38,1.37,2.74,2.74,0,0,1-1.45,2.46,3.46,3.46,0,0,1-1.73.4,3.68,3.68,0,0,1-1.75-.38,2.59,2.59,0,0,1-1.1-1,2.75,2.75,0,0,1-.37-1.41,2.66,2.66,0,0,1,.15-.9,3.64,3.64,0,0,1,.35-.74c.13-.21.31-.48.55-.81l2.06-2.85a1,1,0,0,1,.17-.18.39.39,0,0,1,.23-.06h1.13A.23.23,0,0,1,17.61,44Zm-2.68,4.34a1.4,1.4,0,0,0-.44,1.07,1.42,1.42,0,0,0,.44,1.09,1.53,1.53,0,0,0,1.08.41,1.5,1.5,0,0,0,1.07-.41,1.42,1.42,0,0,0,.44-1.09,1.43,1.43,0,0,0-.43-1.07,1.63,1.63,0,0,0-2.16,0Z"/>
-        <path class="cls-121" d="M22.19,52.12a2.34,2.34,0,0,1-.89-.63,1.07,1.07,0,0,1-.29-.62.23.23,0,0,1,.08-.18.25.25,0,0,1,.18-.08h1a.22.22,0,0,1,.16.1l.26.22a1.64,1.64,0,0,0,.48.28,1.54,1.54,0,0,0,.58.1,1.43,1.43,0,0,0,.76-.18.58.58,0,0,0,.3-.53.56.56,0,0,0-.14-.38,1.16,1.16,0,0,0-.48-.27c-.23-.08-.58-.17-1-.28A3.14,3.14,0,0,1,21.64,49a1.49,1.49,0,0,1-.48-1.16,1.52,1.52,0,0,1,.29-.88,2.09,2.09,0,0,1,.84-.69A3.19,3.19,0,0,1,23.62,46a3.37,3.37,0,0,1,1.38.25,2.4,2.4,0,0,1,.88.61,1,1,0,0,1,.3.62.27.27,0,0,1-.26.26H25a.23.23,0,0,1-.2-.09l-.27-.22a1.72,1.72,0,0,0-.4-.26,1.47,1.47,0,0,0-.55-.09,1,1,0,0,0-.67.19.61.61,0,0,0-.23.49.61.61,0,0,0,.11.36,1.06,1.06,0,0,0,.45.26,6.74,6.74,0,0,0,1,.25c1.41.28,2.11.89,2.11,1.85a1.58,1.58,0,0,1-.72,1.35,3.37,3.37,0,0,1-2,.52A3.64,3.64,0,0,1,22.19,52.12Z"/>
+        <path class="cls-117" d="M17.61,44a.24.24,0,0,1,0,.33l-1.73,2.38a2.34,2.34,0,0,1,.5-.05,3,3,0,0,1,1.42.4,2.79,2.79,0,0,1,1,1,2.53,2.53,0,0,1,.38,1.37,2.74,2.74,0,0,1-1.45,2.46,3.46,3.46,0,0,1-1.73.4,3.68,3.68,0,0,1-1.75-.38,2.59,2.59,0,0,1-1.1-1,2.75,2.75,0,0,1-.37-1.41,2.66,2.66,0,0,1,.15-.9,3.64,3.64,0,0,1,.35-.74c.13-.21.31-.48.55-.81l2.06-2.85a1,1,0,0,1,.17-.18.39.39,0,0,1,.23-.06h1.13A.23.23,0,0,1,17.61,44Zm-2.68,4.34a1.4,1.4,0,0,0-.44,1.07,1.42,1.42,0,0,0,.44,1.09,1.53,1.53,0,0,0,1.08.41,1.5,1.5,0,0,0,1.07-.41,1.42,1.42,0,0,0,.44-1.09,1.43,1.43,0,0,0-.43-1.07,1.63,1.63,0,0,0-2.16,0Z"/>
+        <path class="cls-117" d="M22.19,52.12a2.34,2.34,0,0,1-.89-.63,1.07,1.07,0,0,1-.29-.62.23.23,0,0,1,.08-.18.25.25,0,0,1,.18-.08h1a.22.22,0,0,1,.16.1l.26.22a1.64,1.64,0,0,0,.48.28,1.54,1.54,0,0,0,.58.1,1.43,1.43,0,0,0,.76-.18.58.58,0,0,0,.3-.53.56.56,0,0,0-.14-.38,1.16,1.16,0,0,0-.48-.27c-.23-.08-.58-.17-1-.28A3.14,3.14,0,0,1,21.64,49a1.49,1.49,0,0,1-.48-1.16,1.52,1.52,0,0,1,.29-.88,2.09,2.09,0,0,1,.84-.69A3.19,3.19,0,0,1,23.62,46a3.37,3.37,0,0,1,1.38.25,2.4,2.4,0,0,1,.88.61,1,1,0,0,1,.3.62.27.27,0,0,1-.26.26H25a.23.23,0,0,1-.2-.09l-.27-.22a1.72,1.72,0,0,0-.4-.26,1.47,1.47,0,0,0-.55-.09,1,1,0,0,0-.67.19.61.61,0,0,0-.23.49.61.61,0,0,0,.11.36,1.06,1.06,0,0,0,.45.26,6.74,6.74,0,0,0,1,.25c1.41.28,2.11.89,2.11,1.85a1.58,1.58,0,0,1-.72,1.35,3.37,3.37,0,0,1-2,.52A3.64,3.64,0,0,1,22.19,52.12Z"/>
       </g>
       <g id="_10_Seconds" data-name="10_Seconds">
-        <path id="timer10Secods_bg" class="cls-119" d="M32.26,84A2.1,2.1,0,0,1,30,82.07V55.35a1.88,1.88,0,0,1,1.14-1.65l13-5.89-13-5.88A1.88,1.88,0,0,1,30,40.28V13.86A2.1,2.1,0,0,1,32.26,12H63.74A2.1,2.1,0,0,1,66,13.86V40.28a1.88,1.88,0,0,1-1.14,1.65l-13,5.88,13,5.89A1.88,1.88,0,0,1,66,55.35V82.07A2.1,2.1,0,0,1,63.74,84Z"/>
+        <path id="timer10Secods_bg" class="cls-115" d="M32.26,84A2.1,2.1,0,0,1,30,82.07V55.35a1.88,1.88,0,0,1,1.14-1.65l13-5.89-13-5.88A1.88,1.88,0,0,1,30,40.28V13.86A2.1,2.1,0,0,1,32.26,12H63.74A2.1,2.1,0,0,1,66,13.86V40.28a1.88,1.88,0,0,1-1.14,1.65l-13,5.88,13,5.89A1.88,1.88,0,0,1,66,55.35V82.07A2.1,2.1,0,0,1,63.74,84Z"/>
         <g id="timer_10sec_units">
           <polygon id="_10" data-name="10" class="cls-20" points="63 39.47 48 46.25 33 39.47 63 39.47"/>
           <rect id="_20" data-name="20" class="cls-20" x="33" y="36.89" width="30" height="2.59"/>
@@ -6408,19 +6322,19 @@ sim-playground {
           <rect id="_70" data-name="70" class="cls-20" x="33" y="23.95" width="30" height="2.59"/>
           <rect id="_80" data-name="80" class="cls-20" x="33" y="21.37" width="30" height="2.59"/>
           <rect id="_90" data-name="90" class="cls-20" x="33" y="18.78" width="30" height="2.59"/>
-          <polygon id="Stroke_90" class="cls-102" points="63 18.78 63 39.47 48 46.25 33 39.47 33 18.78 63 18.78"/>
-          <polygon id="Stroke_80" class="cls-102" points="63 21.37 63 39.47 48 46.25 33 39.47 33 21.37 63 21.37"/>
-          <polygon id="Stroke_70" class="cls-102" points="63 23.95 63 39.47 48 46.25 33 39.47 33 23.95 63 23.95"/>
-          <polygon id="Stroke_60" class="cls-102" points="63 26.54 63 39.47 48 46.25 33 39.47 33 26.54 63 26.54"/>
-          <polygon id="Stroke_50" class="cls-102" points="63 29.13 63 39.47 48 46.25 33 39.47 33 29.13 63 29.13"/>
-          <polygon id="Stroke_40" class="cls-102" points="63 31.71 63 39.47 48 46.25 33 39.47 33 31.71 63 31.71"/>
-          <polygon id="Stroke_30" class="cls-102" points="63 34.3 63 39.47 48 46.25 33 39.47 33 34.3 63 34.3"/>
-          <polygon id="Stroke_20" class="cls-102" points="63 36.89 63 39.47 48 46.25 33 39.47 33 36.89 63 36.89"/>
-          <polygon id="Stroke_10" class="cls-102" points="63 39.47 48 46.25 33 39.47 63 39.47"/>
+          <polygon id="Stroke_90" class="cls-103" points="63 18.78 63 39.47 48 46.25 33 39.47 33 18.78 63 18.78"/>
+          <polygon id="Stroke_80" class="cls-103" points="63 21.37 63 39.47 48 46.25 33 39.47 33 21.37 63 21.37"/>
+          <polygon id="Stroke_70" class="cls-103" points="63 23.95 63 39.47 48 46.25 33 39.47 33 23.95 63 23.95"/>
+          <polygon id="Stroke_60" class="cls-103" points="63 26.54 63 39.47 48 46.25 33 39.47 33 26.54 63 26.54"/>
+          <polygon id="Stroke_50" class="cls-103" points="63 29.13 63 39.47 48 46.25 33 39.47 33 29.13 63 29.13"/>
+          <polygon id="Stroke_40" class="cls-103" points="63 31.71 63 39.47 48 46.25 33 39.47 33 31.71 63 31.71"/>
+          <polygon id="Stroke_30" class="cls-103" points="63 34.3 63 39.47 48 46.25 33 39.47 33 34.3 63 34.3"/>
+          <polygon id="Stroke_20" class="cls-103" points="63 36.89 63 39.47 48 46.25 33 39.47 33 36.89 63 36.89"/>
+          <polygon id="Stroke_10" class="cls-103" points="63 39.47 48 46.25 33 39.47 63 39.47"/>
         </g>
       </g>
       <g id="Seconds">
-        <path id="timerSecods_bg" class="cls-119" d="M61.1,84H34.94a2,2,0,0,1-2-2V55.35a1.91,1.91,0,0,1,1-1.65l10.3-5.89L33.9,41.93a1.91,1.91,0,0,1-1-1.65V14a2,2,0,0,1,2-2H61.1a2,2,0,0,1,2,2V40.28a1.89,1.89,0,0,1-1,1.65l-10.3,5.88L62.15,53.7a1.9,1.9,0,0,1,1,1.65V82A2,2,0,0,1,61.1,84Z"/>
+        <path id="timerSecods_bg" class="cls-115" d="M61.1,84H34.94a2,2,0,0,1-2-2V55.35a1.91,1.91,0,0,1,1-1.65l10.3-5.89L33.9,41.93a1.91,1.91,0,0,1-1-1.65V14a2,2,0,0,1,2-2H61.1a2,2,0,0,1,2,2V40.28a1.89,1.89,0,0,1-1,1.65l-10.3,5.88L62.15,53.7a1.9,1.9,0,0,1,1,1.65V82A2,2,0,0,1,61.1,84Z"/>
         <g id="timer_sec_units">
           <rect id="_2" data-name="2" class="cls-20" x="35.73" y="36.89" width="24.58" height="2.59"/>
           <rect id="_3" data-name="3" class="cls-20" x="35.73" y="34.3" width="24.58" height="2.59"/>
@@ -6431,19 +6345,19 @@ sim-playground {
           <rect id="_8" data-name="8" class="cls-20" x="35.73" y="21.37" width="24.58" height="2.59"/>
           <rect id="_9" data-name="9" class="cls-20" x="35.73" y="18.78" width="24.58" height="2.59"/>
           <polygon id="_1" data-name="1" class="cls-20" points="60.31 39.47 48.02 46.52 35.73 39.47 60.31 39.47"/>
-          <polygon id="Stroke_9" class="cls-102" points="60.31 18.73 60.31 39.47 48.02 46.52 35.73 39.47 35.73 18.73 60.31 18.73"/>
-          <polygon id="Stroke_8" class="cls-102" points="60.31 21.37 60.31 39.47 48.02 46.52 35.73 39.47 35.73 21.37 60.31 21.37"/>
-          <polygon id="Stroke_7" class="cls-102" points="60.31 23.95 60.31 39.47 48.02 46.52 35.73 39.47 35.73 23.95 60.31 23.95"/>
-          <polygon id="Stroke_6" class="cls-102" points="60.31 26.54 60.31 39.47 48.02 46.52 35.73 39.47 35.73 26.54 60.31 26.54"/>
-          <polygon id="Stroke_5" class="cls-102" points="60.31 29.13 60.31 39.47 48.02 46.52 35.73 39.47 35.73 29.13 60.31 29.13"/>
-          <polygon id="Stroke_4" class="cls-102" points="60.31 31.71 60.31 39.47 48.02 46.52 35.73 39.47 35.73 31.71 60.31 31.71"/>
-          <polygon id="Stroke_3" class="cls-102" points="60.31 34.3 60.31 39.47 48.02 46.52 35.73 39.47 35.73 34.3 60.31 34.3"/>
-          <polygon id="Stroke_2" class="cls-102" points="60.31 36.89 60.31 39.47 48.02 46.52 35.73 39.47 35.73 36.89 60.31 36.89"/>
-          <polygon id="Stroke_1" class="cls-102" points="60.31 39.47 48.02 46.52 35.73 39.47 60.31 39.47"/>
+          <polygon id="Stroke_9" class="cls-103" points="60.31 18.73 60.31 39.47 48.02 46.52 35.73 39.47 35.73 18.73 60.31 18.73"/>
+          <polygon id="Stroke_8" class="cls-103" points="60.31 21.37 60.31 39.47 48.02 46.52 35.73 39.47 35.73 21.37 60.31 21.37"/>
+          <polygon id="Stroke_7" class="cls-103" points="60.31 23.95 60.31 39.47 48.02 46.52 35.73 39.47 35.73 23.95 60.31 23.95"/>
+          <polygon id="Stroke_6" class="cls-103" points="60.31 26.54 60.31 39.47 48.02 46.52 35.73 39.47 35.73 26.54 60.31 26.54"/>
+          <polygon id="Stroke_5" class="cls-103" points="60.31 29.13 60.31 39.47 48.02 46.52 35.73 39.47 35.73 29.13 60.31 29.13"/>
+          <polygon id="Stroke_4" class="cls-103" points="60.31 31.71 60.31 39.47 48.02 46.52 35.73 39.47 35.73 31.71 60.31 31.71"/>
+          <polygon id="Stroke_3" class="cls-103" points="60.31 34.3 60.31 39.47 48.02 46.52 35.73 39.47 35.73 34.3 60.31 34.3"/>
+          <polygon id="Stroke_2" class="cls-103" points="60.31 36.89 60.31 39.47 48.02 46.52 35.73 39.47 35.73 36.89 60.31 36.89"/>
+          <polygon id="Stroke_1" class="cls-103" points="60.31 39.47 48.02 46.52 35.73 39.47 60.31 39.47"/>
         </g>
       </g>
       <g id="_01_Seconds" data-name="01_Seconds">
-        <path id="timer01seconds_bg" class="cls-119" d="M37.51,84A1.74,1.74,0,0,1,36,82.07V55.35a2,2,0,0,1,.76-1.65l7.42-5.89-7.42-5.88A2,2,0,0,1,36,40.28V13.86A1.74,1.74,0,0,1,37.51,12h21A1.74,1.74,0,0,1,60,13.86V40.28a2,2,0,0,1-.76,1.65l-7.42,5.88,7.42,5.89A2,2,0,0,1,60,55.35V82.07A1.74,1.74,0,0,1,58.49,84Z"/>
+        <path id="timer01seconds_bg" class="cls-115" d="M37.51,84A1.74,1.74,0,0,1,36,82.07V55.35a2,2,0,0,1,.76-1.65l7.42-5.89-7.42-5.88A2,2,0,0,1,36,40.28V13.86A1.74,1.74,0,0,1,37.51,12h21A1.74,1.74,0,0,1,60,13.86V40.28a2,2,0,0,1-.76,1.65l-7.42,5.88,7.42,5.89A2,2,0,0,1,60,55.35V82.07A1.74,1.74,0,0,1,58.49,84Z"/>
         <g id="timer_01sec_units">
           <polygon id="_01" data-name="01" class="cls-20" points="57 39.47 48 46.77 39 39.47 57 39.47"/>
           <rect id="_02" data-name="02" class="cls-20" x="39" y="36.89" width="18" height="2.59"/>
@@ -6454,30 +6368,30 @@ sim-playground {
           <rect id="_07" data-name="07" class="cls-20" x="39" y="23.95" width="18" height="2.59"/>
           <rect id="_08" data-name="08" class="cls-20" x="39" y="21.37" width="18" height="2.59"/>
           <rect id="_09" data-name="09" class="cls-20" x="39" y="18.78" width="18" height="2.59"/>
-          <polygon id="Stroke_01" class="cls-102" points="39 39.47 57 39.47 48 46.77 39 39.47"/>
-          <polygon id="Stroke_02" class="cls-102" points="39 39.47 39 36.89 57 36.89 57 39.47 48 46.77 39 39.47"/>
-          <polygon id="Stroke_03" class="cls-102" points="39 39.47 39 34.3 57 34.3 57 39.47 48 46.77 39 39.47"/>
-          <polygon id="Stroke_04" class="cls-102" points="39 39.47 39 31.71 57 31.71 57 39.47 48 46.77 39 39.47"/>
-          <polygon id="Stroke_05" class="cls-102" points="39 39.47 39 29.13 57 29.13 57 39.47 48 46.77 39 39.47"/>
-          <polygon id="Stroke_06" class="cls-102" points="39 39.47 39 26.54 57 26.54 57 39.47 48 46.77 39 39.47"/>
-          <polygon id="Stroke_07" class="cls-102" points="39 39.47 39 23.95 57 23.95 57 39.47 48 46.77 39 39.47"/>
-          <polygon id="Stroke_08" class="cls-102" points="39 39.47 39 21.37 57 21.37 57 39.47 48 46.77 39 39.47"/>
-          <polygon id="Stroke_09" class="cls-102" points="39 39.47 39 18.78 57 18.78 57 39.47 48 46.77 39 39.47"/>
+          <polygon id="Stroke_01" class="cls-103" points="39 39.47 57 39.47 48 46.77 39 39.47"/>
+          <polygon id="Stroke_02" class="cls-103" points="39 39.47 39 36.89 57 36.89 57 39.47 48 46.77 39 39.47"/>
+          <polygon id="Stroke_03" class="cls-103" points="39 39.47 39 34.3 57 34.3 57 39.47 48 46.77 39 39.47"/>
+          <polygon id="Stroke_04" class="cls-103" points="39 39.47 39 31.71 57 31.71 57 39.47 48 46.77 39 39.47"/>
+          <polygon id="Stroke_05" class="cls-103" points="39 39.47 39 29.13 57 29.13 57 39.47 48 46.77 39 39.47"/>
+          <polygon id="Stroke_06" class="cls-103" points="39 39.47 39 26.54 57 26.54 57 39.47 48 46.77 39 39.47"/>
+          <polygon id="Stroke_07" class="cls-103" points="39 39.47 39 23.95 57 23.95 57 39.47 48 46.77 39 39.47"/>
+          <polygon id="Stroke_08" class="cls-103" points="39 39.47 39 21.37 57 21.37 57 39.47 48 46.77 39 39.47"/>
+          <polygon id="Stroke_09" class="cls-103" points="39 39.47 39 18.78 57 18.78 57 39.47 48 46.77 39 39.47"/>
         </g>
       </g>
       <g id="Slider_timer">
         <line id="slid_unit_start" class="cls-6" x1="84" y1="79.96" x2="84" y2="15.97"/>
-        <line id="slid_unit_full" class="cls-36" x1="84" y1="79.96" x2="84" y2="15.97"/>
-        <circle id="Cursor_units" class="cls-77" cx="84" cy="48" r="5"/>
+        <line id="slid_unit_full" class="cls-66" x1="84" y1="79.96" x2="84" y2="15.97"/>
+        <circle id="Cursor_units" class="cls-76" cx="84" cy="48" r="5"/>
       </g>
-      <rect id="text_TimeDisplay" class="cls-101" x="4" y="40.75" width="24" height="14.5"/>
+      <rect id="text_TimeDisplay" class="cls-34" x="4" y="40.75" width="24" height="14.5"/>
     </g>
     <g id="LICENSE">
       <g>
         <g id="BY">
           <path id="path37" d="M37.48,82.24a.58.58,0,0,0-.57-.58H33.26a.58.58,0,0,0-.58.58v3.65h1v4.32h2.77V85.89h1V82.24Z"/>
           <circle id="circle39" cx="35.08" cy="79.93" r="1.25"/>
-          <path id="path41" class="cls-122" d="M35.07,75.52a8.51,8.51,0,0,0-6.28,2.59,8.75,8.75,0,0,0-2.63,6.34,9,9,0,0,0,8.91,8.92,8.81,8.81,0,0,0,6.39-2.66A8.45,8.45,0,0,0,44,84.45a8.86,8.86,0,0,0-8.94-8.93Zm0,1.61a7.32,7.32,0,0,1,7.31,7.32,6.79,6.79,0,0,1-2.1,5.1,7.17,7.17,0,0,1-5.21,2.19A7.27,7.27,0,0,1,30,79.27,6.9,6.9,0,0,1,35.09,77.13Z"/>
+          <path id="path41" class="cls-118" d="M35.07,75.52a8.51,8.51,0,0,0-6.28,2.59,8.75,8.75,0,0,0-2.63,6.34,9,9,0,0,0,8.91,8.92,8.81,8.81,0,0,0,6.39-2.66A8.45,8.45,0,0,0,44,84.45a8.86,8.86,0,0,0-8.94-8.93Zm0,1.61a7.32,7.32,0,0,1,7.31,7.32,6.79,6.79,0,0,1-2.1,5.1,7.17,7.17,0,0,1-5.21,2.19A7.27,7.27,0,0,1,30,79.27,6.9,6.9,0,0,1,35.09,77.13Z"/>
         </g>
         <path id="NC" d="M57.48,75.52a8.86,8.86,0,0,1,8.94,8.93,8.45,8.45,0,0,1-2.55,6.26,8.81,8.81,0,0,1-6.39,2.66,9,9,0,0,1-8.91-8.92,8.75,8.75,0,0,1,2.63-6.34A8.51,8.51,0,0,1,57.48,75.52Zm-6.9,6.53a7.35,7.35,0,0,0,6.92,9.69,7.17,7.17,0,0,0,5.21-2.19A6.72,6.72,0,0,0,63.93,88L60.56,86.5a2.58,2.58,0,0,1-2.45,2v1.38h-1V88.48a4.23,4.23,0,0,1-2.71-1.07l1.23-1.24a2.69,2.69,0,0,0,2,.81c.53,0,1.11-.2,1.11-.89a.67.67,0,0,0-.24-.53l-.85-.38-1.06-.47-1.42-.63Zm6.92-4.92a6.92,6.92,0,0,0-5.14,2.14,8.4,8.4,0,0,0-1,1.2L54.78,82a2.44,2.44,0,0,1,2.3-1.58V79h1v1.38a3.83,3.83,0,0,1,2.24.82l-1.17,1.2a2.78,2.78,0,0,0-1.53-.52c-.44,0-1.07.14-1.07.69a.38.38,0,0,0,.08.23l1.14.51.77.34,1.44.64,4.57,2a7.87,7.87,0,0,0,.23-1.91,7.32,7.32,0,0,0-7.31-7.32Z"/>
         <g id="ND">
@@ -6485,9 +6399,9 @@ sim-playground {
           <path id="rect1338" d="M76.77,82.34h6.57V84H76.77Zm0,2.91h6.57v1.61H76.77Z"/>
         </g>
         <g id="CC">
-          <path id="path2554" class="cls-122" d="M12.66,75.51A8.64,8.64,0,0,0,6.39,78.1a9,9,0,0,0-2.64,6.35,8.77,8.77,0,0,0,2.62,6.29,8.84,8.84,0,0,0,6.29,2.64,9.06,9.06,0,0,0,6.39-2.67,8.58,8.58,0,0,0,2.55-6.26A8.76,8.76,0,0,0,19,78.13,8.85,8.85,0,0,0,12.66,75.51Zm0,1.62A7.26,7.26,0,0,1,20,84.45a7,7,0,0,1-2.08,5.11,7.43,7.43,0,0,1-5.22,2.18,7.39,7.39,0,0,1-7.32-7.29,7.4,7.4,0,0,1,2.18-5.19A7,7,0,0,1,12.68,77.13Z"/>
-          <path id="path2556" class="cls-122" d="M12.57,83a2.51,2.51,0,0,0-2.37-1.29,2.57,2.57,0,0,0-2.61,2.78,2.52,2.52,0,0,0,2.66,2.77,2.7,2.7,0,0,0,2.35-1.4l-1.11-.56a1.09,1.09,0,0,1-1.1.77c-.82,0-1.2-.68-1.2-1.58s.32-1.59,1.2-1.59a1.14,1.14,0,0,1,1,.72Z"/>
-          <path id="path2558" class="cls-122" d="M17.72,83a2.5,2.5,0,0,0-2.36-1.29,2.56,2.56,0,0,0-2.61,2.78,2.52,2.52,0,0,0,2.66,2.77,2.67,2.67,0,0,0,2.34-1.4l-1.1-.56a1.09,1.09,0,0,1-1.1.77c-.82,0-1.2-.68-1.2-1.58s.32-1.59,1.2-1.59a1.14,1.14,0,0,1,1,.72Z"/>
+          <path id="path2554" class="cls-118" d="M12.66,75.51A8.64,8.64,0,0,0,6.39,78.1a9,9,0,0,0-2.64,6.35,8.77,8.77,0,0,0,2.62,6.29,8.84,8.84,0,0,0,6.29,2.64,9.06,9.06,0,0,0,6.39-2.67,8.58,8.58,0,0,0,2.55-6.26A8.76,8.76,0,0,0,19,78.13,8.85,8.85,0,0,0,12.66,75.51Zm0,1.62A7.26,7.26,0,0,1,20,84.45a7,7,0,0,1-2.08,5.11,7.43,7.43,0,0,1-5.22,2.18,7.39,7.39,0,0,1-7.32-7.29,7.4,7.4,0,0,1,2.18-5.19A7,7,0,0,1,12.68,77.13Z"/>
+          <path id="path2556" class="cls-118" d="M12.57,83a2.51,2.51,0,0,0-2.37-1.29,2.57,2.57,0,0,0-2.61,2.78,2.52,2.52,0,0,0,2.66,2.77,2.7,2.7,0,0,0,2.35-1.4l-1.11-.56a1.09,1.09,0,0,1-1.1.77c-.82,0-1.2-.68-1.2-1.58s.32-1.59,1.2-1.59a1.14,1.14,0,0,1,1,.72Z"/>
+          <path id="path2558" class="cls-118" d="M17.72,83a2.5,2.5,0,0,0-2.36-1.29,2.56,2.56,0,0,0-2.61,2.78,2.52,2.52,0,0,0,2.66,2.77,2.67,2.67,0,0,0,2.34-1.4l-1.1-.56a1.09,1.09,0,0,1-1.1.77c-.82,0-1.2-.68-1.2-1.58s.32-1.59,1.2-1.59a1.14,1.14,0,0,1,1,.72Z"/>
         </g>
       </g>
     </g>
