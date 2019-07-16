@@ -22,16 +22,17 @@ Manager (Thymio Suite 2.0).
 */
 A3a.vpl.Application.prototype.installThymioTDM = function () {
 	var app = this;
+	var tdm = null;
 	return new A3a.vpl.RunGlue({
 		run: function (language, code) {
-			window["tdmRun"](code);
+			tdm["run"](code);
 		},
 		init: function (language) {
 			// initialize the list of nodes
 			try {
-				window["tdmInit"](vplGetHashOption("w"),
-					vplGetHashOption("uuid"),
+				tdm = new window["TDM"](vplGetHashOption("w"),
 					{
+						"uuid": vplGetHashOption("uuid") || "auto",
 						"change": function (connected) {
 							app.robots[app.currentRobotIndex].runGlue.state = connected ? {} : null;
 							app.vplCanvas.update();
@@ -43,10 +44,10 @@ A3a.vpl.Application.prototype.installThymioTDM = function () {
 			}
 		},
 		isConnected: function () {
-			return app.robots[app.currentRobotIndex].runGlue.state != null && window["tdmIsConnected"]();;
+			return app.robots[app.currentRobotIndex].runGlue.state != null && tdm["isConnected"]();
 		},
 		isEnabled: function (language) {
-			return language === "aseba" && app.robots[app.currentRobotIndex].runGlue.state != null && window["tdmCanRun"]();
+			return language === "aseba" && app.robots[app.currentRobotIndex].runGlue.state != null && tdm["canRun"]();
 		},
 		preferredLanguage: "aseba",
 		languages: ["aseba"],

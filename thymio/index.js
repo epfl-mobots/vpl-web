@@ -28,24 +28,28 @@ Build:
 6. use the resulting dist/thymio.js in your web app:
 
 // default for websocketURL: "ws://localhost:8597" (local tdm)
-// default for uuid: none (pick last connected node)
 // options: dict of options (default: none)
+// options.uuid: node uuid to connect to, or "auto" to connect automatically to the first node
+// (default: don't connect)
 // options.change: function(connected) called upon connection change
-// options.variables: function(v) called upon variable change, or "auto" to only enable tdmGetVariable
+// options.variables: function(v) called upon variable change, or "auto" to only enable this.getVariable
 // default for success (function called once code sent success): null (none)
-tdmInit(websocketURL, uuid, options);
-var b = tdmCanRun();
-tdmRun(asebaSourceCode, success);
+var tdm = new TDM(websocketURL, options);
+var b = tdm.canRun();
+tdm.run(asebaSourceCode, success);
 
 */
 
 import {createClient, Node, NodeStatus, Request, setup, mobsya} from '@mobsya/thymio-api'
 
-window.tdmSelectedNode = undefined;
+window.TDM = function (url, options) {
+    options = options || {};
 
-window.tdmVariables = {};
+    this.nodes = [];
+    this.selectedNode = null;
+    this.variables = {};
 
-window.tdmInit = function (url, uuid, options) {
+    var self = this;
 
     // Connect to the switch
     // We will need some way to get that url, via the launcher
@@ -61,46 +65,46 @@ window.tdmInit = function (url, uuid, options) {
     client.onNodesChanged = async (nodes) => {
         try {
             for (let node of nodes) {
-                if (window.tdmSelectedNode
-                    && window.tdmSelectedNode.id.toString() === node.id.toString()
+                if (self.selectedNode
+                    && self.selectedNode.id.toString() === node.id.toString()
                     && node.status != NodeStatus.ready && node.status != NodeStatus.available) {
-                    // tdmSelectedNode lost
-                    window.tdmSelectedNode = null;
-                    options && options.change && options.change(false);
+                    // self.selectedNode lost
+                    self.selectedNode = null;
+                    options.change && options.change(false);
                 }
-                if ((!window.tdmSelectedNode || window.tdmSelectedNode.status != NodeStatus.ready)
+                if ((!self.selectedNode || self.selectedNode.status != NodeStatus.ready)
                     && node.status == NodeStatus.available
-                    && (!uuid || node.id.toString() === uuid)) {
+                    && (options.uuid && (options.uuid === "auto" || node.id.toString() === options.uuid))) {
                     try {
-                        window.tdmSelectedNode = node;
+                        self.selectedNode = node;
                         console.log(`Locking ${node.id}`)
                         // Lock (take ownership) of the node. We cannot mutate a node (send code to it), until we have a lock on it
                         // Once locked, a node will appear busy / unavailable to other clients until we close the connection or call `unlock` explicitely
                         // We can lock as many nodes as we want
                         await node.lock();
                         console.log("Node locked");
-                        options && options.change && options.change(true);
+                        options.change && options.change(true);
                     } catch (e) {
-                        console.log(`Unable To Lock ${node.id} (${node.name})`)
+                        console.log(`Unable to lock ${node.id} (${node.name})`)
                     }
                 }
-                if (!window.tdmSelectedNode) {
+                if (!self.selectedNode) {
                     continue;
                 }
-                if (options && options.variables) {
+                if (options.variables) {
                     if (options.variables === "auto") {
-                        window.tdmSelectedNode.onVariablesChanged = (vars) => {
-                            // store variables from map to global object tdmVariables
+                        self.selectedNode.onVariablesChanged = (vars) => {
+                            // store variables from map to object self.variables
                             vars.forEach((val, key) => {
-                                window.tdmVariables[key] = val;
+                                self.variables[key] = val;
                             });
                         }
                     } else {
-                        window.tdmSelectedNode.onVariablesChanged = (vars) => {
+                        self.selectedNode.onVariablesChanged = (vars) => {
                             // convert variables from map to object
                             var vObj = {};
                             vars.forEach((val, key) => {
-                                window.tdmVariables[key] = val;
+                                self.variables[key] = val;
                                 vObj[key] = val;
                             });
 
@@ -115,11 +119,12 @@ window.tdmInit = function (url, uuid, options) {
     }
 };
 
-window.tdmIsConnected = function () {
-    return window.tdmSelectedNode != null;
+
+window.TDM.prototype.isConnected = function () {
+    return this.selectedNode != null;
 };
 
-window.tdmSetVariables = function (v) {
+window.TDM.prototype.setVariables = function (v) {
     // convert variables from object to map
     var map = new Map();
     for (var v1 in v) {
@@ -128,22 +133,22 @@ window.tdmSetVariables = function (v) {
         }
     }
 
-    window.tdmSelectedNode.setVariables(map);
+    this.selectedNode.setVariables(map);
 };
 
-window.tdmGetVariable = function (name) {
-    return window.tdmVariables[name];
+window.TDM.prototype.getVariable = function (name) {
+    return this.variables[name];
 };
 
-window.tdmCanRun = function () {
-    return window.tdmSelectedNode != null && window.tdmSelectedNode.status == NodeStatus.ready;
+window.TDM.prototype.canRun = function () {
+    return this.selectedNode != null && this.selectedNode.status == NodeStatus.ready;
 };
 
-window.tdmRun = async function (program, success) {
+window.TDM.prototype.run = async function (program, success) {
     try {
-        if (window.tdmSelectedNode.status == NodeStatus.ready) {
-            await window.tdmSelectedNode.sendAsebaProgram(program);
-            await window.tdmSelectedNode.runProgram();
+        if (this.selectedNode.status == NodeStatus.ready) {
+            await this.selectedNode.sendAsebaProgram(program);
+            await this.selectedNode.runProgram();
             success && success();
         }
     } catch(e) {

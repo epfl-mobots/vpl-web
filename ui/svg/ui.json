@@ -33,6 +33,20 @@
 			"type": "hidden"
 		},
 		{
+			"name": "init",
+			"type": "event",
+			"modes": ["basic", "advanced"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Events_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ev_Start"
+				}
+			],
+			"defaultParameters": []
+		},
+		{
 			"name": "button 1",
 			"type": "event",
 			"modes": ["basic", "advanced"],
@@ -77,20 +91,6 @@
 			]
 		},
 		{
-			"name": "init",
-			"type": "event",
-			"modes": ["basic", "advanced"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_Start"
-				}
-			],
-			"defaultParameters": []
-		},
-		{
 			"name": "roll",
 			"type": "event",
 			"modes": ["advanced"],
@@ -124,7 +124,7 @@
 					"uri": "Blocks.svg#Events_bg"
 				},
 				{
-					"uri": "Blocks.svg#Ground_accel"
+					"uri": "Blocks.svg#Ground_accel_1"
 				},
 				{
 					"uri": "Blocks.svg#ThymioSideDown"
@@ -140,7 +140,7 @@
 					"uri": "Blocks.svg#Events_bg"
 				},
 				{
-					"uri": "Blocks.svg#Ground_accel"
+					"uri": "Blocks.svg#Ground_accel_0"
 				},
 				{
 					"uri": "Blocks.svg#ThymioUpsideDown"
@@ -198,15 +198,15 @@
 			]
 		},
 		{
-			"name": "clap",
+			"name": "tap",
 			"type": "event",
-			"modes": ["advanced"],
+			"modes": ["basic", "advanced"],
 			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
 				{
-					"uri": "Blocks.svg#Ev_Clap"
+					"uri": "Blocks.svg#Ev_Acc_Hit"
 				}
 			],
 			"defaultParameters": []
@@ -226,15 +226,15 @@
 			"defaultParameters": []
 		},
 		{
-			"name": "tap",
+			"name": "clap",
 			"type": "event",
-			"modes": ["basic"],
+			"modes": ["advanced"],
 			"draw": [
 				{
 					"uri": "Blocks.svg#Events_bg"
 				},
 				{
-					"uri": "Blocks.svg#Ev_Acc_Hit"
+					"uri": "Blocks.svg#Ev_Clap"
 				}
 			],
 			"defaultParameters": []
@@ -1637,6 +1637,7 @@
 				}
 			],
 			"defaultParameters": [false, false, false, false, false, false, false, false],
+			"typicalParameters": [true, false, false, false, false, false, false, false],
 			"buttons": [
 				{
 					"id": "Btn2_State0",
@@ -1700,6 +1701,7 @@
 
 			],
 			"defaultParameters": [0, 0, 0, 0, 0, 0, 0, 0],
+			"typicalParameters": [-1, 0, 0, 0, 0, 0, 0, 0],
 			"buttons": [
 				{
 					"id": "Btn3_State0_adv",
