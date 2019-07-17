@@ -31,7 +31,7 @@ Build:
 // options: dict of options (default: none)
 // options.uuid: node uuid to connect to, or "auto" to connect automatically to the first node
 // (default: don't connect)
-// options.change: function(connected) called upon connection change
+// options.change: function(connected) called upon connection change, or node change if !options.uuid
 // options.variables: function(v) called upon variable change, or "auto" to only enable this.getVariable
 // default for success (function called once code sent success): null (none)
 var tdm = new TDM(websocketURL, options);
@@ -63,55 +63,60 @@ window.TDM = function (url, options) {
     //      * busy         : The node is locked by someone else.
     //      * disconnected : The node is gone
     client.onNodesChanged = async (nodes) => {
+        self.nodes = nodes.slice();
         try {
-            for (let node of nodes) {
-                if (self.selectedNode
-                    && self.selectedNode.id.toString() === node.id.toString()
-                    && node.status != NodeStatus.ready && node.status != NodeStatus.available) {
-                    // self.selectedNode lost
-                    self.selectedNode = null;
-                    options.change && options.change(false);
-                }
-                if ((!self.selectedNode || self.selectedNode.status != NodeStatus.ready)
-                    && node.status == NodeStatus.available
-                    && (options.uuid && (options.uuid === "auto" || node.id.toString() === options.uuid))) {
-                    try {
-                        self.selectedNode = node;
-                        console.log(`Locking ${node.id}`)
-                        // Lock (take ownership) of the node. We cannot mutate a node (send code to it), until we have a lock on it
-                        // Once locked, a node will appear busy / unavailable to other clients until we close the connection or call `unlock` explicitely
-                        // We can lock as many nodes as we want
-                        await node.lock();
-                        console.log("Node locked");
-                        options.change && options.change(true);
-                    } catch (e) {
-                        console.log(`Unable to lock ${node.id} (${node.name})`)
+            if (options.uuid) {
+                for (let node of nodes) {
+                    if (self.selectedNode
+                        && self.selectedNode.id.toString() === node.id.toString()
+                        && node.status != NodeStatus.ready && node.status != NodeStatus.available) {
+                        // self.selectedNode lost
+                        self.selectedNode = null;
+                        options.change && options.change(false);
                     }
-                }
-                if (!self.selectedNode) {
-                    continue;
-                }
-                if (options.variables) {
-                    if (options.variables === "auto") {
-                        self.selectedNode.onVariablesChanged = (vars) => {
-                            // store variables from map to object self.variables
-                            vars.forEach((val, key) => {
-                                self.variables[key] = val;
-                            });
+                    if ((!self.selectedNode || self.selectedNode.status != NodeStatus.ready)
+                        && node.status == NodeStatus.available
+                        && (options.uuid && (options.uuid === "auto" || node.id.toString() === options.uuid))) {
+                        try {
+                            self.selectedNode = node;
+                            console.log(`Locking ${node.id}`)
+                            // Lock (take ownership) of the node. We cannot mutate a node (send code to it), until we have a lock on it
+                            // Once locked, a node will appear busy / unavailable to other clients until we close the connection or call `unlock` explicitely
+                            // We can lock as many nodes as we want
+                            await node.lock();
+                            console.log("Node locked");
+                            options.change && options.change(true);
+                        } catch (e) {
+                            console.log(`Unable to lock ${node.id} (${node.name})`)
                         }
-                    } else {
-                        self.selectedNode.onVariablesChanged = (vars) => {
-                            // convert variables from map to object
-                            var vObj = {};
-                            vars.forEach((val, key) => {
-                                self.variables[key] = val;
-                                vObj[key] = val;
-                            });
+                    }
+                    if (!self.selectedNode) {
+                        continue;
+                    }
+                    if (options.variables) {
+                        if (options.variables === "auto") {
+                            self.selectedNode.onVariablesChanged = (vars) => {
+                                // store variables from map to object self.variables
+                                vars.forEach((val, key) => {
+                                    self.variables[key] = val;
+                                });
+                            }
+                        } else {
+                            self.selectedNode.onVariablesChanged = (vars) => {
+                                // convert variables from map to object
+                                var vObj = {};
+                                vars.forEach((val, key) => {
+                                    self.variables[key] = val;
+                                    vObj[key] = val;
+                                });
 
-                            options.variables(vObj);
-                        };
+                                options.variables(vObj);
+                            };
+                        }
                     }
                 }
+            } else {
+                options.change();
             }
         } catch (e) {
             console.log(e)
