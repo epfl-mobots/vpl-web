@@ -159,4 +159,16 @@ window.TDM.prototype.run = async function (program, success) {
     } catch(e) {
         console.log(e);
     }
- };
+};
+
+window.TDM.runOnNode = async function (node, program, success) {
+    try {
+        await node.lock();
+        await node.sendAsebaProgram(program);
+        await node.runProgram();
+        await node.unlock();
+        success && success();
+    } catch(e) {
+        console.log(e);
+    }
+};
