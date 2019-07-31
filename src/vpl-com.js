@@ -48,14 +48,17 @@ A3a.vpl.Com.prototype.execCommand = function (name) {
 */
 A3a.vpl.Com.prototype.connect = function () {
 	this.ws = new WebSocket(this.wsURL);
+
+	var self = this;
+
 	this.ws.addEventListener("message", function (event) {
 		try {
 			var msg = JSON.parse(event.data);
-console.info(msg);
 			switch (msg["type"]) {
 			case "cmd":
 				var cmd = msg["data"]["cmd"];
-				this.execCommand(cmd);
+				self.execCommand(cmd);
+				self.app.vplCanvas.update();
 				break;
 			}
 		} catch (e) {
@@ -63,7 +66,6 @@ console.info(msg);
 		}
 	});
 
-	var self = this;
 	this.app.addLogger(function (data) {
 		self.log(data);
 	});
