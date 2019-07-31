@@ -337,7 +337,9 @@ A3a.vpl.Application.prototype.log = function (data) {
 		data = {
 	        "type": "vpl-changed",
 	        "data": {
-	            "nrules": this.program.program.length,
+	            "nrules": this.program.program.reduce(function (acc, cur) {
+					return cur.events.length + cur.actions.length > 0 ? acc + 1 : acc;
+				}, 0),
 				"nblocks": this.program.program.reduce(function (acc, cur) {
 					return acc + cur.events.length + cur.actions.length;
 				}, 0),
