@@ -114,6 +114,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 					function () {
 						self.saveStateBeforeChange();
 					});
+				self.log();
 			}
 			canvas.onUpdate && canvas.onUpdate();
 		},
@@ -363,6 +364,7 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 					self.saveStateBeforeChange();
 					self.program.splice(droppedIndex, 1);
 					self.program.splice(targetIndex, 0, droppedItem.data);
+					self.log();
 				}
 			} else if (droppedItem.data instanceof A3a.vpl.Block) {
 				self.saveStateBeforeChange();
@@ -371,6 +373,7 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 					function () {
 						self.saveStateBeforeChange();
 					});
+				self.log();
 			}
 			canvas.onUpdate && canvas.onUpdate();
 		},

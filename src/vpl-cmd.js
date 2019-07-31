@@ -19,10 +19,12 @@ Buttons defined in the user interface are linked to command ids.
 
 /** Collection of commands
 	@constructor
+	@param {function(Object):void=} logger
 */
-A3a.vpl.Commands = function () {
+A3a.vpl.Commands = function (logger) {
 	/** @type {Array.<A3a.vpl.Commands.Command>} */
 	this.commands = [];
+	this.logger = logger || null;
 };
 
 A3a.vpl.Commands.prototype.clear = function () {
@@ -111,6 +113,14 @@ A3a.vpl.Commands.prototype.hasAction = function (name) {
 A3a.vpl.Commands.prototype.execute = function (name, modifier) {
 	var cmd = this.find(name);
 	cmd && cmd.execute(modifier);
+	if (this.logger) {
+		this.logger({
+	        "type": "cmd",
+	        "data": {
+	            "cmd": name
+	        }
+	    });
+	}
 };
 
 /** Do drop for a command specified by name
@@ -121,6 +131,14 @@ A3a.vpl.Commands.prototype.execute = function (name, modifier) {
 A3a.vpl.Commands.prototype.doDrop = function (name, droppedItem) {
 	var cmd = this.find(name);
 	cmd && cmd.doDrop(droppedItem);
+	if (this.logger) {
+		this.logger({
+	        "type": "drop",
+	        "data": {
+	            "cmd": name
+	        }
+	    });
+	}
 };
 
 /** Check if an item can be dropped for a command specified by name

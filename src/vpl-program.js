@@ -56,6 +56,8 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
 	/** @type {A3a.vpl.UIConfig} */
 	this.uiConfig = uiConfig || new A3a.vpl.UIConfig();
+	/** @type {?function(Object=):void} */
+	this.logger = null;
 };
 
 /** @type {Object<string,A3a.vpl.CodeGenerator>} */
@@ -483,4 +485,21 @@ A3a.vpl.Program.prototype.codeForActions = function (rule, language) {
 A3a.vpl.Program.prototype.codeForBlock = function (block, language) {
 	var codeGenerator = A3a.vpl.Program.codeGenerator[language];
 	return codeGenerator.generate(this, [block]);
+};
+
+/** Set the logger function
+	@param {function(Object=):void} logger
+*/
+A3a.vpl.Program.prototype.setLogger = function (logger) {
+	this.logger = logger;
+};
+
+/** Log data
+	@param {Object=} data data, or null/undefined for default (program metadata)
+	@return {void}
+*/
+A3a.vpl.Program.prototype.log = function (data) {
+	if (this.logger) {
+		this.logger(data);
+	}
 };

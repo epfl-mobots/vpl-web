@@ -305,6 +305,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				app.program.saveStateBeforeChange();
 				app.program.program.splice(i + 1, 0, draggedItem.data.copy());
 				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
+				app.log();
 			}
 		},
 		canDrop: function (app, draggedItem) {
@@ -323,10 +324,12 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				app.program.saveStateBeforeChange();
 				draggedItem.data.disabled = !draggedItem.data.disabled;
 				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
+				app.log();
 			} else if (draggedItem.data instanceof A3a.vpl.Rule) {
 				app.program.saveStateBeforeChange();
 				draggedItem.data.toggleDisable();
 				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
+				app.log();
 			}
 		},
 		canDrop: function (app, draggedItem) {
@@ -348,10 +351,12 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				app.program.saveStateBeforeChange();
 				draggedItem.data.locked = !draggedItem.data.locked;
 				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
+				app.log();
 			} else if (draggedItem.data instanceof A3a.vpl.Rule) {
 				app.program.saveStateBeforeChange();
 				draggedItem.data.locked = !draggedItem.data.locked;
 				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
+				app.log();
 			}
 		},
 		canDrop: function (app, draggedItem) {
@@ -378,6 +383,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 					draggedItem.data.ruleContainer.removeBlock(
 						/** @type {A3a.vpl.positionInContainer} */(draggedItem.data.positionInContainer));
 					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
+					app.log();
 				}
 			} else if (draggedItem.data instanceof A3a.vpl.Rule) {
 				var i = app.program.program.indexOf(draggedItem.data);
@@ -385,6 +391,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 					app.program.saveStateBeforeChange();
 					app.program.program.splice(i, 1);
 					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
+					app.log();
 				}
 			}
 		},

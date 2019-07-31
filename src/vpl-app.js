@@ -32,7 +32,10 @@ A3a.vpl.Application = function (canvasEl) {
 	this.css = new CSSParser.VPL();
 
 	this.uiConfig = new A3a.vpl.UIConfig();
-	this.commands = new A3a.vpl.Commands();
+	var self = this;
+	this.commands = new A3a.vpl.Commands(function (data) {
+		self.log(data);
+	});
 
 	/** @type {Array.<string>} */
 	this.views = ["vpl"];
@@ -49,6 +52,9 @@ A3a.vpl.Application = function (canvasEl) {
 	this.loadBox = null;
 
 	this.program = new A3a.vpl.Program(A3a.vpl.mode.basic, this.uiConfig);
+	this.program.setLogger(function (data) {
+		self.log(data);
+	});
 
 	this.vplMessage = "";
 	this.vplMessageIsWarning = false;	// false for error, true for warning
@@ -70,7 +76,14 @@ A3a.vpl.Application = function (canvasEl) {
 
 	this.multipleViews = false;
 	this.useLocalStorage = false;
+
+	/** @type {Array.<A3a.vpl.Application.Logger>} */
+	this.loggers = [];
 };
+
+/** @typedef {function(Object=):void}
+*/
+A3a.vpl.Application.Logger;
 
 A3a.vpl.Application.initialized = false;
 
@@ -301,4 +314,36 @@ A3a.vpl.Application.prototype.stopRobot = function () {
 A3a.vpl.Application.prototype.canStopRobot = function () {
 	return !this.program.noVPL &&
 		this.robots[this.currentRobotIndex].runGlue.isEnabled(this.program.currentLanguage);
+};
+
+/** Add a logger
+	@param {A3a.vpl.Application.Logger} logger
+	@return {void}
+*/
+A3a.vpl.Application.prototype.addLogger = function (logger) {
+	this.loggers.push(logger);
+};
+
+/** Call all loggers
+	@param {Object=} data
+	@return {void}
+*/
+A3a.vpl.Application.prototype.log = function (data) {
+	if (data == null) {
+		// default data: program metadata
+		data = {
+	        "type": "vpl-changed",
+	        "data": {
+	            "nrules": this.program.program.length,
+				"nblocks": this.program.program.reduce(function (acc, cur) {
+					return acc + cur;
+				}, 0),
+				"err": this.vplMessage
+			}
+		};
+	}
+
+	this.loggers.forEach(function (logger) {
+		logger(data);
+	});
 };
