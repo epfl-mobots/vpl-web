@@ -300,6 +300,8 @@ function vplSetup(gui) {
 			"sim": vrs["sim"] || 1
 		};
 	}
+	var commandServer = vplGetQueryOption("server");
+	var commandSession = vplGetQueryOption("session");
 	var advancedFeatures = vplGetQueryOption("adv") === "true";
 	var experimentalFeatures = vplGetQueryOption("exp") === "true";
 
@@ -615,6 +617,11 @@ function vplSetup(gui) {
 		app.setView(views);
 	}
 	app.vplResize();
+
+	if (commandServer) {
+		window["vplCommandServer"] = new A3a.vpl.Com(app, commandServer, commandSession);
+		window["vplCommandServer"].connect();
+	}
 }
 
 window.addEventListener("load", function () {

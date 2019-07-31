@@ -79,6 +79,7 @@ JS = \
 	vpl-about.js \
 	vpl-files.js \
 	vpl-load.js \
+	vpl-com.js \
 	vpl-main.js \
 	vpl-robot.js \
 	vpl-virtualthymio.js \
