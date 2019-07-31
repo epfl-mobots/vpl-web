@@ -114,7 +114,6 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 					function () {
 						self.saveStateBeforeChange();
 					});
-				self.log();
 			}
 			canvas.onUpdate && canvas.onUpdate();
 		},
@@ -364,7 +363,6 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 					self.saveStateBeforeChange();
 					self.program.splice(droppedIndex, 1);
 					self.program.splice(targetIndex, 0, droppedItem.data);
-					self.log();
 				}
 			} else if (droppedItem.data instanceof A3a.vpl.Block) {
 				self.saveStateBeforeChange();
@@ -373,7 +371,6 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 					function () {
 						self.saveStateBeforeChange();
 					});
-				self.log();
 			}
 			canvas.onUpdate && canvas.onUpdate();
 		},
@@ -596,16 +593,12 @@ A3a.vpl.Application.prototype.getCSSBoxes = function (css) {
 	return cssBoxes;
 };
 
-/** Render the program to a single canvas
-	@return {void}
+/** Update VPL program error information
+	@return {boolean} true if error, false if warning or ok
 */
-A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
+A3a.vpl.Application.prototype.updateErrorInfo = function () {
 	var uiConfig = this.uiConfig;
-	var canvas = this.vplCanvas;
 	var program = this.program;
-	var cssBoxes = this.getCSSBoxes(canvas.css);
-
-	canvas.recalcSize();
 
 	// make sure code is up-to-date to have error info
 	program.getCode(program.currentLanguage);
@@ -627,6 +620,22 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			}
 		}
 	}
+
+	return this.vplMessage !== "" && !this.vplMessageIsWarning;
+};
+
+/** Render the program to a single canvas
+	@return {void}
+*/
+A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
+	var uiConfig = this.uiConfig;
+	var canvas = this.vplCanvas;
+	var program = this.program;
+	var cssBoxes = this.getCSSBoxes(canvas.css);
+
+	canvas.recalcSize();
+
+	this.updateErrorInfo();
 
 	// zoom blocks if too small
 	program.zoomBlocks = canvas.dims.blockSize < canvas.dims.minInteractiveBlockSize;

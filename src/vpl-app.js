@@ -79,6 +79,7 @@ A3a.vpl.Application = function (canvasEl) {
 
 	/** @type {Array.<A3a.vpl.Application.Logger>} */
 	this.loggers = [];
+	this.logDataPrevious = null;
 };
 
 /** @typedef {function(Object=):void}
@@ -167,6 +168,7 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 					if (app.editor) {
 						app.editor.changeCode(app.program.getCode(app.program.currentLanguage));
 					}
+					app.log();
 				}
 				app.renderProgramToCanvas();
 			};
@@ -330,17 +332,25 @@ A3a.vpl.Application.prototype.addLogger = function (logger) {
 */
 A3a.vpl.Application.prototype.log = function (data) {
 	if (data == null) {
-		// default data: program metadata
+		// default data: program metadata (recompile for updated error message)
+		this.updateErrorInfo();
 		data = {
 	        "type": "vpl-changed",
 	        "data": {
 	            "nrules": this.program.program.length,
 				"nblocks": this.program.program.reduce(function (acc, cur) {
-					return acc + cur;
+					return acc + cur.events.length + cur.actions.length;
 				}, 0),
-				"err": this.vplMessage
+				"error": this.vplMessage && !this.vplMessageIsWarning ? this.vplMessage : null,
+				"warning": this.vplMessage && this.vplMessageIsWarning ? this.vplMessage : null
 			}
 		};
+		var dataStr = JSON.stringify(data);
+		if (dataStr === this.logDataPrevious) {
+			// avoid duplicates
+			return;
+		}
+		this.logDataPrevious = dataStr;
 	}
 
 	this.loggers.forEach(function (logger) {
