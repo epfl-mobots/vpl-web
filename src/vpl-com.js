@@ -32,12 +32,20 @@ A3a.vpl.Com = function (app, wsURL, sessionId) {
 
 /** Execute a command
 	@param {string} name
+	@param {boolean | undefined} selected
+	@param {string | undefined} state
 	@return {boolean} true if execute, false if non-existing or disabled
 */
-A3a.vpl.Com.prototype.execCommand = function (name) {
+A3a.vpl.Com.prototype.execCommand = function (name, selected, state) {
 	var commands = this.app.commands;
 	if (commands.hasAction(name) && commands.isEnabled(name)) {
-		commands.execute(name);
+		if (selected !== undefined) {
+			return commands.executeForSelected(name, selected);
+		} else if (state !== undefined) {
+			return commands.executeForState(name, state);
+		} else {
+			commands.execute(name);
+		}
 		return true;
 	}
 	return false;
@@ -57,7 +65,9 @@ A3a.vpl.Com.prototype.connect = function () {
 			switch (msg["type"]) {
 			case "cmd":
 				var cmd = msg["data"]["cmd"];
-				self.execCommand(cmd);
+				var selected = msg["data"]["selected"];
+				var state = msg["data"]["state"];
+				self.execCommand(cmd, selected, state);
 				self.app.vplCanvas.update();
 				break;
 			case "file":

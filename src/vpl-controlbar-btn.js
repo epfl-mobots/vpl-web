@@ -25,7 +25,7 @@ Definition of methods for A3a.vpl.ControlBar which add support for buttons.
 		boolean,
 		boolean,
 		boolean,
-		Object): void}
+		?string): void}
 	Function to draw buttons (arguments: id, ctx, dims, css, cssClasses, isEnabled,
 	isSelected, isPressed, obj)
 */

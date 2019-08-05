@@ -49,7 +49,7 @@ A3a.vpl.Commands.isEnabled;
 */
 A3a.vpl.Commands.isSelected;
 
-/** @typedef {function(Object): (Object | null)}
+/** @typedef {function(Object): string}
 */
 A3a.vpl.Commands.getState;
 
@@ -105,6 +105,27 @@ A3a.vpl.Commands.prototype.hasAction = function (name) {
 	return cmd != null && cmd.actionFun != null;
 };
 
+/** Log the execution of a command
+*/
+A3a.vpl.Commands.prototype.logExecCommand = function (name) {
+	if (this.logger) {
+		var cmd = this.find(name);
+		var data = {
+			"cmd": name
+		};
+		if (cmd.isSelectedFun) {
+			data["selected"] = cmd.isSelected();
+		}
+		if (cmd.getStateFun) {
+			data["state"] = cmd.getState();
+		}
+		this.logger({
+	        "type": "cmd",
+	        "data": data
+	    });
+	}
+}
+
 /** Execute a command by name
 	@param {string} name
 	@param {boolean=} modifier
@@ -112,15 +133,40 @@ A3a.vpl.Commands.prototype.hasAction = function (name) {
 */
 A3a.vpl.Commands.prototype.execute = function (name, modifier) {
 	var cmd = this.find(name);
-	cmd && cmd.execute(modifier);
-	if (this.logger) {
-		this.logger({
-	        "type": "cmd",
-	        "data": {
-	            "cmd": name
-	        }
-	    });
+	if (cmd) {
+		cmd.execute(modifier);
+		this.logExecCommand(name);
 	}
+};
+
+/** If necessary, execute command by name to get the specified selected state
+	@param {boolean} selected
+	@param {boolean=} modifier
+	@return {boolean} true for success
+*/
+A3a.vpl.Commands.prototype.executeForSelected = function (name, selected, modifier) {
+	var cmd = this.find(name);
+	if (cmd && cmd.executeForSelected(selected, modifier)) {
+		this.logExecCommand(name);
+		return true;
+	}
+	return false;
+};
+
+/** If necessary, execute a command by name until the specified state is obtained
+	(or 100 iterations aren't enough)
+	@param {string} name
+	@param {string} state
+	@param {boolean=} modifier
+	@return {boolean} true for success
+*/
+A3a.vpl.Commands.prototype.executeForState = function (name, state, modifier) {
+	var cmd = this.find(name);
+	if (cmd && cmd.executeForState(state, modifier)) {
+		this.logExecCommand(name);
+		return true;
+	}
+	return false;
 };
 
 /** Do drop for a command specified by name
@@ -171,7 +217,7 @@ A3a.vpl.Commands.prototype.isSelected = function (name) {
 
 /** Get command state (for multi-state buttons)
 	@param {string} name
-	@return {?Object}
+	@return {?string}
 */
 A3a.vpl.Commands.prototype.getState = function (name) {
 	var cmd = this.find(name);
@@ -214,6 +260,50 @@ A3a.vpl.Commands.Command.prototype.execute = function (modifier) {
 	}
 };
 
+/** If necessary, execute command to get the specified selected state
+	@param {boolean} selected
+	@param {boolean=} modifier
+	@return {boolean} true for success
+*/
+A3a.vpl.Commands.Command.prototype.executeForSelected = function (selected, modifier) {
+	if (!this.isSelectedFun) {
+		return false;
+	} else if (selected === this.isSelected()) {
+		return true;
+	}
+
+	this.execute(modifier);
+	return selected === this.isSelected();
+};
+
+/** If necessary, execute command until the specified state is obtained
+	(or 100 iterations aren't enough)
+	@param {string} state
+	@param {boolean=} modifier
+	@return {boolean} true for success
+*/
+A3a.vpl.Commands.Command.prototype.executeForState = function (state, modifier) {
+	if (!this.getStateFun) {
+		return false;
+	}
+
+	var state0 = this.getState();
+	if (state === state0) {
+		return true;
+	}
+
+	for (var i = 0; i < 100; i++) {
+		this.execute(modifier);
+		var newState = this.getState();
+		if (newState === state) {
+			return true;
+		} else if (newState === state0) {
+			return false;
+		}
+	}
+	return false;
+};
+
 /** Do drop for a command specified by name
 	@param {Object} droppedItem
 	@return {void}
@@ -247,7 +337,7 @@ A3a.vpl.Commands.Command.prototype.isSelected = function () {
 };
 
 /** Get command state (for multi-state buttons)
-	@return {?Object}
+	@return {?string}
 */
 A3a.vpl.Commands.Command.prototype.getState = function () {
 	return this.getStateFun != null ? this.getStateFun(this.obj) : null;
