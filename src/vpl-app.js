@@ -114,7 +114,14 @@ A3a.vpl.Application.prototype.setHelpContent = function (html) {
 	@return {void}
 */
 A3a.vpl.Application.prototype.setSuspendBoxContent = function (html) {
+	var suspended = this.suspended;
+	if (suspended && this.suspendBox) {
+		this.suspendBox.hide();
+	}
 	this.suspendBox = html ? new A3a.vpl.HTMLPanel(html, true) : null;
+	if (html && suspended) {
+		this.suspendBox.show();
+	}
 };
 
 /** Change current view

@@ -60,6 +60,20 @@ A3a.vpl.Com.prototype.connect = function () {
 				self.execCommand(cmd);
 				self.app.vplCanvas.update();
 				break;
+			case "file":
+				var kind = msg["data"]["kind"];
+				var content = msg["data"]["content"];
+				switch (kind) {
+				case "about":
+					self.app.setAboutBoxContent(content);
+					break;
+				case "help":
+					self.app.setHelpContent(content);
+					break;
+				case "suspend":
+					self.app.setSuspendBoxContent(content);
+					break;
+				}
 			}
 		} catch (e) {
 			console.info(e);
