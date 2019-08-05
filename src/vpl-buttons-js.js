@@ -145,6 +145,18 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 			ctx.fillStyle = isEnabled ? "white" : "#777";
 			ctx.fillText("i", dims.controlSize * 0.5, dims.controlSize * 0.5);
 		},
+		"vpl:help": function () {
+			ctx.fillStyle = isPressed && isEnabled
+				? dims.controlDownColor
+				: dims.controlColor;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.font = "bold " + Math.round(dims.controlSize * 0.7).toString(10) + "px times";
+			ctx.fillStyle = isEnabled ? "white" : "#777";
+			ctx.fillText("?", dims.controlSize * 0.5, dims.controlSize * 0.5);
+		},
 		"vpl:new": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor

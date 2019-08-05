@@ -11,15 +11,16 @@
 
 /** @fileoverview
 
-Modal box for the About panel, with content provided as HTML.
+Modal box for HTML content.
 
 */
 
-/** About box
+/** HTML panel
 	@constructor
-	@param {string} html html content of the about box
+	@param {string} html html content
+	@param {boolean=} noCloseWidget true to suppress close widget
 */
-A3a.vpl.About = function (html) {
+A3a.vpl.HTMLPanel = function (html, noCloseWidget) {
 	this.html = html;
 
 	this.backgroundDiv = document.createElement("div");
@@ -42,30 +43,36 @@ A3a.vpl.About = function (html) {
 	this.backgroundDiv.appendChild(this.div);
 	document.body.appendChild(this.backgroundDiv);
 
-	// close box
-	this.closebox = document.createElement("div");
-	this.closebox.style.position = "absolute";
-	this.closebox.style.width = "32px";
-	this.closebox.style.height = "32px";
-	this.closebox.style.top = "0";
-	this.closebox.style.left = "0";
-	this.closebox.textContent = "\u00d7";	// times
-	this.closebox.style.font = "bold 30px sans-serif";
-	this.closebox.style.textAlign = "left";
-	this.closebox.style.padding = "5px";
-	this.closebox.style.paddingLeft = "10px";
-	var self = this;
-	this.closebox.addEventListener("click", function () {
-		self.hide();
-	}, false);
+	// close widget
+	/** @type {?Element} */
+	this.closeWidget = null;
+	if (!noCloseWidget) {
+		this.closeWidget = document.createElement("div");
+		this.closeWidget.style.position = "absolute";
+		this.closeWidget.style.width = "32px";
+		this.closeWidget.style.height = "32px";
+		this.closeWidget.style.top = "0";
+		this.closeWidget.style.left = "0";
+		this.closeWidget.textContent = "\u00d7";	// times
+		this.closeWidget.style.font = "bold 30px sans-serif";
+		this.closeWidget.style.textAlign = "left";
+		this.closeWidget.style.padding = "5px";
+		this.closeWidget.style.paddingLeft = "10px";
+		var self = this;
+		this.closeWidget.addEventListener("click", function () {
+			self.hide();
+		}, false);
+	}
 };
 
-/** Show about box
+/** Show panel
 	@return {void}
 */
-A3a.vpl.About.prototype.show = function () {
+A3a.vpl.HTMLPanel.prototype.show = function () {
 	this.div.innerHTML = this.html;	// do it here to restart from the desired starting point
-	this.div.appendChild(this.closebox);
+	if (this.closeWidget) {
+		this.div.appendChild(this.closeWidget);
+	}
 	this.backgroundDiv.style.display = "block";
 	this.center();
 };
@@ -73,14 +80,14 @@ A3a.vpl.About.prototype.show = function () {
 /** Hide about box
 	@return {void}
 */
-A3a.vpl.About.prototype.hide = function () {
+A3a.vpl.HTMLPanel.prototype.hide = function () {
 	this.backgroundDiv.style.display = "none";
 };
 
 /** Center about box
 	@return {void}
 */
-A3a.vpl.About.prototype.center = function () {
+A3a.vpl.HTMLPanel.prototype.center = function () {
 	var boundingBox = this.div.getBoundingClientRect();
 	this.div.style.marginLeft = (-boundingBox.width / 2) + "px";
 	this.div.style.marginTop = (-boundingBox.height / 2) + "px";

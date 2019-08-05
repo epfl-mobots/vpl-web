@@ -46,10 +46,15 @@ A3a.vpl.Application = function (canvasEl) {
 		"sim": 1
 	};
 
-	/** @type {A3a.vpl.About} */
+	/** @type {A3a.vpl.HTMLPanel} */
 	this.aboutBox = null;
 	/** @type {A3a.vpl.Load} */
 	this.loadBox = null;
+	/** @type {A3a.vpl.HTMLPanel} */
+	this.helpBox = null;
+	/** @type {A3a.vpl.HTMLPanel} */
+	this.suspendBox = null;
+	this.suspended = false;
 
 	this.program = new A3a.vpl.Program(A3a.vpl.mode.basic, this.uiConfig);
 	this.program.setLogger(function (data) {
@@ -87,6 +92,30 @@ A3a.vpl.Application = function (canvasEl) {
 A3a.vpl.Application.Logger;
 
 A3a.vpl.Application.initialized = false;
+
+/** Set or clear html content of About box
+	@param {?string} html
+	@return {void}
+*/
+A3a.vpl.Application.prototype.setAboutBoxContent = function (html) {
+	this.aboutBox = html ? new A3a.vpl.HTMLPanel(html) : null;
+};
+
+/** Set or clear html content of Help
+	@param {?string} html
+	@return {void}
+*/
+A3a.vpl.Application.prototype.setHelpContent = function (html) {
+	this.helpBox = html ? new A3a.vpl.HTMLPanel(html) : null;
+};
+
+/** Set or clear html content of Suspend box
+	@param {?string} html
+	@return {void}
+*/
+A3a.vpl.Application.prototype.setSuspendBoxContent = function (html) {
+	this.suspendBox = html ? new A3a.vpl.HTMLPanel(html, true) : null;
+};
 
 /** Change current view
 	@param {Array.<string>} views array of "vpl", "src" and "sim"

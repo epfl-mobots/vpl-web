@@ -38,6 +38,32 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return app.aboutBox != null;
 		}
 	});
+	this.commands.add("vpl:help", {
+		action: function (app, modifier) {
+			app.helpBox.show();
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.helpBox != null;
+		}
+	});
+	this.commands.add("vpl:suspend", {
+		action: function (app, modifier) {
+			app.suspended = !app.suspended;
+			if (app.suspended) {
+				app.suspendBox.show();
+			} else {
+				app.suspendBox.hide();
+			}
+		},
+		isSelected: function (app) {
+			return app.suspended;
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.suspendBox != null;
+		}
+	});
 	this.commands.add("vpl:new", {
 		action: function (app, modifier) {
 			app.program.new();

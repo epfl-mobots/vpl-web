@@ -574,7 +574,12 @@ function vplSetup(gui) {
 
 	// about box
 	if (gui && gui["fragments"] && gui["fragments"]["about.html"]) {
-		app.aboutBox = new A3a.vpl.About(gui["fragments"]["about.html"]);
+		app.setAboutBoxContent(gui["fragments"]["about.html"]);
+	}
+
+	// help box
+	if (gui && gui["fragments"] && gui["fragments"]["help.html"]) {
+		app.setHelpContent(gui["fragments"]["help.html"]);
 	}
 
 	// css for html output

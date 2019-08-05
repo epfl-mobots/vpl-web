@@ -707,6 +707,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		"vpl:close",
 		"!space",
 		"vpl:about",
+		"vpl:help",
 		"!space",
 		"vpl:new",
 		"vpl:save",

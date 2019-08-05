@@ -76,7 +76,7 @@ JS = \
 	vpl-cmd-src.js \
 	vpl-ui-svg.js \
 	vpl-runglue.js \
-	vpl-about.js \
+	vpl-htmlpanel.js \
 	vpl-files.js \
 	vpl-load.js \
 	vpl-com.js \
