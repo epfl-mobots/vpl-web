@@ -729,6 +729,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		"!stretch",
 		"vpl:teacher-reset",
 		"vpl:teacher-save",
+		"vpl:teacher-setasnew",
 		"vpl:teacher"
 	];
 

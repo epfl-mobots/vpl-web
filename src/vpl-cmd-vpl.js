@@ -67,6 +67,9 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	this.commands.add("vpl:new", {
 		action: function (app, modifier) {
 			app.program.new();
+			if (app.jsonForNew) {
+				app.loadProgramJSON(app.jsonForNew);
+			}
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.isEmpty();
@@ -509,6 +512,20 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL;
+		},
+		object: this,
+		keep: true,
+		isAvailable: function (app) {
+			return app.program.teacherRole && app.program.uiConfig.customizationMode;
+		}
+	});
+	this.commands.add("vpl:teacher-setasnew", {
+		action: function (app, modifier) {
+			var json = app.program.exportToJSON({prog: true});
+			app.jsonForNew = app.jsonForNew === json ? null : json;
+		},
+		isSelected: function (app) {
+			return app.jsonForNew === app.program.exportToJSON({prog: true});
 		},
 		object: this,
 		keep: true,

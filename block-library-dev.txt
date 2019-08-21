@@ -327,6 +327,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:teacher": toggle between the normal and the customization states
 - "vpl:teacher-reset": reset the available toolbar buttons and VPL blocks to the standard sets
 - "vpl:teacher-save": download customized state (like "vpl:save", but without the VPL program)
+- "vpl:teacher-setasnew": toggle between setting current program and customized state as initial program after "vpl:new", or default empty program with customized state
 
 Here is the list of button ids for the Editor view:
 

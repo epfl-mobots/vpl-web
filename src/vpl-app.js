@@ -46,6 +46,9 @@ A3a.vpl.Application = function (canvasEl) {
 		"sim": 1
 	};
 
+	/** @type {?string} */
+	this.jsonForNew = null;	// json program to load upon "new"
+
 	/** @type {A3a.vpl.HTMLPanel} */
 	this.aboutBox = null;
 	/** @type {A3a.vpl.Load} */

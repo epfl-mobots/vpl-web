@@ -17,6 +17,28 @@ or SVG for the obstacle map).
 
 */
 
+A3a.vpl.Application.prototype.loadProgramJSON = function (json) {
+	try {
+		this.program.importFromJSON(json, function (view) {
+			if (this.views.indexOf(view) < 0) {
+				if (this.views.length === 1) {
+					this.setView([view]);
+				} else {
+					// switch vpl to src or src to vpl
+					var views = this.views.slice();
+					views[views.indexOf("vpl") >= 0 ? views.indexOf("vpl")
+						: views.indexOf("src") >= 0 ? views.indexOf("src")
+						: 0] = view;
+					this.setView(views);
+				}
+			}
+			if (this.views.indexOf("vpl") >= 0) {
+				this.vplCanvas.onUpdate();
+			}
+		});
+	} catch (e) {}
+};
+
 /** Load a program file (aesl or json)
 	@param {File} file
 	@return {boolean} true if file suffix was recognized as a program
@@ -38,25 +60,7 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 				app.vplCanvas.onUpdate();
 			} catch (e) {
 				// then try json
-				try {
-					app.program.importFromJSON(data, function (view) {
-						if (app.views.indexOf(view) < 0) {
-							if (app.views.length === 1) {
-								app.setView([view]);
-							} else {
-								// switch vpl to src or src to vpl
-								var views = app.views.slice();
-								views[views.indexOf("vpl") >= 0 ? views.indexOf("vpl")
-									: views.indexOf("src") >= 0 ? views.indexOf("src")
-									: 0] = view;
-								app.setView(views);
-							}
-						}
-						if (app.views.indexOf("vpl") >= 0) {
-							app.vplCanvas.onUpdate();
-						}
-					});
-				} catch (e) {}
+				app.loadProgramJSON(data);
 			}
 		};
 		reader["readAsText"](file);
