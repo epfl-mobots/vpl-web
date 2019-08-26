@@ -1,1 +1,3 @@
 The files in this directory illustrate how parts of the VPL3 web application, and the corresponding source code, can be removed.
+
+index-classic-full-log.html dumps to the browser console the log data which would be sent to a websocket server with vpl-com.js.

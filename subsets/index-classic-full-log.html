@@ -1,6 +1,6 @@
 <!--
 
-VPL3 web app based on a subset of whole JavaScript source code minus thymio connection and svg ui and blocks
+VPL3 web app based on a subset of whole JavaScript source code
 
 full:
 + base vpl3
@@ -9,10 +9,10 @@ full:
 + l2
 + js
 + python
-- support for svg ui
-- support for svg blocks
-- thymio
-- thymio-tdm,
++ support for svg ui
++ support for svg blocks
++ thymio
++ thymio-tdm,
 + simulator
 
 -->
@@ -332,6 +332,7 @@ pre#editor-lines {
 <script src="../src/vpl-canvas-scroll.js"></script>
 <script src="../src/vpl-blocklibutil.js"></script>
 <script src="../src/vpl-blocklib.js"></script>
+<script src="../src/vpl-blocklib-svg.js"></script>
 <script src="../src/vpl-blocklib-l2.js"></script>
 <script src="../src/vpl-blocklib-js.js"></script>
 <script src="../src/vpl-blocklib-python.js"></script>
@@ -360,6 +361,7 @@ pre#editor-lines {
 <script src="../src/vpl-texteditor.js"></script>
 <script src="../src/vpl-sourceedit.js"></script>
 <script src="../src/vpl-cmd-src.js"></script>
+<script src="../src/vpl-ui-svg.js"></script>
 <script src="../src/vpl-runglue.js"></script>
 <script src="../src/vpl-htmlpanel.js"></script>
 <script src="../src/vpl-files.js"></script>
@@ -369,6 +371,8 @@ pre#editor-lines {
 <script src="../src/a3a-nodebase.js"></script>
 <script src="../src/a3a-nodeproxy.js"></script>
 
+<script src="../src/vpl-thymio.js"></script>
+<script src="../src/vpl-thymio-tdm.js"></script>
 <script src="../src/vpl-robot.js"></script>
 <script src="../src/vpl-virtualthymio.js"></script>
 <script src="../src/compiler-ns.js"></script>
@@ -389,6 +393,29 @@ pre#editor-lines {
 <script src="../src/vpl-sim.js"></script>
 <script src="../src/vpl-sim2d.js"></script>
 <script src="../src/vpl-cmd-sim.js"></script>
+
+<script src="../thymio/thymio.js"></script>
+
+<script>
+
+// log to console
+
+window.addEventListener("load", function () {
+	window["vplApp"].addLogger(function (data) {
+		// from vpl-com.js
+		var msg = {
+			"sender": {
+				"type": "vpl",
+				"sessionid": "xxx"
+			},
+			"type": "log",
+			"data": data || null
+		};
+		console.info(msg);
+	});
+}, false);
+
+</script>
 
 </head>
 
