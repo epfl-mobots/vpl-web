@@ -316,7 +316,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:undo": undo last change
 - "vpl:redo": redo last undone change
 - "vpl:run": run the VPL program with the Thymio or the simulator (state is "empty", "running", "error", "canLoad", or "canReload" depending on the VPL program and whether it's been run and modified)
-- "vpl:stop": stop the VPL program
+- "vpl:stop": stop the VPL program and blink the leds
 - "vpl:connected": connection indicator (no action, always disabled; selected if connected, unselected if no connection)
 - "vpl:robot": toggle between all the robots specified in option "robot" in the query string (see below; hidden unless there are at least two robots; state is the robot name, such as "thymio" or "sim")
 - "vpl:sim": switch to the simulator view
@@ -339,7 +339,7 @@ Here is the list of button ids for the Editor view:
 - "src:language": switch to the next programming language (Aseba, L2, JavaScript or Python); state is "aseba", "l2", "js" or "python"
 - "src:disass": toggle between the text programming language and the bytecode disassembly (for Aseba and L2)
 - "src:run": run the text program with the Thymio or the simulator (state is "empty" or "canLoad" depending on the source code)
-- "src:stop": stop the text program
+- "src:stop": stop the text program and blink the leds
 - "src:connected": connection indicator (no action; enabled if connected, disabled if no connection)
 - "src:sim": switch to the simulator view
 - "src:teacher": toggle between the normal and the customization states

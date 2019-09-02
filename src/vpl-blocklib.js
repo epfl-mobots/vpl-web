@@ -92,7 +92,11 @@ A3a.vpl.BlockTemplate.lib =	[
 					statement:
 						"motor.left.target = 0\n" +
 						"motor.right.target = 0\n" +
-						"call sound.system(-1)\n"
+						"call sound.system(-1)\n" +
+						"call leds.circle(32,32,32,32,32,32,32,32)\n" +
+						"timer.period[0] = 100\n" +
+						"onevent timer0\n" +
+						"call leds.circle(0,0,0,0,0,0,0,0)\n"
 				};
 			}
 		}

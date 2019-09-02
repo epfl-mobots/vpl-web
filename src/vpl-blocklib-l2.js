@@ -98,7 +98,12 @@ A3a.vpl.patchL2Blocks = function () {
 					statement:
 						"motor.left.target = 0;\n" +
 						"motor.right.target = 0;\n" +
-						"sound.system(-1);\n"
+						"sound.system(-1);\n" +
+						"leds.circle(32,32,32,32,32,32,32,32);\n" +
+						"timer.period[0] = 100;\n" +
+						"onevent timer0 {\n" +
+						"leds.circle(0,0,0,0,0,0,0,0);\n" +
+						"}\n"
 				};
 			},
 			"button 1": function (block) {
