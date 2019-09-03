@@ -197,6 +197,15 @@ A3a.vpl.Commands.prototype.canDrop = function (name, droppedItem) {
 	return cmd != null && cmd.canDrop(droppedItem);
 };
 
+/** Check if command is available
+	@param {string} name
+	@return {boolean}
+*/
+A3a.vpl.Commands.prototype.isAvailable = function (name) {
+	var cmd = this.find(name);
+	return cmd != null && cmd.isAvailable();
+};
+
 /** Check if command is enabled
 	@param {string} name
 	@return {boolean}
@@ -206,7 +215,7 @@ A3a.vpl.Commands.prototype.isEnabled = function (name) {
 	return cmd != null && cmd.isEnabled();
 };
 
-/** Check if command is enabled
+/** Check if command is selected
 	@param {string} name
 	@return {boolean}
 */

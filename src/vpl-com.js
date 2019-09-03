@@ -38,7 +38,9 @@ A3a.vpl.Com = function (app, wsURL, sessionId) {
 */
 A3a.vpl.Com.prototype.execCommand = function (name, selected, state) {
 	var commands = this.app.commands;
-	if (commands.hasAction(name) && commands.isEnabled(name)) {
+	if (commands.isAvailable(name) &&
+		commands.hasAction(name) &&
+		commands.isEnabled(name)) {
 		if (selected !== undefined) {
 			return commands.executeForSelected(name, selected);
 		} else if (state !== undefined) {

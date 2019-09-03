@@ -61,7 +61,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.suspendBox != null;
+			return !app.program.teacherRole && app.suspendBox != null;
 		}
 	});
 	this.commands.add("vpl:new", {

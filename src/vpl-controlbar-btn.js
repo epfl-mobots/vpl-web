@@ -50,7 +50,7 @@ A3a.vpl.ControlBar.getButtonBounds;
 */
 A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButton, buttonBounds) {
 	var disabled = app.uiConfig.isDisabled(id);
-	if (app.commands.find(id).isAvailable() && (app.uiConfig.customizationMode || !disabled)) {
+	if (app.commands.isAvailable(id) && (app.uiConfig.customizationMode || !disabled)) {
 		var canvas = this.canvas;
 		var cmd = app.commands.find(id);
 		var keepAvailable = cmd.keep;
@@ -135,7 +135,7 @@ A3a.vpl.ControlBar.prototype.setButtons = function (app, buttons, cssClasses, dr
 */
 A3a.vpl.ControlBar.hasAvailableButtons = function (app, buttons) {
 	for (var i = 0; i < buttons.length; i++) {
-		if (buttons[i][0] !== "!" && app.commands.find(buttons[i]).isAvailable()) {
+		if (buttons[i][0] !== "!" && app.commands.isAvailable(buttons[i])) {
 			return true;
 		}
 	}
