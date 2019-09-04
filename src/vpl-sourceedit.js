@@ -56,22 +56,24 @@ A3a.vpl.VPLSourceEditor = function (app, noVPL, language) {
 		},
 		false);
 	// editor tab key
-	document.getElementById("editor").addEventListener("keydown", function (e) {
-		if (e.keyCode === 9) {
-			// prevent loss of focus in textarea
-			e.preventDefault();
-			e.cancelBubbles = true;
-			var textarea = document.getElementById("editor");
-			var text = textarea.value;
-			var start = this.selectionStart, end = this.selectionEnd;
-			text = text.slice(0, start) + "\t" + text.slice(end);
-			self.textEditor.setContent(text);
-			this.selectionStart = this.selectionEnd = start + 1;
-			return false;
-		}
-		// normal behavior
-		return true;
-	}, false);
+	var textarea = document.getElementById("editor");
+	if (textarea) {
+		document.getElementById("editor").addEventListener("keydown", function (e) {
+			if (e.keyCode === 9) {
+				// prevent loss of focus in textarea
+				e.preventDefault();
+				e.cancelBubbles = true;
+				var text = textarea.value;
+				var start = this.selectionStart, end = this.selectionEnd;
+				text = text.slice(0, start) + "\t" + text.slice(end);
+				self.textEditor.setContent(text);
+				this.selectionStart = this.selectionEnd = start + 1;
+				return false;
+			}
+			// normal behavior
+			return true;
+		}, false);
+	}
 };
 
 /** @typedef {function():{language:string,code:string}} */

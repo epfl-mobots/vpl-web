@@ -414,7 +414,7 @@ function vplSetup(gui) {
 	app.program.toolbarDrawButton = drawButton;
 	app.program.toolbarGetButtonBounds = getButtonBounds;
 
-	if (A3a.vpl.VPLSourceEditor) {
+	if (A3a.vpl.VPLSourceEditor && document.getElementById("editor")) {
 		app.editor = new A3a.vpl.VPLSourceEditor(app,
 			app.program.noVPL,
 			language);
