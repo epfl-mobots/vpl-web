@@ -171,7 +171,12 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 	if (initSection >= 0) {
 		if (c[initSection].clauseAssignment) {
 			str += "\n";
-			str += (c[initSection].sectionBegin || "") + (c[initSection].clauseInit || "") + (c[initSection].clauseAssignment || "") + (c[initSection].sectionEnd || "");
+			str +=
+				(c[initSection].sectionBegin || "") +
+				(c[initSection].sectionPreamble || "") +
+				(c[initSection].clauseInit || "") +
+				(c[initSection].clauseAssignment || "") +
+				(c[initSection].sectionEnd || "");
 		}
 	}
 	// init fragments defining functions and onevent
@@ -182,7 +187,12 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 	for (var i = 0; i < program.program.length; i++) {
 		if (i !== initSection && c[i].clauseAssignment) {
 			str += "\n";
-			str += (c[i].sectionBegin || "") + (c[i].clauseInit || "") + (c[i].clauseAssignment || "") + (c[i].sectionEnd || "");
+			str +=
+				(c[i].sectionBegin || "") +
+				(c[i].sectionPreamble || "") +
+				(c[i].clauseInit || "") +
+				(c[i].clauseAssignment || "") +
+				(c[i].sectionEnd || "");
 		}
 	}
 	// add onevent timer1

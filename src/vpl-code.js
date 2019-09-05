@@ -218,8 +218,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 		}
 	}
 
-	// find the event with the highest sectionPriority, check compatibility
-	// and collect init code
+	// collect init code
 	/** @type {Array.<string>} */
 	var initVarDecl = [];
 	/** @type {Array.<string>} */
@@ -293,27 +292,10 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 		var eventCode = rule.events[0].blockTemplate.type === A3a.vpl.blockType.event
 			? rule.events[0].generateCode(this.language)
 			: null;
-		if (eventCode && eventCode.initVarDecl) {
-			eventCode.initVarDecl.forEach(function (frag) {
-				if (initVarDecl.indexOf(frag) < 0) {
-					initVarDecl.push(frag);
-				}
-			});
-		}
-		if (eventCode && eventCode.initCodeExec) {
-			eventCode.initCodeExec.forEach(function (frag) {
-				if (initCodeExec.indexOf(frag) < 0) {
-					initCodeExec.push(frag);
-				}
-			});
-		}
-		if (eventCode && eventCode.initCodeDecl) {
-			eventCode.initCodeDecl.forEach(function (frag) {
-				if (initCodeDecl.indexOf(frag) < 0) {
-					initCodeDecl.push(frag);
-				}
-			});
-		}
+		var auxEventCode = rule.events
+			.slice(1)
+			.filter(function (eb) { return eb.blockTemplate.type === A3a.vpl.blockType.event; })
+			.map(function (eb) { return eb.generateCode(this.language); }, this);
 		return {
 			firstEventType: rule.events[0] ? rule.events[0].blockTemplate.name : "",
 			initVarDecl: initVarDecl,
@@ -321,6 +303,10 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 			initCodeDecl: initCodeDecl,
 			sectionBegin: eventCode ? eventCode.sectionBegin : "",
 			sectionEnd: eventCode ? eventCode.sectionEnd : "",
+			sectionPreamble: eventCode ? eventCode.sectionPreamble : "",
+			auxSectionBegin: auxEventCode.map(function (ec) { return ec.sectionBegin || ""; }),
+			auxSectionEnd: auxEventCode.map(function (ec) { return ec.sectionEnd || ""; }),
+			auxSectionPreamble: auxEventCode.map(function (ec) { return ec.sectionPreamble || ""; }),
 			clauseInit: clauseInit,
 			auxClausesInit: auxClausesInit,
 			clause: clause,

@@ -143,7 +143,8 @@
 				"initCodeExec": [
 					"tapped = 0\n"
 				],
-				"sectionBegin": "onevent tap\ntapped = 1\n"
+				"sectionBegin": "onevent tap\n",
+				"sectionPreamble": "tapped = 1\n"
 			}
 		},
 		{
@@ -250,8 +251,8 @@
 					],
 					"timerElapsed = 0\n"
 				],
-				"sectionBegin": [
-					"onevent timer0\n",
+				"sectionBegin": "onevent timer0\n",
+				"sectionPreamble": [
 					"timerElapsed = 1\n",
 					"timer.period[0] = 0\n"
 				]
