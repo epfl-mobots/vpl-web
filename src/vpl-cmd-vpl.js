@@ -84,7 +84,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			} else {
 				// var aesl = app.program.exportAsAESLFile();
 				// A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
-				var json = app.program.exportToJSON({lib: false});
+				var json = app.program.exportToJSON({lib: false, prog: true});
 				A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
 			}
 		},
@@ -104,7 +104,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:upload", {
 		action: function (app, modifier) {
-			var aesl = app.program.exportAsAESLFile();
+			var json = app.program.exportToJSON({lib: false, prog: true});
 			// ...
 		},
 		isEnabled: function (app) {
@@ -507,7 +507,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:teacher-save", {
 		action: function (app, modifier) {
-			var json = app.program.exportToJSON({prog: false});
+			var json = app.program.exportToJSON({lib: true, prog: false});
 			A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
 		},
 		isEnabled: function (app) {
@@ -521,11 +521,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:teacher-setasnew", {
 		action: function (app, modifier) {
-			var json = app.program.exportToJSON({prog: true});
+			var json = app.program.exportToJSON({lib: false, prog: true});
 			app.jsonForNew = app.jsonForNew === json ? null : json;
 		},
 		isSelected: function (app) {
-			return app.jsonForNew === app.program.exportToJSON({prog: true});
+			return app.jsonForNew === app.program.exportToJSON({lib: false, prog: true});
 		},
 		object: this,
 		keep: true,
