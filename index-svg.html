@@ -2365,7 +2365,8 @@ sim-playground {
 					"tapped = 0\n"
 				],
 				"sectionBegin": "onevent tap\n",
-				"sectionPreamble": "tapped = 1\n"
+				"sectionPreamble": "tapped = 1\n",
+				"clause": "tapped != 0"
 			}
 		},
 		{
@@ -2476,7 +2477,8 @@ sim-playground {
 				"sectionPreamble": [
 					"timerElapsed = 1\n",
 					"timer.period[0] = 0\n"
-				]
+				],
+				"clause": "timerElapsed != 0"
 			}
 		},
 		{
@@ -2956,7 +2958,8 @@ sim-playground {
 				],
 				"sectionBegin": "onevent tap {\n",
 				"sectionEnd": "}\n",
-				"sectionPreamble": "tapped = true;\n"
+				"sectionPreamble": "tapped = true;\n",
+				"clause": "tapped"
 			}
 		},
 		{
@@ -3077,7 +3080,8 @@ sim-playground {
 				"sectionPreamble": [
 					"timerElapsed = true;\n",
 					"timer.period[0] = 0;\n"
-				]
+				],
+				"clause": "timerElapsed"
 			}
 		},
 		{
@@ -3407,9 +3411,29 @@ sim-playground {
 		},
 		{
 			"name": "clap",
+			"l2": {
+				"initVarDecl": [
+					"var clap;\n"
+				],
+				"initCodeExec": [
+					"clap = false;\n"
+				],
+				"sectionBegin": "onevent mic {\n",
+				"sectionEnd": "}\n",
+				"sectionPreamble": "clap = true;\n",
+				"clause": "clap"
+			}
 			"js": {
+				"initCodeExec": [
+					[
+						"// setup threshold for detecting claps\n",
+						"this.set["mic.threshold", 250];\n"
+					]
+				],
 				"sectionBegin": "this.addEventListener(\"mic\", function (name, param) {\n",
-				"sectionEnd": "});\n"
+				"sectionEnd": "});\n",
+				"clause": "this.get[\"mic.intensity\"] > this.get[\"mic.threshold\"]",
+				"clauseOptional": true
 			}
 		},
 		{
@@ -3418,8 +3442,16 @@ sim-playground {
 		{
 			"name": "tap",
 			"js": {
+				"initVarDecl": [
+					"var tapped;\n"
+				],
+				"initCodeExec": [
+					"tapped = false;\n"
+				],
 				"sectionBegin": "this.addEventListener(\"tap\", function (name, param) {\n",
-				"sectionEnd": "});\n"
+				"sectionPreamble": "tappded = true;\n",
+				"sectionEnd": "});\n",
+				"clause": "tapped"
 			}
 		},
 		{

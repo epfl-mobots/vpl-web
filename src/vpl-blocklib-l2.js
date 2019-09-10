@@ -248,8 +248,16 @@ A3a.vpl.patchL2Blocks = function () {
 			},
 			"tap": function (block) {
 				return {
+					initVarDecl: [
+						"bool tapped;\n"
+					],
+					initCodeExec: [
+						"tapped = false;\n"
+					],
 					sectionBegin: "onevent tap {\n",
-					sectionEnd: "}\n"
+					sectionEnd: "}\n",
+					sectionPreamble: "tapped = true;\n",
+					clause: "tapped"
 				};
 			},
 			"accelerometer": function (block) {
@@ -257,8 +265,16 @@ A3a.vpl.patchL2Blocks = function () {
 				if (dir === 0) {
 					// tap
 					return {
+						initVarDecl: [
+							"bool tapped;\n"
+						],
+						initCodeExec: [
+							"tapped = false;\n"
+						],
 						sectionBegin: "onevent tap {\n",
-						sectionEnd: "}\n"
+						sectionEnd: "}\n",
+						sectionPreamble: "tapped = true;\n",
+						clause: "tapped"
 					};
 				} else {
 					/** @type {number} */
@@ -350,8 +366,10 @@ A3a.vpl.patchL2Blocks = function () {
 						A3a.vpl.BlockTemplate.resetTimer2,
 						"timerElapsed = false;\n"
 					],
-					sectionBegin: "onevent timer0 {\ntimerElapsed = true;\ntimer.period[0] = 0;\n",
-					sectionEnd: "}\n"
+					sectionBegin: "onevent timer0 {\n",
+					sectionEnd: "}\n",
+					sectionPreamble: "timerElapsed = true;\ntimer.period[0] = 0;\n",
+					clause: "timerElapsed"
 				};
 			},
 			"state": function (block) {

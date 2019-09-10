@@ -144,7 +144,8 @@
 					"tapped = 0\n"
 				],
 				"sectionBegin": "onevent tap\n",
-				"sectionPreamble": "tapped = 1\n"
+				"sectionPreamble": "tapped = 1\n",
+				"clause": "tapped != 0"
 			}
 		},
 		{
@@ -255,7 +256,8 @@
 				"sectionPreamble": [
 					"timerElapsed = 1\n",
 					"timer.period[0] = 0\n"
-				]
+				],
+				"clause": "timerElapsed != 0"
 			}
 		},
 		{

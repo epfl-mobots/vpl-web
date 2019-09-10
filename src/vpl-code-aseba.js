@@ -30,10 +30,45 @@ A3a.vpl.CodeGeneratorA3a.prototype.constructor = A3a.vpl.CodeGeneratorA3a;
 	@inheritDoc
 */
 A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
+	// generate code fragments for all rules
 	this.reset();
 	var c = program.program.map(function (rule) {
 		return this.generateCodeForEventHandler(rule);
 	}, this);
+
+	// get all sections
+	var sections = {};	// key = sectionBegin
+	var sectionList = [];	// list of sectionBegin strings to preserve order
+	c.forEach(function (evCode) {
+		if (evCode.sectionBegin) {
+			sections[evCode.sectionBegin] = {
+				sectionBegin: evCode.sectionBegin,
+				sectionEnd: evCode.sectionEnd,
+				sectionPreamble: evCode.sectionPreamble,
+				clauseInit: "",
+				clauseAssignment: ""
+			};
+			if (sectionList.indexOf(evCode.sectionBegin) < 0) {
+				sectionList.push(evCode.sectionBegin);
+			}
+		}
+		if (evCode.auxSectionBegin) {
+			evCode.auxSectionBegin.forEach(function (sectionBegin, i) {
+				sections[sectionBegin] = {
+					sectionBegin: sectionBegin,
+					sectionEnd: evCode.auxSectionEnd[i],
+					sectionPreamble: evCode.auxSectionPreamble[i],
+					clauseInit: "",
+					clauseAssignment: ""
+				};
+				if (sectionList.indexOf(sectionBegin) < 0) {
+					sectionList.push(sectionBegin);
+				}
+			});
+		}
+	});
+
+	// collect code fragments
 	/** @type {Array.<string>} */
 	var initVarDecl = [];
 	/** @type {Array.<string>} */
@@ -42,10 +77,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 	var initCodeDecl = [];
 	/** @type {Array.<string>} */
 	var clauses = [];
-	/** @dict */
-	var folding = {};
-		// folding[sectionBegin] = index in c fragments with same sectionBegin are folded into
-	var initSection = -1;	// will be output first if it exists, before onevent sections
+
 	c.forEach(function (evCode, i) {
 		evCode.initVarDecl && evCode.initVarDecl.forEach(function (fr) {
 			if (initVarDecl.indexOf(fr) < 0) {
@@ -69,31 +101,16 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 				evCode.clauseIndex = clauses.length;
 				clauses.push(A3a.vpl.CodeGenerator.Mark.remove(evCode.clause || evCode.sectionBegin));
 
-	 			if (folding[evCode.sectionBegin] != undefined) {
-					// fold evCode into c[folding[evCode.sectionBegin]]
-					var foldedFrag = c[folding[evCode.sectionBegin]];
-					if (evCode.clauseInit &&
-						(!foldedFrag.clauseInit || foldedFrag.clauseInit.indexOf(evCode.clauseInit) < 0)) {
-						// concat all clauseInit fragments without duplicates
-						foldedFrag.clauseInit = (foldedFrag.clauseInit || "") + evCode.clauseInit;
-					}
-					foldedFrag.clauseAssignment += evCode.clause
-						? "when " + evCode.clause + " do\n" +
-							"eventCache[" + evCode.clauseIndex + "] = 1\n" +
-							"end\n"
-						: "eventCache[" + evCode.clauseIndex + "] = 1\n";
-				} else {
-					// first fragment with that sectionBegin
-					folding[evCode.sectionBegin] = i;
-					evCode.clauseAssignment = evCode.clause
-						? "when " + evCode.clause + " do\n" +
-							"eventCache[" + evCode.clauseIndex + "] = 1\n" +
-							"end\n"
-						: "eventCache[" + evCode.clauseIndex + "] = 1\n";
-					if (c[i].firstEventType === "init") {
-						initSection = i;
-					}
+				var section = sections[evCode.sectionBegin];
+				if (evCode.clauseInit && section.clauseInit.indexOf(evCode.clauseInit) < 0) {
+					// concat all clauseInit fragments without duplicates
+					evCode.clauseInit += evCode.clauseInit;
 				}
+				section.clauseAssignment += evCode.clause
+					? "when " + evCode.clause + " do\n" +
+						"eventCache[" + evCode.clauseIndex + "] = 1\n" +
+						"end\n"
+					: "eventCache[" + evCode.clauseIndex + "] = 1\n";
 			}
 		}
 		if (!evCode.sectionBegin) {
@@ -188,32 +205,21 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 			str += "timer.period[1] = 50\n";
 		}
 	}
-	// explicit init events
-	if (initSection >= 0) {
-		if (c[initSection].clauseAssignment) {
-			str += "\n";
-			str +=
-				(c[initSection].sectionBegin || "") +
-				(c[initSection].sectionPreamble || "") +
-				(c[initSection].clauseInit || "") +
-				(c[initSection].clauseAssignment || "") +
-				(c[initSection].sectionEnd || "");
-		}
-	}
 	// init fragments defining sub and onevent
 	if (initCodeDecl.length > 0) {
 		str += "\n" + initCodeDecl.join("\n");
 	}
 	// explicit events
-	for (var i = 0; i < program.program.length; i++) {
-		if (i !== initSection && c[i].clauseAssignment) {
-			str += "\n";
-			str +=
-				(c[i].sectionBegin || "") +
-				(c[i].sectionPreamble || "") +
-				(c[i].clauseInit || "") +
-				(c[i].clauseAssignment || "") +
-				(c[i].sectionEnd || "");
+	for (var i = 0; i < sectionList.length; i++) {
+		if (sections[sectionList[i]].sectionPreamble ||
+			sections[sectionList[i]].clauseInit ||
+			sections[sectionList[i]].clauseAssignment) {
+			str += "\n" +
+				(sections[sectionList[i]].sectionBegin || "") +
+				(sections[sectionList[i]].sectionPreamble || "") +
+				(sections[sectionList[i]].clauseInit || "") +
+				(sections[sectionList[i]].clauseAssignment || "") +
+				(sections[sectionList[i]].sectionEnd || "");
 		}
 	}
 	// add onevent timer1

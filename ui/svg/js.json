@@ -31,9 +31,29 @@
 		},
 		{
 			"name": "clap",
+			"l2": {
+				"initVarDecl": [
+					"var clap;\n"
+				],
+				"initCodeExec": [
+					"clap = false;\n"
+				],
+				"sectionBegin": "onevent mic {\n",
+				"sectionEnd": "}\n",
+				"sectionPreamble": "clap = true;\n",
+				"clause": "clap"
+			}
 			"js": {
+				"initCodeExec": [
+					[
+						"// setup threshold for detecting claps\n",
+						"this.set["mic.threshold", 250];\n"
+					]
+				],
 				"sectionBegin": "this.addEventListener(\"mic\", function (name, param) {\n",
-				"sectionEnd": "});\n"
+				"sectionEnd": "});\n",
+				"clause": "this.get[\"mic.intensity\"] > this.get[\"mic.threshold\"]",
+				"clauseOptional": true
 			}
 		},
 		{
@@ -42,8 +62,16 @@
 		{
 			"name": "tap",
 			"js": {
+				"initVarDecl": [
+					"var tapped;\n"
+				],
+				"initCodeExec": [
+					"tapped = false;\n"
+				],
 				"sectionBegin": "this.addEventListener(\"tap\", function (name, param) {\n",
-				"sectionEnd": "});\n"
+				"sectionPreamble": "tappded = true;\n",
+				"sectionEnd": "});\n",
+				"clause": "tapped"
 			}
 		},
 		{

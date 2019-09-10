@@ -31,22 +31,57 @@ A3a.vpl.CodeGeneratorJS.prototype.constructor = A3a.vpl.CodeGeneratorJS;
 	@inheritDoc
 */
 A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
+	// generate code fragments for all rules
 	this.reset();
 	var c = program.program.map(function (rule) {
 		return this.generateCodeForEventHandler(rule);
 	}, this);
+
+	// get all sections
+	var sections = {};	// key = sectionBegin
+	var sectionList = [];	// list of sectionBegin strings to preserve order
+	c.forEach(function (evCode) {
+		if (evCode.sectionBegin) {
+			sections[evCode.sectionBegin] = {
+				sectionBegin: evCode.sectionBegin,
+				sectionEnd: evCode.sectionEnd,
+				sectionPreamble: evCode.sectionPreamble,
+				clauseInit: "",
+				clauseAssignment: ""
+			};
+			if (sectionList.indexOf(evCode.sectionBegin) < 0) {
+				sectionList.push(evCode.sectionBegin);
+			}
+		}
+		if (evCode.auxSectionBegin) {
+			evCode.auxSectionBegin.forEach(function (sectionBegin, i) {
+				sections[sectionBegin] = {
+					sectionBegin: sectionBegin,
+					sectionEnd: evCode.auxSectionEnd[i],
+					sectionPreamble: evCode.auxSectionPreamble[i],
+					clauseInit: "",
+					clauseAssignment: ""
+				};
+				if (sectionList.indexOf(sectionBegin) < 0) {
+					sectionList.push(sectionBegin);
+				}
+			});
+		}
+	});
+
+	// collect code fragments
 	/** @type {Array.<string>} */
 	var initVarDecl = [];
 	/** @type {Array.<string>} */
 	var initCodeExec = [];
 	/** @type {Array.<string>} */
 	var initCodeDecl = [];
-	/** @dict */
-	var folding = {};
-		// folding[sectionBegin] = index in c fragments with same sectionBegin are folded into
+	/** @type {Array.<string>} */
+	var clauses = [];
+
 	/** @type {Array.<number>} */
 	var initEventIndices = [];
-	var usesCond = false;
+	var nextCond = 0;
 	c.forEach(function (evCode, i) {
 		evCode.initVarDecl && evCode.initVarDecl.forEach(function (fr) {
 			if (initVarDecl.indexOf(fr) < 0) {
@@ -67,32 +102,40 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 		if (evCode.clause) {
 			statement =
 				"cond = " + evCode.clause + ";\n" +
-				"if (cond && !cond0[" + i + "]) {\n" +
+				"if (cond && !cond0[" + nextCond + "]) {\n" +
 				statement +
 				"}\n" +
-				"cond0[" + i + "] = cond;\n";
-			usesCond = true;
+				"cond0[" + nextCond + "] = cond;\n";
+			nextCond++;
 		}
 		statement = this.bracket(statement, program.program[i]);
 		if (evCode.sectionBegin) {
- 			if (folding[evCode.sectionBegin] !== undefined) {
-				// fold evCode into c[folding[evCode.sectionBegin]]
-				var foldedFrag = c[folding[evCode.sectionBegin]];
-				if (evCode.clauseInit &&
-					(!foldedFrag.clauseInit || foldedFrag.clauseInit.indexOf(evCode.clauseInit) < 0)) {
+			evCode.clauseIndex = clauses.indexOf(A3a.vpl.CodeGenerator.Mark.remove(evCode.clause || evCode.sectionBegin));
+			if (evCode.clauseIndex < 0) {
+				// first time this exact clause is found
+				evCode.clauseIndex = clauses.length;
+				clauses.push(A3a.vpl.CodeGenerator.Mark.remove(evCode.clause || evCode.sectionBegin));
+
+				var section = sections[evCode.sectionBegin];
+				if (evCode.clauseInit && section.clauseInit.indexOf(evCode.clauseInit) < 0) {
 					// concat all clauseInit fragments without duplicates
-					foldedFrag.clauseInit = (foldedFrag.clauseInit || "") + evCode.clauseInit;
+					evCode.clauseInit += evCode.clauseInit;
 				}
-				foldedFrag.statement += statement;
-				evCode.statement = undefined;
-			} else {
-				// first fragment with that sectionBegin
-				folding[evCode.sectionBegin] = i;
-				evCode.statement = statement;
+				if (evCode.clause) {
+				section.clauseAssignment +=
+					"cond = " + evCode.clause + ";\n" +
+						"if (cond && !cond0[" + nextCond + "]) {\n" +
+						"eventCache[" + evCode.clauseIndex + "] = 1\n" +
+						"}\n" +
+						"cond0[" + nextCond + "] = cond;\n"
+					nextCond++;
+				} else {
+					section.clauseAssignment += "eventCache[" + evCode.clauseIndex + "] = 1\n";
+				}
 			}
-		} else {
-			// replace clauseBegin/statement/clauseEnd with statement
-			evCode.statement = statement;
+		}
+		if (!evCode.sectionBegin) {
+			evCode.statement = this.bracket(evCode.statement || "", program.program[i]);
 		}
 		if (program.program[i].getEventBlockByType("init")) {
 			initEventIndices.push(i);
@@ -111,7 +154,43 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 		runBlocksCode = this.generateCodeForEventHandler(rule).statement;
 	}
 
-	if (usesCond) {
+	// collect action code
+	/** @type {Array.<string>} */
+	var auxClausesInit = [];
+	var actionsTestCode = "";
+	var actionsExecCode = "";
+	var actionTestCount = 0;
+	for (var i = 0; i < program.program.length; i++) {
+		if (c[i].clauseIndex >= 0) {
+			c[i].auxClausesInit && c[i].auxClausesInit.forEach(function (cl) {
+				if (auxClausesInit.indexOf(cl) < 0) {
+					auxClausesInit.push(cl);
+				}
+			});
+			actionsTestCode += "if (eventCache[" + c[i].clauseIndex + "]" +
+				(c[i].auxClauses ? " && " + c[i].auxClauses : "") +
+				") {\n" +
+				"todo[" + actionTestCount + "] = true;\n" +
+				"}\n";
+			actionsExecCode += "if (todo[" + actionTestCount + "]) {\n" +
+				c[i].statement +
+				"}\n";
+			actionTestCount++;
+		} else if (c[i].auxClauses) {
+			actionsTestCode += "cond = " + c[i].auxClauses + ";\n" +
+				"if (cond && !cond0[" + nextCond + "]) {\n" +
+				"todo[" + actionTestCount + "] = 1\n" +
+				"}\n" +
+				"cond0[" + nextCond + "] = cond;\n";
+			nextCond++;
+			actionsExecCode += "if todo[" + actionTestCount + "] != 0 then\n" +
+				c[i].statement +
+				"end\n";
+			actionTestCount++;
+		}
+	}
+	
+	if (nextCond > 0) {
 		initVarDecl.unshift("var cond0;\nvar cond;\n");
 		initCodeExec.unshift("cond0 = [];\n");
 	}
@@ -119,6 +198,12 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 	// build program from fragments:
 	// init fragments (var declarations first, then code)
 	var str = initVarDecl.length > 0 ? "\n" + initVarDecl.join("\n") : "";
+	if (clauses.length > 0) {
+		str += "var eventCache = [];\n"
+	}
+	if (actionTestCount > 0) {
+		str += "var todo[] = [];\n";
+	}
 	if (runBlocks) {
 		str += "\n" + runBlocksCode;
 	} else {
@@ -145,12 +230,29 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 		throw "internal error, unsupported sub/onevent in js";
 	}
 	// explicit events
-	for (var i = 0; i < program.program.length; i++) {
-		if (initEventIndices.indexOf(i) < 0 && c[i].statement) {
-			str += "\n";
-			str += (c[i].sectionBegin || "") + (c[i].clauseInit || "") + (c[i].statement || "") + (c[i].sectionEnd || "");
+	for (var i = 0; i < sectionList.length; i++) {
+		if (sections[sectionList[i]].sectionPreamble ||
+			sections[sectionList[i]].clauseInit ||
+			sections[sectionList[i]].clauseAssignment) {
+			str += "\n" +
+				(sections[sectionList[i]].sectionBegin || "") +
+				(sections[sectionList[i]].sectionPreamble || "") +
+				(sections[sectionList[i]].clauseInit || "") +
+				(sections[sectionList[i]].clauseAssignment || "") +
+				(sections[sectionList[i]].sectionEnd || "");
 		}
 	}
+	// add onevent timer1
+	if (actionsTestCode) {
+		str += "\nthis.addEventListener(\"timer1\", function (name, param) {\n" + auxClausesInit.join("") + actionsTestCode + actionsExecCode;
+		for (var i = 0; i < clauses.length; i++) {
+			str += "eventCache[" + i + "] = 0\n";
+		}
+		for (var i = 0; i < actionTestCount; i++) {
+			str += "todo[" + i + "] = 0\n";
+		}
+	}
+	str += "});";
 	// remove initial lf
 	if (str[0] === "\n") {
 		str = str.slice(1);

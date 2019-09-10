@@ -785,8 +785,9 @@ A3a.vpl.BlockTemplate.lib =	[
 					initCodeExec: [
 						"tapped = 0\n"
 					],
-					sectionBegin: "onevent tap\ntapped = 1\n"
-						// there must be a real tap event block in the program
+					sectionBegin: "onevent tap\n",
+					sectionPreamble: "tapped = 1\n",
+					clause: "tapped != 0"
 				};
 			}
 		}
@@ -871,7 +872,15 @@ A3a.vpl.BlockTemplate.lib =	[
 					if (dir === 0) {
 						// tap
 						return {
-							sectionBegin: "onevent tap\n"
+							initVarDecl: [
+								"var tapped\n"
+							],
+							initCodeExec: [
+								"tapped = 0\n"
+							],
+							sectionBegin: "onevent tap\n",
+							sectionPreamble: "tapped = 1\n",
+							clause: "tapped != 0"
 						};
 					} else {
 						/** @type {number} */
@@ -1131,8 +1140,9 @@ A3a.vpl.BlockTemplate.lib =	[
 						A3a.vpl.BlockTemplate.resetTimer,
 						"timerElapsed = 0\n"
 					],
-					sectionBegin: "onevent timer0\ntimerElapsed = 1\ntimer.period[0] = 0\n"
-						// there must be a real timer event block in the program
+					sectionBegin: "onevent timer0\n",
+					sectionPreamble: "timerElapsed = 1\ntimer.period[0] = 0\n",
+					clause: "timerElapsed"
 				};
 			}
 		}
