@@ -180,8 +180,8 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 			str += (str.length > 0 ? "\n" : "") + strInit.slice(1);	// skip initial linefeed
 		}
 		// timer1 for actions
-		if (program.program.length > 0) {
-			str += "timer.period[1] = 50;\n";
+		if (actionsTestCode) {
+			str += (str.length > 0 ? "\n" : "") + "timer.period[1] = 50;\n";
 		}
 	}
 	// init fragments defining functions and onevent

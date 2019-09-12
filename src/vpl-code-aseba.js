@@ -201,8 +201,8 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 			str += "\n" + initCodeExec.join("\n");
 		}
 		// timer1 for actions
-		if (program.program.length > 0) {
-			str += "timer.period[1] = 50\n";
+		if (actionsTestCode) {
+			str += (str.length > 0 ? "\n" : "") + "timer.period[1] = 50\n";
 		}
 	}
 	// init fragments defining sub and onevent
