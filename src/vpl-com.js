@@ -76,6 +76,17 @@ A3a.vpl.Com.prototype.connect = function () {
 				var kind = msg["data"]["kind"];
 				var content = msg["data"]["content"];
 				switch (kind) {
+				case "vpl":
+					if (/^[\s]*{/.test(content)) {
+						// json
+						self.app.loadProgramJSON(content);
+					} else {
+						// try xml
+						self.app.program.importFromAESLFile(content);
+						self.app.vplCanvas.onUpdate();
+					}
+					self.app.program.filename = msg["data"]["name"] || null;
+					break;
 				case "about":
 					self.app.setAboutBoxContent(content);
 					break;
@@ -102,7 +113,24 @@ A3a.vpl.Com.prototype.connect = function () {
 	@return {void}
 */
 A3a.vpl.Com.prototype.log = function (data) {
-	var msg = {
+	if (data["type"] === "cmd" && data["data"] &&
+		["vpl:run"].indexOf(data["data"]["cmd"]) >= 0) {
+		// send file before logging command
+		var json = this.app.program.exportToJSON({lib: false, prog: true});
+		var fileMsg = {
+			"sender": {
+				"type": "vpl",
+				"sessionid": this.sessionId
+			},
+			"type": "file",
+			"data": {
+				"name": this.app.program.filename,
+				"content": json
+			}
+		};
+		this.ws.send(JSON.stringify(fileMsg));
+	}
+	var logMsg = {
 		"sender": {
 			"type": "vpl",
 			"sessionid": this.sessionId
@@ -110,5 +138,5 @@ A3a.vpl.Com.prototype.log = function (data) {
 		"type": "log",
 		"data": data || null
 	};
-	this.ws.send(JSON.stringify(msg));
+	this.ws.send(JSON.stringify(logMsg));
 };
