@@ -105,14 +105,14 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	this.commands.add("vpl:upload", {
 		action: function (app, modifier) {
 			var json = app.program.exportToJSON({lib: false, prog: true});
-			// ...
+			window["vplUpload"](app.program.filename, json);
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.isEmpty();
 		},
 		object: this,
 		isAvailable: function (app) {
-			return window["vplStorageSetFunction"] != null;
+			return window["vplUpload"] != null;
 		}
 	});
 	this.commands.add("vpl:exportToHTML", {
