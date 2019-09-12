@@ -57,12 +57,12 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 			try {
 				// try aesl first
 				app.program.importFromAESLFile(data);
-				app.vplCanvas.onUpdate();
 			} catch (e) {
 				// then try json
 				app.loadProgramJSON(data);
-				app.vplCanvas.onUpdate();
 			}
+			app.program.filename = filename;
+			app.vplCanvas.onUpdate();
 		};
 		reader["readAsText"](file);
 		return true;

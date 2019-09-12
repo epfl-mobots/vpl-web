@@ -23,6 +23,8 @@ to programming.
 	@param {?A3a.vpl.UIConfig=} uiConfig
 */
 A3a.vpl.Program = function (mode, uiConfig) {
+	/** @type {?string} */
+	this.filename = null;
 	/** @type {A3a.vpl.mode} */
 	this.mode = mode || A3a.vpl.mode.basic;
 	this.noVPL = false;	// true for source code editor without vpl counterpart
