@@ -61,6 +61,7 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 			} catch (e) {
 				// then try json
 				app.loadProgramJSON(data);
+				app.vplCanvas.onUpdate();
 			}
 		};
 		reader["readAsText"](file);
