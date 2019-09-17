@@ -46,7 +46,7 @@
       }
 
       .cls-7 {
-        fill: #6200ea;
+        fill: #6215e6;
       }
 
       .cls-8 {
@@ -94,7 +94,7 @@
       }
 
       .cls-21 {
-        stroke: #6200ea;
+        stroke: #6215e6;
       }
 
       .cls-22, .cls-24 {
@@ -754,9 +754,9 @@
     <g id="Ev_Accel">
       <g id="Rot360Rail">
         <g id="Gravity_arrow">
-          <polyline class="cls-28" points="10.83 11.8 8 14.63 5.17 11.8"/>
-          <line class="cls-29" x1="8" y1="14" x2="8" y2="4"/>
-          <line class="cls-29" x1="12" y1="18.63" x2="4" y2="18.63"/>
+          <polyline class="cls-28" points="10.83 85.17 8 88 5.17 85.17"/>
+          <line class="cls-29" x1="8" y1="87.37" x2="8" y2="77.37"/>
+          <line class="cls-29" x1="12" y1="92" x2="4" y2="92"/>
         </g>
         <g id="_360Rot_rail" data-name="360Rot_rail">
           <g>
