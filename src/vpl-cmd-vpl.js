@@ -47,6 +47,15 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return app.helpBox != null;
 		}
 	});
+	this.commands.add("vpl:readonly", {
+		isEnabled: function (app) {
+			return false;
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.program.readOnly;
+		}
+	});
 	this.commands.add("vpl:suspend", {
 		action: function (app, modifier) {
 			app.suspended = !app.suspended;
@@ -74,7 +83,10 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.readOnly && !app.program.isEmpty();
 		},
-		object: this
+		object: this,
+		isAvailable: function (app) {
+			return !app.program.readOnly;
+		}
 	});
 	this.commands.add("vpl:save", {
 		action: function (app, modifier) {
@@ -91,7 +103,10 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.isEmpty();
 		},
-		object: this
+		object: this,
+		isAvailable: function (app) {
+			return !app.program.readOnly;
+		}
 	});
 	this.commands.add("vpl:load", {
 		action: function (app, modifier) {
@@ -100,7 +115,10 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.readOnly;
 		},
-		object: this
+		object: this,
+		isAvailable: function (app) {
+			return !app.program.readOnly;
+		}
 	});
 	this.commands.add("vpl:upload", {
 		action: function (app, modifier) {
@@ -112,7 +130,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return window["vplUpload"] != null;
+			return window["vplUpload"] != null && !app.program.readOnly;
 		}
 	});
 	this.commands.add("vpl:exportToHTML", {
@@ -186,25 +204,34 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		isSelected: function (app) {
 			return app.program.mode === A3a.vpl.mode.advanced;
 		},
-		object: this
+		object: this,
+		isAvailable: function (app) {
+			return !app.program.readOnly;
+		}
 	});
 	this.commands.add("vpl:undo", {
 		action: function (app, modifier) {
 			app.program.undo(function () { app.renderProgramToCanvas(); });
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL && !app.program.readOnly && app.program.undoState.canUndo();
+			return !app.program.noVPL && app.program.undoState.canUndo();
 		},
-		object: this
+		object: this,
+		isAvailable: function (app) {
+			return !app.program.readOnly;
+		}
 	});
 	this.commands.add("vpl:redo", {
 		action: function (app, modifier) {
 			app.program.redo(function () { app.renderProgramToCanvas(); });
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL && !app.program.readOnly && app.program.undoState.canRedo();
+			return !app.program.noVPL && app.program.undoState.canRedo();
 		},
-		object: this
+		object: this,
+		isAvailable: function (app) {
+			return !app.program.readOnly;
+		}
 	});
 	this.commands.add("vpl:run", {
 		action: function (app, modifier) {
@@ -325,7 +352,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:duplicate", {
 		isEnabled: function (app) {
-			return !app.program.noVPL && !app.program.readOnly;
+			return !app.program.noVPL;
 		},
 		doDrop: function (app, draggedItem) {
 			// duplicate event handler
@@ -341,11 +368,14 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
             return draggedItem.data instanceof A3a.vpl.Rule &&
 				!/** @type {A3a.vpl.Rule} */(draggedItem.data).isEmpty();
 		},
-		object: this
+		object: this,
+		isAvailable: function (app) {
+			return !app.program.readOnly;
+		}
 	});
 	this.commands.add("vpl:disable", {
 		isEnabled: function (app) {
-			return !app.program.noVPL && !app.program.readOnly;
+			return !app.program.noVPL;
 		},
 		doDrop: function (app, draggedItem) {
 			// disable or reenable block or event handler
@@ -368,11 +398,14 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				: draggedItem.data instanceof A3a.vpl.Block &&
 					draggedItem.data.ruleContainer !== null;
 		},
-		object: this
+		object: this,
+		isAvailable: function (app) {
+			return !app.program.readOnly;
+		}
 	});
 	this.commands.add("vpl:lock", {
 		isEnabled: function (app) {
-			return !app.program.noVPL && !app.program.readOnly;
+			return !app.program.noVPL;
 		},
 		doDrop: function (app, draggedItem) {
 			// lock or unlock block or event handler
@@ -397,12 +430,12 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.program.experimentalFeatures && app.program.teacherRole;
+			return app.program.experimentalFeatures && app.program.teacherRole && !app.program.readOnly;
 		}
 	});
 	this.commands.add("vpl:trashcan", {
 		isEnabled: function (app) {
-			return !app.program.noVPL && !app.program.readOnly;
+			return !app.program.noVPL;
 		},
 		doDrop: function (app, draggedItem) {
 			// remove block or event handler
@@ -433,7 +466,10 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
  						app.program.program.indexOf(draggedItem.data) + 1 < app.program.program.length) &&
  					!/** @type {A3a.vpl.Rule} */(draggedItem.data).locked;
 		},
-		object: this
+		object: this,
+		isAvailable: function (app) {
+			return !app.program.readOnly;
+		}
 	});
 	this.commands.add("vpl:message-error", {
 		isEnabled: function (app) {
@@ -481,7 +517,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		keep: true,
 		isAvailable: function (app) {
-			return app.program.teacherRole;
+			return app.program.teacherRole && !app.program.readOnly;
 		}
 	});
 	this.commands.add("vpl:teacher-reset", {
@@ -497,12 +533,12 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			}
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL && !app.program.readOnly;
+			return !app.program.noVPL;
 		},
 		object: this,
 		keep: true,
 		isAvailable: function (app) {
-			return app.program.teacherRole && app.program.uiConfig.customizationMode;
+			return app.program.teacherRole && app.program.uiConfig.customizationMode && !app.program.readOnly;
 		}
 	});
 	this.commands.add("vpl:teacher-save", {
@@ -516,7 +552,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		keep: true,
 		isAvailable: function (app) {
-			return app.program.teacherRole && app.program.uiConfig.customizationMode;
+			return app.program.teacherRole && app.program.uiConfig.customizationMode && !app.program.readOnly;
 		}
 	});
 	this.commands.add("vpl:teacher-setasnew", {
@@ -524,16 +560,13 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			var json = app.program.exportToJSON({lib: false, prog: true});
 			app.jsonForNew = app.jsonForNew === json ? null : json;
 		},
-		isEnabled: function (app) {
-			return !app.program.readOnly;
-		},
 		isSelected: function (app) {
 			return app.jsonForNew === app.program.exportToJSON({lib: false, prog: true});
 		},
 		object: this,
 		keep: true,
 		isAvailable: function (app) {
-			return app.program.teacherRole && app.program.uiConfig.customizationMode;
+			return app.program.teacherRole && app.program.uiConfig.customizationMode && !app.program.readOnly;
 		}
 	});
 };

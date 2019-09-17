@@ -454,8 +454,8 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 				x, y + vertOffset,
 				{
 					notDropTarget: rule.disabled || this.readOnly,
-					notClickable: true || this.readOnly,
-					notDraggable: true || this.readOnly
+					notClickable: true,
+					notDraggable: true
 				});
 		}
 		item.attachItem(childItem);
@@ -718,6 +718,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		"vpl:exportToHTML",
 		"!space",
 		"vpl:advanced",
+		"!stretch",
+		"vpl:readonly",
 		"!stretch",
 		"vpl:undo",
 		"vpl:redo",

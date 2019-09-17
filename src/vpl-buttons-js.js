@@ -157,6 +157,36 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 			ctx.fillStyle = isEnabled ? "white" : "#777";
 			ctx.fillText("?", dims.controlSize * 0.5, dims.controlSize * 0.5);
 		},
+		"vpl:readonly": function () {
+			var s = dims.controlSize;
+			var th = 0.1;
+			var ln = 0.22;
+			var ln1 = 0.15;
+			var lN = 0.4;
+			ctx.save();
+			ctx.fillStyle = dims.controlColor;
+			ctx.strokeStyle = dims.controlColor;
+			ctx.lineWidth = dims.controlLineWidth;
+			ctx.translate(s * 0.5, s * 0.7);
+			ctx.save();
+			ctx.rotate(0.6);
+			ctx.beginPath();
+			ctx.moveTo(-th * ln1 / ln * s, (ln - ln1) * s);
+			ctx.lineTo(0, ln * s);
+			ctx.lineTo(th * ln1 / ln * s, (ln - ln1) * s);
+			ctx.fill();
+			ctx.beginPath();
+			ctx.moveTo(-th * s, -lN * s);
+			ctx.lineTo(-th * s, 0);
+			ctx.lineTo(0, ln * s);
+			ctx.lineTo(th * s, 0);
+			ctx.lineTo(th * s, -lN * s);
+			ctx.restore();
+			ctx.moveTo(-0.2 * s, -0.4 * s);
+			ctx.lineTo(0.4 * s, 0.2 * s);
+			ctx.stroke();
+			ctx.restore();
+		},
 		"vpl:new": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
