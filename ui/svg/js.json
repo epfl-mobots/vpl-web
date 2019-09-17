@@ -31,23 +31,11 @@
 		},
 		{
 			"name": "clap",
-			"l2": {
-				"initVarDecl": [
-					"var clap;\n"
-				],
-				"initCodeExec": [
-					"clap = false;\n"
-				],
-				"sectionBegin": "onevent mic {\n",
-				"sectionEnd": "}\n",
-				"sectionPreamble": "clap = true;\n",
-				"clause": "clap"
-			}
 			"js": {
 				"initCodeExec": [
 					[
 						"// setup threshold for detecting claps\n",
-						"this.set["mic.threshold", 250];\n"
+						"this.set[\"mic.threshold\", 250];\n"
 					]
 				],
 				"sectionBegin": "this.addEventListener(\"mic\", function (name, param) {\n",
