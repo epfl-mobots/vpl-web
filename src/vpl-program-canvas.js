@@ -50,7 +50,8 @@ A3a.vpl.Program.CanvasRenderingState = function () {
 		notClickable:(boolean|undefined),
 		notDraggable:(boolean|undefined),
 		scale:(number|undefined),
-		disabled: (boolean|undefined)
+		disabled: (boolean|undefined),
+		crossedOut: (boolean|undefined)
 	}=} opts
 	@return {A3a.vpl.CanvasItem}
 */
@@ -85,7 +86,7 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 			}
 			if (block.disabled || opts.disabled) {
 				canvas.disabledMark(item.x + dx, item.y + dy, blockSize, blockSize,
-					["block"], ["block"]);
+					["block"], ["block"], !opts.crossedOut);
 			}
 			canvas.dims = dims0;
 			ctx.restore();
@@ -152,17 +153,18 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 	if (blockTemplate.typicalParam) {
 		block.param = blockTemplate.typicalParam();
 	}
-	var disabled = (this.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
+	var crossedOut = (this.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
 		.indexOf(blockTemplate.name) < 0;
 	var self = this;
 	var canvasItem = this.addBlockToCanvas(canvas, block, box, x, y,
 		{
 			notInteractive: true,
 			notDropTarget: true,
-			notDraggable: this.noVPL,
-			disabled: disabled,
+			notDraggable: this.noVPL || this.readOnly,
+			disabled: crossedOut || this.readOnly,
+			crossedOut: crossedOut,
 			/** @type {?A3a.vpl.CanvasItem.mousedown} */
-			mousedown: this.uiConfig.customizationMode && !this.noVPL
+			mousedown: this.uiConfig.customizationMode && !this.noVPL && !this.readOnly
 				? function (canvas, data, width, height, x, y, downEvent) {
 					var a = self.mode === A3a.vpl.mode.basic ? self.enabledBlocksBasic : self.enabledBlocksAdvanced;
 					if (a.indexOf(blockTemplate.name) >= 0) {
@@ -394,7 +396,7 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 			canvas.disabledMark(item.x + dx, item.y + dy, item.width, item.height, ["rule"], ["rule"]);
 		};
 	}
-	if (this.noVPL) {
+	if (this.noVPL || this.readOnly) {
 		item.draggable = false;
 	}
 	canvas.setItem(item);
@@ -439,9 +441,9 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 			childItem = this.addBlockToCanvas(canvas, event, blockBox,
 				x, y + vertOffset,
 				{
-					notInteractive: rule.disabled || this.noVPL,
-					notClickable: rule.disabled || this.noVPL,
-					notDraggable: this.noVPL
+					notInteractive: rule.disabled || this.noVPL || this.readOnly,
+					notClickable: rule.disabled || this.noVPL || this.readOnly,
+					notDraggable: this.noVPL || this.readOnly
 				});
 		} else {
 			containerBox.width = blockBox.totalWidth();
@@ -451,9 +453,9 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 				blockBox,
 				x, y + vertOffset,
 				{
-					notDropTarget: rule.disabled,
-					notClickable: true,
-					notDraggable: true
+					notDropTarget: rule.disabled || this.readOnly,
+					notClickable: true || this.readOnly,
+					notDraggable: true || this.readOnly
 				});
 		}
 		item.attachItem(childItem);
@@ -486,9 +488,9 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 			childItem = this.addBlockToCanvas(canvas, action, A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes),
 				x, y + vertOffset,
 				{
-					notInteractive: rule.disabled || this.noVPL,
-					notClickable: rule.disabled || this.noVPL,
-					notDraggable: this.noVPL
+					notInteractive: rule.disabled || this.noVPL || this.readOnly,
+					notClickable: rule.disabled || this.noVPL || this.readOnly,
+					notDraggable: this.noVPL || this.readOnly
 				});
 		} else {
 			containerBox.width = blockBox.totalWidth();
@@ -497,7 +499,7 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 					{eventSide: false, index: j}),
 				blockBox,
 				x, y,
-				{notDropTarget: false, notClickable: true, notDraggable: true});
+				{notDropTarget: this.readOnly, notClickable: true, notDraggable: true});
 		}
 		item.attachItem(childItem);
 		x += containerBox.totalWidth();

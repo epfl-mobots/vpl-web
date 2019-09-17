@@ -56,25 +56,28 @@ A3a.vpl.Canvas.prototype.overlayRect = function (left, top, width, height, overl
 	@param {number} height
 	@param {Array.<string>=} overlayRectClasses css classes for overlay rectangle
 	@param {Array.<string>=} crossoutLineClasses css classes for crossout-line
+	@param {boolean=} noCrossoutLine true just for disabled style, false also for crossout line (default)
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height,
-	overlayRectClasses, crossoutLineClasses) {
+	overlayRectClasses, crossoutLineClasses, noCrossoutLine) {
 	this.overlayRect(left, top, width, height, (overlayRectClasses || []).concat("disabled"));
 	var overlayRect = this.css.getBox({
 		tag: "overlay-rectangle",
 		clas: overlayRectClasses || []
 	});
-	this.ctx.save();
-	var crossoutLine = this.css.getLine({
-		tag: "crossout-line",
-		clas: crossoutLineClasses || []
-	});
-	this.ctx.beginPath();
-	this.ctx.moveTo(left - this.dims.blockSize * 0.1, top + height * 0.7);
-	this.ctx.lineTo(left + width + this.dims.blockSize * 0.1, top + height * 0.3);
-	crossoutLine.stroke(this.ctx);
-	this.ctx.restore();
+	if (!noCrossoutLine) {
+		this.ctx.save();
+		var crossoutLine = this.css.getLine({
+			tag: "crossout-line",
+			clas: crossoutLineClasses || []
+		});
+		this.ctx.beginPath();
+		this.ctx.moveTo(left - this.dims.blockSize * 0.1, top + height * 0.7);
+		this.ctx.lineTo(left + width + this.dims.blockSize * 0.1, top + height * 0.3);
+		crossoutLine.stroke(this.ctx);
+		this.ctx.restore();
+	}
 };
 
 /** Draw lock for an item specified by bounding box (block or event handler)

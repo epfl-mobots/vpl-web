@@ -72,7 +72,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			}
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL && !app.program.isEmpty();
+			return !app.program.noVPL && !app.program.readOnly && !app.program.isEmpty();
 		},
 		object: this
 	});
@@ -98,7 +98,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			app.loadBox.show();
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL;
+			return !app.program.noVPL && !app.program.readOnly;
 		},
 		object: this
 	});
@@ -108,7 +108,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			window["vplUpload"](app.program.filename, json);
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL && !app.program.isEmpty();
+			return !app.program.noVPL && !app.program.readOnly && !app.program.isEmpty();
 		},
 		object: this,
 		isAvailable: function (app) {
@@ -181,7 +181,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				: A3a.vpl.mode.basic);
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL;
+			return !app.program.noVPL && !app.program.readOnly;
 		},
 		isSelected: function (app) {
 			return app.program.mode === A3a.vpl.mode.advanced;
@@ -193,7 +193,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			app.program.undo(function () { app.renderProgramToCanvas(); });
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL && app.program.undoState.canUndo();
+			return !app.program.noVPL && !app.program.readOnly && app.program.undoState.canUndo();
 		},
 		object: this
 	});
@@ -202,7 +202,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			app.program.redo(function () { app.renderProgramToCanvas(); });
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL && app.program.undoState.canRedo();
+			return !app.program.noVPL && !app.program.readOnly && app.program.undoState.canRedo();
 		},
 		object: this
 	});
@@ -325,7 +325,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:duplicate", {
 		isEnabled: function (app) {
-			return !app.program.noVPL;
+			return !app.program.noVPL && !app.program.readOnly;
 		},
 		doDrop: function (app, draggedItem) {
 			// duplicate event handler
@@ -345,7 +345,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:disable", {
 		isEnabled: function (app) {
-			return !app.program.noVPL;
+			return !app.program.noVPL && !app.program.readOnly;
 		},
 		doDrop: function (app, draggedItem) {
 			// disable or reenable block or event handler
@@ -372,7 +372,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:lock", {
 		isEnabled: function (app) {
-			return !app.program.noVPL;
+			return !app.program.noVPL && !app.program.readOnly;
 		},
 		doDrop: function (app, draggedItem) {
 			// lock or unlock block or event handler
@@ -402,7 +402,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:trashcan", {
 		isEnabled: function (app) {
-			return !app.program.noVPL;
+			return !app.program.noVPL && !app.program.readOnly;
 		},
 		doDrop: function (app, draggedItem) {
 			// remove block or event handler
@@ -473,7 +473,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			app.program.uiConfig.customizationMode = !app.program.uiConfig.customizationMode;
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL;
+			return !app.program.noVPL && !app.program.readOnly;
 		},
 		isSelected: function (app) {
 			return app.program.uiConfig.customizationMode;
@@ -497,7 +497,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			}
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL;
+			return !app.program.noVPL && !app.program.readOnly;
 		},
 		object: this,
 		keep: true,
@@ -523,6 +523,9 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		action: function (app, modifier) {
 			var json = app.program.exportToJSON({lib: false, prog: true});
 			app.jsonForNew = app.jsonForNew === json ? null : json;
+		},
+		isEnabled: function (app) {
+			return !app.program.readOnly;
 		},
 		isSelected: function (app) {
 			return app.jsonForNew === app.program.exportToJSON({lib: false, prog: true});
