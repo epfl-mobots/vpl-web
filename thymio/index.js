@@ -2,6 +2,7 @@
 
 Communication with a Thymio via the Thymio Device Manager
 Based on https://github.com/Mobsya/thymio-js-api-demo/blob/master/src/index.js
+API js: https://mobsya.github.io/aseba/js/index.html
 
 Copyright 2019 Mobsya
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +18,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 This is a Derivative Work.
-Changes by Mobots, EPFL, March-April 2019
+Changes by Mobots, EPFL, March-September 2019
 
 Build:
 1. git clone https://github.com/Mobsya/thymio-js-api-demo.git
@@ -121,9 +122,12 @@ window.TDM = function (url, options) {
         } catch (e) {
             console.log(e)
         }
-    }
-};
+    };
 
+    client.onClose = async () => {
+        options.change && options.change(false);
+    };
+};
 
 window.TDM.prototype.isConnected = function () {
     return this.selectedNode != null;
