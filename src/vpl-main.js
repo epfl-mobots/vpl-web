@@ -497,12 +497,14 @@ function vplSetup(gui) {
 	// reload from storage
 	if (window["vplStorageGetFunction"]) {
 		window["vplStorageGetFunction"]("vpl.json",
-			function (data) {
+			function (data, options) {
 				try {
 					if (data) {
 						app.program.importFromJSON(data, function () {
 							app.renderProgramToCanvas();
 						});
+						app.program.filename = options && options["filename"] || "vpl.json";
+						app.program.readOnly = options != undefined && options["readOnly"] == true;
 					}
 				} catch (e) {}
 			});
@@ -668,7 +670,6 @@ window.addEventListener("load", function () {
 
 // remember state across reload
 window.addEventListener("unload", function () {
-console.info("vplStorageSetFunction");
 	var json = window["vplApp"].program.exportToJSON();
 	try {
 		if (window["vplStorageSetFunction"]) {

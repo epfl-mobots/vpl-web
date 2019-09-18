@@ -539,3 +539,14 @@ The following options are supported:
 - "robot": device(s) code is sent to for execution. "thymio" for a Thymio via asebahttp (supported language: "aseba"), "thymio-tdm" for a Thymio via the Thymio Device Manager (supported language: "aseba"), "sim" for the simulator (supported languages: "aseba", "l2", and "js"), or undefined for no execution. Multiple devices can be specified, separated with (unquoted) '+'; e.g. "robot=thymio-tdm+sim". In that case, button "vpl:robot" toggles between devices.
 - "role": "student" (default) or "teacher" (options to customize the user interface and vpl blocks).
 - "ui": filename of the main json file (default "ui.json")
+
+Global variables
+----------------
+
+VPL is started by code in a "load" event listener defined in vpl-main.js. Some customization is possible using global variables. To avoid interferences with Google Closure Compiler, they are accessed as window["vplXXX"]. Here is a partial list:
+
+- window["vplApp"]: A3a.vpl.Application object
+- window["vplCommandServer"]: can be set to an A3a.vpl.Com object to supervise the application
+- window["vplDisableResize"]: can be set to true to disable full-window mode
+- window["vplUpload"]: can be set to a void function(string filename, string json) to implement the "vpl:upload" command
+- window["vplStorageGetFunction"]: can be set to a void function(string filename, function(string jsonProgram, Object= options)) to get a file. Called at launch; if a program can be read (e.g. to restore a program saved to localStorage in a previous session), should call the function passed as 2nd argument with the json program and (optionally) a dictionary with the (optional) following entries: string filename (a filename which overrides the one passed to vplStorageGetFunction), boolean readOnly
