@@ -1012,10 +1012,13 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 			},
 			/** @type {A3a.vpl.CanvasItem.mousedrag} */
 			mousedrag: function (canvas, data, dragIndex, width, height, left, top, ev) {
-				self.downControl.isInside = ev.x >= self.downControl.rect.x &&
-					ev.x < self.downControl.rect.x + self.downControl.rect.w &&
-					ev.y >= self.downControl.rect.y &&
-					ev.y < self.downControl.rect.y + self.downControl.rect.h;
+				var canvasBndRect = canvas.canvas.getBoundingClientRect();
+				var x = ev.x - canvasBndRect.left;
+				var y = ev.y - canvasBndRect.top;
+				self.downControl.isInside = x >= self.downControl.rect.x &&
+					x < self.downControl.rect.x + self.downControl.rect.w &&
+					y >= self.downControl.rect.y &&
+					y < self.downControl.rect.y + self.downControl.rect.h;
 				canvas.redraw();
 			},
 			/** @type {A3a.vpl.CanvasItem.mouseup} */
