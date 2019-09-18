@@ -715,6 +715,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		"vpl:save",
 		"vpl:load",
 		"vpl:upload",
+		"vpl:filename",
 		"vpl:exportToHTML",
 		"!space",
 		"vpl:advanced",

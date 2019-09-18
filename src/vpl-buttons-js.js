@@ -596,6 +596,19 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 			}
 		},
 		// "vpl:message-warning": "vpl:message-error"
+		"vpl:filename": function (app) {
+			if (state) {
+				ctx.beginPath();
+				ctx.rect(0, 0,
+	                3 * dims.controlSize, dims.controlSize);
+				ctx.clip();
+				ctx.fillStyle = box.color;
+				ctx.font = box.cssFontString();
+				ctx.textAlign = "center";
+				ctx.textBaseline = "middle";
+				ctx.fillText(/** @type {string} */(state), box.width / 2, box.height / 2);
+			}
+		},
 		"vpl:duplicate": function () {
             ctx.fillStyle = isPressed && isEnabled
 				? dims.controlDownColor
@@ -1327,10 +1340,19 @@ A3a.vpl.Commands.getButtonBoundsJS = function (id, dims) {
 			ymin: 0,
 			ymax: dims.controlSize
 		};
-	case "vpl:message":
+	case "vpl:message-error":
+	case "vpl:message-warning":
+	case "vpl:message-empty":
 		return {
 			xmin: 0,
 			xmax: 5 * dims.controlSize,
+			ymin: 0,
+			ymax: dims.controlSize
+		};
+	case "vpl:filename":
+		return {
+			xmin: 0,
+			xmax: 3 * dims.controlSize,
 			ymin: 0,
 			ymax: dims.controlSize
 		};

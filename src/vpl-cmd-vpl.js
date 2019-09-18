@@ -97,7 +97,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				// var aesl = app.program.exportAsAESLFile();
 				// A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
 				var json = app.program.exportToJSON({lib: false, prog: true});
-				A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
+				A3a.vpl.Program.downloadText(json, app.program.filename || "vpl.json", "application/json");
 			}
 		},
 		isEnabled: function (app) {
@@ -365,7 +365,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			}
 		},
 		canDrop: function (app, draggedItem) {
-            return draggedItem.data instanceof A3a.vpl.Rule &&
+			return draggedItem.data instanceof A3a.vpl.Rule &&
 				!/** @type {A3a.vpl.Rule} */(draggedItem.data).isEmpty();
 		},
 		object: this,
@@ -504,6 +504,18 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return !app.vplMessage;
 		}
 	});
+	this.commands.add("vpl:filename", {
+		isEnabled: function (app) {
+			return false;
+		},
+		getState: function (app) {
+			return app.program.filename;
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.program.filename ? true : false;
+		}
+	})
 	this.commands.add("vpl:teacher", {
 		action: function (app, modifier) {
 			app.program.uiConfig.customizationMode = !app.program.uiConfig.customizationMode;
@@ -544,7 +556,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	this.commands.add("vpl:teacher-save", {
 		action: function (app, modifier) {
 			var json = app.program.exportToJSON({lib: true, prog: false});
-			A3a.vpl.Program.downloadText(json, "vpl.json", "application/json");
+			A3a.vpl.Program.downloadText(json, "gui-config.json", "application/json");
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL;
