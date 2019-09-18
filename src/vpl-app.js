@@ -298,8 +298,9 @@ A3a.vpl.Application.prototype.layout = function (verticalLayout) {
 };
 
 A3a.vpl.Application.prototype.vplResize = function () {
-	var width = window.innerWidth;
-	var height = window.innerHeight;
+	var bounds = this.vplCanvas.canvas.parentElement.getBoundingClientRect();
+	var width = bounds.width;
+	var height = window.innerHeight - bounds.top;
 	this.layout(width < height);
 	if (window["vplDisableResize"]) {
 		var bnd = this.vplCanvas.canvas.getBoundingClientRect();
@@ -310,7 +311,7 @@ A3a.vpl.Application.prototype.vplResize = function () {
 	// vpl, editor and simulator
 	this.vplCanvas.resize(width, height);
 	if (this.editor) {
-		this.editor.resize();
+		this.editor.resize(width, height);
 	}
 	if (this.sim2d) {
 		this.simCanvas.resize(width, height);

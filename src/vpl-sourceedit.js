@@ -274,11 +274,11 @@ A3a.vpl.VPLSourceEditor.prototype.lockWithVPL = function (b) {
 };
 
 /** Resize the source code editor
+	@param {number} width
+	@param {number} height
 	@return {void}
 */
-A3a.vpl.VPLSourceEditor.prototype.resize = function () {
-	var width = window.innerWidth;
-	var height = window.innerHeight;
+A3a.vpl.VPLSourceEditor.prototype.resize = function (width, height) {
 	this.tbCanvas.resize(width, height);
 	var canvasBndRect = this.tbCanvas.canvas.getBoundingClientRect();
 	var editorDiv = document.getElementById("src-editor");
