@@ -1222,8 +1222,8 @@ A3a.vpl.Canvas.prototype.noteClick = function (width, height, left, top, ev) {
 */
 A3a.vpl.Canvas.prototype.timerCheck = function (width, height, left, top, ev) {
 	var r = 0.4 * width;
-	var x = ev.x - left - width / 2;
-	var y = top + height / 2 - ev.y;
+	var x = ev.x - left - 0.55 * width;
+	var y = top + 0.53 * height - ev.y;
 	return x * x + y * y <= r * r;
 };
 
@@ -1238,8 +1238,8 @@ A3a.vpl.Canvas.prototype.timerCheck = function (width, height, left, top, ev) {
 	@return {number} new value of the time, between 0 and 4
 */
 A3a.vpl.Canvas.prototype.timerDrag = function (width, height, left, top, isLog, ev) {
-	var x = ev.x - left - width / 2;
-	var y = top + height / 2 - ev.y;
+	var x = ev.x - left - 0.55 * width;
+	var y = top + 0.53 * height - ev.y;
 	var time2 = (Math.PI - Math.atan2(x, -y)) / (2 * Math.PI);
 	return isLog
 		? Math.exp(time2 * Math.log(100)) / 10	// [0,1] -> [0.1,10]
