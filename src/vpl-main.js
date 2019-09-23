@@ -668,9 +668,19 @@ window.addEventListener("load", function () {
 	);
 }, false);
 
+/** Check if the program has been changed since it's been loaded
+	@return {boolean}
+*/
+window["vplIsProgramChanged"] = function () {
+	return window["vplApp"].program.undoState.canUndo();
+};
+
+/** Get vpl program as json
+	@return {string}
+*/
 window["vplGetProgramAsJSON"] = function () {
 	return window["vplApp"].program.exportToJSON();
-}
+};
 
 // remember state across reload
 window.addEventListener("unload", function () {

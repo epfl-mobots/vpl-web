@@ -553,6 +553,8 @@ Global variables
 VPL is started by code in a "load" event listener defined in vpl-main.js. Some customization is possible using global variables. To avoid interferences with Google Closure Compiler, they are accessed as window["vplXXX"]. Here is a partial list:
 
 - window["vplApp"]: A3a.vpl.Application object
+- window["vplIsProgramChanged"]: function() to check if the vpl program has been changed since it has been loaded
+- window["vplGetProgramAsJSON"]: function() to get vpl program as json
 - window["vplCommandServer"]: can be set to an A3a.vpl.Com object to supervise the application
 - window["vplDisableResize"]: can be set to true to disable full-window mode
 - window["vplUpload"]: can be set to a void function(string filename, string json) to implement the "vpl:upload" command
