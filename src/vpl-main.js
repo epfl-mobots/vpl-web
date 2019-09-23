@@ -668,6 +668,10 @@ window.addEventListener("load", function () {
 	);
 }, false);
 
+window["vplGetProgramAsJSON"] = function () {
+	return window["vplApp"].program.exportToJSON();
+}
+
 // remember state across reload
 window.addEventListener("unload", function () {
 	var json = window["vplApp"].program.exportToJSON();
