@@ -509,11 +509,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return false;
 		},
 		getState: function (app) {
-			return app.program.filename;
+			return (app.program.filename || "") + (app.username ? "\n" + app.username : "");
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.program.filename ? true : false;
+			return app.program.filename || app.username ? true : false;
 		}
 	})
 	this.commands.add("vpl:teacher", {

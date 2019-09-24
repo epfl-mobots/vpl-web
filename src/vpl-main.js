@@ -232,6 +232,7 @@ function vplSetup(gui) {
 	// application
 	var app = new A3a.vpl.Application(canvasEl);
 	window["vplApp"] = app;
+	app.username = vplGetQueryOption("user") || window["vplUsername"] || app.username;
 
 	// validate ui (correct usage of blocks, control elements etc.)
 	if (gui && A3a.vpl.validateUI) {

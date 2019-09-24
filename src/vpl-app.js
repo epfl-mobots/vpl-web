@@ -59,6 +59,9 @@ A3a.vpl.Application = function (canvasEl) {
 	this.suspendBox = null;
 	this.suspended = false;
 
+	/** @type {?string} */
+	this.username = null;
+
 	this.program = new A3a.vpl.Program(A3a.vpl.mode.basic, this.uiConfig);
 	this.program.setLogger(function (data) {
 		self.log(data);

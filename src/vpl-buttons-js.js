@@ -606,7 +606,15 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 				ctx.font = box.cssFontString();
 				ctx.textAlign = "center";
 				ctx.textBaseline = "middle";
-				ctx.fillText(/** @type {string} */(state), box.width / 2, box.height / 2);
+				var str = /** @type {string} */(state).trim();
+				if (str.indexOf("\n") >= 0) {
+					// two lines (or more which are ignored)
+					var strArray = str.split("\n");
+					ctx.fillText(strArray[0], box.width / 2, box.height * 0.25);
+					ctx.fillText(strArray[1], box.width / 2, box.height * 0.75);
+				} else {
+					ctx.fillText(str, box.width / 2, box.height / 2);
+				}
 			}
 		},
 		"vpl:duplicate": function () {

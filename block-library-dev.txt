@@ -336,7 +336,7 @@ The following ids are for passive text strings:
 - "vpl:message-error": vpl error message
 - "vpl:message-warning": vpl warning message
 - "vpl:message-empty": no error or warning message (placeholder for alignment)
-- "vpl:filename": vpl filename
+- "vpl:filename": vpl filename and username, whichever are defined
 
 Here is the list of button ids for the Editor view:
 
@@ -386,7 +386,7 @@ Property "buttons" is an array with one element per button appearance. Each butt
 - "state": array of strings which restricts when the appearance is used: "pressed" (the button is being clicked or tapped, or the target of a drop), "unpressed" (the button is not being clicked or tapped, nor the target of a drop), "selected" (the button corresponds to a state which is ON), "unselected" (the button corresponds to a state which is OFF), "disabled" (the action is disabled), "enabled" (the action is enabled). In addition, strings starting with "=" specify which state to select for multi-state buttons such as "src:language" or "sim:map"; for example "=aseba" for the "src:language" button would be used when the Aseba language is selected. The first appearance match is used; typically appearance with "state" set to ["disabled"], ["pressed"], ["selected"] (for toggle buttons only), and [] (normal appearance) are defined in that order.
 - "draw": array of objects defining the appearance of buttons, like for blocks (see above). They have a "uri" property for svg or a "js" property for JavaScript code, and optionally an "alpha" property (number, 1=opaque, 0=transparent) and a "debug" property (string, displayed centered over the widget). Elements in "draw" are rendered starting with the first one, with the last one in the foreground.
 
-"Buttons" with id "vpl:message-error", "vpl:message-warning" and "vpl:filename" (not real buttons, but placeholders to display error or warning messages, or filename, in a toolbar) should not be redefined in SVG. The text style can be changed in css.
+"Buttons" with id "vpl:message-error", "vpl:message-warning" and "vpl:filename" (not real buttons, but placeholders to display error or warning messages, or filename/username, in a toolbar) should not be redefined in SVG. The text style can be changed in css.
 
 If the value of property "buttons" is null ("buttons":null), the default built-in (non-SVG) button definitions are used. Otherwise, undefined buttons are displayed as squares with the button id and properties displayed; this can be useful during development.
 
@@ -546,6 +546,7 @@ The following options are supported:
 - "robot": device(s) code is sent to for execution. "thymio" for a Thymio via asebahttp (supported language: "aseba"), "thymio-tdm" for a Thymio via the Thymio Device Manager (supported language: "aseba"), "sim" for the simulator (supported languages: "aseba", "l2", and "js"), or undefined for no execution. Multiple devices can be specified, separated with (unquoted) '+'; e.g. "robot=thymio-tdm+sim". In that case, button "vpl:robot" toggles between devices.
 - "role": "student" (default) or "teacher" (options to customize the user interface and vpl blocks).
 - "ui": filename of the main json file (default "ui.json")
+- "user": username displayed in the "vpl:filename" indicator (overrides window["vplUsername"])
 
 Global variables
 ----------------
@@ -557,5 +558,6 @@ VPL is started by code in a "load" event listener defined in vpl-main.js. Some c
 - window["vplGetProgramAsJSON"]: function() to get vpl program as json
 - window["vplCommandServer"]: can be set to an A3a.vpl.Com object to supervise the application
 - window["vplDisableResize"]: can be set to true to disable full-window mode
+- window["vplUsername"]: can be set to a string to display the username in "vpl:filename" indicator
 - window["vplUpload"]: can be set to a void function(string filename, string json) to implement the "vpl:upload" command
 - window["vplStorageGetFunction"]: can be set to a void function(string filename, function(string jsonProgram, Object= options)) to get a file. Called at launch; if a program can be read (e.g. to restore a program saved to localStorage in a previous session), should call the function passed as 2nd argument with the json program and (optionally) a dictionary with the (optional) following entries: string filename (a filename which overrides the one passed to vplStorageGetFunction), boolean readOnly
