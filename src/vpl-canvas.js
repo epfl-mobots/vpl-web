@@ -34,13 +34,15 @@ and layout.
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 	@param {string=} id identifier
+	@param {number=} mouseRadius radius of the item around which it is selectable with the mouse
 */
-A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, doDrop, canDrop, id) {
+A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, doDrop, canDrop, id, mouseRadius) {
 	this.data = data;
 	this.width = width;
 	this.height = height;
 	this.x = x;
 	this.y = y;
+	this.mouseRadius = mouseRadius;
 	/** @type {?A3a.vpl.Canvas.ClippingRect} */
 	this.clippingRect = null;
 	/** @type {Array.<A3a.vpl.CanvasItem>} */
@@ -778,9 +780,10 @@ A3a.vpl.Canvas.prototype.clickedItemIndex = function (mouseEvent, clickableOnly)
 	var indices = [];
 	for (var i = this.items.length - 1; i >= 0; i--) {
 		var d = this.items[i].getTranslation();
+		const radius = this.items[i].mouseRadius || 0;
 		if ((!clickableOnly || this.items[i].clickable) &&
-			x >= this.items[i].x + d.dx && x <= this.items[i].x + d.dx + this.items[i].width &&
-			y >= this.items[i].y + d.dy && y <= this.items[i].y + d.dy + this.items[i].height &&
+			x >= this.items[i].x + d.dx - radius && x <= this.items[i].x + d.dx + this.items[i].width + radius &&
+			y >= this.items[i].y + d.dy - radius && y <= this.items[i].y + d.dy + this.items[i].height + radius &&
 			this.items[i].isInClip(x, y)) {
 			indices.push(i);
 		}
@@ -974,9 +977,10 @@ A3a.vpl.Canvas.controlAction;
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 	@param {string=} id
+	@param {number=} mouseRadius
 	@return {A3a.vpl.CanvasItem}
 */
-A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop, canDrop, id) {
+A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop, canDrop, id, mouseRadius) {
 	/** @type {A3a.vpl.CanvasItem.mouseEvent} */
 	var downEvent;
 	var self = this;
@@ -1032,7 +1036,8 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 		} : null,
 		doDrop,
 		canDrop,
-		id);
+		id,
+		mouseRadius);
 	item.draggable = false;
 	item.noDropHint = true;	// drawn with isPressed=true for better control on appearance
 	this.setItem(item);

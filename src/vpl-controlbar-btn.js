@@ -46,9 +46,10 @@ A3a.vpl.ControlBar.getButtonBounds;
 	@param {Array.<string>} cssClasses
 	@param {A3a.vpl.ControlBar.drawButton} drawButton
 	@param {A3a.vpl.ControlBar.Bounds} buttonBounds
+	@param {number=} mouseRadius
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButton, buttonBounds) {
+A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButton, buttonBounds, mouseRadius) {
 	var disabled = app.uiConfig.isDisabled(id);
 	if (app.commands.isAvailable(id) && (app.uiConfig.customizationMode || !disabled)) {
 		var canvas = this.canvas;
@@ -90,7 +91,8 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 				: function (targetItem, droppedItem) {
 					return app.commands.canDrop(id, droppedItem);
 				},
-			id);
+			id,
+			mouseRadius);
 	}
 };
 
@@ -122,7 +124,9 @@ A3a.vpl.ControlBar.prototype.setButtons = function (app, buttons, cssClasses, dr
 			this.addButton(app,
 				buttons[i], cssClasses,
 				drawButton,
-				getButtonBounds(buttons[i], this.canvas.dims, app.commands.find(buttons[i]).obj));
+				getButtonBounds(buttons[i], this.canvas.dims, app.commands.find(buttons[i]).obj),
+				app.program.mouseRadiuses && app.program.mouseRadiuses[buttons[i]]
+			);
 			break;
 		}
 	}

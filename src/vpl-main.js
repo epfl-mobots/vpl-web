@@ -206,10 +206,25 @@ function vplSetup(gui) {
 				if (overlay.hasOwnProperty(key)) {
 					switch (key) {
 					case "blocks":
-					case "buttons":
 					case "widgets":
 						// concat arrays
 						gui[key] = gui[key].concat(overlay[key]);
+						break;
+					case "buttons":
+						const current = overlay[key];
+						for (var key2 in current) {
+							if ( current.hasOwnProperty(key2) ) {
+								// detach mouse radius info and build a map buttonId --> mouseRadius
+								if ( current[key2].hasOwnProperty("mouseRadius") ){
+									if ( !gui.hasOwnProperty("mouseRadiuses") ){
+										gui["mouseRadiuses"]={};
+									}  
+									gui["mouseRadiuses"][current[key2].name]=current[key2]["mouseRadius"];
+								}
+							}
+						}
+						// concat arrays
+						gui[key] = gui[key].concat(current);
 						break;
 					case "toolbars":
 						// merge objects
@@ -410,6 +425,10 @@ function vplSetup(gui) {
 		if (gui["toolbars"]["vpl2"]) {
 			app.program.toolbar2Config = gui["toolbars"]["vpl2"];
 		}
+	}
+
+	if (!isClassic && gui && gui["mouseRadiuses"]){
+		app.program.mouseRadiuses = gui["mouseRadiuses"];
 	}
 
 	app.program.toolbarDrawButton = drawButton;

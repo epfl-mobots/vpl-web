@@ -64,9 +64,10 @@ A3a.vpl.ControlBar.prototype.reset = function () {
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 	@param {string=} id
+	@param {number=} mouseRadius 
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addControl = function (draw, bounds, action, doDrop, canDrop, id) {
+A3a.vpl.ControlBar.prototype.addControl = function (draw, bounds, action, doDrop, canDrop, id, mouseRadius) {
 	this.controls.push({
 		draw: draw,
 		action: action || null,
@@ -75,7 +76,8 @@ A3a.vpl.ControlBar.prototype.addControl = function (draw, bounds, action, doDrop
 		id: id || "",
 		bounds: bounds,
 		x: 0,
-		y: 0
+		y: 0,
+		mouseRadius: mouseRadius || 0
 	});
 	this.layout += "X";
 };
@@ -199,6 +201,7 @@ A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes) {
 			},
 			control.action,
 			control.doDrop, control.canDrop,
-			control.id);
+			control.id,
+			control.mouseRadius);
 	}, this);
 };
