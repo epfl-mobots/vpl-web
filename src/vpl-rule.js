@@ -304,7 +304,7 @@ A3a.vpl.Rule.prototype.checkConflicts = function (otherEventHandler) {
 	if (otherEventHandler.error == null || otherEventHandler.error.isWarning) {
 		var err = new A3a.vpl.Error("Duplicate event");
 		err.addEventConflictError(this);
-		otherEventHandler.error = otherEventHandler.error || err;
+		otherEventHandler.error = err;
 	}
 	return true;
 };
