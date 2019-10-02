@@ -211,7 +211,7 @@ function vplSetup(gui) {
 						gui[key] = gui[key].concat(overlay[key]);
 						break;
 					case "buttons":
-						const current = overlay[key];
+						var current = overlay[key];
 						for (var key2 in current) {
 							if ( current.hasOwnProperty(key2) ) {
 								// detach mouse radius info and build a map buttonId --> mouseRadius
