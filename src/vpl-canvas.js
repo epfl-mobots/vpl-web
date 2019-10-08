@@ -218,6 +218,36 @@ A3a.vpl.CanvasItem.prototype.isInClip = function (x, y) {
 			&& y >= this.clippingRect.y && y < this.clippingRect.y + this.clippingRect.h);
 };
 
+/** Check if another CanvasItem element radius collides with the current element
+	@param {CanvasItem} item
+	@return {boolean}
+*/
+A3a.vpl.CanvasItem.prototype.isItemInRadius = function ( item ){
+	var d = item.getTranslation();
+	var radius = item.mouseRadius || 0;
+	var topLeftCorner = [ item.x + d.dx - radius, item.y + d.dy -radius ];
+	var topRightCorner = [ item.x + d.dx + item.width + radius, item.y + d.dy -radius ];
+	var bottomLeftCorner = [ item.x + d.dx - radius, item.y + d.dy + item.height + radius ];
+	var bottomRightCorner = [ item.x + d.dx + item.width + radius, item.y + d.dy + item.height + radius ];
+	var someEdgeIsInRadius = this.isInRadius( topLeftCorner[0], topLeftCorner[1]) || this.isInRadius( topRightCorner[0], topRightCorner[1])
+						     || this.isInRadius( bottomLeftCorner[0], bottomLeftCorner[1]) || this.isInRadius( bottomRightCorner[0], bottomRightCorner[1]);
+	var notAllEdgesInRadius = ! ( this.isInRadius( topLeftCorner[0], topLeftCorner[1]) && this.isInRadius( topRightCorner[0], topRightCorner[1])
+							  && this.isInRadius( bottomLeftCorner[0], bottomLeftCorner[1]) && this.isInRadius( bottomRightCorner[0], bottomRightCorner[1]) );
+	return someEdgeIsInRadius && notAllEdgesInRadius;
+}
+
+/** Check if position is inside the item radius
+	@param {number} x
+	@param {number} y
+	@return {boolean}
+*/
+A3a.vpl.CanvasItem.prototype.isInRadius = function ( x, y ){
+	var radius = this.mouseRadius || 0;
+	var d = this.getTranslation();
+	return ( x >= this.x + d.dx - radius ) && ( x<= this.x + d.dx + this.width + radius )
+			&& ( y >= this.y + d.dy - radius ) && ( y <= this.y + d.dy + this.height + radius );
+}
+
 /**
 	@constructor
 	@struct
@@ -774,21 +804,52 @@ A3a.vpl.Canvas.prototype.itemIndex = function (data) {
 */
 A3a.vpl.Canvas.prototype.clickedItemIndex = function (mouseEvent, clickableOnly) {
 	var canvasBndRect = this.canvas.getBoundingClientRect();
+	var items = this.items;
 	var x = mouseEvent.x - canvasBndRect.left;
 	var y = mouseEvent.y - canvasBndRect.top;
 	/** @type {Array.<number>} */
 	var indices = [];
-	for (var i = this.items.length - 1; i >= 0; i--) {
-		var d = this.items[i].getTranslation();
-		var radius = this.items[i].mouseRadius || 0;
-		// x_alpha_radius prevents the radius to override other icons when the display width is too small
-		// x_alpha_radius get close to radius value if the canvas width is lower than breakingWidth
-		// , it get close to zero if the width is higher
-		var breakingWidth = 650;
-		var x_alpha_radius = Math.min( radius * breakingWidth / canvasBndRect.width  , radius );
+	for (var i = items.length - 1; i >= 0; i--) {
+		var d = items[i].getTranslation();
+		var radiusY = items[i].mouseRadius || 0;
+		var radiusX = items[i].mouseRadius || 0;
+		// manage the radius property on the items
+		if ( items[i].mouseRadius > 0 ) {
+			// check if the specified radius cause an overlap with other items 
+			// filter all the items that get overlapped
+			var overlappedItems = items.filter( function( item ) {
+				return items[i].isItemInRadius(item) && item.id != items[i].id; 
+			});
+			// for each overlap, calculate the dimension of the overlap and subtract it 
+			// to the current radius value
+			if ( overlappedItems.length > 0 ){
+				// calculate the new radius on the x axe
+				var admissibleRadiusesX = overlappedItems.map( function ( item ){
+					var translation = item.getTranslation();
+					var iRadius = item.mouseRadius || 0;
+					// reductionCoeff distribuite the radius reduction proportionally between
+					// the overlapping items 
+					var reductionCoeff = radiusX / ( radiusX + iRadius )
+					// calculate delta of intersection on left and right side of the item
+					var deltaRadiusRight = (( items[i].x + translation.dx - items[i].mouseRadius ) - ( item.x + translation.dx + item.width + iRadius )) * reductionCoeff ;
+					var deltaRadiusLeft = (( item.x + translation.dx - iRadius ) - ( items[i].x + d.dx + items[i].width + items[i].mouseRadius )) * reductionCoeff ;
+					// both the delta should result negative because of the overlap
+					// the highest value of the 2 represent the intersection delta
+					// while the other only the distance of the 2 items
+					var delta = Math.max(deltaRadiusLeft, deltaRadiusRight );
+					return radiusX + delta;
+				});
+				// discard all the values < 0
+				admissibleRadiusesX = admissibleRadiusesX.filter( function( delta ){
+					return delta > 0;
+				});
+				// return the minimum of all the radius possible values, in the case of multiple overlaps
+				radiusX = Math.min(radiusX, ...admissibleRadiusesX);
+			}
+		}
 		if ((!clickableOnly || this.items[i].clickable) &&
-			x >= this.items[i].x + d.dx - radius + x_alpha_radius && x <= this.items[i].x + d.dx + this.items[i].width + radius - x_alpha_radius &&
-			y >= this.items[i].y + d.dy - radius && y <= this.items[i].y + d.dy + this.items[i].height + radius &&
+			x >= this.items[i].x + d.dx - radiusX && x <= this.items[i].x + d.dx + this.items[i].width + radiusX &&
+			y >= this.items[i].y + d.dy - radiusY && y <= this.items[i].y + d.dy + this.items[i].height + radiusY &&
 			this.items[i].isInClip(x, y)) {
 			indices.push(i);
 		}
