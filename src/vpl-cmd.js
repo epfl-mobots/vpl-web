@@ -175,9 +175,8 @@ A3a.vpl.Commands.prototype.executeForState = function (name, state, modifier) {
 	@return {void}
 */
 A3a.vpl.Commands.prototype.doDrop = function (name, droppedItem) {
-	var cmd = this.find(name);
-	cmd && cmd.doDrop(droppedItem);
 	if (this.logger) {
+		// log "drop" before executing doDrop in case doDrop logs changes
 		this.logger({
 	        "type": "drop",
 	        "data": {
@@ -185,6 +184,8 @@ A3a.vpl.Commands.prototype.doDrop = function (name, droppedItem) {
 	        }
 	    });
 	}
+	var cmd = this.find(name);
+	cmd && cmd.doDrop(droppedItem);
 };
 
 /** Check if an item can be dropped for a command specified by name
