@@ -57,9 +57,32 @@ A3a.vpl.Com.prototype.execCommand = function (name, selected, state) {
 	@return {void}
 */
 A3a.vpl.Com.prototype.connect = function () {
+	var self = this;
+
 	this.ws = new WebSocket(this.wsURL);
 
-	var self = this;
+	this.ws.addEventListener("open", function () {
+		var helloMsg = {
+			"sender": {
+				"type": "vpl",
+				"sessionid": self.sessionId,
+				"role": self.app.program.teacherRole ? "teacher" : "student"
+			},
+			"type": "hello"
+		};
+		self.ws.send(JSON.stringify(helloMsg));
+		window.addEventListener("unload", function () {
+			var byeMsg = {
+				"sender": {
+					"type": "vpl",
+					"sessionid": self.sessionId,
+					"role": self.app.program.teacherRole ? "teacher" : "student"
+				},
+				"type": "bye"
+			};
+			self.ws.send(JSON.stringify(byeMsg));
+		});
+	});
 
 	this.ws.addEventListener("message", function (event) {
 		try {
@@ -86,6 +109,7 @@ A3a.vpl.Com.prototype.connect = function () {
 						self.app.vplCanvas.onUpdate();
 					}
 					self.app.program.filename = msg["data"]["name"] || null;
+					self.app.vplCanvas.update();
 					break;
 				case "about":
 					self.app.setAboutBoxContent(content);
