@@ -778,14 +778,9 @@ A3a.vpl.Canvas.prototype.clickedItemIndex = function (mouseEvent, clickableOnly)
 	var indices = [];
 	for (var i = this.items.length - 1; i >= 0; i--) {
 		var d = this.items[i].getTranslation();
-		// x_alpha_radius prevents the radius to override other icons when the display width is too small
-		// x_alpha_radius get close to radius value if the canvas width is lower than breakingWidth
-		// , it get close to zero if the width is higher
-		var breakingWidth = 650;
-		var x_alpha_radius = Math.min( radius * breakingWidth / canvasBndRect.width  , radius );
 		if ((!clickableOnly || this.items[i].clickable) &&
-			x >= this.items[i].x + d.dx - radius + x_alpha_radius && x <= this.items[i].x + d.dx + this.items[i].width + radius - x_alpha_radius &&
-			y >= this.items[i].y + d.dy - radius && y <= this.items[i].y + d.dy + this.items[i].height + radius &&
+			x >= this.items[i].x + d.dx && x <= this.items[i].x + d.dx + this.items[i].width &&
+			y >= this.items[i].y + d.dy && y <= this.items[i].y + d.dy + this.items[i].height &&
 			this.items[i].isInClip(x, y)) {
 			indices.push(i);
 		}

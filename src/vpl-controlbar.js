@@ -199,6 +199,6 @@ A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes) {
 			},
 			control.action,
 			control.doDrop, control.canDrop,
-			control.id
+			control.id )
 	}, this);
 };
