@@ -34,15 +34,13 @@ and layout.
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 	@param {string=} id identifier
-	@param {number=} mouseRadius radius of the item around which it is selectable with the mouse
 */
-A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, doDrop, canDrop, id, mouseRadius) {
+A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, doDrop, canDrop, id) {
 	this.data = data;
 	this.width = width;
 	this.height = height;
 	this.x = x;
 	this.y = y;
-	this.mouseRadius = mouseRadius;
 	/** @type {?A3a.vpl.Canvas.ClippingRect} */
 	this.clippingRect = null;
 	/** @type {Array.<A3a.vpl.CanvasItem>} */
@@ -780,7 +778,6 @@ A3a.vpl.Canvas.prototype.clickedItemIndex = function (mouseEvent, clickableOnly)
 	var indices = [];
 	for (var i = this.items.length - 1; i >= 0; i--) {
 		var d = this.items[i].getTranslation();
-		var radius = this.items[i].mouseRadius || 0;
 		// x_alpha_radius prevents the radius to override other icons when the display width is too small
 		// x_alpha_radius get close to radius value if the canvas width is lower than breakingWidth
 		// , it get close to zero if the width is higher
@@ -982,10 +979,9 @@ A3a.vpl.Canvas.controlAction;
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 	@param {string=} id
-	@param {number=} mouseRadius
 	@return {A3a.vpl.CanvasItem}
 */
-A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop, canDrop, id, mouseRadius) {
+A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop, canDrop, id) {
 	/** @type {A3a.vpl.CanvasItem.mouseEvent} */
 	var downEvent;
 	var self = this;
@@ -1041,8 +1037,7 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 		} : null,
 		doDrop,
 		canDrop,
-		id,
-		mouseRadius);
+		id);
 	item.draggable = false;
 	item.noDropHint = true;	// drawn with isPressed=true for better control on appearance
 	this.setItem(item);
