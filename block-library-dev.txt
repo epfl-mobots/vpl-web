@@ -511,10 +511,6 @@ Some global style settings can be specified in a top-level object named "style".
 
 - "ruleMarks" (string, default: "#bbb"): color of rule marks (colon dots)
 
-- "controlColor" (string, default: "navy"): color of control buttons in normal state
-- "controlDownColor" (string, default: "#37f"): color of control buttons in pressed state
-- "controlActiveColor" (string, default: "#06f"): color of control buttons in active (selected) state
-
 Auxiliary HTML and CSS documents
 --------------------------------
 
