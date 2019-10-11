@@ -99,12 +99,12 @@ A3a.vpl.Rule.prototype.getEventBlockByType = function (name) {
 
 /** Set block (event or action depending on its type)
 	@param {A3a.vpl.Block} block
-	@param {?A3a.vpl.positionInContainer} posInEventHandler
+	@param {?A3a.vpl.positionInContainer} posInRule
 	@param {?function():void} onPrepareChange
 	@param {boolean=} noCopy true to use block itself instead of a copy (default: false)
 	@return {void}
 */
-A3a.vpl.Rule.prototype.setBlock = function (block, posInEventHandler, onPrepareChange, noCopy) {
+A3a.vpl.Rule.prototype.setBlock = function (block, posInRule, onPrepareChange, noCopy) {
 	if (block) {
 		// replace
 		switch (block.blockTemplate.type) {
@@ -112,25 +112,25 @@ A3a.vpl.Rule.prototype.setBlock = function (block, posInEventHandler, onPrepareC
 		case A3a.vpl.blockType.state:
 			if (block.ruleContainer === this) {
 				// reorder events in the same event handler
-				if (posInEventHandler) {
+				if (posInRule) {
 					this.events.splice(block.positionInContainer.index, 1);
 					if (noCopy) {
 						block.onPrepareChange = onPrepareChange;
 					} else {
-						block = block.copy(this, posInEventHandler, onPrepareChange);
+						block = block.copy(this, posInRule, onPrepareChange);
 					}
-					this.events.splice(posInEventHandler.index, 0, block);
+					this.events.splice(posInRule.index, 0, block);
 				}
-			} else if (posInEventHandler) {
-				if (this.events[posInEventHandler.index] === block) {
+			} else if (posInRule) {
+				if (this.events[posInRule.index] === block) {
 					return;	// copy onto itself: ignore, keep parameters
 				}
 				if (noCopy) {
 					block.onPrepareChange = onPrepareChange;
 				} else {
-					block = block.copy(this, posInEventHandler, onPrepareChange);
+					block = block.copy(this, posInRule, onPrepareChange);
 				}
-				this.events[posInEventHandler.index] = block;
+				this.events[posInRule.index] = block;
 			} else {
 				if (noCopy) {
 					block.onPrepareChange = onPrepareChange;
@@ -144,25 +144,25 @@ A3a.vpl.Rule.prototype.setBlock = function (block, posInEventHandler, onPrepareC
 		case A3a.vpl.blockType.comment:
 			if (block.ruleContainer === this) {
 				// reorder actions in the same event handler
-				if (posInEventHandler) {
+				if (posInRule) {
 					this.removeBlock(/** @type {A3a.vpl.positionInContainer} */(block.positionInContainer));
 					if (noCopy) {
 						block.onPrepareChange = onPrepareChange;
 					} else {
-						block = block.copy(this, posInEventHandler, onPrepareChange);
+						block = block.copy(this, posInRule, onPrepareChange);
 					}
-					(posInEventHandler.eventSide ? this.events : this.actions).splice(posInEventHandler.index, 0, block);
+					(posInRule.eventSide ? this.events : this.actions).splice(posInRule.index, 0, block);
 				}
-			} else if (posInEventHandler) {
-				if ((posInEventHandler.eventSide ? this.events : this.actions)[posInEventHandler.index] === block) {
+			} else if (posInRule) {
+				if ((posInRule.eventSide ? this.events : this.actions)[posInRule.index] === block) {
 					return;	// copy onto itself: ignore, keep parameters
 				}
 				if (noCopy) {
 					block.onPrepareChange = onPrepareChange;
 				} else {
-					block = block.copy(this, posInEventHandler, onPrepareChange);
+					block = block.copy(this, posInRule, onPrepareChange);
 				}
-				(posInEventHandler.eventSide ? this.events : this.actions)[posInEventHandler.index] = block;
+				(posInRule.eventSide ? this.events : this.actions)[posInRule.index] = block;
 			} else {
 				if (noCopy) {
 					block.onPrepareChange = onPrepareChange;
@@ -178,17 +178,17 @@ A3a.vpl.Rule.prototype.setBlock = function (block, posInEventHandler, onPrepareC
 };
 
 /** Remove block
-	@param {A3a.vpl.positionInContainer} posInEventHandler
+	@param {A3a.vpl.positionInContainer} posInRule
 	@return {void}
 */
-A3a.vpl.Rule.prototype.removeBlock = function (posInEventHandler) {
-	if (posInEventHandler.eventSide) {
-		if (this.events[posInEventHandler.index]) {
-			this.events.splice(posInEventHandler.index, 1);
+A3a.vpl.Rule.prototype.removeBlock = function (posInRule) {
+	if (posInRule.eventSide) {
+		if (this.events[posInRule.index]) {
+			this.events.splice(posInRule.index, 1);
 		}
 	} else {
-		if (this.actions[posInEventHandler.index]) {
-			this.actions.splice(posInEventHandler.index, 1);
+		if (this.actions[posInRule.index]) {
+			this.actions.splice(posInRule.index, 1);
 		}
 	}
 };
@@ -216,9 +216,10 @@ A3a.vpl.Rule.prototype.fixBlockContainerRefs = function () {
 
 /** Check conflict with another event handler, setting their error if there is
 	one
+	@param {A3a.vpl.Rule} otherRule
 	@return {boolean} true if there is a conflict
 */
-A3a.vpl.Rule.prototype.checkConflicts = function (otherEventHandler) {
+A3a.vpl.Rule.prototype.checkConflicts = function (otherRule) {
 	/** Compare function for sorting events
 		@param {A3a.vpl.Block} a
 		@param {A3a.vpl.Block} b
@@ -270,24 +271,24 @@ A3a.vpl.Rule.prototype.checkConflicts = function (otherEventHandler) {
 	}
 
 	// ok if event handlers are disabled
-	if (this.disabled || otherEventHandler.disabled) {
+	if (this.disabled || otherRule.disabled) {
 		return false;
 	}
 
 	// ok if all event blocks are disabled
-	if (areEventBlocksDisabled(this) || areEventBlocksDisabled(otherEventHandler)) {
+	if (areEventBlocksDisabled(this) || areEventBlocksDisabled(otherRule)) {
 		return false;
 	}
 
 	// ok if events are missing or in different number
 	if (this.events.length === 0 ||
-		otherEventHandler.events.length !== this.events.length) {
+		otherRule.events.length !== this.events.length) {
 		return false;
 	}
 
 	// ok if events are different
 	var eSorted = this.events.slice().sort(compareEvents);
-	var eOtherSorted = otherEventHandler.events.slice().sort(compareEvents);
+	var eOtherSorted = otherRule.events.slice().sort(compareEvents);
 	for (var i = 0; i < eSorted.length && !eSorted[i].disabled && !eOtherSorted[i].disabled; i++) {
 		if (eSorted[i].blockTemplate !== eOtherSorted[i].blockTemplate ||
 			!areParamEqual(eSorted[i], eOtherSorted[i])) {
@@ -298,13 +299,13 @@ A3a.vpl.Rule.prototype.checkConflicts = function (otherEventHandler) {
 	// else error
 	if (this.error == null || this.error.isWarning) {
 		var err = new A3a.vpl.Error("Duplicate event");
-		err.addEventConflictError(otherEventHandler);
+		err.addEventConflictError(otherRule);
 		this.error = err;
 	}
-	if (otherEventHandler.error == null || otherEventHandler.error.isWarning) {
+	if (otherRule.error == null || otherRule.error.isWarning) {
 		var err = new A3a.vpl.Error("Duplicate event");
 		err.addEventConflictError(this);
-		otherEventHandler.error = err;
+		otherRule.error = err;
 	}
 	return true;
 };
