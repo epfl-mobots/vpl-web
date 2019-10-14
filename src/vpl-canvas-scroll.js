@@ -98,7 +98,7 @@ A3a.vpl.ScrollArea.prototype.begin = function (canvas) {
 	var self = this;
 	var item = new A3a.vpl.CanvasItem(null,
 		this.wView, this.hView, this.x, this.y,
-		null,
+		null, null,
 		this.wTotal > this.wView || this.hTotal > this.hView
 			? {
 				/** @type {A3a.vpl.CanvasItem.mousedown} */

@@ -25,6 +25,7 @@ and layout.
 	@param {number} height
 	@param {number} x
 	@param {number} y
+	@param {number} padding
 	@param {?A3a.vpl.CanvasItem.draw} draw
 	@param {?{
 		mousedown:(A3a.vpl.CanvasItem.mousedown|null|undefined),
@@ -35,12 +36,13 @@ and layout.
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
 	@param {string=} id identifier
 */
-A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, doDrop, canDrop, id) {
+A3a.vpl.CanvasItem = function (data, width, height, x, y, padding, draw, interactiveCB, doDrop, canDrop, id) {
 	this.data = data;
 	this.width = width;
 	this.height = height;
 	this.x = x;
 	this.y = y;
+	this.padding = padding;
 	/** @type {?A3a.vpl.Canvas.ClippingRect} */
 	this.clippingRect = null;
 	/** @type {Array.<A3a.vpl.CanvasItem>} */
@@ -83,6 +85,7 @@ A3a.vpl.CanvasItem.prototype.clone = function () {
 	var c = new A3a.vpl.CanvasItem(this.data,
 		this.width, this.height,
 		this.x, this.y,
+		this.padding,
 		this.drawContent,
 		this.interactiveCB,
 		this.doDrop,
@@ -778,9 +781,10 @@ A3a.vpl.Canvas.prototype.clickedItemIndex = function (mouseEvent, clickableOnly)
 	var indices = [];
 	for (var i = this.items.length - 1; i >= 0; i--) {
 		var d = this.items[i].getTranslation();
+		var item = this.items[i];
 		if ((!clickableOnly || this.items[i].clickable) &&
-			x >= this.items[i].x + d.dx && x <= this.items[i].x + d.dx + this.items[i].width &&
-			y >= this.items[i].y + d.dy && y <= this.items[i].y + d.dy + this.items[i].height &&
+			x >= item.x + d.dx - item.padding && x <= item.x + d.dx + item.width + item.padding &&
+			y >= item.y + d.dy - item.padding && y <= item.y + d.dy + item.height + item.padding &&
 			this.items[i].isInClip(x, y)) {
 			indices.push(i);
 		}
@@ -943,7 +947,7 @@ A3a.vpl.Canvas.prototype.setItem = function (item, index) {
 */
 A3a.vpl.Canvas.prototype.addDecoration = function (fun) {
 	var item = new A3a.vpl.CanvasItem(null,
-		-1, -1, 0, 0,
+		-1, -1, 0, 0, 0,
 		function(canvas, item, dx, dy) {
 			var ctx = canvas.ctx;
 			ctx.save();
@@ -980,8 +984,9 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 	/** @type {A3a.vpl.CanvasItem.mouseEvent} */
 	var downEvent;
 	var self = this;
+	var padding = Math.max(box.paddingTop, box.paddingRight, box.paddingBottom, box.paddingLeft );
 	var item = new A3a.vpl.CanvasItem(null,
-		box.width, box.height, x, y,
+		box.width, box.height, x, y, padding,
 		/** @type {A3a.vpl.CanvasItem.draw} */
 		(function (canvas, item, dx, dy) {
 			var ctx = canvas.ctx;

@@ -1051,6 +1051,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			sim2d.playground.width * playgroundView.scale, sim2d.playground.height * playgroundView.scale,
 			playgroundView.x + playgroundView.ox,
 			playgroundView.y + playgroundView.oy,
+			0,
 			function(canvas, item, dx, dy) {
 				var ctx = canvas.ctx;
 				ctx.save();

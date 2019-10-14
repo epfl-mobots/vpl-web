@@ -67,9 +67,10 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 	var self = this;
 	var blockSize = Math.min(box.width, box.height);
 	var scale = blockSize / canvas.dims.blockSize;
+	var padding = Math.max(box.paddingTop, box.paddingRight, box.paddingBottom, box.paddingLeft );
 	var item = new A3a.vpl.CanvasItem(block,
 		box.width, box.height,
-		x, y,
+		x, y, padding,
 		// draw
 		function (canvas, item, dx, dy) {
 			var ctx = canvas.ctx;
@@ -300,6 +301,7 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 		cssBoxes.ruleBox.paddedHeight(),
 		x - cssBoxes.ruleBox.paddingLeft - cssBoxes.blockContainerBox.offsetLeft() - block0Box.offsetLeft(),
 		y - cssBoxes.ruleBox.paddingTop - cssBoxes.blockContainerBox.offsetTop() - block0Box.offsetTop(),
+		0,
 		// draw
 		function (canvas, item, dx, dy) {
 			var ctx = canvas.ctx;

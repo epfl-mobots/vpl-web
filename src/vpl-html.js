@@ -48,7 +48,7 @@ A3a.vpl.Block.prototype.toDataURL = function (css, dims, scale) {
 	var item = new A3a.vpl.CanvasItem(this,
 		box.totalWidth(),
 		box.totalHeight(),
-		0, 0,
+		0, 0, 0,
 		// draw
 		function (canvas, item, dx, dy) {
 			var x = item.x + box.offsetLeft() + dx;
@@ -88,7 +88,7 @@ A3a.vpl.Canvas.prototype.widgetToDataURL = function (id, css, dims, scale) {
 	var self = this;
 	var item = new A3a.vpl.CanvasItem(null,
 		width, height,
-		0, 0,
+		0, 0, 0,
 		// draw
 		function (canvas, item, dx, dy) {
 			canvas.widgets = self.widgets;
