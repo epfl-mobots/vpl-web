@@ -124,12 +124,12 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 				section.clauseAssignment +=
 					"cond = " + evCode.clause + ";\n" +
 						"if (cond && !cond0[" + nextCond + "]) {\n" +
-						"eventCache[" + evCode.clauseIndex + "] = 1\n" +
+						"eventCache[" + evCode.clauseIndex + "] = true;\n" +
 						"}\n" +
 						"cond0[" + nextCond + "] = cond;\n"
 					nextCond++;
 				} else {
-					section.clauseAssignment += "eventCache[" + evCode.clauseIndex + "] = 1\n";
+					section.clauseAssignment += "eventCache[" + evCode.clauseIndex + "] = true;\n";
 				}
 			}
 		}
@@ -201,7 +201,7 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 		str += "var eventCache = [];\n"
 	}
 	if (actionTestCount > 0) {
-		str += "var todo[] = [];\n";
+		str += "var todo = [];\n";
 	}
 	if (runBlocks) {
 		str += "\n" + runBlocksCode;
@@ -209,6 +209,10 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 		var strInit = "";
 		if (initCodeExec.length > 0) {
 			strInit += "\n" + initCodeExec.join("\n");
+		}
+		// timer1 for actions
+		if (actionsTestCode) {
+			strInit += "this.setTimer(1, 0.1, true);\n";
 		}
 		// init implicit event
 		for (var i = 0; i < program.program.length; i++) {
@@ -245,10 +249,10 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 	if (actionsTestCode) {
 		str += "\nthis.addEventListener(\"timer1\", function (name, param) {\n" + auxClausesInit.join("") + actionsTestCode + actionsExecCode;
 		for (var i = 0; i < clauses.length; i++) {
-			str += "eventCache[" + i + "] = 0\n";
+			str += "eventCache[" + i + "] = false;\n";
 		}
 		for (var i = 0; i < actionTestCount; i++) {
-			str += "todo[" + i + "] = 0\n";
+			str += "todo[" + i + "] = false;\n";
 		}
 	}
 	str += "});";
