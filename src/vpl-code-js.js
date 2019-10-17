@@ -108,7 +108,6 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 				"cond0[" + nextCond + "] = cond;\n";
 			nextCond++;
 		}
-		statement = this.bracket(statement, program.program[i]);
 		if (evCode.sectionBegin) {
 			evCode.clauseIndex = clauses.indexOf(A3a.vpl.CodeGenerator.Mark.remove(evCode.clause || evCode.sectionBegin));
 			if (evCode.clauseIndex < 0) {
@@ -135,7 +134,7 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 			}
 		}
 		if (!evCode.sectionBegin) {
-			evCode.statement = this.bracket(evCode.statement || "", program.program[i]);
+			evCode.statement = this.bracket(statement, program.program[i]);
 		}
 		if (program.program[i].getEventBlockByType("init")) {
 			initEventIndices.push(i);
