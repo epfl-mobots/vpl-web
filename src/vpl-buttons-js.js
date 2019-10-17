@@ -199,8 +199,8 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 			var ln1 = 0.15;
 			var lN = 0.4;
 			ctx.save();
-			ctx.fillStyle = col.bg;
-			ctx.strokeStyle = col.bg;
+			ctx.fillStyle = col.fgDim;
+			ctx.strokeStyle = col.fgDim;
 			ctx.lineWidth = dims.controlLineWidth;
 			ctx.translate(s * 0.5, s * 0.7);
 			ctx.save();
