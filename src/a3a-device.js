@@ -440,13 +440,14 @@ A3a.Device.prototype.step = function () {
 		if (isWhen) {
 			// when: skip if lastWhenCond or !cond
 			var lastWhenCond = op & 0x200;
+			var lastPC = this.pc - 1;
 			if (lastWhenCond || !cond) {
 				this.pc += relAddr - 2;
 			}
 			if (cond) {
-				this.bytecode[this.pc - 1] |= 0x200;
+				this.bytecode[lastPC] |= 0x200;
 			} else {
-				this.bytecode[this.pc - 1] &= ~0x200;
+				this.bytecode[lastPC] &= ~0x200;
 			}
 		} else {
 			// if: skip if !cond

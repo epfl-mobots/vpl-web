@@ -168,7 +168,8 @@ A3a.vm.dis = function (bytecode, noLabel) {
 			instr.str = "jump " +
 				(op & 0x100 ? "when" : "if") +
 				" not " + A3a.vm.condName[op & 0x1f] +
-				" " + (i + s16(bytecode[i + 1]));
+				" " + (i + s16(bytecode[i + 1])) +
+				(op & 0x100 ? op & 0x200 ? " (prev=true)" : " (prev=false)" : "");
 			i++;
 			break;
 		case A3a.vm.bc.emit:
