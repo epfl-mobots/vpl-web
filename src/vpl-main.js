@@ -683,6 +683,13 @@ window["vplGetProgramAsJSON"] = function () {
 	return window["vplApp"].program.exportToJSON();
 };
 
+/** Get vpl UI as json
+	@return {string}
+*/
+window["vplGetUIAsJSON"] = function () {
+	return window["vplApp"].program.exportToJSON({lib: true, prog: false});
+};
+
 // remember state across reload
 window.addEventListener("unload", function () {
 	var json = window["vplApp"].program.exportToJSON();
