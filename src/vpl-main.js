@@ -354,7 +354,7 @@ function vplSetup(gui) {
 	}
 
 	A3a.vpl.Program.resetBlockLib();
-	app.program.new();
+	app.program.new(true);
 	app.program.resetUI();
 
 	var view = vplGetQueryOption("view");
