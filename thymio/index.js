@@ -129,6 +129,16 @@ window.TDM = function (url, options) {
     };
 };
 
+window.TDM.status = {
+    // from thymio.fbs
+    unknown: 0,
+    connected: 1,
+    available: 2,
+    busy: 3,
+    ready: 4,
+    disconnected: 5
+};
+
 window.TDM.prototype.isConnected = function () {
     return this.selectedNode != null;
 };
