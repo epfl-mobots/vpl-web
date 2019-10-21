@@ -135,8 +135,13 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:exportToHTML", {
 		action: function (app, modifier) {
-			var html = app.toHTMLDocument(app.css);
-			A3a.vpl.Program.downloadText(html, "vpl-program.html", "text/html");
+			if (modifier) {
+				var html = app.uiToHTMLDocument(app.css);
+				A3a.vpl.Program.downloadText(html, "vpl-ui.html", "text/html");
+			} else {
+				var html = app.toHTMLDocument(app.css);
+				A3a.vpl.Program.downloadText(html, "vpl-program.html", "text/html");
+			}
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.isEmpty();

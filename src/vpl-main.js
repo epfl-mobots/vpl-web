@@ -395,7 +395,6 @@ function vplSetup(gui) {
 	app.uiConfig.setDisabledFeatures(advancedFeatures ? [] : ["src:language"]);
 
 	app.program.currentLanguage = language;
-	app.vplCanvas.state.vpl = new A3a.vpl.Program.CanvasRenderingState();
 	app.vplCanvas.widgets = widgets;
 	app.program.addEventHandler(true);
 	if (app.simCanvas != null) {

@@ -36,6 +36,58 @@ A3a.vpl.Application = function (canvasEl) {
 	this.commands = new A3a.vpl.Commands(function (data) {
 		self.log(data);
 	});
+	/** @type {?{
+		disabled: boolean,
+		isAvailable: boolean,
+		isPressed: boolean,
+		isEnabled: boolean,
+		isSelected: boolean,
+		state: ?string
+	}} */
+	this.forcedCommandState = null;
+
+	this.vplToolbarConfig = [
+		"vpl:close",
+		"!space",
+		"vpl:about",
+		"vpl:help",
+		"!space",
+		"vpl:new",
+		"vpl:save",
+		"vpl:load",
+		"vpl:upload",
+		"vpl:filename",
+		"vpl:exportToHTML",
+		"!space",
+		"vpl:advanced",
+		"!stretch",
+		"vpl:readonly",
+		"!stretch",
+		"vpl:undo",
+		"vpl:redo",
+		"!stretch",
+		"vpl:run",
+		"vpl:stop",
+		"vpl:robot",
+		"!stretch",
+		"vpl:sim",
+		"vpl:text",
+		"!stretch",
+		"vpl:teacher-reset",
+		"vpl:teacher-save",
+		"vpl:teacher-setasnew",
+		"vpl:teacher"
+	];
+	this.vplToolbar2Config = [
+		"!!stretch",
+		"vpl:message-error",
+		"vpl:message-warning",
+		"!!stretch",
+		"vpl:duplicate",
+		"vpl:disable",
+		"vpl:lock",
+		"vpl:trashcan",
+	];
 
 	/** @type {Array.<string>} */
 	this.views = ["vpl"];
@@ -71,7 +123,9 @@ A3a.vpl.Application = function (canvasEl) {
 	this.vplMessageIsWarning = false;	// false for error, true for warning
 
 	this.vplCanvas = new A3a.vpl.Canvas(canvasEl, {css: this.css});
-	this.vplCanvas.state = {};
+	this.vplCanvas.state = {
+		vpl: new A3a.vpl.Program.CanvasRenderingState()
+	};
 
 	this.cssForHTMLDocument = "";
 
@@ -336,7 +390,9 @@ A3a.vpl.Application.prototype.vplResize = function () {
 	}, this);
 
 	// modal boxes
-	this.aboutBox.center();
+	if (this.aboutBox) {
+		this.aboutBox.center();
+	}
 };
 
 /** Stop robot

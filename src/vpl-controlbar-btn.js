@@ -50,7 +50,8 @@ A3a.vpl.ControlBar.getButtonBounds;
 */
 A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButton, buttonBounds) {
 	var disabled = app.uiConfig.isDisabled(id);
-	if (app.commands.isAvailable(id) && (app.uiConfig.customizationMode || !disabled)) {
+	if ((app.forcedCommandState ? app.forcedCommandState.isAvailable : app.commands.isAvailable(id)) &&
+		(app.uiConfig.customizationMode || !disabled)) {
 		var canvas = this.canvas;
 		var cmd = app.commands.find(id);
 		var keepAvailable = cmd.keep;
@@ -58,12 +59,20 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 
 		this.addControl(
 			function (ctx, box, isPressed) {
-				drawButton(id, ctx, canvas.dims, canvas.css, cssClasses,
-					app.commands.isEnabled(id),
-					app.commands.isSelected(id),
-					isPressed,
-					app.commands.getState(id));
-				if (disabled) {
+				if (app.forcedCommandState) {
+					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses,
+						app.forcedCommandState.isEnabled,
+						app.forcedCommandState.isSelected,
+						app.forcedCommandState.isPressed,
+						app.forcedCommandState.state);
+				} else {
+					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses,
+						app.commands.isEnabled(id),
+						app.commands.isSelected(id),
+						isPressed,
+						app.commands.getState(id));
+				}
+				if (app.forcedCommandState ? app.forcedCommandState.disabled : disabled) {
 					canvas.disabledMark(0, 0, box.width, box.height, ["button"], ["button"]);
 				}
 			},
@@ -152,7 +161,8 @@ A3a.vpl.ControlBar.buttonBoxes = function (app, buttons, cssClasses) {
 	/** @type {Object.<string,CSSParser.VPL.Box>} */
 	var boxes = {};
 	for (var i = 0; i < buttons.length; i++) {
-		if (buttons[i][0] !== "!" && app.commands.find(buttons[i]).isAvailable()) {
+		if (buttons[i][0] !== "!" &&
+			(app.forcedCommandState ? app.forcedCommandState.isAvailable : app.commands.find(buttons[i]).isAvailable())) {
 			var buttonBox = app.css.getBox({tag: "button", id: buttons[i].replace(/:/g, "-"), clas: cssClasses});
 			boxes[buttons[i]] = buttonBox;
 		}

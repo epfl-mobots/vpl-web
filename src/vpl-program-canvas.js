@@ -626,6 +626,19 @@ A3a.vpl.Application.prototype.updateErrorInfo = function () {
 	return this.vplMessage !== "" && !this.vplMessageIsWarning;
 };
 
+A3a.vpl.Application.prototype.createVPLToolbar = function (toolbarConfig, cssClasses,
+	toolbarBox, toolbarSeparatorBox, toolbarItemBoxes) {
+	// top controls
+	var controlBar = new A3a.vpl.ControlBar(this.vplCanvas);
+	controlBar.setButtons(this,
+		toolbarConfig,
+		cssClasses,
+		this.program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
+		this.program.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
+	controlBar.calcLayout(toolbarBox, toolbarItemBoxes, toolbarSeparatorBox);
+	return controlBar;
+};
+
 /** Render the program to a single canvas
 	@return {void}
 */
@@ -648,17 +661,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var showState = program.mode === A3a.vpl.mode.advanced;
 
 	// 2nd toolbar at bottom between templates
-	var toolbar2Config = program.toolbar2Config || [
-		"!!stretch",
-		"vpl:message-error",
-		"vpl:message-warning",
-		"!!stretch",
-		"vpl:duplicate",
-		"vpl:disable",
-		"vpl:lock",
-		"vpl:trashcan",
-	];
-	var toolbar2HasAvButtons = A3a.vpl.ControlBar.hasAvailableButtons(this, toolbar2Config);
+	var toolbar2HasAvButtons = A3a.vpl.ControlBar.hasAvailableButtons(this, this.vplToolbar2Config);
 
 	// program item counts
 	var displaySingleEvent = program.displaySingleEvent();
@@ -704,40 +707,6 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		}
 	}, this);
 
-	// toolbar button boxes and height
-	var toolbarConfig = program.toolbarConfig || [
-		"vpl:close",
-		"!space",
-		"vpl:about",
-		"vpl:help",
-		"!space",
-		"vpl:new",
-		"vpl:save",
-		"vpl:load",
-		"vpl:upload",
-		"vpl:filename",
-		"vpl:exportToHTML",
-		"!space",
-		"vpl:advanced",
-		"!stretch",
-		"vpl:readonly",
-		"!stretch",
-		"vpl:undo",
-		"vpl:redo",
-		"!stretch",
-		"vpl:run",
-		"vpl:stop",
-		"vpl:robot",
-		"!stretch",
-		"vpl:sim",
-		"vpl:text",
-		"!stretch",
-		"vpl:teacher-reset",
-		"vpl:teacher-save",
-		"vpl:teacher-setasnew",
-		"vpl:teacher"
-	];
-
 	// default drop handler to delete blocks and rules dragged outside hor span of rules
 	canvas.addDefaultDoDrop("delete", function (dropTargetItem, draggedItem, x, y) {
 		if (self.commands.canDrop("vpl:trashcan", draggedItem)) {
@@ -753,9 +722,9 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	});
 
 	// box sizes
-	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, toolbarConfig, ["vpl", "top"]);
+	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, this.vplToolbarConfig, ["vpl", "top"]);
 	var toolbarItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
-	var toolbar2ItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, toolbar2Config, ["vpl", "bottom"]);
+	var toolbar2ItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, this.vplToolbar2Config, ["vpl", "bottom"]);
 	var toolbar2ItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
 
 	cssBoxes.viewBox.setTotalWidth(canvasSize.width);
@@ -830,24 +799,14 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	});
 
 	// top controls
-	var controlBar = new A3a.vpl.ControlBar(canvas);
-	controlBar.setButtons(this,
-		toolbarConfig,
-		["vpl", "top"],
-		program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
-		program.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
-	controlBar.calcLayout(cssBoxes.toolbarBox, toolbarItemBoxes, cssBoxes.toolbarSeparatorBox);
+	var controlBar = this.createVPLToolbar(this.vplToolbarConfig, ["vpl", "top"],
+		cssBoxes.toolbarBox, cssBoxes.toolbarSeparatorBox, toolbarItemBoxes);
 	controlBar.addToCanvas(cssBoxes.toolbarBox, toolbarItemBoxes);
 
 	// 2nd toolbar at bottom between templates
 	if (toolbar2HasAvButtons > 0) {
-		var controlBar2 = new A3a.vpl.ControlBar(canvas);
-		controlBar2.setButtons(this,
-			toolbar2Config,
-			["vpl", "bottom"],
-			program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
-			program.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
-		controlBar2.calcLayout(cssBoxes.toolbar2Box, toolbar2ItemBoxes, cssBoxes.toolbarSeparator2Box);
+		var controlBar2 = this.createVPLToolbar(this.vplToolbar2Config, ["vpl", "bottom"],
+			cssBoxes.toolbar2Box, cssBoxes.toolbarSeparator2Box, toolbar2ItemBoxes);
 		controlBar2.addToCanvas(cssBoxes.toolbar2Box, toolbar2ItemBoxes);
 	}
 
