@@ -404,10 +404,10 @@ function vplSetup(gui) {
 	app.addVPLCommands();
 	if (!isClassic && gui && gui["toolbars"]) {
 		if (gui["toolbars"]["vpl"]) {
-			app.program.toolbarConfig = gui["toolbars"]["vpl"];
+			app.vplToolbarConfig = gui["toolbars"]["vpl"];
 		}
 		if (gui["toolbars"]["vpl2"]) {
-			app.program.toolbar2Config = gui["toolbars"]["vpl2"];
+			app.vplToolbar2Config = gui["toolbars"]["vpl2"];
 		}
 	}
 
