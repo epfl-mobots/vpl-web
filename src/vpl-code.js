@@ -150,7 +150,7 @@ A3a.vpl.CodeGenerator.prototype.findMark = function (ref, isBegin) {
 	return -1;
 };
 
-/** Generate code for an event handler
+/** Generate code for a rule
 	@param {A3a.vpl.Rule} rule
 	@return {A3a.vpl.compiledCode}
 */
@@ -173,7 +173,9 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 						err.addEventError([i]);
 						if (!err.isWarning || !rule.error) {
 							rule.error = err;
-							return {error: err};
+							if (!err.isWarning) {
+								return {error: err};
+							}
 						}
 					}
 				}
@@ -191,7 +193,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 		}
 	}
 	if (!hasEvent && !hasAction) {
-		return {};
+		return rule.error ? {error: rule.error} : {};
 	}
 	if (!hasEvent && !hasState) {
 		var err = new A3a.vpl.Error("Missing event block");
@@ -204,7 +206,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 		err.addActionError(0);
 		rule.error = err;
 		return {error: err};
-	} else {
+	} else if (!rule.error) {
 		for (var i = 0; i < rule.actions.length; i++) {
 			for (var j = i + 1; j < rule.actions.length; j++) {
 				if (rule.actions[j].blockTemplate.type === A3a.vpl.blockType.action &&
