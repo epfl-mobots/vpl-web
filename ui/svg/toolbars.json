@@ -1,12 +1,15 @@
 {
 	"toolbars": {
 		"vpl": [
+			"!!space",
 			"vpl:about",
+			"vpl:help",
 			"!!space",
 			"!!space",
 			"vpl:new",
 			"vpl:save",
 			"vpl:load",
+			"vpl:exportToHTML",
 			"!!stretch",
 			"vpl:message-error",
 			"vpl:message-warning",
@@ -18,11 +21,11 @@
 			"!stretch",
 			"vpl:advanced",
 			"vpl:sim",
-			"vpl:text-toggle",
 			"!stretch",
 			"vpl:teacher-reset",
 			"vpl:teacher-save",
-			"vpl:teacher"
+			"vpl:teacher",
+			"vpl:readonly"
 		],
 		"vpl2": [
 			"!!stretch",

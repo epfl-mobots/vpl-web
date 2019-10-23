@@ -1,3 +1,4 @@
+
 {
 	"buttons": [
 		{
@@ -22,6 +23,27 @@
 			]
 		},
 		{
+			"name": "vpl:help",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#help_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:help",
+			"state": [],
+			"draw": [
+				{
+					"uri": "Icons.svg#help_default"
+				}
+			]
+		},
+		{
 			"name": "vpl:new",
 			"state": ["pressed"],
 			"draw": [
@@ -30,6 +52,16 @@
 				},
 				{
 					"uri": "Icons.svg#new2_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:new",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#new2_default",
+					"alpha": 0.5
 				}
 			]
 		},
@@ -79,10 +111,52 @@
 		},
 		{
 			"name": "vpl:save",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#download_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:save",
 			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#download_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:exportToHTML",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg",
+					"alpha": 1.0
+				},
+				{
+					"uri": "Icons.svg#make_html_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:exportToHTML",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#make_html_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:exportToHTML",
+			"state": [],
+			"draw": [
+				{
+					"uri": "Icons.svg#make_html_default"
 				}
 			]
 		},
@@ -106,6 +180,15 @@
 
 				{
 					"uri": "Icons.svg#textMode_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:readonly",
+			"state": [],
+			"draw": [
+				{
+					"uri": "Icons.svg#readonly_default"
 				}
 			]
 		},
