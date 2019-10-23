@@ -68,7 +68,7 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 					}
 					break;
 				default:
-					if (prop[i][0] === "=" && state.toString() !== prop[i].slice(1)) {
+					if (prop[i][0] === "=" && (state || "").toString() !== prop[i].slice(1)) {
 						return false;
 					}
 					break;
