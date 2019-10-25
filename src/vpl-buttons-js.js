@@ -634,21 +634,33 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 		"vpl:filename": function (app) {
 			if (state) {
 				ctx.beginPath();
-				ctx.rect(0, 0,
-	                3 * dims.controlSize, dims.controlSize);
+				var w = 3 * dims.controlSize;
+				ctx.rect(0, 0, w, dims.controlSize);
 				ctx.clip();
 				ctx.fillStyle = box.color;
 				ctx.font = box.cssFontString();
 				ctx.textAlign = "center";
 				ctx.textBaseline = "middle";
 				var str = /** @type {string} */(state).trim();
-				if (str.indexOf("\n") >= 0) {
-					// two lines (or more which are ignored)
-					var strArray = str.split("\n");
+				// up to two lines, trimmed to fit
+				var strArray = str
+					.split("\n")
+					.slice(0, 2)
+					.map(function (s) {
+						s = s.slice(0, 80);
+						if (s.length > 1 && ctx.measureText(s).width > w) {
+							while (s.length > 1 && ctx.measureText(s + "\u2026").width > w) {
+								s = s.slice(0, -1);
+							}
+							s += "\u2026";
+						}
+						return s;
+					});
+				if (strArray.length > 1) {
 					ctx.fillText(strArray[0], box.width / 2, box.height * 0.25);
 					ctx.fillText(strArray[1], box.width / 2, box.height * 0.75);
 				} else {
-					ctx.fillText(str, box.width / 2, box.height / 2);
+					ctx.fillText(strArray[0], box.width / 2, box.height / 2);
 				}
 			}
 		},

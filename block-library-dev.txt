@@ -400,6 +400,7 @@ Property "widgets" is an array with one element per widget. A widget is a static
 - "vpl:warning": warning marker displayed closed to rules with warnings (minor issues which still permit to run the program)
 - "vpl:moreHigh": hint displayed at the top of block lib (events or actions) when overflow is scroll (see section "Stylesheet" below) and the blocks could be scrolled down to show more
 - "vpl:moreLow": hint displayed at the bottom of block lib (events or actions) when overflow is scroll and the blocks could be scrolled down to show more
+- "vpl:customize": displayed in lieu of vpl program during ui customization when "vpl:teacher" is selected
 
 Widgets are scaled to fill their css box (see below). The box id for widget "vpl:then" is "widget-then", and so on.
 
