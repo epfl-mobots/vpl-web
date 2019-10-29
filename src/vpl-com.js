@@ -27,7 +27,16 @@ A3a.vpl.Com = function (app, wsURL, sessionId) {
 	this.wsURL = wsURL;
 	/** @type {WebSocket} */
 	this.ws = null;
+	this.hasLogger = false;
 	this.sessionId = sessionId;
+
+	var self = this;
+	this.reconnectId = setInterval(function () {
+		if (self.ws != null && self.ws.readyState >= 2) {
+			// closing or closed websocket: try to reconnect every 5 s
+			self.connect();
+		}
+	}, 5000);
 };
 
 /** Execute a command
@@ -127,9 +136,12 @@ A3a.vpl.Com.prototype.connect = function () {
 		}
 	});
 
-	this.app.addLogger(function (data) {
-		self.log(data);
-	});
+	if (!this.hasLogger) {
+		this.app.addLogger(function (data) {
+			self.log(data);
+		});
+		this.hasLogger = true;
+	}
 };
 
 /** Send a log message
