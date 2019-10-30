@@ -632,8 +632,9 @@ function vplSetup(gui) {
 }
 
 window.addEventListener("load", function () {
-	(/^https?:\/\//.test(document.location.href) ? vplLoadResourcesWithXHR : vplLoadResourcesInScripts)(
-		vplGetQueryOption("ui") || "ui.json",
+	var uiDoc = vplGetQueryOption("ui") || "ui.json";
+	(document.getElementById(uiDoc) ? vplLoadResourcesInScripts : vplLoadResourcesWithXHR)(
+		uiDoc,
 		function (obj) {
 			// get subfiles
 			return (obj["svgFilenames"] || []).concat(obj["overlays"] || []).concat(obj["css"] || []);
