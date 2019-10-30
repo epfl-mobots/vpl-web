@@ -472,6 +472,8 @@ A3a.vpl.Application.prototype.log = function (data) {
 	}
 
 	this.loggers.forEach(function (logger) {
-		logger(data);
+        try {
+		  logger(data);
+        } catch (e) {}
 	});
 };
