@@ -21,13 +21,14 @@ Drawing of buttons defined in JavaScript.
 	@param {A3a.vpl.Canvas.dims} dims
 	@param {CSSParser.VPL} css
 	@param {Array.<string>} cssClasses
+	@param {A3a.vpl.Translation} i18n
 	@param {boolean} isEnabled
 	@param {boolean} isSelected
 	@param {boolean} isPressed
 	@param {*=} state state for multi-value buttons
 	@return {void}
 */
-A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnabled, isSelected, isPressed, state) {
+A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, isEnabled, isSelected, isPressed, state) {
 
 	// 2018 colors (white on navy)
 	var col = {
@@ -627,7 +628,8 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, isEnab
 				ctx.font = box.cssFontString();
 				ctx.textAlign = "center";
 				ctx.textBaseline = "middle";
-				ctx.fillText(/** @type {string} */(state), box.width / 2, box.height / 2);
+				var msg = i18n.translate(/** @type {string} */(state));
+				ctx.fillText(msg, box.width / 2, box.height / 2);
 			}
 		},
 		// "vpl:message-warning": "vpl:message-error"

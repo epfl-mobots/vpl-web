@@ -22,12 +22,13 @@ Definition of methods for A3a.vpl.ControlBar which add support for buttons.
 		A3a.vpl.Canvas.dims,
 		CSSParser.VPL,
 		Array.<string>,
+		A3a.vpl.Translation,
 		boolean,
 		boolean,
 		boolean,
 		?string): void}
-	Function to draw buttons (arguments: id, ctx, dims, css, cssClasses, isEnabled,
-	isSelected, isPressed, obj)
+	Function to draw buttons (arguments: id, ctx, dims, css, cssClasses, translation,
+	isEnabled, isSelected, isPressed, obj)
 */
 A3a.vpl.ControlBar.drawButton;
 
@@ -61,12 +62,14 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 			function (ctx, box, isPressed) {
 				if (app.forcedCommandState) {
 					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses,
+						app.i18n,
 						app.forcedCommandState.isEnabled,
 						app.forcedCommandState.isSelected,
 						app.forcedCommandState.isPressed,
 						app.forcedCommandState.state);
 				} else {
 					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses,
+						app.i18n,
 						app.commands.isEnabled(id),
 						app.commands.isSelected(id),
 						isPressed,

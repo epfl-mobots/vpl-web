@@ -30,6 +30,7 @@ A3a.vpl.Application = function (canvasEl) {
 	this.canvasEl = canvasEl;
 
 	this.css = new CSSParser.VPL();
+	this.i18n = new A3a.vpl.Translation();
 
 	this.uiConfig = new A3a.vpl.UIConfig();
 	var self = this;
@@ -152,6 +153,22 @@ A3a.vpl.Application = function (canvasEl) {
 A3a.vpl.Application.Logger;
 
 A3a.vpl.Application.initialized = false;
+
+/** Change the current UI language
+	@param {string} language code ("en" etc.)
+	@return {void}
+*/
+A3a.vpl.Application.prototype.setUILanguage = function (language) {
+	return this.i18n.setLanguage(language);
+};
+
+/** Translate message using the current language
+	@param {string} messageKey
+	@return {string}
+*/
+A3a.vpl.Application.prototype.translate = function (messageKey) {
+	return this.i18n.translate(messageKey);
+};
 
 /** Set or clear html content of About box
 	@param {?string} html

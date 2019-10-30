@@ -37,6 +37,7 @@ JS = \
 	vpl-emptyblock.js \
 	vpl-rule.js \
 	vpl-uiconfig.js \
+	vpl-i18n.js \
 	vpl-program.js \
 	vpl-code.js \
 	vpl-code-aseba.js \

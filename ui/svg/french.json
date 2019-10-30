@@ -1,0 +1,13 @@
+{
+	"i18n": {
+		"fr": {
+			"Duplicate action blocks": "Un bloc d'action fait doublon",
+			"Duplicate event": "Un bloc d'événement fait doublon",
+			"Missing action block": "Il manque un bloc d'action",
+			"Missing event block": "Il manque un bloc d'événement",
+			"No ground sensor specified": "Le capteur de sol n'est pas spécifié",
+			"No proximity sensor specified": "Le capteur de proximité n'est pas spécifié",
+			"No sensor specified": "Aucun capteur n'est spécifié"
+		}
+	}
+}

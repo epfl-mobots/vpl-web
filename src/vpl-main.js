@@ -212,6 +212,7 @@ function vplSetup(gui) {
 						gui[key] = gui[key].concat(overlay[key]);
 						break;
 					case "toolbars":
+					case "i18n":
 						// merge objects
 						for (var key2 in overlay[key]) {
 							if (overlay[key].hasOwnProperty(key2)) {
@@ -250,11 +251,22 @@ function vplSetup(gui) {
 		app.css.defineProperties();
 	}
 
+	// translations
+	if (gui && gui["i18n"]) {
+		for (var lang in gui["i18n"]) {
+			if (gui["i18n"].hasOwnProperty(lang)) {
+				app.i18n.addDictForLanguage(lang, gui["i18n"][lang]);
+			}
+		}
+	}
+
 	// load box
 	app.loadBox = new A3a.vpl.Load(app);
 
 	// general settings
 	var isClassic = gui == undefined || vplGetQueryOption("appearance") === "classic";
+	var uiLanguage = vplGetQueryOption("uilanguage") || "en";
+	app.setUILanguage(uiLanguage);
 	app.useLocalStorage = vplGetQueryOption("storage") === "local";
 	app.multipleViews = vplGetQueryOption("multiview") !== "false";
 	var language = vplGetQueryOption("language");
@@ -275,14 +287,14 @@ function vplSetup(gui) {
 		A3a.vpl.patchPythonBlocks();
 	}
 	if (gui && !isClassic) {
-		if (gui["buttons"] !== null) {
+		if (gui["buttons"] !== null && gui["buttons"].length > 0) {
 			drawButton = A3a.vpl.drawButtonSVGFunction(gui);
 			getButtonBounds = A3a.vpl.getButtonBoundsSVGFunction(gui);
 		}
-		if (gui["widgets"] !== null) {
+		if (gui["widgets"] !== null && gui["widgets"].length > 0) {
 			widgets = A3a.vpl.makeSVGWidgets(gui);
 		}
-		if (gui["blocks"] !== null) {
+		if (gui["blocks"] !== null && gui["blocks"].length > 0) {
 			try {
 				A3a.vpl.patchBlocksSVG(gui);
 			} catch (e) {
@@ -493,7 +505,7 @@ function vplSetup(gui) {
 
 		app.sim2d.disabledObstacleSVG = '<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><g transform="translate(0,-308)"><path style="fill:none;stroke:#000;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter" d="M 172,928 137,420 763,371 905,688 708,981 Z" /><path style="fill:none;stroke:#949494;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter" d="m 402,754 168,91 101,-142" /><circle style="fill:none;stroke:#000;stroke-width:6" cx="531" cy="550" r="59" /></g></svg>';
 	}
-//app.program.readOnly = true;
+
 	// reload from storage
 	if (window["vplStorageGetFunction"]) {
 		window["vplStorageGetFunction"]("vpl.json",

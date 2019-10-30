@@ -1970,6 +1970,7 @@
 		"js.json",
 		"python.json",
 		"toolbars.json",
-		"buttons.json"
+		"buttons.json",
+		"french.json"
 	]
 }

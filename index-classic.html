@@ -23,7 +23,11 @@
 	"fragments": {
 		"about.html": "<iframe src=\"vpl-about.html\" style=\"width:100%;height:100%;border:none;\"></iframe>",
 		"vpl-export-html.css": "td.events, td.then, td.actions {\n\tborder: solid 2px silver;\n\tborder-style: solid none;\n}\ntd.block {\n\tpadding: 15px;\n}\ntd.events {\n    min-width: 20px;\n    border-left-style: solid;\n    border-top-left-radius: 20px; \n    border-bottom-left-radius: 20px;\n}\ntd.event-aux {    transform: scale(0.8) translate(0,10px);\n}\ntd.actions {\n    min-width: 20px;\n    border-right-style: solid;\n    border-bottom-right-radius: 20px; \n    border-top-right-radius: 20px; \n}\ntable.program {\n\tborder-collapse: separate;\n\tborder-spacing: 0 10px;\n\tmargin-left: auto;\n\tmargin-right: auto;\n}\n"
-	}
+	},
+
+	"overlays": [
+		"french.json"
+	]
 }
 </script>
 
@@ -237,6 +241,22 @@ sim-playground {
 }
 </script>
 
+<script type="text/x-vpl-css" id="french.json">
+{
+	"i18n": {
+		"fr": {
+			"Duplicate action blocks": "Un bloc d'action fait doublon",
+			"Duplicate event": "Un bloc d'événement fait doublon",
+			"Missing action block": "Il manque un bloc d'action",
+			"Missing event block": "Il manque un bloc d'événement",
+			"No ground sensor specified": "Le capteur de sol n'est pas spécifié",
+			"No proximity sensor specified": "Le capteur de proximité n'est pas spécifié",
+			"No sensor specified": "Aucun capteur n'est spécifié"
+		}
+	}
+}
+</script>
+
 <title>VPL</title>
 
 <style>
@@ -354,6 +374,7 @@ pre#editor-lines {
 <script src="src/vpl-files.js"></script>
 <script src="src/vpl-load.js"></script>
 <script src="src/vpl-com.js"></script>
+<script src="src/vpl-i18n.js"></script>
 <script src="src/vpl-main.js"></script>
 
 <script src="src/a3a-nodebase.js"></script>

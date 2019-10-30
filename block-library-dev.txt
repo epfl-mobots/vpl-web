@@ -496,6 +496,27 @@ Line elements:
 - conflict-line (classes: error, warning)
 - crossout-line (classes: button, vpl, rule, block)
 
+Text translation
+----------------
+
+Text messages can be translated to languages other than English. Translations are defined in dictionaries where the key is the English message and the value is the translated value. Translation dictionaries are specified under the key "i18n" at the top level. Here is a partial example:
+
+{
+  ...
+  "i18n": {
+    "fr": {
+      "Missing action block": "Il manque un bloc d'action",
+      ...
+    },
+    "it": {
+      ...
+    }
+  },
+  ...
+}
+
+Languages and messages can be split into multiple overlays.
+
 Global style settings
 ---------------------
 
@@ -543,6 +564,7 @@ The following options are supported:
 - "robot": device(s) code is sent to for execution. "thymio" for a Thymio via asebahttp (supported language: "aseba"), "thymio-tdm" for a Thymio via the Thymio Device Manager (supported language: "aseba"), "sim" for the simulator (supported languages: "aseba", "l2", and "js"), or undefined for no execution. Multiple devices can be specified, separated with (unquoted) '+'; e.g. "robot=thymio-tdm+sim". In that case, button "vpl:robot" toggles between devices.
 - "role": "student" (default) or "teacher" (options to customize the user interface and vpl blocks).
 - "ui": filename of the main json file (default "ui.json")
+- "uilanguage": 2-letter language code used to translate messages (default: "en"; otherwise, as defined in dictionary "i18n" of the user interface json file)
 - "user": username displayed in the "vpl:filename" indicator (overrides window["vplUsername"])
 
 Global variables
