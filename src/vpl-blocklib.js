@@ -150,6 +150,71 @@ A3a.vpl.BlockTemplate.lib =	[
 			@type {Array.<A3a.vpl.Canvas.buttonShape>}
 		*/
 		var buttons = [
+			{sh: "c", x: 0, y: 0, r: 0},
+			{sh: "t", x: 0, y: 0.3, r: 0},
+			{sh: "t", x: 0, y: -0.3, r: Math.PI},
+			{sh: "t", x: 0.3, y: 0, r: Math.PI / 2},
+			{sh: "t", x: -0.3, y: 0, r: -Math.PI / 2},
+		];
+		return {
+			name: "button",
+			modes: [A3a.vpl.mode.custom],
+			type: A3a.vpl.blockType.event,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [false, false, false, false, false]; },
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			typicalParam: function () { return [false, false, true, false, true]; },
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop();
+				canvas.buttons(buttons, block.param);
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					block.param[i] = !block.param[i];
+				}
+				return i;
+			},
+			/** @type {A3a.vpl.BlockTemplate.validateFun} */
+			validate: function (block) {
+				for (var i = 0; i < 5; i++) {
+					if (block.param[i]) {
+						return null;
+					}
+				}
+				return new A3a.vpl.Error("No button specified", true);
+			},
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					var cond = "";
+					for (var i = 0; i < 5; i++) {
+						if (block.param[i]) {
+							cond += (cond.length === 0 ? "" : " and ") +
+								"button." + ["center", "forward", "backward", "right", "left"][i] +
+								" != 0";
+						}
+					}
+					if (cond === "") {
+						cond = "button.center != 0 or button.forward != 0 or button.backward != 0 or button.right != 0 or button.left != 0";
+					}
+					return {
+						sectionBegin: "onevent buttons\n",
+						clause: cond
+					};
+				}
+			}
+		};
+	})()),
+	new A3a.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
 			{sh: "r", x: 0, y: 0.4, r: 0, str: "2"},
 			{sh: "r", x: -0.22, y: 0.35, r: -0.45, str: "1"},
 			{sh: "r", x: 0.22, y: 0.35, r: 0.45, str: "3"},
@@ -827,9 +892,9 @@ A3a.vpl.BlockTemplate.lib =	[
 					canvas.tap(0.7);
 					canvas.ctx.restore();
 				} else {
-					canvas.robotAccelerometer(dir === 2, a);
+					canvas.robotAccelerometer(dir === 1, dir === 2 ? -a : a);
 				}
-				canvas.buttons(buttons, [dir===0, dir===1, dir===2]);
+				canvas.buttons(buttons, [dir===0, dir===2, dir===1]);
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
@@ -849,7 +914,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				if (dragIndex === 1) {
 					var angle = canvas.accelerometerDrag(width, height, left, top, ev);
-					block.param[1] = angle;
+					block.param[1] = block.param[0] === 2 ? -angle : angle;
 				}
 			},
 			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */

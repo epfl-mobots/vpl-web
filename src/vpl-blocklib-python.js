@@ -86,12 +86,31 @@ A3a.vpl.patchPythonBlocks = function () {
 						"self.set(\"motor.right\", 0)\n"
 				};
 			},
+			"button": function (block) {
+				var cond = "";
+				for (var i = 0; i < 5; i++) {
+					if (block.param[i]) {
+						cond += (cond.length === 0 ? "" : " and ") +
+							"self.get(\"button." + ["center", "forward", "backward", "right", "left"][i] +
+							"\")";
+					}
+				}
+				if (cond === "") {
+					cond = ["center", "forward", "backward", "right", "left"].map(function (name) {
+						return "self.get(\"button." + name + "\")";
+					}).join(" or ");
+				}
+				return {
+					sectionBegin: "def event_buttons(self):\n",
+					sectionEnd: "<\n",
+					clause: cond
+				};
+			},
 			"button 1": function (block) {
 				var cond = "self.get(\"button." + ["center", "forward", "backward", "right", "left"][block.param[0]] + "\")";
 				return {
 					sectionBegin: "def event_buttons(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 30,
 					clause: cond
 				};
 			},
@@ -113,7 +132,6 @@ A3a.vpl.patchPythonBlocks = function () {
 				return {
 					sectionBegin: "def event_prox(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 20,
 					clause: cond
 				};
 			},
@@ -137,7 +155,6 @@ A3a.vpl.patchPythonBlocks = function () {
 				return {
 					sectionBegin: "def event_prox(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 20,
 					clause: cond
 				};
 			},
@@ -160,7 +177,6 @@ A3a.vpl.patchPythonBlocks = function () {
 				return {
 					sectionBegin: "def event_prox(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 20,
 					clause: cond
 				};
 			},
@@ -182,7 +198,6 @@ A3a.vpl.patchPythonBlocks = function () {
 				return {
 					sectionBegin: "def event_prox(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 10,
 					clause: cond
 				};
 			},
@@ -206,7 +221,6 @@ A3a.vpl.patchPythonBlocks = function () {
 				return {
 					sectionBegin: "def event_prox(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 10,
 					clause: cond
 				};
 			},
@@ -229,7 +243,6 @@ A3a.vpl.patchPythonBlocks = function () {
 				return {
 					sectionBegin: "def event_prox(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 10,
 					clause: cond
 				};
 			},
@@ -237,7 +250,6 @@ A3a.vpl.patchPythonBlocks = function () {
 				return {
 					sectionBegin: "def event_tap(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 50
 				};
 			},
 			"accelerometer": function (block) {
@@ -247,7 +259,6 @@ A3a.vpl.patchPythonBlocks = function () {
 					return {
 						sectionBegin: "def event_tap(self):\n",
 						sectionEnd: "<\n",
-						sectionPriority: 50
 					};
 				} else {
 					/** @type {number} */
@@ -266,7 +277,6 @@ A3a.vpl.patchPythonBlocks = function () {
 					return {
 						sectionBegin: "def event_acc(self):\n",
 						sectionEnd: "<\n",
-						sectionPriority: 40,
 						clauseInit:
 							dir === 2
 								? "pitchAngle = math.atan2(acc[1], acc[2])\n"
@@ -281,7 +291,6 @@ A3a.vpl.patchPythonBlocks = function () {
 				return {
 					sectionBegin: "def event_acc(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 40,
 					clauseInit:
 						"rollAngle = math.atan2(acc[0], acc[2])\n",
 					clause:
@@ -295,7 +304,6 @@ A3a.vpl.patchPythonBlocks = function () {
 				return {
 					sectionBegin: "def event_acc(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 40,
 					clauseInit:
 						"pitchAngle = math.atan2(acc[1], acc[2])\n",
 					clause:
@@ -309,7 +317,6 @@ A3a.vpl.patchPythonBlocks = function () {
 				return {
 					sectionBegin: "def event_acc(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 40,
 					clauseInit:
 						"yawAngle = math.atan2(acc[0], acc[1])\n",
 					clause:
@@ -321,13 +328,11 @@ A3a.vpl.patchPythonBlocks = function () {
 				return {
 					sectionBegin: "def event_mic(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 50
 				};
 			},
 			"init": function (block) {
 				return {
 					sectionBegin: "# init block\n",
-					sectionPriority: 300
 				};
 			},
 			"timer": function (block) {
@@ -337,7 +342,6 @@ A3a.vpl.patchPythonBlocks = function () {
 					],
 					sectionBegin: "def event_timer0(self):\n",
 					sectionEnd: "<\n",
-					sectionPriority: 200
 				};
 			},
 			"state": function (block) {

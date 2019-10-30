@@ -106,6 +106,25 @@ A3a.vpl.patchL2Blocks = function () {
 						"}\n"
 				};
 			},
+			"button": function (block) {
+				var cond = "";
+				for (var i = 0; i < 5; i++) {
+					if (block.param[i]) {
+						cond += (cond.length === 0 ? "" : " && ") +
+							"button." + ["center", "forward", "backward", "right", "left"][i];
+					}
+				}
+				if (cond === "") {
+					cond = ["center", "forward", "backward", "right", "left"].map(function (name) {
+						return "button." + name;
+					}).join(" || ");
+				}
+				return {
+					sectionBegin: "onevent buttons {\n",
+					sectionEnd: "}\n",
+					clause: cond
+				};
+			},
 			"button 1": function (block) {
 				return {
 					sectionBegin: "onevent buttons {\n",

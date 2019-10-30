@@ -5,8 +5,9 @@
 			"Duplicate event": "Un bloc d'événement fait doublon",
 			"Missing action block": "Il manque un bloc d'action",
 			"Missing event block": "Il manque un bloc d'événement",
-			"No ground sensor specified": "Le capteur de sol n'est pas spécifié",
-			"No proximity sensor specified": "Le capteur de proximité n'est pas spécifié",
+			"No button specified": "Aucun bouton n'est spécifié",
+			"No ground sensor specified": "Aucun capteur de sol n'est spécifié",
+			"No proximity sensor specified": "Aucun capteur de proximité n'est spécifié",
 			"No sensor specified": "Aucun capteur n'est spécifié"
 		}
 	}
