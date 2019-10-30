@@ -118,7 +118,7 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 				var section = sections[evCode.sectionBegin];
 				if (evCode.clauseInit && section.clauseInit.indexOf(evCode.clauseInit) < 0) {
 					// concat all clauseInit fragments without duplicates
-					evCode.clauseInit += evCode.clauseInit;
+					section.clauseInit += evCode.clauseInit;
 				}
 				if (evCode.clause) {
 				section.clauseAssignment +=

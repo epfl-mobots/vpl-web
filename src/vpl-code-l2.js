@@ -104,7 +104,7 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 				var section = sections[evCode.sectionBegin];
 				if (evCode.clauseInit && section.clauseInit.indexOf(evCode.clauseInit) < 0) {
 					// concat all clauseInit fragments without duplicates
-					evCode.clauseInit += evCode.clauseInit;
+					section.clauseInit += evCode.clauseInit;
 				}
 				section.clauseAssignment += evCode.clause
 					? "when (" + evCode.clause + ") {\n" +
