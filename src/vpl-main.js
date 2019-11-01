@@ -197,9 +197,6 @@ function vplGetHashOption(key) {
 function vplSetup(gui) {
 	// handle overlays in gui
 	if (gui && gui["overlays"]) {
-		gui["blocks"] = gui["blocks"] || [];
-		gui["buttons"] = gui["buttons"] || [];
-		gui["widgets"] = gui["widgets"] || [];
 		gui["overlays"].forEach(function (filename) {
 			var overlay = JSON.parse(gui.rsrc[filename]);
 			for (var key in overlay) {
@@ -209,7 +206,7 @@ function vplSetup(gui) {
 					case "buttons":
 					case "widgets":
 						// concat arrays
-						gui[key] = gui[key].concat(overlay[key]);
+						gui[key] = gui[key] ? gui[key].concat(overlay[key]) : overlay[key];
 						break;
 					case "toolbars":
 					case "i18n":
