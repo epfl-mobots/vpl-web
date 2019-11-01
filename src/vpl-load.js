@@ -54,7 +54,8 @@ A3a.vpl.Load = function (app) {
 	tr.appendChild(td);
 	this.input = document.createElement("input");
 	this.input.setAttribute("type", "file");
-	this.input.setAttribute("accept", ".aesl,.json");
+	this.input.setAttribute("accept",
+		".aesl,.json,." + A3a.vpl.Program.suffix + ",." + A3a.vpl.Program.suffixUI);
 	this.input.style.width = "35em";
 	td.appendChild(this.input);
 

@@ -97,7 +97,9 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				// var aesl = app.program.exportAsAESLFile();
 				// A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
 				var json = app.program.exportToJSON({lib: false, prog: true});
-				A3a.vpl.Program.downloadText(json, app.program.filename || "vpl.json", "application/json");
+				A3a.vpl.Program.downloadText(json,
+					app.program.filename || A3a.vpl.Program.defaultFilename,
+					A3a.vpl.Program.mimetype);
 			}
 		},
 		isEnabled: function (app) {
@@ -561,7 +563,9 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	this.commands.add("vpl:teacher-save", {
 		action: function (app, modifier) {
 			var json = app.program.exportToJSON({lib: true, prog: false});
-			A3a.vpl.Program.downloadText(json, "gui-config.json", "application/json");
+			A3a.vpl.Program.downloadText(json,
+				A3a.vpl.Program.defaultFilenameUI,
+				A3a.vpl.Program.mimetypeUI);
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL;

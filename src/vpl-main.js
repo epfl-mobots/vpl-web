@@ -505,21 +505,21 @@ function vplSetup(gui) {
 
 	// reload from storage
 	if (window["vplStorageGetFunction"]) {
-		window["vplStorageGetFunction"]("vpl.json",
+		window["vplStorageGetFunction"](A3a.vpl.Program.defaultFilename,
 			function (data, options) {
 				try {
 					if (data) {
 						app.program.importFromJSON(data, function () {
 							app.renderProgramToCanvas();
 						});
-						app.program.filename = options && options["filename"] || "vpl.json";
+						app.program.filename = options && options["filename"] || A3a.vpl.Program.defaultFilename;
 						app.program.readOnly = options != undefined && options["readOnly"] == true;
 					}
 				} catch (e) {}
 			});
 	} else if (app.useLocalStorage) {
 		try {
-			var vplJson = window.localStorage.getItem("vpl.json");
+			var vplJson = window.localStorage.getItem(A3a.vpl.Program.defaultFilename);
 			if (vplJson) {
 				app.program.importFromJSON(vplJson, function () {
 					app.renderProgramToCanvas();
@@ -704,9 +704,9 @@ window.addEventListener("unload", function () {
 	var json = window["vplApp"].program.exportToJSON();
 	try {
 		if (window["vplStorageSetFunction"]) {
-			window["vplStorageSetFunction"]("vpl.json", json);
+			window["vplStorageSetFunction"](A3a.vpl.Program.defaultFilename, json);
 		} else if (window["vplApp"].useLocalStorage) {
-			window.localStorage.setItem("vpl.json", json);
+			window.localStorage.setItem(A3a.vpl.Program.defaultFilename, json);
 		}
 	} catch (e) {}
 }, false);

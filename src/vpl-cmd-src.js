@@ -45,7 +45,9 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 			// var aesl = A3a.vpl.Program.toAESLFile(src);
 			// A3a.vpl.Program.downloadText(aesl, "code.aesl");
 			var json = app.program.exportToJSON({lib: false, prog: true});
-			A3a.vpl.Program.downloadText(json, app.program.filename || "vpl.json", "application/json");
+			A3a.vpl.Program.downloadText(json,
+				app.program.filename || A3a.vpl.Program.defaultFilename,
+				A3a.vpl.Program.mimetype);
 		},
 		isEnabled: function (app) {
 			return app.editor.getCode().length > 0;

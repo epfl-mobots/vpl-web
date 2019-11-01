@@ -63,6 +63,24 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.logger = null;
 };
 
+/** @const */
+A3a.vpl.Program.mimetype = "application/x-vpl3";
+
+/** @const */
+A3a.vpl.Program.suffix = "vpl3";
+
+/** @const */
+A3a.vpl.Program.defaultFilename = "program." + A3a.vpl.Program.suffix;
+
+/** @const */
+A3a.vpl.Program.mimetypeUI = "application/x-vpl3-ui";
+
+/** @const */
+A3a.vpl.Program.suffixUI = "vpl3ui";
+
+/** @const */
+A3a.vpl.Program.defaultFilenameUI = "ui." + A3a.vpl.Program.suffixUI;
+
 /** @type {Object<string,A3a.vpl.CodeGenerator>} */
 A3a.vpl.Program.codeGenerator = {};
 

@@ -39,7 +39,7 @@ A3a.vpl.Application.prototype.loadProgramJSON = function (json) {
 	} catch (e) {}
 };
 
-/** Load a program file (aesl or json)
+/** Load a program file (aesl or vpl3 (json))
 	@param {File} file
 	@return {boolean} true if file suffix was recognized as a program
 */
@@ -49,6 +49,8 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 	var reader = new window.FileReader();
 	switch (ext.toLowerCase()) {
 	case "aesl":
+	case A3a.vpl.Program.suffix:
+	case A3a.vpl.Program.suffixUI:
 	case "json":
 		var app = this;
 		reader.onload = function (event) {
