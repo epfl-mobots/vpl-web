@@ -270,6 +270,27 @@ A3a.vpl.Program.boxForBlockType = function (block, isFirst, cssBoxes) {
 	}
 }
 
+/** Calculate the vertical offset to apply to a block based on the
+	verticalAlign property of its css box
+	@param {CSSParser.VPL.Box} blockBox
+	@param {CSSParser.VPL.Box} containerBox
+	@return {number}
+*/
+A3a.vpl.Program.blockVerticalOffset = function (blockBox, containerBox) {
+	switch (blockBox.verticalAlign) {
+	case "middle":
+		return (containerBox.height - blockBox.totalHeight()) / 2;
+	case "bottom":
+		return containerBox.height - blockBox.totalHeight();
+	case "top":
+		// no shift
+		return 0;
+	default:
+		// offset from bottom, positive = upward
+		return containerBox.height - blockBox.totalHeight() - /** @type {number} */(blockBox.verticalAlign);
+	}
+};
+
 /** Add a rule to a canvas
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.Rule} rule
@@ -420,22 +441,7 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 			(rule.error.eventErrorIndices.length === 0 || rule.error.eventErrorIndices.indexOf(j) >= 0)
 			? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
-		var vertOffset = 0;
-		switch (blockBox.verticalAlign) {
-		case "middle":
-			vertOffset = (containerBox.height - blockBox.totalHeight()) / 2;
-			break;
-		case "bottom":
-			vertOffset = containerBox.height - blockBox.totalHeight();
-			break;
-		case "top":
-			// no shift
-			break;
-		default:
-			// offset from bottom, positive = upward
-			vertOffset = containerBox.height - blockBox.totalHeight() - /** @type {number} */(blockBox.verticalAlign);
-			break;
-		}
+		var vertOffset = A3a.vpl.Program.blockVerticalOffset(blockBox, containerBox);
 		if (event) {
 			containerBox.width = blockBox.totalWidth();
 			childItem = this.addBlockToCanvas(canvas, event, blockBox,
@@ -474,15 +480,7 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 			(rule.error.actionErrorIndices.length === 0 || rule.error.actionErrorIndices.indexOf(j) >= 0)
 			? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
 			: cssBoxes.blockContainerBox;
-		var vertOffset = 0;
-		switch (blockBox.verticalAlign) {
-		case "middle":
-			vertOffset = (cssBoxes.ruleBox.height - containerBox.totalHeight()) / 2;
-			break;
-		case "bottom":
-			vertOffset = cssBoxes.ruleBox.height - containerBox.totalHeight();
-			break;
-		}
+		var vertOffset = A3a.vpl.Program.blockVerticalOffset(blockBox, containerBox);
 		if (action) {
 			containerBox.width = blockBox.totalWidth();
 			childItem = this.addBlockToCanvas(canvas, action, A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes),
@@ -956,13 +954,133 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	}
 
 	if (uiConfig.customizationMode) {
+		// rule skeleton to toggle program.multiEventBasic
+		(function () {
+			// size event and action boxes and rule box
+			var eventContainerBox = cssBoxes.blockContainerBox.copy();
+			eventContainerBox.width = cssBoxes.blockEventMainBox.totalWidth();
+			var auxEventContainerBox = cssBoxes.blockContainerBox.copy();
+			auxEventContainerBox.width = cssBoxes.blockEventAuxBox.totalWidth();
+			var actionContainerBox = cssBoxes.blockContainerBox.copy();
+			actionContainerBox.width = cssBoxes.blockActionBox.totalWidth();
+			var totalWidth = eventContainerBox.totalWidth() +
+				auxEventContainerBox.totalWidth() +
+				cssBoxes.ruleSeparatorBox.totalWidth() +
+				actionContainerBox.totalWidth();;
+			var ruleBox = cssBoxes.ruleBox.copy();
+			ruleBox.width = totalWidth;
+			var eventX0 = cssBoxes.viewBox.x + (cssBoxes.viewBox.width - totalWidth) / 2 +
+				(eventLibWidth - actionLibWidth) / 2 - canvas.dims.scrollbarWidth / 2;
+			var actionX0 = eventX0 + totalWidth - actionContainerBox.totalWidth();
+			var y = cssBoxes.vplBox.y + ruleBox.offsetTop() + eventContainerBox.offsetTop();
+
+			var isInside = false;
+			var item = new A3a.vpl.CanvasItem(self,
+				ruleBox.paddedWidth(),
+				ruleBox.paddedHeight(),
+				eventX0 - ruleBox.paddingLeft - eventContainerBox.offsetLeft(),
+				y - ruleBox.paddingTop - eventContainerBox.offsetTop(),
+				// draw
+				function (canvas, item, dx, dy) {
+					var ctx = canvas.ctx;
+					// strip
+					ruleBox.drawAt(ctx, item.x + dx, item.y + dy, true);
+					// event/action separator
+					var separatorWidth = cssBoxes.ruleSeparatorBox.totalWidth();
+					cssBoxes.ruleSeparatorBox.drawAt(ctx,
+						actionX0 - cssBoxes.ruleSeparatorBox.width - cssBoxes.ruleSeparatorBox.marginRight - cssBoxes.ruleSeparatorBox.paddingRight -
+							cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockActionBox.offsetLeft() + dx,
+						item.y + (cssBoxes.ruleBox.paddedHeight() - cssBoxes.ruleSeparatorBox.height) / 2 + dy);
+					canvas.drawWidget("vpl:then",
+						actionX0 - cssBoxes.ruleSeparatorBox.totalWidth() / 2 - cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockActionBox.offsetLeft() + dx,
+						item.y + cssBoxes.ruleBox.paddedHeight() / 2 + dy,
+						cssBoxes.ruleSeparatorBox);
+					var x = item.x + dx + ruleBox.paddingLeft;
+					eventContainerBox.drawAt(ctx,
+						x + eventContainerBox.marginLeft,
+						item.y + dy + ruleBox.paddingTop + eventContainerBox.marginTop,
+						true);
+					cssBoxes.blockEventMainBox.drawAt(ctx,
+						x + eventContainerBox.offsetLeft() + cssBoxes.blockEventMainBox.marginLeft,
+						item.y + dy + ruleBox.paddingTop +
+							eventContainerBox.offsetTop() + cssBoxes.blockEventMainBox.marginTop +
+							A3a.vpl.Program.blockVerticalOffset(cssBoxes.blockEventMainBox, eventContainerBox),
+						true);
+					x += eventContainerBox.totalWidth();
+					auxEventContainerBox.drawAt(ctx,
+						x + auxEventContainerBox.marginLeft,
+						item.y + dy + ruleBox.paddingTop + auxEventContainerBox.marginTop,
+						true);
+					cssBoxes.blockEventAuxBox.drawAt(ctx,
+						x + eventContainerBox.offsetLeft() + cssBoxes.blockEventAuxBox.marginLeft,
+						item.y + dy + ruleBox.paddingTop +
+							auxEventContainerBox.offsetTop() + cssBoxes.blockEventAuxBox.marginTop +
+							A3a.vpl.Program.blockVerticalOffset(cssBoxes.blockEventAuxBox, auxEventContainerBox),
+						true);
+					if (!self.program.multiEventBasic ^ isInside) {
+						canvas.disabledMark(x + eventContainerBox.offsetLeft() + cssBoxes.blockEventAuxBox.marginLeft,
+							item.y + dy + ruleBox.paddingTop +
+								auxEventContainerBox.offsetTop() + cssBoxes.blockEventAuxBox.marginTop +
+								A3a.vpl.Program.blockVerticalOffset(cssBoxes.blockEventAuxBox, auxEventContainerBox),
+							cssBoxes.blockEventAuxBox.width, cssBoxes.blockEventAuxBox.height,
+							["block"], ["block"], false);
+					}
+					x = item.x + dx + cssBoxes.ruleBox.paddingLeft + actionX0 - eventX0;
+					actionContainerBox.drawAt(ctx,
+						x + actionContainerBox.marginLeft,
+						item.y + dy + ruleBox.paddingTop + actionContainerBox.marginTop,
+						true);
+					cssBoxes.blockActionBox.drawAt(ctx,
+						x + actionContainerBox.offsetLeft() + cssBoxes.blockActionBox.marginLeft,
+						item.y + dy + ruleBox.paddingTop +
+							actionContainerBox.offsetTop() + cssBoxes.blockActionBox.marginTop +
+							A3a.vpl.Program.blockVerticalOffset(cssBoxes.blockActionBox, actionContainerBox),
+						true);
+				},
+				// interactiveCB
+				{
+					/** @type {A3a.vpl.CanvasItem.mousedown} */
+					mousedown: function (canvas, data, width, height, left, top, ev) {
+						isInside = true;
+						canvas.redraw();
+						return 0;
+					},
+					/** @type {A3a.vpl.CanvasItem.mousedrag} */
+					mousedrag: function (canvas, data, dragIndex, width, height, left, top, ev) {
+						var canvasBndRect = canvas.canvas.getBoundingClientRect();
+						var x = ev.x - canvasBndRect.left;
+						var y = ev.y - canvasBndRect.top;
+						isInside = x >= left &&
+							x < left + width &&
+							y >= top &&
+							y < top + height;
+						canvas.redraw();
+					},
+					/** @type {A3a.vpl.CanvasItem.mouseup} */
+					mouseup: function (canvas, data, dragIndex) {
+						if (isInside) {
+							self.program.multiEventBasic = !self.program.multiEventBasic;
+						}
+						canvas.redraw();
+					}
+				},
+				// doDrop
+				null,
+		        // canDrop
+		        null
+			);
+			item.draggable = false;
+			canvas.setItem(item);
+		})();
+
 		// draw vpl:customization widget
 		var customizationBox = canvas.css.getBox({tag: "widget", id: "vpl-customize"});
 		customizationBox.width = cssBoxes.vplBox.width / 4;
-		customizationBox.height = cssBoxes.vplBox.height / 4;
+		customizationBox.height = (cssBoxes.vplBox.height - cssBoxes.ruleBox.totalHeight()) / 4;
 		canvas.addDecoration(function (ctx) {
 			canvas.drawWidget("vpl:customize",
-				cssBoxes.vplBox.x + cssBoxes.vplBox.width / 2, cssBoxes.vplBox.y + cssBoxes.vplBox.height / 2,
+				cssBoxes.vplBox.x + cssBoxes.vplBox.width / 2,
+				cssBoxes.vplBox.y + (cssBoxes.vplBox.height + cssBoxes.ruleBox.totalHeight()) / 2,
 				customizationBox);
 		});
 	} else if (program.message) {
