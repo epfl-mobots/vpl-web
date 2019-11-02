@@ -15,6 +15,7 @@
 
 	"miscSettings": {
 		"basicMultiEvent": true,
+		"advancedMultiEvent": true,
 		"viewRelativeSizes": {
 			"vpl": 2,
 			"src": 1,

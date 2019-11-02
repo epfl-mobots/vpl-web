@@ -57,6 +57,8 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.multiEventBasic = A3a.vpl.Program.basicMultiEvent;
 	/** @type {Array.<string>} */
 	this.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
+	/** @type {boolean} */
+	this.multiEventAdvanced = A3a.vpl.Program.advancedMultiEvent;
 	/** @type {A3a.vpl.UIConfig} */
 	this.uiConfig = uiConfig || new A3a.vpl.UIConfig();
 	/** @type {?function(Object=):void} */
@@ -88,6 +90,7 @@ A3a.vpl.Program.codeGenerator = {};
 A3a.vpl.Program.basicBlocks = [];
 
 A3a.vpl.Program.basicMultiEvent = false;
+A3a.vpl.Program.advancedMultiEvent = true;
 
 /** @type {Array.<string>} */
 A3a.vpl.Program.advancedBlocks = [];
@@ -141,6 +144,7 @@ A3a.vpl.Program.prototype.new = function (resetUndoStack) {
 	this.enabledBlocksBasic = A3a.vpl.Program.basicBlocks;
 	this.multiEventBasic = A3a.vpl.Program.basicMultiEvent;
 	this.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
+	this.multiEventAdvanced = A3a.vpl.Program.advancedMultiEvent;
 	this.program = [];
 	this.code = {};
 	this.notUploadedYet = true;
@@ -175,7 +179,7 @@ A3a.vpl.Program.prototype.getError = function () {
 	@return {boolean}
 */
 A3a.vpl.Program.prototype.displaySingleEvent = function () {
-	if (this.mode !== A3a.vpl.mode.basic || this.multiEventBasic) {
+	if (this.mode === A3a.vpl.mode.basic ? this.multiEventBasic : this.multiEventAdvanced) {
 		return false;
 	}
 	for (var i = 0; i < this.program.length; i++) {
@@ -325,6 +329,7 @@ A3a.vpl.Program.prototype.exportToObject = function (opt) {
 		obj["basicBlocks"] = this.enabledBlocksBasic;
 		obj["basicMultiEvent"] = this.multiEventBasic;
 		obj["advancedBlocks"] = this.enabledBlocksAdvanced;
+		obj["advancedMultiEvent"] = this.multiEventAdvanced;
 		obj["disabledUI"] = this.uiConfig.disabledUI;
 	}
 	if (opt && opt.prog === false) {
@@ -400,8 +405,13 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 				this.uiConfig.setDisabledFeatures(obj["disabledUI"]);
 			}
 			this.enabledBlocksBasic = obj["basicBlocks"] || A3a.vpl.Program.basicBlocks;
-			this.multiEventBasic = obj["basicMultiEvent"] || A3a.vpl.Program.basicMultiEvent;
+			this.multiEventBasic = obj["basicMultiEvent"] !== undefined
+				? obj["basicMultiEvent"]
+				: A3a.vpl.Program.basicMultiEvent;
 			this.enabledBlocksAdvanced = obj["advancedBlocks"] || A3a.vpl.Program.advancedBlocks;
+			this.multiEventAdvanced = obj["advancedMultiEvent"] !== undefined
+ 				? obj["advancedMultiEvent"]
+				: A3a.vpl.Program.advancedMultiEvent;
 			if (obj["program"]) {
 				this.program = obj["program"].map(function (rule) {
 					var eh = new A3a.vpl.Rule();

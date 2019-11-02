@@ -302,6 +302,9 @@ function vplSetup(gui) {
 	if (gui["miscSettings"] && gui["miscSettings"]["basicMultiEvent"] != undefined) {
 		A3a.vpl.Program.basicMultiEvent = gui["miscSettings"]["basicMultiEvent"] == true;
 	}
+	if (gui["miscSettings"] && gui["miscSettings"]["advancedMultiEvent"] != undefined) {
+		A3a.vpl.Program.advancedMultiEvent = gui["miscSettings"]["advancedMultiEvent"] == true;
+	}
 	if (gui["miscSettings"] && gui["miscSettings"]["viewRelativeSizes"]) {
 		var vrs = gui["miscSettings"]["viewRelativeSizes"];
 		app.viewRelativeSizes = {

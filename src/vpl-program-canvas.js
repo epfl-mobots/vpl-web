@@ -954,7 +954,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	}
 
 	if (uiConfig.customizationMode) {
-		// rule skeleton to toggle program.multiEventBasic
+		// rule skeleton to toggle program.multiEventBasic or program.multiEventAdvanced
 		(function () {
 			// size event and action boxes and rule box
 			var eventContainerBox = cssBoxes.blockContainerBox.copy();
@@ -1017,7 +1017,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 							auxEventContainerBox.offsetTop() + cssBoxes.blockEventAuxBox.marginTop +
 							A3a.vpl.Program.blockVerticalOffset(cssBoxes.blockEventAuxBox, auxEventContainerBox),
 						true);
-					if (!self.program.multiEventBasic ^ isInside) {
+					if (!(self.program.mode === A3a.vpl.mode.advanced
+							? self.program.multiEventAdvanced : self.program.multiEventBasic) ^ isInside) {
 						canvas.disabledMark(x + eventContainerBox.offsetLeft() + cssBoxes.blockEventAuxBox.marginLeft,
 							item.y + dy + ruleBox.paddingTop +
 								auxEventContainerBox.offsetTop() + cssBoxes.blockEventAuxBox.marginTop +
@@ -1059,7 +1060,11 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 					/** @type {A3a.vpl.CanvasItem.mouseup} */
 					mouseup: function (canvas, data, dragIndex) {
 						if (isInside) {
-							self.program.multiEventBasic = !self.program.multiEventBasic;
+							if (self.program.mode === A3a.vpl.mode.advanced) {
+								self.program.multiEventAdvanced = !self.program.multiEventAdvanced;
+							} else {
+								self.program.multiEventBasic = !self.program.multiEventBasic;
+							}
 						}
 						canvas.redraw();
 					}

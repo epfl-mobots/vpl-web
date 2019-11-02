@@ -276,6 +276,7 @@ Miscellaneous settings
 Property "miscSettings" contains VPL global settings which aren't related to the user interface:
 
 - "basicMultiEvent" (boolean, default false): true to allow multiple event blocks in basic mode
+- "advancedMultiEvent" (boolean, default false): true to allow multiple event blocks in advanced mode
 - "viewRelativeSizes" (object, default {"vpl":1,"src":1,"sim":1}): relative size of vpl, src and sim views
 
 Toolbars

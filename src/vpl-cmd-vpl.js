@@ -96,7 +96,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			} else {
 				// var aesl = app.program.exportAsAESLFile();
 				// A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
-				var json = app.program.exportToJSON({lib: false, prog: true});
+				var json = app.program.exportToJSON({lib: true, prog: true});
 				A3a.vpl.Program.downloadText(json,
 					app.program.filename || A3a.vpl.Program.defaultFilename,
 					A3a.vpl.Program.mimetype);
@@ -578,11 +578,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:teacher-setasnew", {
 		action: function (app, modifier) {
-			var json = app.program.exportToJSON({lib: false, prog: true});
+			var json = app.program.exportToJSON({lib: true, prog: false});
 			app.jsonForNew = app.jsonForNew === json ? null : json;
 		},
 		isSelected: function (app) {
-			return app.jsonForNew === app.program.exportToJSON({lib: false, prog: true});
+			return app.jsonForNew === app.program.exportToJSON({lib: true, prog: false});
 		},
 		object: this,
 		keep: true,
