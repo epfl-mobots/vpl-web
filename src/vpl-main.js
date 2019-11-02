@@ -517,6 +517,9 @@ function vplSetup(gui) {
 						});
 						app.program.filename = options && options["filename"] || A3a.vpl.Program.defaultFilename;
 						app.program.readOnly = options != undefined && options["readOnly"] == true;
+						if (options != undefined && options["customizationMode"] == true) {
+							app.uiConfig.customizationMode = true;
+						}
 					}
 				} catch (e) {}
 			});
