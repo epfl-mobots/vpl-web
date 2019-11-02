@@ -692,10 +692,11 @@ window["vplIsProgramChanged"] = function () {
 };
 
 /** Get vpl program as json
+	@param {boolean} libAndUIOnly
 	@return {string}
 */
-window["vplGetProgramAsJSON"] = function () {
-	return window["vplApp"].program.exportToJSON();
+window["vplGetProgramAsJSON"] = function (libAndUIOnly) {
+	return window["vplApp"].program.exportToJSON(libAndUIOnly ? {lib: true, prog: false} : undefined);
 };
 
 /** Get vpl UI as json

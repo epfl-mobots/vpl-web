@@ -575,7 +575,7 @@ VPL is started by code in a "load" event listener defined in vpl-main.js. Some c
 
 - window["vplApp"]: A3a.vpl.Application object
 - window["vplIsProgramChanged"]: function() to check if the vpl program has been changed since it has been loaded
-- window["vplGetProgramAsJSON"]: function() to get vpl program as json
+- window["vplGetProgramAsJSON"]: function(libAndUIOnly) to get vpl program as json, or block lib and UI configuration if libAndUIOnly is true
 - window["vplGetUIAsJSON"]: function() to get UI and block selection as json
 - window["vplCommandServer"]: can be set to an A3a.vpl.Com object to supervise the application
 - window["vplDisableResize"]: can be set to true to disable full-window mode
