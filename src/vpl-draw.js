@@ -72,9 +72,10 @@ A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height,
 			tag: "crossout-line",
 			clas: crossoutLineClasses || []
 		});
+        var excess = 0.1 * Math.min(width, this.dims.blockSize);
 		this.ctx.beginPath();
-		this.ctx.moveTo(left - this.dims.blockSize * 0.1, top + height * 0.7);
-		this.ctx.lineTo(left + width + this.dims.blockSize * 0.1, top + height * 0.3);
+		this.ctx.moveTo(left - excess, top + height * 0.7);
+		this.ctx.lineTo(left + width + excess, top + height * 0.3);
 		crossoutLine.stroke(this.ctx);
 		this.ctx.restore();
 	}
