@@ -64,7 +64,20 @@ window.TDM = function (url, options) {
     //      * busy         : The node is locked by someone else.
     //      * disconnected : The node is gone
     client.onNodesChanged = async (nodes) => {
-        self.nodes = nodes.slice();
+        // merge with self.nodes
+        nodes.forEach(function (node) {
+            var nodeId = node.id.toString();
+            var index = self.nodes.findIndex(function (node1) {
+                return node1.id.toString() === nodeId;
+            });
+            if (index < 0) {
+                // unknown: add it
+                self.nodes.push(node);
+            } else {
+                // known: replace it
+                self.nodes.splice(index, 1, node);
+            }
+        });
         try {
             if (options.uuid) {
                 for (let node of nodes) {
@@ -125,7 +138,11 @@ window.TDM = function (url, options) {
     };
 
     client.onClose = async () => {
-        options.change && options.change(false);
+        if (options.uuid) {
+            options.change && options.change(false);
+        } else {
+            options.change && options.change();
+        }
     };
 };
 
