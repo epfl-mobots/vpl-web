@@ -209,17 +209,20 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 	if (initCodeDecl.length > 0) {
 		str += "\n" + initCodeDecl.join("\n");
 	}
-	// explicit events
-	for (var i = 0; i < sectionList.length; i++) {
-		if (sections[sectionList[i]].sectionPreamble ||
-			sections[sectionList[i]].clauseInit ||
-			sections[sectionList[i]].clauseAssignment) {
-			str += "\n" +
-				(sections[sectionList[i]].sectionBegin || "") +
-				(sections[sectionList[i]].sectionPreamble || "") +
-				(sections[sectionList[i]].clauseInit || "") +
-				(sections[sectionList[i]].clauseAssignment || "") +
-				(sections[sectionList[i]].sectionEnd || "");
+	// explicit events, first init (not onevent), then onevent
+	for (var group = 0; group < 2; group++) {
+		for (var i = 0; i < sectionList.length; i++) {
+			if ((group === 0 ^ /onevent/.test(sections[sectionList[i]].sectionBegin)) &&
+				(sections[sectionList[i]].sectionPreamble ||
+					sections[sectionList[i]].clauseInit ||
+					sections[sectionList[i]].clauseAssignment)) {
+				str += "\n" +
+					(sections[sectionList[i]].sectionBegin || "") +
+					(sections[sectionList[i]].sectionPreamble || "") +
+					(sections[sectionList[i]].clauseInit || "") +
+					(sections[sectionList[i]].clauseAssignment || "") +
+					(sections[sectionList[i]].sectionEnd || "");
+			}
 		}
 	}
 	// add onevent timer1
