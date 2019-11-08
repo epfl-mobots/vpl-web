@@ -333,6 +333,8 @@ A3a.vpl.Application.prototype.setView = function (views, options) {
 	}
 };
 
+A3a.vpl.Application.prototype["setView"] = A3a.vpl.Application.prototype.setView;
+
 /** Calculate canvas layout
 	@param {boolean} verticalLayout
 	@return {void}
