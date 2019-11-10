@@ -569,7 +569,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		// draw
 		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:forward",
-				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"],
+				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"], null,
 				true, false, isPressed);
 		},
 		// action
@@ -590,7 +590,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		// draw
 		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:left",
-				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"],
+				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"], null,
 				true, false, isPressed);
 		},
 		// action
@@ -610,7 +610,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		// draw
 		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:center",
-				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"],
+				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"], null,
 				true, false, isPressed);
 		},
 		// action
@@ -630,7 +630,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		// draw
 		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:right",
-				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"],
+				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"], null,
 				true, false, isPressed);
 		},
 		// action
@@ -651,7 +651,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		// draw
 		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:backward",
-				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"],
+				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"], null,
 				true, false, isPressed);
 		},
 		// action
@@ -673,7 +673,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		// draw
 		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:tap",
-				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"],
+				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"], null,
 				true, false, isPressed);
 		},
 		// action
@@ -690,7 +690,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		// draw
 		function (ctx, box, isPressed) {
 			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("sim-event:clap",
-				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"],
+				ctx, simCanvas.dims, simCanvas.css, ["sim", "event"], null,
 				true, false, isPressed);
 		},
 		// action
