@@ -277,7 +277,7 @@ A3a.vpl.Canvas = function (canvas, options) {
 			return;
 		}
 
-		var mouseEvent = self.makeMouseEvent(downEvent);
+		var mouseEvent = self.makeMouseEvent(downEvent, backingScale);
 
 		function startInteraction(item) {
 			var canvasBndRect = self.canvas.getBoundingClientRect();
@@ -307,7 +307,7 @@ A3a.vpl.Canvas = function (canvas, options) {
 								item.width, item.height,
 								canvasBndRect.left + item.x + d.dx,
 								canvasBndRect.top + item.y + d.dy,
-								self.makeMouseEvent(e));
+								self.makeMouseEvent(e, backingScale));
 							self.onUpdate && self.onUpdate();
 							self.onDraw ? self.onDraw() : self.redraw();
 						} else if (item.interactiveCB.mouseup) {
@@ -365,7 +365,7 @@ A3a.vpl.Canvas = function (canvas, options) {
 				var x0 = mouseEvent.x - d.dx;
 				var y0 = mouseEvent.y - d.dy;
 				A3a.vpl.dragFun = function (dragEvent, isUp) {
-					var mouseEvent = self.makeMouseEvent(dragEvent);
+					var mouseEvent = self.makeMouseEvent(dragEvent, backingScale);
 					if (isUp) {
 						if (item.zoomOnLongPress && item === self.items[self.clickedItemIndex(mouseEvent, false)[0]]) {
 							self.zoomedItemIndex = indices[0];
@@ -463,7 +463,7 @@ A3a.vpl.Canvas = function (canvas, options) {
 			}
 		}
 
-		var mouseEvent = self.makeMouseEvent(wheelEvent);
+		var mouseEvent = self.makeMouseEvent(wheelEvent, backingScale);
 		if (self.isZoomedItemProxyClicked(mouseEvent)) {
 			self.zoomedItemProxy && doScroll(self.zoomedItemProxy);
 		} else if (self.zoomedItemIndex < 0) {
@@ -640,12 +640,14 @@ A3a.vpl.Canvas.prototype.applyInverseTransform = function (p) {
 
 /** Convert browser's mouse Event object to
 	@param {Event} e
+	@param {number} pixelRatio
 	@return {A3a.vpl.CanvasItem.mouseEvent}
 */
-A3a.vpl.Canvas.prototype.makeMouseEvent = function (e) {
+A3a.vpl.Canvas.prototype.makeMouseEvent = function (e, pixelRatio) {
+	var canvasBB = this.canvas.getBoundingClientRect();
 	var mouseEvent = {
-		x: e.clientX,
-		y: e.clientY,
+		x: e.clientX * this.canvas.width / pixelRatio / canvasBB.width,
+		y: e.clientY * this.canvas.height / pixelRatio / canvasBB.height,
 		modifier: e.altKey
 	};
 	var p1 = this.applyInverseTransform([mouseEvent.x, mouseEvent.y]);
