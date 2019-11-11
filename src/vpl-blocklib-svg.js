@@ -787,43 +787,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 			};
 
 		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
-		var genCode = blockTemplate0 ? blockTemplate0.genCode : {};
-		["aseba", "l2", "js", "python"].forEach(function (lang) {
-			if (b[lang]) {
-				genCode[lang] = function (block) {
-					var c = {};
-					b[lang]["initVarDecl"] && (c.initVarDecl = substInlineA(b[lang]["initVarDecl"].map(str), block));
-					b[lang]["initCodeDecl"] && (c.initCodeDecl = substInlineA(b[lang]["initCodeDecl"].map(str), block));
-					b[lang]["initCodeExec"] && (c.initCodeExec = substInlineA(b[lang]["initCodeExec"].map(str), block));
-					b[lang]["sectionBegin"] && (c.sectionBegin = A3a.vpl.BlockTemplate.substInline(str(b[lang]["sectionBegin"]), block));
-					b[lang]["sectionEnd"] && (c.sectionEnd = A3a.vpl.BlockTemplate.substInline(str(b[lang]["sectionEnd"]), block));
-					b[lang]["sectionPreamble"] && (c.sectionPreamble = A3a.vpl.BlockTemplate.substInline(str(b[lang]["sectionPreamble"]), block));
-					b[lang]["clauseInit"] && (c.clauseInit = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clauseInit"]), block));
-					if (b[lang]["clauseAnd"]) {
-						var clause = "";
-						block.param.forEach(function (p, i) {
-							var cl = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clauseAnd"]), block, i);
-							if (cl) {
-								clause += (clause.length > 0 ? " " + A3a.vpl.Program.codeGenerator[lang].andOperator + " " : "") + cl;
-							}
-						});
-						c.clause = /** @type {string} */(clause || A3a.vpl.Program.codeGenerator[lang].trueConstant);
-					} else if (b[lang]["clause"]) {
-		 				c.clause = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clause"]), block);
-					}
-					c.clauseOptional = /** @type {boolean} */(b[lang]["clauseOptional"]) || false;
-					if (b[lang]["statement1"]) {
-						c.statement = block.param.map(function (p, i) {
-							return A3a.vpl.BlockTemplate.substInline(str(b[lang]["statement1"]), block, i);
-						}).join("");
-					} else if (b[lang]["statement"]) {
-						c.statement = A3a.vpl.BlockTemplate.substInline(str(b[lang]["statement"]), block);
-					}
-					b[lang]["error"] && (c.clause = A3a.vpl.BlockTemplate.substInline(str(b["error"]["error"]), block));
-					return c;
-				};
-			}
-		});
+		var genCode = A3a.vpl.BlockTemplate.loadCodeGenFromJSON(b, blockTemplate0 && blockTemplate0.genCode);
 
 		/** @type {A3a.vpl.BlockTemplate.params} */
 		var p = {
