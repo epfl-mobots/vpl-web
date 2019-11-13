@@ -149,30 +149,34 @@ A3a.vpl.Com.prototype.connect = function () {
 	@return {void}
 */
 A3a.vpl.Com.prototype.log = function (data) {
-	if (data["type"] === "cmd" && data["data"] &&
-		["vpl:run"].indexOf(data["data"]["cmd"]) >= 0) {
-		// send file before logging command
-		var json = this.app.program.exportToJSON({lib: false, prog: true});
-		var fileMsg = {
+	try {
+		if (data["type"] === "cmd" && data["data"] &&
+			["vpl:run"].indexOf(data["data"]["cmd"]) >= 0) {
+			// send file before logging command
+			var json = this.app.program.exportToJSON({lib: false, prog: true});
+			var fileMsg = {
+				"sender": {
+					"type": "vpl",
+					"sessionid": this.sessionId
+				},
+				"type": "file",
+				"data": {
+					"name": this.app.program.filename,
+					"content": json
+				}
+			};
+			this.ws.send(JSON.stringify(fileMsg));
+		}
+		var logMsg = {
 			"sender": {
 				"type": "vpl",
 				"sessionid": this.sessionId
 			},
-			"type": "file",
-			"data": {
-				"name": this.app.program.filename,
-				"content": json
-			}
+			"type": "log",
+			"data": data || null
 		};
-		this.ws.send(JSON.stringify(fileMsg));
+		this.ws.send(JSON.stringify(logMsg));
+	} catch (e) {
+		// ignore disconnections
 	}
-	var logMsg = {
-		"sender": {
-			"type": "vpl",
-			"sessionid": this.sessionId
-		},
-		"type": "log",
-		"data": data || null
-	};
-	this.ws.send(JSON.stringify(logMsg));
 };
