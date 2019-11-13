@@ -286,9 +286,9 @@ A3a.vpl.Rule.prototype.checkConflicts = function (otherRule) {
 		return false;
 	}
 
-	// ok if events are different
-	var eSorted = this.events.slice().sort(compareEvents);
-	var eOtherSorted = otherRule.events.slice().sort(compareEvents);
+	// ok if events are different (sort auxiliary events by block name)
+	var eSorted = this.events.slice(0, 1).concat(this.events.slice(1).sort(compareEvents));
+	var eOtherSorted = otherRule.events.slice(0, 1).concat(otherRule.events.slice(1).sort(compareEvents));
 	for (var i = 0; i < eSorted.length && !eSorted[i].disabled && !eOtherSorted[i].disabled; i++) {
 		if (eSorted[i].blockTemplate !== eOtherSorted[i].blockTemplate ||
 			!areParamEqual(eSorted[i], eOtherSorted[i])) {
@@ -298,12 +298,12 @@ A3a.vpl.Rule.prototype.checkConflicts = function (otherRule) {
 
 	// else error
 	if (this.error == null || this.error.isWarning) {
-		var err = new A3a.vpl.Error("Duplicate event");
+		var err = new A3a.vpl.Error("Rules with same events");
 		err.addEventConflictError(otherRule);
 		this.error = err;
 	}
 	if (otherRule.error == null || otherRule.error.isWarning) {
-		var err = new A3a.vpl.Error("Duplicate event");
+		var err = new A3a.vpl.Error("Rules with same events");
 		err.addEventConflictError(this);
 		otherRule.error = err;
 	}
