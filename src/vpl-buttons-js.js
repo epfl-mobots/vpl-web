@@ -537,16 +537,60 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 				dims.controlSize * 0.44, dims.controlSize * 0.44);
 		},
 		"vpl:connected": function () {
+			ctx.translate(0, 0.1 * dims.controlSize);
 			ctx.fillStyle = isEnabled
 				? col.bgPr
 				: col.bg;
 			ctx.fillRect(0, 0,
 				dims.controlSize, dims.controlSize);
-			ctx.textAlign = "center";
-			ctx.textBaseline = "middle";
-			ctx.font = "bold " + Math.round(dims.controlSize * 0.7).toString(10) + "px sans-serif";
+			ctx.save();
+			ctx.translate(dims.controlSize * 0.8, dims.controlSize * 0.2);
+			ctx.scale(0.35, 0.35);
+			drawRobot();
+			ctx.restore();
 			ctx.fillStyle = isEnabled ? col.fg : col.fgDis;
-			ctx.fillText("C", dims.controlSize * 0.5, dims.controlSize * 0.5);
+			ctx.strokeStyle = isEnabled ? col.fg : col.fgDis;
+			ctx.lineWidth = 1.5 * dims.controlLineWidth;
+			if (state) {
+				ctx.strokeRect(0, 0.05 * dims.controlSize,
+					0.3 * dims.controlSize, 0.3 * dims.controlSize);
+			}
+			ctx.strokeRect(0.3 * dims.controlSize, 0.55 * dims.controlSize,
+				0.4 * dims.controlSize, 0.3 * dims.controlSize);
+			ctx.lineWidth = dims.controlLineWidth;
+			ctx.beginPath();
+			ctx.moveTo(0.7 * dims.controlSize, 0.7 * dims.controlSize);
+			ctx.bezierCurveTo(0.9 * dims.controlSize, 0.7 * dims.controlSize,
+				0.9 * dims.controlSize, 0.7 * dims.controlSize,
+				0.85 * dims.controlSize, 0.35 * dims.controlSize);
+			if (state) {
+				ctx.moveTo(0.3 * dims.controlSize, 0.7 * dims.controlSize);
+				ctx.bezierCurveTo(0.1 * dims.controlSize, 0.7 * dims.controlSize,
+					0.1 * dims.controlSize, 0.7 * dims.controlSize,
+					0.15 * dims.controlSize, 0.35 * dims.controlSize);
+			}
+			ctx.stroke();
+			function cross(x, y) {
+				var s = 0.08 * dims.controlSize;
+				ctx.save();
+				ctx.fillStyle = isEnabled
+					? col.bgPr
+					: col.bg;
+				ctx.fillRect(x - s, y - s, 2 * s, 2 * s);
+				ctx.beginPath();
+				ctx.moveTo(x - s, y - s);
+				ctx.lineTo(x + s, y + s);
+				ctx.moveTo(x + s, y - s);
+				ctx.lineTo(x - s, y + s);
+				ctx.stroke();
+				ctx.restore();
+			}
+			if (!isSelected) {
+				cross(0.86 * dims.controlSize, 0.55 * dims.controlSize);
+			}
+			if (state === "nonmonitored") {
+				cross(0.14 * dims.controlSize, 0.55 * dims.controlSize);
+			}
 		},
 		"vpl:robot": function () {
 			ctx.fillStyle = isPressed

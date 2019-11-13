@@ -323,6 +323,10 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		isSelected: function (app) {
 			return !app.program.noVPL && app.robots[app.currentRobotIndex].runGlue.isConnected();
 		},
+		getState: function (app) {
+			return app.supervisorConnected ? "monitored"
+ 				: app.supervisorConnected === false ? "nonmonitored" : "";
+		},
 		object: this,
 		isAvailable: function (app) {
 			return app.currentRobotIndex >= 0;

@@ -320,7 +320,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:redo": redo last undone change
 - "vpl:run": run the VPL program with the Thymio or the simulator (state is "empty", "running", "error", "canLoad", or "canReload" depending on the VPL program and whether it's been run and modified)
 - "vpl:stop": stop the VPL program and blink the leds
-- "vpl:connected": connection indicator (no action, always disabled; selected if connected, unselected if no connection)
+- "vpl:connected": connection indicator (no action, always disabled; selected if connected to a robot, unselected if no connection with a robot; state is "monitored" if connected with a supervisor application (teacher dashboard), "nonmonitored" if disconnected, or "" (empty string) if no supervisor)
 - "vpl:robot": toggle between all the robots specified in option "robot" in the query string (see below; hidden unless there are at least two robots; state is the robot name, such as "thymio" or "sim")
 - "vpl:sim": switch to the simulator view
 - "vpl:duplicate": duplicate a rule (drag target)

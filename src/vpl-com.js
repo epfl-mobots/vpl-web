@@ -34,6 +34,10 @@ A3a.vpl.Com = function (app, wsURL, sessionId) {
 	this.reconnectId = setInterval(function () {
 		if (self.ws != null && self.ws.readyState >= 2) {
 			// closing or closed websocket: try to reconnect every 5 s
+			if (self.app.supervisorConnected !== false) {
+				self.app.supervisorConnected = false;
+				self.app.renderProgramToCanvas();
+			}
 			self.connect();
 		}
 	}, 5000);
@@ -71,6 +75,7 @@ A3a.vpl.Com.prototype.connect = function () {
 	this.ws = new WebSocket(this.wsURL);
 
 	this.ws.addEventListener("open", function () {
+		self.app.supervisorConnected = true;
 		var helloMsg = {
 			"sender": {
 				"type": "vpl",
@@ -91,6 +96,7 @@ A3a.vpl.Com.prototype.connect = function () {
 			};
 			self.ws.send(JSON.stringify(byeMsg));
 		});
+		self.app.renderProgramToCanvas();
 	});
 
 	this.ws.addEventListener("message", function (event) {

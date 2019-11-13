@@ -67,6 +67,8 @@ A3a.vpl.Application = function (canvasEl) {
 		"vpl:undo",
 		"vpl:redo",
 		"!stretch",
+		"vpl:connected",
+		"!stretch",
 		"vpl:run",
 		"vpl:stop",
 		"vpl:robot",
@@ -146,6 +148,8 @@ A3a.vpl.Application = function (canvasEl) {
 	/** @type {Array.<A3a.vpl.Application.Logger>} */
 	this.loggers = [];
 	this.logDataPrevious = null;
+	/** @type {?boolean} */
+	this.supervisorConnected = null;
 };
 
 /** @typedef {function(Object=):void}
