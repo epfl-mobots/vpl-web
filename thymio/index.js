@@ -130,7 +130,7 @@ window.TDM = function (url, options) {
                     }
                 }
             } else {
-                options.change();
+                options.change && options.change();
             }
         } catch (e) {
             console.log(e)
