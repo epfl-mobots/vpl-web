@@ -1003,10 +1003,11 @@ A3a.vpl.Canvas.controlAction;
 	@param {?A3a.vpl.Canvas.controlAction=} action
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
 	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
+	@param {?A3a.vpl.CanvasItem.doOver=} doOver
 	@param {string=} id
 	@return {A3a.vpl.CanvasItem}
 */
-A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop, canDrop, id) {
+A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop, canDrop, doOver, id) {
 	/** @type {A3a.vpl.CanvasItem.mouseEvent} */
 	var downEvent;
 	var self = this;
@@ -1063,6 +1064,7 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 		doDrop,
 		canDrop,
 		id);
+	item.doOver = doOver || null;
 	item.draggable = false;
 	item.noDropHint = true;	// drawn with isPressed=true for better control on appearance
 	this.setItem(item);

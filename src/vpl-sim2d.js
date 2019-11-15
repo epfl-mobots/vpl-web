@@ -579,7 +579,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			robot["set"]("button.forward", false);
 			robot["sendEvent"]("buttons", null);	// reset "when" state
 		},
-		null, null,
+		null, null, null,
 		"button.forward"));
 	// left
 	yRobotControl += smallButtonBox.totalHeight();
@@ -600,7 +600,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			robot["set"]("button.left", false);
 			robot["sendEvent"]("buttons", null);	// reset "when" state
 		},
-		null, null,
+		null, null, null,
 		"button.left"));
 	// center
 	simControls.push(simCanvas.addControl(
@@ -620,7 +620,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			robot["set"]("button.center", false);
 			robot["sendEvent"]("buttons", null);	// reset "when" state
 		},
-		null, null,
+		null, null, null,
 		"button.center"));
 	// right
 	simControls.push(simCanvas.addControl(
@@ -640,7 +640,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			robot["set"]("button.right", false);
 			robot["sendEvent"]("buttons", null);	// reset "when" state
 		},
-		null, null,
+		null, null, null,
 		"button.right"));
 	// backward
 	yRobotControl += smallButtonBox.totalHeight();
@@ -661,7 +661,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			robot["set"]("button.backward", false);
 			robot["sendEvent"]("buttons", null);	// reset "when" state
 		},
-		null, null,
+		null, null, null,
 		"button.backward"));
 	yRobotControl += smallButtonBox.totalHeight() + separatorControlBox.totalHeight();
 
@@ -680,7 +680,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		function (ev) {
 			robot["sendEvent"]("tap", null);
 		},
-		null, null,
+		null, null, null,
 		"tap"));
 	// clap
 	simControls.push(simCanvas.addControl(
@@ -697,7 +697,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		function (ev) {
 			robot["sendEvent"]("mic", null);
 		},
-		null, null,
+		null, null, null,
 		"clap"));
 	yRobotControl += 2 * smallBtnSize;
 

@@ -178,9 +178,10 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBoxes, separ
 /** Add all controls to the canvas (should follow calcLayout)
 	@param {CSSParser.VPL.Box} toolbarBox
 	@param {Object.<string,CSSParser.VPL.Box>} itemBoxes
+	@param {?function(string):void=} doOver
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes) {
+A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes, doOver) {
 	var self = this;
 	this.canvas.addDecoration(function (ctx) {
 		toolbarBox.drawAt(ctx, self.x, self.y);
@@ -199,6 +200,11 @@ A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes) {
 			},
 			control.action,
 			control.doDrop, control.canDrop,
+			doOver
+				? function () {
+					doOver(control.id);
+				}
+				: null,
 			control.id);
 	}, this);
 };

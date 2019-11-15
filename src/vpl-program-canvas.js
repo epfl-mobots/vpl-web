@@ -805,13 +805,21 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	// top controls
 	var controlBar = this.createVPLToolbar(this.vplToolbarConfig, ["vpl", "top"],
 		cssBoxes.toolbarBox, cssBoxes.toolbarSeparatorBox, toolbarItemBoxes);
-	controlBar.addToCanvas(cssBoxes.toolbarBox, toolbarItemBoxes);
+	controlBar.addToCanvas(cssBoxes.toolbarBox, toolbarItemBoxes,
+		function (id) {
+			self.hint = self.i18n.translate(id);
+			self.renderProgramToCanvas();
+		});
 
 	// 2nd toolbar at bottom between templates
 	if (toolbar2HasAvButtons > 0) {
 		var controlBar2 = this.createVPLToolbar(this.vplToolbar2Config, ["vpl", "bottom"],
 			cssBoxes.toolbar2Box, cssBoxes.toolbarSeparator2Box, toolbar2ItemBoxes);
-		controlBar2.addToCanvas(cssBoxes.toolbar2Box, toolbar2ItemBoxes);
+		controlBar2.addToCanvas(cssBoxes.toolbar2Box, toolbar2ItemBoxes,
+		function (id) {
+			self.hint = self.i18n.translate(id);
+			self.renderProgramToCanvas();
+		});
 	}
 
 	// templates
@@ -1177,6 +1185,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			box.width = ctx.measureText(msg).width;
 			box.height = box.fontSize * 1.2;
 
+			box.drawAt(ctx, box.marginLeft, canvasSize.height - box.totalHeight() + box.marginTop, true);
 			ctx.fillText(msg,
 				box.offsetLeft(),
 				canvasSize.height - box.totalHeight() + box.offsetTop() + box.height / 2);
