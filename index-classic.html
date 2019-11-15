@@ -27,8 +27,10 @@
 
 	"overlays": [
 		"block-english.json",
+		"cmd-vpl-english.json",
 		"french.json",
-		"block-french.json"
+		"block-french.json",
+		"cmd-vpl-french.json"
 	]
 }
 </script>
@@ -317,6 +319,46 @@ sim-playground {
 }
 </script>
 
+<script type="text/x-vpl-css" id="cmd-vpl-english.json">
+{
+	"i18n": {
+		"en": {
+			"vpl:close": "Close panel",
+			"vpl:about": "Show application information",
+			"vpl:help": "Show documentation",
+			"vpl:readonly": "Read-only program",
+			"vpl:new": "New program",
+			"vpl:save": "Save program",
+			"vpl:load": "Load program",
+			"vpl:upload": "Upload program",
+			"vpl:exportToHTML": "Export program view to HTML",
+			"vpl:text": "Text source code panel",
+			"vpl:text-toggle": "Show or hide text source code panel",
+			"vpl:advanced": "Switch advanced mode on or off",
+			"vpl:undo": "Undo last program change",
+			"vpl:redo": "Redo last undone program change",
+			"vpl:run": "Run program",
+			"vpl:stop": "Stop program",
+			"vpl:connected": "Connection status",
+			"vpl:robot": "Change robot",
+			"vpl:sim": "Simulator panel",
+			"vpl:duplicate": "Duplicate rule (rule drop target)",
+			"vpl:disable": "Disable block or rule (drop target)",
+			"vpl:lock": "Lock block or rule (drop target)",
+			"vpl:trashcan": "Remove block or rule (drop target)",
+			"vpl:message-error": "Error message",
+			"vpl:message-warning": "Warning message",
+			"vpl:message-empty": " ",
+			"vpl:filename": "Filename",
+			"vpl:teacher": "Switch customization mode on or off",
+			"vpl:teacher-reset": "Reset customization",
+			"vpl:teacher-save": "Save customization",
+			"vpl:teacher-setasnew": "Install customization for new programs"
+		}
+	}
+}
+</script>
+
 <script type="text/x-vpl-css" id="block-french.json">
 {
 	"i18n": {
@@ -362,6 +404,46 @@ sim-playground {
 			"set timer": "Démarre la minuterie (0-4 sec)",
 			"set timer log": "Démarre la minuterie (0.1-10 sec)",
 			"picture comment": "Commentaire (image)"
+		}
+	}
+}
+</script>
+
+<script type="text/x-vpl-css" id="cmd-vpl-french.json">
+{
+	"i18n": {
+		"fr": {
+			"vpl:close": "Ferme la vue",
+			"vpl:about": "Affiche des informations sur l'application",
+			"vpl:help": "Affiche la documentation",
+			"vpl:readonly": "Programme en mode lecture seule",
+			"vpl:new": "Nouveau programme",
+			"vpl:save": "Enregistre le programme",
+			"vpl:load": "Charge le programme",
+			"vpl:upload": "Téléverse le programme",
+			"vpl:exportToHTML": "Exporte le programme en HTML",
+			"vpl:text": "Affiche le code source",
+			"vpl:text-toggle": "Affiche ou cache la vue code source",
+			"vpl:advanced": "Commute entre les modes de base et avancés",
+			"vpl:undo": "Annule le dernier changement",
+			"vpl:redo": "Rétablit le dernier changement annulé",
+			"vpl:run": "Exécute le programme",
+			"vpl:stop": "Arrête le programme",
+			"vpl:connected": "Témoin de connexion",
+			"vpl:robot": "Change de robot",
+			"vpl:sim": "Affiche le simulateur",
+			"vpl:duplicate": "Duplique une règle (cible de glisser/déposer)",
+			"vpl:disable": "Désactive un bloc ou une règle (cible de glisser/déposer)",
+			"vpl:lock": "Verrouille un bloc ou une règle (cible de glisser/déposer)",
+			"vpl:trashcan": "Supprime un bloc ou une règle (cible de glisser/déposer)",
+			"vpl:message-error": "Message d'erreur",
+			"vpl:message-warning": "Message d'avertissement",
+			"vpl:message-empty": " ",
+			"vpl:filename": "Nom de fichier",
+			"vpl:teacher": "Commute entre les modes de programmation et de configuration",
+			"vpl:teacher-reset": "Remet la configuration à l'état d'origine",
+			"vpl:teacher-save": "Enregistre la configuration",
+			"vpl:teacher-setasnew": "Installe la configuration pour les nouveaux programmes"
 		}
 	}
 }

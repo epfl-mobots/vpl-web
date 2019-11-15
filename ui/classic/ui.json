@@ -14,7 +14,9 @@
 
 	"overlays": [
 		"block-english.json",
+		"cmd-vpl-english.json",
 		"french.json",
-		"block-french.json"
+		"block-french.json",
+		"cmd-vpl-french.json"
 	]
 }

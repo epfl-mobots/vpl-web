@@ -1972,6 +1972,8 @@
 		"python.json",
 		"toolbars.json",
 		"buttons.json",
-		"french.json"
+		"cmd-vpl-english.json",
+		"french.json",
+		"cmd-vpl-french.json"
 	]
 }

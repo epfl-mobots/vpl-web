@@ -182,6 +182,13 @@ block.library {
 	min-height: 32px;
 }
 
+hint {
+	font: 1vw sans-serif;
+	padding: 0.5vw;
+	background-color: white;
+	color: #222;
+}
+
 /* simulator */
 
 sim-controller {

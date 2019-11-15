@@ -128,7 +128,6 @@ block.library {
 	min-width: 54px;
 	min-height: 54px;
 	margin: 6px;
-	
 }
 
 block-container{
@@ -156,7 +155,6 @@ rule {
 overlay-rectangle.disabled {
 	background: rgba(120,144,156,0.4);
 	border-radius: 2px;
-	
 }
 
 overlay-rectangle.drop-target {
@@ -202,6 +200,14 @@ block-library {
 	/*border-left: 2px solid #eceff1;
 	border-right: 2px solid #eceff1;
 	overflow: scroll;*/
+}
+
+hint {
+	font-size: 1vw;
+ 	font-family: 'Rubik', sans-serif;
+	padding: 0.5vw;
+	background-color: #f5f7f8;
+	color: #222;
 }
 
 /* simulator */
