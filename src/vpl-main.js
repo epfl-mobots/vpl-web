@@ -283,35 +283,37 @@ function vplSetup(gui) {
  	if (A3a.vpl.patchPythonBlocks) {
 		A3a.vpl.patchPythonBlocks();
 	}
-	if (gui && !isClassic) {
-		if (gui["buttons"] !== null && gui["buttons"].length > 0) {
-			drawButton = A3a.vpl.drawButtonSVGFunction(gui);
-			getButtonBounds = A3a.vpl.getButtonBoundsSVGFunction(gui);
-		}
-		if (gui["widgets"] !== null && gui["widgets"].length > 0) {
-			widgets = A3a.vpl.makeSVGWidgets(gui);
-		}
-		if (gui["blocks"] !== null && gui["blocks"].length > 0) {
-			try {
-				A3a.vpl.patchBlocksSVG(gui);
-			} catch (e) {
-				window["console"] && window["console"]["error"](e);
+	if (gui) {
+		if (!isClassic) {
+			if (gui["buttons"] !== null && gui["buttons"].length > 0) {
+				drawButton = A3a.vpl.drawButtonSVGFunction(gui);
+				getButtonBounds = A3a.vpl.getButtonBoundsSVGFunction(gui);
+			}
+			if (gui["widgets"] !== null && gui["widgets"].length > 0) {
+				widgets = A3a.vpl.makeSVGWidgets(gui);
+			}
+			if (gui["blocks"] !== null && gui["blocks"].length > 0) {
+				try {
+					A3a.vpl.patchBlocksSVG(gui);
+				} catch (e) {
+					window["console"] && window["console"]["error"](e);
+				}
 			}
 		}
-	}
-	if (gui["miscSettings"] && gui["miscSettings"]["basicMultiEvent"] != undefined) {
-		A3a.vpl.Program.basicMultiEvent = gui["miscSettings"]["basicMultiEvent"] == true;
-	}
-	if (gui["miscSettings"] && gui["miscSettings"]["advancedMultiEvent"] != undefined) {
-		A3a.vpl.Program.advancedMultiEvent = gui["miscSettings"]["advancedMultiEvent"] == true;
-	}
-	if (gui["miscSettings"] && gui["miscSettings"]["viewRelativeSizes"]) {
-		var vrs = gui["miscSettings"]["viewRelativeSizes"];
-		app.viewRelativeSizes = {
-			"vpl": vrs["vpl"] || 1,
-			"src": vrs["src"] || 1,
-			"sim": vrs["sim"] || 1
-		};
+		if (gui["miscSettings"] && gui["miscSettings"]["basicMultiEvent"] != undefined) {
+			A3a.vpl.Program.basicMultiEvent = gui["miscSettings"]["basicMultiEvent"] == true;
+		}
+		if (gui["miscSettings"] && gui["miscSettings"]["advancedMultiEvent"] != undefined) {
+			A3a.vpl.Program.advancedMultiEvent = gui["miscSettings"]["advancedMultiEvent"] == true;
+		}
+		if (gui["miscSettings"] && gui["miscSettings"]["viewRelativeSizes"]) {
+			var vrs = gui["miscSettings"]["viewRelativeSizes"];
+			app.viewRelativeSizes = {
+				"vpl": vrs["vpl"] || 1,
+				"src": vrs["src"] || 1,
+				"sim": vrs["sim"] || 1
+			};
+		}
 	}
 	var commandServer = vplGetQueryOption("server");
 	var commandSession = vplGetQueryOption("session");
