@@ -13,6 +13,8 @@
 	},
 
 	"overlays": [
-		"french.json"
+		"block-english.json",
+		"french.json",
+		"block-french.json"
 	]
 }

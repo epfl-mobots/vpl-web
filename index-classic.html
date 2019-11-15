@@ -26,7 +26,9 @@
 	},
 
 	"overlays": [
-		"french.json"
+		"block-english.json",
+		"french.json",
+		"block-french.json"
 	]
 }
 </script>
@@ -216,6 +218,13 @@ block.library {
 	min-height: 32px;
 }
 
+hint {
+	font: 1vw sans-serif;
+	padding: 0.5vw;
+	background-color: white;
+	color: #222;
+}
+
 /* simulator */
 
 sim-controller {
@@ -253,6 +262,106 @@ sim-playground {
 			"No ground sensor specified": "Aucun capteur de sol n'est spécifié",
 			"No proximity sensor specified": "Aucun capteur de proximité n'est spécifié",
 			"No sensor specified": "Aucun capteur n'est spécifié"
+		}
+	}
+}
+</script>
+
+<script type="text/x-vpl-css" id="block-english.json">
+{
+	"i18n": {
+		"en": {
+			"button 1": "Single button",
+			"button": "Multiple buttons",
+			"horiz prox": "Proximity sensors",
+			"horiz prox adv": "Proximity sensors with low and high thresholds",
+			"horiz prox 1": "Proximity sensors with threshold",
+			"ground": "Ground reflection sensors",
+			"ground adv": "Ground reflection sensors with low and high sensors",
+			"ground 1": "Ground reflection sensors with threshold",
+			"tap": "Tap",
+			"accelerometer": "Accelerometer",
+			"roll": "Roll angle",
+			"pitch": "Pitch angle",
+			"yaw": "Yaw angle",
+			"clap": "Sound detection",
+			"init": "Initialization",
+			"timer": "Timer elapsed",
+			"state": "State (4 bits)",
+			"state 8": "State (8 values)",
+			"counter comparison": "Counter comparison",
+			"color state": "Color state",
+			"color 8 state": "Color state",
+			"motor state": "Motor state",
+			"motor": "Set motor speeds",
+			"move": "Set motion",
+			"top color": "Set top color (RGB components)",
+			"top color 8": "Set top color",
+			"bottom color": "Set bottom color (RGB components)",
+			"bottom-left color": "Set bottom-left color (RGB components)",
+			"bottom-right color": "Set bottom-right color (RGB components)",
+			"bottom color 8": "Set bottom color",
+			"bottom-left color 8": "Set bottom-left color",
+			"bottom-right color 8": "Set bottom-right color",
+			"notes": "Play melody",
+			"set state": "Set state (4 bits)",
+			"toggle state": "Toggle state (4 bits)",
+			"set state 8": "Set state (8 values)",
+			"change state 8": "Set to next or previous state (8 values)",
+			"set counter": "Set counter",
+			"set timer": "Start timer (0-4 sec)",
+			"set timer log": "Set timer (0.1-10 sec)",
+			"picture comment": "Picture comment"
+		}
+	}
+}
+</script>
+
+<script type="text/x-vpl-css" id="block-french.json">
+{
+	"i18n": {
+		"fr": {
+			"button 1": "Bouton simple",
+			"button": "Boutons multiples",
+			"horiz prox": "Capteurs de proximité",
+			"horiz prox adv": "Capteurs de proximité avec seuils bas et haut",
+			"horiz prox 1": "Capteurs de proximité avec seuil",
+			"ground": "Capteurs de réflexion sur le sol",
+			"ground adv": "Capteurs de réflexion sur le sol avec seuils bas et haut",
+			"ground 1": "Capteurs de réflexion sur le sol avec seuil",
+			"tap": "Choc",
+			"accelerometer": "Accéléromètre",
+			"roll": "Angle de roulis",
+			"pitch": "Angle de tangage",
+			"yaw": "Angle de lacet",
+			"clap": "Détection de son",
+			"init": "Initialisation",
+			"timer": "Minuterie",
+			"state": "État (4 bits)",
+			"state 8": "État (8 valeurs)",
+			"counter comparison": "Comparaison du compteur",
+			"color state": "État (couleur)",
+			"color 8 state": "État (couleur)",
+			"motor state": "Vitesses des moteurs",
+			"motor": "Change les vitesses des moteurs",
+			"move": "Change le type de déplacement",
+			"top color": "Change la couleur du dessus (composantes RVB)",
+			"top color 8": "Change la couleur du dessus",
+			"bottom color": "Change la couleur du dessous (composantes RVB)",
+			"bottom-left color": "Change la couleur du dessous à gauche (composantes RVB)",
+			"bottom-right color": "Change la couleur du dessous à droite (composantes RVB)",
+			"bottom color 8": "Change la couleur du dessous",
+			"bottom-left color 8": "Change la couleur du dessous à gauche",
+			"bottom-right color 8": "Change la couleur du dessous à droite",
+			"notes": "Joue une mélodie",
+			"set state": "Change l'état (4 bits)",
+			"toggle state": "Inverse l'état (4 bits)",
+			"set state 8": "Change l'état (8 valeurs)",
+			"change state 8": "Passe à l'état suivant ou précédant (8 valeurs)",
+			"set counter": "Change le compteur",
+			"set timer": "Démarre la minuterie (0-4 sec)",
+			"set timer log": "Démarre la minuterie (0.1-10 sec)",
+			"picture comment": "Commentaire (image)"
 		}
 	}
 }
