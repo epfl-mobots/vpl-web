@@ -209,12 +209,25 @@ function vplSetup(gui) {
 						gui[key] = gui[key] ? gui[key].concat(overlay[key]) : overlay[key];
 						break;
 					case "toolbars":
-					case "i18n":
 						// merge objects
 						for (var key2 in overlay[key]) {
 							if (overlay[key].hasOwnProperty(key2)) {
 								gui[key] = gui[key] || {};	// ensure gui[key] exists
 								gui[key][key2] = overlay[key][key2];
+							}
+						}
+						break;
+					case "i18n":
+						// merge objects in objects
+						for (var key2 in overlay[key]) {
+							if (overlay[key].hasOwnProperty(key2)) {
+								gui[key] = gui[key] || {};	// ensure gui[key] exists
+								gui[key][key2] = gui[key][key2] || {};	// ensure gui[key][key2] exists
+								for (var key3 in overlay[key][key2]) {
+									if (overlay[key][key2].hasOwnProperty(key3)) {
+										gui[key][key2][key3] = overlay[key][key2][key3];
+									}
+								}
 							}
 						}
 						break;
