@@ -59,6 +59,8 @@ A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, d
 	this.dropTarget = false;	// true when canDrop, when a hint would be drawn if !noDropHint
 	/** @type {?A3a.vpl.CanvasItem.doScroll} */
 	this.doScroll = null;
+	/** @type {?A3a.vpl.CanvasItem.doOver} */
+	this.doOver = null;
 	this.id = id || "";
 	/** @type {?function(A3a.vpl.CanvasItem):A3a.vpl.CanvasItem} */
 	this.zoomOnLongPress = null;
@@ -199,6 +201,11 @@ A3a.vpl.CanvasItem.canDrop;
 */
 A3a.vpl.CanvasItem.doScroll;
 
+/**
+	@typedef {function():void}
+*/
+A3a.vpl.CanvasItem.doOver;
+
 A3a.vpl.CanvasItem.prototype.getTranslation = function () {
 	return this.clippingRect
 		? {dx: this.clippingRect.xOffset, dy: this.clippingRect.yOffset}
@@ -243,6 +250,9 @@ A3a.vpl.Canvas = function (canvas, options) {
 	this.ctx = this.canvas.getContext("2d");
 	/** @type {Object} */
 	this.state = null;	// client data used by callbacks (scroll positions etc.)
+
+	/** @type {?A3a.vpl.CanvasItem.doOver} */
+	this.defaultDoOver = null;
 
 	/** @type {Array.<{tag:string,doDrop:A3a.vpl.Canvas.defaultDoDrop}>} */
 	this.defaultDoDrop = [];
@@ -475,6 +485,27 @@ A3a.vpl.Canvas = function (canvas, options) {
 					break;
 				}
 			}
+		}
+	}, false);
+
+	canvas.addEventListener("mousemove", function (overEvent) {
+		if (!self.visible) {
+			return;
+		}
+
+		var mouseEvent = self.makeMouseEvent(overEvent, backingScale);
+		var indices = self.clickedItemIndex(mouseEvent, true);
+		// pick the top-most item with doOver
+		for (var i = 0; i < indices.length; i++) {
+			if (self.items[indices[i]].doOver != null) {
+				overEvent.preventDefault();
+				self.items[indices[i]].doOver();
+				return;
+			}
+		}
+		// no item with doOver
+		if (self.defaultDoOver) {
+			self.defaultDoOver();
 		}
 	}, false);
 
