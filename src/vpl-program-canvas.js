@@ -55,7 +55,7 @@ A3a.vpl.Program.CanvasRenderingState = function () {
 	}=} opts
 	@return {A3a.vpl.CanvasItem}
 */
-A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y, opts) {
+A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, x, y, opts) {
 	/** Check if block type is for blocks on the action side (right)
 		@param {A3a.vpl.blockType} type
 		@return {boolean}
@@ -64,7 +64,8 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 		return type === A3a.vpl.blockType.action ||
 			type === A3a.vpl.blockType.comment;
 	}
-	var self = this;
+	var app = this;
+	var program = app.program;
 	var blockSize = Math.min(box.width, box.height);
 	var scale = blockSize / canvas.dims.blockSize;
 	var item = new A3a.vpl.CanvasItem(block,
@@ -109,11 +110,11 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 		// doDrop: for block in event handler, be replaced by dropped block
 		opts && opts.notDropTarget ? null : function (targetBlockItem, newBlockItem) {
 			if (targetBlockItem.data.ruleContainer) {
-				self.saveStateBeforeChange();
+				program.saveStateBeforeChange();
 				targetBlockItem.data.ruleContainer.setBlock(newBlockItem.data,
 					targetBlockItem.data.positionInContainer,
 					function () {
-						self.saveStateBeforeChange();
+						program.saveStateBeforeChange();
 					});
 			}
 			canvas.onUpdate && canvas.onUpdate();
@@ -128,13 +129,17 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 		}
 	);
 	var canvasSize = canvas.getSize();
-	if (!(opts && opts.notInteractive || !block.blockTemplate.mousedown) && self.zoomBlocks) {
+	if (!(opts && opts.notInteractive || !block.blockTemplate.mousedown) && program.zoomBlocks) {
 		item.zoomOnLongPress = function (zoomedItem) {
 			return canvas.makeZoomedClone(zoomedItem);
 		};
 	}
 	item.clickable = !(opts && opts.notClickable);
 	item.draggable = !(opts && opts.notDraggable);
+	item.doOver = function () {
+		app.hint = app.i18n.translate(block.blockTemplate.name);
+		app.renderProgramToCanvas();
+	};
 	var index = canvas.itemIndex(block);
 	canvas.setItem(item, index);
 	return item;
@@ -148,14 +153,14 @@ A3a.vpl.Program.prototype.addBlockToCanvas = function (canvas, block, box, x, y,
 	@param {number} y vertical  block template position (without box padding)
 	@return {void}
 */
-A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemplate, box, x, y) {
+A3a.vpl.Application.prototype.addBlockTemplateToCanvas = function (canvas, blockTemplate, box, x, y) {
 	var block = new A3a.vpl.Block(blockTemplate, null, null);
 	if (blockTemplate.typicalParam) {
 		block.param = blockTemplate.typicalParam();
 	}
-	var crossedOut = (this.mode === A3a.vpl.mode.basic ? this.enabledBlocksBasic : this.enabledBlocksAdvanced)
+	var program = this.program;
+	var crossedOut = (program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 		.indexOf(blockTemplate.name) < 0;
-	var self = this;
 	var canvasItem = this.addBlockToCanvas(canvas, block, box, x, y,
 		{
 			notInteractive: true,
@@ -164,9 +169,9 @@ A3a.vpl.Program.prototype.addBlockTemplateToCanvas = function (canvas, blockTemp
 			disabled: crossedOut || this.readOnly,
 			crossedOut: crossedOut,
 			/** @type {?A3a.vpl.CanvasItem.mousedown} */
-			mousedown: this.uiConfig.customizationMode && !this.noVPL && !this.readOnly
+			mousedown: this.uiConfig.customizationMode && !this.noVPL && !program.readOnly
 				? function (canvas, data, width, height, x, y, downEvent) {
-					var a = self.mode === A3a.vpl.mode.basic ? self.enabledBlocksBasic : self.enabledBlocksAdvanced;
+					var a = program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced;
 					if (a.indexOf(blockTemplate.name) >= 0) {
 						a.splice(a.indexOf(blockTemplate.name), 1);
 					} else {
@@ -302,7 +307,7 @@ A3a.vpl.Program.blockVerticalOffset = function (blockBox, containerBox) {
 	@param {Object} cssBoxes
 	@return {void}
 */
-A3a.vpl.Program.prototype.addRuleToCanvas =
+A3a.vpl.Application.prototype.addRuleToCanvas =
 	function (canvas, rule, displaySingleEvent, maxWidthForEventRightAlign,
 		eventX0, actionX0, y,
 		cssBoxes) {
@@ -313,6 +318,7 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 	var widths = A3a.vpl.Application.measureRuleWidth(rule, displaySingleEvent, cssBoxes);
 
 	var self = this;
+	var program = this.program;
 	var block0Box = rule.events.length > 0 && rule.events[0].blockTemplate.type === A3a.vpl.blockType.event
 		? cssBoxes.blockEventMainBox
 		: cssBoxes.blockEventAuxBox;
@@ -380,19 +386,19 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 		// doDrop: reorder event handler or add dropped block
 		function (targetItem, droppedItem) {
 			if (droppedItem.data instanceof A3a.vpl.Rule) {
-				var targetIndex = self.program.indexOf(/** @type {A3a.vpl.Rule} */(targetItem.data));
-				var droppedIndex = self.program.indexOf(droppedItem.data);
+				var targetIndex = program.program.indexOf(/** @type {A3a.vpl.Rule} */(targetItem.data));
+				var droppedIndex = program.program.indexOf(droppedItem.data);
 				if (targetIndex >= 0 && droppedIndex >= 0) {
-					self.saveStateBeforeChange();
-					self.program.splice(droppedIndex, 1);
-					self.program.splice(targetIndex, 0, droppedItem.data);
+					program.saveStateBeforeChange();
+					program.program.splice(droppedIndex, 1);
+					program.program.splice(targetIndex, 0, droppedItem.data);
 				}
 			} else if (droppedItem.data instanceof A3a.vpl.Block) {
-				self.saveStateBeforeChange();
+				program.saveStateBeforeChange();
 				targetItem.data.setBlock(droppedItem.data,
 					null,
 					function () {
-						self.saveStateBeforeChange();
+						program.saveStateBeforeChange();
 					});
 			}
 			canvas.onUpdate && canvas.onUpdate();
@@ -406,7 +412,7 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
                 // block: not in parent event handler
                 : droppedItem.data.ruleContainer !== targetItem.data &&
                     // ...and not a new event in basic mode
-                    (self.mode === A3a.vpl.mode.advanced ||
+                    (program.mode === A3a.vpl.mode.advanced ||
                         targetItem.data.events.length === 0 ||
                         (droppedItem.data instanceof A3a.vpl.Block &&
                             droppedItem.data.blockTemplate.type === A3a.vpl.blockType.action));
@@ -497,7 +503,7 @@ A3a.vpl.Program.prototype.addRuleToCanvas =
 					{eventSide: false, index: j}),
 				blockBox,
 				x, y,
-				{notDropTarget: this.readOnly, notClickable: true, notDraggable: true});
+				{notDropTarget: program.readOnly, notClickable: true, notDraggable: true});
 		}
 		item.attachItem(childItem);
 		x += containerBox.totalWidth();
@@ -834,7 +840,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 						.indexOf(blockTemplate.name) >= 0)) {
 				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
-				program.addBlockTemplateToCanvas(canvas, blockTemplate, box,
+				this.addBlockTemplateToCanvas(canvas, blockTemplate, box,
 					cssBoxes.blockEventLibBox.x + box.offsetLeft(),
 					cssBoxes.blockEventLibBox.y + box.offsetTop() + row * stepEvent);
 				row++;
@@ -877,7 +883,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
 				var x = cssBoxes.blockEventLibBox.x + box.offsetLeft() + Math.floor(row / colLen) * stepEvent;
 				var y = cssBoxes.blockEventLibBox.y + box.offsetTop() + stepEvent * (row % colLen);
-				program.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y);
+				self.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y);
 				row++;
 			}
 		}, this);
@@ -903,7 +909,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 						.indexOf(blockTemplate.name) >= 0)) {
 				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
-				program.addBlockTemplateToCanvas(canvas, blockTemplate, box,
+				this.addBlockTemplateToCanvas(canvas, blockTemplate, box,
 					cssBoxes.blockActionLibBox.x + cssBoxes.blockActionLibItemBox.offsetLeft(),
 					cssBoxes.blockActionLibBox.y + cssBoxes.blockActionLibItemBox.offsetTop() + row * stepAction);
 				row++;
@@ -947,7 +953,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				var x = cssBoxes.blockActionLibBox.x + box.offsetLeft() + cssBoxes.blockActionLibBox.width -
 					(acCol - Math.floor(row / colLen)) * stepAction;
 				var y = cssBoxes.blockActionLibBox.y + box.offsetTop() + stepAction * (row % colLen);
-				program.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y);
+				self.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y);
 				row++;
 			}
 		}, this);
@@ -1123,7 +1129,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		var errorMsg = "";
 		var isWarning = false;
 		program.program.forEach(function (rule, i) {
-			program.addRuleToCanvas(canvas, rule,
+			this.addRuleToCanvas(canvas, rule,
 				displaySingleEvent,
 				canvas.dims.eventRightAlign ? maxEventsWidth : 0,
 				eventX0, actionX0,
@@ -1146,7 +1152,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 					}
 				}
 			}
-		});
+		}, this);
 		renderingState.programScroll.end();
 
 		if (program.noVPL) {
@@ -1158,9 +1164,27 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		}
 	}
 
+	// hint
+	if (this.hint) {
+		canvas.addDecoration(function (ctx) {
+			var box = canvas.css.getBox({tag: "hint"});
+			ctx.fillStyle = box.color;
+			ctx.font = box.cssFontString();
+			ctx.textAlign = "start";
+			ctx.textBaseline = "middle";
+			var msg = self.i18n.translate(/** @type {string} */(self.hint));
+
+			box.width = ctx.measureText(msg).width;
+			box.height = box.fontSize * 1.2;
+
+			ctx.fillText(msg,
+				box.offsetLeft(),
+				canvasSize.height - box.totalHeight() + box.offsetTop() + box.height / 2);
+		});
+	}
+
 	// copyright
 	canvas.addDecoration(function (ctx) {
-		ctx.save();
 		ctx.font = "9px sans-serif";
 		ctx.textAlign = "start";
 		ctx.textBaseline = "bottom";
@@ -1168,7 +1192,6 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		ctx.fillText("EPFL 2018-2019",
 			-canvasSize.height + canvas.dims.blockLineWidth,
 			canvasSize.width - canvas.dims.blockLineWidth);
-		ctx.restore();
 	});
 
 	program.onUpdate && program.onUpdate();
