@@ -1074,10 +1074,10 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 				: col.bg;
 			ctx.fillRect(0, 0, box.width, box.height);
 			var s = dims.controlSize;
-			ctx.lineWidth = 0.08 * s;
-			A3a.vpl.Canvas.drawArcArrow(ctx, 0.5 * s, 0.5 * s, 0.28 * s,
-				0.1,
-				-0.1,
+			ctx.lineWidth = 0.05 * s;
+			A3a.vpl.Canvas.drawArcArrow(ctx, 0.5 * s, 0.5 * s, 0.25 * s,
+				1.56,
+				0,
 				{
 					arrowAtStart: false,
 					arrowSize: 0.2 * s,
