@@ -38,6 +38,37 @@ A3a.vpl.Program.CanvasRenderingState = function () {
 	this.actionScroll = new A3a.vpl.ScrollArea(1, 1);
 };
 
+/** Make a function suitable for CanvasItem doOver callback with a fixed string
+	@param {string} str string to be translated and displayed as hint
+	@return {A3a.vpl.CanvasItem.doOver} function which displays hint if it has changed
+*/
+A3a.vpl.Application.prototype.createFixedDoOverFun = function (str) {
+	var app = this;
+	str = app.i18n.translate(str);
+
+	return function () {
+		if (app.hint !== str) {
+			app.hint = str;
+			app.renderProgramToCanvas();
+		}
+	};
+};
+
+/** Make a function suitable for ControlBar doOver callback
+	@return {function(string):void} function which displays hint if it has changed
+*/
+A3a.vpl.Application.prototype.createControlBarDoOverFun = function () {
+	var app = this;
+
+	return function (id) {
+		var str = app.i18n.translate(id);
+		if (app.hint !== str) {
+			app.hint = str;
+			app.renderProgramToCanvas();
+		}
+	};
+};
+
 /** Add a block to a canvas
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.Block} block
@@ -136,10 +167,7 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, x
 	}
 	item.clickable = !(opts && opts.notClickable);
 	item.draggable = !(opts && opts.notDraggable);
-	item.doOver = function () {
-		app.hint = app.i18n.translate(block.blockTemplate.name);
-		app.renderProgramToCanvas();
-	};
+	item.doOver = app.createFixedDoOverFun(block.blockTemplate.name);
 	var index = canvas.itemIndex(block);
 	canvas.setItem(item, index);
 	return item;
@@ -806,20 +834,14 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var controlBar = this.createVPLToolbar(this.vplToolbarConfig, ["vpl", "top"],
 		cssBoxes.toolbarBox, cssBoxes.toolbarSeparatorBox, toolbarItemBoxes);
 	controlBar.addToCanvas(cssBoxes.toolbarBox, toolbarItemBoxes,
-		function (id) {
-			self.hint = self.i18n.translate(id);
-			self.renderProgramToCanvas();
-		});
+		self.createControlBarDoOverFun());
 
 	// 2nd toolbar at bottom between templates
 	if (toolbar2HasAvButtons > 0) {
 		var controlBar2 = this.createVPLToolbar(this.vplToolbar2Config, ["vpl", "bottom"],
 			cssBoxes.toolbar2Box, cssBoxes.toolbarSeparator2Box, toolbar2ItemBoxes);
 		controlBar2.addToCanvas(cssBoxes.toolbar2Box, toolbar2ItemBoxes,
-		function (id) {
-			self.hint = self.i18n.translate(id);
-			self.renderProgramToCanvas();
-		});
+		self.createControlBarDoOverFun());
 	}
 
 	// templates

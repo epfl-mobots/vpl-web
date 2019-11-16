@@ -9,7 +9,7 @@
 			"ground": "Capteurs de réflexion sur le sol",
 			"ground adv": "Capteurs de réflexion sur le sol avec seuils bas et haut",
 			"ground 1": "Capteurs de réflexion sur le sol avec seuil",
-			"tap": "Choc",
+			"tap": "Détection de choc",
 			"accelerometer": "Accéléromètre",
 			"roll": "Angle de roulis",
 			"pitch": "Angle de tangage",

@@ -9,7 +9,7 @@
 			"ground": "Ground reflection sensors",
 			"ground adv": "Ground reflection sensors with low and high sensors",
 			"ground 1": "Ground reflection sensors with threshold",
-			"tap": "Tap",
+			"tap": "Impact detection",
 			"accelerometer": "Accelerometer",
 			"roll": "Roll angle",
 			"pitch": "Pitch angle",
