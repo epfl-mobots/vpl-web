@@ -146,11 +146,14 @@ A3a.vpl.Application = function (canvasEl) {
 	this.useLocalStorage = false;
 
 	/** @type {?string} */
-	this.hint = null;
+	this.vplHint = null;	// before translation
 	this.vplCanvas.defaultDoOver = function () {
-		self.hint = null;
+		self.vplHint = null;
 		self.renderProgramToCanvas();
 	};
+
+	/** @type {?string} */
+	this.simHint = null;	// before translation
 
 	/** @type {Array.<A3a.vpl.Application.Logger>} */
 	this.loggers = [];

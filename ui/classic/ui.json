@@ -15,8 +15,10 @@
 	"overlays": [
 		"block-english.json",
 		"cmd-vpl-english.json",
+		"cmd-sim-english.json",
 		"french.json",
 		"block-french.json",
-		"cmd-vpl-french.json"
+		"cmd-vpl-french.json",
+		"cmd-sim-french.json"
 	]
 }

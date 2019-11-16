@@ -458,6 +458,20 @@ A3a.vpl.VPLSim2DViewer.color = function (rgb) {
 		")";
 };
 
+/** Make a function suitable for ControlBar doOver callback
+	@return {function(string):void} function which displays hint if it has changed
+*/
+A3a.vpl.Application.prototype.createSimControlBarDoOverFun = function () {
+	var app = this;
+
+	return function (id) {
+		if (app.simHint !== id) {
+			app.simHint = id;
+			app.requestRendering();
+		}
+	};
+};
+
 /** Render viewer
 	@return {void}
 */
@@ -548,7 +562,8 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		sim2d.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
 
 	controlBar.calcLayout(toolbarBox, toolbarItemBoxes, separatorBox);
-	controlBar.addToCanvas(toolbarBox, toolbarItemBoxes);
+	controlBar.addToCanvas(toolbarBox, toolbarItemBoxes,
+		this.createSimControlBarDoOverFun());
 
 	// add buttons for events
 	simCanvas.addDecoration(function (ctx) {
@@ -1189,6 +1204,26 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			});
 		playgroundItem.draggable = false;
 		simCanvas.setItem(playgroundItem);
+	}
+
+	// hint
+	if (this.simHint) {
+		simCanvas.addDecoration(function (ctx) {
+			var box = simCanvas.css.getBox({tag: "hint"});
+			ctx.fillStyle = box.color;
+			ctx.font = box.cssFontString();
+			ctx.textAlign = "start";
+			ctx.textBaseline = "middle";
+			var msg = self.i18n.translate(/** @type {string} */(self.simHint));
+
+			box.width = ctx.measureText(msg).width;
+			box.height = box.fontSize * 1.2;
+
+			box.drawAt(ctx, box.marginLeft, canvasSize.height - box.totalHeight() + box.marginTop, true);
+			ctx.fillText(msg,
+				box.offsetLeft(),
+				canvasSize.height - box.totalHeight() + box.offsetTop() + box.height / 2);
+		});
 	}
 
 	simCanvas.redraw();

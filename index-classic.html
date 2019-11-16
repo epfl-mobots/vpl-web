@@ -28,9 +28,11 @@
 	"overlays": [
 		"block-english.json",
 		"cmd-vpl-english.json",
+		"cmd-sim-english.json",
 		"french.json",
 		"block-french.json",
-		"cmd-vpl-french.json"
+		"cmd-vpl-french.json",
+		"cmd-sim-french.json"
 	]
 }
 </script>
@@ -359,6 +361,28 @@ sim-playground {
 }
 </script>
 
+<script type="text/x-vpl-css" id="cmd-sim-english.json">
+{
+	"i18n": {
+		"en": {
+			"sim:close": "Close panel",
+			"sim:restart": "Restart simulation",
+			"sim:pause": "Pause simulation",
+			"sim:speedup": "Set simulation speedup factor",
+			"sim:noise": "Switch noise on sensors on or off",
+			"sim:pen": "Switch pen on or off",
+			"sim:clear": "Erase traces made by pen",
+			"sim:map-kind": "Select which map is displayed (ground, height, obstacles)",
+			"sim:map": "Switch map on or off",
+			"sim:vpl": "VPL panel",
+			"sim:text": "Text source code panel",
+			"sim:teacher": "Switch customization mode on or off",
+			"sim:teacher-reset": "Reset customization"
+		}
+	}
+}
+</script>
+
 <script type="text/x-vpl-css" id="block-french.json">
 {
 	"i18n": {
@@ -444,6 +468,28 @@ sim-playground {
 			"vpl:teacher-reset": "Remet la configuration à l'état d'origine",
 			"vpl:teacher-save": "Enregistre la configuration",
 			"vpl:teacher-setasnew": "Installe la configuration pour les nouveaux programmes"
+		}
+	}
+}
+</script>
+
+<script type="text/x-vpl-css" id="cmd-sim-french.json">
+{
+	"i18n": {
+		"fr": {
+			"sim:close": "Ferme la vue",
+			"sim:restart": "Redémarre la simulation depuis le début",
+			"sim:pause": "Met la simulation en pause",
+			"sim:speedup": "Change le facteur d'accélération de la simulation",
+			"sim:noise": "Enclenche l'ajout de bruit sur les capteurs",
+			"sim:pen": "Commute entre le crayon en position baissée ou levée",
+			"sim:clear": "Efface les traces faites par le crayon",
+			"sim:map-kind": "Change la carte affichée (sol, hauteur ou obstacles)",
+			"sim:map": "Active ou désactive la carte",
+			"sim:vpl": "Affiche le programme VPL",
+			"sim:text": "Affiche le code source",
+			"sim:teacher": "Commute entre les modes de programmation et de configuration",
+			"sim:teacher-reset": "Remet la configuration à l'état d'origine"
 		}
 	}
 }

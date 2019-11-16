@@ -1,0 +1,19 @@
+{
+	"i18n": {
+		"en": {
+			"sim:close": "Close panel",
+			"sim:restart": "Restart simulation",
+			"sim:pause": "Pause simulation",
+			"sim:speedup": "Set simulation speedup factor",
+			"sim:noise": "Switch noise on sensors on or off",
+			"sim:pen": "Switch pen on or off",
+			"sim:clear": "Erase traces made by pen",
+			"sim:map-kind": "Select which map is displayed (ground, height, obstacles)",
+			"sim:map": "Switch map on or off",
+			"sim:vpl": "VPL panel",
+			"sim:text": "Text source code panel",
+			"sim:teacher": "Switch customization mode on or off",
+			"sim:teacher-reset": "Reset customization"
+		}
+	}
+}

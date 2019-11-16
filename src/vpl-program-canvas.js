@@ -42,13 +42,12 @@ A3a.vpl.Program.CanvasRenderingState = function () {
 	@param {string} str string to be translated and displayed as hint
 	@return {A3a.vpl.CanvasItem.doOver} function which displays hint if it has changed
 */
-A3a.vpl.Application.prototype.createFixedDoOverFun = function (str) {
+A3a.vpl.Application.prototype.createVPLFixedStringDoOverFun = function (str) {
 	var app = this;
-	str = app.i18n.translate(str);
 
 	return function () {
-		if (app.hint !== str) {
-			app.hint = str;
+		if (app.vplHint !== str) {
+			app.vplHint = str;
 			app.renderProgramToCanvas();
 		}
 	};
@@ -57,13 +56,12 @@ A3a.vpl.Application.prototype.createFixedDoOverFun = function (str) {
 /** Make a function suitable for ControlBar doOver callback
 	@return {function(string):void} function which displays hint if it has changed
 */
-A3a.vpl.Application.prototype.createControlBarDoOverFun = function () {
+A3a.vpl.Application.prototype.createVPLControlBarDoOverFun = function () {
 	var app = this;
 
 	return function (id) {
-		var str = app.i18n.translate(id);
-		if (app.hint !== str) {
-			app.hint = str;
+		if (app.vplHint !== id) {
+			app.vplHint = id;
 			app.renderProgramToCanvas();
 		}
 	};
@@ -167,7 +165,7 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, x
 	}
 	item.clickable = !(opts && opts.notClickable);
 	item.draggable = !(opts && opts.notDraggable);
-	item.doOver = app.createFixedDoOverFun(block.blockTemplate.name);
+	item.doOver = app.createVPLFixedStringDoOverFun(block.blockTemplate.name);
 	var index = canvas.itemIndex(block);
 	canvas.setItem(item, index);
 	return item;
@@ -834,14 +832,14 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var controlBar = this.createVPLToolbar(this.vplToolbarConfig, ["vpl", "top"],
 		cssBoxes.toolbarBox, cssBoxes.toolbarSeparatorBox, toolbarItemBoxes);
 	controlBar.addToCanvas(cssBoxes.toolbarBox, toolbarItemBoxes,
-		self.createControlBarDoOverFun());
+		self.createVPLControlBarDoOverFun());
 
 	// 2nd toolbar at bottom between templates
 	if (toolbar2HasAvButtons > 0) {
 		var controlBar2 = this.createVPLToolbar(this.vplToolbar2Config, ["vpl", "bottom"],
 			cssBoxes.toolbar2Box, cssBoxes.toolbarSeparator2Box, toolbar2ItemBoxes);
 		controlBar2.addToCanvas(cssBoxes.toolbar2Box, toolbar2ItemBoxes,
-		self.createControlBarDoOverFun());
+		self.createVPLControlBarDoOverFun());
 	}
 
 	// templates
@@ -1195,14 +1193,14 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	}
 
 	// hint
-	if (this.hint) {
+	if (this.vplHint) {
 		canvas.addDecoration(function (ctx) {
 			var box = canvas.css.getBox({tag: "hint"});
 			ctx.fillStyle = box.color;
 			ctx.font = box.cssFontString();
 			ctx.textAlign = "start";
 			ctx.textBaseline = "middle";
-			var msg = self.i18n.translate(/** @type {string} */(self.hint));
+			var msg = self.i18n.translate(/** @type {string} */(self.vplHint));
 
 			box.width = ctx.measureText(msg).width;
 			box.height = box.fontSize * 1.2;

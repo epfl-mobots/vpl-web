@@ -21,9 +21,14 @@ A3a.vpl.RunGlue object for the simulator.
 	@return {A3a.vpl.RunGlue}
 */
 A3a.vpl.Application.prototype.installRobotSimulator = function (options) {
-	this.simCanvas = new A3a.vpl.Canvas(this.canvasEl, {css: this.css});
-
 	var app = this;
+
+	this.simCanvas = new A3a.vpl.Canvas(this.canvasEl, {css: this.css});
+	this.simCanvas.defaultDoOver = function () {
+		app.simHint = null;
+		app.requestRendering();
+	};
+
 	var intervalId = null;
 	return new A3a.vpl.RunGlue({
  		run: function (language, code) {
