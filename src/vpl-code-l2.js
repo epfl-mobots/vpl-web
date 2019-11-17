@@ -184,24 +184,36 @@ A3a.vpl.CodeGeneratorL2.prototype.generate = function (program, runBlocks) {
 			str += (str.length > 0 ? "\n" : "") + "timer.period[1] = 50;\n";
 		}
 	}
+	// init event (not onevent, hence placed before initCodeDecl)
+	for (var i = 0; i < sectionList.length; i++) {
+		if (!/onevent/.test(sections[sectionList[i]].sectionBegin) &&
+			(sections[sectionList[i]].sectionPreamble ||
+				sections[sectionList[i]].clauseInit ||
+				sections[sectionList[i]].clauseAssignment)) {
+			str += "\n" +
+				(sections[sectionList[i]].sectionBegin || "") +
+				(sections[sectionList[i]].sectionPreamble || "") +
+				(sections[sectionList[i]].clauseInit || "") +
+				(sections[sectionList[i]].clauseAssignment || "") +
+				(sections[sectionList[i]].sectionEnd || "");
+		}
+	}
 	// init fragments defining functions and onevent
 	if (initCodeDecl.length > 0) {
 		str += "\n" + initCodeDecl.join("\n");
 	}
-	// explicit events, first init (not onevent), then onevent
-	for (var group = 0; group < 2; group++) {
-		for (var i = 0; i < sectionList.length; i++) {
-			if ((group === 0 ^ /onevent/.test(sections[sectionList[i]].sectionBegin)) &&
-				(sections[sectionList[i]].sectionPreamble ||
-					sections[sectionList[i]].clauseInit ||
-					sections[sectionList[i]].clauseAssignment)) {
-				str += "\n" +
-					(sections[sectionList[i]].sectionBegin || "") +
-					(sections[sectionList[i]].sectionPreamble || "") +
-					(sections[sectionList[i]].clauseInit || "") +
-					(sections[sectionList[i]].clauseAssignment || "") +
-					(sections[sectionList[i]].sectionEnd || "");
-			}
+	// explicit events (real onevent, not init)
+	for (var i = 0; i < sectionList.length; i++) {
+		if (/onevent/.test(sections[sectionList[i]].sectionBegin) &&
+			(sections[sectionList[i]].sectionPreamble ||
+				sections[sectionList[i]].clauseInit ||
+				sections[sectionList[i]].clauseAssignment)) {
+			str += "\n" +
+				(sections[sectionList[i]].sectionBegin || "") +
+				(sections[sectionList[i]].sectionPreamble || "") +
+				(sections[sectionList[i]].clauseInit || "") +
+				(sections[sectionList[i]].clauseAssignment || "") +
+				(sections[sectionList[i]].sectionEnd || "");
 		}
 	}
 	// add onevent timer1
