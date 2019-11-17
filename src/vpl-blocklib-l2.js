@@ -618,8 +618,8 @@ A3a.vpl.patchL2Blocks = function () {
 				var durations = [];
 				for (var i = 0; i < 6; i++) {
 					if (block.param[2 * i + 1] > 0) {
-						notes.push([262, 311, 370, 440, 524, 370][/** @type {number} */(block.param[2 * i])]);
-						durations.push(7 * block.param[2 * i + 1]);
+						notes.push([370, 415, 466, 494, 554][/** @type {number} */(block.param[2 * i])]);
+						durations.push(10 * block.param[2 * i + 1]);
 					} else {
 						notes.push(0);
 						durations.push(28);
