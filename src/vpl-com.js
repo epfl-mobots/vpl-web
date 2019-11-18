@@ -115,9 +115,10 @@ A3a.vpl.Com.prototype.connect = function () {
 				var content = msg["data"]["content"];
 				switch (kind) {
 				case "vpl":
+					var suffix = A3a.vpl.Application.getFileSuffix(msg["data"]["name"] || "");
 					if (/^[\s]*{/.test(content)) {
 						// json
-						self.app.loadProgramJSON(content);
+						self.app.loadProgramJSON(content, {dontChangeProgram: suffix === "vpl3ui"});
 					} else {
 						// try xml
 						self.app.program.importFromAESLFile(content);

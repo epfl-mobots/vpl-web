@@ -386,70 +386,84 @@ A3a.vpl.Program.prototype.exportToJSON = function (opt) {
 	return JSON.stringify(this.exportToObject(opt), null, "\t");
 };
 
+/**
+	@typedef {{
+			dontChangeProgram: (boolean | undefined),
+			dontChangeBlocks: (boolean | undefined),
+			dontChangeUI: (boolean | undefined)
+	}}
+*/
+A3a.vpl.Program.ImportOptions;
+
 /** Import program from an object, as created by exportToObject
 	@param {Object} obj
 	@param {function(string):void=} updateFun called at the end and for further
 	asynchronous loading if necessary; arg is "vpl" or "src"
+	@param {A3a.vpl.Program.ImportOptions=} options
 	@return {void}
 */
-A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
+A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun, options) {
 	var self = this;
 	var importFinished = false;
 	var view = "vpl";
 	try {
 		if (obj) {
-			this.mode = obj["advanced"]
-				? A3a.vpl.mode.advanced
-				: A3a.vpl.mode.basic;
-			if (obj["disabledUI"]) {
+			if (obj["disabledUI"] && (!options || !options.dontChangeUI)) {
 				this.uiConfig.setDisabledFeatures(obj["disabledUI"]);
 			}
-			this.enabledBlocksBasic = obj["basicBlocks"] || A3a.vpl.Program.basicBlocks;
-			this.multiEventBasic = obj["basicMultiEvent"] !== undefined
-				? obj["basicMultiEvent"]
-				: A3a.vpl.Program.basicMultiEvent;
-			this.enabledBlocksAdvanced = obj["advancedBlocks"] || A3a.vpl.Program.advancedBlocks;
-			this.multiEventAdvanced = obj["advancedMultiEvent"] !== undefined
- 				? obj["advancedMultiEvent"]
-				: A3a.vpl.Program.advancedMultiEvent;
-			if (obj["program"]) {
-				this.program = obj["program"].map(function (rule) {
-					var eh = new A3a.vpl.Rule();
-					rule["blocks"].forEach(function (block) {
-						var bt = A3a.vpl.BlockTemplate.findByName(block["name"]);
-						if (bt) {
-							var b = new A3a.vpl.Block(bt, null, null);
-							b.disabled = block["disabled"] || false;
-							b.locked = block["locked"] || false;
-							if (bt.importParam) {
-								bt.importParam(b, block["param"],
-									function () {
-										if (importFinished && updateFun) {
-											updateFun("vpl");
-										}
-									});
-							} else {
-								b.param = block["param"];
-							}
-							eh.setBlock(b, null,
-								function () {
-									self.saveStateBeforeChange();
-								},
-								true);
-						}
-					}, this);
-					eh.disabled = rule["disabled"] || false;
-					eh.locked = rule["locked"] || false;
-					return eh;
-				}, this);
-			} else {
-				this.program = [];
+			if (!options || !options.dontChangeBlocks) {
+				this.mode = obj["advanced"]
+					? A3a.vpl.mode.advanced
+					: A3a.vpl.mode.basic;
+				this.enabledBlocksBasic = obj["basicBlocks"] || A3a.vpl.Program.basicBlocks;
+				this.multiEventBasic = obj["basicMultiEvent"] !== undefined
+					? obj["basicMultiEvent"]
+					: A3a.vpl.Program.basicMultiEvent;
+				this.enabledBlocksAdvanced = obj["advancedBlocks"] || A3a.vpl.Program.advancedBlocks;
+				this.multiEventAdvanced = obj["advancedMultiEvent"] !== undefined
+	 				? obj["advancedMultiEvent"]
+					: A3a.vpl.Program.advancedMultiEvent;
 			}
-			if (this.setEditedSourceCodeFun) {
-				var code = obj["code"];
-				this.setEditedSourceCodeFun(obj["code"] == undefined ? null : code);
-				if (code != null) {
-					view = "src";
+			if (!options || !options.dontChangeProgram) {
+				if (obj["program"]) {
+					this.program = obj["program"].map(function (rule) {
+						var eh = new A3a.vpl.Rule();
+						rule["blocks"].forEach(function (block) {
+							var bt = A3a.vpl.BlockTemplate.findByName(block["name"]);
+							if (bt) {
+								var b = new A3a.vpl.Block(bt, null, null);
+								b.disabled = block["disabled"] || false;
+								b.locked = block["locked"] || false;
+								if (bt.importParam) {
+									bt.importParam(b, block["param"],
+										function () {
+											if (importFinished && updateFun) {
+												updateFun("vpl");
+											}
+										});
+								} else {
+									b.param = block["param"];
+								}
+								eh.setBlock(b, null,
+									function () {
+										self.saveStateBeforeChange();
+									},
+									true);
+							}
+						}, this);
+						eh.disabled = rule["disabled"] || false;
+						eh.locked = rule["locked"] || false;
+						return eh;
+					}, this);
+				} else {
+					this.program = [];
+				}
+				if (this.setEditedSourceCodeFun) {
+					var code = obj["code"];
+					this.setEditedSourceCodeFun(obj["code"] == undefined ? null : code);
+					if (code != null) {
+						view = "src";
+					}
 				}
 			}
 		}
@@ -463,12 +477,13 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun) {
 	@param {string} json
 	@param {function(string):void=} updateFun called at the end and for further
 	asynchrounous loading if necessary
+	@param {A3a.vpl.Program.ImportOptions=} options
 	@return {void}
 */
-A3a.vpl.Program.prototype.importFromJSON = function (json, updateFun) {
+A3a.vpl.Program.prototype.importFromJSON = function (json, updateFun, options) {
 	try {
 		var obj = JSON.parse(json);
-		this.importFromObject(/** @type {Object} */(obj), updateFun);
+		this.importFromObject(/** @type {Object} */(obj), updateFun, options);
 		this.undoState.reset();
 	} catch (e) {}
 };

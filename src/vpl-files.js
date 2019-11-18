@@ -17,7 +17,12 @@ or SVG for the obstacle map).
 
 */
 
-A3a.vpl.Application.prototype.loadProgramJSON = function (json) {
+/** Load a json program file
+	@param {string} json program file content
+	@param {A3a.vpl.Program.ImportOptions=} options
+	@return {void}
+*/
+A3a.vpl.Application.prototype.loadProgramJSON = function (json, options) {
 	try {
 		this.program.importFromJSON(json, function (view) {
 			if (this.views.indexOf(view) < 0) {
@@ -35,8 +40,18 @@ A3a.vpl.Application.prototype.loadProgramJSON = function (json) {
 			if (this.views.indexOf("vpl") >= 0) {
 				this.vplCanvas.onUpdate();
 			}
-		});
+		}, options);
 	} catch (e) {}
+};
+
+/** Get the suffix (without dot) of a filename
+	@param {string} filename
+	@return {string}
+*/
+A3a.vpl.Application.getFileSuffix = function (filename) {
+	var r = /^[^.]+\.(.*)$/.exec(filename);
+	var ext = r ? r[1].toLowerCase() : "";
+	return ext;
 };
 
 /** Load a program file (aesl or vpl3 (json))
@@ -44,10 +59,9 @@ A3a.vpl.Application.prototype.loadProgramJSON = function (json) {
 	@return {boolean} true if file suffix was recognized as a program
 */
 A3a.vpl.Application.prototype.loadProgramFile = function (file) {
-	var r = /^[^.]+\.(.*)$/.exec(file.name);
-	var ext = r ? r[1] : "";
+	var ext = A3a.vpl.Application.getFileSuffix(file.name);
 	var reader = new window.FileReader();
-	switch (ext.toLowerCase()) {
+	switch (ext) {
 	case "aesl":
 	case A3a.vpl.Program.suffix:
 	case A3a.vpl.Program.suffixUI:
@@ -61,7 +75,7 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 				app.program.importFromAESLFile(data);
 			} catch (e) {
 				// then try json
-				app.loadProgramJSON(data);
+				app.loadProgramJSON(data, {dontChangeProgram: ext === "vpl3ui"});
 			}
 			app.program.filename = filename;
 			app.vplCanvas.onUpdate();
