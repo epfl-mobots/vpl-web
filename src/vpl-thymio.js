@@ -28,9 +28,10 @@ A3a.vpl.Application.prototype.installThymio = function () {
 		init: function (language) {
 			// initialize the list of nodes
 			try {
-				var origin = document.location.origin.slice(0, 5) !== "http:"
-					? "http://127.0.0.1:3000"
-					: document.location.origin;
+				var origin = vplGetHashOption("asebahttp") ||
+					(document.location.origin.slice(0, 5) !== "http:"
+						? "http://127.0.0.1:3000"
+						: document.location.origin);
 				A3a.NodeProxy.init(origin, function () {
 					app.robots[app.currentRobotIndex].runGlue.state = A3a.Node.getNodeList()[0];
 					app.vplCanvas.update();
