@@ -32,7 +32,7 @@ ThymioJSONWebSocketBridge.prototype.connect = function () {
 				if (msg["id"]) {
 					var id = msg["id"];
 					self.nodes[id] = msg;
-					self.onConnectNode && self.onConnectNode(id);
+					self.onConnectNode && self.onConnectNode(id, msg["descr"]);
 				}
 				break;
 			case "disconnect":
