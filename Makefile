@@ -25,6 +25,8 @@ CLOSUREFLAGS = \
         --warning_level VERBOSE \
         --summary_detail_level 2
 
+# CLOSUREFLAGS += --compilation_level WHITESPACE_ONLY --formatting=PRETTY_PRINT
+
 CLOSUREDBG = --debug --formatting=PRETTY_PRINT
 
 JS = \
@@ -104,7 +106,9 @@ JS = \
 	vpl-sim2d.js \
 	vpl-cmd-sim.js \
 	vpl-thymio.js \
-	vpl-thymio-tdm.js
+	vpl-thymio-tdm.js \
+	json-ws-bridge-api.js \
+	vpl-thymio-jws.js
 
 vpath %.js src
 

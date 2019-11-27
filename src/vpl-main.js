@@ -404,6 +404,10 @@ function vplSetup(gui) {
 			runGlue = app.installThymioTDM();
 			runGlue.init(language);
 			break;
+		case "thymio-jws":
+			runGlue = app.installThymioJSONWebSocketBridge();
+			runGlue.init(language);
+			break;
 	 	case "sim":
 			runGlue = app.installRobotSimulator({canvasFilter: filter, canvasTransform: transform});
 			runGlue.init(language);
