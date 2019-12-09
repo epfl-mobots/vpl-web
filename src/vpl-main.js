@@ -181,7 +181,7 @@ function vplGetHashOption(key) {
 	var dict = (document.location.hash || "#")
 		.slice(1)
 		.split("&").map(function (p) {
-			return p.split("=");
+			return p.split("=").map(decodeURIComponent);
 		})
 		.reduce(function (acc, p) {
 			acc[p[0]] = p[1];
