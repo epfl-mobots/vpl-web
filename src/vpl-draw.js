@@ -609,6 +609,34 @@ A3a.vpl.Canvas.prototype.notes = function (notes) {
 	ctx.restore();
 };
 
+/** Draw sd card with number (for "play" action block)
+	@param {number} fileId
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.playSDFile = function (fileId) {
+	var ctx = this.ctx;
+	var dims = this.dims;
+	ctx.save();
+	ctx.beginPath();
+	ctx.moveTo(dims.blockSize * 0.4, dims.blockSize * 0.3);
+	ctx.lineTo(dims.blockSize * 0.4, dims.blockSize * 0.7);
+	ctx.lineTo(dims.blockSize * 0.7, dims.blockSize * 0.7);
+	ctx.lineTo(dims.blockSize * 0.7, dims.blockSize * 0.37);
+	ctx.lineTo(dims.blockSize * 0.63, dims.blockSize * 0.3);
+	ctx.closePath();
+	ctx.lineWidth = dims.blockLineWidth;
+	ctx.strokeStyle = "white";
+	ctx.lineJoin = "round";
+	ctx.stroke();
+	for (var r = 0.15; r < 0.31; r += 0.06) {
+		ctx.beginPath();
+		ctx.arc(dims.blockSize * 0.65, dims.blockSize * 0.5, dims.blockSize * r, -0.6, 0.6);
+		ctx.stroke();
+	}
+	this.text(fileId.toString(10), {x: -0.3 * dims.blockSize});
+	ctx.restore();
+};
+
 /** Draw microphone (for clap event)
 	@return {void}
 */

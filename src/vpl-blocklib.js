@@ -2253,6 +2253,55 @@ A3a.vpl.BlockTemplate.lib =	[
 			}
 		}
 	}),
+	new A3a.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "t", x: -0.3, y: 0.3, r: 0},
+			{sh: "t", x: -0.3, y: -0.3, r: Math.PI}
+		];
+		return {
+			name: "play",
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0]; },
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.playSDFile(block.param[0]);
+				canvas.buttons(buttons, [-2, -2]);
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					switch (i) {
+					case 0:	// up
+						block.param[0] = (block.param[0] + 1) % 100;
+						break;
+					case 1:	// down
+						block.param[0] = (block.param[0] + 99) % 100;
+						break;
+					}
+				}
+				return i;
+			},
+			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+			genCode: {
+				"aseba": function (block) {
+					return {
+						initCodeExec: [
+							"call sound.system(-1)\n"
+						],
+						statement:
+							"call sound.play(" + block.param[0].toString(10) + ")\n"
+					};
+				}
+			}
+		};
+	})()),
 	new A3a.vpl.BlockTemplate({
 		name: "set state",
 		modes: [A3a.vpl.mode.advanced],

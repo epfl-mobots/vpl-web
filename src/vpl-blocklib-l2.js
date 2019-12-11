@@ -640,7 +640,7 @@ A3a.vpl.patchL2Blocks = function () {
 						"wave[i] = 128 * sin(fixed(i) / size(wave) * 2 * pi);\n" +
 						"}\n" +
 						"sound.wave(wave);\n" +
-						"note_index = 6;\n" +
+						"note_index = 6;\n",
 						"sound.system(-1);\n",
 						A3a.vpl.BlockTemplate.initOutputs2
 					],
@@ -658,6 +658,15 @@ A3a.vpl.patchL2Blocks = function () {
 						"durations = [" + durations.join(", ") + "];\n" +
 						"sound.freq(notes[0], durations[0]);\n" +
 						"note_index = 1;\n"
+				};
+			},
+			"play": function (block) {
+				return {
+					initCodeExec: [
+						"sound.system(-1);\n"
+					],
+					statement:
+						"sound.play(" + block.param[0].toString(10) + ");\n"
 				};
 			},
 			"set state": function (block) {

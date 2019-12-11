@@ -572,6 +572,17 @@ A3a.vpl.patchPythonBlocks = function () {
 						"self.set(\"sound\", {\"f\": [" + notes.join(", ") + "], \"d\": [" + durations.join(", ") + "]})\n"
 				};
 			},
+			"play": function (block) {
+				return {
+					initCodeExec: [
+						"# init notes\n" +
+						"self.set(\"sound\", {})\n",
+						A3a.vpl.BlockTemplate.initOutputsPython
+					],
+					statement:
+						"self.set(\"sound\", {\"pcm\": " + block.param[0] + "})\n"
+				};
+			},
 			"set state": function (block) {
 				var code = "";
 				for (var i = 0; i < 4; i++) {
