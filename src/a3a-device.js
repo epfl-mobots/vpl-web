@@ -52,6 +52,12 @@ A3a.Device = function (opt) {
 	this.onEmit = null;
 	/** @type {?function(string,number,number,number):void} */
 	this.onVarChanged = null;
+	/**
+		@type {?function(string,A3a.Device,Array.<Array.<number>>):boolean}
+		Called with native function name, device, and arguments; should
+		return true to skip original implementation in A3a.Device, else false
+	*/
+	this.onNativeCall = null;
 	/** @type {?function(ArrayBuffer):void} */
 	this.write = null;
 };
@@ -494,7 +500,13 @@ A3a.Device.prototype.step = function () {
 			return this.varData.slice(argSpec.p, argSpec.p + argSpec.s);
 		}, this);
 		// call function
-		this.nativeFunctions[opl].fun(this, args);
+		var skipOriginalNatCall = false;
+		if (this.onNativeCall) {
+			skipOriginalNatCall = this.onNativeCall(this.nativeFunctions[opl].name, this, args);
+		}
+		if (!skipOriginalNatCall) {
+			this.nativeFunctions[opl].fun(this, args);
+		}
 		// put back arguments (possibly modified) to varData
 		argSpec.forEach(function (argSpec, i) {
 			this.setVariableData(argSpec.p, args[i]);
