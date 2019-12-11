@@ -121,12 +121,12 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 					section.clauseInit += evCode.clauseInit;
 				}
 				if (evCode.clause) {
-				section.clauseAssignment +=
-					"cond = " + evCode.clause + ";\n" +
-						"if (cond && !cond0[" + nextCond + "]) {\n" +
-						"eventCache[" + evCode.clauseIndex + "] = true;\n" +
-						"}\n" +
-						"cond0[" + nextCond + "] = cond;\n"
+					section.clauseAssignment +=
+						"cond = " + evCode.clause + ";\n" +
+							"if (cond && !cond0[" + nextCond + "]) {\n" +
+							"eventCache[" + evCode.clauseIndex + "] = true;\n" +
+							"}\n" +
+							"cond0[" + nextCond + "] = cond;\n"
 					nextCond++;
 				} else {
 					section.clauseAssignment += "eventCache[" + evCode.clauseIndex + "] = true;\n";
@@ -178,17 +178,17 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 		} else if (c[i].auxClauses) {
 			actionsTestCode += "cond = " + c[i].auxClauses + ";\n" +
 				"if (cond && !cond0[" + nextCond + "]) {\n" +
-				"todo[" + actionTestCount + "] = 1\n" +
+				"todo[" + actionTestCount + "] = true;\n" +
 				"}\n" +
 				"cond0[" + nextCond + "] = cond;\n";
 			nextCond++;
-			actionsExecCode += "if todo[" + actionTestCount + "] != 0 then\n" +
+			actionsExecCode += "if (todo[" + actionTestCount + "]) {\n" +
 				c[i].statement +
-				"end\n";
+				"}\n";
 			actionTestCount++;
 		}
 	}
-	
+
 	if (nextCond > 0) {
 		initVarDecl.unshift("var cond0;\nvar cond;\n");
 		initCodeExec.unshift("cond0 = [];\n");
