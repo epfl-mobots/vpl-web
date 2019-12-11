@@ -2264,6 +2264,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "play",
+			modes: [A3a.vpl.mode.custom],
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
@@ -2302,6 +2303,27 @@ A3a.vpl.BlockTemplate.lib =	[
 			}
 		};
 	})()),
+	new A3a.vpl.BlockTemplate({
+		name: "play stop",
+		modes: [A3a.vpl.mode.custom],
+		type: A3a.vpl.blockType.action,
+		/** @type {A3a.vpl.BlockTemplate.drawFun} */
+		draw: function (canvas, block) {
+			canvas.playSDFile(null);
+		},
+		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
+		genCode: {
+			"aseba": function (block) {
+				return {
+					initCodeExec: [
+						"call sound.system(-1)\n"
+					],
+					statement:
+						"call sound.play(-1)\n"
+				};
+			}
+		}
+	}),
 	new A3a.vpl.BlockTemplate({
 		name: "set state",
 		modes: [A3a.vpl.mode.advanced],

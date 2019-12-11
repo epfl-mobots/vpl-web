@@ -669,6 +669,15 @@ A3a.vpl.patchL2Blocks = function () {
 						"sound.play(" + block.param[0].toString(10) + ");\n"
 				};
 			},
+			"play stop": function (block) {
+				return {
+					initCodeExec: [
+						"sound.system(-1);\n"
+					],
+					statement:
+						"sound.play(-1);\n"
+				};
+			},
 			"set state": function (block) {
 				var code = "";
 				for (var i = 0; i < 4; i++) {

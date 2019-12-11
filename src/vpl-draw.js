@@ -610,19 +610,20 @@ A3a.vpl.Canvas.prototype.notes = function (notes) {
 };
 
 /** Draw sd card with number (for "play" action block)
-	@param {number} fileId
+	@param {?number} fileId fileId (0..99), or null for stop
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.playSDFile = function (fileId) {
 	var ctx = this.ctx;
 	var dims = this.dims;
+	var dx = fileId === null ? -0.15 * dims.blockSize : 0;
 	ctx.save();
 	ctx.beginPath();
-	ctx.moveTo(dims.blockSize * 0.4, dims.blockSize * 0.3);
-	ctx.lineTo(dims.blockSize * 0.4, dims.blockSize * 0.7);
-	ctx.lineTo(dims.blockSize * 0.7, dims.blockSize * 0.7);
-	ctx.lineTo(dims.blockSize * 0.7, dims.blockSize * 0.37);
-	ctx.lineTo(dims.blockSize * 0.63, dims.blockSize * 0.3);
+	ctx.moveTo(dims.blockSize * 0.4 + dx, dims.blockSize * 0.3);
+	ctx.lineTo(dims.blockSize * 0.4 + dx, dims.blockSize * 0.7);
+	ctx.lineTo(dims.blockSize * 0.7 + dx, dims.blockSize * 0.7);
+	ctx.lineTo(dims.blockSize * 0.7 + dx, dims.blockSize * 0.37);
+	ctx.lineTo(dims.blockSize * 0.63 + dx, dims.blockSize * 0.3);
 	ctx.closePath();
 	ctx.lineWidth = dims.blockLineWidth;
 	ctx.strokeStyle = "white";
@@ -630,10 +631,18 @@ A3a.vpl.Canvas.prototype.playSDFile = function (fileId) {
 	ctx.stroke();
 	for (var r = 0.15; r < 0.31; r += 0.06) {
 		ctx.beginPath();
-		ctx.arc(dims.blockSize * 0.65, dims.blockSize * 0.5, dims.blockSize * r, -0.6, 0.6);
+		ctx.arc(dims.blockSize * 0.65 + dx, dims.blockSize * 0.5, dims.blockSize * r, -0.6, 0.6);
 		ctx.stroke();
 	}
-	this.text(fileId.toString(10), {x: -0.3 * dims.blockSize});
+	if (fileId === null) {
+		ctx.beginPath();
+		ctx.moveTo(dims.blockSize * 0.12, dims.blockSize * 0.6);
+		ctx.lineTo(dims.blockSize * 0.88, dims.blockSize * 0.4);
+		ctx.lineWidth = dims.blockLineWidth * 1.5;
+		ctx.stroke();
+	} else {
+		this.text(fileId.toString(10), {x: -0.3 * dims.blockSize});
+	}
 	ctx.restore();
 };
 
