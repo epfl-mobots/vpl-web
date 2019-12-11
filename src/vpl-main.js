@@ -494,7 +494,7 @@ function vplSetup(gui) {
 		if (files.length === 1) {
 			var file = files[0];
 			// try to load file as a program or as an image for the simulator
-			app.loadProgramFile(file) || app.loadImageFile(file);
+			app.loadProgramFile(file) || app.loadImageFile(file) || app.loadAudioFile(file);
 		}
 	}, false);
 

@@ -430,6 +430,15 @@ A3a.vpl.Application.prototype.setSVG = function (svgSrc) {
 	}
 };
 
+/** Set or change audio file
+	@param {string} filename
+	@param {?ArrayBuffer} audioArrayBuffer
+	@return {void}
+*/
+A3a.vpl.Application.prototype.setAudio = function (filename, audioArrayBuffer) {
+	this.sim2d.robot["setFile"](filename, audioArrayBuffer);
+};
+
 /** Start simulator, rendering once if suspended or continuously else
 	@param {boolean} suspended
 	@return {void}

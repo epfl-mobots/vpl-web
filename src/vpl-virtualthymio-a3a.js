@@ -47,6 +47,20 @@ A3a.vpl.VirtualThymioVM = function () {
 		}
 	};
 
+	// intercept native calls
+	this.vthymio.onNativeCall = function (name, device, args) {
+		switch (name) {
+		case "sound.play":
+			// call directly stateChangeListener because there is no real
+			// "sound" variable in vm
+			self.stateChangeListener["sound"]("sound", {
+				"pcm": args[0][0]
+			});
+			return true;
+		}
+		return false;
+	};
+
 	// get description of Thymio (variables, events, native functions)
 	this.asebaNode = new A3a.A3aNode(A3a.thymioDescr);
 };

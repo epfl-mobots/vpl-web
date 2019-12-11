@@ -42,6 +42,8 @@ A3a.vpl.VirtualThymio = function () {
 
 	this.hasNoise = false;	// add noise on sensors, motors and timers
 
+	this.files = {};	// "filename":
+
 	this.robotSize = 120;	// robot width and length
 	this.groundSensorLon = 80;	// distance from robot center to ground sensors along x axis
 	this.groundSensorLat = 20;	// distance from robot center to ground sensors along y axis
@@ -86,6 +88,13 @@ A3a.vpl.VirtualThymio.prototype["setPositionLimits"] = function (xmin, xmax, ymi
 	};
 };
 
+/** Set an audio file
+
+*/
+A3a.vpl.VirtualThymio.prototype["setFile"] = function (filename, content) {
+	this.files[filename] = content;
+};
+
 /**
 	@inheritDoc
 */
@@ -127,6 +136,28 @@ A3a.vpl.VirtualThymio.prototype["reset"] = function (t0) {
 		},
 
 		"sound": function (name, val) {
+			if (val.hasOwnProperty("pcm")) {
+				// numeric id of wav file on sd card
+				var fileId = val["pcm"];
+				var filename = "P" + fileId + ".wav";
+				var fileContent = self.files[filename];
+				if (fileContent) {
+					if (!self.audioContext) {
+						self.audioContext = new (window["AudioContext"] || window["webkitAudioContext"])();
+					}
+					var context = self.audioContext;
+					var data = fileContent.slice();	// released by decodeAudioData, hence use a copy
+					context.decodeAudioData(data,
+						function (buffer) {
+							var source = context.createBufferSource();
+							source.buffer = buffer;
+							source.connect(context.destination);
+							source.start(0);
+						});
+				}
+				return;
+			}
+
 			if (!val["f"]) {
 				return;
 			}

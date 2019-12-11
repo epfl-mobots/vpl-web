@@ -96,30 +96,54 @@ A3a.vpl.Application.prototype.loadImageFile = function (file) {
 	var ext = r ? r[1] : "";
 	var reader = new window.FileReader();
 	switch (ext.toLowerCase()) {
-		case "svg":
-		case "png":
-		case "jpg":
-		case "gif":
-			var app = this;
-			if (this.sim2d) {
-				if (this.sim2d.wantsSVG()) {
-					reader.onload = function (event) {
-						var data = event.target.result;
-						app.setSVG(data);
-					};
-					reader["readAsText"](file);
-				} else {
-					reader.onload = function (event) {
-						var data = event.target.result;
-						var img = new Image();
-						img.addEventListener("load", function () {
-							app.setImage(img);
-						});
-						img.src = data;
-					};
-					reader["readAsDataURL"](file);
-				}
+	case "svg":
+	case "png":
+	case "jpg":
+	case "gif":
+		var app = this;
+		if (this.sim2d) {
+			if (this.sim2d.wantsSVG()) {
+				reader.onload = function (event) {
+					var data = event.target.result;
+					app.setSVG(data);
+				};
+				reader["readAsText"](file);
+			} else {
+				reader.onload = function (event) {
+					var data = event.target.result;
+					var img = new Image();
+					img.addEventListener("load", function () {
+						app.setImage(img);
+					});
+					img.src = data;
+				};
+				reader["readAsDataURL"](file);
 			}
+		}
+		return true;
+	}
+
+	return false;
+};
+
+/** Load an audio file (wav) into the simulator
+	@param {File} file
+	@return {boolean} true if file suffix was recognized as an audio file
+*/
+A3a.vpl.Application.prototype.loadAudioFile = function (file) {
+	var r = /^[^.]+\.(.*)$/.exec(file.name);
+	var ext = r ? r[1] : "";
+	var reader = new window.FileReader();
+	switch (ext.toLowerCase()) {
+	case "wav":
+		var app = this;
+		if (this.sim2d) {
+			reader.onload = function (event) {
+				var data = event.target.result;
+				app.setAudio(file.name, data);
+			};
+			reader["readAsArrayBuffer"](file);
+		}
 		return true;
 	}
 
