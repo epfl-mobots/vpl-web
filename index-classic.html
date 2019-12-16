@@ -289,6 +289,219 @@ sim-playground {
 {
 	"blocks": [
 		{
+			"name": "!stop",
+			"l2": {
+				"statement": [
+					"motor.left.target = 0;\n",
+					"motor.right.target = 0;\n",
+					"sound.system(-1);\n",
+					"leds.circle(32,32,32,32,32,32,32,32);\n",
+					"timer.period[0] = 100;\n",
+					"onevent timer0 {\n",
+					"leds.circle(0,0,0,0,0,0,0,0);\n",
+					"}\n"
+				]
+			}
+		},
+		{
+			"name": "button",
+			"l2": {
+				"sectionBegin": "onevent buttons {\n",
+				"sectionEnd": "}\n",
+				"clause": "`['center', 'forward', 'backward', 'right', 'left'].map(function (s, i) { return $[i] ? s : ''; }).filter(function (s) { return s; }).join(' && ') || ['center', 'forward', 'backward', 'right', 'left'].map(function (s) { return 'button.' + s; }).join(' || ')`"
+			}
+		},
+		{
+			"name": "button 1",
+			"l2": {
+				"sectionBegin": "onevent buttons {\n",
+				"sectionEnd": "}\n",
+				"clause": "button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]`"
+			}
+		},
+		{
+			"name": "horiz prox",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= 2000' : '<= 1000') : ''; }).filter(function (s) { return s; }).join(' && ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' || ')`"
+			}
+		},
+		{
+			"name": "horiz prox adv",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(7 + 33 * $[7] : '<= ' + Math.round(7 + 33 * $[8])) + '00' : ''; }).filter(function (s) { return s; }).join(' && ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' || ')`"
+			}
+		},
+		{
+			"name": "horiz prox 1",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[7] + '00' : ''; }).filter(function (s) { return s; }).join(' && ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' || ')`"
+			}
+		},
+		{
+			"name": "ground",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'prox.ground.delta[' + ix + '] ' + ($[i] > 0 ? '>= 450' : '<= 400') : ''; }).filter(function (s) { return s; }).join(' && ') || [0, 1].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' || ')`"
+			}
+
+		},
+		{
+			"name": "ground adv",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'prox.ground.delta[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(25 + 40 * $[2]) : '<= ' + Math.round(25 + 40 * $[3])) : ''; }).filter(function (s) { return s; }).join(' && ') || [0, 1].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' || ')`"
+			}
+		},
+		{
+			"name": "ground 1",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'prox.ground.delta[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(25 + 40 * $[2]) : ''; }).filter(function (s) { return s; }).join(' && ') || [0, 1].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' || ')`"
+			}
+		},
+		{
+			"name": "tap",
+			"l2": {
+				"initVarDecl": [
+					"bool tapped;\n"
+				],
+				"initCodeExec": [
+					"tapped = false;\n"
+				],
+				"sectionBegin": "onevent tap {\n",
+				"sectionEnd": "}\n",
+				"sectionPreamble": "tapped = true;\n",
+				"clause": "tapped"
+			}
+		},
+		{
+			"name": "accelerometer",
+			"l2-too-complicated": {
+				"initVarDecl": [
+					"`$[0] == 0 ? 'bool tapped;\n' : ''"
+				],
+				"initCodeExec": [
+					"`$[0] == 0 ? 'tapped = false;\n' : ''"
+				],
+				"sectionBegin": "onevent `$[0] == 0 ? 'tap' : 'acc'` {\n",
+				"sectionEnd": "}\n",
+				"clauseInit": "`dir == 1 ? 'fixed rollAngle = atan2(acc[0], acc[2]);\n' : dir == 2 ? 'fixed pitchAngle = atan2(acc[1], acc[2]);\n' : ''`",
+				"clause": "`$0 == 0 ? '' : `"
+			}
+		},
+		{
+			"name": "roll",
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"clauseInit":
+					"fixed rollAngle = atan2(acc[0], acc[2]);\n",
+				"clause":
+					"rollAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` && rollAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+			}
+		},
+		{
+			"name": "pitch",
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"clauseInit":
+					"fixed pitchAngle = atan2(acc[1], acc[2]);\n",
+				"clause":
+					"pitchAngle >= `(Math.PI / 12 * (-$[0] - 0.5)).toFixed(2)` && pitchAngle < `(Math.PI / 12 * (-$[0] + 0.5)).toFixed(2)`"
+			}
+		},
+		{
+			"name": "yaw",
+			"l2": {
+				"sectionBegin": "onevent acc {\n",
+				"sectionEnd": "}\n",
+				"clauseInit":
+					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+				"clause":
+					"yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` && yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+			}
+		},
+		{
+			"name": "clap",
+			"l2": {
+				"initCodeExec": [
+					[
+						"// setup threshold for detecting claps\n",
+						"mic.threshold = 250\n"
+					]
+				],
+				"sectionBegin": "onevent mic {\n",
+				"sectionEnd": "}\n",
+				"clause": "mic.intensity > mic.threshold",
+				"clauseOptional": true
+			}
+		},
+		{
+			"name": "init",
+			"l2": {
+				"sectionBegin": "// initialization\n"
+			}
+		},
+		{
+			"name": "timer",
+			"l2": {
+				"initVarDecl": [
+					"bool timerElapsed;\n"
+				],
+				"initCodeExec": [
+					[
+						"// stop timer 0\n",
+						"timer.period[0] = 0;\n"
+					],
+					"timerElapsed = false;\n"
+				],
+				"sectionBegin": "onevent timer0 {\n",
+				"sectionEnd": "}\n",
+				"sectionPreamble": "timerElapsed = true;\ntimer.period[0] = 0;\n",
+				"clause": "timerElapsed"
+			}
+		},
+		{
+			"name": "state",
+			"l2": {
+				"initVarDecl": [
+					[
+						"// variables for state\n",
+						"bool state[4];\n"
+					]
+				],
+				"initCodeExec": [
+					"state = [false, false, false, false];\n"
+				],
+				"clause": "`$.map(function (v, i) { return (v >= 0 ? '' : '!') + 'state[' + i + ']'; }).filter(function (v, i) { return $[i]; }).join(' && ')`"
+			}
+		},
+		{
+			"name": "state 8",
+			"l2": {
+				"initVarDecl": [
+					[
+						"// variables for exclusive state\n",
+						"int state8;\n"
+					]
+				],
+				"initCodeExec": [
+					"state8 = 0;\n"
+				],
+				"clause": "state8 == `$[0]`"
+			}
+		},
+		{
 			"name": "play",
 			"l2": {
 				"initCodeExec": [
