@@ -34,6 +34,8 @@
 			"bottom-left color 8": "Set bottom-left color",
 			"bottom-right color 8": "Set bottom-right color",
 			"notes": "Play melody",
+			"play": "Play a .wav file",
+			"play stop": "Stop playing a .wav file",
 			"set state": "Set state (4 bits)",
 			"toggle state": "Toggle state (4 bits)",
 			"set state 8": "Set state (8 values)",

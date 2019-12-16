@@ -34,6 +34,8 @@
 			"bottom-left color 8": "Change la couleur du dessous à gauche",
 			"bottom-right color 8": "Change la couleur du dessous à droite",
 			"notes": "Joue une mélodie",
+			"play": "Joue un fichier .wav",
+			"play stop": "Arrête de jouer un fichier .wav",
 			"set state": "Change l'état (4 bits)",
 			"toggle state": "Inverse l'état (4 bits)",
 			"set state 8": "Change l'état (8 valeurs)",
