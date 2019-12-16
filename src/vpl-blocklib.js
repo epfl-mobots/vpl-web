@@ -2288,18 +2288,6 @@ A3a.vpl.BlockTemplate.lib =	[
 					}
 				}
 				return i;
-			},
-			/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
-			genCode: {
-				"aseba": function (block) {
-					return {
-						initCodeExec: [
-							"call sound.system(-1)\n"
-						],
-						statement:
-							"call sound.play(" + block.param[0].toString(10) + ")\n"
-					};
-				}
 			}
 		};
 	})()),
@@ -2310,18 +2298,6 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.playSDFile(null);
-		},
-		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
-		genCode: {
-			"aseba": function (block) {
-				return {
-					initCodeExec: [
-						"call sound.system(-1)\n"
-					],
-					statement:
-						"call sound.play(-1)\n"
-				};
-			}
 		}
 	}),
 	new A3a.vpl.BlockTemplate({

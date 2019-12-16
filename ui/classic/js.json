@@ -1,0 +1,22 @@
+{
+	"blocks": [
+		{
+			"name": "play",
+			"js": {
+				"initCodeExec": [
+					"// init notes\nthis.set(\"sound\", {});\n"
+				],
+				"statement": "this.set(\"sound\", {\"pcm\": `$[0].toString(10)`});\n"
+			}
+		},
+		{
+			"name": "play stop",
+			"js": {
+				"initCodeExec": [
+					"// init notes\nthis.set(\"sound\", {});\n"
+				],
+				"statement": "this.set(\"sound\", {});\n"
+			}
+		}
+	]
+}

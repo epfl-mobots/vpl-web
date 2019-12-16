@@ -12,6 +12,7 @@
 <!-- definition of the user interface and blocks -->
 <script type="application/json" id="ui.json">
 {
+	"hardcoded-gui": true,
 	"blocks": null,
 	"buttons": null,
 	"widgets": null,
@@ -26,6 +27,11 @@
 	},
 
 	"overlays": [
+		"aseba.json",
+		"l2.json",
+		"js.json",
+		"python.json",
+
 		"block-english.json",
 		"cmd-vpl-english.json",
 		"cmd-sim-english.json",
@@ -251,6 +257,106 @@ sim-playground-area {
 
 sim-playground {
 	border: 2px silver;
+}
+</script>
+
+<script type="text/x-vpl-css" id="aseba.json">
+{
+	"blocks": [
+		{
+			"name": "play",
+			"aseba": {
+				"initCodeExec": [
+					"call sound.system(-1)\n"
+				],
+				"statement": "call sound.play(`$[0].toString(10)`)\n"
+			}
+		},
+		{
+			"name": "play stop",
+			"aseba": {
+				"initCodeExec": [
+					"call sound.system(-1)\n"
+				],
+				"statement": "call sound.play(-1)\n"
+			}
+		}
+	]
+}
+</script>
+
+<script type="text/x-vpl-css" id="l2.json">
+{
+	"blocks": [
+		{
+			"name": "play",
+			"l2": {
+				"initCodeExec": [
+					"sound.system(-1);\n"
+				],
+				"statement": "sound.play(`$[0].toString(10)`);\n"
+			}
+		},
+		{
+			"name": "play stop",
+			"l2": {
+				"initCodeExec": [
+					"sound.system(-1);\n"
+				],
+				"statement": "sound.play(-1);\n"
+			}
+		}
+	]
+}
+</script>
+
+<script type="text/x-vpl-css" id="js.json">
+{
+	"blocks": [
+		{
+			"name": "play",
+			"js": {
+				"initCodeExec": [
+					"// init notes\nthis.set(\"sound\", {});\n"
+				],
+				"statement": "this.set(\"sound\", {\"pcm\": `$[0].toString(10)`});\n"
+			}
+		},
+		{
+			"name": "play stop",
+			"js": {
+				"initCodeExec": [
+					"// init notes\nthis.set(\"sound\", {});\n"
+				],
+				"statement": "this.set(\"sound\", {});\n"
+			}
+		}
+	]
+}
+</script>
+
+<script type="text/x-vpl-css" id="python.json">
+{
+	"blocks": [
+		{
+			"name": "play",
+			"python": {
+ 				"initCodeExec": [
+					"# init notes\nself.set(\"sound\", {})\n"
+				],
+				"statement": "self.set(\"sound\", {\"pcm\": `$[0]`})\n"
+			}
+		},
+		{
+			"name": "play stop",
+			"python": {
+ 				"initCodeExec": [
+					"# init notes\nself.set(\"sound\", {})\n"
+				],
+				"statement": "self.set(\"sound\", {})\n"
+			}
+		}
+	]
 }
 </script>
 

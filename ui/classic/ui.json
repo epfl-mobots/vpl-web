@@ -1,4 +1,5 @@
 {
+	"hardcoded-gui": true,
 	"blocks": null,
 	"buttons": null,
 	"widgets": null,
@@ -13,6 +14,11 @@
 	},
 
 	"overlays": [
+		"aseba.json",
+		"l2.json",
+		"js.json",
+		"python.json",
+
 		"block-english.json",
 		"cmd-vpl-english.json",
 		"cmd-sim-english.json",

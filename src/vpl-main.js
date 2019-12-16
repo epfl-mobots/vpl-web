@@ -274,7 +274,7 @@ function vplSetup(gui) {
 	app.loadBox = new A3a.vpl.Load(app);
 
 	// general settings
-	var isClassic = gui == undefined || vplGetQueryOption("appearance") === "classic";
+	var isClassic = gui == undefined || gui["hardcoded-gui"] || vplGetQueryOption("appearance") === "classic";
 	var uiLanguage = vplGetQueryOption("uilanguage") || "en";
 	app.setUILanguage(uiLanguage);
 	app.useLocalStorage = vplGetQueryOption("storage") === "local";
@@ -297,7 +297,16 @@ function vplSetup(gui) {
 		A3a.vpl.patchPythonBlocks();
 	}
 	if (gui) {
-		if (!isClassic) {
+		if (isClassic) {
+			if (gui["blocks"] !== null && gui["blocks"].length > 0) {
+				// just load block overlays
+				(gui["blocks"] || []).forEach(function (b) {
+					var name = b["name"];
+					var bt = A3a.vpl.BlockTemplate.findByName(name);
+					A3a.vpl.BlockTemplate.loadCodeGenFromJSON(b, bt.genCode);
+				});
+			}
+		} else {
 			if (gui["buttons"] !== null && gui["buttons"].length > 0) {
 				drawButton = A3a.vpl.drawButtonSVGFunction(gui);
 				getButtonBounds = A3a.vpl.getButtonBoundsSVGFunction(gui);

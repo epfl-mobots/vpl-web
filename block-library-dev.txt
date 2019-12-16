@@ -279,6 +279,13 @@ Property "miscSettings" contains VPL global settings which aren't related to the
 - "advancedMultiEvent" (boolean, default false): true to allow multiple event blocks in advanced mode
 - "viewRelativeSizes" (object, default {"vpl":1,"src":1,"sim":1}): relative size of vpl, src and sim views
 
+Hardcoded blocks
+----------------
+
+Even when blocks are mostly hardcoded in JavaScript, properties related to code generation can be specified in JSON overlays. In that case, the following property should be defined:
+
+- "hardcoded-gui": (boolean, default false): true to use built-in block definitions and overlay code generation properties defined in JSON.
+
 Toolbars
 --------
 

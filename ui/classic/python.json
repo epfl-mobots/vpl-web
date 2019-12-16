@@ -1,0 +1,22 @@
+{
+	"blocks": [
+		{
+			"name": "play",
+			"python": {
+ 				"initCodeExec": [
+					"# init notes\nself.set(\"sound\", {})\n"
+				],
+				"statement": "self.set(\"sound\", {\"pcm\": `$[0]`})\n"
+			}
+		},
+		{
+			"name": "play stop",
+			"python": {
+ 				"initCodeExec": [
+					"# init notes\nself.set(\"sound\", {})\n"
+				],
+				"statement": "self.set(\"sound\", {})\n"
+			}
+		}
+	]
+}

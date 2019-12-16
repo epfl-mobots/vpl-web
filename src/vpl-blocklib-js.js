@@ -573,26 +573,6 @@ A3a.vpl.patchJSBlocks = function () {
 						"this.set(\"sound\", {\"f\": [" + notes.join(", ") + "], \"d\": [" + durations.join(", ") + "]});\n"
 				};
 			},
-			"play": function (block) {
-				return {
-					initCodeExec: [
-						"// init notes\n" +
-						"this.set(\"sound\", {});\n"
-					],
-					statement:
-						"this.set(\"sound\", {\"pcm\": " + block.param[0].toString(10) + "});\n"
-				};
-			},
-			"play stop": function (block) {
-				return {
-					initCodeExec: [
-						"// init notes\n" +
-						"this.set(\"sound\", {});\n"
-					],
-					statement:
-						"this.set(\"sound\", {});\n"
-				};
-			},
 			"set state": function (block) {
 				var code = "";
 				for (var i = 0; i < 4; i++) {
