@@ -1,6 +1,486 @@
 {
 	"blocks": [
 		{
+			"name": "!stop",
+			"aseba": {
+				"statement": [
+					"motor.left.target = 0\n",
+					"motor.right.target = 0\n",
+					"call sound.system(-1)\n",
+					"call leds.circle(32,32,32,32,32,32,32,32)\n",
+					"timer.period[0] = 100\n",
+					"onevent timer0\n",
+					"call leds.circle(0,0,0,0,0,0,0,0)\n"
+				]
+			}
+		},
+		{
+			"name": "button",
+			"aseba": {
+				"sectionBegin": "onevent buttons\n",
+				"clause": "`['center', 'forward', 'backward', 'right', 'left'].map(function (s, i) { return $[i] ? 'button.' + s : ''; }).filter(function (s) { return s; }).join(' and ') || ['center', 'forward', 'backward', 'right', 'left'].map(function (s) { return 'button.' + s; }).join(' or ')`"
+			}
+		},
+		{
+			"name": "button 1",
+			"aseba": {
+				"sectionBegin": "onevent buttons\n",
+				"clause": "button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]` != 0"
+			}
+		},
+		{
+			"name": "horiz prox",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= 2000' : '<= 1000') : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
+			}
+		},
+		{
+			"name": "horiz prox adv",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(7 + 33 * $[7] : '<= ' + Math.round(7 + 33 * $[8])) + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
+			}
+		},
+		{
+			"name": "horiz prox 1",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[7] + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
+			}
+		},
+		{
+			"name": "ground",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'prox.ground.delta[' + ix + '] ' + ($[i] > 0 ? '>= 450' : '<= 400') : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' or ')`"
+			}
+
+		},
+		{
+			"name": "ground adv",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'prox.ground.delta[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(25 + 40 * $[2]) : '<= ' + Math.round(25 + 40 * $[3])) : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' or ')`"
+			}
+		},
+		{
+			"name": "ground 1",
+			"aseba": {
+				"sectionBegin": "onevent prox\n",
+				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'prox.ground.delta[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(25 + 40 * $[2]) : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' or ')`"
+			}
+		},
+		{
+			"name": "tap",
+			"aseba": {
+				"initVarDecl": [
+					"var tapped\n"
+				],
+				"initCodeExec": [
+					"tapped = 0\n"
+				],
+				"sectionBegin": "onevent tap\n",
+				"sectionPreamble": "tapped = 1\n",
+				"clause": "tapped != 0"
+			}
+		},
+		{
+			"name": "accelerometer",
+			"aseba": {
+				"initVarDecl": [
+					"`$[0] == 0 ? 'var tapped\\n' : 'var ' + ($[0] == 1 ? 'rollAngle' : 'pitchAngle') + 'Angle\\n'`"
+				],
+				"initCodeExec": [
+					"`$[0] == 0 ? 'tapped = 0\\n' : ''`"
+				],
+				"sectionBegin": "onevent `$[0] == 0 ? 'tap' : 'acc'`\n",
+				"sectionPreamble": "`$[0] == 0 ? 'tapped = 1\\n' : ''`",
+				"clauseInit": "`$[0] == 1 ? 'call math.atan2(rollAngle, acc[0], acc[2])\n' : $[0] == 2 ? 'call math.atan2(pitchAngle, acc[1], acc[2])\n' : ''`",
+				"clause": "`$[0] == 0 ? 'tapped != 0' : (function (name, a) { return a <= -6 ? name + ' < ' + Math.round(2730.67 * a + 1365.33) : a >= 6 ? name + ' >= ' + Math.round(2730.67 * a - 1365.33) : name + ' >= ' + Math.round(2730.67 * a - 1365.33) + ' and ' + name + ' < ' + Math.round(2730.67 * a + 1365.33); })($[0] === 1 ? 'rollAngle' : 'pitchAngle', $[0] === 2 ? $[1] : -$[1])`"
+			}
+		},
+		{
+			"name": "roll",
+			"aseba": {
+				"sectionBegin": "onevent acc\n",
+				"initVarDecl": "var rollAngle\n",
+				"clauseInit":
+					"call math.atan2(rollAngle, acc[0], acc[2])\n",
+				"clause":
+					"`$[0] === -12 ? 'rollAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'rollAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+			}
+		},
+		{
+			"name": "pitch",
+			"aseba": {
+				"sectionBegin": "onevent acc\n",
+				"initVarDecl": "var pitchAngle\n",
+				"clauseInit":
+					"call math.atan2(pitchAngle, acc[1], acc[2])\n",
+				"clause":
+					"`$[0] === -12 ? 'pitchAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'pitchAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+			}
+		},
+		{
+			"name": "yaw",
+			"aseba": {
+				"sectionBegin": "onevent acc\n",
+				"initVarDecl": "var yawAngle\n",
+				"clauseInit":
+					"call math.atan2(yawAngle, acc[0], acc[1])\n",
+				"clause":
+					"`$[0] === -12 ? 'yawAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'yawAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+			}
+		},
+		{
+			"name": "clap",
+			"aseba": {
+				"initCodeExec": [
+					[
+						"# setup threshold for detecting claps\n",
+						"mic.threshold = 250\n"
+					]
+				],
+				"sectionBegin": "onevent mic\n",
+				"clause": "mic.intensity > mic.threshold",
+				"clauseOptional": true
+			}
+		},
+		{
+			"name": "init",
+			"aseba": {
+				"sectionBegin": "# initialization\n"
+			}
+		},
+		{
+			"name": "timer",
+			"aseba": {
+				"initVarDecl": [
+					"var timerElapsed\n"
+				],
+				"initCodeExec": [
+					[
+						"# stop timer 0\n",
+						"timer.period[0] = 0\n"
+					],
+					"timerElapsed = 0\n"
+				],
+				"sectionBegin": "onevent timer0\n",
+				"sectionPreamble": "timerElapsed = 1\ntimer.period[0] = 0\n",
+				"clause": "timerElapsed"
+			}
+		},
+		{
+			"name": "state",
+			"aseba": {
+				"initVarDecl": [
+					"var state[4]\n"
+				],
+				"initCodeExec": [
+					"state = [0, 0, 0, 0]\n"
+				],
+				"clause": "`$.map(function (v, i) { return 'state[' + i + ']' + (v >= 0 ? ' == 1' : ' == 0'); }).filter(function (v, i) { return $[i]; }).join(' and ')`"
+			}
+		},
+		{
+			"name": "state 8",
+			"aseba": {
+				"initVarDecl": [
+					"var state8\n"
+				],
+				"initCodeExec": [
+					"state8 = 0\n"
+				],
+				"clause": "state8 == `$[0]`"
+			}
+		},
+		{
+			"name": "counter comparison",
+			"aseba": {
+				"initVarDecl": [
+					"var counter\n"
+				],
+				"initCodeExec": [
+					"counter = 0\n"
+				],
+				"clause": "counter `$[0] === 0 ? '==' : $[0] > 0 ? '>=' : '<='` `$[1]`"
+			}
+		},
+		{
+			"name": "color state",
+			"aseba": {
+				"initVarDecl": [
+					"var topColor[3]\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n"
+				],
+				"clause": "`$.map(function (p, i) { return 'topColor[' + i + '] / 11 == ' + Math.floor(p * 2.99); }).join(' and ')`"
+			}
+		},
+		{
+			"name": "color 8 state",
+			"aseba": {
+				"initVarDecl": [
+					"var topColor[3]\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n"
+				],
+				"clause": "topColor[0] `$[0] % 2 ? '>=' : '<'` 16 && topColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && topColor[2] `$[0] >= 4 ? '>=' : '<'` 16"
+			}
+		},
+		{
+			"name": "motor state",
+			"aseba": {
+				"clause": [
+					"`$[0] == 0 ? 'abs(' : ''`motor.left.target`$[0] > 0 ? ' > ' : $[0] < 0 ? ' < -' : ') < '`250 ",
+					"and `$[1] == 0 ? 'abs(' : ''`motor.right.target`$[1] > 0 ? ' > ' : $[1] < 0 ? ' < -' : ') < '`250"
+				]
+			}
+		},
+		{
+			"name": "motor",
+			"aseba": {
+				"initCodeExec": [
+					[
+						"# reset outputs\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
+				],
+				"statement":
+					[
+						"motor.left.target = `Math.round(500 * $[0])`\n",
+						"motor.right.target = `Math.round(500 * $[1])`\n"
+					]
+			}
+		},
+		{
+			"name": "move",
+			"aseba": {
+				"initCodeExec": [
+					[
+						"# reset outputs\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
+				],
+				"statement": [
+					"motor.left.target = `[0, 100, -100, 75, 125, -100, 100][$[0]]`\n",
+					"motor.right.target = `[0, 100, -100, 125, 75, 100, -100][$[0]]`\n"
+				]
+			}
+		},
+		{
+			"name": "top color",
+			"aseba": {
+				"initVarDecl": [
+					"var topColor[3]\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n",
+					[
+						"# reset outputs\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
+				],
+				"statement": [
+					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n",
+					"topColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
+				],
+				"statementWithoutInit":
+					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
+			}
+		},
+		{
+			"name": "top color 8",
+			"aseba": {
+				"initVarDecl": [
+					"var topColor[3]\n"
+				],
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n",
+					[
+						"# reset outputs\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
+				],
+				"statement": [
+					"call leds.top(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`)\n",
+					"topColor = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n"
+				]
+			}
+		},
+		{
+			"name": "bottom color",
+			"aseba": {
+				"initCodeExec": [
+					[
+						"# reset outputs\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
+				],
+				"statement": [
+					"call leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n",
+					"call leds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
+				]
+			}
+		},
+		{
+			"name": "bottom-left color",
+			"aseba": {
+				"initCodeExec": [
+					[
+						"# reset outputs\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
+				],
+				"statement": [
+					"call leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
+				]
+			}
+		},
+		{
+			"name": "bottom-right color",
+			"aseba": {
+				"initCodeExec": [
+					[
+						"# reset outputs\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
+				],
+				"statement": [
+					"call leds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
+				]
+			}
+		},
+		{
+			"name": "bottom color 8",
+			"aseba": {
+				"initCodeExec": [
+					[
+						"# reset outputs\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
+				],
+				"statement": [
+					"call leds.bottom.left(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`)\n",
+					"call leds.bottom.right(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`)\n"
+				]
+			}
+		},
+		{
+			"name": "bottom-left color 8",
+			"aseba": {
+				"initCodeExec": [
+					[
+						"# reset outputs\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
+				],
+				"statement": [
+					"call leds.bottom.left(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`)\n"
+				]
+			}
+		},
+		{
+			"name": "bottom-right color 8",
+			"aseba": {
+				"initCodeExec": [
+					[
+						"# reset outputs\n",
+						"call leds.top(0, 0, 0)\n",
+						"call leds.bottom.left(0, 0, 0)\n",
+						"call leds.bottom.right(0, 0, 0)\n",
+						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
+					]
+				],
+				"statement": [
+					"call leds.bottom.right(`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`)\n"
+				]
+			}
+		},
+		{
+			"name": "notes",
+			"aseba": {
+				"initVarDecl": [
+					[
+						"# variables for notes\n",
+						"var notes[6]\n",
+						"var durations[6]\n",
+						"var note_index\n",
+						"var note_count\n",
+						"var wave[142]\n",
+						"var i\n",
+						"var wave_phase\n",
+						"var wave_intensity\n"
+					]
+				],
+				"initCodeExec": [
+					[
+						"# init. variables for notes\n",
+						"note_index = 6\n",
+						"note_count = 6\n"
+					],
+					[
+						"# compute a sinus wave for sound\n",
+						"for i in 0 : 141 do\n",
+						"wave_phase = (i - 70) * 468\n",
+						"call math.cos(wave_intensity, wave_phase)\n",
+						"wave[i] = wave_intensity / 256\n",
+						"end\ncall sound.wave(wave)\n"
+					],
+					[
+						"call sound.system(-1)\n"
+					]
+				],
+				"initCodeDecl": [
+					[
+						"# when a note is finished, play the next one\n",
+						"onevent sound.finished\n",
+						"if note_index != note_count then\n",
+						"call sound.freq(notes[note_index], durations[note_index])\n",
+						"note_index++\n",
+						"end\n"
+					]
+				],
+				"statement": [
+					"notes = [`$.filter(function (a, i) { return i % 2 == 0; }).map(function (h, i) { return $[2 * i + 1] ? [370, 415, 466, 494, 554][h] : 0; }).join(', ')`]\n",
+					"durations = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return d ? 10 * d : 28; }).join(', ')`]\n",
+					"note_index = 1\n",
+					"note_count = 6\n",
+					"call sound.freq(notes[0], durations[0])\n"
+				]
+			}
+		},
+		{
 			"name": "play",
 			"aseba": {
 				"initCodeExec": [
@@ -17,6 +497,161 @@
 				],
 				"statement": "call sound.play(-1)\n"
 			}
+		},
+		{
+			"name": "set state",
+			"aseba": {
+				"initVarDecl": [
+					"var state[4]\n"
+				],
+				"initCodeExec": [
+					"state = [0, 0, 0, 0]\n"
+				],
+				"initCodeDecl": [
+					[
+						"sub display_state\n",
+						"call leds.circle(0,state[1]*32,0,state[3]*32,0,state[2]*32,0,state[0]*32)\n"
+					]
+				],
+				"statement": [
+					"`$.map(function (v, i) { return 'state[' + i + '] = ' + (v > 0 ? 'true' : 'false') + ';\\n'; }).filter(function (v) { return v; }).join('')`",
+					"`$[0] || $[1] || $[2] || $[3] ? 'display_state();\\n' : ''`"
+				]
+			}
+		},
+		{
+			"name": "toggle state",
+			"aseba": {
+				"initVarDecl": [
+					"var state[4]\n"
+				],
+				"initCodeExec": [
+					"state = [0, 0, 0, 0]\n"
+				],
+				"initCodeDecl": [
+					[
+						"sub display_state\n",
+						"call leds.circle(0,state[1]*32,0,state[3]*32,0,state[2]*32,0,state[0]*32)\n"
+					]
+				],
+				"statement": [
+					"`$.map(function (v, i) { return 'state[' + i + '] = !state[' + i + '];\\n'; }).filter(function (v) { return v; }).join('')`",
+					"`$[0] || $[1] || $[2] || $[3] ? 'sub display_state\\n' : ''`"
+				]
+			}
+		},
+		{
+			"name": "set state 8",
+			"aseba": {
+				"initVarDecl": [
+					"var state8\n"
+				],
+				"initCodeExec": [
+					"state8 = 0\n"
+				],
+				"initCodeDecl": [
+					[
+						"sub display_state8\n",
+						"call leds.circle((state8==0)*32, (state8==1)*32, (state8==2)*32, (state8==3)*32, (state8==4)*32, (state8==5)*32, (state8==6)*32, (state8==7)*32)\n"
+					]
+				],
+				"statement": [
+					"state8 = `$[0]`;\n",
+					"sub display_state8\n"
+				],
+				"statementWithoutInit": [
+					"call leds.circle(`$[0] === 0 ? 32 : 0`, `$[0] === 1 ? 32 : 0`, `$[0] === 2 ? 32 : 0`, `$[0] === 3 ? 32 : 0`, ",
+						"`$[0] === 4 ? 32 : 0`, `$[0] === 5 ? 32 : 0`, `$[0] === 6 ? 32 : 0`, `$[0] === 7 ? 32 : 0`)\n"
+				]
+			}
+		},
+		{
+			"name": "change state 8",
+			"aseba": {
+				"initVarDecl": [
+					"var state8\n"
+				],
+				"initCodeExec": [
+					"state8 = 0\n"
+				],
+				"initCodeDecl": [
+					[
+						"sub display_state8\n",
+						"call leds.circle((state8==0)*32, (state8==1)*32, (state8==2)*32, (state8==3)*32, (state8==4)*32, (state8==5)*32, (state8==6)*32, (state8==7)*32)\n"
+					]
+				],
+				"statement": [
+					"state8 = (state8 + `$[0] > 0 ? 1 : 7`) % 8;\n",
+					"sub display_state8\n"
+				],
+				"statementWithoutInit": [
+					"call leds.circle(`$[0] === 0 ? 32 : 0`, `$[0] === 1 ? 32 : 0`, `$[0] === 2 ? 32 : 0`, `$[0] === 3 ? 32 : 0`, ",
+						"`$[0] === 4 ? 32 : 0`, `$[0] === 5 ? 32 : 0`, `$[0] === 6 ? 32 : 0`, `$[0] === 7 ? 32 : 0`)\n"
+				]
+			}
+		},
+		{
+			"name": "set counter",
+			"aseba": {
+				"initVarDecl": [
+					"var counter\n"
+				],
+				"initCodeExec": [
+					"counter = 0\n"
+				],
+				"initCodeDecl": [
+					[
+						"sub display_counter\n",
+						"call leds.circle((counter&1)<<5,(counter&2)<<4,(counter&4)<<3,(counter&8)<<2,(counter&16)<<1,counter&32,(counter&64)>>1,(counter&128)>>2)\n"
+					]
+				],
+				"statement": [
+					"`$[0] === 0 ? 'counter = 0' : $[0] > 0 ? 'if counter < 255 then\\ncounter++\\nend' : 'if counter > 0 then\\ncounter--\\nend'`\n",
+					"sub display_counter\n"
+				]
+			}
+		},
+		{
+			"name": "set timer",
+			"aseba": {
+				"initVarDecl": [
+					"var timerElapsed\n"
+				],
+				"initCodeExec": [
+					[
+						"# stop timer 0\n",
+						"timer.period[0] = 0\n"
+					],
+					"timerElapsed = 0\n"
+				],
+				"statement": [
+					"timer.period[0] = `Math.round(1000 * $[0]`)\n",
+					"timerElapsed = 0\n"
+				]
+			}
+		},
+		{
+			"name": "set timer log",
+			"aseba": {
+				"initVarDecl": [
+					"var timerElapsed\n"
+				],
+				"initCodeExec": [
+					[
+						"# stop timer 0\n",
+						"timer.period[0] = 0\n"
+					],
+					"timerElapsed = 0\n"
+				],
+				"statement": [
+					"timer.period[0] = `Math.round(1000 * $[0]`)\n",
+					"timerElapsed = 0\n"
+				]
+			}
+		},
+		{
+			"name": "picture comment",
+			"aseba": {}
 		}
 	]
 }
