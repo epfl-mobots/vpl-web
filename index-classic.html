@@ -396,7 +396,7 @@ sim-playground {
 				"sectionEnd": "}\n",
 				"sectionPreamble": "`$[0] == 0 ? 'tapped = true;\\n' : ''`",
 				"clauseInit": "`$[0] == 1 ? 'fixed rollAngle = atan2(acc[0], acc[2]);\\n' : $[0] == 2 ? 'fixed pitchAngle = atan2(acc[1], acc[2]);\\n' : ''`",
-				"clause": "`$[0] == 0 ? 'tapped' : (function (name, a) { return a <= -6 ? name + ' < ' + (Math.PI / 12 * (a + 0.5)).toFixed(2) : a >= 6 ? name + ' >= ' + (Math.PI / 12 * (a - 0.5)).toFixed(2) : name + ' >= ' + (Math.PI / 12 * (a - 0.5)).toFixed(2) + ' && ' + name + ' < ' + (Math.PI / 12 * (a + 0.5)).toFixed(2); })($[0] === 1 ? 'rollAngle' : 'pitchAngle', $[0] === 2 ? -$[1] : $[1])`"
+				"clause": "`$[0] == 0 ? 'tapped' : (function (name, a) { return a <= -6 ? name + ' < ' + (Math.PI / 12 * (a + 0.5)).toFixed(2) : a >= 6 ? name + ' >= ' + (Math.PI / 12 * (a - 0.5)).toFixed(2) : name + ' >= ' + (Math.PI / 12 * (a - 0.5)).toFixed(2) + ' && ' + name + ' < ' + (Math.PI / 12 * (a + 0.5)).toFixed(2); })($[0] === 1 ? 'rollAngle' : 'pitchAngle', $[0] === 2 ? $[1] : -$[1])`"
 			}
 		},
 		{

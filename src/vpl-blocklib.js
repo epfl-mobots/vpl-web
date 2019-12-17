@@ -874,7 +874,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () {
 				return [
-					0,	// 0 for tap, 2 for roll, 1 for pitch
+					0,	// 0 for tap, 1 for roll, 2 for pitch
 					0 // integer from -6 to 6
 				];
 			},
@@ -892,9 +892,9 @@ A3a.vpl.BlockTemplate.lib =	[
 					canvas.tap(0.7);
 					canvas.ctx.restore();
 				} else {
-					canvas.robotAccelerometer(dir === 1, dir === 2 ? -a : a);
+					canvas.robotAccelerometer(dir === 2, dir === 2 ? -a : a);
 				}
-				canvas.buttons(buttons, [dir===0, dir===2, dir===1]);
+				canvas.buttons(buttons, [dir===0, dir===1, dir===2]);
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
@@ -949,7 +949,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						};
 					} else {
 						/** @type {number} */
-						var a = (dir === 2 ? -1 : 1) * /** @type {number} */(block.param[1]);
+						var a = (dir === 2 ? 1 : -1) * /** @type {number} */(block.param[1]);
 						var name = dir === 1 ? "roll" : "pitch";
 						/** @type {string} */
 						var cond;
