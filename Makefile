@@ -68,7 +68,6 @@ JS = \
 	svg-preparsed.js \
 	svg-transform.js \
 	vpl-blocklib-svg.js \
-	vpl-blocklib-l2.js \
 	vpl-blocklib-js.js \
 	vpl-blocklib-python.js \
 	vpl-error.js \

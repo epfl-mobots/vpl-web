@@ -57,7 +57,7 @@
 					"tapped = false;\n"
 				],
 				"sectionBegin": "this.addEventListener(\"tap\", function (name, param) {\n",
-				"sectionPreamble": "tappded = true;\n",
+				"sectionPreamble": "tapped = true;\n",
 				"sectionEnd": "});\n",
 				"clause": "tapped"
 			}

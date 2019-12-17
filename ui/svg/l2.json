@@ -381,10 +381,15 @@
 						"leds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
 					]
 				],
-				"statement":
-					"leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\nleds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\nbottomColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`];\n",
-				"statementWithoutInit":
-					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n"
+				"statement": [
+					"leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n",
+					"leds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n",
+					"bottomColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`];\n"
+				],
+				"statementWithoutInit": [
+					"leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n",
+					"leds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n"
+				]
 			}
 		},
 		{
