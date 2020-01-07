@@ -287,9 +287,6 @@ function vplSetup(gui) {
 	var getButtonBounds = A3a.vpl.Commands.getButtonBoundsJS;
 	/** @type {Object.<string,A3a.vpl.Canvas.drawWidget>} */
 	var widgets = A3a.vpl.widgetsJS;
- 	if (A3a.vpl.patchPythonBlocks) {
-		A3a.vpl.patchPythonBlocks();
-	}
 	if (gui) {
 		if (isClassic) {
 			if (gui["blocks"] !== null && gui["blocks"].length > 0) {

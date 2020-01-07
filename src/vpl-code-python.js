@@ -1,5 +1,5 @@
 /*
-	Copyright 2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2019-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -65,7 +65,7 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 		var statement = (evCode.statement || "");
 		if (evCode.clause) {
 			statement =
-				"self.cond = " + evCode.clause + "\n" +
+				"cond = " + evCode.clause + "\n" +
 				"if self.cond and not self.cond0[" + i + "]:\n" +
 				statement +
 				"<\n" +
@@ -111,7 +111,7 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 	}
 
 	if (usesCond) {
-		initVarDecl.unshift("self.cond0 = {}\nself.cond = {}\n");
+		initVarDecl.unshift("self.cond0 = {}\n");
 		initCodeExec.unshift("self.cond0 = {}\n");
 	}
 
