@@ -1,5 +1,5 @@
 /*
-	Copyright 2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2019-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -249,6 +249,12 @@ CSSParser.prototype.processValue = function (key, val) {
 	@return {CSSParser.Length}
 */
 CSSParser.prototype.convertLength = function (length) {
+	// handle min and max
+	if (/^(max|min)\(.*\)$/.test(length)) {
+		var args = length.slice(4, -1).split(",").map(function (arg) { return this.convertLength(arg); }, this);
+		return new CSSParser.Length.MultipleValues(length.slice(0, 3), args);
+	}
+
 	var re = /^(-?([0-9]+\.?|[0-9]*\.[0-9]+))([a-z]*|%)$/.exec(length);
 	var sc = 1;
 	var type = CSSParser.Length.type.absolute;
@@ -504,6 +510,37 @@ CSSParser.Length.prototype.toValue = function (lengthBase) {
 		return this.val * (lengthBase ? Math.min(lengthBase.ww, lengthBase.wh) : 1);
 	case CSSParser.Length.type.wmax:
 		return this.val * (lengthBase ? Math.max(lengthBase.ww, lengthBase.wh) : 1);
+	default:
+		throw "internal";
+	}
+};
+
+/** Length with multiple values (max or min)
+	@constructor
+	@extends {CSSParser.Length}
+	@param {string} fun "max" or "min"
+	@param {number} values
+*/
+CSSParser.Length.MultipleValues = function (fun, values) {
+	CSSParser.Length.call(this, 0);
+	this.fun = fun;
+	this.values = values;
+};
+CSSParser.Length.MultipleValues.prototype = Object.create(CSSParser.Length.prototype);
+CSSParser.Length.MultipleValues.prototype.constructor = CSSParser.Length.MultipleValues;
+
+/** @inheritDoc
+*/
+CSSParser.Length.MultipleValues.prototype.toValue = function (lengthBase) {
+	switch (this.fun) {
+	case "max":
+		return this.values.reduce(function (acc, val) {
+			return Math.max(acc, val.toValue(lengthBase));
+		}, -Infinity);
+	case "min":
+		return this.values.reduce(function (acc, val) {
+			return Math.min(acc, val.toValue(lengthBase));
+		}, Infinity);
 	default:
 		throw "internal";
 	}

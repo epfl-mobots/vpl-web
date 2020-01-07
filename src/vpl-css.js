@@ -128,6 +128,9 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 		return ["butt", "round", "square"].indexOf(val) >= 0;
 	}
 
+	// remove spaces inside single balanced parentheses to be able to split values
+	val = val.replace(/\s+(?=[^()]*\))/g, "");
+
 	switch (key) {
 	case "margin-left":
 	case "margin-right":

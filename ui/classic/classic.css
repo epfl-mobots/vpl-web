@@ -1,7 +1,7 @@
 /*
 	CSS for VPL3 application
     Classic version (blocks, buttons and widgets defined in JavaScript)
-	Copyright 2019, ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE
+	Copyright 2019-2020, ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE
 */
 
 view {
@@ -183,7 +183,7 @@ block.library {
 }
 
 hint {
-	font: 1vw sans-serif;
+	font: max(1vw, 12px) sans-serif;
 	padding: 0.5vw;
 	background-color: white;
 	color: #222;
