@@ -27,7 +27,7 @@ CLOSUREFLAGS = \
 
 # CLOSUREFLAGS += --compilation_level WHITESPACE_ONLY --formatting=PRETTY_PRINT
 
-CLOSUREDBG = --debug --formatting=PRETTY_PRINT
+# CLOSUREDBG = --debug --formatting=PRETTY_PRINT
 
 JS = \
 	a3a-ns.js \
@@ -68,7 +68,6 @@ JS = \
 	svg-preparsed.js \
 	svg-transform.js \
 	vpl-blocklib-svg.js \
-	vpl-blocklib-js.js \
 	vpl-blocklib-python.js \
 	vpl-error.js \
 	vpl-undo.js \

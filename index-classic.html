@@ -302,14 +302,14 @@ sim-playground {
 			"name": "horiz prox adv",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(7 + 33 * $[7] : '<= ' + Math.round(7 + 33 * $[8])) + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(7 + 33 * $[7]) : '<= ' + Math.round(7 + 33 * $[8])) + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
 			}
 		},
 		{
 			"name": "horiz prox 1",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[7] + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[7]) + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
 			}
 		},
 		{
@@ -359,7 +359,7 @@ sim-playground {
 				],
 				"sectionBegin": "onevent `$[0] == 0 ? 'tap' : 'acc'`\n",
 				"sectionPreamble": "`$[0] == 0 ? 'tapped = 1\\n' : ''`",
-				"clauseInit": "`$[0] == 1 ? 'call math.atan2(rollAngle, acc[0], acc[2])\n' : $[0] == 2 ? 'call math.atan2(pitchAngle, acc[1], acc[2])\n' : ''`",
+				"clauseInit": "`$[0] == 1 ? 'call math.atan2(rollAngle, acc[0], acc[2])\\n' : $[0] == 2 ? 'call math.atan2(pitchAngle, acc[1], acc[2])\\n' : ''`",
 				"clause": "`$[0] == 0 ? 'tapped != 0' : (function (name, a) { return a <= -6 ? name + ' < ' + Math.round(2730.67 * a + 1365.33) : a >= 6 ? name + ' >= ' + Math.round(2730.67 * a - 1365.33) : name + ' >= ' + Math.round(2730.67 * a - 1365.33) + ' and ' + name + ' < ' + Math.round(2730.67 * a + 1365.33); })($[0] === 1 ? 'rollAngle' : 'pitchAngle', $[0] === 2 ? $[1] : -$[1])`"
 			}
 		},
@@ -777,8 +777,8 @@ sim-playground {
 					]
 				],
 				"statement": [
-					"`$.map(function (v, i) { return 'state[' + i + '] = ' + (v > 0 ? 'true' : 'false') + ';\\n'; }).filter(function (v) { return v; }).join('')`",
-					"`$[0] || $[1] || $[2] || $[3] ? 'display_state();\\n' : ''`"
+					"`$.map(function (v, i) { return v ? 'state[' + i + '] = ' + (v > 0 ? '1' : '0') + '\\n' : ''; }).join('')`",
+					"`$[0] || $[1] || $[2] || $[3] ? 'callsub display_state\\n' : ''`"
 				]
 			}
 		},
@@ -798,8 +798,8 @@ sim-playground {
 					]
 				],
 				"statement": [
-					"`$.map(function (v, i) { return 'state[' + i + '] = !state[' + i + '];\\n'; }).filter(function (v) { return v; }).join('')`",
-					"`$[0] || $[1] || $[2] || $[3] ? 'sub display_state\\n' : ''`"
+					"`$.map(function (v, i) { return v ? 'state[' + i + '] = 1 - state[' + i + ']\\n' : ''; }).join('')`",
+					"`$[0] || $[1] || $[2] || $[3] ? 'callsub display_state\\n' : ''`"
 				]
 			}
 		},
@@ -820,7 +820,7 @@ sim-playground {
 				],
 				"statement": [
 					"state8 = `$[0]`;\n",
-					"sub display_state8\n"
+					"callsub display_state8\n"
 				],
 				"statementWithoutInit": [
 					"call leds.circle(`$[0] === 0 ? 32 : 0`, `$[0] === 1 ? 32 : 0`, `$[0] === 2 ? 32 : 0`, `$[0] === 3 ? 32 : 0`, ",
@@ -845,7 +845,7 @@ sim-playground {
 				],
 				"statement": [
 					"state8 = (state8 + `$[0] > 0 ? 1 : 7`) % 8;\n",
-					"sub display_state8\n"
+					"callsub display_state8\n"
 				],
 				"statementWithoutInit": [
 					"call leds.circle(`$[0] === 0 ? 32 : 0`, `$[0] === 1 ? 32 : 0`, `$[0] === 2 ? 32 : 0`, `$[0] === 3 ? 32 : 0`, ",
@@ -870,7 +870,7 @@ sim-playground {
 				],
 				"statement": [
 					"`$[0] === 0 ? 'counter = 0' : $[0] > 0 ? 'if counter < 255 then\\ncounter++;\\nend' : 'if counter > 0 then\\ncounter--\\nend'`\n",
-					"sub display_counter\n"
+					"callsub display_counter\n"
 				]
 			}
 		},
@@ -967,7 +967,7 @@ sim-playground {
 			"l2": {
 				"sectionBegin": "onevent prox {\n",
 				"sectionEnd": "}\n",
-				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(7 + 33 * $[7] : '<= ' + Math.round(7 + 33 * $[8])) + '00' : ''; }).filter(function (s) { return s; }).join(' && ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' || ')`"
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(7 + 33 * $[7]) : '<= ' + Math.round(7 + 33 * $[8])) + '00' : ''; }).filter(function (s) { return s; }).join(' && ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' || ')`"
 			}
 		},
 		{
@@ -975,7 +975,7 @@ sim-playground {
 			"l2": {
 				"sectionBegin": "onevent prox {\n",
 				"sectionEnd": "}\n",
-				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[7] + '00' : ''; }).filter(function (s) { return s; }).join(' && ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' || ')`"
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[7]) + '00' : ''; }).filter(function (s) { return s; }).join(' && ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' || ')`"
 			}
 		},
 		{
@@ -1454,7 +1454,7 @@ sim-playground {
 					]
 				],
 				"statement": [
-					"`$.map(function (v, i) { return 'state[' + i + '] = ' + (v > 0 ? 'true' : 'false') + ';\\n'; }).filter(function (v) { return v; }).join('')`",
+					"`$.map(function (v, i) { return v ? 'state[' + i + '] = ' + (v > 0 ? 'true' : 'false') + ';\\n' : ''; }).join('')`",
 					"`$[0] || $[1] || $[2] || $[3] ? 'display_state();\\n' : ''`"
 				]
 			}
@@ -1480,7 +1480,7 @@ sim-playground {
 					]
 				],
 				"statement": [
-					"`$.map(function (v, i) { return 'state[' + i + '] = !state[' + i + '];\\n'; }).filter(function (v) { return v; }).join('')`",
+					"`$.map(function (v, i) { return v ? 'state[' + i + '] = !state[' + i + '];\\n' : ''; }).join('')`",
 					"`$[0] || $[1] || $[2] || $[3] ? 'display_state();\\n' : ''`"
 				]
 			}
@@ -1615,6 +1615,352 @@ sim-playground {
 {
 	"blocks": [
 		{
+			"name": "!stop",
+			"js": {
+				"statement": [
+					"this.set(\"motor.left\", 0);\n",
+					"this.set(\"motor.right\", 0);\n"
+				]
+			}
+		},
+		{
+			"name": "button",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"buttons\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clause": "`['center', 'forward', 'backward', 'right', 'left'].map(function (s, i) { return $[i] ? 'this.get(\"button.' + s + '\")' : ''; }).filter(function (s) { return s; }).join(' && ') || ['center', 'forward', 'backward', 'right', 'left'].map(function (s) { return 'this.get(\"button.' + s + '\")'; }).join(' || ')`"
+			}
+		},
+		{
+			"name": "button 1",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"buttons\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clause": "this.get(\"button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]`\")"
+			}
+		},
+		{
+			"name": "horiz prox",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"prox\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'this.get(\"prox.horizontal\")[' + ix + '] ' + ($[i] > 0 ? '>' : '<') + '= 0.5' : ''; }).filter(function (s) { return s; }).join(' || ')`"
+			}
+		},
+		{
+			"name": "horiz prox adv",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"prox\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'this.get(\"prox.horizontal\")[' + ix + '] ' + ($[i] > 0 ? '>= ' + toFixed($[7]) : '<= ' + toFixed($[8])) : ''; }).filter(function (s) { return s; }).join(' && ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'this.get(\"prox.horizontal\")[' + ix + '] ' + ($[i] > 0 ? '>= ' + toFixed($[7]) : '<= ' + toFixed($[8])); }).join(' || ')`"
+			}
+		},
+		{
+			"name": "horiz prox 1",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"prox\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'this.get(\"prox.horizontal\")[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + toFixed($[7]) : ''; }).filter(function (s) { return s; }).join(' && ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'this.get(\"prox.horizontal\")[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + toFixed($[7]); }).join(' || ')`"
+			}
+		},
+		{
+			"name": "ground",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"prox\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'this.get(\"prox.ground.delta\")[' + ix + '] ' + ($[i] > 0 ? '>' : '<') + '= 0.5' : ''; }).filter(function (s) { return s; }).join(' || ')`"
+			}
+		},
+		{
+			"name": "ground adv",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"prox\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'this.get(\"prox.ground.delta\")[' + ix + '] ' + ($[i] > 0 ? '>= ' + toFixed($[2]) : '<= ' + toFixed($[3])) : ''; }).filter(function (s) { return s; }).join(' && ') || [0, 1].map(function (ix) { return 'this.get(\"prox.ground.delta\")[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + toFixed($[2]); }).join(' || ')`"
+			}
+		},
+		{
+			"name": "ground 1",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"prox\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'this.get(\"prox.ground.delta\")[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + toFixed($[2]) : ''; }).filter(function (s) { return s; }).join(' && ') || [0, 1].map(function (ix) { return 'this.get(\"prox.ground.delta\")[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + toFixed($[2]); }).join(' || ')`"
+			}
+		},
+		{
+			"name": "tap",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"tap\", function (name, param) {\n",
+				"sectionEnd": "});\n"
+			}
+		},
+		{
+			"name": "accelerometer",
+			"js": {
+				"initVarDecl": [
+					"`$[0] == 0 ? 'bool tapped;\\n' : ''`"
+				],
+				"initCodeExec": [
+					"`$[0] == 0 ? 'tapped = false;\\n' : ''`"
+				],
+				"sectionBegin": "this.addEventListener($[0] == 0 ? \"tap\" : \"acc\", function (name, param) {\n",
+				"sectionEnd": "}\n",
+				"sectionPreamble": "`$[0] == 0 ? 'tapped = true;\\n' : ''`",
+				"clauseInit": "`$[0] === 1 ? 'var rollAngle = Math.atan2(acc[0], acc[2]);\\n' : $[0] === 2 ? 'var pitchAngle = Math.atan2(acc[1], acc[2]);\\n' : ''`",
+				"clause": "`$[0] == 0 ? 'tapped' : (function (name, a) { return a <= -6 ? name + ' < ' + (Math.PI / 12 * (a + 0.5)).toFixed(2) : a >= 6 ? name + ' >= ' + (Math.PI / 12 * (a - 0.5)).toFixed(2) : name + ' >= ' + (Math.PI / 12 * (a - 0.5)).toFixed(2) + ' && ' + name + ' < ' + (Math.PI / 12 * (a + 0.5)).toFixed(2); })($[0] === 1 ? 'rollAngle' : 'pitchAngle', $[0] === 2 ? $[1] : -$[1])`"
+			}
+		},
+		{
+			"name": "roll",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"acc\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clauseInit":
+					"var rollAngle = Math.atan2(acc[0], acc[2]);\n",
+				"clause":
+					"rollAngle >= `toFixed(Math.PI / 12 * ($[0] - 0.5))` && rollAngle < `toFixed(Math.PI / 12 * ($[0] + 0.5))`"
+			}
+		},
+		{
+			"name": "pitch",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"acc\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clauseInit":
+					"var pitchAngle = Math.atan2(acc[1], acc[2]);\n",
+				"clause":
+					"pitchAngle >= `toFixed(Math.PI / 12 * (a - 0.5))` && pitchAngle < `toFixed(Math.PI / 12 * (a + 0.5))`"
+			}
+		},
+		{
+			"name": "yaw",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"acc\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clauseInit":
+					"var yawAngle = Math.atan2(acc[0], acc[1]);\n",
+				"clause":
+					"yawAngle >= `toFixed(Math.PI / 12 * (a - 0.5))` && yawAngle < `toFixed(Math.PI / 12 * (a + 0.5))`"
+			}
+		},
+		{
+			"name": "clap",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"mic\", function (name, param) {\n",
+				"sectionEnd": "});\n"
+			}
+		},
+		{
+			"name": "init",
+			"js": {
+				"sectionBegin": "// init block\n"
+			}
+		},
+		{
+			"name": "timer",
+			"js": {
+				"initCodeExec": [
+					[
+						"// stop timer 0\n",
+						"this.setTimer(0, -1);\n"
+					]
+				],
+				"sectionBegin": "this.addEventListener(\"timer0\", function (name, param) {\n",
+				"sectionEnd": "});\n"
+			}
+		},
+		{
+			"name": "state",
+			"js": {
+				"initVarDecl": [
+					[
+						"// variables for state\n",
+						"this.setClientState(\"state\", []);\n"
+					]
+				],
+				"initCodeExec": [
+					"this.setClientState(\"state\", [false, false, false, false]);\n"
+				],
+				"clauseInit": "var state0 = this.getClientState(\"state\");\n",
+				"clause": "`$.map(function (v, i) { return (v >= 0 ? '' : '!') + 'state[' + i + ']'; }).filter(function (v, i) { return $[i]; }).join(' && ')`"
+			}
+		},
+		{
+			"name": "state 8",
+			"js": {
+				"initVarDecl": [
+					[
+						"// variable for exclusive state\n",
+						"this.setClientState(\"state8\", 0);\n"
+					]
+				],
+				"initCodeExec": [
+					"this.setClientState(\"state8\", 0);\n"
+				],
+				"clauseInit": "var state80 = this.getClientState(\"state8\");\n",
+				"clause": "state80 == `$[0].toString(10)`"
+			}
+		},
+		{
+			"name": "counter comparison",
+			"js": {
+				"initVarDecl": [
+					[
+						"// variable for counter\n",
+						"this.setClientState(\"counter\", 0);\n"
+					]
+				],
+				"initCodeExec": [
+					"this.setClientState(\"counter\", 0);\n"
+				],
+				"clauseInit": "var counter0 = this.getClientState(\"counter\");\n",
+				"clause": "counter0 `$[0] === 0 ? '==' : $[0] > 0 ? '>=' : '<='` `$[1]`"
+			}
+		},
+		{
+			"name": "color state",
+			"js": {
+				"clause": "`$.map(function (p, i) { return 'topColor[' + i + '] / 11 == ' + Math.floor(p * 2.99); }).join(' && ')`"
+			}
+		},
+		{
+			"name": "color 8 state",
+			"js": {
+				"clause": "`$.map(function (p, i) { return 'topColor[' + i + '] / 11 == ' + Math.floor(p * 2.99); }).join(' && ')`"
+			}
+		},
+		{
+			"name": "motor state",
+			"js": {
+				"clause": [
+					"`$[0] == 0 ? 'Math.abs(' : ''`this.get(\"motor.left\")`$[0] > 0 ? ' > ' : $[0] < 0 ? ' < -' : ') < '`0.1 ",
+					"&& `$[1] == 0 ? 'Math.abs(' : ''`this.get(\"motor.right\")`$[1] > 0 ? ' > ' : $[1] < 0 ? ' < -' : ') < '`0.1"
+				]
+			}
+		},
+		{
+			"name": "motor",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement": [
+					"this.set(\"motor.left\", `toFixed($[0])`);\n",
+					"this.set(\"motor.right\", `toFixed($[1])`);\n"
+				]
+			}
+		},
+		{
+			"name": "move",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement": [
+					"this.set(\"motor.left\", `toFixed([0, 0.2, -0.2, 0.2-0.05, 0.2+0.05, -0.2, 0.2][$[0]])`);\n",
+					"this.set(\"motor.right\", `toFixed([0, 0.2, -0.2, 0.2+0.05, 0.2-0.05, 0.2, -0.2][$[0]])`);\n"
+				]
+			}
+		},
+		{
+			"name": "top color",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.top\", [`$.map(toFixed).join(', ')`]);\n"
+			}
+		},
+		{
+			"name": "top color 8",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.top\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`]);\n"
+			}
+		},
+		{
+			"name": "bottom color",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement": [
+					"this.set(\"leds.bottom.left\", [`$.map(toFixed).join(', ')`]);\n",
+					"this.set(\"leds.bottom.right\", [`$.map(toFixed).join(', ')`]);\n"
+				]
+			}
+		},
+		{
+			"name": "bottom-left color",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.bottom.left\", [`$.map(toFixed).join(', ')`]);\n"
+			}
+		},
+		{
+			"name": "bottom-right color",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.bottom.right\", [`$.map(toFixed).join(', ')`]);\n"
+			}
+		},
+		{
+			"name": "bottom color 8",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement": [
+					"this.set(\"leds.bottom.left\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`]);\n",
+					"this.set(\"leds.bottom.right\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`]);\n"
+				]
+			}
+		},
+		{
+			"name": "bottom-left color 8",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.bottom.left\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`]);\n"
+			}
+		},
+		{
+			"name": "bottom-right color 8",
+			"js": {
+				"initCodeExec": [
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"leds.bottom.right\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`]);\n"
+			}
+		},
+		{
+			"name": "notes",
+			"js": {
+				"initCodeExec": [
+					[
+						"// init notes\n",
+						"this.set(\"sound\", {});\n"
+					],
+					"this.set(\"leds.top\", [0, 0, 0]);\n"
+				],
+				"statement":
+					"this.set(\"sound\", {\"f\": [`$.filter(function (a, i) { return i % 2 == 0; }).map(function (h, i) { return $[2 * i + 1] ? [262, 311, 370, 440, 524, 370][h] : 0; }).join(', ')`], \"d\": [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return d ? 7 * d : 28; }).join(', ')`]});\n"
+			}
+		},
+		{
 			"name": "play",
 			"js": {
 				"initCodeExec": [
@@ -1631,6 +1977,134 @@ sim-playground {
 				],
 				"statement": "this.set(\"sound\", {});\n"
 			}
+		},
+		{
+			"name": "set state",
+			"js": {
+				"initVarDecl": [
+					[
+						"// variables for state\n",
+						"this.setClientState(\"state\", []);\n"
+					]
+				],
+				"initCodeExec": [
+					"this.setClientState(\"state\", [false, false, false, false]);\n"
+				],
+				"statement": [
+					"var state = this.getClientState(\"state\");\n",
+					"`$.map(function (v, i) { return v ? 'state[' + i + '] = ' + (v > 0 ? 'true' : 'false') + ';\\n' : ''; }).join('')`",
+					"this.setClientState(\"state\", state);\n",
+					"`$[0] || $[1] || $[2] || $[3] ? 'this.set(\"leds.circle\", [0,state[1]?1:0,0,state[3]?1:0,0,state[2]?1:0,0,state[0]?1:0]);\\n' : ''`"
+				]
+			}
+		},
+		{
+			"name": "toggle state",
+			"js": {
+				"initVarDecl": [
+					[
+						"// variables for state\n",
+						"this.setClientState(\"state\", []);\n"
+					]
+				],
+				"initCodeExec": [
+					"this.setClientState(\"state\", [false, false, false, false]);\n"
+				],
+				"statement": [
+					"var state = this.getClientState(\"state\");\n",
+					"`$.map(function (v, i) { return v ? 'state[' + i + '] = !state[' + i + '];\\n' : ''; }).join('')`",
+					"this.setClientState(\"state\", state);\n",
+					"`$[0] || $[1] || $[2] || $[3] ? 'this.set(\"leds.circle\", [0,state[1]?1:0,0,state[3]?1:0,0,state[2]?1:0,0,state[0]?1:0]);\\n' : ''`"
+				]
+			}
+		},
+		{
+			"name": "set state 8",
+			"js": {
+				"initVarDecl": [
+					[
+						"// variable for exclusive state\n",
+						"this.setClientState(\"state8\", 0);\n"
+					]
+				],
+				"initCodeExec": [
+					"this.setClientState(\"state8\", 0);\n"
+				],
+				"statement": [
+					"this.setClientState(\"state8\", `$[0].toString(10)`);\n",
+					"this.set(\"leds.circle\", [`[0,1,2,3,4,5,6,7].map(function (i) { return $[0] === i; }).join(', ')`]);\n"
+				],
+				"statementWithoutInit":
+					"this.set(\"leds.circle\", [`[0,1,2,3,4,5,6,7].map(function (i) { return $[0] === i; }).join(', ')`]);\n"
+			}
+		},
+		{
+			"name": "change state 8",
+			"js": {
+				"initVarDecl": [
+					[
+						"// variable for exclusive state\n",
+						"this.setClientState(\"state8\", 0);\n"
+					]
+				],
+				"initCodeExec": [
+					"this.setClientState(\"state8\", 0);\n"
+				],
+				"statement": [
+					"var state8 = (this.getClientState(\"state8\") + `$[0] > 0 ? 1 : 7`) % 8;",
+					"this.setClientState(\"state8\", state8);\n",
+					"this.set(\"leds.circle\", [`[0,1,2,3,4,5,6,7].map(function (i) { return 'state8 === ' + i.toString(10); }).join(', ')`]);\n"
+				],
+				"statementWithoutInit":
+					"this.set(\"leds.circle\", [`$[0] === 0 ? 1 : 0`,`$[0] === 1 ? 1 : 0`,`$[0] === 2 ? 1 : 0`,`$[0] === 3 ? 1 : 0`,`$[0] === 4 ? 1 : 0`,`$[0] === 5 ? 1 : 0`,`$[0] === 6 ? 1 : 0`,`$[0] === 7 ? 1 : 0`]);\n"
+			}
+		},
+		{
+			"name": "set counter",
+			"js": {
+				"initVarDecl": [
+					[
+						"// variable for counter\n",
+						"this.setClientState(\"counter\", 0);\n"
+					]
+				],
+				"initCodeExec": [
+					"this.setClientState(\"counter\", 0);\n"
+				],
+				"statement": [
+					"var counter = `$[0] === 0 ? 0 : $[0] > 0 ? 'Math.min(this.getClientState(\"counter\") + 1, 255)' : 'Math.max(this.getClientState(\"counter\") - 1, 0)'`;\n",
+					"this.setClientState(\"counter\", counter);\n",
+					"this.set(\"leds.circle\", [counter&1?1:0,counter&2?1:0,counter&4?1:0,counter&8?1:0,counter&16?1:0,counter&32?1:0,counter&64?1:0,counter&128?1:0]);\n"
+				]
+			}
+		},
+		{
+			"name": "set timer",
+			"js": {
+				"initCodeExec": [
+					[
+						"// stop timer 0\n",
+						"this.setTimer(0, -1);\n"
+					]
+				],
+				"statement": "this.setTimer(0, `$[0].toFixed(3)`);\n"
+			}
+		},
+		{
+			"name": "set timer log",
+			"js": {
+				"initCodeExec": [
+					[
+						"// stop timer 0\n",
+						"this.setTimer(0, -1);\n"
+					]
+				],
+				"statement": "this.setTimer(0, `$[0].toFixed(3)`);\n"
+			}
+		},
+		{
+			"name": "picture comment",
+			"js": {}
 		}
 	]
 }
@@ -2003,7 +2477,6 @@ pre#editor-lines {
 <script src="src/vpl-blocklibutil.js"></script>
 <script src="src/vpl-blocklib.js"></script>
 <script src="src/vpl-blocklib-svg.js"></script>
-<script src="src/vpl-blocklib-js.js"></script>
 <script src="src/vpl-blocklib-python.js"></script>
 <script src="src/vpl-jsoncode.js"></script>
 <script src="src/vpl-rule.js"></script>

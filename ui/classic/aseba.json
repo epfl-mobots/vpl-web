@@ -39,14 +39,14 @@
 			"name": "horiz prox adv",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(7 + 33 * $[7] : '<= ' + Math.round(7 + 33 * $[8])) + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(7 + 33 * $[7]) : '<= ' + Math.round(7 + 33 * $[8])) + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
 			}
 		},
 		{
 			"name": "horiz prox 1",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[7] + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[7]) + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
 			}
 		},
 		{
@@ -96,7 +96,7 @@
 				],
 				"sectionBegin": "onevent `$[0] == 0 ? 'tap' : 'acc'`\n",
 				"sectionPreamble": "`$[0] == 0 ? 'tapped = 1\\n' : ''`",
-				"clauseInit": "`$[0] == 1 ? 'call math.atan2(rollAngle, acc[0], acc[2])\n' : $[0] == 2 ? 'call math.atan2(pitchAngle, acc[1], acc[2])\n' : ''`",
+				"clauseInit": "`$[0] == 1 ? 'call math.atan2(rollAngle, acc[0], acc[2])\\n' : $[0] == 2 ? 'call math.atan2(pitchAngle, acc[1], acc[2])\\n' : ''`",
 				"clause": "`$[0] == 0 ? 'tapped != 0' : (function (name, a) { return a <= -6 ? name + ' < ' + Math.round(2730.67 * a + 1365.33) : a >= 6 ? name + ' >= ' + Math.round(2730.67 * a - 1365.33) : name + ' >= ' + Math.round(2730.67 * a - 1365.33) + ' and ' + name + ' < ' + Math.round(2730.67 * a + 1365.33); })($[0] === 1 ? 'rollAngle' : 'pitchAngle', $[0] === 2 ? $[1] : -$[1])`"
 			}
 		},
@@ -514,8 +514,8 @@
 					]
 				],
 				"statement": [
-					"`$.map(function (v, i) { return 'state[' + i + '] = ' + (v > 0 ? 'true' : 'false') + ';\\n'; }).filter(function (v) { return v; }).join('')`",
-					"`$[0] || $[1] || $[2] || $[3] ? 'display_state();\\n' : ''`"
+					"`$.map(function (v, i) { return v ? 'state[' + i + '] = ' + (v > 0 ? '1' : '0') + '\\n' : ''; }).join('')`",
+					"`$[0] || $[1] || $[2] || $[3] ? 'callsub display_state\\n' : ''`"
 				]
 			}
 		},
@@ -535,8 +535,8 @@
 					]
 				],
 				"statement": [
-					"`$.map(function (v, i) { return 'state[' + i + '] = !state[' + i + '];\\n'; }).filter(function (v) { return v; }).join('')`",
-					"`$[0] || $[1] || $[2] || $[3] ? 'sub display_state\\n' : ''`"
+					"`$.map(function (v, i) { return v ? 'state[' + i + '] = 1 - state[' + i + ']\\n' : ''; }).join('')`",
+					"`$[0] || $[1] || $[2] || $[3] ? 'callsub display_state\\n' : ''`"
 				]
 			}
 		},
@@ -557,7 +557,7 @@
 				],
 				"statement": [
 					"state8 = `$[0]`;\n",
-					"sub display_state8\n"
+					"callsub display_state8\n"
 				],
 				"statementWithoutInit": [
 					"call leds.circle(`$[0] === 0 ? 32 : 0`, `$[0] === 1 ? 32 : 0`, `$[0] === 2 ? 32 : 0`, `$[0] === 3 ? 32 : 0`, ",
@@ -582,7 +582,7 @@
 				],
 				"statement": [
 					"state8 = (state8 + `$[0] > 0 ? 1 : 7`) % 8;\n",
-					"sub display_state8\n"
+					"callsub display_state8\n"
 				],
 				"statementWithoutInit": [
 					"call leds.circle(`$[0] === 0 ? 32 : 0`, `$[0] === 1 ? 32 : 0`, `$[0] === 2 ? 32 : 0`, `$[0] === 3 ? 32 : 0`, ",
@@ -606,8 +606,8 @@
 					]
 				],
 				"statement": [
-					"`$[0] === 0 ? 'counter = 0' : $[0] > 0 ? 'if counter < 255 then\\ncounter++\\nend' : 'if counter > 0 then\\ncounter--\\nend'`\n",
-					"sub display_counter\n"
+					"`$[0] === 0 ? 'counter = 0' : $[0] > 0 ? 'if counter < 255 then\\ncounter++;\\nend' : 'if counter > 0 then\\ncounter--\\nend'`\n",
+					"callsub display_counter\n"
 				]
 			}
 		},
