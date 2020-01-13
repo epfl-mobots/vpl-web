@@ -519,7 +519,7 @@ CSSParser.Length.prototype.toValue = function (lengthBase) {
 	@constructor
 	@extends {CSSParser.Length}
 	@param {string} fun "max" or "min"
-	@param {number} values
+	@param {Array.<CSSParser.Length>} values
 */
 CSSParser.Length.MultipleValues = function (fun, values) {
 	CSSParser.Length.call(this, 0);
