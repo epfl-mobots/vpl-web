@@ -481,6 +481,8 @@ Values:
 - overflow: wrap (default) or scroll
 - vertical-align: top, middle (default), or bottom
 
+Functions min and max are supported in lengths.
+
 Box elements:
 
 - view (classes: vpl, sim, src)

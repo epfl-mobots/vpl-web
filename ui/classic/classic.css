@@ -12,6 +12,14 @@ toolbar {
 	padding: 5px;
 	margin: 0;
 }
+toolbar.top {
+	border-bottom: 1px silver;
+}
+toolbar.bottom {
+	border-top: 1px silver;
+	border-left: 1px silver;
+	border-right: 1px silver;
+}
 
 button {
 	width: 3.0ww;
@@ -27,7 +35,7 @@ button {
 }
 
 button.vpl.bottom {
-	font: 1.7vw sans-serif;
+	font: max(1.7vw, 12px) sans-serif;
 }
 
 #vpl-message-error {
@@ -42,7 +50,7 @@ button.vpl.bottom {
 
 #vpl-filename {
 	width: 9ww;
-	font: 1vw sans-serif;
+	font: max(1vw, 12px) sans-serif;
 }
 
 separator {

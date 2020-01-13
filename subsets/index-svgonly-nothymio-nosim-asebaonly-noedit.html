@@ -2016,7 +2016,7 @@ minus editor and disassembly
 */
 
 view {
-	background: #fbfcfc;
+	background: #f5f7f8;
 }
 
 toolbar {
@@ -2024,9 +2024,9 @@ toolbar {
 }
 
 toolbar.top {
-	border-bottom: 2px solid #eceff1;
-	background: #f0f3f5;
-	/*background: #eceff1*/
+	/*background: #f0f3f5;*/
+	background: #fbfcfc;
+	box-shadow: 0px 0px 5px #cfd8dc;
 }
 
 button {
@@ -2038,8 +2038,10 @@ button {
 }
 
 vpl.top {
-	border-bottom: 1px solid #eceff1;
-	background: #f5f7f8;
+}
+
+vpl.bottom {
+	border-top: 1px solid #eceff1;
 }
 
 button.vpl.top {
@@ -2051,7 +2053,7 @@ button.vpl.top {
 #vpl-message-error, #vpl-message-warning {
 	color: #455a64;
 	width: 20vw;
-	background: #fefefe;
+	background: #f0f3f5;;
 	padding: 0px 4px 0px 4px;
 	border-radius: 2.5wh;
 }
@@ -2065,8 +2067,9 @@ vpl {
 	padding: 24px 0 16px 0;
 	margin: 0px;
 	border-radius: 4px;
-	background: #fbfcfc;
-	/*box-shadow: 0px 0px 8px #aabbcc;*/
+	/*background: #f0f3f5;
+	box-shadow: 0px 0px 2px #aabbcc;*/
+	background: transparent;
 }
 
 block {
@@ -2079,11 +2082,11 @@ block {
 	background: transparent;
 	vertical-align: bottom;
 	border-radius: 4px;
-	border-width: 1.5px;
+	border-width: 3px;
 }
 
 block:small {
-	border-width: 2px;
+	border-radius: 2px;
 	border-color: white;
 }
 
@@ -2102,7 +2105,7 @@ block.empty {
 	border-style: dashed;
 	background: transparent;
 	width: 3.6ww;
-	border-radius: 4px;
+	border-radius: 2px;
 	vertical-align: bottom;
 }
 
@@ -2113,15 +2116,15 @@ block.empty.event-aux {
 }
 
 block.event {
-	border-color: #ffa799;
+	border-color: #ffae9e;
 }
 
 block.action {
-	border-color: #80b6ff;
+	border-color: #64b5f6;
 }
 
 block.state {
-	border-color: #ffa799;
+	border-color: #ffae9e;
 }
 
 block.empty:only-child {
@@ -2135,11 +2138,13 @@ block.library {
 	min-width: 54px;
 	min-height: 54px;
 	margin: 6px;
+	border-radius: 2px;
+	border-width: 2px;
 }
 
 block-container{
-	background: #f0f3f5;
-	border-radius: 4px;
+	background: #fbfcfc;
+	border-radius: 2px;
 	padding: 8px;
 }
 
@@ -2147,25 +2152,26 @@ block-container.error {
 	border-bottom: #ff1744 2px;
 }
 block-container.warning {
-	border-bottom: #ffd600 2px;
+	border-bottom: #fbca00 2px;
 }
 
 rule {
-	background: transparent;
+	background: #fbfcfc;
 	border: solid #eceff1 2px;
 	border-radius: 4px;
 	padding: 8px;
-	margin: 16px;
+	margin: 12px;
+	/*box-shadow: 0px 0px 8px #f5f7f8;*/
 }
 
 overlay-rectangle.disabled {
 	background: rgba(120,144,156,0.4);
-	border-radius: 4px;
+	border-radius: 2px;
 }
 
 overlay-rectangle.drop-target {
 	border: 0.1vw #6200ea;
-	border-radius: 4px;
+	border-radius: 2px;
 }
 
 crossout-line {
@@ -2201,9 +2207,19 @@ conflict-line {
 block-library {
 	padding: 24px 8px 8px 8px;
 	margin: 0px;
-	border-left: 2px solid #eceff1;
+	backgroun: white;
+	box-shadow: 0px 0px 2px #aabbcc;
+	/*border-left: 2px solid #eceff1;
 	border-right: 2px solid #eceff1;
-	/*overflow: scroll;*/
+	overflow: scroll;*/
+}
+
+hint {
+	font-size: 1vw;
+ 	font-family: 'Rubik', sans-serif;
+	padding: 0.5vw;
+	background-color: #f5f7f8;
+	color: #222;
 }
 
 /* simulator */

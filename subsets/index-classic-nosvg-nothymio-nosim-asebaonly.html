@@ -53,7 +53,7 @@ full:
 /*
 	CSS for VPL3 application
     Classic version (blocks, buttons and widgets defined in JavaScript)
-	Copyright 2019, ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE
+	Copyright 2019-2020, ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE
 */
 
 view {
@@ -63,6 +63,14 @@ view {
 toolbar {
 	padding: 5px;
 	margin: 0;
+}
+toolbar.top {
+	border-bottom: 1px silver;
+}
+toolbar.bottom {
+	border-top: 1px silver;
+	border-left: 1px silver;
+	border-right: 1px silver;
 }
 
 button {
@@ -79,7 +87,7 @@ button {
 }
 
 button.vpl.bottom {
-	font: 1.7vw sans-serif;
+	font: max(1.7vw, 12px) sans-serif;
 }
 
 #vpl-message-error {
@@ -226,6 +234,13 @@ block.library {
 	height: 4vw;
 	min-width: 32px;
 	min-height: 32px;
+}
+
+hint {
+	font: max(1vw, 12px) sans-serif;
+	padding: 0.5vw;
+	background-color: white;
+	color: #222;
 }
 
 /* simulator */
