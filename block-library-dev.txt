@@ -540,6 +540,7 @@ Some global style settings can be specified in a top-level object named "style".
 - "blockLineWidth" (number, default: based on block size): line width used in blocks
 - "minTemplateSize" (number, default: 32): minimum block size in libraries
 - "minInteractiveBlockSize" (number, default: 60): minimum block size where direct manipulation of interactive controls (buttons, sliders etc.) is possible; if smaller, a zoomed version is displayed when the block is clicked or touched
+- "minTouchInteractiveBlockSize" (number, default: 120): same as "minInteractiveBlockSize", but for touch events, typically on smartphones and tablets
 - "eventRightAlign" (boolean, number: false): true to align event blocks on the right
 
 - "ruleMarks" (string, default: "#bbb"): color of rule marks (colon dots)
