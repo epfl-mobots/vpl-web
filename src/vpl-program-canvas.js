@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -158,10 +158,17 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, x
 		}
 	);
 	var canvasSize = canvas.getSize();
-	if (!(opts && opts.notInteractive || !block.blockTemplate.mousedown) && program.zoomBlocks) {
-		item.zoomOnLongPress = function (zoomedItem) {
-			return canvas.makeZoomedClone(zoomedItem);
-		};
+	if (!(opts && opts.notInteractive || !block.blockTemplate.mousedown)) {
+		if (program.zoomBlocks) {
+			item.zoomOnLongPress = function (zoomedItem) {
+				return canvas.makeZoomedClone(zoomedItem);
+			};
+		}
+		if (program.touchZoomBlocks) {
+			item.zoomOnLongTouchPress = function (zoomedItem) {
+				return canvas.makeZoomedClone(zoomedItem);
+			};
+		}
 	}
 	item.clickable = !(opts && opts.notClickable);
 	item.draggable = !(opts && opts.notDraggable);
@@ -589,7 +596,9 @@ A3a.vpl.Program.prototype.addEventHandlerConflictLinkToCanvas = function (canvas
 */
 A3a.vpl.Application.prototype.getCSSBoxes = function (css) {
 	var cssBoxes = {};
-	var zoomBlocks = this.program.zoomBlocks;
+	var zoomBlocks = window.matchMedia && window.matchMedia("(pointer: coarse)").matches
+		?  this.program.touchZoomBlocks
+		: this.program.zoomBlocks;
 	cssBoxes.viewBox = css.getBox({tag: "view", clas: ["vpl"]});
 	cssBoxes.toolbarSeparatorBox = css.getBox({tag: "separator", clas: ["vpl", "top"]});
 	cssBoxes.toolbarSeparator2Box = css.getBox({tag: "separator", clas: ["vpl", "bottom"]});
@@ -684,6 +693,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 
 	// zoom blocks if too small
 	program.zoomBlocks = canvas.dims.blockSize < canvas.dims.minInteractiveBlockSize;
+	program.touchZoomBlocks = canvas.dims.blockSize < canvas.dims.minTouchInteractiveBlockSize;
 
 	var canvasSize = canvas.getSize();
 	var renderingState = /** @type {A3a.vpl.Program.CanvasRenderingState} */(canvas.state.vpl);

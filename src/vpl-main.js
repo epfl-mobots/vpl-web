@@ -21,17 +21,17 @@ and installs global event listeners.
 A3a.vpl.blockLib = {};
 
 // window-level drag
-/** @type {?function(Event,boolean):void} */
+/** @type {?function(Event,boolean,boolean):void} */
 A3a.vpl.dragFun = null;
 document.addEventListener("mousemove", function (e) {
 	if (A3a.vpl.dragFun !== null) {
-		A3a.vpl.dragFun(e, false);
+		A3a.vpl.dragFun(e, false, false);
 		e.preventDefault();
 	}
 }, false);
 document.addEventListener("mouseup", function (e) {
 	if (A3a.vpl.dragFun !== null) {
-		A3a.vpl.dragFun(e, true);
+		A3a.vpl.dragFun(e, true, false);
 		A3a.vpl.dragFun = null;
 		e.preventDefault();
 	}
@@ -44,13 +44,13 @@ document.addEventListener("touchmove", function (e) {
 	if (A3a.vpl.dragFun !== null) {
 		var touches = e.targetTouches;
 		A3a.vpl.lastTouch = touches[0];
-		A3a.vpl.dragFun(A3a.vpl.lastTouch, false);
+		A3a.vpl.dragFun(A3a.vpl.lastTouch, false, true);
 	}
 	return false;
 }, {"capture": false, "passive": false});
 document.addEventListener("touchend", function (e) {
 	if (A3a.vpl.dragFun !== null) {
-		A3a.vpl.dragFun(A3a.vpl.lastTouch, true);
+		A3a.vpl.dragFun(A3a.vpl.lastTouch, true, true);
 		A3a.vpl.dragFun = null;
 		e.preventDefault();
 	}

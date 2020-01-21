@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -62,8 +62,10 @@ A3a.vpl.CanvasItem = function (data, width, height, x, y, draw, interactiveCB, d
 	/** @type {?A3a.vpl.CanvasItem.doOver} */
 	this.doOver = null;
 	this.id = id || "";
-	/** @type {?function(A3a.vpl.CanvasItem):A3a.vpl.CanvasItem} */
+	/** @type {?function(A3a.vpl.CanvasItem,boolean):A3a.vpl.CanvasItem} */
 	this.zoomOnLongPress = null;
+	/** @type {?function(A3a.vpl.CanvasItem,boolean):A3a.vpl.CanvasItem} */
+	this.zoomOnLongTouchPress = null;
 	/** @type {?function():void} */
 	this.onUpdate = null;
 	/** @type {*} */
@@ -310,7 +312,7 @@ A3a.vpl.Canvas = function (canvas, options) {
 				self.onDraw ? self.onDraw() : self.redraw();
 				// continue with window-level handler
 				A3a.vpl.dragFun = item.interactiveCB.mousedrag
-					? function (e, isUp) {
+					? function (e, isUp, isTouch) {
 						if (!isUp) {
 							item.interactiveCB.mousedrag(self, item.data,
 								/** @type {number} */(item.dragging),
@@ -358,7 +360,8 @@ A3a.vpl.Canvas = function (canvas, options) {
 			}
 			self.clickTimestamp = Date.now();
 			if (item.interactiveCB) {
-				if (item.zoomOnLongPress && self.zoomedItemIndex !== indices[0]) {
+				if ((downEvent instanceof MouseEvent ? item.zoomOnLongPress : item.zoomOnLongTouchPress) &&
+					self.zoomedItemIndex !== indices[0]) {
 					// continue with item drag callback
 				} else {
 					if (startInteraction(item)) {
@@ -374,12 +377,13 @@ A3a.vpl.Canvas = function (canvas, options) {
 				var d = draggedItem.getTranslation();
 				var x0 = mouseEvent.x - d.dx;
 				var y0 = mouseEvent.y - d.dy;
-				A3a.vpl.dragFun = function (dragEvent, isUp) {
+				A3a.vpl.dragFun = function (dragEvent, isUp, isTouch) {
 					var mouseEvent = self.makeMouseEvent(dragEvent, backingScale);
 					if (isUp) {
-						if (item.zoomOnLongPress && item === self.items[self.clickedItemIndex(mouseEvent, false)[0]]) {
+						if ((isTouch ? item.zoomOnLongTouchPress : item.zoomOnLongPress) &&
+							item === self.items[self.clickedItemIndex(mouseEvent, false)[0]]) {
 							self.zoomedItemIndex = indices[0];
-							self.zoomedItemProxy = item.zoomOnLongPress(item);
+							self.zoomedItemProxy = (isTouch ? item.zoomOnLongTouchPress : item.zoomOnLongPress)(item, isTouch);
 						} else if (dropTargetItem && dropTargetItem.doDrop
 							&& (!dropTargetItem.canDrop || dropTargetItem.canDrop(dropTargetItem, draggedItem))) {
 							dropTargetItem.doDrop(dropTargetItem, draggedItem);
@@ -699,6 +703,7 @@ A3a.vpl.Canvas.prototype.update = function () {
 	@typedef {{
 		blockSize: number,
 		minInteractiveBlockSize: number,
+		minTouchInteractiveBlockSize: number,
 		eventRightAlign: boolean,
 		blockLineWidth: number,
 		blockFont: string,
@@ -724,6 +729,7 @@ A3a.vpl.Canvas.calcDims = function (blockSize, controlSize) {
 	return {
 		blockSize: blockSize,
 		minInteractiveBlockSize: 60,
+		minTouchInteractiveBlockSize: 120,
 		eventRightAlign: false,
 		blockLineWidth: Math.max(1, Math.min(3, Math.round(blockSize / 40))),
 		blockFont: Math.round(blockSize / 4).toString(10) + "px sans-serif",
@@ -831,6 +837,7 @@ A3a.vpl.Canvas.prototype.makeZoomedClone = function (item) {
 	c.x = (canvasSize.width - c.width) / 2;
 	c.y = (canvasSize.height - c.height) / 2;
 	c.zoomOnLongPress = null;
+	c.zoomOnLongTouchPress = null;
 	var self = this;
 	c.drawContent = function (canvas, item1, dx, dy) {
 		var ctx = canvas.ctx;
