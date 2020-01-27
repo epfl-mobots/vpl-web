@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -24,6 +24,7 @@ robot connected via asebahttp or the Thymio Device Manager or the simulator.
 		init: (function(string):void | undefined),
 		isConnected: (function():boolean | undefined),
 		isEnabled: (function(string):boolean | undefined),
+		getName: (function():(string|null) | undefined),
 		languages: (Array.<string> | undefined),
 		preferredLanguage: (string | undefined),
 		state: (Object | undefined)
@@ -34,16 +35,16 @@ A3a.vpl.RunGlue = function (options) {
 	this.initFun = options && options.init ? options.init : null;
 	this.isConnectedFun = options && options.isConnected ? options.isConnected : null;
 	this.isEnabledFun = options && options.isEnabled ? options.isEnabled : null;
+	this.getNameFun = options && options.getName ? options.getName : null;
 	this.preferredLanguage = options && options.preferredLanguage ? options.preferredLanguage : "aseba";
 	this.languages = options && options.languages ? options.languages : [this.preferredLanguage];
 	this.state = options && options.state ? options.state : null;
 };
 
-/** Check if the RunGlue interface is enabled for a specific language
-	@param {string} language
+/** Check if a robot is connected
 	@return {boolean}
 */
-A3a.vpl.RunGlue.prototype.isConnected = function (language) {
+A3a.vpl.RunGlue.prototype.isConnected = function () {
 	return this.isConnectedFun == null || this.isConnectedFun();
 };
 
@@ -54,6 +55,13 @@ A3a.vpl.RunGlue.prototype.isConnected = function (language) {
 A3a.vpl.RunGlue.prototype.isEnabled = function (language) {
 	return this.runFun != null && this.languages.indexOf(language) >= 0 &&
 		(this.isEnabledFun == null || this.isEnabledFun(language));
+};
+
+/** Get robot name, or null if no connection
+	@return {?string}
+*/
+A3a.vpl.RunGlue.prototype.getName = function () {
+	return this.getNameFun != null ? this.getNameFun() : null;
 };
 
 /** Initialize the RunGlue interface

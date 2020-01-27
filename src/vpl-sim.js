@@ -65,6 +65,9 @@ A3a.vpl.Application.prototype.installRobotSimulator = function (options) {
 			}
 			app.sim2d = sim2d;
 		},
+		getName: function () {
+			return "Simulator";
+		},
 		preferredLanguage: "js",
 		languages: ["js", "aseba", "l2"]
 	});
