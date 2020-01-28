@@ -59,6 +59,7 @@ document.addEventListener("touchend", function (e) {
 
 /** Load resources via XMLHttpRequest (requires http(s), x-origin blocking with file)
 	@param {string} rootFilename filename of the ui json file
+	@param {string} rootDir directory where other files are to be found ("." for scripts)
 	@param {function(Object):Array.<string>} getAuxiliaryFilenames get a list of
 	filenames of resources referenced in the ui file (svg etc.)
 	@param {function(Object,Object):void} onLoad function called asynchronously once
@@ -67,7 +68,7 @@ document.addEventListener("touchend", function (e) {
 	@param {function(*):void} onError function called asynchronously upon error
 	@return {void}
 */
-function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, onError) {
+function vplLoadResourcesWithXHR(rootFilename, rootDir, getAuxiliaryFilenames, onLoad, onError) {
 	var path = rootFilename.indexOf("/") >= 0 ? rootFilename.replace(/\/[^/]*$/, "/") : "";
 	var rsrc = {};
 	var xhr = new XMLHttpRequest();
@@ -112,6 +113,7 @@ function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, on
 
 /** Load resources in script elements
 	@param {string} rootFilename filename (script id) of the ui json file
+	@param {string} rootDir directory where other files are to be found ("." for scripts)
 	@param {function(Object):Array.<string>} getAuxiliaryFilenames get a list of
 	filenames of resources referenced in the ui file (svg etc.)
 	@param {function(Object,Object):void} onLoad function called synchronously once
@@ -120,7 +122,7 @@ function vplLoadResourcesWithXHR(rootFilename, getAuxiliaryFilenames, onLoad, on
 	@param {function(*):void} onError function called synchronously upon error
 	@return {void}
 */
-function vplLoadResourcesInScripts(rootFilename, getAuxiliaryFilenames, onLoad, onError) {
+function vplLoadResourcesInScripts(rootFilename, rootDir, getAuxiliaryFilenames, onLoad, onError) {
 	try {
 		var txt = document.getElementById(rootFilename).textContent;
 		var gui = /** @type {Object} */(JSON.parse(txt));
@@ -192,9 +194,10 @@ function vplGetHashOption(key) {
 
 /** Setup everything for vpl
 	@param {Object=} gui
+	@param {string=} rootDir directory where other files are to be found ("." for scripts)
 	@return {void}
 */
-function vplSetup(gui) {
+function vplSetup(gui, rootDir) {
 	// handle overlays in gui
 	if (gui && gui["overlays"]) {
 		gui["overlays"].forEach(function (filename) {
@@ -610,12 +613,12 @@ function vplSetup(gui) {
 
 	// about box
 	if (gui && gui["fragments"] && gui["fragments"]["about.html"]) {
-		app.setAboutBoxContent(gui["fragments"]["about.html"]);
+		app.setAboutBoxContent(gui["fragments"]["about.html"].replace(/UIROOT/g, rootDir));
 	}
 
 	// help box
 	if (gui && gui["fragments"] && gui["fragments"]["help.html"]) {
-		app.setHelpContent(gui["fragments"]["help.html"]);
+		app.setHelpContent(gui["fragments"]["help.html"].replace(/UIROOT/g, rootDir));
 	}
 
 	// css for html output
@@ -667,8 +670,11 @@ function vplSetup(gui) {
 
 window.addEventListener("load", function () {
 	var uiDoc = vplGetQueryOption("ui") || "ui.json";
-	(document.getElementById(uiDoc) ? vplLoadResourcesInScripts : vplLoadResourcesWithXHR)(
+	var isInScripts = document.getElementById(uiDoc) != null;
+	var uiRoot = window["vplUIRoot"] ? window["vplUIRoot"] : isInScripts ? "." : uiDoc.indexOf("/") >= 0 ? uiDoc.replace(/\/[^/]*$/, "") : ".";
+	(isInScripts ? vplLoadResourcesInScripts : vplLoadResourcesWithXHR)(
 		uiDoc,
+		uiRoot,
 		function (obj) {
 			// get subfiles
 			return (obj["svgFilenames"] || []).concat(obj["overlays"] || []).concat(obj["css"] || []);
@@ -693,7 +699,7 @@ window.addEventListener("load", function () {
 					gui.rsrc[filename] = rsrc[filename];
 				});
 			}
-			vplSetup(gui);
+			vplSetup(gui, uiRoot);
 		},
 		function (e) {
 			// error
