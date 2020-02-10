@@ -58,6 +58,8 @@ In json, block contain the following properties:
 
 - "typicalParameters" (same type and length as "defaultParameters", optional): values of the block parameters used to display the block in the block library.
 
+- "typicalParamSet" (array of elements the same type and length as "defaultParameters", optional): multiple values similar to "typicalParameters", to be used when the block has a very different appearance for different values of the parameters (e.g. in block "accelerometer" where the first parameter is 0 for tap, 1 for roll angle, or 2 for pitch angle). These values are used when exporting libraries as HTML.
+
 - "buttons" (array of objects, optional): multi-state button definitions. Each button is described by an object with the following properties:
 
 	- "id" (string, required): id of the svg element corresponding to the button. It should be contained in the element identified by "main".

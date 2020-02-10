@@ -298,6 +298,9 @@ function vplSetup(gui, rootDir) {
 					var name = b["name"];
 					var bt = A3a.vpl.BlockTemplate.findByName(name);
 					A3a.vpl.BlockTemplate.loadCodeGenFromJSON(b, bt.genCode);
+					if (b["typicalParamSet"]) {
+						bt.typicalParamSet = b["typicalParamSet"];
+					}
 				});
 			}
 		} else {
