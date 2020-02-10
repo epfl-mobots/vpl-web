@@ -1,0 +1,28 @@
+{
+	"blocks": [
+		{
+			"name": "accelerometer",
+			"typicalParamSet": [
+				[0, 0],
+				[1, 2],
+				[2, 2]
+			]
+		},
+		{
+			"name": "counter comparison",
+			"typicalParamSet": [
+				[-1, 2],
+				[0, 9],
+				[1, 3]
+			]
+		},
+		{
+			"name": "set counter",
+			"typicalParamSet": [
+				[-1],
+				[0],
+				[1]
+			]
+		}
+	]
+}

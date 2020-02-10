@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -1591,6 +1591,8 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.action,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [false, false, false, false]; },
+		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+		typicalParam: function () { return [true, false, false, false]; },
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotTop();

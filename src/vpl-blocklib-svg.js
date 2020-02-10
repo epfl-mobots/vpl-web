@@ -800,6 +800,9 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 			typicalParam: blockTemplate0
 				? blockTemplate0.typicalParam
 				: function () { return b["typicalParameters"] || b["defaultParameters"] || []; },
+			typicalParamSet: blockTemplate0
+				? blockTemplate0.typicalParamSet || null
+				: b["typicalParamSet"] || null,
 			draw: draw,
 			mousedown: mousedown,
 			mousedrag: mousedrag,

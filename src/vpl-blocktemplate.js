@@ -49,6 +49,7 @@ A3a.vpl.BlockTemplate = function (blockParams) {
 	this.noState = blockParams.noState || false;
 	this.defaultParam = blockParams.defaultParam || null;
 	this.typicalParam = blockParams.typicalParam || null;
+	this.typicalParamSet = blockParams.typicalParamSet || null;
 	this.exportParam = blockParams.exportParam || null;
 	this.importParam = blockParams.importParam || null;
 	this.validate = blockParams.validate || null;
@@ -141,6 +142,7 @@ A3a.vpl.BlockTemplate.sectionPriFun;
 		noState: (boolean|undefined),
 		defaultParam: (A3a.vpl.BlockTemplate.defaultParam|null|undefined),
 		typicalParam: (A3a.vpl.BlockTemplate.defaultParam|null|undefined),
+		typicalParamSet: (Array.<A3a.vpl.BlockTemplate.param>|undefined),
 		exportParam: (A3a.vpl.BlockTemplate.exportParam|null|undefined),
 		validate: (A3a.vpl.BlockTemplate.validateFun|null|undefined),
 		genCode: (Object<string,A3a.vpl.BlockTemplate.genCodeFun>|null|undefined),
