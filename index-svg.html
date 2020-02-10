@@ -19,7 +19,7 @@
 		"scrollbarWidth": 2,
 		"errorColor": "#ff1744",
 		"warningColor": "#ff7777",
-		"minInteractiveBlockSize":"84",
+		"minInteractiveBlockSize":"72",
 		"eventRightAlign": true
 	},
 
@@ -2001,42 +2001,39 @@
 	Copyright 2019-2020, ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE
 */
 
+/*General*/
 view {
 	background: #FAFCFD;
 }
-
-toolbar.bottom {
-	padding: 8px;
+vpl {
+	padding: 24px 0 16px 0;
+	margin: 0px;
+	background: transparent;
 }
 
+/*Toolbars*/
+toolbar.bottom {
+	padding: 16px;
+}
 toolbar.top {
-	/*background: #f0f3f5;*/
 	padding: 16px;
 	background: #ECEFF1;
 	box-shadow: 0px 0px 8px #BAC0C4;
 }
 
+/*Buttons & console*/
 button {
 	width: 3ww;
 	height: 3ww;
-	min-width: 36px;
-	min-height: 36px;
+	min-width: 32px;
+	min-height: 32px;
 	margin: 0.24vw;
 }
-
-vpl.top {
-}
-
-vpl.bottom {
-	border-top: 1px solid #eceff1;
-}
-
 button.vpl.top {
-	font-size: 1.1vw;
+	font-size: max(1vw, 12px) ;
 	font-weight: 300;
 	font-family: 'Rubik', sans-serif;
 }
-
 #vpl-message-error, #vpl-message-warning {
 	color: #455a64;
 	width: 20vw;
@@ -2044,170 +2041,123 @@ button.vpl.top {
 	padding: 0px 4px 0px 4px;
 	border-radius: 2.5wh;
 }
-
 separator {
 	width: 5px;
 	height: 5px;
 }
 
-vpl {
-	padding: 24px 0 16px 0;
-	margin: 0px;
-	border-radius: 4px;
-	/*background: #f0f3f5;
-	box-shadow: 0px 0px 2px #aabbcc;*/
-	background: transparent;
-}
-
+/*Blocks*/
 block {
-	width: 7.8ww;
-	height: 7.8ww;
-	min-width: 72px;
-	min-height: 72px;
-	max-width: 112px;
-	max-height: 112px;
-	background: transparent;
-	vertical-align: bottom;
-	border-radius: 4px;
-	border-width: 3px;
-}
-
-block:small {
+	width: 7vw;
+	height: 7vw;
+	min-width: 56px;
+	min-height: 56px;
+	border-width: 2pt;
 	border-radius: 2px;
-	border-color: white;
+	box-sizing: border-box;
 }
-
-block.event-aux, block.state {
-	height: 7ww;
-	width: 7ww;
-	min-width: 65px;
-	min-height: 65px;
-	max-width: 100px;
-	max-height: 100px;
-	vertical-align: bottom;
-}
-
-block.empty {
-	border-width: 2px;
-	border-style: dashed;
-	background: transparent;
-	width: 3.6ww;
-	border-radius: 2px;
-	vertical-align: bottom;
-}
-
-block.empty.event-aux {
-	height: 7ww;
-	min-height: 65px;
-	vertical-align: bottom;
-}
-
 block.event {
 	border-color: #ffae9e;
-}
 
+}
 block.action {
 	border-color: #64b5f6;
 }
-
 block.state {
 	border-color: #ffae9e;
 }
-
-block.empty:only-child {
-	width: 7.8ww;
-	max-width: 112px;
+block.event-aux, block.state {
+	height: 6vw;
+	width: 6vw;
+	vertical-align: bottom;
 }
-
 block.library {
-	width: 5.6ww;
-	height: 5.6ww;
-	min-width: 54px;
-	min-height: 54px;
-	margin: 8px;
-	border-radius: 2px;
-	border-width: 2px;
-}
+	margin: 4px;
+	width: 5.6vw;
+	height: 5.6vw;
 
+}
+block.empty {
+	border-width: 1.5pt;
+	border-radius: 4px;
+	border-style: dashed;
+	background: transparent;
+	width: 3vw;
+	min-width: 16px;
+}
+block.empty:only-child{
+	width: 7vw;
+	min-width: 56px;
+
+}
 block-container{
 	/*background: #fbfcfc;*/
 	border-radius: 2px;
 	padding: 8px;
 }
-
 block-container.error {
-	border-bottom: #ff1744 2px;
+	border-bottom: #ff1744 1.5pt;
 }
 block-container.warning {
-	border-bottom: #fbca00 2px;
+	border-bottom: #fbca00 1.5pt;
 }
 
+/*programming lines*/
 rule {
 	background: #ffffff;
 	border: solid #eceff1 2px;
 	border-radius: 4px;
 	padding: 8px;
 	margin: 12px;
-	/*box-shadow: 0px 0px 8px #f5f7f8;*/
+}
+rule:small{
+	background: #ECEFF1;
 }
 
+/*Disable states*/
 overlay-rectangle.disabled {
-	background: rgba(120,144,156,0.4);
+	background: rgba(120,144,156,0.5);
+	border-radius: 4px;
+}
+overlay-rectangle.drop-target {
+	border: 0.1vw #6200ea;
 	border-radius: 4px;
 }
 
-overlay-rectangle.drop-target {
-	border: 0.1vw #6200ea;
-	border-radius: 2px;
-}
-
-crossout-line {
-	/*line-width: 0.2ww;
- 	color: rgba(120,120,120,0.5);*/
- 	visibility: none;
-}
-crossout-line.vpl {
-}
-
+/*Other*/
 widget {
-	width: 3vw;
-	height: 3vw;
+	width: 36px;
+	height: 36px;
 }
-
 #widget-then {
 	padding-left: 16px;
 	padding-right: 16px;
-	width: 2ww;
-	height: 2ww;
+	width: 20px;
+	height: 20px;
 }
-
 #widget-error, #widget-warning {
-	width: 2ww;
-	height: 2ww;
+	width: 20px;
+	height: 20px;
 }
-
 #widget-moreLow, #widget-moreHigh {
 	width: 3ww;
 	height: 3ww;
 }
-
 conflict-line {
     line: 2px #ff1744 dashed;
     stroke-linejoin:round;
 }
-
 block-library {
 	padding: 24px 8px 8px 8px;
 	margin: 0px;
-	backgroun: white;
+		/*background: white;
 	box-shadow: 0px 0px 2px #aabbcc;
-	/*border-left: 2px solid #eceff1;
+	border-left: 2px solid #eceff1;
 	border-right: 2px solid #eceff1;
 	overflow: scroll;*/
 }
-
 hint {
-	font-size: 1vw;
+	font-size: max(1vw, 12px);
  	font-family: 'Rubik', sans-serif;
 	padding: 0.5vw;
 	background-color: #f5f7f8;
@@ -2215,25 +2165,16 @@ hint {
 }
 
 /* simulator */
-
 sim-controller {
 	background: #eee;
 	margin: 5px;
 	padding: 1vw;
 }
-
-button.event {
-	width: 2vw;
-	height: 2vw;
-	margin: 0.2vw;
-}
-
 sim-playground-area {
 	background: #eee;
 	margin: 5px;
 	padding: 5px;
 }
-
 sim-playground {
 	border: 2px silver;
 }
