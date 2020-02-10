@@ -172,6 +172,11 @@ crossout-line {
 crossout-line.vpl {
 }
 
+widget {
+	width: 3vw;
+	height: 3vw;
+}
+
 #widget-then {
 	padding-left: 16px;
 	padding-right: 16px;

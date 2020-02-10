@@ -1122,10 +1122,10 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			canvas.setItem(item);
 		})();
 
-		// draw vpl:customization widget
+		// draw vpl:customize widget
 		var customizationBox = canvas.css.getBox({tag: "widget", id: "vpl-customize"});
-		customizationBox.width = cssBoxes.vplBox.width / 4;
-		customizationBox.height = (cssBoxes.vplBox.height - cssBoxes.ruleBox.totalHeight()) / 4;
+		customizationBox.width = cssBoxes.vplBox.width / 2;
+		customizationBox.height = (cssBoxes.vplBox.height - cssBoxes.ruleBox.totalHeight()) / 2;
 		canvas.addDecoration(function (ctx) {
 			canvas.drawWidget("vpl:customize",
 				cssBoxes.vplBox.x + cssBoxes.vplBox.width / 2,

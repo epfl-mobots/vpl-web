@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -88,8 +88,8 @@ A3a.vpl.widgetsJS = {
 		ctx.stroke();
 	}),
 	"vpl:customize": /** @type {A3a.vpl.Canvas.drawWidget} */(function (ctx, id, dims, box) {
-		var s = Math.min(box.width, box.height);
+		var r = Math.min(box.width, box.height) / 2;	// radius of circumscribed circle of the nut
 		ctx.fillStyle = dims.ruleMarks;
-		A3a.vpl.Canvas.drawHexagonalNut(ctx, 0, 0, s);
+		A3a.vpl.Canvas.drawHexagonalNut(ctx, 0, 0, r);
 	})
 };
