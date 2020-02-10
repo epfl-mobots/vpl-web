@@ -1,8 +1,7 @@
-<script type="text/x-vpl-css" id="svg.css">
 /*
 	CSS for VPL3 application
     SVG version (blocks, buttons and widgets defined in SVG)
-	Copyright 2019, ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE
+	Copyright 2019-2020, ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE
 */
 
 view {
@@ -236,4 +235,4 @@ sim-playground-area {
 sim-playground {
 	border: 2px silver;
 }
-</script>
+
