@@ -88,7 +88,11 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return !app.editor.noVPL;
-		}
+		},
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		]
 	});
 	this.commands.add("src:language", {
 		action: function (app, modifier) {
@@ -107,7 +111,13 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.editor.updateCodeLanguage != null;
-		}
+		},
+		possibleStates: [
+			{state: "aseba"},
+			{state: "l2"},
+			{state: "js"},
+			{state: "python"}
+		]
 	});
 	this.commands.add("src:disass", {
 		action: function (app, modifier) {
@@ -131,13 +141,14 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 		isSelected: function (app) {
 			return app.editor.srcForAsm !== null;
 		},
-		getState: function (app) {
-			return app.editor.language;
-		},
 		object: this,
 		isAvailable: function (app) {
 			return app.editor.disass !== null;
-		}
+		},
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		]
 	});
 	this.commands.add("src:run", {
 		action: function (app, modifier) {
@@ -158,7 +169,16 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.currentRobotIndex >= 0;
-		}
+		},
+		possibleStates: [
+			{selected: false},
+			{selected: true},
+			{state: "empty"},
+			{state: "running"},
+			{state: "error"},
+			{state: "canLoad"},
+			{state: "canReload"}
+		]
 	});
 	this.commands.add("src:stop", {
 		action: function (app, modifier) {
@@ -180,7 +200,15 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.robots.length > 0;
-		}
+		},
+		possibleStates: [
+			{selected: false},
+			{selected: true},
+			{selected: false, state: "monitored"},
+			{selected: true, state: "monitored"},
+			{selected: false, state: "nonmonitored"},
+			{selected: true, state: "nonmonitored"}
+		]
 	});
 	this.commands.add("src:sim", {
 		action: function (app, modifier) {
@@ -219,6 +247,10 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 		keep: true,
 		isAvailable:  function (app) {
 			return app.editor.teacherRole;
-		}
+		},
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		]
 	});
 };

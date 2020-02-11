@@ -91,6 +91,47 @@ A3a.vpl.Application = function (canvasEl) {
 		"vpl:lock",
 		"vpl:trashcan",
 	];
+	this.srcToolbarConfig = [
+		"src:close",
+		"!space",
+		"src:new",
+		"src:save",
+		"!space",
+		"src:language",
+		"src:disass",
+		"!stretch",
+		"src:run",
+		"src:stop",
+		"!stretch",
+		"src:sim",
+		"src:vpl",
+		"!space",
+		"src:locked",
+		"!stretch",
+		"src:teacher-reset",
+		"src:teacher"
+	];
+	this.simToolbarConfig = [
+		"sim:close",
+		"!stretch",
+		"sim:restart",
+		"sim:pause",
+		"!space",
+		"sim:speedup",
+		"sim:noise",
+		"!stretch",
+		"sim:pen",
+		"sim:clear",
+		"!space",
+		"sim:map-kind",
+		"sim:map",
+		"!stretch",
+		"sim:vpl",
+		"sim:text",
+		"!stretch",
+		"sim:teacher-reset",
+		"sim:teacher"
+	];
 
 	/** @type {Array.<string>} */
 	this.views = ["vpl"];

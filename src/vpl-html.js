@@ -250,6 +250,24 @@ A3a.vpl.Application.prototype.toHTMLDocument = function (css) {
 	@return {string}
 */
 A3a.vpl.Application.prototype.uiToHTMLDocument = function (css) {
+
+	function toolbarButtonsToHTML(app, controlBar) {
+		return controlBar.controls.map(function (control) {
+			var possibleStates = app.commands.find(control.id).possibleStates || [{}];
+			return possibleStates.map(function (possibleState) {
+				app.forcedCommandState.isSelected = possibleState.selected === true;
+				app.forcedCommandState.state = possibleState.state || null;
+				var stateStr = possibleState.selected === true ? "selected" : possibleState.selected === false ? "unselected" : "";
+				if (possibleState.state) {
+					stateStr += (stateStr.length > 0 ? " " : "") + "=" + possibleState.state;
+				}
+				var buttonImg = app.vplCanvas.toolbarButtonToImgElement(controlBar, control.id, toolbarItemBoxes[control.id],
+					css, dims, scale, control.id + (stateStr ? "-" + stateStr.replace(/\s+/g, "-").replace("=", "") : "") + ".png");
+				return "<tr><td>" + buttonImg + "</td><td>" + control.id + "</td><td>" + stateStr + "</td></tr>\n";
+			}).join("");
+		}).join("");
+	}
+
 	var dims = A3a.vpl.Canvas.calcDims(100, 100);
 	var scale = 5;
 	var cssBoxes = this.getCSSBoxes(css);
@@ -264,9 +282,23 @@ A3a.vpl.Application.prototype.uiToHTMLDocument = function (css) {
 	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, this.vplToolbarConfig, ["vpl", "top"]);
 	var controlBar = this.createVPLToolbar(this.vplToolbarConfig, ["vpl", "top"],
 		cssBoxes.toolbarBox, cssBoxes.toolbarSeparatorBox, toolbarItemBoxes);
-	var toolbar2ItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, this.vplToolbar2Config, ["vpl", "bottom"]);
+	toolbarItemBoxes = Object.assign(/** @type {!Object} */(toolbarItemBoxes), A3a.vpl.ControlBar.buttonBoxes(this, this.vplToolbar2Config, ["vpl", "bottom"]));
 	var controlBar2 = this.createVPLToolbar(this.vplToolbar2Config, ["vpl", "bottom"],
-			cssBoxes.toolbar2Box, cssBoxes.toolbarSeparator2Box, toolbar2ItemBoxes);
+			cssBoxes.toolbar2Box, cssBoxes.toolbarSeparator2Box, toolbarItemBoxes);
+	this.srcToolbarConfig.forEach(function (id) {
+		toolbarItemBoxes[id] = css.getBox({tag: "button", id: id.replace(/:/g, "-"), clas: ["src", "top"]});
+	}, this);
+	var controlBarSourceEditor = this.createSourceEditorToolbar(this.srcToolbarConfig,
+			css.getBox({tag: "toolbar", clas: ["src", "top"]}),
+			css.getBox({tag: "separator", clas: ["src", "top"]}),
+			toolbarItemBoxes);
+	this.simToolbarConfig.forEach(function (id) {
+		toolbarItemBoxes[id] = css.getBox({tag: "button", id: id.replace(/:/g, "-"), clas: ["sim", "top"]});
+	}, this);
+	var controlBarSimulator = this.createSim2dToolbar(this.simToolbarConfig,
+			css.getBox({tag: "toolbar", clas: ["sim", "top"]}),
+			css.getBox({tag: "separator", clas: ["sim", "top"]}),
+			toolbarItemBoxes);
 	var html = "<!DOCTYPE html>\n" +
 		"<html>\n" +
 		(this.cssForHTMLDocument
@@ -317,16 +349,10 @@ A3a.vpl.Application.prototype.uiToHTMLDocument = function (css) {
 		}, this).join("") +
 		"</table>\n" +
 		"<table>\n" +
-		controlBar.controls.map(function (control) {
-			var buttonImg = this.vplCanvas.toolbarButtonToImgElement(controlBar, control.id, toolbarItemBoxes[control.id],
-				css, dims, scale, control.id + ".png");
-			return "<tr><td>" + buttonImg + "</td><td>" + control.id + "</td></tr>\n";
-		}, this).join("") +
-		controlBar2.controls.map(function (control) {
-			var buttonImg = this.vplCanvas.toolbarButtonToImgElement(controlBar2, control.id, toolbar2ItemBoxes[control.id],
-				css, dims, scale, control.id + ".png");
-			return "<tr><td>" + buttonImg + "</td><td>" + control.id + "</td></tr>\n";
-		}, this).join("") +
+		toolbarButtonsToHTML(this, controlBar) +
+		toolbarButtonsToHTML(this, controlBar2) +
+		toolbarButtonsToHTML(this, controlBarSourceEditor) +
+		toolbarButtonsToHTML(this, controlBarSimulator) +
 		"</table>\n" +
 		"</body>\n" +
 		"</html>\n";

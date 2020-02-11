@@ -201,7 +201,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		isSelected: function (app) {
 			return app.views.indexOf("src") >= 0;
 		},
-		object: this
+		object: this,
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		]
 	});
 	this.commands.add("vpl:advanced", {
 		action: function (app, modifier) {
@@ -218,7 +222,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return !app.program.readOnly;
-		}
+		},
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		]
 	});
 	this.commands.add("vpl:undo", {
 		action: function (app, modifier) {
@@ -305,7 +313,16 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.currentRobotIndex >= 0;
-		}
+		},
+		possibleStates: [
+			{selected: false},
+			{selected: true},
+			{state: "empty"},
+			{state: "running"},
+			{state: "error"},
+			{state: "canLoad"},
+			{state: "canReload"}
+		]
 	});
 	this.commands.add("vpl:stop", {
 		action: function (app, modifier) {
@@ -334,7 +351,15 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.currentRobotIndex >= 0;
-		}
+		},
+		possibleStates: [
+			{selected: false},
+			{selected: true},
+			{selected: false, state: "monitored"},
+			{selected: true, state: "monitored"},
+			{selected: false, state: "nonmonitored"},
+			{selected: true, state: "nonmonitored"}
+		]
 	});
 	this.commands.add("vpl:robot", {
 		action: function (app) {
@@ -545,7 +570,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		keep: true,
 		isAvailable: function (app) {
 			return app.program.teacherRole && !app.program.readOnly;
-		}
+		},
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		]
 	});
 	this.commands.add("vpl:teacher-reset", {
 		action: function (app, modifier) {

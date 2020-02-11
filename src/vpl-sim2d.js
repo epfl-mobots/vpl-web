@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -481,6 +481,19 @@ A3a.vpl.Application.prototype.createSimControlBarDoOverFun = function () {
 	};
 };
 
+A3a.vpl.Application.prototype.createSim2dToolbar = function (toolbarConfig,
+	toolbarBox, toolbarSeparatorBox, toolbarItemBoxes) {
+	// top controls
+	var controlBar = new A3a.vpl.ControlBar(this.simCanvas);
+	controlBar.setButtons(this,
+		toolbarConfig,
+		["sim", "top"],
+		this.sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
+		this.sim2d.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
+	controlBar.calcLayout(toolbarBox, toolbarItemBoxes, toolbarSeparatorBox);
+	return controlBar;
+};
+
 /** Render viewer
 	@return {void}
 */
@@ -505,27 +518,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	simCanvas.clearItems();
 
 	// toolbar button boxes and height
-	var toolbarConfig = sim2d.toolbarConfig || [
-		"sim:close",
-		"!stretch",
-		"sim:restart",
-		"sim:pause",
-		"!space",
-		"sim:speedup",
-		"sim:noise",
-		"!stretch",
-		"sim:pen",
-		"sim:clear",
-		"!space",
-		"sim:map-kind",
-		"sim:map",
-		"!stretch",
-		"sim:vpl",
-		"sim:text",
-		"!stretch",
-		"sim:teacher-reset",
-		"sim:teacher"
-	];
+	var toolbarConfig = sim2d.toolbarConfig || this.simToolbarConfig;
 	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, toolbarConfig, ["sim", "top"]);
 	var toolbarItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
 
@@ -563,14 +556,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	});
 
 	// top controls
-	var controlBar = new A3a.vpl.ControlBar(simCanvas);
-	controlBar.setButtons(this,
-		toolbarConfig,
-		["sim", "top"],
-		sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
-		sim2d.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
-
-	controlBar.calcLayout(toolbarBox, toolbarItemBoxes, separatorBox);
+	var controlBar = this.createSim2dToolbar(toolbarConfig, toolbarBox, separatorBox, toolbarItemBoxes);
 	controlBar.addToCanvas(toolbarBox, toolbarItemBoxes,
 		this.createSimControlBarDoOverFun());
 

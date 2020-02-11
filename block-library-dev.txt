@@ -417,7 +417,7 @@ Widgets are scaled to fill their css box (see below). The box id for widget "vpl
 Each widget appearance is an object with the following properties:
 
 - "name": widget name (see above)
-- "svg": array of objects containing a "uri" or "js" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent) and a "debug" property (string, displayed centered over the widget). SVG elements are rendered starting with the first one, with the last one in the foreground.
+- "svg": array of objects containing a "uri" or "js" property, like for blocks (see above), and optionally an "alpha" property (number, 1=opaque, 0=transparent), and a "debug" property (string, displayed centered over the widget). SVG elements are rendered starting with the first one, with the last one in the foreground.
 
 If the value of property "widgets" is null ("widgets":null), the default built-in (non-SVG) widget definitions are used. Otherwise, undefined widgets are empty (nothing is displayed).
 

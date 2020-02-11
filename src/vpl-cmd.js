@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -78,7 +78,8 @@ A3a.vpl.Commands.isAvailable;
 		canDrop: (?A3a.vpl.Commands.canDrop | undefined),
 		object: (?Object | undefined),
 		keep: (boolean | undefined),
-		isAvailable: (?A3a.vpl.Commands.isAvailable | undefined)
+		isAvailable: (?A3a.vpl.Commands.isAvailable | undefined),
+		possibleStates: (?Array.<{selected:(?boolean|undefined),state:(?string|undefined)}> | undefined)
 	}}
 */
 A3a.vpl.Commands.CommandProperties;
@@ -258,6 +259,9 @@ A3a.vpl.Commands.Command = function (name, opt) {
 	this.keep = opt.keep || false;
 	/** @type {?A3a.vpl.Commands.isAvailable} */
 	this.isAvailableFun = opt.isAvailable || null;
+
+	/** @type {?Array.<{selected:(?boolean|undefined),state:(?string|undefined)}>} */
+	this.possibleStates = opt.possibleStates || null;
 };
 
 /** Execute command

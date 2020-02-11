@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -58,7 +58,11 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 		isSelected: function (app) {
 			return app.sim2d.paused;
 		},
-		object: this
+		object: this,
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		]
 	});
 	this.commands.add("sim:speedup", {
 		action: function (app, modifier) {
@@ -72,7 +76,14 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 		getState: function (app) {
 			return app.sim2d.robot.speedupFactor;
 		},
-		object: this
+		object: this,
+		possibleStates: [
+			{selected: false, state: 1},
+			{selected: true, state: 0.5},
+			{selected: true, state: 2},
+			{selected: true, state: 5},
+			{selected: true, state: 10}
+		]
 	});
 	this.commands.add("sim:noise", {
 		action: function (app, modifier) {
@@ -81,7 +92,11 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 		isSelected: function (app) {
 			return app.sim2d.robot.hasNoise;
 		},
-		object: this
+		object: this,
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		]
 	});
 	this.commands.add("sim:pen", {
 		action: function (app, modifier) {
@@ -90,7 +105,11 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 		isSelected: function (app) {
 			return app.sim2d.penDown;
 		},
-		object: this
+		object: this,
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		]
 	});
 	this.commands.add("sim:clear", {
 		action: function (app, modifier) {
@@ -127,7 +146,12 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 				return "ground";
 			}
 		},
-		object: this
+		object: this,
+		possibleStates: [
+			{state: "ground"},
+			{state: "height"},
+			{state: "obstacles"}
+		]
 	});
 	this.commands.add("sim:map", {
 		action: function (app, modifier) {
@@ -169,7 +193,15 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 				return "ground";
 			}
 		},
-		object: this
+		object: this,
+		possibleStates: [
+			{selected: false, state: "ground"},
+			{selected: false, state: "height"},
+			{selected: false, state: "obstacles"},
+			{selected: true, state: "ground"},
+			{selected: true, state: "height"},
+			{selected: true, state: "obstacles"}
+		]
 	});
 	this.commands.add("sim:vpl", {
 		action: function (app, modifier) {
@@ -231,6 +263,10 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 		keep: true,
 		isAvailable:  function (app) {
 			return app.sim2d.teacherRole;
-		}
+		},
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		]
 	});
 };

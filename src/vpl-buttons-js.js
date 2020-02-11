@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -538,11 +538,6 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 		},
 		"vpl:connected": function () {
 			ctx.translate(0, 0.1 * dims.controlSize);
-			ctx.fillStyle = isEnabled
-				? col.bgPr
-				: col.bg;
-			ctx.fillRect(0, 0,
-				dims.controlSize, dims.controlSize);
 			ctx.save();
 			ctx.translate(dims.controlSize * 0.8, dims.controlSize * 0.2);
 			ctx.scale(0.35, 0.35);

@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -192,6 +192,19 @@ A3a.vpl.VPLSourceEditor.prototype.editorArea = function () {
 	};
 };
 
+A3a.vpl.Application.prototype.createSourceEditorToolbar = function (toolbarConfig,
+	toolbarBox, toolbarSeparatorBox, toolbarItemBoxes) {
+	// top controls
+	var controlBar = new A3a.vpl.ControlBar(this.editor.tbCanvas);
+	controlBar.setButtons(this,
+		toolbarConfig,
+		["src", "top"],
+		this.editor.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
+		this.editor.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
+	controlBar.calcLayout(toolbarBox, toolbarItemBoxes, toolbarSeparatorBox);
+	return controlBar;
+};
+
 /** Render toolbar for source code editor
 	@return {void}
 */
@@ -202,26 +215,7 @@ A3a.vpl.Application.prototype.renderSourceEditorToolbar = function () {
 	editor.tbCanvas.clearItems();
 
 	// toolbar button boxes and height
-	var toolbarConfig = editor.toolbarConfig || [
-		"src:close",
-		"!space",
-		"src:new",
-		"src:save",
-		"!space",
-		"src:language",
-		"src:disass",
-		"!stretch",
-		"src:run",
-		"src:stop",
-		"!stretch",
-		"src:sim",
-		"src:vpl",
-		"!space",
-		"src:locked",
-		"!stretch",
-		"src:teacher-reset",
-		"src:teacher"
-	];
+	var toolbarConfig = editor.toolbarConfig || this.srcToolbarConfig;
 	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, toolbarConfig, ["src", "top"]);
 	var toolbarItemHeight = editor.toolbarHeight().height;
 
@@ -248,14 +242,9 @@ A3a.vpl.Application.prototype.renderSourceEditorToolbar = function () {
 	});
 
 	// top controls
-	var controlBar = new A3a.vpl.ControlBar(editor.tbCanvas);
-	controlBar.setButtons(this,
-		toolbarConfig,
-		["src", "top"],
-		editor.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS,
-		editor.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
+	var controlBar = this.createSourceEditorToolbar(toolbarConfig,
+		toolbarBox, separatorBox, toolbarItemBoxes);
 
-	controlBar.calcLayout(toolbarBox, toolbarItemBoxes, separatorBox);
 	controlBar.addToCanvas(toolbarBox, toolbarItemBoxes);
 	editor.tbCanvas.redraw();
 };
