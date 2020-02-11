@@ -536,6 +536,43 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 				dims.controlSize * 0.28,
 				dims.controlSize * 0.44, dims.controlSize * 0.44);
 		},
+		"vpl:debug": function () {
+			ctx.fillStyle = isPressed && isEnabled
+				? col.bgPr
+				: col.bg;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			ctx.strokeStyle = isEnabled ? col.fg : col.fgDis;
+			ctx.lineWidth = dims.controlLineWidth;
+			ctx.save();
+			ctx.translate(0.5 * dims.controlSize, 0.42 * dims.controlSize);
+			ctx.scale(0.0085 * dims.controlSize, 0.012 * dims.controlSize);
+			ctx.beginPath();
+			ctx.arc(0, 0, 20, 0, 2 * Math.PI);	// body
+			ctx.moveTo(-13, -10);	// neck
+			ctx.bezierCurveTo(0, -5, 0, -5, 13, -10);
+			ctx.moveTo(0, -5);	// wing separation
+			ctx.lineTo(0, 20);
+			ctx.moveTo(-18, -5);	// front left leg
+			ctx.lineTo(-30, -10);
+			ctx.moveTo(-18, 2);	// middle left leg
+			ctx.lineTo(-32, 6);
+			ctx.moveTo(-15, 10);	// rear left leg
+			ctx.lineTo(-26, 18);
+			ctx.moveTo(18, -5);	// front right leg
+			ctx.lineTo(30, -10);
+			ctx.moveTo(18, 2);	// middle right leg
+			ctx.lineTo(32, 6);
+			ctx.moveTo(15, 10);	// rear right leg
+			ctx.lineTo(26, 18);
+			ctx.restore();
+			ctx.stroke();
+			ctx.fillStyle = isEnabled ? isSelected || isPressed ? col.fg : col.fgOff : col.fgDis;
+			ctx.fillRect(dims.controlSize * 0.1,
+				dims.controlSize * 0.8,
+				dims.controlSize * 0.8,
+				dims.controlSize * 0.1);
+		},
 		"vpl:connected": function () {
 			ctx.translate(0, 0.1 * dims.controlSize);
 			ctx.save();

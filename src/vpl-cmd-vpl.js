@@ -337,6 +337,22 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return app.currentRobotIndex >= 0;
 		}
 	});
+	this.commands.add("vpl:debug", {
+		// not implemented yet
+		action: function (app) {
+		},
+		isSelected: function (app) {
+			return false;
+		},
+		object: this,
+		isAvailable: function (app) {
+			return false;
+		},
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		]
+	});
 	this.commands.add("vpl:connected", {
 		isEnabled: function (app) {
 			return false;
@@ -625,6 +641,10 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		keep: true,
 		isAvailable: function (app) {
 			return app.program.teacherRole && app.program.uiConfig.customizationMode && !app.program.readOnly;
-		}
+		},
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		]
 	});
 };

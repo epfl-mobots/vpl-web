@@ -71,6 +71,7 @@ A3a.vpl.Application = function (canvasEl) {
 		"!stretch",
 		"vpl:run",
 		"vpl:stop",
+		"vpl:debug",
 		"vpl:robot",
 		"!stretch",
 		"vpl:sim",
