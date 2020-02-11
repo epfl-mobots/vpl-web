@@ -5,7 +5,7 @@
 		"scrollbarWidth": 2,
 		"errorColor": "#ff1744",
 		"warningColor": "#ff7777",
-		"minInteractiveBlockSize":"84",
+		"minInteractiveBlockSize": 72,
 		"eventRightAlign": true
 	},
 
@@ -258,7 +258,7 @@
 				{
 					"id": "btn2_ProxGd_detection",
 					"val": [true, false],
-					"st": ["fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:4 6;stroke-dashoffset:.8;stroke-linecap:round"]
+					"st": ["fill:#ffffff;stroke:#263238", "stroke:#263238;fill:#000000"]
 				}
 			]
 		},
@@ -1978,3 +1978,4 @@
 		"cmd-vpl-french.json"
 	]
 }
+
