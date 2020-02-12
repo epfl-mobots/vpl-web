@@ -126,32 +126,44 @@ A3a.vpl.Canvas.prototype.widgetToImgElement = function (id, css, dims, scale, do
 		: img;
 };
 
-/** Export toolbar button to data URL
-	@param {string} id
+/** Export control to data URL
+	@param {A3a.vpl.Canvas.controlDraw} draw
+	@param {number} width
+	@param {number} height
 	@param {CSSParser.VPL.Box} itemBox
-	@param {CSSParser.VPL} css
 	@param {A3a.vpl.Canvas.dims} dims
 	@param {number=} scale
 	@return {{url: string, width: number, height: number}}
 */
-A3a.vpl.ControlBar.prototype.toolbarButtonToDataURL = function (id, itemBox, css, dims, scale) {
+A3a.vpl.Canvas.controlToDataURL = function (draw, width, height, itemBox, dims, scale) {
+	var item = new A3a.vpl.CanvasItem(null,
+		width, height,
+		0, 0,
+		// draw
+		function (canvas, item, dx, dy) {
+			draw(canvas.ctx, itemBox, false);
+		});
+	return {
+		url: item.toDataURL(dims, scale || 1),
+		width: width,
+		height: height
+	};
+};
+
+/** Export toolbar button to data URL
+	@param {string} id
+	@param {CSSParser.VPL.Box} itemBox
+	@param {A3a.vpl.Canvas.dims} dims
+	@param {number=} scale
+	@return {{url: string, width: number, height: number}}
+*/
+A3a.vpl.ControlBar.prototype.toolbarButtonToDataURL = function (id, itemBox, dims, scale) {
 	for (var i = 0; i < this.controls.length; i++) {
 		var control = this.controls[i];
 		if (control.id === id) {
 			var width = control.bounds.xmax - control.bounds.xmin;
 			var height = control.bounds.ymax - control.bounds.ymin;
-			var item = new A3a.vpl.CanvasItem(null,
-				width, height,
-				0, 0,
-				// draw
-				function (canvas, item, dx, dy) {
-					control.draw(canvas.ctx, itemBox, false);
-				});
-			return {
-				url: item.toDataURL(dims, scale || 1),
-				width: width,
-				height: height
-			};
+			return A3a.vpl.Canvas.controlToDataURL(control.draw, width, height, itemBox, dims, scale);
 		}
 	}
 	throw "button id not found";
@@ -161,14 +173,13 @@ A3a.vpl.ControlBar.prototype.toolbarButtonToDataURL = function (id, itemBox, css
 	@param {A3a.vpl.ControlBar} controlbar
 	@param {string} id
 	@param {CSSParser.VPL.Box} itemBox
-	@param {CSSParser.VPL} css
 	@param {A3a.vpl.Canvas.dims} dims
 	@param {number=} scale
 	@param {string=} downloadFilename
 	@return {string}
 */
-A3a.vpl.Canvas.prototype.toolbarButtonToImgElement = function (controlbar, id, itemBox, css, dims, scale, downloadFilename) {
-	var data = controlbar.toolbarButtonToDataURL(id, itemBox, css, dims, scale);
+A3a.vpl.Canvas.prototype.toolbarButtonToImgElement = function (controlbar, id, itemBox, dims, scale, downloadFilename) {
+	var data = controlbar.toolbarButtonToDataURL(id, itemBox, dims, scale);
 	var img = "<img width='" + data.width.toString(10) +
 		"' height='" + data.height.toString(10) +
 		"' src='" + data.url + "'>";
@@ -251,6 +262,15 @@ A3a.vpl.Application.prototype.toHTMLDocument = function (css) {
 */
 A3a.vpl.Application.prototype.uiToHTMLDocument = function (css) {
 
+	function controlToHTML(id, data) {
+		var img = "<img width='" + data.width.toString(10) +
+			"' height='" + data.height.toString(10) +
+			"' src='" + data.url + "'>";
+		var downloadFilename = id.replace(/ /g, "_") + ".png";
+		var a = "<a href='" + data.url + "' download='" + downloadFilename + "'>" + img + "</a>";
+		return "<tr><td>" + a + "</td><td>" + id + "</td></tr>\n";
+	}
+
 	function toolbarButtonsToHTML(app, controlBar) {
 		return controlBar.controls.map(function (control) {
 			var possibleStates = app.commands.find(control.id).possibleStates || [{}];
@@ -262,7 +282,7 @@ A3a.vpl.Application.prototype.uiToHTMLDocument = function (css) {
 					stateStr += (stateStr.length > 0 ? " " : "") + "=" + possibleState.state;
 				}
 				var buttonImg = app.vplCanvas.toolbarButtonToImgElement(controlBar, control.id, toolbarItemBoxes[control.id],
-					css, dims, scale, control.id + (stateStr ? "-" + stateStr.replace(/\s+/g, "-").replace("=", "") : "") + ".png");
+					dims, scale, control.id + (stateStr ? "-" + stateStr.replace(/\s+/g, "-").replace("=", "") : "") + ".png");
 				return "<tr><td>" + buttonImg + "</td><td>" + control.id + "</td><td>" + stateStr + "</td></tr>\n";
 			}).join("");
 		}).join("");
@@ -299,6 +319,28 @@ A3a.vpl.Application.prototype.uiToHTMLDocument = function (css) {
 			css.getBox({tag: "toolbar", clas: ["sim", "top"]}),
 			css.getBox({tag: "separator", clas: ["sim", "top"]}),
 			toolbarItemBoxes);
+	var eventButtons = [
+		"sim-event:forward",
+		"sim-event:backward",
+		"sim-event:left",
+		"sim-event:right",
+		"sim-event:center",
+		"sim-event:clap",
+		"sim-event:tap"
+	];
+	var sim2d = this.sim2d;
+	var eventButtonBox = css.getBox({tag: "button", clas: ["sim", "event"]});
+	var eventButtonsSimulator = eventButtons.map(function (id) {
+		var draw = function (ctx, box, isPressed) {
+			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)(id,
+				ctx, dims, css, ["sim", "event"], null,
+				true, false, isPressed);
+		};
+		var dataURL = A3a.vpl.Canvas.controlToDataURL(draw,
+			eventButtonBox.width, eventButtonBox.height, eventButtonBox,
+			dims, scale);
+		return dataURL;
+	});
 	var html = "<!DOCTYPE html>\n" +
 		"<html>\n" +
 		(this.cssForHTMLDocument
@@ -353,6 +395,9 @@ A3a.vpl.Application.prototype.uiToHTMLDocument = function (css) {
 		toolbarButtonsToHTML(this, controlBar2) +
 		toolbarButtonsToHTML(this, controlBarSourceEditor) +
 		toolbarButtonsToHTML(this, controlBarSimulator) +
+		eventButtonsSimulator.map(function (data, i) {
+			return controlToHTML(eventButtons[i], data);
+ 		}) +
 		"</table>\n" +
 		"</body>\n" +
 		"</html>\n";
