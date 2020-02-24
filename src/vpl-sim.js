@@ -25,8 +25,10 @@ A3a.vpl.Application.prototype.installRobotSimulator = function (options) {
 
 	this.simCanvas = new A3a.vpl.Canvas(this.canvasEl, {css: this.css});
 	this.simCanvas.defaultDoOver = function () {
-		app.simHint = null;
-		app.requestRendering();
+		if (app.simHint !== null) {
+			app.simHint = null;
+			app.requestRendering();
+		}
 	};
 
 	var intervalId = null;

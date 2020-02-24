@@ -190,8 +190,10 @@ A3a.vpl.Application = function (canvasEl) {
 	/** @type {?string} */
 	this.vplHint = null;	// before translation
 	this.vplCanvas.defaultDoOver = function () {
-		self.vplHint = null;
-		self.renderProgramToCanvas();
+		if (self.vplHint !== null) {
+			self.vplHint = null;
+			self.renderProgramToCanvas();
+		}
 	};
 
 	/** @type {?string} */
