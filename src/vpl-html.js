@@ -50,14 +50,15 @@ A3a.vpl.Block.prototype.toDataURL = function (css, dims, scale) {
 		box.totalHeight(),
 		0, 0,
 		// draw
-		function (canvas, item, dx, dy) {
+		function (canvas, item, dx, dy, isZoomed) {
 			var x = item.x + box.offsetLeft() + dx;
  			var y = item.y + box.offsetTop() + dy;
 			box.drawAt(canvas.ctx, x, y);
 			self.blockTemplate.renderToCanvas(canvas,
 				/** @type {A3a.vpl.Block} */(item.data),
 				box,
-				x, y);
+				x, y,
+				isZoomed);
 		});
 	return item.toDataURL(dims, scale || 1);
 };

@@ -804,6 +804,9 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 				? blockTemplate0.typicalParamSet || null
 				: b["typicalParamSet"] || null,
 			draw: draw,
+			alwaysZoom: blockTemplate0
+				? blockTemplate0.alwaysZoom || false
+				: b["alwaysZoom"] || false,
 			mousedown: mousedown,
 			mousedrag: mousedrag,
 			genCode: genCode,

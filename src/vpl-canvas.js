@@ -102,9 +102,10 @@ A3a.vpl.CanvasItem.prototype.clone = function () {
 	to draw at the original position with clipping
 	@param {number=} dy vertical offset wrt original position
 	@param {boolean=} overlay true to call drawOverlay, false to call drawContent
+	@param {boolean=} isZoomed
 	@return {void}
 */
-A3a.vpl.CanvasItem.prototype.draw = function (canvas, dx, dy, overlay) {
+A3a.vpl.CanvasItem.prototype.draw = function (canvas, dx, dy, overlay, isZoomed) {
 	var ctx = canvas.ctx;
 	var clipped = this.clippingRect && dx === undefined;
 	if (clipped) {
@@ -117,9 +118,9 @@ A3a.vpl.CanvasItem.prototype.draw = function (canvas, dx, dy, overlay) {
 		dy = this.clippingRect.yOffset;
 	}
 	if (overlay) {
-		this.drawOverlay && this.drawOverlay(canvas, this, dx || 0, dy || 0);
+		this.drawOverlay && this.drawOverlay(canvas, this, dx || 0, dy || 0, isZoomed);
 	} else {
-		this.drawContent && this.drawContent(canvas, this, dx || 0, dy || 0);
+		this.drawContent && this.drawContent(canvas, this, dx || 0, dy || 0, isZoomed);
 	}
 	if (clipped) {
 		ctx.restore();
@@ -158,7 +159,7 @@ A3a.vpl.CanvasItem.prototype.toDataURL = function (dims, scale, mimetype) {
 };
 
 /**
-	@typedef {function(A3a.vpl.Canvas,A3a.vpl.CanvasItem,number,number):void}
+	@typedef {function(A3a.vpl.Canvas,A3a.vpl.CanvasItem,number,number,(boolean|undefined)):void}
 */
 A3a.vpl.CanvasItem.draw;
 
@@ -845,17 +846,17 @@ A3a.vpl.Canvas.prototype.makeZoomedClone = function (item) {
 		ctx.translate(item1.x, item1.y);
 		ctx.scale(sc, sc);
 		ctx.translate(-item1.x, -item1.y);
-		item.drawContent(canvas, c, item1.x - c.x, item1.y - c.y);
+		item.drawContent(canvas, c, item1.x - c.x, item1.y - c.y, true);
 		ctx.restore();
 	};
 	if (item.drawOverlay) {
-		c.drawOverlay = function (canvas, item1, dx, dy) {
+		c.drawOverlay = function (canvas, item1, dx, dy, isZoomed) {
 			var ctx = canvas.ctx;
 			ctx.save();
 			ctx.translate(item1.x, item1.y);
 			ctx.scale(sc, sc);
 			ctx.translate(-item1.x, -item1.y);
-			item.drawOverlay(canvas, c, item1.x - c.x, item1.y - c.y);
+			item.drawOverlay(canvas, c, item1.x - c.x, item1.y - c.y, true);
 			ctx.restore();
 		};
 	}

@@ -60,6 +60,8 @@ In json, block contain the following properties:
 
 - "typicalParamSet" (array of elements the same type and length as "defaultParameters", optional): multiple values similar to "typicalParameters", to be used when the block has a very different appearance for different values of the parameters (e.g. in block "accelerometer" where the first parameter is 0 for tap, 1 for roll angle, or 2 for pitch angle). These values are used when exporting libraries as HTML.
 
+- "alwaysZoom" (boolean, optional): true to zoom block when clicked, irrespectively of minInteractiveBlockSize and minTouchInteractiveBlockSize. Default is false.
+
 - "buttons" (array of objects, optional): multi-state button definitions. Each button is described by an object with the following properties:
 
 	- "id" (string, required): id of the svg element corresponding to the button. It should be contained in the element identified by "main".

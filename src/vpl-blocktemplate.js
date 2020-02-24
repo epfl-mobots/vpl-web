@@ -68,9 +68,11 @@ A3a.vpl.BlockTemplate = function (blockParams) {
 				}
 		};
 	/** @type {A3a.vpl.BlockTemplate.drawFun} */
-	this.draw = blockParams.draw || function (canvas, block, box) {
+	this.draw = blockParams.draw || function (canvas, block, box, isZoomed) {
 		canvas.text(block.blockTemplate.name);
 	};
+	/** @type {boolean} */
+	this.alwaysZoom = blockParams.alwaysZoom || false;
 	/** @type {A3a.vpl.BlockTemplate.mousedownFun|null} */
 	this.mousedown = blockParams.mousedown || null;
 	/** @type {A3a.vpl.BlockTemplate.mousedragFun|null} */
@@ -110,7 +112,7 @@ A3a.vpl.BlockTemplate.validateFun;
 A3a.vpl.BlockTemplate.genCodeFun;
 
 /**
-	@typedef {function(A3a.vpl.Canvas,A3a.vpl.Block,CSSParser.VPL.Box):void}
+	@typedef {function(A3a.vpl.Canvas,A3a.vpl.Block,CSSParser.VPL.Box,(boolean|undefined)):void}
 */
 A3a.vpl.BlockTemplate.drawFun;
 
@@ -138,19 +140,20 @@ A3a.vpl.BlockTemplate.sectionPriFun;
 	@typedef {{
 		name: string,
 		type: A3a.vpl.blockType,
-		modes: (Array.<A3a.vpl.mode>|undefined),
-		noState: (boolean|undefined),
-		defaultParam: (A3a.vpl.BlockTemplate.defaultParam|null|undefined),
-		typicalParam: (A3a.vpl.BlockTemplate.defaultParam|null|undefined),
-		typicalParamSet: (Array.<A3a.vpl.BlockTemplate.param>|undefined),
-		exportParam: (A3a.vpl.BlockTemplate.exportParam|null|undefined),
-		validate: (A3a.vpl.BlockTemplate.validateFun|null|undefined),
-		genCode: (Object<string,A3a.vpl.BlockTemplate.genCodeFun>|null|undefined),
-		draw: (A3a.vpl.BlockTemplate.drawFun|null|undefined),
-		mousedown: (A3a.vpl.BlockTemplate.mousedownFun|null|undefined),
-		mousedrag: (A3a.vpl.BlockTemplate.mousedragFun|null|undefined),
-		changeMode: (A3a.vpl.BlockTemplate.changeModeFun|null|undefined),
-		sectionPriority: (A3a.vpl.BlockTemplate.sectionPriFun|undefined)
+		modes: (Array.<A3a.vpl.mode> | undefined),
+		noState: (boolean | undefined),
+		defaultParam: (A3a.vpl.BlockTemplate.defaultParam | null | undefined),
+		typicalParam: (A3a.vpl.BlockTemplate.defaultParam | null | undefined),
+		typicalParamSet: (Array.<A3a.vpl.BlockTemplate.param> | undefined),
+		exportParam: (A3a.vpl.BlockTemplate.exportParam | null | undefined),
+		validate: (A3a.vpl.BlockTemplate.validateFun | null | undefined),
+		genCode: (Object<string,A3a.vpl.BlockTemplate.genCodeFun> | null | undefined),
+		draw: (A3a.vpl.BlockTemplate.drawFun | null | undefined),
+		alwaysZoom: (boolean | undefined),
+		mousedown: (A3a.vpl.BlockTemplate.mousedownFun | null | undefined),
+		mousedrag: (A3a.vpl.BlockTemplate.mousedragFun | null | undefined),
+		changeMode: (A3a.vpl.BlockTemplate.changeModeFun | null | undefined),
+		sectionPriority: (A3a.vpl.BlockTemplate.sectionPriFun | undefined)
 	}}
 */
 A3a.vpl.BlockTemplate.params;
@@ -161,12 +164,13 @@ A3a.vpl.BlockTemplate.params;
 	@param {CSSParser.VPL.Box} box
 	@param {number} x0 position of left side
 	@param {number} y0 position of top side
+	@param {(boolean | undefined)} isZoomed
 	@return {void}
 */
-A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, box, x0, y0) {
+A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, box, x0, y0, isZoomed) {
 	canvas.ctx.save();
 	canvas.ctx.translate(x0, y0);
-	this.draw(canvas, block, box);
+	this.draw(canvas, block, box, isZoomed);
 	canvas.ctx.restore();
 };
 

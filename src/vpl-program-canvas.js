@@ -101,7 +101,7 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, x
 		box.width, box.height,
 		x, y,
 		// draw
-		function (canvas, item, dx, dy) {
+		function (canvas, item, dx, dy, isZoomed) {
 			var ctx = canvas.ctx;
 			ctx.save();
 			var dims0 = canvas.dims;
@@ -110,7 +110,8 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, x
 			block.blockTemplate.renderToCanvas(canvas,
 				/** @type {A3a.vpl.Block} */(item.data),
 				box,
-				item.x + dx, item.y + dy);
+				item.x + dx, item.y + dy,
+				isZoomed);
 			if (block.locked) {
 				canvas.lockedMark(item.x + dx, item.y + dy, blockSize, blockSize, true);
 			}
@@ -159,12 +160,12 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, x
 	);
 	var canvasSize = canvas.getSize();
 	if (!(opts && opts.notInteractive || !block.blockTemplate.mousedown)) {
-		if (program.zoomBlocks) {
+		if (program.zoomBlocks || block.blockTemplate.alwaysZoom) {
 			item.zoomOnLongPress = function (zoomedItem) {
 				return canvas.makeZoomedClone(zoomedItem);
 			};
 		}
-		if (program.touchZoomBlocks) {
+		if (program.touchZoomBlocks || block.blockTemplate.alwaysZoom) {
 			item.zoomOnLongTouchPress = function (zoomedItem) {
 				return canvas.makeZoomedClone(zoomedItem);
 			};
