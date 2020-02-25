@@ -446,8 +446,7 @@ sim-playground {
 					"timerElapsed = 0\n"
 				],
 				"sectionBegin": "onevent timer0\n",
-				"sectionPreamble": "timerElapsed = 1\ntimer.period[0] = 0\n",
-				"clause": "timerElapsed"
+				"sectionPreamble": "timerElapsed = 1\ntimer.period[0] = 0\n"
 			}
 		},
 		{
@@ -531,11 +530,10 @@ sim-playground {
 						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
 					]
 				],
-				"statement":
-					[
-						"motor.left.target = `Math.round(500 * $[0])`\n",
-						"motor.right.target = `Math.round(500 * $[1])`\n"
-					]
+				"statement": [
+					"motor.left.target = `Math.round(500 * $[0])`\n",
+					"motor.right.target = `Math.round(500 * $[1])`\n"
+				]
 			}
 		},
 		{
@@ -835,7 +833,7 @@ sim-playground {
 					]
 				],
 				"statement": [
-					"state8 = `$[0]`;\n",
+					"state8 = `$[0]`\n",
 					"callsub display_state8\n"
 				],
 				"statementWithoutInit": [
@@ -860,7 +858,7 @@ sim-playground {
 					]
 				],
 				"statement": [
-					"state8 = (state8 + `$[0] > 0 ? 1 : 7`) % 8;\n",
+					"state8 = (state8 + `$[0] > 0 ? 1 : 7`) % 8\n",
 					"callsub display_state8\n"
 				],
 				"statementWithoutInit": [
@@ -885,7 +883,7 @@ sim-playground {
 					]
 				],
 				"statement": [
-					"`$[0] === 0 ? 'counter = 0' : $[0] > 0 ? 'if counter < 255 then\\ncounter++;\\nend' : 'if counter > 0 then\\ncounter--\\nend'`\n",
+					"`$[0] === 0 ? 'counter = 0' : $[0] > 0 ? 'if counter < 255 then\\ncounter++\\nend' : 'if counter > 0 then\\ncounter--\\nend'`\n",
 					"callsub display_counter\n"
 				]
 			}
@@ -904,7 +902,7 @@ sim-playground {
 					"timerElapsed = 0\n"
 				],
 				"statement": [
-					"timer.period[0] = `Math.round(1000 * $[0]`)\n",
+					"timer.period[0] = `Math.round(1000 * $[0])`\n",
 					"timerElapsed = 0\n"
 				]
 			}
@@ -923,7 +921,7 @@ sim-playground {
 					"timerElapsed = 0\n"
 				],
 				"statement": [
-					"timer.period[0] = `Math.round(1000 * $[0]`)\n",
+					"timer.period[0] = `Math.round(1000 * $[0])`\n",
 					"timerElapsed = 0\n"
 				]
 			}
@@ -1119,8 +1117,7 @@ sim-playground {
 				],
 				"sectionBegin": "onevent timer0 {\n",
 				"sectionEnd": "}\n",
-				"sectionPreamble": "timerElapsed = true;\ntimer.period[0] = 0;\n",
-				"clause": "timerElapsed"
+				"sectionPreamble": "timerElapsed = true;\ntimer.period[0] = 0;\n"
 			}
 		},
 		{

@@ -180,8 +180,7 @@
 				],
 				"sectionBegin": "onevent timer0 {\n",
 				"sectionEnd": "}\n",
-				"sectionPreamble": "timerElapsed = true;\ntimer.period[0] = 0;\n",
-				"clause": "timerElapsed"
+				"sectionPreamble": "timerElapsed = true;\ntimer.period[0] = 0;\n"
 			}
 		},
 		{
