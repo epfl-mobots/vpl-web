@@ -25,6 +25,7 @@
 			"motor state": "Motor state",
 			"motor": "Set motor speeds",
 			"move": "Set motion",
+			"nn obstacles": "Neural net for obstacle avoidance",
 			"top color": "Set top color (RGB components)",
 			"top color 8": "Set top color",
 			"bottom color": "Set bottom color (RGB components)",

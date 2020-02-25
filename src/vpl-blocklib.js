@@ -1196,6 +1196,93 @@ A3a.vpl.BlockTemplate.lib =	[
 	})()),
 	new A3a.vpl.BlockTemplate((function () {
 		return {
+			name: "nn obstacles",
+			modes: [],
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0, 0, 0, 0]; },
+			typicalParam: function () { return [0.3, 0.2, 0.1, 0.3]; },
+			draw: function (canvas, block, box, isZoomed) {
+				var sc = isZoomed ? 0.5 : 1;
+				var ctx = canvas.ctx;
+				var dims = canvas.dims;
+				ctx.save();
+				if (isZoomed) {
+					ctx.scale(sc, sc);
+				}
+				ctx.fillStyle = "white";
+				ctx.font = dims.blockFont;
+				ctx.textAlign = "center";
+				ctx.textBaseline = "middle";
+				ctx.translate(0.5 * dims.blockSize,
+					0.5 * dims.blockSize);
+				ctx.translate(-0.5 * dims.blockSize,
+					-0.5 * dims.blockSize);
+
+				if (isZoomed) {
+					ctx.fillText("\u21d1", 0.25 * dims.blockSize, 0.35 * dims.blockSize);
+					ctx.fillText(block.param[0].toFixed(1), 0.6 * dims.blockSize, 0.35 * dims.blockSize);
+
+					ctx.fillText("\u21a7", 0.25 * dims.blockSize, 0.81 * dims.blockSize);
+					ctx.fillText(block.param[1].toFixed(1), 0.6 * dims.blockSize, 0.81 * dims.blockSize);
+
+					ctx.fillText("+", 0.25 * dims.blockSize, 1.27 * dims.blockSize);
+					ctx.fillText(block.param[2].toFixed(1), 0.6 * dims.blockSize, 1.27 * dims.blockSize);
+
+					ctx.fillText("\u2212", 0.25 * dims.blockSize, 1.69 * dims.blockSize);
+					ctx.fillText(block.param[3].toFixed(1), 0.6 * dims.blockSize, 1.69 * dims.blockSize);
+
+					ctx.translate(dims.blockSize, 0);
+					canvas.slider(/** @type {number} */(block.param[0]), 0.15, false);
+					canvas.slider(/** @type {number} */(block.param[1]), -0.30, false);
+					canvas.slider(/** @type {number} */(block.param[2]), -0.75, false);
+					canvas.slider(/** @type {number} */(block.param[3]), -1.20, false);
+				} else {
+					ctx.fillText("\u21d1", 0.25 * dims.blockSize, 0.17 * dims.blockSize);
+					ctx.fillText(block.param[0].toFixed(1), 0.6 * dims.blockSize, 0.17 * dims.blockSize);
+
+					ctx.fillText("\u21a7", 0.25 * dims.blockSize, 0.4 * dims.blockSize);
+					ctx.fillText(block.param[1].toFixed(1), 0.6 * dims.blockSize, 0.4 * dims.blockSize);
+
+					ctx.fillText("+", 0.25 * dims.blockSize, 0.63 * dims.blockSize);
+					ctx.fillText(block.param[2].toFixed(1), 0.6 * dims.blockSize, 0.63 * dims.blockSize);
+
+					ctx.fillText("\u2212", 0.25 * dims.blockSize, 0.87 * dims.blockSize);
+					ctx.fillText(block.param[3].toFixed(1), 0.6 * dims.blockSize, 0.87 * dims.blockSize);
+				}
+
+				ctx.restore();
+			},
+			alwaysZoom: true,
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				if (canvas.sliderCheck(0.35, false, width / 2, height, left + width / 2, top, ev)) {
+					block.prepareChange();
+					return 0;
+				}
+				if (canvas.sliderCheck(0.12, false, width / 2, height, left + width / 2, top, ev)) {
+					block.prepareChange();
+					return 1;
+				}
+				if (canvas.sliderCheck(-0.12, false, width / 2, height, left + width / 2, top, ev)) {
+					block.prepareChange();
+					return 2;
+				}
+				if (canvas.sliderCheck(-0.35, false, width / 2, height, left + width / 2, top, ev)) {
+					block.prepareChange();
+					return 3;
+				}
+				return null;
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedragFun} */
+			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
+				var val = canvas.sliderDrag(false, width / 2, height, left + width / 2, top, ev);
+				block.param[dragIndex] = Math.max(0, Math.min(1, Math.round(20 * val) / 20));
+			}
+		};
+	})()),
+	new A3a.vpl.BlockTemplate((function () {
+		return {
 			name: "top color",
 			modes: [A3a.vpl.mode.advanced],
 			type: A3a.vpl.blockType.action,

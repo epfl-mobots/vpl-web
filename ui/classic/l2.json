@@ -296,6 +296,30 @@
 			}
 		},
 		{
+			"name": "nn obstacles",
+			"l2": {
+				"initCodeExec": [
+					[
+						"// reset outputs\n",
+						"leds.top(0, 0, 0);\n",
+						"leds.bottom.left(0, 0, 0);\n",
+						"leds.bottom.right(0, 0, 0);\n",
+						"leds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+					]
+				],
+				"statement": [
+					"motor.left.target = `Math.round(500 * $[0])`",
+					"`Math.round(20 * $[1]) ? ' - prox.horizontal[2] / 10 * ' + Math.round(20 * $[1]).toString(10) + ' / 16' : ''`",
+					"`Math.round(20 * $[2]) ? ' + prox.horizontal[0] / 10 * ' + Math.round(20 * $[2]).toString(10) + ' / 16' : ''`",
+					"`Math.round(20 * $[3]) ? ' - prox.horizontal[4] / 10 * ' + Math.round(20 * $[3]).toString(10) + ' / 16' : ''`;\n",
+					"motor.right.target = `Math.round(500 * $[0])`",
+					"`Math.round(20 * $[1]) ? ' - prox.horizontal[2] / 10 * ' + Math.round(20 * $[1]).toString(10) + ' / 16' : ''`",
+					"`Math.round(20 * $[2]) ? ' + prox.horizontal[4] / 10 * ' + Math.round(20 * $[2]).toString(10) + ' / 16' : ''`",
+					"`Math.round(20 * $[3]) ? ' - prox.horizontal[0] / 10 * ' + Math.round(20 * $[3]).toString(10) + ' / 16' : ''`;\n"
+				]
+			}
+		},
+		{
 			"name": "top color",
 			"l2": {
 				"initVarDecl": [

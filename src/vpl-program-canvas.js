@@ -453,7 +453,7 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
         }
 	);
 	if (rule.disabled) {
-		item.drawOverlay = function (ctx, item, dx, dy) {
+		item.drawOverlay = function (ctx, item, dx, dy, isZoomed) {
 			canvas.disabledMark(item.x + dx, item.y + dy, item.width, item.height, ["rule"], ["rule"]);
 		};
 	}

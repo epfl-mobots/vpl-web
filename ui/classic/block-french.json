@@ -25,6 +25,7 @@
 			"motor state": "Vitesses des moteurs",
 			"motor": "Change les vitesses des moteurs",
 			"move": "Change le type de déplacement",
+			"nn obstacles": "Réseau de neurones pour l'évitement d'obstacles",
 			"top color": "Change la couleur du dessus (composantes RVB)",
 			"top color 8": "Change la couleur du dessus",
 			"bottom color": "Change la couleur du dessous (composantes RVB)",
