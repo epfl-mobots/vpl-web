@@ -769,6 +769,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			@param {number} val
 			@param {string=} color0
 			@param {string=} color1
+			@return {void}
 		*/
 		function drawSensor(x, y, r, val, color0, color1) {
 			ctx.save();
@@ -852,6 +853,31 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	// draw robot back side
 	var yRobotSide = yRobotControl;	// top
 	simControls.push(simCanvas.addDecoration(function (ctx) {
+
+		/** Draw a signed motor target value as a dial
+			@param {number} x
+			@param {number} y
+			@param {number} r
+			@param {number} val value in range [-1,1]
+			@return {void}
+		*/
+		function drawSpeed(x, y, r, val) {
+			val = Math.max(-1, Math.min(1, val));
+			ctx.save();
+			ctx.translate(x, y);
+			ctx.beginPath();
+			ctx.arc(0, 0, r, 0, 2 * Math.PI);
+			ctx.fillStyle = "#ccc";
+			ctx.fill();
+			ctx.beginPath();
+			ctx.moveTo(0, 0);
+			ctx.lineTo(r * Math.sin(3 * val), -r * Math.cos(3 * val));
+			ctx.lineWidth = Math.max(r / 6, 1);
+			ctx.strokeStyle = "black";
+			ctx.stroke();
+			ctx.restore();
+		}
+
 		ctx.save();
 		ctx.fillStyle = "black";
 		ctx.fillRect(xRobotControl - 1.15 * smallBtnSize,
@@ -889,6 +915,16 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		ctx.strokeRect(xRobotControl - 1.2 * smallBtnSize,
 			yRobotSide,
 			2.4 * smallBtnSize, smallBtnSize);
+		// left speed
+		drawSpeed(xRobotControl - 1.7 * smallBtnSize,
+			yRobotSide + smallBtnSize,
+			0.4 * smallBtnSize,
+			robot["get"]("motor.left") / 2);
+		// right speed
+		drawSpeed(xRobotControl + 1.7 * smallBtnSize,
+			yRobotSide + smallBtnSize,
+			0.4 * smallBtnSize,
+			robot["get"]("motor.right") / 2);
 		ctx.restore();
 	}));
 	yRobotControl += 1.5 * smallBtnSize;

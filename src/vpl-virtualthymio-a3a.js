@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -128,7 +128,7 @@ A3a.vpl.VirtualThymioVM.prototype["set"] = function (name, val) {
 			this.setVMVar("prox.ground.delta", val.map(function (x) { return 2000 * x; }));
 			break;
 		case "prox.horizontal":
-			this.setVMVar("prox.horizontal", val.map(function (x) { return 2000 * x; }));
+			this.setVMVar("prox.horizontal", val.map(function (x) { return 4000 * x; }));
 			break;
 		case "acc":
 			this.setVMVar("acc", val.map(function (x) { return 22 * x; }));
