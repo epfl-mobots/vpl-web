@@ -606,7 +606,8 @@ function vplSetup(gui, rootDir) {
 						return null;
 					}
 					var bytecode = c.compile();
-					return A3a.vm.disToListing(bytecode);
+					return A3a.vm.disToMixedListing(src, bytecode, c.sourceToBCMapping, true);
+					// return A3a.vm.disToListing(bytecode);
 				} catch (e) {
 					return "; " + e;
 				}

@@ -1,4 +1,4 @@
-#	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+#	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 #	Miniature Mobile Robots group, Switzerland
 #	Author: Yves Piguet
 
@@ -87,6 +87,7 @@ JS = \
 	compiler-ns.js \
 	compiler-vm.js \
 	compiler-dis.js \
+	compiler-dis-mixed.js \
 	compiler.js \
 	compiler-macros.js \
 	compiler-l2.js \
