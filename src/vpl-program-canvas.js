@@ -457,7 +457,7 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 			canvas.disabledMark(item.x + dx, item.y + dy, item.width, item.height, ["rule"], ["rule"]);
 		};
 	}
-	if (this.noVPL || this.readOnly) {
+	if (this.program.noVPL || this.program.readOnly) {
 		item.draggable = false;
 	}
 	canvas.setItem(item);
@@ -487,9 +487,9 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 			childItem = this.addBlockToCanvas(canvas, event, blockBox,
 				x, y + vertOffset,
 				{
-					notInteractive: rule.disabled || this.noVPL || this.readOnly,
-					notClickable: rule.disabled || this.noVPL || this.readOnly,
-					notDraggable: this.noVPL || this.readOnly
+					notInteractive: rule.disabled || this.program.noVPL || this.program.readOnly,
+					notClickable: rule.disabled || this.program.noVPL || this.program.readOnly,
+					notDraggable: this.program.noVPL || this.program.readOnly
 				});
 		} else {
 			containerBox.width = blockBox.totalWidth();
@@ -526,9 +526,9 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 			childItem = this.addBlockToCanvas(canvas, action, A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes),
 				x, y + vertOffset,
 				{
-					notInteractive: rule.disabled || this.noVPL || this.readOnly,
-					notClickable: rule.disabled || this.noVPL || this.readOnly,
-					notDraggable: this.noVPL || this.readOnly
+					notInteractive: rule.disabled || this.program.noVPL || this.program.readOnly,
+					notClickable: rule.disabled || this.program.noVPL || this.program.readOnly,
+					notDraggable: this.program.noVPL || this.program.readOnly
 				});
 		} else {
 			containerBox.width = blockBox.totalWidth();
@@ -537,7 +537,11 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 					{eventSide: false, index: j}),
 				blockBox,
 				x, y,
-				{notDropTarget: program.readOnly, notClickable: true, notDraggable: true});
+				{
+					notDropTarget: program.readOnly,
+					notClickable: true,
+					notDraggable: true
+				});
 		}
 		item.attachItem(childItem);
 		x += containerBox.totalWidth();

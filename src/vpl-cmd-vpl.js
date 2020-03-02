@@ -53,7 +53,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.program.readOnly;
+			return app.program.readOnly || app.program.noVPL;
 		}
 	});
 	this.commands.add("vpl:suspend", {
