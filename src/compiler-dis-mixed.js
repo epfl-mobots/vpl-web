@@ -1,5 +1,5 @@
 /*
-	Copyright 2018 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -32,7 +32,7 @@ A3a.vm.disToMixedListing = function (src, bytecode, sourceToBCMapping, loose) {
 		@return {void}
 	*/
 	function add(k) {
-		var addr = j.toString(10);
+		var addr = dis[k].addr.toString(10);
 		addr = "    ".slice(addr.length - 1) + addr;
 		var op = dis[k].op.map(function (op1) {
 			var str = op1.toString(16);
