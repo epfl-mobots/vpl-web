@@ -104,7 +104,9 @@
 			"name": "roll",
 			"aseba": {
 				"sectionBegin": "onevent acc\n",
-				"initVarDecl": "var rollAngle\n",
+				"initVarDecl": [
+					"var rollAngle\n"
+				],
 				"clauseInit":
 					"call math.atan2(rollAngle, acc[0], acc[2])\n",
 				"clause":
@@ -115,7 +117,9 @@
 			"name": "pitch",
 			"aseba": {
 				"sectionBegin": "onevent acc\n",
-				"initVarDecl": "var pitchAngle\n",
+				"initVarDecl": [
+					"var pitchAngle\n"
+				],
 				"clauseInit":
 					"call math.atan2(pitchAngle, acc[1], acc[2])\n",
 				"clause":
@@ -126,7 +130,9 @@
 			"name": "yaw",
 			"aseba": {
 				"sectionBegin": "onevent acc\n",
-				"initVarDecl": "var yawAngle\n",
+				"initVarDecl": [
+					"var yawAngle\n"
+				],
 				"clauseInit":
 					"call math.atan2(yawAngle, acc[0], acc[1])\n",
 				"clause":
