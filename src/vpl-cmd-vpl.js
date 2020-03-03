@@ -116,7 +116,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:load", {
 		action: function (app, modifier) {
-			app.loadBox.show();
+			app.loadBox.show("Open program file",
+				".aesl,.json,." + A3a.vpl.Program.suffix + ",." + A3a.vpl.Program.suffixUI,
+				function (file) {
+					app.loadProgramFile(file);
+				});
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.readOnly;

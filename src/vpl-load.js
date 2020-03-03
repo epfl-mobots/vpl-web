@@ -43,7 +43,7 @@ A3a.vpl.Load = function (app) {
 	document.body.appendChild(this.backgroundDiv);
 
 	var el = document.createElement("p");
-	el.textContent = app.i18n.translate("Open program file");
+	this.titleElement = el;
 	this.div.appendChild(el);
 	el = document.createElement("table");
 	el.style.width = "100%";
@@ -54,8 +54,6 @@ A3a.vpl.Load = function (app) {
 	tr.appendChild(td);
 	this.input = document.createElement("input");
 	this.input.setAttribute("type", "file");
-	this.input.setAttribute("accept",
-		".aesl,.json,." + A3a.vpl.Program.suffix + ",." + A3a.vpl.Program.suffixUI);
 	this.input.style.width = "35em";
 	td.appendChild(this.input);
 
@@ -68,7 +66,7 @@ A3a.vpl.Load = function (app) {
 	button.addEventListener("click", function () {
 		var file = self.input.files[0];
 		if (file) {
-			app.loadProgramFile(file);
+			self.loadFun(file);
 		}
 		self.hide();
 	}, false);
@@ -100,12 +98,23 @@ A3a.vpl.Load = function (app) {
 		self.hide();
 	}, false);
 	el.appendChild(closebox);
+
+	this.i18n = app.i18n;
+	this.loadFun = null;
 };
 
 /** Show Load modal box
+	@param {string} title
+	@param {string} accept file input attribute "accept"
+	(comma-separated dotted file extensions
+	@param {function(File):void} loadFun
 	@return {void}
 */
-A3a.vpl.Load.prototype.show = function () {
+A3a.vpl.Load.prototype.show = function (title, accept, loadFun) {
+	this.titleElement.textContent = this.i18n.translate(title);
+	this.input.setAttribute("accept", accept);
+	this.loadFun = loadFun;
+
 	this.backgroundDiv.style.display = "block";
 	var boundingBox = this.div.getBoundingClientRect();
 	this.div.style.marginLeft = (-boundingBox.width / 2) + "px";
