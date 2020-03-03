@@ -577,7 +577,7 @@ function vplSetup(gui, rootDir) {
 	}
 
 	/** @const */
-	var languageList = ["aseba", "l2", "js", "python"];
+	var languageList = ["aseba", "l2", "asm", "js", "python"];
 	if (app.editor && languageList.indexOf(language) >= 0) {
 		/** @const */
 		app.editor.setUpdateCodeLanguageFunction(function () {
@@ -595,24 +595,21 @@ function vplSetup(gui, rootDir) {
 		if (app.editor) {
 			var asebaNode = new A3a.A3aNode(A3a.thymioDescr);
 			app.editor.disass = function (language, src) {
-				/** @type {A3a.Compiler}*/
-				var c;
 				try {
 					switch (language) {
 					case "aseba":
-						c = new A3a.Compiler(asebaNode, src);
+						var c = new A3a.Compiler(asebaNode, src);
 						c.functionLib = A3a.A3aNode.stdMacros;
-						break;
+						var bytecode = c.compile();
+						return A3a.vm.disToMixedListing(src, bytecode, c.sourceToBCMapping, true);
 					case "l2":
-						c = new A3a.Compiler.L2(asebaNode, src);
+						var c = new A3a.Compiler.L2(asebaNode, src);
 						c.functionLib = A3a.A3aNode.stdMacrosL2;
-						break;
+						var bytecode = c.compile();
+						return A3a.vm.disToMixedListing(src, bytecode, c.sourceToBCMapping, true);
 					default:
 						return null;
 					}
-					var bytecode = c.compile();
-					return A3a.vm.disToMixedListing(src, bytecode, c.sourceToBCMapping, true);
-					// return A3a.vm.disToListing(bytecode);
 				} catch (e) {
 					return "; " + e;
 				}

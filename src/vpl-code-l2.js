@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -11,7 +11,7 @@
 
 /** @fileoverview
 
-Definition of class A3a.vpl.CodeGeneratorA3a (a subclass of
+Definition of class A3a.vpl.CodeGeneratorL2 (a subclass of
 A3a.vpl.CodeGenerator), which generate L2 source code from a VPL3 program.
 
 */

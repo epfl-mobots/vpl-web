@@ -115,6 +115,7 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 		possibleStates: [
 			{state: "aseba"},
 			{state: "l2"},
+			{state: "asm"},
 			{state: "js"},
 			{state: "python"}
 		]

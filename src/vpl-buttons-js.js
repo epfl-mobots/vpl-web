@@ -1028,7 +1028,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 		},
 		"src:language": function () {
 			/** @const */
-			var languageAbbr = {"aseba": "Aa", "l2": "l2", "js": "js", "python": "py"};
+			var languageAbbr = {"aseba": "Aa", "l2": "l2", "asm": "asm", "js": "js", "python": "Py"};
 			var s = dims.controlSize;
 			ctx.save();
 			ctx.fillStyle = !isEnabled
