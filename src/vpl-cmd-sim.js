@@ -211,9 +211,27 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 	});
 	this.commands.add("sim:map-ground", {
 		action: function (app, modifier) {
-			// toggle between null and disabled ground image
-			app.setImage(app.sim2d.groundImage == null ? app.sim2d.disabledGroundImage : null,
-				A3a.vpl.VPLSim2DViewer.playgroundMap.ground);
+			if (modifier) {
+				// open ground file
+				app.loadBox.show("Open ground image file",
+					".gif,.png,.jpg,.svg",
+					function (file) {
+						var fileReader = new window.FileReader();
+						fileReader.onload = function (event) {
+							var data = event.target.result;
+							var img = new Image();
+							img.addEventListener("load", function () {
+								app.setImage(img, A3a.vpl.VPLSim2DViewer.playgroundMap.ground);
+							});
+							img.src = data;
+						};
+						fileReader["readAsDataURL"](file);
+					});
+			} else {
+				// toggle between null and disabled ground image
+				app.setImage(app.sim2d.groundImage == null ? app.sim2d.disabledGroundImage : null,
+					A3a.vpl.VPLSim2DViewer.playgroundMap.ground);
+			}
 		},
 		isSelected: function (app) {
 			return app.sim2d.groundImage != null;
@@ -229,9 +247,27 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 	});
 	this.commands.add("sim:map-height", {
 		action: function (app, modifier) {
-			// toggle between null and disabled height image
-			app.setImage(app.sim2d.heightImage == null ? app.sim2d.disabledHeightImage : null,
-				A3a.vpl.VPLSim2DViewer.playgroundMap.height);
+			if (modifier) {
+				// open height file
+				app.loadBox.show("Open height image file",
+					".gif,.png,.jpg,.svg",
+					function (file) {
+						var fileReader = new window.FileReader();
+						fileReader.onload = function (event) {
+							var data = event.target.result;
+							var img = new Image();
+							img.addEventListener("load", function () {
+								app.setImage(img, A3a.vpl.VPLSim2DViewer.playgroundMap.height);
+							});
+							img.src = data;
+						};
+						fileReader["readAsDataURL"](file);
+					});
+			} else {
+				// toggle between null and disabled height image
+				app.setImage(app.sim2d.heightImage == null ? app.sim2d.disabledHeightImage : null,
+					A3a.vpl.VPLSim2DViewer.playgroundMap.height);
+			}
 		},
 		isSelected: function (app) {
 			return app.sim2d.heightImage != null;
@@ -247,9 +283,23 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 	});
 	this.commands.add("sim:map-obstacles", {
 		action: function (app, modifier) {
-			// toggle between null and disabled obstacle svg
-			app.setSVG(app.sim2d.hasObstacles ? null : app.sim2d.disabledObstacleSVG,
-				A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle);
+			if (modifier) {
+				// open obstacle file
+				app.loadBox.show("Open obstacle SVG file",
+					".svg",
+					function (file) {
+						var fileReader = new window.FileReader();
+						fileReader.onload = function (event) {
+							var data = event.target.result;
+							app.setSVG(data, A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle);
+						};
+						fileReader["readAsText"](file);
+					});
+			} else {
+				// toggle between null and disabled obstacle svg
+				app.setSVG(app.sim2d.hasObstacles ? null : app.sim2d.disabledObstacleSVG,
+					A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle);
+			}
 		},
 		isSelected: function (app) {
 			return app.sim2d.hasObstacles;
