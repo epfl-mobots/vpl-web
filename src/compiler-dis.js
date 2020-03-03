@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -197,10 +197,12 @@ A3a.vm.dis = function (bytecode, noLabel) {
 
 /** Disassemble bytecode
 	@param {Array.<number>} bytecode
+	@param {boolean=} forAssembler false to show addresses and opcodes (default),
+	true to be compatible with assembler
 	@return {string}
 */
-A3a.vm.disToListing = function (bytecode) {
-	return A3a.vm.dis(bytecode).map(function (instr) {
+A3a.vm.disToListing = function (bytecode, forAssembler) {
+	var listing = A3a.vm.dis(bytecode).map(function (instr) {
 		var addr = instr.addr.toString(10);
 		addr = "    ".slice(addr.length - 1) + addr;
 		var op = instr.op.map(function (op1) {
@@ -208,11 +210,22 @@ A3a.vm.disToListing = function (bytecode) {
 			return "000".slice(str.length - 1) + str;
 		}).join(" ");
 		op += "     ".slice(op.length - 4);
-		return (instr.id ? instr.id + ":\n" : "") +
-			addr + "  " + op + "  " + instr.str +
+		return (forAssembler
+				? ""
+				: "    " + (instr.id ? instr.id + ":\n" : "") +
+					addr + "  " + op + "  ") +
+			instr.str +
 			(instr.addr === bytecode[0] - 2 ||
 				instr.instr === A3a.vm.bc.stop || instr.instr === A3a.vm.bc.ret ? "\n" : "");
 	}).join("\n");
+	if (forAssembler) {
+		// indent by 4 spaces
+		listing = listing
+			.split("\n")
+			.map(function (line) { return "    " + line; })
+			.join("\n");
+	}
+	return listing;
 }
 
 /** Instruction
