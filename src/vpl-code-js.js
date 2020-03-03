@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -255,7 +255,9 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 			str += "todo[" + i + "] = false;\n";
 		}
 	}
-	str += "});";
+	if (str.trim().length > 0) {
+		str += "});";
+	}
 	// remove initial lf
 	if (str[0] === "\n") {
 		str = str.slice(1);
