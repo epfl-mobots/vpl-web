@@ -1,5 +1,5 @@
 /*
-	Copyright 2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2019-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -43,7 +43,7 @@ A3a.vpl.Load = function (app) {
 	document.body.appendChild(this.backgroundDiv);
 
 	var el = document.createElement("p");
-	el.textContent = "Open program file";
+	el.textContent = app.i18n.translate("Open program file");
 	this.div.appendChild(el);
 	el = document.createElement("table");
 	el.style.width = "100%";
@@ -64,7 +64,7 @@ A3a.vpl.Load = function (app) {
 	tr.appendChild(td);
 	var button = document.createElement("input");
 	button.setAttribute("type", "button");
-	button.setAttribute("value", "OK");
+	button.setAttribute("value", app.i18n.translate("OK"));
 	button.addEventListener("click", function () {
 		var file = self.input.files[0];
 		if (file) {
@@ -78,7 +78,7 @@ A3a.vpl.Load = function (app) {
 
 	button = document.createElement("input");
 	button.setAttribute("type", "button");
-	button.setAttribute("value", "Cancel");
+	button.setAttribute("value", app.i18n.translate("Cancel"));
 	button.addEventListener("click", function () {
 		self.hide();
 	}, false);

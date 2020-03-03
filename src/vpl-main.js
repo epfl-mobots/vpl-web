@@ -277,14 +277,14 @@ function vplSetup(gui, rootDir) {
 			}
 		}
 	}
+	var uiLanguage = vplGetQueryOption("uilanguage") || "en";
+	app.setUILanguage(uiLanguage);
 
 	// load box
 	app.loadBox = new A3a.vpl.Load(app);
 
 	// general settings
 	var isClassic = gui == undefined || gui["hardcoded-gui"] || vplGetQueryOption("appearance") === "classic";
-	var uiLanguage = vplGetQueryOption("uilanguage") || "en";
-	app.setUILanguage(uiLanguage);
 	app.useLocalStorage = vplGetQueryOption("storage") === "local";
 	app.multipleViews = vplGetQueryOption("multiview") !== "false";
 	var language = vplGetQueryOption("language");
