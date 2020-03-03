@@ -33,7 +33,9 @@ A3a.vm.dis = function (bytecode, noLabel) {
 
 	// event vector table
 	var eventVectorSize = bytecode[0];
-	code.push({addr: 0, op: bytecode.slice(0, 1), instr: -1, str: "dc " + bytecode[0]});
+	if (bytecode.length > 0) {
+		code.push({addr: 0, op: bytecode.slice(0, 1), instr: -1, str: "dc " + bytecode[0]});
+	}
 	var eventVectorTable = [];
 	for (var i = 1; i < eventVectorSize; i += 2) {
 		eventVectorTable.push({
@@ -218,6 +220,11 @@ A3a.vm.disToListing = function (bytecode, forAssembler) {
 			(instr.addr === bytecode[0] - 2 ||
 				instr.instr === A3a.vm.bc.stop || instr.instr === A3a.vm.bc.ret ? "\n" : "");
 	}).join("\n");
+
+	if (listing.length === 0) {
+		listing = "; empty";
+	}
+
 	if (forAssembler) {
 		// indent by 4 spaces
 		listing = listing
