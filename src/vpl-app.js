@@ -126,6 +126,9 @@ A3a.vpl.Application = function (canvasEl) {
 		"!space",
 		"sim:map-kind",
 		"sim:map",
+		"sim:map-ground",
+		"sim:map-obstacles",
+		"sim:map-height",
 		"!stretch",
 		"sim:vpl",
 		"sim:text",
@@ -142,6 +145,9 @@ A3a.vpl.Application = function (canvasEl) {
 		"src": 1,
 		"sim": 1
 	};
+
+	/** @type {?Array.<string>} */
+	this.simMaps = ["ground", "height", "obstacles"];
 
 	/** @type {?string} */
 	this.jsonForNew = null;	// json program to load upon "new"

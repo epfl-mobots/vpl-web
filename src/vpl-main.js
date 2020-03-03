@@ -245,6 +245,11 @@ function vplSetup(gui, rootDir) {
 
 	// application
 	var app = new A3a.vpl.Application(canvasEl);
+	app.simMaps = window["vplSimMaps"] == undefined
+ 		? "ground,height,obstacles"
+		: window["vplSimMaps"] === "merged"
+			? null
+			: window["vplSimMaps"].split(",");
 	window["vplApp"] = app;
 	app.username = vplGetQueryOption("user") || window["vplUsername"] || app.username;
 

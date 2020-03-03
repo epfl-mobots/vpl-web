@@ -1332,6 +1332,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 				ctx.stroke();
 				break;
 			case "height":
+				ctx.beginPath();
 				for (var y = 0; y <= 0.75; y += 0.25) {
 					for (var x = 0; x <= 1; x += 0.1) {
 						var z = calcHeight(x, y);
@@ -1357,6 +1358,18 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 				break;
 			}
 			ctx.restore();
+		},
+		"sim:map-ground": function () {
+			state = "ground";
+			draw["sim:map"]();
+		},
+		"sim:map-height": function () {
+			state = "height";
+			draw["sim:map"]();
+		},
+		"sim:map-obstacles": function () {
+			state = "obstacles";
+			draw["sim:map"]();
 		},
 		// "sim:vpl": "src:vpl"
 		// "sim:text": "vpl:text"

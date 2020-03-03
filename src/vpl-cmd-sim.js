@@ -151,7 +151,10 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 			{state: "ground"},
 			{state: "height"},
 			{state: "obstacles"}
-		]
+		],
+		isAvailable: function (app) {
+			return app.simMaps === null;
+		}
 	});
 	this.commands.add("sim:map", {
 		action: function (app, modifier) {
@@ -201,7 +204,64 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 			{selected: true, state: "ground"},
 			{selected: true, state: "height"},
 			{selected: true, state: "obstacles"}
-		]
+		],
+		isAvailable: function (app) {
+			return app.simMaps === null;
+		}
+	});
+	this.commands.add("sim:map-ground", {
+		action: function (app, modifier) {
+			// toggle between null and disabled ground image
+			app.setImage(app.sim2d.groundImage == null ? app.sim2d.disabledGroundImage : null,
+				A3a.vpl.VPLSim2DViewer.playgroundMap.ground);
+		},
+		isSelected: function (app) {
+			return app.sim2d.groundImage != null;
+		},
+		object: this,
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		],
+		isAvailable: function (app) {
+			return app.simMaps && app.simMaps.indexOf("ground") >= 0;
+		}
+	});
+	this.commands.add("sim:map-height", {
+		action: function (app, modifier) {
+			// toggle between null and disabled height image
+			app.setImage(app.sim2d.heightImage == null ? app.sim2d.disabledHeightImage : null,
+				A3a.vpl.VPLSim2DViewer.playgroundMap.height);
+		},
+		isSelected: function (app) {
+			return app.sim2d.heightImage != null;
+		},
+		object: this,
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		],
+		isAvailable: function (app) {
+			return app.simMaps && app.simMaps.indexOf("height") >= 0;
+		}
+	});
+	this.commands.add("sim:map-obstacles", {
+		action: function (app, modifier) {
+			// toggle between null and disabled obstacle svg
+			app.setSVG(app.sim2d.hasObstacles ? null : app.sim2d.disabledObstacleSVG,
+				A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle);
+		},
+		isSelected: function (app) {
+			return app.sim2d.hasObstacles;
+		},
+		object: this,
+		possibleStates: [
+			{selected: false},
+			{selected: true}
+		],
+		isAvailable: function (app) {
+			return app.simMaps && app.simMaps.indexOf("obstacles") >= 0;
+		}
 	});
 	this.commands.add("sim:vpl", {
 		action: function (app, modifier) {

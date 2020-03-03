@@ -402,10 +402,11 @@ A3a.vpl.VPLSim2DViewer.prototype.wantsSVG = function () {
 
 /** Set or change playground image for the currently-selected type (ground, height or obstacles)
 	@param {Image} img
+	@param {A3a.vpl.VPLSim2DViewer.playgroundMap=} map map (default: currentMap)
 	@return {void}
 */
-A3a.vpl.Application.prototype.setImage = function (img) {
-	switch (this.sim2d.currentMap) {
+A3a.vpl.Application.prototype.setImage = function (img, map) {
+	switch (map || this.sim2d.currentMap) {
 	case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
 		this.sim2d.disabledGroundImage = img == null ? this.sim2d.groundImage : null;
 		this.setGroundImage(img);
@@ -419,10 +420,11 @@ A3a.vpl.Application.prototype.setImage = function (img) {
 
 /** Set or change playground svg image for the obstacles
 	@param {?string} svgSrc
+	@param {A3a.vpl.VPLSim2DViewer.playgroundMap=} map map (default: currentMap)
 	@return {void}
 */
-A3a.vpl.Application.prototype.setSVG = function (svgSrc) {
-	switch (this.sim2d.currentMap) {
+A3a.vpl.Application.prototype.setSVG = function (svgSrc, map) {
+	switch (map || this.sim2d.currentMap) {
 	case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
 		this.sim2d.disabledObstacleSVG = svgSrc == null ? this.sim2d.obstacleSVG : null;
 		this.setObstacleImage(svgSrc);
@@ -1123,23 +1125,43 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 				playgroundAreaBox.draw(ctx);
 				playgroundBox.draw(ctx);
 
-				switch (sim2d.currentMap) {
-				case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
-					ctx.drawImage(sim2d.groundCanvas, item.x + dx, item.y + dy, item.width, item.height);
-					break;
-				case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
-					if (sim2d.heightImage != null) {
-						ctx.drawImage(sim2d.heightCanvas, item.x + dx, item.y + dy, item.width, item.height);
+				if (self.simMaps === null) {
+					// display currentMap
+					switch (sim2d.currentMap) {
+					case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
+						ctx.drawImage(sim2d.groundCanvas, item.x + dx, item.y + dy, item.width, item.height);
+						break;
+					case A3a.vpl.VPLSim2DViewer.playgroundMap.height:
+						if (sim2d.heightImage != null) {
+							ctx.drawImage(sim2d.heightCanvas, item.x + dx, item.y + dy, item.width, item.height);
+						}
+						break;
+					case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
+						ctx.save();
+						// map sim2d.playground to item.x+dx,item.y+dy,item.width,item.height
+						ctx.translate(item.x + dx + item.width / 2, item.y + dy + item.height / 2);
+						ctx.scale(playgroundView.scale, -playgroundView.scale);	// upside-down
+						sim2d.obstacles.draw(ctx);
+						ctx.restore();
+						break;
 					}
-					break;
-				case A3a.vpl.VPLSim2DViewer.playgroundMap.obstacle:
-					ctx.save();
-					// map sim2d.playground to item.x+dx,item.y+dy,item.width,item.height
-					ctx.translate(item.x + dx + item.width / 2, item.y + dy + item.height / 2);
-					ctx.scale(playgroundView.scale, -playgroundView.scale);	// upside-down
-					sim2d.obstacles.draw(ctx);
-					ctx.restore();
-					break;
+				} else {
+					// display all maps
+					ctx.drawImage(sim2d.groundCanvas, item.x + dx, item.y + dy, item.width, item.height);
+					if (sim2d.heightImage != null) {
+						ctx.save();
+						ctx.globalAlpha = 0.5;
+						ctx.drawImage(sim2d.heightCanvas, item.x + dx, item.y + dy, item.width, item.height);
+						ctx.restore();
+					}
+					if (sim2d.hasObstacles) {
+						ctx.save();
+						// map sim2d.playground to item.x+dx,item.y+dy,item.width,item.height
+						ctx.translate(item.x + dx + item.width / 2, item.y + dy + item.height / 2);
+						ctx.scale(playgroundView.scale, -playgroundView.scale);	// upside-down
+						sim2d.obstacles.draw(ctx);
+						ctx.restore();
+					}
 				}
 
 				// set playground origin in the middle of the playground
