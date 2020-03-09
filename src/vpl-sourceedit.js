@@ -140,7 +140,7 @@ A3a.vpl.VPLSourceEditor.prototype.changeCode = function (code) {
 	@return {string}
 */
 A3a.vpl.VPLSourceEditor.prototype.getCode = function () {
-	return document.getElementById("editor").value.trim();
+	return document.getElementById("editor").value.replace(/\s+$/, "");
 };
 
 /** Check if source code matches vpl

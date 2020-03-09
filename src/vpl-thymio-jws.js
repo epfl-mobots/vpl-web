@@ -32,19 +32,24 @@ A3a.vpl.Application.prototype.installThymioJSONWebSocketBridge = function () {
 
 	return new A3a.vpl.RunGlue({
 		run: function (language, code) {
-			/** @type {A3a.Compiler} */
+			/** @type {(A3a.Compiler|A3a.Assembler)} */
 			var compiler;
 			switch (language) {
 			case "aseba":
 				compiler = new A3a.Compiler(asebaNode, code);
 				compiler.functionLib = A3a.A3aNode.stdMacros;
+				var bytecode = compiler.compile();
 				break;
 			case "l2":
 				compiler = new A3a.Compiler(asebaNode, code);
 				compiler.functionLib = A3a.A3aNode.stdMacrosL2;
+				var bytecode = compiler.compile();
+				break;
+			case "asm":
+				compiler = new A3a.Assembler(asebaNode, code);
+				var bytecode = compiler.assemble();
 				break;
 			}
-			var bytecode = compiler.compile();
 			jws.run(uuid, bytecode);
 		},
 		init: function (language) {
@@ -77,14 +82,14 @@ A3a.vpl.Application.prototype.installThymioJSONWebSocketBridge = function () {
 			return app.robots[app.currentRobotIndex].runGlue.state != null;
 		},
 		isEnabled: function (language) {
-			return (language === "aseba" || language === "l2") &&
+			return (language === "aseba" || language === "l2" || language === "asm") &&
 				app.robots[app.currentRobotIndex].runGlue.state != null;
 		},
 		getName: function () {
 			return "Thymio (JWS)";
 		},
 		preferredLanguage: "aseba",
-		languages: ["aseba", "l2"],
+		languages: ["aseba", "l2", "asm"],
 		state: null
 	});
 };

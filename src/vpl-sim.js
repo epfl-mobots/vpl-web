@@ -71,6 +71,6 @@ A3a.vpl.Application.prototype.installRobotSimulator = function (options) {
 			return "Simulator";
 		},
 		preferredLanguage: "js",
-		languages: ["js", "aseba", "l2"]
+		languages: ["js", "aseba", "l2", "asm"]
 	});
 };

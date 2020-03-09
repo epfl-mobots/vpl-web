@@ -607,6 +607,10 @@ function vplSetup(gui, rootDir) {
 						c.functionLib = A3a.A3aNode.stdMacrosL2;
 						var bytecode = c.compile();
 						return A3a.vm.disToMixedListing(src, bytecode, c.sourceToBCMapping, true);
+					case "asm":
+						var asm = new A3a.Assembler(asebaNode, src);
+						var bytecode = asm.assemble();
+						return A3a.vm.disToListing(bytecode);
 					default:
 						return null;
 					}

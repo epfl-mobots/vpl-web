@@ -203,15 +203,21 @@ A3a.vpl.VirtualThymioVM.prototype["loadCode"] = function (language, src) {
 		A3a.vpl.VirtualThymio.prototype["loadCode"].call(this, language, src);
 		this.useVM = false;
 	} else {
-		// detect syntax (A3a or L2) automatically
-		var l2 = A3a.Compiler.L2.isL2(src);
+		var bytecode;
+ 		if (language === "asm") {
+			var c = new A3a.Assembler(this.asebaNode, src);
+			bytecode = c.assemble();
+		} else {
+			// detect syntax (A3a or L2) automatically
+			var l2 = A3a.Compiler.L2.isL2(src);
 
-		// compile code
-		var c = l2
-			? new A3a.Compiler.L2(this.asebaNode, src)
-			: new A3a.Compiler(this.asebaNode, src);
-		c.functionLib = l2 ? A3a.A3aNode.stdMacrosL2 : A3a.A3aNode.stdMacros;
-		var bytecode = c.compile();
+			// compile code
+			var c = l2
+				? new A3a.Compiler.L2(this.asebaNode, src)
+				: new A3a.Compiler(this.asebaNode, src);
+			c.functionLib = l2 ? A3a.A3aNode.stdMacrosL2 : A3a.A3aNode.stdMacros;
+			bytecode = c.compile();
+		}
 
 		// load it on virtual Thymio
 		this.vthymio.setBytecode(bytecode);

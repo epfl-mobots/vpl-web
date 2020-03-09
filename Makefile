@@ -93,6 +93,7 @@ JS = \
 	compiler-l2.js \
 	compiler-macros-l2.js \
 	compiler-thymio.js \
+	compiler-asm.js \
 	inputbuffer.js \
 	a3a-idmapping.js \
 	a3a-com.js \
