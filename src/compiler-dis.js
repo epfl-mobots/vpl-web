@@ -57,7 +57,7 @@ A3a.vm.dis = function (bytecode, noLabel) {
 		if (!noLabel) {
 			for (var j = 0; j < eventVectorTable.length; j++) {
 				if (eventVectorTable[j].addr === i) {
-					instr.id = "@onevent_" + eventVectorTable[j].id.toString(16);
+					instr.id = "onevent_" + eventVectorTable[j].id.toString(16);
 					break;
 				}
 			}
@@ -83,11 +83,11 @@ A3a.vm.dis = function (bytecode, noLabel) {
 			break;
 		case A3a.vm.bc.loadIndirect:
 			instr.op = bytecode.slice(i, i + 2);
-			instr.str = "load " + (op & 0xfff) + "+ind size=" + bytecode[++i];
+			instr.str = "load.ind " + (op & 0xfff) + " size=" + bytecode[++i];
 			break;
 		case A3a.vm.bc.storeIndirect:
 			instr.op = bytecode.slice(i, i + 2);
-			instr.str = "store " + (op & 0xfff) + "+ind size=" + bytecode[++i];
+			instr.str = "store.ind " + (op & 0xfff) + " size=" + bytecode[++i];
 			break;
 		case A3a.vm.bc.unaryOp:
 		case A3a.vm.bc.binaryOp:
@@ -167,11 +167,11 @@ A3a.vm.dis = function (bytecode, noLabel) {
 			break;
 		case A3a.vm.bc.conditionalBranch:
 			instr.op = bytecode.slice(i, i + 2);
-			instr.str = "jump " +
+			instr.str = (op & 0x100 ? op & 0x200 ? "dont." : "do." : "") +
+				"jump." +
 				(op & 0x100 ? "when" : "if") +
-				" not " + A3a.vm.condName[op & 0x1f] +
-				" " + (i + s16(bytecode[i + 1])) +
-				(op & 0x100 ? op & 0x200 ? " (prev=true)" : " (prev=false)" : "");
+				".not " + A3a.vm.condName[op & 0x1f] +
+				" " + (i + s16(bytecode[i + 1]));
 			i++;
 			break;
 		case A3a.vm.bc.emit:
@@ -212,11 +212,8 @@ A3a.vm.disToListing = function (bytecode, forAssembler) {
 			return "000".slice(str.length - 1) + str;
 		}).join(" ");
 		op += "     ".slice(op.length - 4);
-		return (forAssembler
-				? ""
-				: "    " + (instr.id ? instr.id + ":\n" : "") +
-					addr + "  " + op + "  ") +
-			instr.str +
+		return (instr.id ? instr.id + ":\n" : "") +
+			(forAssembler ? "    " : addr + "  " + op + "  ") + instr.str +
 			(instr.addr === bytecode[0] - 2 ||
 				instr.instr === A3a.vm.bc.stop || instr.instr === A3a.vm.bc.ret ? "\n" : "");
 	}).join("\n");
@@ -225,13 +222,6 @@ A3a.vm.disToListing = function (bytecode, forAssembler) {
 		listing = "; empty";
 	}
 
-	if (forAssembler) {
-		// indent by 4 spaces
-		listing = listing
-			.split("\n")
-			.map(function (line) { return "    " + line; })
-			.join("\n");
-	}
 	return listing;
 }
 
