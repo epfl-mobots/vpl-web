@@ -25,13 +25,34 @@ A3a.Assembler = function (asebaNode, src) {
 	this.src = src;
 };
 
+/** Create definition dict based on node variables and native functions
+	@return {Object}
+*/
+A3a.Assembler.prototype.nodeDefinitions = function () {
+	var defs = {};
+
+	// variables
+	this.asebaNode.variables.forEach(function (v) {
+		defs[v.name] = v.offset;
+	});
+	defs["_userdata"] = this.asebaNode.varSize;
+	defs["_topdata"] = this.asebaNode.maxVarSize;
+
+	// native functions
+	this.asebaNode.nativeFunctions.forEach(function (nf) {
+		defs["_nf." + nf.name] = nf.id;
+	});
+
+	return defs;
+};
+
 /** Assemble to bytecode
 	@return {Array.<number>} bytecode
 */
 A3a.Assembler.prototype.assemble = function () {
 	var lines = this.src.split("\n");
 	var bytecode = [];
-	var defs = {};
+	var defs = this.nodeDefinitions();
 	for (var pass = 0; pass < 2; pass++) {
 		bytecode = [];
 		lines.forEach(function (line, i) {
@@ -96,6 +117,11 @@ A3a.Assembler.prototype.assemble = function () {
 	return bytecode;
 };
 
+/** Convert instruction argument to numerical value
+	@param {(number|string)} arg
+	@param {Object} defs
+	@return {number}
+*/
 A3a.Assembler.resolveSymbol = function (arg, defs) {
 	if (typeof arg === "string") {
 		if (defs == null) {
