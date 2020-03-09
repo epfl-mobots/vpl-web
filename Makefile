@@ -46,6 +46,7 @@ JS = \
 	vpl-code-l2.js \
 	vpl-code-js.js \
 	vpl-code-python.js \
+	vpl-code-asm.js \
 	vpl-cmd.js \
 	vpl-app.js \
 	vpl-ui-validator.js \

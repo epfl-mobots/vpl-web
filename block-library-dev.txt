@@ -357,7 +357,7 @@ Here is the list of button ids for the Editor view:
 - "src:save": download the text program
 - "src:vpl": switch to the VPL view
 - "src:locked": toggle between the locked state where the text program corresponds to the VPL program and cannot be edited, and the unlocked state where the text program can be modified
-- "src:language": switch to the next programming language (Aseba, L2, JavaScript or Python); state is "aseba", "l2", "js" or "python"
+- "src:language": switch to the next programming language (Aseba, L2, JavaScript or Python); state is "aseba", "l2", "asm", "js", or "python"
 - "src:disass": toggle between the text programming language and the bytecode disassembly (for Aseba and L2)
 - "src:run": run the text program with the Thymio or the simulator (state is "empty" or "canLoad" depending on the source code)
 - "src:stop": stop the text program and blink the leds
@@ -573,7 +573,7 @@ The following options are supported:
 
 - "appearance": "classic" (icons and blocks defined in JavaScript) or "svg" (default) (icons and blocks defined in SVG and json).
 - "multiview": "true" (default) to enable the display of multiple views simultaneously (main vpl view, text source code and simulator), "false" to force a single view filling all the available space.
-- "language": programming language the vpl program is converted to. "aseba" (default), "l2" (C-like syntax with functions, local variables, boolean and fixed-point values, and multi-dim arrays), "python", or "js". Not all the languages are compatible with the Thymio or the simulator.
+- "language": programming language the vpl program is converted to. "aseba" (default), "l2" (C-like syntax with functions, local variables, boolean and fixed-point values, and multi-dim arrays), "asm" (assembly language for Aseba bytecode), "python", or "js". Not all the languages are compatible with the Thymio or the simulator.
 - "cssdebug": "true" to display the padding and margin rectangles of css boxes, or "false" (default).
 - "adv": "true" to enable advanced features such as the Aseba virtual machine disassembler, or "false" (default).
 - "blur": radius of blur filter applied to canvas in 0.1px units (default 0), to simulate vision deficiency.
