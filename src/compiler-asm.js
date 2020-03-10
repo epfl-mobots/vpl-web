@@ -62,7 +62,7 @@ A3a.Assembler.prototype.assemble = function () {
 				return;
 			}
 
-			re = /^\s*(\w+:)\s*(;.*)?$/i.exec(line);
+			re = /^\s*([\w_.]+:)\s*(;.*)?$/i.exec(line);
 			if (re) {
 				// label without instr
 				var label = re[1];
@@ -70,7 +70,7 @@ A3a.Assembler.prototype.assemble = function () {
 				return;
 			}
 
-			re = /^\s*(\w+:)?\s*([a-z0-9.]+)([-a-z0-9\s.,+=]*)(;.*)?$/i.exec(line);
+			re = /^\s*(\w+:)?\s*([a-z0-9.]+)([-a-z0-9\s._,=]*)(;.*)?$/i.exec(line);
 			if (re) {
 				var label = re[1];
 				if (label) {
@@ -102,7 +102,7 @@ A3a.Assembler.prototype.assemble = function () {
 							if (/^[a-z]+=/.test(arg)) {
 								arg = arg.replace(/^[a-z]+=/, "");
 							}
-							if (/(0x)?\d+/.test(arg)) {
+							if (/^(0x)?[\da-f]+$/i.test(arg)) {
 								return parseInt(arg, 0);	// decimal or hexadecimal
 							}
 							return arg;
