@@ -178,6 +178,7 @@ A3a.vm.dis = function (bytecode, noLabel) {
 			instr.str = "emit id=" + (op & 0xfff) +
 				" data=" + s16(bytecode[i + 1]) +
 				" count=" + s16(bytecode[i + 2]);
+			i += 2;
 			break;
 		case A3a.vm.bc.nativeCall:
 			instr.str = "callnat " + (op & 0xfff);
