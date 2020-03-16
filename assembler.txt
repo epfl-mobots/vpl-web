@@ -1,12 +1,12 @@
 Aseba bytecode assembler
 ========================
 
-A simple assembler is provided as one of the available programming languages. Assembler source code syntax differs from the disassembly listing: disassembly listing includes the original Aseba or L2 source code, addresses, and bytecode in hexadecimal. Assembler input can contain labels, symbols, expressions, and pseudo-instructions.
+A simple assembler is provided as one of the available programming languages. Assembler source code syntax differs from the disassembly listing: in addition to bytecode instructions (mnemonics), disassembly listing also includes the original Aseba or L2 source code, addresses, and bytecode in hexadecimal. Assembler input can contain labels, symbols, expressions, and pseudo-instructions.
 
 Assembler input syntax
 ----------------------
 
-An assembler line can contain a label followed by a colon, an instruction or pseudo-instruction with its comma-separated or space-separated arguments, and a comment. Any or all of these elements can be missing. Arguments can be decimal or hexadecimal (prefixed with 0x) numbers, constants, or arithmetic expressions made of numbers constants, and + and - operators, without space or parentheses. Constants are defined as labels or with the pseudo-instruction equ (see below). They can be used before their definition.
+An assembler line can contain a label followed by a colon, an instruction or pseudo-instruction with its comma-separated or space-separated arguments, and a comment. Any or all of these elements can be missing. Arguments can be numbers in decimal or hexadecimal (prefixed with 0x), constants, or arithmetic expressions made of numbers, constants, and + and - operators, without space or parentheses. Constants are defined as labels or with the pseudo-instruction equ (see below). They can be used before their definition.
 
 Examples:
 
@@ -31,11 +31,11 @@ Instructions
 
 push.s value
 
-    push a 12-bit signed value on the stack
+    push a 12-bit signed value onto the stack
 
 push value
 
-    push a 16-bit signed value on the stack
+    push a 16-bit signed value onto the stack
 
 load address
 
@@ -47,7 +47,7 @@ store address
 
 load.ind address
 
-    pop a value, add it to a fixed address, fetch the value there and push it on the stack
+    pop a value, add it to a fixed address, fetch the value there and push it onto the stack
 
 store.ind address
 
@@ -172,3 +172,196 @@ callsub address
 ret
 
     return from a subroutine (pop an address from the stack and go there)
+
+Predefined definitions
+----------------------
+
+The set of definitions contains predefined values for the variables and native functions, retrieved from the Thymio. Variables have the same name as in Aseba. Two special definitions characterize the area of memory available for user variables:
+
+_userdata: address of the first word available for user variables
+_topdata: address following the last word available for user variables
+
+The id of native functions is the same as the name used in Aseba, prefixed with "_nf." to avoid any name clash with variables.
+
+Here is the complete list:
+
+_id:
+	equ 0
+event.source:
+	equ 1
+event.args:
+	equ 2
+_fwversion:
+	equ 34
+_productId:
+	equ 36
+buttons._raw:
+	equ 37
+button.backward:
+	equ 42
+button.left:
+	equ 43
+button.center:
+	equ 44
+button.forward:
+	equ 45
+button.right:
+	equ 46
+buttons._mean:
+	equ 47
+buttons._noise:
+	equ 52
+prox.horizontal:
+	equ 57
+prox.comm.rx._payloads:
+	equ 64
+prox.comm.rx._intensities:
+	equ 71
+prox.comm.rx:
+	equ 78
+prox.comm.tx:
+	equ 79
+prox.ground.ambiant:
+	equ 80
+prox.ground.reflected:
+	equ 82
+prox.ground.delta:
+	equ 84
+motor.left.target:
+	equ 86
+motor.right.target:
+	equ 87
+_vbat:
+	equ 88
+_imot:
+	equ 90
+motor.left.speed:
+	equ 92
+motor.right.speed:
+	equ 93
+motor.left.pwm:
+	equ 94
+motor.right.pwm:
+	equ 95
+acc:
+	equ 96
+temperature:
+	equ 99
+rc5.address:
+	equ 100
+rc5.command:
+	equ 101
+mic.intensity:
+	equ 102
+mic.threshold:
+	equ 103
+mic._mean:
+	equ 104
+timer.period:
+	equ 105
+acc._tap:
+	equ 107
+
+_userdata:
+	equ 108
+_topdata:
+	equ 620
+
+_nf._system_reboot:
+	equ 0
+_nf._system_settings_read:
+	equ 1
+_nf._system_settings_write:
+	equ 2
+_nf._system_settings_flash:
+	equ 3
+_nf.math.copy:
+	equ 4
+_nf.math.fill:
+	equ 5
+_nf.math.addscalar:
+	equ 6
+_nf.math.add:
+	equ 7
+_nf.math.sub:
+	equ 8
+_nf.math.mul:
+	equ 9
+_nf.math.div:
+	equ 10
+_nf.math.min:
+	equ 11
+_nf.math.max:
+	equ 12
+_nf.math.clamp:
+	equ 13
+_nf.math.dot:
+	equ 14
+_nf.math.stat:
+	equ 15
+_nf.math.argbounds:
+	equ 16
+_nf.math.sort:
+	equ 17
+_nf.math.muldiv:
+	equ 18
+_nf.math.atan2:
+	equ 19
+_nf.math.sin:
+	equ 20
+_nf.math.cos:
+	equ 21
+_nf.math.rot2:
+	equ 22
+_nf.math.sqrt:
+	equ 23
+_nf.math.rand:
+	equ 24
+_nf._leds.set:
+	equ 25
+_nf.sound.record:
+	equ 26
+_nf.sound.play:
+	equ 27
+_nf.sound.replay:
+	equ 28
+_nf.sound.system:
+	equ 29
+_nf.leds.circle:
+	equ 30
+_nf.leds.top:
+	equ 31
+_nf.leds.bottom.left:
+	equ 32
+_nf.leds.bottom.right:
+	equ 33
+_nf.sound.freq:
+	equ 34
+_nf.leds.buttons:
+	equ 35
+_nf.leds.prox.h:
+	equ 36
+_nf.leds.prox.v:
+	equ 37
+_nf.leds.rc:
+	equ 38
+_nf.leds.sound:
+	equ 39
+_nf.leds.temperature:
+	equ 40
+_nf.sound.wave:
+	equ 41
+_nf.prox.comm.enable:
+	equ 42
+_nf.sd.open:
+	equ 43
+_nf.sd.write:
+	equ 44
+_nf.sd.read:
+	equ 45
+_nf.sd.seek:
+	equ 46
+_nf._rf.nodeid:
+	equ 47
+_nf._poweroff:
+	equ 48
