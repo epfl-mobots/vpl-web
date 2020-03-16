@@ -1,0 +1,174 @@
+Aseba bytecode assembler
+========================
+
+A simple assembler is provided as one of the available programming languages. Assembler source code syntax differs from the disassembly listing: disassembly listing includes the original Aseba or L2 source code, addresses, and bytecode in hexadecimal. Assembler input can contain labels, symbols, expressions, and pseudo-instructions.
+
+Assembler input syntax
+----------------------
+
+An assembler line can contain a label followed by a colon, an instruction or pseudo-instruction with its comma-separated or space-separated arguments, and a comment. Any or all of these elements can be missing. Arguments can be decimal or hexadecimal (prefixed with 0x) numbers, constants, or arithmetic expressions made of numbers constants, and + and - operators, without space or parentheses. Constants are defined as labels or with the pseudo-instruction equ (see below). They can be used before their definition.
+
+Examples:
+
+loop: push 123  ; some comment
+loop: push 123
+loop:
+      push 123
+
+Pseudo-instructions
+-------------------
+
+dc val1, val2, ...
+
+  constants, useful mainly for the initial event table
+
+symbol: equ value
+
+  define symbol as equivalent to value
+
+Instructions
+------------
+
+push.s value
+
+    push a 12-bit signed value on the stack
+
+push value
+
+    push a 16-bit signed value on the stack
+
+load address
+
+    push a value fetched at a fixed address
+
+store address
+
+    pop a value and store it at a fixed address
+
+load.ind address
+
+    pop a value, add it to a fixed address, fetch the value there and push it on the stack
+
+store.ind address
+
+    pop a value, add it to a fixed address, pop a second value and store it there
+
+neg
+
+    change the sign of the top stack element
+
+abs
+
+    take the absolute value of the top stack element
+
+bitnot
+
+    take the one's complement of the top stack element
+
+not
+
+    take the logical "not" of the top stack element (not implemented in the VM, must not be used)
+
+sl
+
+    pop 2 elements a and b and push a << b (a shifted to the left by b bits)
+
+asr
+
+    pop 2 elements a and b and push a >> b (a shifted to the right by b bits with sign bit replicated)
+
+add
+
+    pop 2 elements a and b and push a + b
+
+sub
+
+    pop 2 elements a and b and push a - b
+
+mult
+
+    pop 2 elements a and b and push a * b
+
+div
+
+    pop 2 elements a and b and push a / b
+
+mod
+
+    pop 2 elements a and b and push a % b (a modulo b)
+
+bitor
+
+    pop 2 elements a and b and push a | b (bitwise or)
+
+bitxor
+
+    pop 2 elements a and b and push a ^ b (bitwise exclusive or)
+
+bitand
+
+    pop 2 elements a and b and push a & b (bitwise and)
+
+eq
+
+    pop 2 elements a and b and push 1 if a == b, 0 otherwise
+
+ne
+
+    pop 2 elements a and b and push 1 if a != b, 0 otherwise
+
+gt
+
+    pop 2 elements a and b and push 1 if a > b, 0 otherwise
+
+ge
+
+    pop 2 elements a and b and push 1 if a >= b, 0 otherwise
+
+lt
+
+    pop 2 elements a and b and push 1 if a < b, 0 otherwise
+
+le
+
+    pop 2 elements a and b and push 1 if a <= b, 0 otherwise
+
+or
+
+    pop 2 elements a and b and push 1 if a or b != 0, 0 otherwise
+
+and
+
+    pop 2 elements a and b and push 1 if a and b != b, 0 otherwise
+
+jump address
+
+    go to the specified absolute address in the bytecode
+
+jump.if.not condition address
+
+    pop 2 elements, apply a condition to them (one of the logical operators eq, ne, gt, ge, lt, le, or, and), and go to the specified absolute address if the result is false (0)
+
+do.jump.when.not condition address
+
+    pop 2 elements and apply a condition to them (one of the logical operators eq, ne, gt, ge, lt, le, or, and); if the result is false (0), go to that address and modify the instruction to dont.jump.when.not. This is used to implement the "when" Aseba statement
+
+do.jump.always condition address
+
+    pop 2 elements and apply a condition to them (one of the logical operators eq, ne, gt, ge, lt, le, or, and); if the result is true (not 0), modify the instruction to do.jump.when.not. This is the do.jump.when.not instruction once it has been triggered
+
+emit id, address, size
+
+    emit an event with the specified identifier and data at the specified address with the specified size
+
+callnat id
+
+    call the native function specified by its id
+
+callsub address
+
+    call a subroutine at the specified absolute address in the bytecode
+
+ret
+
+    return from a subroutine (pop an address from the stack and go there)
