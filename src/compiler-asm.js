@@ -71,7 +71,7 @@ A3a.Assembler.prototype.assemble = function () {
 				return;
 			}
 
-			re = /^\s*([\w_.]+:)?\s*([a-z0-9.]+)([-a-z0-9\s._,=]*)(;.*)?$/i.exec(line);
+			re = /^\s*([\w_.]+:)?\s*([a-z0-9.]+)([-+a-z0-9\s._,=]*)(;.*)?$/i.exec(line);
 			if (re) {
 				if (re[1]) {
 					label = re[1].slice(0, -1);	// remove colon
@@ -102,7 +102,7 @@ A3a.Assembler.prototype.assemble = function () {
 							if (/^[a-z]+=/.test(arg)) {
 								arg = arg.replace(/^[a-z]+=/, "");
 							}
-							if (/^(0x)?[\da-f]+$/i.test(arg)) {
+							if (/^(0x[0-9a-f]+|[0-9]+)$/i.test(arg)) {
 								return parseInt(arg, 0);	// decimal or hexadecimal
 							}
 							return arg;
@@ -128,14 +128,44 @@ A3a.Assembler.prototype.assemble = function () {
 	@return {number}
 */
 A3a.Assembler.resolveSymbol = function (arg, defs, line) {
-	if (typeof arg === "string") {
+	/** Convert definition in defs
+	*/
+	function resolveDef(name) {
 		if (defs == null) {
 			return 0;
 		}
-		if (!defs.hasOwnProperty(arg)) {
+		if (/^(0x[0-9a-f]+|[0-9]+)$/i.test(name)) {
+			return parseInt(name, 0);
+		}
+		if (!defs.hasOwnProperty(name)) {
 			throw "Unknown symbol \"" + arg + "\" (line " + line.toString(10) + ")";
 		}
-		arg = defs[arg];
+		return defs[name];
+	}
+
+	if (typeof arg === "string") {
+		// eval
+		var val = 0;
+		var minus = false;
+		for (var offset = 0; offset < arg.length; ) {
+			var frag = /^(\+|-|[._a-z0-9]+)/i.exec(arg.slice(offset));
+			if (frag == null) {
+				throw "Syntax error (line " + line.toString(10) + ")";
+			}
+			switch (frag[0]) {
+			case "+":
+			 	minus = false;
+				break;
+			case "-":
+				minus = true;
+				break;
+			default:
+				val += minus ? -resolveDef(frag[0]) : resolveDef(frag[0]);
+				break;
+			}
+			offset += frag[0].length;
+		}
+		return val;
 	}
 	return arg;
 };
@@ -314,7 +344,7 @@ A3a.Assembler.instr = {
 			return [0xa000 | (testInstr.code[0] & 0x00ff), (arg - pc) & 0xffff];
 		}
 	},
-	"do.jump.when.not": {
+	"do.jump.always": {
 		numArgs: 2,
 		toCode: function (pc, args, label, defs, line) {
 			var testInstr = A3a.Assembler.instr[args[0]];
@@ -326,13 +356,13 @@ A3a.Assembler.instr = {
 			return [0xa100 | (testInstr.code[0] & 0x00ff), (arg - pc) & 0xffff];
 		}
 	},
-	"dont.jump.when.not": {
+	"do.jump.always": {
 		numArgs: 2,
 		toCode: function (pc, args, label, defs, line) {
 			var testInstr = A3a.Assembler.instr[args[0]];
 			if (testInstr == undefined || testInstr.code == undefined ||
 				testInstr.code.length !== 1 || (testInstr.code[0] & 0xf000) !== 0x8000) {
-				throw "Unknown op \"" + args[0] + "\" for dont.jump.when.not (line " + line.toString(10) + ")";
+				throw "Unknown op \"" + args[0] + "\" for do.jump.always (line " + line.toString(10) + ")";
 			}
 			var arg = A3a.Assembler.resolveSymbol(args[1], defs, line);
 			return [0xa300 | (testInstr.code[0] & 0x00ff), (arg - pc) & 0xffff];
