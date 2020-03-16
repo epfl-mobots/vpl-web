@@ -344,7 +344,7 @@ A3a.Assembler.instr = {
 			return [0xa000 | (testInstr.code[0] & 0x00ff), (arg - pc) & 0xffff];
 		}
 	},
-	"do.jump.always": {
+	"do.jump.when.not": {
 		numArgs: 2,
 		toCode: function (pc, args, label, defs, line) {
 			var testInstr = A3a.Assembler.instr[args[0]];
