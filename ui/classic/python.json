@@ -19,7 +19,7 @@
 			"python": {
 				"sectionBegin": [
 					"@thymio.onevent(thymio.BUTTONS)\n",
-					"def onevent_buttons(self):\n"
+					"def onevent_buttons():\n"
 				],
 				"sectionEnd": "<\n",
 				"clause": "`['center', 'forward', 'backward', 'right', 'left'].map(function (s, i) { return $[i] ? 'thymio.button.' + s : ''; }).filter(function (s) { return s; }).join(' and ') || ['center', 'forward', 'backward', 'right', 'left'].map(function (s) { return 'button.' + s; }).join(' or ')`"
@@ -30,7 +30,7 @@
 			"python": {
 				"sectionBegin": [
 					"@thymio.onevent(thymio.BUTTONS)\n",
-					"def onevent_buttons(self):\n"
+					"def onevent_buttons():\n"
 				],
 				"sectionEnd": "<\n",
 				"clause": "thymio.button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]`"
@@ -41,7 +41,7 @@
 			"python": {
 				"sectionBegin": [
 					"@thymio.onevent(thymio.PROX)\n",
-					"def onevent_prox(self):\n"
+					"def onevent_prox():\n"
 				],
 				"sectionEnd": "<\n",
 				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'thymio.prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= 2000' : '<= 1000') : ''; }).filter(function (s) { return s; }).join(' or ')`"
@@ -52,7 +52,7 @@
 			"python": {
 				"sectionBegin": [
 					"@thymio.onevent(thymio.PROX)\n",
-					"def onevent_prox(self):\n"
+					"def onevent_prox():\n"
 				],
 				"sectionEnd": "<\n",
 				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'thymio.prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(7 + 33 * $[7]) : '<= ' + Math.round(7 + 33 * $[8])) + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'thymio.prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
@@ -63,7 +63,7 @@
 			"python": {
 				"sectionBegin": [
 					"@thymio.onevent(thymio.PROX)\n",
-					"def onevent_prox(self):\n"
+					"def onevent_prox():\n"
 				],
 				"sectionEnd": "<\n",
 				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'thymio.prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[7]) + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'thymio.prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
@@ -74,7 +74,7 @@
 			"python": {
 				"sectionBegin": [
 					"@thymio.onevent(thymio.PROX)\n",
-					"def onevent_prox(self):\n"
+					"def onevent_prox():\n"
 				],
 				"sectionEnd": "<\n",
 				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'thymio.prox.ground.delta[' + ix + '] ' + ($[i] > 0 ? '>= 450' : '<= 400') : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' or ')`"
@@ -85,7 +85,7 @@
 			"python": {
 				"sectionBegin": [
 					"@thymio.onevent(thymio.PROX)\n",
-					"def onevent_prox(self):\n"
+					"def onevent_prox():\n"
 				],
 				"sectionEnd": "<\n",
 				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'thymio.prox.ground.delta[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(25 + 40 * $[2]) : '<= ' + Math.round(25 + 40 * $[3])) : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'thymio.prox.ground.delta[' + ix + '] >= 450'; }).join(' or ')`"
@@ -96,7 +96,7 @@
 			"python": {
 				"sectionBegin": [
 					"@thymio.onevent(thymio.PROX)\n",
-					"def onevent_prox(self):\n"
+					"def onevent_prox():\n"
 				],
 				"sectionEnd": "<\n",
 				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'thymio.prox.ground.delta[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(25 + 40 * $[2]) : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'thymio.prox.ground.delta[' + ix + '] >= 450'; }).join(' or ')`"
@@ -110,10 +110,11 @@
 				],
 				"sectionBegin": [
 					"@thymio.onevent(thymio.TAP)\n",
-					"def onevent_tap(self):\n"
+					"def onevent_tap():\n"
 				],
 				"sectionPreamble": "tapped = True\n",
-				"sectionEnd": "<\n"
+				"sectionEnd": "<\n",
+				"clause": "tapped"
 			}
 		},
 		{
@@ -124,7 +125,7 @@
 				],
 				"sectionBegin": [
 					"@thymio.onevent(thymio.`$[0] == 0 ? 'TAP' : 'ACC'`)\n",
-					"def onevent_`$[0] == 0 ? 'tap' : 'acc'`(self):\n"
+					"def onevent_`$[0] == 0 ? 'tap' : 'acc'`():\n"
 				],
 				"sectionEnd": "<\n",
 				"sectionPreamble": "`$[0] == 0 ? 'tapped = True\\n' : ''`",
@@ -137,7 +138,7 @@
 			"python": {
 				"sectionBegin": [
 					"@thymio.onevent(thymio.ACC)\n",
-					"def onevent_acc(self):\n"
+					"def onevent_acc():\n"
 				],
 				"sectionEnd": "<\n",
 				"clauseInit":
@@ -151,7 +152,7 @@
 			"python": {
 				"sectionBegin": [
 					"@thymio.onevent(thymio.ACC)\n",
-					"def onevent_acc(self):\n"
+					"def onevent_acc():\n"
 				],
 				"sectionEnd": "<\n",
 				"clauseInit":
@@ -165,7 +166,7 @@
 			"python": {
 				"sectionBegin": [
 					"@thymio.onevent(thymio.ACC)\n",
-					"def onevent_acc(self):\n"
+					"def onevent_acc():\n"
 				],
 				"sectionEnd": "<\n",
 				"clauseInit":
@@ -179,7 +180,7 @@
 			"python": {
 				"sectionBegin": [
 					"@thymio.onevent(thymio.MIC)\n",
-					"def onevent_mic(self):\n"
+					"def onevent_mic():\n"
 				],
 				"sectionEnd": "<\n"
 			}
@@ -197,13 +198,16 @@
 					[
 						"# stop timer 0\n",
 						"thymio.timer.period[0] = 0\n"
-					]
+					],
+					"timerElapsed = False\n"
 				],
 				"sectionBegin": [
 					"@thymio.onevent(thymio.TIMER0)\n",
-					"def onevent_timer0(self):\n"
+					"def onevent_timer0():\n"
 				],
-				"sectionEnd": "<\n"
+				"sectionEnd": "<\n",
+				"sectionPreamble": "timerElapsed = True\nthymio.timer.period[0] = 0\n",
+				"clause": "timerElapsed"
 			}
 		},
 		{
@@ -526,9 +530,7 @@
 					"state = [False, False, False, False])\n"
 				],
 				"statement": [
-					"state = this.getClientState(\"state\")\n",
 					"`$.map(function (v, i) { return v ? 'state[' + i + '] = ' + (v > 0 ? 'True' : 'False') + '\\n' : ''; }).join('')`",
-					"self.setClientState(\"state\", state)\n",
 					"`$[0] || $[1] || $[2] || $[3] ? 'leds.circle = [0,state[1]?1:0,0,state[3]?1:0,0,state[2]?1:0,0,state[0]?1:0]\\n' : ''`"
 				]
 			}
@@ -536,19 +538,11 @@
 		{
 			"name": "toggle state",
 			"python": {
-				"initVarDecl": [
-					[
-						"# variables for state\n",
-						"self.setClientState(\"state\", [])\n"
-					]
-				],
 				"initCodeExec": [
-					"self.setClientState(\"state\", [False, False, False, False])\n"
+					"state = [False, False, False, False])\n"
 				],
 				"statement": [
-					"state = this.getClientState(\"state\")\n",
 					"`$.map(function (v, i) { return v ? 'state[' + i + '] = !state[' + i + ']\\n' : ''; }).join('')`",
-					"self.setClientState(\"state\", state)\n",
 					"`$[0] || $[1] || $[2] || $[3] ? 'leds.circle = [0,state[1]?1:0,0,state[3]?1:0,0,state[2]?1:0,0,state[0]?1:0]\\n' : ''`"
 				]
 			}
@@ -556,38 +550,25 @@
 		{
 			"name": "set state 8",
 			"python": {
-					"initVarDecl": [
-						[
-							"# variable for exclusive state\n",
-							"self.setClientState(\"state8\", 0)\n"
-						]
-					],
-					"initCodeExec": [
-						"self.setClientState(\"state8\", 0)\n"
-					],
-					"statement": [
-						"self.setClientState(\"state8\", `$[0].toString(10)`)\n",
-						"thymio.leds.circle = [`[0,1,2,3,4,5,6,7].map(function (i) { return $[0] === i; }).join(', ')`]\n"
-					],
-					"statementWithoutInit":
-						"thymio.leds.circle = [`[0,1,2,3,4,5,6,7].map(function (i) { return $[0] === i; }).join(', ')`]\n"
+				"initCodeExec": [
+					"state8 = 0\n"
+				],
+				"statement": [
+					"state8 = `$[0].toString(10)`\n",
+					"thymio.leds.circle = [`[0,1,2,3,4,5,6,7].map(function (i) { return $[0] === i; }).join(', ')`]\n"
+				],
+				"statementWithoutInit":
+					"thymio.leds.circle = [`[0,1,2,3,4,5,6,7].map(function (i) { return $[0] === i; }).join(', ')`]\n"
 			}
 		},
 		{
 			"name": "change state 8",
 			"python": {
-					"initVarDecl": [
-						[
-							"# variable for exclusive state\n",
-							"self.setClientState(\"state8\", 0)\n"
-						]
-					],
-					"initCodeExec": [
-						"self.setClientState(\"state8\", 0)\n"
-					],
+				"initCodeExec": [
+					"state8 = 0\n"
+				],
 				"statement": [
-					"state8 = (this.getClientState(\"state8\") + `$[0] > 0 ? 1 : 7`) % 8",
-					"self.setClientState(\"state8\", state8)\n",
+					"state8 = (state8 + `$[0] > 0 ? 1 : 7`) % 8",
 					"thymio.leds.circle = [`[0,1,2,3,4,5,6,7].map(function (i) { return 'state8 === ' + i.toString(10); }).join(', ')`]\n"
 				],
 				"statementWithoutInit":
@@ -597,18 +578,11 @@
 		{
 			"name": "set counter",
 			"python": {
-					"initVarDecl": [
-						[
-							"# variable for counter\n",
-							"self.setClientState(\"counter\", 0)\n"
-						]
-					],
-					"initCodeExec": [
-						"self.setClientState(\"counter\", 0)\n"
-					],
+				"initCodeExec": [
+					"counter = 0\n"
+				],
 				"statement": [
 					"counter = `$[0] === 0 ? 0 : $[0] > 0 ? 'Math.min(this.getClientState(\"counter\") + 1, 255)' : 'Math.max(this.getClientState(\"counter\") - 1, 0)'`\n",
-					"self.setClientState(\"counter\", counter)\n",
 					"thymio.leds.circle = [counter&1?1:0,counter&2?1:0,counter&4?1:0,counter&8?1:0,counter&16?1:0,counter&32?1:0,counter&64?1:0,counter&128?1:0]\n"
 				]
 			}
@@ -616,13 +590,17 @@
 		{
 			"name": "set timer",
 			"python": {
-					"initCodeExec": [
-						[
-							"# stop timer 0\n",
-							"self.setTimer(0, -1)\n"
-						]
+				"initCodeExec": [
+					[
+						"# stop timer 0\n",
+						"thymio.timer.period[0] = 0\n"
 					],
-					"statement": "self.setTimer(0, `$[0].toFixed(3)`)\n"
+					"timerElapsed = False\n"
+				],
+				"statement": [
+					"thymio.timer.period[0] = `Math.round(1000 * $[0])`\n",
+					"timerElapsed = False\n"
+				]
 			}
 		},
 		{
@@ -631,10 +609,14 @@
 				"initCodeExec": [
 					[
 						"# stop timer 0\n",
-						"self.setTimer(0, -1)\n"
-					]
+						"thymio.timer.period[0] = 0\n"
+					],
+					"timerElapsed = False\n"
 				],
-				"statement": "self.setTimer(0, `$[0].toFixed(3)`)\n"
+				"statement": [
+					"thymio.timer.period[0] = `Math.round(1000 * $[0])`\n",
+					"thymio.timerElapsed = False\n"
+				]
 			}
 		},
 		{

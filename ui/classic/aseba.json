@@ -173,7 +173,8 @@
 					"timerElapsed = 0\n"
 				],
 				"sectionBegin": "onevent timer0\n",
-				"sectionPreamble": "timerElapsed = 1\ntimer.period[0] = 0\n"
+				"sectionPreamble": "timerElapsed = 1\ntimer.period[0] = 0\n",
+				"clause": "timerElapsed != 0"
 			}
 		},
 		{
