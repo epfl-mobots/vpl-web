@@ -2184,79 +2184,115 @@ sim-playground {
 			"name": "!stop",
 			"python": {
 				"statement": [
-					"self.set(\"motor.left\", 0)\n",
-					"self.set(\"motor.right\", 0)\n"
+					"thymio.motor.left.target = 0\n",
+					"thymio.motor.right.target = 0\n",
+					"thymio.leds.circle = [32,32,32,32,32,32,32,32]\n",
+					"@onevent(thymio.TIMER0)\n",
+					"def onevent_timer0():\n",
+					"thymio.leds.circle = [0,0,0,0,0,0,0,0]\n",
+					"<\n"
 				]
 			}
 		},
 		{
 			"name": "button",
 			"python": {
-				"sectionBegin": "def event_buttons(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.BUTTONS)\n",
+					"def onevent_buttons(self):\n"
+				],
 				"sectionEnd": "<\n",
-				"clause": "`['center', 'forward', 'backward', 'right', 'left'].map(function (s, i) { return $[i] ? 'self.get(\"button.' + s + '\")' : ''; }).filter(function (s) { return s; }).join(' and ') || ['center', 'forward', 'backward', 'right', 'left'].map(function (s) { return 'self.get(\"button.' + s + '\")'; }).join(' or ')`"
+				"clause": "`['center', 'forward', 'backward', 'right', 'left'].map(function (s, i) { return $[i] ? 'thymio.button.' + s : ''; }).filter(function (s) { return s; }).join(' and ') || ['center', 'forward', 'backward', 'right', 'left'].map(function (s) { return 'button.' + s; }).join(' or ')`"
 			}
 		},
 		{
 			"name": "button 1",
 			"python": {
-				"sectionBegin": "def event_buttons(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.BUTTONS)\n",
+					"def onevent_buttons(self):\n"
+				],
 				"sectionEnd": "<\n",
-				"clause": "self.get(\"button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]`\")"
+				"clause": "thymio.button.`['center', 'forward', 'backward', 'right', 'left'][$[0]]`"
 			}
 		},
 		{
 			"name": "horiz prox",
 			"python": {
-				"sectionBegin": "def event_prox(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.PROX)\n",
+					"def onevent_prox(self):\n"
+				],
 				"sectionEnd": "<\n",
-				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'self.get(\"prox.horizontal\")[' + ix + '] ' + ($[i] > 0 ? '>' : '<') + '= 0.5' : ''; }).filter(function (s) { return s; }).join(' or ')`"
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'thymio.prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= 2000' : '<= 1000') : ''; }).filter(function (s) { return s; }).join(' or ')`"
 			}
 		},
 		{
 			"name": "horiz prox adv",
 			"python": {
-				"sectionBegin": "def event_prox(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.PROX)\n",
+					"def onevent_prox(self):\n"
+				],
 				"sectionEnd": "<\n",
-				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'self.get(\"prox.horizontal\")[' + ix + '] ' + ($[i] > 0 ? '>= ' + toFixed($[7]) : '<= ' + toFixed($[8])) : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'self.get(\"prox.horizontal\")[' + ix + '] ' + ($[i] > 0 ? '>= ' + toFixed($[7]) : '<= ' + toFixed($[8])); }).join(' or ')`"
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'thymio.prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(7 + 33 * $[7]) : '<= ' + Math.round(7 + 33 * $[8])) + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'thymio.prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
 			}
 		},
 		{
 			"name": "horiz prox 1",
 			"python": {
-				"sectionBegin": "def event_prox(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.PROX)\n",
+					"def onevent_prox(self):\n"
+				],
 				"sectionEnd": "<\n",
-				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'self.get(\"prox.horizontal\")[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + toFixed($[7]) : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'self.get(\"prox.horizontal\")[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + toFixed($[7]); }).join(' or ')`"
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { return $[i] ? 'thymio.prox.horizontal[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(7 + 33 * $[7]) + '00' : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'thymio.prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
 			}
 		},
 		{
 			"name": "ground",
 			"python": {
-				"sectionBegin": "def event_prox(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.PROX)\n",
+					"def onevent_prox(self):\n"
+				],
 				"sectionEnd": "<\n",
-				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'self.get(\"prox.ground.delta\")[' + ix + '] ' + ($[i] > 0 ? '>' : '<') + '= 0.5' : ''; }).filter(function (s) { return s; }).join(' or ')`"
+				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'thymio.prox.ground.delta[' + ix + '] ' + ($[i] > 0 ? '>= 450' : '<= 400') : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' or ')`"
 			}
 		},
 		{
 			"name": "ground adv",
 			"python": {
-				"sectionBegin": "def event_prox(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.PROX)\n",
+					"def onevent_prox(self):\n"
+				],
 				"sectionEnd": "<\n",
-				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'self.get(\"prox.ground.delta\")[' + ix + '] ' + ($[i] > 0 ? '>= ' + toFixed($[2]) : '<= ' + toFixed($[3])) : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'self.get(\"prox.ground.delta\")[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + toFixed($[2]); }).join(' or ')`"
+				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'thymio.prox.ground.delta[' + ix + '] ' + ($[i] > 0 ? '>= ' + Math.round(25 + 40 * $[2]) : '<= ' + Math.round(25 + 40 * $[3])) : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'thymio.prox.ground.delta[' + ix + '] >= 450'; }).join(' or ')`"
 			}
 		},
 		{
 			"name": "ground 1",
 			"python": {
-				"sectionBegin": "def event_prox(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.PROX)\n",
+					"def onevent_prox(self):\n"
+				],
 				"sectionEnd": "<\n",
-				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'self.get(\"prox.ground.delta\")[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + toFixed($[2]) : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'self.get(\"prox.ground.delta\")[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + toFixed($[2]); }).join(' or ')`"
+				"clause": "`[0, 1].map(function (ix, i) { return $[i] ? 'thymio.prox.ground.delta[' + ix + '] ' + ($[i] > 0 ? '>= ' : '<= ') + Math.round(25 + 40 * $[2]) : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'thymio.prox.ground.delta[' + ix + '] >= 450'; }).join(' or ')`"
 			}
 		},
 		{
 			"name": "tap",
 			"python": {
-				"sectionBegin": "def event_tap(self):\n",
+				"initCodeExec": [
+					"tapped = False\n"
+				],
+				"sectionBegin": [
+					"@thymio.onevent(thymio.TAP)\n",
+					"def onevent_tap(self):\n"
+				],
+				"sectionPreamble": "tapped = True\n",
 				"sectionEnd": "<\n"
 			}
 		},
@@ -2266,57 +2302,72 @@ sim-playground {
 				"initCodeExec": [
 					"`$[0] == 0 ? 'tapped = False\\n' : ''`"
 				],
-				"sectionBegin": "def event_acc(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.`$[0] == 0 ? 'TAP' : 'ACC'`)\n",
+					"def onevent_`$[0] == 0 ? 'tap' : 'acc'`(self):\n"
+				],
 				"sectionEnd": "<\n",
 				"sectionPreamble": "`$[0] == 0 ? 'tapped = True\\n' : ''`",
-				"clauseInit": "`$[0] === 1 ? 'rollAngle = math.atan2(acc[0], acc[2]);\\n' : $[0] === 2 ? 'pitchAngle = math.atan2(acc[1], acc[2]);\\n' : ''`",
-				"clause": "`$[0] == 0 ? 'tapped' : (function (name, a) { return a <= -6 ? name + ' < ' + (Math.PI / 12 * (a + 0.5)).toFixed(2) : a >= 6 ? name + ' >= ' + (Math.PI / 12 * (a - 0.5)).toFixed(2) : name + ' >= ' + (Math.PI / 12 * (a - 0.5)).toFixed(2) + ' && ' + name + ' < ' + (Math.PI / 12 * (a + 0.5)).toFixed(2); })($[0] === 1 ? 'rollAngle' : 'pitchAngle', $[0] === 2 ? $[1] : -$[1])`"
+				"clauseInit": "`$[0] === 1 ? 'rollAngle = thymio.math.atan2(thymio.acc[0], thymio.acc[2])\\n' : $[0] === 2 ? 'pitchAngle = thymio.math.atan2(acc[1], acc[2])\\n' : ''`",
+				"clause": "`$[0] == 0 ? 'tapped' : (function (name, a) { return a <= -6 ? name + ' < ' + Math.round(2730.67 * a + 1365.33) : a >= 6 ? name + ' >= ' + Math.round(2730.67 * a - 1365.33) : name + ' >= ' + Math.round(2730.67 * a - 1365.33) + ' and ' + name + ' < ' + Math.round(2730.67 * a + 1365.33); })($[0] === 1 ? 'rollAngle' : 'pitchAngle', $[0] === 2 ? $[1] : -$[1])`"
 			}
 		},
 		{
 			"name": "roll",
 			"python": {
-				"sectionBegin": "def event_acc(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.ACC)\n",
+					"def onevent_acc(self):\n"
+				],
 				"sectionEnd": "<\n",
 				"clauseInit":
-					"rollAngle = math.atan2(acc[0], acc[2])\n",
+					"rollAngle = thymio.math.atan2(thymio.acc[0], thymio.acc[2])\n",
 				"clause":
-					"rollAngle >= `toFixed2(Math.PI / 12 * ($[0] - 0.5))` and rollAngle < `toFixed2(Math.PI / 12 * ($[0] + 0.5))`"
+					"`$[0] === -12 ? 'rollAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'rollAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
 			"name": "pitch",
 			"python": {
-				"sectionBegin": "def event_acc(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.ACC)\n",
+					"def onevent_acc(self):\n"
+				],
 				"sectionEnd": "<\n",
 				"clauseInit":
-					"pitchAngle = math.atan2(acc[1], acc[2])\n",
+					"pitchAngle = thymio.math.atan2(thymio.acc[1], thymio.acc[2])\n",
 				"clause":
-					"pitchAngle >= `toFixed2(Math.PI / 12 * (-$[0] - 0.5))` and pitchAngle < `toFixed2(Math.PI / 12 * ($[0] + 0.5))`"
+					"`$[0] === -12 ? 'pitchAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'pitchAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
 			"name": "yaw",
 			"python": {
-				"sectionBegin": "def event_acc(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.ACC)\n",
+					"def onevent_acc(self):\n"
+				],
 				"sectionEnd": "<\n",
 				"clauseInit":
-					"yawAngle = math.atan2(acc[0], acc[1])\n",
+					"yawAngle = thymio.math.atan2(thymio.acc[0], thymio.acc[1])\n",
 				"clause":
-					"yawAngle >= `toFixed2(Math.PI / 12 * ($[0] - 0.5))` and yawAngle < `toFixed2(Math.PI / 12 * ($[0] + 0.5))`"
+					"`$[0] === -12 ? 'yawAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'yawAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
 			"name": "clap",
 			"python": {
-				"sectionBegin": "def event_mic(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.MIC)\n",
+					"def onevent_mic(self):\n"
+				],
 				"sectionEnd": "<\n"
 			}
 		},
 		{
 			"name": "init",
 			"python": {
-					"sectionBegin": "# init block\n"
+					"sectionBegin": "# inititialization\n"
 			}
 		},
 		{
@@ -2325,70 +2376,58 @@ sim-playground {
 				"initCodeExec": [
 					[
 						"# stop timer 0\n",
-						"self.setTimer(0, -1)\n"
+						"thymio.timer.period[0] = 0\n"
 					]
 				],
-				"sectionBegin": "def event_timer0(self):\n",
+				"sectionBegin": [
+					"@thymio.onevent(thymio.TIMER0)\n",
+					"def onevent_timer0(self):\n"
+				],
 				"sectionEnd": "<\n"
 			}
 		},
 		{
 			"name": "state",
 			"python": {
-					"initVarDecl": [
-						[
-							"# variables for state\n",
-							"self.setClientState(\"state\", [])\n"
-						]
-					],
 					"initCodeExec": [
-						"self.setClientState(\"state\", [False, False, False, False])\n"
+						"state = [False, False, False, False]\n"
 					],
-					"clauseInit": "state0 = self.getClientState(\"state\")\n",
-					"clause": "`$.map(function (v, i) { return (v >= 0 ? '' : '!') + 'state0[' + i + ']'; }).filter(function (v, i) { return $[i]; }).join(' and ')`"
+					"clause": "`$.map(function (v, i) { return (v >= 0 ? '' : 'not ') + 'state0[' + i + ']'; }).filter(function (v, i) { return $[i]; }).join(' and ')`"
 			}
 		},
 		{
 			"name": "state 8",
 			"python": {
-				"initVarDecl": [
-					[
-						"# variable for exclusive state\n",
-						"self.setClientState(\"state8\", 0)\n"
-					]
-				],
 				"initCodeExec": [
-					"self.setClientState(\"state8\", 0)\n"
+					"state8 = 0\n"
 				],
-				"clauseInit": "state80 = self.getClientState(\"state8\")\n",
-				"clause": "state80 == `$[0].toString(10)`"
+				"clause": "state8 == `$[0]`"
 			}
 		},
 		{
 			"name": "counter comparison",
 			"python": {
-					"initVarDecl": [
-						[
-							"# variable for counter\n",
-							"self.setClientState(\"counter\", 0)\n"
-						]
-					],
 					"initCodeExec": [
-						"self.setClientState(\"counter\", 0)\n"
+						"counter = 0\n"
 					],
-					"clauseInit": "counter0 = self.getClientState(\"counter\")\n",
-					"clause": "counter0 `$[0] === 0 ? '==' : $[0] > 0 ? '>=' : '<='` `$[1]`"
+					"clause": "counter `$[0] === 0 ? '==' : $[0] > 0 ? '>=' : '<='` `$[1]`"
 			}
 		},
 		{
 			"name": "color state",
 			"python": {
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n"
+				],
 				"clause": "`$.map(function (p, i) { return 'topColor[' + i + '] / 11 == ' + Math.floor(p * 2.99); }).join(' and ')`"
 			}
 		},
 		{
 			"name": "color 8 state",
 			"python": {
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n"
+				],
 				"clause": "`$.map(function (p, i) { return 'topColor[' + i + '] / 11 == ' + Math.floor(p * 2.99); }).join(' and ')`"
 			}
 		},
@@ -2396,32 +2435,68 @@ sim-playground {
 			"name": "motor state",
 			"python": {
 				"clause": [
-					"`$[0] == 0 ? 'abs(' : ''`this.get(\"motor.left\")`$[0] > 0 ? ' > ' : $[0] < 0 ? ' < -' : ') < '`0.1 ",
-					"and `$[1] == 0 ? 'abs(' : ''`this.get(\"motor.right\")`$[1] > 0 ? ' > ' : $[1] < 0 ? ' < -' : ') < '`0.1"
+					"`$[0] == 0 ? 'abs(' : ''`thymio.motor.left.target`$[0] > 0 ? ' > ' : $[0] < 0 ? ' < -' : ') < '`0.1 ",
+					"and `$[1] == 0 ? 'abs(' : ''`thymio.motor.right.target`$[1] > 0 ? ' > ' : $[1] < 0 ? ' < -' : ') < '`0.1"
 				]
 			}
 		},
 		{
 			"name": "motor",
 			"python": {
-					"initCodeExec": [
-						"self.set(\"leds.top\", [0, 0, 0])\n"
-					],
+				"initCodeExec": [
+					[
+						"# reset outputs\n",
+						"thymio.leds.top = [0, 0, 0]\n",
+						"thymio.leds.bottom.left = [0, 0, 0]\n",
+						"thymio.leds.bottom.right = [0, 0, 0]\n",
+						"thymio.leds.circle = [0, 0, 0, 0, 0, 0, 0, 0]\n"
+					]
+				],
 				"statement": [
-					"self.set(\"motor.left\", `toFixed($[0])`)\n",
-					"self.set(\"motor.right\", `toFixed($[1])`)\n"
+					"thymio.motor.left.target = `toFixed($[0])`\n",
+					"thymio.motor.right.target = `toFixed($[1])`\n"
 				]
 			}
 		},
 		{
 			"name": "move",
 			"python": {
-					"initCodeExec": [
-						"self.set(\"leds.top\", [0, 0, 0])\n"
-					],
+				"initCodeExec": [
+					[
+						"# reset outputs\n",
+						"thymio.leds.top = [0, 0, 0]\n",
+						"thymio.leds.bottom.left = [0, 0, 0]\n",
+						"thymio.leds.bottom.right = [0, 0, 0]\n",
+						"thymio.leds.circle = [0, 0, 0, 0, 0, 0, 0, 0]\n"
+					]
+				],
 				"statement": [
-					"self.set(\"motor.left\", `toFixed([0, 0.2, -0.2, 0.2-0.05, 0.2+0.05, -0.2, 0.2][$[0]])`)\n",
-					"self.set(\"motor.right\", `toFixed([0, 0.2, -0.2, 0.2+0.05, 0.2-0.05, 0.2, -0.2][$[0]])`)\n"
+					"thymio.motor.left.target = `toFixed([0, 0.2, -0.2, 0.2-0.05, 0.2+0.05, -0.2, 0.2][$[0]])`\n",
+					"thymio.motor.right.target = `toFixed([0, 0.2, -0.2, 0.2+0.05, 0.2-0.05, 0.2, -0.2][$[0]])`\n"
+				]
+			}
+		},
+		{
+			"name": "nn obstacles",
+			"python": {
+				"initCodeExec": [
+					[
+						"# reset outputs\n",
+						"thymio.leds.top = [0, 0, 0]\n",
+						"thymio.leds.bottom.left = [0, 0, 0]\n",
+						"thymio.leds.bottom.right = [0, 0, 0]\n",
+						"thymio.leds.circle = [0, 0, 0, 0, 0, 0, 0, 0]\n"
+					]
+				],
+				"statement": [
+					"thymio.motor.left.target = `Math.round(500 * $[0])`",
+					"`Math.round(20 * $[1]) ? ' - thymio.prox.horizontal[2] / 10 * ' + Math.round(20 * $[1]).toString(10) + ' / 16' : ''`",
+					"`Math.round(20 * $[2]) ? ' + thymio.prox.horizontal[0] / 10 * ' + Math.round(20 * $[2]).toString(10) + ' / 16' : ''`",
+					"`Math.round(20 * $[3]) ? ' - thymio.thymio.thymio.thymio.prox.horizontal[4] / 10 * ' + Math.round(20 * $[3]).toString(10) + ' / 16' : ''`\n",
+					"thymio.motor.right.target = `Math.round(500 * $[0])`",
+					"`Math.round(20 * $[1]) ? ' - thymio.thymio.thymio.prox.horizontal[2] / 10 * ' + Math.round(20 * $[1]).toString(10) + ' / 16' : ''`",
+					"`Math.round(20 * $[2]) ? ' + thymio.thymio.prox.horizontal[4] / 10 * ' + Math.round(20 * $[2]).toString(10) + ' / 16' : ''`",
+					"`Math.round(20 * $[3]) ? ' - thymio.prox.horizontal[0] / 10 * ' + Math.round(20 * $[3]).toString(10) + ' / 16' : ''`\n"
 				]
 			}
 		},
@@ -2429,31 +2504,55 @@ sim-playground {
 			"name": "top color",
 			"python": {
 				"initCodeExec": [
-					"self.set(\"leds.top\", [0, 0, 0])\n"
+					"topColor = [0, 0, 0]\n",
+					[
+						"# reset outputs\n",
+						"thymio.leds.top = [0, 0, 0]\n",
+						"thymio.leds.bottom.left = [0, 0, 0]\n",
+						"thymio.leds.bottom.right = [0, 0, 0]\n",
+						"thymio.leds.circle = [0, 0, 0, 0, 0, 0, 0, 0]\n"
+					]
 				],
-				"statement":
-					"self.set(\"leds.top\", [`$.map(toFixed).join(', ')`])\n"
+				"statement": [
+					"topColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
+					"thymio.leds.top = topColor\n"
+				]
 			}
 		},
 		{
 			"name": "top color 8",
 			"python": {
-					"initCodeExec": [
-						"self.set(\"leds.top\", [0, 0, 0])\n"
-					],
-					"statement":
-						"self.set(\"leds.top\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`])\n"
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n",
+					[
+						"# reset outputs\n",
+						"thymio.leds.top = [0, 0, 0]\n",
+						"thymio.leds.bottom.left = [0, 0, 0]\n",
+						"thymio.leds.bottom.right = [0, 0, 0]\n",
+						"thymio.leds.circle = [0, 0, 0, 0, 0, 0, 0, 0]\n"
+					]
+				],
+				"statement": [
+					"topColor = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n",
+					"thymio.leds.top = topColor\n"
+				]
 			}
 		},
 		{
 			"name": "bottom color",
 			"python": {
-					"initCodeExec": [
-						"self.set(\"leds.top\", [0, 0, 0])\n"
-					],
+				"initCodeExec": [
+					[
+						"# reset outputs\n",
+						"thymio.leds.top = [0, 0, 0]\n",
+						"thymio.leds.bottom.left = [0, 0, 0]\n",
+						"thymio.leds.bottom.right = [0, 0, 0]\n",
+						"thymio.leds.circle = [0, 0, 0, 0, 0, 0, 0, 0]\n"
+					]
+				],
 				"statement": [
-					"self.set(\"leds.bottom.left\", [`$.map(toFixed).join(', ')`])\n",
-					"self.set(\"leds.bottom.right\", [`$.map(toFixed).join(', ')`])\n"
+					"thymio.leds.bottom.left = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
+					"thymio.leds.bottom.right = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
 				]
 			}
 		},
@@ -2461,31 +2560,49 @@ sim-playground {
 			"name": "bottom-left color",
 			"python": {
 				"initCodeExec": [
-					"self.set(\"leds.top\", [0, 0, 0])\n"
+					[
+						"# reset outputs\n",
+						"thymio.leds.top = [0, 0, 0]\n",
+						"thymio.leds.bottom.left = [0, 0, 0]\n",
+						"thymio.leds.bottom.right = [0, 0, 0]\n",
+						"thymio.leds.circle = [0, 0, 0, 0, 0, 0, 0, 0]\n"
+					]
 				],
 				"statement":
-					"self.set(\"leds.bottom.left\", [`$.map(toFixed).join(', ')`])\n"
+					"thymio.leds.bottom.left = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
 			}
 		},
 		{
 			"name": "bottom-right color",
 			"python": {
 				"initCodeExec": [
-					"self.set(\"leds.top\", [0, 0, 0])\n"
+					[
+						"# reset outputs\n",
+						"thymio.leds.top = [0, 0, 0]\n",
+						"thymio.leds.bottom.left = [0, 0, 0]\n",
+						"thymio.leds.bottom.right = [0, 0, 0]\n",
+						"thymio.leds.circle = [0, 0, 0, 0, 0, 0, 0, 0]\n"
+					]
 				],
 				"statement":
-					"self.set(\"leds.bottom.right\", [`$.map(toFixed).join(', ')`])\n"
+					"thymio.leds.bottom.right = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
 			}
 		},
 		{
 			"name": "bottom color 8",
 			"python": {
 				"initCodeExec": [
-					"self.set(\"leds.top\", [0, 0, 0])\n"
+					[
+						"# reset outputs\n",
+						"thymio.leds.top = [0, 0, 0]\n",
+						"thymio.leds.bottom.left = [0, 0, 0]\n",
+						"thymio.leds.bottom.right = [0, 0, 0]\n",
+						"thymio.leds.circle = [0, 0, 0, 0, 0, 0, 0, 0]\n"
+					]
 				],
 				"statement": [
-					"self.set(\"leds.bottom.left\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`])\n",
-					"self.set(\"leds.bottom.right\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`])\n"
+					"thymio.leds.bottom.left = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n",
+					"thymio.leds.bottom.right = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n"
 				]
 			}
 		},
@@ -2493,20 +2610,32 @@ sim-playground {
 			"name": "bottom-left color 8",
 			"python": {
 				"initCodeExec": [
-					"self.set(\"leds.top\", [0, 0, 0])\n"
+					[
+						"# reset outputs\n",
+						"thymio.leds.top = [0, 0, 0]\n",
+						"thymio.leds.bottom.left = [0, 0, 0]\n",
+						"thymio.leds.bottom.right = [0, 0, 0]\n",
+						"thymio.leds.circle = [0, 0, 0, 0, 0, 0, 0, 0]\n"
+					]
 				],
 				"statement":
-					"self.set(\"leds.bottom.left\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`])\n"
+					"thymio.leds.bottom.left = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n"
 			}
 		},
 		{
 			"name": "bottom-right color 8",
 			"python": {
 				"initCodeExec": [
-					"self.set(\"leds.top\", [0, 0, 0])\n"
+					[
+						"# reset outputs\n",
+						"thymio.leds.top = [0, 0, 0]\n",
+						"thymio.leds.bottom.left = [0, 0, 0]\n",
+						"thymio.leds.bottom.right = [0, 0, 0]\n",
+						"thymio.leds.circle = [0, 0, 0, 0, 0, 0, 0, 0]\n"
+					]
 				],
 				"statement":
-					"self.set(\"leds.bottom.right\", [`['0,0,0','1,0,0','0,1,0','1,1,0','0,0,1','1,0,1','0,1,1','1,1,1'][$[0]]`])\n"
+					"thymio.leds.bottom.right = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n"
 			}
 		},
 		{
@@ -2514,50 +2643,73 @@ sim-playground {
 			"python": {
 				"initCodeExec": [
 					[
-						"# init notes\n",
-						"self.set(\"sound\", {})\n",
-						"self.set(\"leds.top\", [0, 0, 0])\n"
+						"# init. variables for notes\n",
+						"note_index = 6\n",
+						"note_count = 6\n"
+					],
+					[
+						"# compute a sinus wave for sound\n",
+						"for i in range(142):\n",
+						"wave_phase = (i - 70) * 468\n",
+						"wave_intensity = thymio.math.cos(wave_phase)\n",
+						"wave[i] = wave_intensity / 256\n",
+						"<\n",
+						"thymio.nf.sound.wave(wave)\n"
+					],
+					[
+						"thymio.nf.sound.system(-1)\n"
 					]
 				],
-				"statement":
-					"self.set(\"sound\", {\"f\": [`$.filter(function (a, i) { return i % 2 == 0; }).map(function (h, i) { return $[2 * i + 1] ? [262, 311, 370, 440, 524, 370][h] : 0; }).join(', ')`], \"d\": [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return d ? 7 * d : 28; }).join(', ')`]})\n"
+				"initCodeDecl": [
+					[
+						"# when a note is finished, play the next one\n",
+						"@thymio.onevent(thymio.SOUND_FINISHED)\n",
+						"def onevent_sound_finished():\n",
+						"if note_index != note_count:\n",
+						"thymio.nf.sound.freq(notes[note_index], durations[note_index])\n",
+						"note_index += 1\n",
+						"<\n",
+						"<\n"
+					]
+				],
+				"statement": [
+					"notes = [`$.filter(function (a, i) { return i % 2 == 0; }).map(function (h, i) { return $[2 * i + 1] ? [370, 415, 466, 494, 554][h] : 0; }).join(', ')`]\n",
+					"durations = [`$.filter(function (a, i) { return i % 2 == 1; }).map(function (d) { return d ? 10 * d : 28; }).join(', ')`]\n",
+					"note_index = 1\n",
+					"note_count = 6\n",
+					"thymio.nf.sound.freq(notes[0], durations[0])\n"
+				]
 			}
 		},
 		{
 			"name": "play",
 			"python": {
  				"initCodeExec": [
-					"# init notes\nself.set(\"sound\", {})\n"
+					"thymio.nf.sound.system(-1)\n"
 				],
-				"statement": "self.set(\"sound\", {\"pcm\": `$[0]`})\n"
+				"statement": "thymio.nf.sound.play(`$[0].toString(10)`)\n"
 			}
 		},
 		{
 			"name": "play stop",
 			"python": {
  				"initCodeExec": [
-					"# init notes\nself.set(\"sound\", {})\n"
+					"thymio.nf.sound.system(-1)\n"
 				],
-				"statement": "self.set(\"sound\", {})\n"
+				"statement": "thymio.nf.sound.play(-1)\n"
 			}
 		},
 		{
 			"name": "set state",
 			"python": {
-				"initVarDecl": [
-					[
-						"# variables for state\n",
-						"self.setClientState(\"state\", [])\n"
-					]
-				],
 				"initCodeExec": [
-					"self.setClientState(\"state\", [False, False, False, False])\n"
+					"state = [False, False, False, False])\n"
 				],
 				"statement": [
 					"state = this.getClientState(\"state\")\n",
 					"`$.map(function (v, i) { return v ? 'state[' + i + '] = ' + (v > 0 ? 'True' : 'False') + '\\n' : ''; }).join('')`",
 					"self.setClientState(\"state\", state)\n",
-					"`$[0] || $[1] || $[2] || $[3] ? 'self.set(\"leds.circle\", [0,state[1]?1:0,0,state[3]?1:0,0,state[2]?1:0,0,state[0]?1:0])\\n' : ''`"
+					"`$[0] || $[1] || $[2] || $[3] ? 'leds.circle = [0,state[1]?1:0,0,state[3]?1:0,0,state[2]?1:0,0,state[0]?1:0]\\n' : ''`"
 				]
 			}
 		},
@@ -2577,7 +2729,7 @@ sim-playground {
 					"state = this.getClientState(\"state\")\n",
 					"`$.map(function (v, i) { return v ? 'state[' + i + '] = !state[' + i + ']\\n' : ''; }).join('')`",
 					"self.setClientState(\"state\", state)\n",
-					"`$[0] || $[1] || $[2] || $[3] ? 'self.set(\"leds.circle\", [0,state[1]?1:0,0,state[3]?1:0,0,state[2]?1:0,0,state[0]?1:0])\\n' : ''`"
+					"`$[0] || $[1] || $[2] || $[3] ? 'leds.circle = [0,state[1]?1:0,0,state[3]?1:0,0,state[2]?1:0,0,state[0]?1:0]\\n' : ''`"
 				]
 			}
 		},
@@ -2595,10 +2747,10 @@ sim-playground {
 					],
 					"statement": [
 						"self.setClientState(\"state8\", `$[0].toString(10)`)\n",
-						"self.set(\"leds.circle\", [`[0,1,2,3,4,5,6,7].map(function (i) { return $[0] === i; }).join(', ')`])\n"
+						"thymio.leds.circle = [`[0,1,2,3,4,5,6,7].map(function (i) { return $[0] === i; }).join(', ')`]\n"
 					],
 					"statementWithoutInit":
-						"self.set(\"leds.circle\", [`[0,1,2,3,4,5,6,7].map(function (i) { return $[0] === i; }).join(', ')`])\n"
+						"thymio.leds.circle = [`[0,1,2,3,4,5,6,7].map(function (i) { return $[0] === i; }).join(', ')`]\n"
 			}
 		},
 		{
@@ -2616,10 +2768,10 @@ sim-playground {
 				"statement": [
 					"state8 = (this.getClientState(\"state8\") + `$[0] > 0 ? 1 : 7`) % 8",
 					"self.setClientState(\"state8\", state8)\n",
-					"self.set(\"leds.circle\", [`[0,1,2,3,4,5,6,7].map(function (i) { return 'state8 === ' + i.toString(10); }).join(', ')`])\n"
+					"thymio.leds.circle = [`[0,1,2,3,4,5,6,7].map(function (i) { return 'state8 === ' + i.toString(10); }).join(', ')`]\n"
 				],
 				"statementWithoutInit":
-					"self.set(\"leds.circle\", [`$[0] === 0 ? 1 : 0`,`$[0] === 1 ? 1 : 0`,`$[0] === 2 ? 1 : 0`,`$[0] === 3 ? 1 : 0`,`$[0] === 4 ? 1 : 0`,`$[0] === 5 ? 1 : 0`,`$[0] === 6 ? 1 : 0`,`$[0] === 7 ? 1 : 0`])\n"
+					"thymio.leds.circle = [`$[0] === 0 ? 1 : 0`,`$[0] === 1 ? 1 : 0`,`$[0] === 2 ? 1 : 0`,`$[0] === 3 ? 1 : 0`,`$[0] === 4 ? 1 : 0`,`$[0] === 5 ? 1 : 0`,`$[0] === 6 ? 1 : 0`,`$[0] === 7 ? 1 : 0`]\n"
 			}
 		},
 		{
@@ -2637,7 +2789,7 @@ sim-playground {
 				"statement": [
 					"counter = `$[0] === 0 ? 0 : $[0] > 0 ? 'Math.min(this.getClientState(\"counter\") + 1, 255)' : 'Math.max(this.getClientState(\"counter\") - 1, 0)'`\n",
 					"self.setClientState(\"counter\", counter)\n",
-					"self.set(\"leds.circle\", [counter&1?1:0,counter&2?1:0,counter&4?1:0,counter&8?1:0,counter&16?1:0,counter&32?1:0,counter&64?1:0,counter&128?1:0])\n"
+					"thymio.leds.circle = [counter&1?1:0,counter&2?1:0,counter&4?1:0,counter&8?1:0,counter&16?1:0,counter&32?1:0,counter&64?1:0,counter&128?1:0]\n"
 				]
 			}
 		},
