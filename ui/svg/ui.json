@@ -314,7 +314,7 @@
 					"uri": "Blocks.svg#Events_bg"
 				},
 				{
-					"js": "var gth = Math.floor($[2] * 255.99).toString(10); var g = 'rgb(' + [gth,gth,gth].join(',') + ')'; $.slice(0, 2).forEach(function (b, i) { if (b) { var lg = ctx.createLinearGradient(0, 40, 0, 460); lg.addColorStop(0, b > 0 ? 'white' : g); lg.addColorStop(1, b > 0 ? g : 'black'); ctx.fillStyle = lg; ctx.fillRect(40 + i * 325, 40, 325, 460); } });"
+					"js": "var gth = Math.floor($[2] * 255.99).toString(10); var g = 'rgb(' + [gth,gth,gth].join(',') + ')'; $.slice(0, 2).forEach(function (b, i) { if (b) { var lg = ctx.createLinearGradient(0, 40, 0, 460); lg.addColorStop(0, b > 0 ? 'white' : g); lg.addColorStop(1, b > 0 ? g : 'black'); ctx.fillStyle = lg; ctx.fillRect(40 + i * 335, 40, 335, 460); } });"
 				},
 				{
 					"uri": "Blocks.svg#Ev_ProxGround_adv"
