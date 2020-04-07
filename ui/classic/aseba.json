@@ -234,7 +234,7 @@
 				"initCodeExec": [
 					"topColor = [0, 0, 0]\n"
 				],
-				"clause": "topColor[0] `$[0] % 2 ? '>=' : '<'` 16 && topColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && topColor[2] `$[0] >= 4 ? '>=' : '<'` 16"
+				"clause": "topColor[0] `$[0] % 2 ? '>=' : '<'` 16 and topColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 and topColor[2] `$[0] >= 4 ? '>=' : '<'` 16"
 			}
 		},
 		{

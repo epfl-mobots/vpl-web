@@ -77,7 +77,7 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 	var initCodeDecl = [];
 	/** @type {Array.<string>} */
 	var clauses = [];
-	var usesCond = false;
+	var nextCond = 0;
 
 	c.forEach(function (evCode, i) {
 		evCode.initVarDecl && evCode.initVarDecl.forEach(function (fr) {
@@ -110,10 +110,11 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 				if (evCode.clause) {
 					section.clauseAssignment +=
 						"cond = " + evCode.clause + "\n" +
-						"if cond and not cond0[" + i + "]:\n" +
+						"if cond and not cond0[" + nextCond + "]:\n" +
 						"eventCache[" + evCode.clauseIndex + "] = True\n" +
-						"<\n";
-					usesCond = true;
+						"<\n" +
+						"cond0[" + nextCond + "] = cond\n";
+					nextCond++;
 				} else {
 					section.clauseAssignment +=
 						"eventCache[" + evCode.clauseIndex + "] = True\n";
@@ -155,8 +156,8 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 		}
 	}
 
-	if (usesCond) {
-		initCodeExec.unshift("cond0 = {}\n");
+	if (nextCond > 0) {
+		initCodeExec.unshift("cond0 = [False for i in range(" + nextCond + ")]\n");
 	}
 
 	// collect action code
