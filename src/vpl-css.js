@@ -1,5 +1,5 @@
 /*
-	Copyright 2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2019-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -237,6 +237,10 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 	case "border-top-right-radius":
 	case "border-bottom-right-radius":
 	case "border-bottom-left-radius":
+	case "border-top-left-cut":
+	case "border-top-right-cut":
+	case "border-bottom-left-cut":
+	case "border-bottom-right-cut":
 		// convert to [rx, ry]
 		var r = val
 			.replace(/ +/g, " ")
@@ -251,6 +255,7 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 			throw "Wrong number of radii";
 		}
 	case "border-radius":
+	case "border-cut":
 		// convert to 8 radii:
 		// 0-3=rx for top-left, top-right, bottom-right and bottom-left
 		// 4-7=ry for top-left, top-right, bottom-right and bottom-left
@@ -462,7 +467,7 @@ CSSParser.VPL.Box = function (props, lengthBase) {
 	this.marginBottom = 0;
 
 	this.sameBorder = true;
-	this.roundedCorners = false;
+	this.roundedCorners = false;	// or cut
 
 	this.borderLeftWidth = 0;
 	this.borderRightWidth = 0;
@@ -483,6 +488,11 @@ CSSParser.VPL.Box = function (props, lengthBase) {
 	this.borderTopRightRadius = [0, 0];
 	this.borderBottomRightRadius = [0, 0];
 	this.borderBottomLeftRadius = [0, 0];
+
+	this.borderTopLeftCut = false;
+	this.borderTopRightCut = false;
+	this.borderBottomLeftCut = false;
+	this.borderBottomRightCut = false;
 
 	this.paddingLeft = 0;
 	this.paddingRight = 0;
@@ -735,6 +745,37 @@ CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 			this.borderBottomLeftRadius = [props[key][3].toValue(lengthBase), props[key][7].toValue(lengthBase)];
 			this.roundedCorners = true;
 			break;
+		case "border-top-left-cut":
+			this.borderTopLeftRadius = props[key].map(function (l) { return l.toValue(lengthBase); });
+			this.borderTopLeftCut = true;
+			this.roundedCorners = true;
+			break;
+		case "border-top-right-cut":
+			this.borderTopRightRadius = props[key].map(function (l) { return l.toValue(lengthBase); });
+			this.borderTopRightCut = true;
+			this.roundedCorners = true;
+			break;
+		case "border-bottom-left-cut":
+			this.borderBottomLeftCut = props[key].map(function (l) { return l.toValue(lengthBase); });
+			this.borderBottomLeftCut = true;
+			this.roundedCorners = true;
+			break;
+		case "border-bottom-right-cut":
+			this.borderBottomRightRadius = props[key].map(function (l) { return l.toValue(lengthBase); });
+			this.borderBottomRightCut = true;
+			this.roundedCorners = true;
+			break;
+		case "border-cut":
+			this.borderTopLeftRadius = [props[key][0].toValue(lengthBase), props[key][4].toValue(lengthBase)];
+			this.borderTopRightRadius = [props[key][1].toValue(lengthBase), props[key][5].toValue(lengthBase)];
+			this.borderBottomRightRadius = [props[key][2].toValue(lengthBase), props[key][6].toValue(lengthBase)];
+			this.borderBottomLeftRadius = [props[key][3].toValue(lengthBase), props[key][7].toValue(lengthBase)];
+			this.borderTopLeftCut = true;
+			this.borderTopRightCut = true;
+			this.borderBottomLeftCut = true;
+			this.borderBottomRightCut = true;
+			this.roundedCorners = true;
+			break;
 		case "background-color":
 		case "background":	// color is the only supported property
 			this.backgroundColor = props[key];
@@ -887,6 +928,11 @@ CSSParser.VPL.Box.prototype.copy = function () {
 	box.borderTopRightRadius = this.borderTopRightRadius;
 	box.borderBottomRightRadius = this.borderBottomRightRadius;
 	box.borderBottomLeftRadius = this.borderBottomLeftRadius;
+
+	box.borderTopLeftCut = this.borderTopLeftCut;
+	box.borderTopRightCut = this.borderTopRightCut;
+	box.borderBottomLeftCut = this.borderBottomLeftCut;
+	box.borderBottomRightCut = this.borderBottomRightCut;
 
 	box.paddingLeft = this.paddingLeft;
 	box.paddingRight = this.paddingRight;

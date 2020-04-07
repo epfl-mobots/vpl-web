@@ -1,5 +1,5 @@
 /*
-	Copyright 2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2019-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -83,19 +83,35 @@ CSSParser.VPL.Box.prototype.drawAt = function (ctx, x, y, includePadding) {
 		var rx = Math.min(self.borderTopLeftRadius[0], w / 2);
 		var ry = Math.min(self.borderTopLeftRadius[1], h / 2);
 		ctx.moveTo(x, y + ry);
-		ctx.bezierCurveTo(x, y + ry / 2, x + rx / 2, y, x + rx, y);
+		if (self.borderTopLeftCut) {
+			ctx.lineTo(x + rx, y);
+		} else {
+			ctx.bezierCurveTo(x, y + ry / 2, x + rx / 2, y, x + rx, y);
+		}
 		rx = Math.min(self.borderTopRightRadius[0], w / 2);
 		ry = Math.min(self.borderTopRightRadius[1], h / 2);
 		ctx.lineTo(x + w - rx, y);
-		ctx.bezierCurveTo(x + w - rx / 2, y, x + w, y + ry / 2, x + w, y + ry);
+		if (self.borderTopRightCut) {
+			ctx.lineTo(x + w, y + ry);
+		} else {
+			ctx.bezierCurveTo(x + w - rx / 2, y, x + w, y + ry / 2, x + w, y + ry);
+		}
 		rx = Math.min(self.borderBottomRightRadius[0], w / 2);
 		ry = Math.min(self.borderBottomRightRadius[1], h / 2);
 		ctx.lineTo(x + w, y + h - ry);
-		ctx.bezierCurveTo(x + w, y + h - ry / 2, x + w - rx / 2, y + h, x + w - rx, y + h);
+		if (self.borderBottomRightCut) {
+			ctx.lineTo(x + w - rx, y + h);
+		} else {
+			ctx.bezierCurveTo(x + w, y + h - ry / 2, x + w - rx / 2, y + h, x + w - rx, y + h);
+		}
 		rx = Math.min(self.borderBottomLeftRadius[0], w / 2);
 		ry = Math.min(self.borderBottomLeftRadius[1], h / 2);
 		ctx.lineTo(x + rx, y + h);
-		ctx.bezierCurveTo(x + rx / 2, y + h, x, y + h - ry / 2, x, y + h - ry);
+		if (self.borderBottomLeftCut) {
+			ctx.lineTo(x, y + h - ry);
+		} else {
+			ctx.bezierCurveTo(x + rx / 2, y + h, x, y + h - ry / 2, x, y + h - ry);
+		}
 		ctx.closePath();
 	}
 
