@@ -197,6 +197,7 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 	case "color":
 	case "background-color":
 	case "background":	// only color is supported
+	case "border-cut-background":
 		if (!isColor(val)) {
 			throw "Unknown border color";
 		}
@@ -499,6 +500,7 @@ CSSParser.VPL.Box = function (props, lengthBase) {
 	this.paddingTop = 0;
 	this.paddingBottom = 0;
 
+	this.backdropColor = "transparent";
 	this.backgroundColor = "transparent";
 	this.color = "black";
 
@@ -776,6 +778,9 @@ CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 			this.borderBottomRightCut = true;
 			this.roundedCorners = true;
 			break;
+		case "backdrop-color":
+			this.backdropColor = props[key];
+			break;
 		case "background-color":
 		case "background":	// color is the only supported property
 			this.backgroundColor = props[key];
@@ -939,6 +944,7 @@ CSSParser.VPL.Box.prototype.copy = function () {
 	box.paddingTop = this.paddingTop;
 	box.paddingBottom = this.paddingBottom;
 
+	box.backdropColor = this.backdropColor;
 	box.backgroundColor = this.backgroundColor;
 	box.color = this.color;
 

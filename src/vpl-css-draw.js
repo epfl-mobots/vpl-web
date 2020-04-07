@@ -117,6 +117,12 @@ CSSParser.VPL.Box.prototype.drawAt = function (ctx, x, y, includePadding) {
 
 	ctx.save();
 
+	if (this.backdropColor !== "transparent") {
+		// display filled rectangle behind box
+		ctx.fillStyle = this.backdropColor;
+		ctx.fillRect(x, y, w, h);
+	}
+
 	ctx.beginPath();
 	if (this.roundedCorners) {
 		ctx.beginPath();

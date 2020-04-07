@@ -78,6 +78,8 @@ block.library {
 block.event {
 	background: #f70;
 	border: none #f70;
+	border-top-right-cut: 0.9vw;
+	backdrop-color: #830;
 }
 block.event-aux, block.state {
 	width: 5vw;
@@ -85,14 +87,17 @@ block.event-aux, block.state {
 	min-width: 27px;
 	min-height: 27px;
 	vertical-align: bottom;
+	border-top-right-cut: 0.75vw;
 }
 block.action {
 	background: #38f;
 	border: none #38f;
+	backdrop-color: #148;
 }
 block.state {
 	background: #0c0;
 	border: none #0c0;
+	backdrop-color: #060;
 }
 block.comment {
 	background: #aaa;
@@ -103,6 +108,7 @@ block.empty {
 	background: transparent;
 	width: 1.5vw;
 	min-width: 8px;
+	backdrop-color: transparent;
 }
 block.empty.event-aux {
 	height: 5vw;
@@ -193,6 +199,10 @@ block.library {
 	height: 4vw;
 	min-width: 32px;
 	min-height: 32px;
+}
+
+block.library.event, block.library.state {
+	border-top-right-cut: 0.6vw;
 }
 
 hint {

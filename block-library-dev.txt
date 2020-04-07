@@ -454,8 +454,11 @@ Box properties:
 - border-color
 - border-top-left-radius, border-top-right-radius, border-bottom-right-radius, border-bottom-left-radius
 - border-radius
+- border-top-left-cut, border-top-right-cut, border-bottom-right-cut, border-bottom-left-cut (same as *-radius, but straight cut instead of rounded)
+- border-cut (same as *-radius, but straight cut instead of rounded)
 - margin-left, margin-right, margin-top, margin-bottom
 - margin
+- backdrop-color (square box, typically to complement rounded or cut corners)
 - background-color
 - background (for background-color property only)
 - box-shadow ("inset" and spread radius ignored, one shadow only)
