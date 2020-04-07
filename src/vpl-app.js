@@ -250,6 +250,35 @@ A3a.vpl.Application.prototype.setHelpContent = function (html) {
 	this.helpBox = html ? new A3a.vpl.HTMLPanel(html) : null;
 };
 
+/** Set the help content based on dynamicHelp and the current language and ui settings
+	@return {void}
+*/
+A3a.vpl.Application.prototype.setHelpForCurrentAppState = function () {
+
+	/** Produce the union of two arrays
+		@param {Array.<*>} a
+		@param {Array.<*>} b
+		@return {Array.<*>}
+	*/
+	function mergeArrays(a, b) {
+		var c = a.slice();
+		b.forEach(function (el) {
+			if (c.indexOf(el) < 0) {
+				c.push(el);
+			}
+		});
+		return c;
+	}
+
+	if (this.dynamicHelp) {
+		var blocks = this.program.mode === A3a.vpl.mode.basic
+		 	? this.program.enabledBlocksBasic
+			: this.program.enabledBlocksAdvanced;
+		var html = this.dynamicHelp.generate(this.i18n.language, blocks);
+		this.setHelpContent(html);
+	}
+};
+
 /** Set or clear html content of Suspend box
 	@param {?string} html
 	@return {void}

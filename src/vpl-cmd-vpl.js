@@ -216,6 +216,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			app.program.setMode(app.program.mode === A3a.vpl.mode.basic
 				? A3a.vpl.mode.advanced
 				: A3a.vpl.mode.basic);
+			app.setHelpForCurrentAppState();
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.readOnly;
@@ -579,6 +580,9 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	this.commands.add("vpl:teacher", {
 		action: function (app, modifier) {
 			app.program.uiConfig.customizationMode = !app.program.uiConfig.customizationMode;
+			if (!app.program.uiConfig.customizationMode) {
+				app.setHelpForCurrentAppState();
+			}
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.readOnly;

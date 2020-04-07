@@ -27,6 +27,9 @@
 		"french.json",
 		"block-french.json",
 		"cmd-vpl-french.json",
-		"cmd-sim-french.json"
+		"cmd-sim-french.json",
+
+		"help-blocks-english.json",
+		"help-blocks-french.json"
 	]
 }

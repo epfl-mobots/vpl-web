@@ -199,6 +199,8 @@ function vplGetHashOption(key) {
 */
 function vplSetup(gui, rootDir) {
 	// handle overlays in gui
+	/** @type {Array.<Object>} */
+	var helpFragments = [];
 	if (gui && gui["overlays"]) {
 		gui["overlays"].forEach(function (filename) {
 			var overlay = JSON.parse(gui.rsrc[filename]);
@@ -233,6 +235,10 @@ function vplSetup(gui, rootDir) {
 								}
 							}
 						}
+						break;
+					case "help":
+						// remember help fragments
+						helpFragments.push(overlay[key]);
 						break;
 					}
 				}
@@ -629,6 +635,16 @@ function vplSetup(gui, rootDir) {
 	// help box
 	if (gui && gui["fragments"] && gui["fragments"]["help.html"]) {
 		app.setHelpContent(gui["fragments"]["help.html"].replace(/UIROOT/g, rootDir));
+	}
+	if (gui && gui["help"] || helpFragments.length > 0) {
+		app.dynamicHelp = new A3a.vpl.DynamicHelp();
+		if (gui && gui["help"]) {
+			app.dynamicHelp.add(gui["help"]);
+		}
+		helpFragments.forEach(function (h) {
+			app.dynamicHelp.add(h);
+		});
+		app.setHelpForCurrentAppState();
 	}
 
 	// css for html output

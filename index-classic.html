@@ -23,6 +23,7 @@
 
 	"fragments": {
 		"about.html": "<iframe src=\"vpl-about.html\" style=\"width:100%;height:100%;border:none;\"></iframe>",
+		"help.html": "<div><h1>Help</h1></div>",
 		"vpl-export-html.css": "td.events, td.then, td.actions {\n\tborder: solid 2px silver;\n\tborder-style: solid none;\n}\ntd.block {\n\tpadding: 15px;\n}\ntd.events {\n    min-width: 20px;\n    border-left-style: solid;\n    border-top-left-radius: 20px; \n    border-bottom-left-radius: 20px;\n}\ntd.event-aux {    transform: scale(0.8) translate(0,10px);\n}\ntd.actions {\n    min-width: 20px;\n    border-right-style: solid;\n    border-bottom-right-radius: 20px; \n    border-top-right-radius: 20px; \n}\ntable.program {\n\tborder-collapse: separate;\n\tborder-spacing: 0 10px;\n\tmargin-left: auto;\n\tmargin-right: auto;\n}\n"
 	},
 
@@ -41,7 +42,10 @@
 		"french.json",
 		"block-french.json",
 		"cmd-vpl-french.json",
-		"cmd-sim-french.json"
+		"cmd-sim-french.json",
+
+		"help-blocks-english.json",
+		"help-blocks-french.json"
 	]
 }
 </script>
@@ -3127,6 +3131,62 @@ sim-playground {
 }
 </script>
 
+<script type="application/json" id="help-blocks-english.json">
+{
+	"help": {
+		"en": {
+			"blocks": {
+				"button 1": [
+					"# Single button",
+					"Type: event or condition block",
+					"As an event block, the _Single button_ block triggers a rule when the specified button on the Thymio is touched.",
+					"As a condition block, the _Single button_ block allows the rule to be triggered only if the specified button is being touched at the moment the event in the leftmost block occurs."
+				],
+				"horiz prox": [
+					"# Proximity sensors",
+					"Type: event or condition block",
+					"As an event block, the _Proximity sensors_ block triggers a rule when the specified proximity sensors on the Thymio detect an obstacle, or the absence of obstacle, by reflecting more than a fixed amount of infrared emission. All the conditions must be satisfied simulaneously; the event occurs at the time the last specified sensor detects, or stops detecting, an obstacle.",
+					"As a condition block, the _Proximity sensors_ block allows the rule to be triggered only if the specified proximity sensors fullfil the presence of absence of an obstacle."
+				],
+				"motor": [
+					"# Set motor speeds",
+					"Type: action block",
+					"The _Set motor speeds_ block sets the target speed for the left and right motors. The combination of speeds makes the robot move forward or backward, possibly, turning at the same time, or to stop."
+				]
+			}
+		}
+	}
+}
+</script>
+
+<script type="application/json" id="help-blocks-french.json">
+{
+	"help": {
+		"fr": {
+			"blocks": {
+				"button 1": [
+					"# Bouton simple",
+					"Type: bloc d'événement ou de condition",
+					"Comme bloc d'événement, le bloc _bouton simple_ active la règle lorsqu'on touche le bouton spécifié sur le Thymio.",
+					"Comme bloc de condition, le bloc _bouton simple_ n'autorise l'activation de la règle que si l'on touche le bouton spécifié au moment où l'événement correspondant au 1er bloc à gauche survient."
+				],
+				"horiz prox": [
+					"# Capteurs de proximité",
+					"Type: bloc d'événement ou de condition",
+					"Comme bloc d'événement, le bloc _capteurs de proximité_ active la règle lorsque les capteurs de proxoîmité spécifiés détectent un obstacle, ou l'absence d'obstacle, en réfléchissant plus qu'une certaine fraction de l'émission infrarouge. Toutes les conditions doivent être remplies simultanément; l'événement ne se produit qu'au moment où le dernier capteur spécifié détecte (ou ne détecte plus) un obstacle.",
+					"Comme bloc de condition, le bloc _capteurs de proximité_ n'autorise l'activation de la règle que si les capteurs de proximité spécifiés détectent (ou pas) la présence d'un obstacle."
+				],
+				"motor": [
+					"# Change les vitesses des moteurs",
+					"Type: bloc d'action",
+					"Le bloc _change les vitesses des moteurs_ fixe la vitesse à atteindre pour les moteurs gauche et droit. La combinaison de vitesses permet d'avancer ou de reculer, de tourner et de s'arrêter."
+				]
+			}
+		}
+	}
+}
+</script>
+
 <title>VPL</title>
 
 <style>
@@ -3244,6 +3304,7 @@ pre#editor-lines {
 <script src="src/vpl-load.js"></script>
 <script src="src/vpl-com.js"></script>
 <script src="src/vpl-i18n.js"></script>
+<script src="src/vpl-dynamic-help.js"></script>
 <script src="src/vpl-main.js"></script>
 
 <script src="src/a3a-nodebase.js"></script>
