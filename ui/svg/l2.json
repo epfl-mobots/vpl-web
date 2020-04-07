@@ -28,26 +28,26 @@
 			"name": "state 256",
 			"l2": {
 				"initVarDecl": [
-					"int state256;\n"
+					"int state;\n"
 				],
 				"initCodeExec": [
-					"state256 = 0;\n"
+					"state = 0;\n"
 				],
 				"clause":
-					"state256 == `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`"
+					"state == `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`"
 			}
 		},
 		{
 			"name": "state 256 with mask",
 			"l2": {
 				"initVarDecl": [
-					"int state256;\n"
+					"int state;\n"
 				],
 				"initCodeExec": [
-					"state256 = 0;\n"
+					"state = 0;\n"
 				],
 				"clause":
-					"(state256 & `$.reduce(function (a, b, i) { return b !== 0 ? a | (1 << i) : a; }, 0)`) == `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << i) : a; }, 0)`"
+					"(state & `$.reduce(function (a, b, i) { return b !== 0 ? a | (1 << i) : a; }, 0)`) == `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << i) : a; }, 0)`"
 			}
 		},
 		{
@@ -262,13 +262,13 @@
 			"name": "counter comparison",
 			"l2": {
 				"initVarDecl": [
-					"int state256;\n"
+					"int state;\n"
 				],
 				"initCodeExec": [
-					"state256 = 0;\n"
+					"state = 0;\n"
 				],
 				"clause":
-					"state256 `['<=','<','==','>','>='][$[0] + 2]` `$[1]`"
+					"state `['<=','<','==','>','>='][$[0] + 2]` `$[1]`"
 			}
 		},
 		{
@@ -381,55 +381,50 @@
 						"leds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
 					]
 				],
-				"statement": [
-					"leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n",
-					"leds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n",
-					"bottomColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`];\n"
-				],
-				"statementWithoutInit": [
-					"leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n",
-					"leds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n"
-				]
+				"statement":
+					"leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\nleds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\nbottomColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`];\n",
+				"statementWithoutInit":
+					"leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`);\n"
 			}
 		},
 		{
 			"name": "set state 256",
 			"l2": {
 				"initVarDecl": [
-					"int state256;\n"
+					"int state;\n"
 				],
 				"initCodeExec": [
-					"state256 = 0;\n"
+					"state = 0;\n"
 				],
 				"initCodeDecl": [
 					[
-						"void display_state256() {\n",
-						"leds.circle((state256&1)*32,(state256&2)*16,(state256&4)*8,(state256&8)*4,(state256&16)*2,state256&32,(state256&64)/2,(state256&128)/4);\n",
+						"void display_state() {\n",
+						"leds.circle((state&1)*32,(state&2)*16,(state&4)*8,(state&8)*4,(state&16)*2,state&32,(state&64)/2,(state&128)/4);\n",
 						"}\n"
 					]
 				],
 				"statement":
-					"state256 = `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`;\ndisplay_state256();\n"
+					"state = `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`;\ndisplay_state();\n"
 			}
 		},
 		{
 			"name": "set state 256 with mask",
 			"l2": {
 				"initVarDecl": [
-					"int state256;\n"
+					"int state;\n"
 				],
 				"initCodeExec": [
-					"state256 = 0;\n"
+					"state = 0;\n"
 				],
 				"initCodeDecl": [
 					[
-						"void display_state256() {\n",
-						"leds.circle((state256&1)*32,(state256&2)*16,(state256&4)*8,(state256&8)*4,(state256&16)*2,state256&32,(state256&64)/2,(state256&128)/4);\n",
+						"void display_state() {\n",
+						"leds.circle((state&1)*32,(state&2)*16,(state&4)*8,(state&8)*4,(state&16)*2,state&32,(state&64)/2,(state&128)/4);\n",
 						"}\n"
 					]
 				],
 				"statement":
-					"state256 = state256 & `$.reduce(function (a, b, i) { return b === 0 ? a | (1 << i) : a; }, 0)` | `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << i) : a; }, 0)`;\ndisplay_state256();\n"
+					"state = state & `$.reduce(function (a, b, i) { return b === 0 ? a | (1 << i) : a; }, 0)` | `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << i) : a; }, 0)`;\ndisplay_state();\n"
 			}
 		},
 		{
@@ -536,20 +531,20 @@
 			"name": "arithmetic",
 			"l2": {
 				"initVarDecl": [
-					"int state256;\n"
+					"int state;\n"
 				],
 				"initCodeExec": [
-					"state256 = 0;\n"
+					"state = 0;\n"
 				],
 				"initCodeDecl": [
 					[
-						"void display_state256() {\n",
-						"leds.circle((state256&1)*32,(state256&2)*16,(state256&4)*8,(state256&8)*4,(state256&16)*2,state256&32,(state256&64)/2,(state256&128)/4);\n",
+						"void display_state() {\n",
+						"leds.circle((state&1)*32,(state&2)*16,(state&4)*8,(state&8)*4,(state&16)*2,state&32,(state&64)/2,(state&128)/4);\n",
 						"}\n"
 					]
 				],
 				"statement":
-					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if (state256 ' + ($[0] == 2 ? '< ' + $[1] + ') {\\nstate256 = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ') {\\nstate256 = 255\\n') + '} else {\\nstate256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\n}\\n' : 'state256 ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + ';\\n'`display_state256();\n"
+					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if (state ' + ($[0] == 2 ? '< ' + $[1] + ') {\\nstate = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ') {\\nstate = 255\\n') + '} else {\\nstate ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\n}\\n' : 'state ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + ';\\n'`display_state();\n"
 			}
 		}
 	]
