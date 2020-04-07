@@ -62,7 +62,7 @@ A3a.vpl.validateUI = function (ui) {
 			for (var i = 0; i < drawArr.length; i++) {
 				if (drawArr[i]["uri"]) {
 					var uriDec = A3a.vpl.Canvas.decodeURI(drawArr[i]["uri"]);
-					if (ui.svg[f].hasAncestor(id, uriDec.id)) {
+					if (ui.svg[uriDec.f].hasAncestor(id, uriDec.id)) {
 						return true;
 					}
 				}
