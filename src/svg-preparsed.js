@@ -1477,5 +1477,8 @@ SVG.Preparsed.prototype.hasElement = function (elementId) {
 */
 SVG.Preparsed.prototype.hasAncestor = function (elementId, ancestorId) {
 	var ancestor = SVG.Preparsed.findDescendentElement(this.doc, ancestorId);
+	if (ancestor == null) {
+		throw "Undefined SVG element id " + ancestorId;
+	}
 	return SVG.Preparsed.findDescendentElement(ancestor, elementId) != null;
 }
