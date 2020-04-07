@@ -181,36 +181,37 @@
 			"name": "state",
 			"aseba": {
 				"initVarDecl": [
-					"var state[4]\n"
+					"var state\n"
 				],
 				"initCodeExec": [
-					"state = [0, 0, 0, 0]\n"
+					"state = 0\n"
 				],
-				"clause": "`$.map(function (v, i) { return 'state[' + i + ']' + (v >= 0 ? ' == 1' : ' == 0'); }).filter(function (v, i) { return $[i]; }).join(' and ')`"
+				"clause":
+				"(state & `$.reduce(function (a, b, i) { return b !== 0 ? a | [128,2,32,8][i] : a; }, 0)`) == `$.reduce(function (a, b, i) { return b === 1 ? a | [128,2,32,8][i] : a; }, 0)`"
 			}
 		},
 		{
 			"name": "state 8",
 			"aseba": {
 				"initVarDecl": [
-					"var state8\n"
+					"var state\n"
 				],
 				"initCodeExec": [
-					"state8 = 0\n"
+					"state = 0\n"
 				],
-				"clause": "state8 == `$[0]`"
+				"clause": "state == `1 << $[0]`"
 			}
 		},
 		{
 			"name": "counter comparison",
 			"aseba": {
 				"initVarDecl": [
-					"var counter\n"
+					"var state\n"
 				],
 				"initCodeExec": [
-					"counter = 0\n"
+					"state = 0\n"
 				],
-				"clause": "counter `$[0] === 0 ? '==' : $[0] > 0 ? '>=' : '<='` `$[1]`"
+				"clause": "state `$[0] === 0 ? '==' : $[0] > 0 ? '>=' : '<='` `$[1]`"
 			}
 		},
 		{
@@ -531,20 +532,20 @@
 			"name": "set state",
 			"aseba": {
 				"initVarDecl": [
-					"var state[4]\n"
+					"var state\n"
 				],
 				"initCodeExec": [
-					"state = [0, 0, 0, 0]\n"
+					"state = 0\n"
 				],
 				"initCodeDecl": [
 					[
 						"sub display_state\n",
-						"call leds.circle(0,state[1]*32,0,state[3]*32,0,state[2]*32,0,state[0]*32)\n"
+						"call leds.circle((state&1)<<5,(state&2)<<4,(state&4)<<3,(state&8)<<2,(state&16)<<1,state&32,(state&64)>>1,(state&128)>>2)\n"
 					]
 				],
 				"statement": [
-					"`$.map(function (v, i) { return v ? 'state[' + i + '] = ' + (v > 0 ? '1' : '0') + '\\n' : ''; }).join('')`",
-					"`$[0] || $[1] || $[2] || $[3] ? 'callsub display_state\\n' : ''`"
+					"state = state & `0xff ^ $.reduce(function (a, b, i) { return b !== 0 ? a | [128,2,32,8][i] : a; }, 0)` | `$.reduce(function (a, b, i) { return b === 1 ? a | [128,2,32,8][i] : a; }, 0)`\n",
+					"callsub display_state\n"
 				]
 			}
 		},
@@ -552,20 +553,20 @@
 			"name": "toggle state",
 			"aseba": {
 				"initVarDecl": [
-					"var state[4]\n"
+					"var state\n"
 				],
 				"initCodeExec": [
-					"state = [0, 0, 0, 0]\n"
+					"state = 0\n"
 				],
 				"initCodeDecl": [
 					[
 						"sub display_state\n",
-						"call leds.circle(0,state[1]*32,0,state[3]*32,0,state[2]*32,0,state[0]*32)\n"
+						"call leds.circle((state&1)<<5,(state&2)<<4,(state&4)<<3,(state&8)<<2,(state&16)<<1,state&32,(state&64)>>1,(state&128)>>2)\n"
 					]
 				],
 				"statement": [
-					"`$.map(function (v, i) { return v ? 'state[' + i + '] = 1 - state[' + i + ']\\n' : ''; }).join('')`",
-					"`$[0] || $[1] || $[2] || $[3] ? 'callsub display_state\\n' : ''`"
+					"state ^= `$.reduce(function (a, b, i) { return b ? a | [128,2,32,8][i] : a; }, 0)`\n",
+					"callsub display_state\n"
 				]
 			}
 		},
@@ -573,20 +574,20 @@
 			"name": "set state 8",
 			"aseba": {
 				"initVarDecl": [
-					"var state8\n"
+					"var state\n"
 				],
 				"initCodeExec": [
-					"state8 = 0\n"
+					"state = 0\n"
 				],
 				"initCodeDecl": [
 					[
-						"sub display_state8\n",
-						"call leds.circle((state8==0)*32, (state8==1)*32, (state8==2)*32, (state8==3)*32, (state8==4)*32, (state8==5)*32, (state8==6)*32, (state8==7)*32)\n"
+						"sub display_state\n",
+						"call leds.circle((state&1)<<5,(state&2)<<4,(state&4)<<3,(state&8)<<2,(state&16)<<1,state&32,(state&64)>>1,(state&128)>>2)\n"
 					]
 				],
 				"statement": [
-					"state8 = `$[0]`\n",
-					"callsub display_state8\n"
+					"state = `1 << $[0]`\n",
+					"callsub display_state\n"
 				],
 				"statementWithoutInit": [
 					"call leds.circle(`$[0] === 0 ? 32 : 0`, `$[0] === 1 ? 32 : 0`, `$[0] === 2 ? 32 : 0`, `$[0] === 3 ? 32 : 0`, ",
@@ -598,20 +599,20 @@
 			"name": "change state 8",
 			"aseba": {
 				"initVarDecl": [
-					"var state8\n"
+					"var state\n"
 				],
 				"initCodeExec": [
-					"state8 = 0\n"
+					"state = 0\n"
 				],
 				"initCodeDecl": [
 					[
-						"sub display_state8\n",
-						"call leds.circle((state8==0)*32, (state8==1)*32, (state8==2)*32, (state8==3)*32, (state8==4)*32, (state8==5)*32, (state8==6)*32, (state8==7)*32)\n"
+						"sub display_state\n",
+						"call leds.circle((state&1)<<5,(state&2)<<4,(state&4)<<3,(state&8)<<2,(state&16)<<1,state&32,(state&64)>>1,(state&128)>>2)\n"
 					]
 				],
 				"statement": [
-					"state8 = (state8 + `$[0] > 0 ? 1 : 7`) % 8\n",
-					"callsub display_state8\n"
+					"state = `$[0] > 0 ? '(state << 1) & 0xff | (state >> 7) & 1' : '(state >> 1) & 0x7f | (state << 7) & 0x80'`\n",
+					"callsub display_state\n"
 				],
 				"statementWithoutInit": [
 					"call leds.circle(`$[0] === 0 ? 32 : 0`, `$[0] === 1 ? 32 : 0`, `$[0] === 2 ? 32 : 0`, `$[0] === 3 ? 32 : 0`, ",
@@ -623,20 +624,20 @@
 			"name": "set counter",
 			"aseba": {
 				"initVarDecl": [
-					"var counter\n"
+					"var state\n"
 				],
 				"initCodeExec": [
-					"counter = 0\n"
+					"state = 0\n"
 				],
 				"initCodeDecl": [
 					[
-						"sub display_counter\n",
-						"call leds.circle((counter&1)<<5,(counter&2)<<4,(counter&4)<<3,(counter&8)<<2,(counter&16)<<1,counter&32,(counter&64)>>1,(counter&128)>>2)\n"
+						"sub display_state\n",
+						"call leds.circle((state&1)<<5,(state&2)<<4,(state&4)<<3,(state&8)<<2,(state&16)<<1,state&32,(state&64)>>1,(state&128)>>2)\n"
 					]
 				],
 				"statement": [
-					"`$[0] === 0 ? 'counter = 0' : $[0] > 0 ? 'if counter < 255 then\\ncounter++\\nend' : 'if counter > 0 then\\ncounter--\\nend'`\n",
-					"callsub display_counter\n"
+					"`$[0] === 0 ? 'state = 0' : $[0] > 0 ? 'if state < 255 then\\nstate++\\nend' : 'if state > 0 then\\nstate--\\nend'`\n",
+					"callsub display_state\n"
 				]
 			}
 		},
