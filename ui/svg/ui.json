@@ -742,36 +742,36 @@
 					"st": "visibility:`$[0]===2?'visible':'hidden'`"
 				},
 				{
-					"id": "Btn2_State0-2",
-					"st": "fill:`$[1]&1?'#a6f7d8':'transparent'`"
+					"id": "State0",
+					"st": "fill:`$[1]&1?'#ff6040':'transparent'`"
 				},
 				{
-					"id": "Btn2_State1-2",
-					"st": "fill:`$[1]&2?'#a6f7d8':'transparent'`"
+					"id": "State1",
+					"st": "fill:`$[1]&2?'#ff6040':'transparent'`"
 				},
 				{
-					"id": "Btn2_State2-2",
-					"st": "fill:`$[1]&4?'#a6f7d8':'transparent'`"
+					"id": "State2",
+					"st": "fill:`$[1]&4?'#ff6040':'transparent'`"
 				},
 				{
-					"id": "Btn2_State3-2",
-					"st": "fill:`$[1]&8?'#a6f7d8':'transparent'`"
+					"id": "State3",
+					"st": "fill:`$[1]&8?'#ff6040':'transparent'`"
 				},
 				{
-					"id": "Btn2_State4-2",
-					"st": "fill:`$[1]&16?'#a6f7d8':'transparent'`"
+					"id": "State4",
+					"st": "fill:`$[1]&16?'#ff6040':'transparent'`"
 				},
 				{
-					"id": "Btn2_State5-2",
-					"st": "fill:`$[1]&32?'#a6f7d8':'transparent'`"
+					"id": "State5",
+					"st": "fill:`$[1]&32?'#ff6040':'transparent'`"
 				},
 				{
-					"id": "Btn2_State6-2",
-					"st": "fill:`$[1]&64?'#a6f7d8':'transparent'`"
+					"id": "State6",
+					"st": "fill:`$[1]&64?'#ff6040':'transparent'`"
 				},
 				{
-					"id": "Btn2_State7-2",
-					"st": "fill:`$[1]&128?'#a6f7d8':'transparent'`"
+					"id": "State7",
+					"st": "fill:`$[1]&128?'#ff6040':'transparent'`"
 				}
 			]
 		},
@@ -787,7 +787,7 @@
 					"uri": "Blocks.svg#statesEv_Bg"
 				},
 				{
-					"uri": "Blocks.svg#StatesOff"
+					"uri": "Blocks.svg#StatesOff_bas"
 				}
 			],
 			"defaultParameters": [false, false, false, false, false, false, false, false],
@@ -847,7 +847,7 @@
 					"uri": "Blocks.svg#statesEv_Bg_adv"
 				},
 				{
-					"uri": "Blocks.svg#StatesOff_Adv"
+					"uri": "Blocks.svg#StatesOff_adv"
 				}
 
 
@@ -1474,6 +1474,42 @@
 			}
 		},
 		{
+			"name": "sd play",
+			"type": "action",
+			"modes": ["advanced"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Act_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ac_SD_play"
+				}
+			],
+			"defaultParameters": [],
+			"pushbuttons": [
+				{
+					"id": "ComparatorDown",
+					"newParameters": ""
+				}
+			]
+
+		},
+		{
+			"name": "sd stop",
+			"type": "action",
+			"modes": ["advanced"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Act_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ac_SD_stop"
+				}
+			],
+			"defaultParameters": []
+
+		},
+		{
 			"name": "set state 256",
 			"type": "action",
 			"modes": ["basic"],
@@ -1485,7 +1521,7 @@
 					"uri": "Blocks.svg#statesAct_Bg"
 				},
 				{
-					"uri": "Blocks.svg#StatesOff"
+					"uri": "Blocks.svg#StatesOff_bas"
 				}
 			],
 			"defaultParameters": [false, false, false, false, false, false, false, false],
@@ -1545,7 +1581,7 @@
 					"uri": "Blocks.svg#statesAct_Bg_adv"
 				},
 				{
-					"uri": "Blocks.svg#StatesOff_Adv"
+					"uri": "Blocks.svg#StatesOff_adv"
 				}
 
 			],
@@ -1730,36 +1766,36 @@
 					"st": "visibility:hidden"
 				},
 				{
-					"id": "Btn2_State0-3",
-					"st": "fill:`$[1]&1?'#a6f7d8':'transparent'`"
+					"id": "Led0",
+					"st": "fill:`$[1]&1?'#338bff':'transparent'`"
 				},
 				{
-					"id": "Btn2_State1-3",
-					"st": "fill:`$[1]&2?'#a6f7d8':'transparent'`"
+					"id": "Led1",
+					"st": "fill:`$[1]&2?'#338bff':'transparent'`"
 				},
 				{
-					"id": "Btn2_State2-3",
-					"st": "fill:`$[1]&4?'#a6f7d8':'transparent'`"
+					"id": "Led2",
+					"st": "fill:`$[1]&4?'#338bff':'transparent'`"
 				},
 				{
-					"id": "Btn2_State3-3",
-					"st": "fill:`$[1]&8?'#a6f7d8':'transparent'`"
+					"id": "Led3",
+					"st": "fill:`$[1]&8?'#338bff':'transparent'`"
 				},
 				{
-					"id": "Btn2_State4-3",
-					"st": "fill:`$[1]&16?'#a6f7d8':'transparent'`"
+					"id": "Led4",
+					"st": "fill:`$[1]&16?'#338bff':'transparent'`"
 				},
 				{
-					"id": "Btn2_State5-3",
-					"st": "fill:`$[1]&32?'#a6f7d8':'transparent'`"
+					"id": "Led5",
+					"st": "fill:`$[1]&32?'#338bff':'transparent'`"
 				},
 				{
-					"id": "Btn2_State6-3",
-					"st": "fill:`$[1]&64?'#a6f7d8':'transparent'`"
+					"id": "Led6",
+					"st": "fill:`$[1]&64?'#338bff':'transparent'`"
 				},
 				{
-					"id": "Btn2_State7-3",
-					"st": "fill:`$[1]&128?'#a6f7d8':'transparent'`"
+					"id": "Led7",
+					"st": "fill:`$[1]&128?'#338bff':'transparent'`"
 				},
 				{
 					"id": "Btn_Saturate_On",
