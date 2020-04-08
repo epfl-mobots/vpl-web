@@ -787,7 +787,7 @@
 					"uri": "Blocks.svg#statesEv_Bg"
 				},
 				{
-					"uri": "Blocks.svg#StatesOff-2"
+					"uri": "Blocks.svg#StatesOff"
 				}
 			],
 			"defaultParameters": [false, false, false, false, false, false, false, false],
@@ -1485,7 +1485,7 @@
 					"uri": "Blocks.svg#statesAct_Bg"
 				},
 				{
-					"uri": "Blocks.svg#StatesOff-2"
+					"uri": "Blocks.svg#StatesOff"
 				}
 			],
 			"defaultParameters": [false, false, false, false, false, false, false, false],
@@ -1626,6 +1626,43 @@
 					"id": "Led7",
 					"st": "visibility:`$[7]?'visible':'hidden'`"
 				}
+			]
+		},
+		{
+			"name": "setTimer",
+			"type": "action",
+			"modes": ["advanced"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Act_bg"
+				},
+				{
+					"uri": "Blocks.svg#Ac_Timer"
+				}
+
+			],
+			"defaultParameters": [],
+
+			"pushbuttons": [
+				{
+					"id": "SecUp",
+					"newParameters": ""
+				},
+				{
+					"id": "SecDown",
+					"newParameters": ""
+				},
+				{
+					"id": "TSecUp",
+					"newParameters": ""
+				},
+				{
+					"id": "TSecDown",
+					"newParameters": ""
+				}
+			],
+			"styles": [
+
 			]
 		},
 		{
