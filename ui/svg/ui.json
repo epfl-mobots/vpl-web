@@ -1782,6 +1782,11 @@
 		"Blocks.svg"
 	],
 	"overlays": [
+		"aseba.json",
+		"l2.json",
+		"js.json",
+		"python.json",
+
 		"toolbars.json",
 		"buttons.json",
 		"cmd-vpl-english.json",

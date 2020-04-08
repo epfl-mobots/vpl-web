@@ -177,20 +177,6 @@
 			}
 		},
 		{
-			"name": "horiz prox front",
-			"aseba": {
-				"sectionBegin": "onevent prox\n",
-				"clauseAnd": "`$[i] ? 'prox.horizontal' + '[' + i + '] ' + ($[i] > 0 ? '>= 2000' : '<= 1000') : ''`"
-			}
-		},
-		{
-			"name": "horiz prox back",
-			"aseba": {
-				"sectionBegin": "onevent prox\n",
-				"clauseAnd": "`$[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= 2000' : '<= 1000') : ''`"
-			}
-		},
-		{
 			"name": "horiz prox front adv",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
@@ -558,22 +544,6 @@
 					"note_index = 1\n",
 					"note_count = 6\n",
 					"call sound.freq(notes[0], durations[0])\n"
-				]
-			}
-		},
-		{
-			"name": "set timer",
-			"aseba": {
-				"initCodeExec": [
-					[
-						"# stop timer 0\n",
-						"timer.period[0] = 0\n"
-					],
-					"timerElapsed = 0\n"
-				],
-				"statement": [
-					"timer.period[0] = `Math.round(1000 * $[0])`\n",
-					"timerElapsed = 0\n"
 				]
 			}
 		},

@@ -88,12 +88,6 @@
 			"name": "ground 1"
 		},
 		{
-			"name": "horiz prox front"
-		},
-		{
-			"name": "horiz prox back"
-		},
-		{
 			"name": "horiz prox front adv"
 		},
 		{
@@ -252,9 +246,6 @@
 					"this.set(\"leds.circle\", [counter&1?1:0,counter&2?1:0,counter&4?1:0,counter&8?1:0,counter&16?1:0,counter&32?1:0,counter&64?1:0,counter&128?1:0]);\n"
 				]
 			}
-		},
-		{
-			"name": "set timer"
 		},
 		{
 			"name": "arithmetic",

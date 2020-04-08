@@ -40,12 +40,6 @@
 			"name": "ground 1"
 		},
 		{
-			"name": "horiz prox front"
-		},
-		{
-			"name": "horiz prox back"
-		},
-		{
 			"name": "horiz prox front adv"
 		},
 		{
@@ -104,9 +98,6 @@
 		},
 		{
 			"name": "set state 256 with mask"
-		},
-		{
-			"name": "set timer"
 		},
 		{
 			"name": "arithmetic"

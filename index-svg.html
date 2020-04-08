@@ -1796,6 +1796,11 @@
 		"Blocks.svg"
 	],
 	"overlays": [
+		"aseba.json",
+		"l2.json",
+		"js.json",
+		"python.json",
+
 		"toolbars.json",
 		"buttons.json",
 		"cmd-vpl-english.json",
@@ -2174,20 +2179,6 @@ sim-playground {
 			}
 		},
 		{
-			"name": "horiz prox front",
-			"aseba": {
-				"sectionBegin": "onevent prox\n",
-				"clauseAnd": "`$[i] ? 'prox.horizontal' + '[' + i + '] ' + ($[i] > 0 ? '>= 2000' : '<= 1000') : ''`"
-			}
-		},
-		{
-			"name": "horiz prox back",
-			"aseba": {
-				"sectionBegin": "onevent prox\n",
-				"clauseAnd": "`$[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= 2000' : '<= 1000') : ''`"
-			}
-		},
-		{
 			"name": "horiz prox front adv",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
@@ -2559,22 +2550,6 @@ sim-playground {
 			}
 		},
 		{
-			"name": "set timer",
-			"aseba": {
-				"initCodeExec": [
-					[
-						"# stop timer 0\n",
-						"timer.period[0] = 0\n"
-					],
-					"timerElapsed = 0\n"
-				],
-				"statement": [
-					"timer.period[0] = `Math.round(1000 * $[0])`\n",
-					"timerElapsed = 0\n"
-				]
-			}
-		},
-		{
 			"name": "arithmetic",
 			"aseba": {
 				"initVarDecl": [
@@ -2764,22 +2739,6 @@ sim-playground {
 					"bottomColor = [0, 0, 0];\n"
 				],
 				"clause": "bottomColor[0] `$[0] % 2 ? '>=' : '<'` 16 && bottomColor[1] `$[0] % 4 >= 2 ? '>=' : '<'` 16 && bottomColor[2] `$[0] >= 4 ? '>=' : '<'` 16"
-			}
-		},
-		{
-			"name": "horiz prox front",
-			"l2": {
-				"sectionBegin": "onevent prox {\n",
-				"sectionEnd": "}\n",
-				"clauseAnd": "`$[i] ? 'prox.horizontal[' + i + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
-			}
-		},
-		{
-			"name": "horiz prox back",
-			"l2": {
-				"sectionBegin": "onevent prox {\n",
-				"sectionEnd": "}\n",
-				"clauseAnd": "`$[i] ? 'prox.horizontal[' + (i + 5) + '] ' + ($[i] > 0 ? '>= 2' : '<= 1') + '000' : ''`"
 			}
 		},
 		{
@@ -3120,16 +3079,6 @@ sim-playground {
 			}
 		},
 		{
-			"name": "set timer",
-			"l2": {
-				"initCodeExec": [
-					"// stop timer 0\ntimer.period[0] = 0;\n"
-				],
-				"statement":
-					"timer.period[0] = `Math.round(1000 * $[0])`;\n"
-			}
-		},
-		{
 			"name": "arithmetic",
 			"l2": {
 				"initVarDecl": [
@@ -3242,12 +3191,6 @@ sim-playground {
 		},
 		{
 			"name": "ground 1"
-		},
-		{
-			"name": "horiz prox front"
-		},
-		{
-			"name": "horiz prox back"
 		},
 		{
 			"name": "horiz prox front adv"
@@ -3410,9 +3353,6 @@ sim-playground {
 			}
 		},
 		{
-			"name": "set timer"
-		},
-		{
 			"name": "arithmetic",
 			"js": {
 				"initVarDecl": [
@@ -3475,12 +3415,6 @@ sim-playground {
 			"name": "ground 1"
 		},
 		{
-			"name": "horiz prox front"
-		},
-		{
-			"name": "horiz prox back"
-		},
-		{
 			"name": "horiz prox front adv"
 		},
 		{
@@ -3539,9 +3473,6 @@ sim-playground {
 		},
 		{
 			"name": "set state 256 with mask"
-		},
-		{
-			"name": "set timer"
 		},
 		{
 			"name": "arithmetic"
