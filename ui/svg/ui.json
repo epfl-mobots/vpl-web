@@ -26,7 +26,7 @@
 	"fragments": {
 		"about.html": "<iframe src=\"vpl-about.html\" style=\"width:100%;height:100%;border:none;\"></iframe>",
 		"help.html": "<iframe src=\"UIROOT/help/vpl_help.html\" style=\"width:100%;height:100%;border:none;\"></iframe>",
-		"vpl-export-html.css": "td.events, td.then, td.actions {\n\tborder: solid 2px silver;\n\tborder-style: solid none;\n}\ntd.block {\n\tpadding: 15px;\n}\ntd.events {\n    min-width: 20px;\n    border-left-style: solid;\n    border-top-left-radius: 20px; \n    border-bottom-left-radius: 20px;\n}\ntd.state, td.event-aux {    transform: scale(0.8) translate(0,10px);\n}\ntd.actions {\n    min-width: 20px;\n    border-right-style: solid;\n    border-bottom-right-radius: 20px; \n    border-top-right-radius: 20px; \n}\ntable.program {\n\tborder-collapse: separate;\n\tborder-spacing: 0 10px;\n\tmargin-left: auto;\n\tmargin-right: auto;\n}\n"
+		"vpl-export-html.css": "td.events, td.then, td.actions {\n\tborder: solid 2px silver;\n\tborder-style: solid none;\n}\ntd.block {\n\tpadding: 15px;\n}\ntd.events {\n    min-width: 20px;\n    border-left-style: solid;\n    border-top-left-radius: 20px; \n    border-bottom-left-radius: 20px;\n}\ntd.event-aux {    transform: scale(0.8) translate(0,10px);\n}\ntd.actions {\n    min-width: 20px;\n    border-right-style: solid;\n    border-bottom-right-radius: 20px; \n    border-top-right-radius: 20px; \n}\ntable.program {\n\tborder-collapse: separate;\n\tborder-spacing: 0 10px;\n\tmargin-left: auto;\n\tmargin-right: auto;\n}\n"
 	},
 
 	"blocks": [
@@ -40,7 +40,7 @@
 			"modes": ["basic", "advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ev_Start"
@@ -54,7 +54,7 @@
 			"modes": ["basic", "advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Bg_Thymio"
@@ -68,27 +68,27 @@
 				{
 					"id": "Btn2_Center",
 					"val": 0,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Forward",
 					"val": 1,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Backward",
 					"val": 2,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Right",
 					"val": 3,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Left",
 					"val": 4,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				}
 			]
 		},
@@ -98,7 +98,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Rot360Rail"
@@ -123,10 +123,10 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
-					"uri": "Blocks.svg#Ground_accel_1"
+					"uri": "Blocks.svg#Ground_accel"
 				},
 				{
 					"uri": "Blocks.svg#ThymioSideDown"
@@ -139,10 +139,10 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
-					"uri": "Blocks.svg#Ground_accel_0"
+					"uri": "Blocks.svg#Ground_accel"
 				},
 				{
 					"uri": "Blocks.svg#ThymioUpsideDown"
@@ -155,7 +155,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Rot360Rail"
@@ -180,7 +180,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Rot360Rail"
@@ -205,7 +205,7 @@
 			"modes": ["basic", "advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ev_Acc_Hit"
@@ -219,7 +219,7 @@
 			"modes": [],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ev_Acc_Fall"
@@ -233,7 +233,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ev_Clap"
@@ -247,7 +247,7 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ev_ProxGr_bas"
@@ -258,7 +258,7 @@
 				{
 					"id": "btn2_ProxGd_detection",
 					"val": [true, false],
-					"st": ["fill:#ffffff;stroke:#263238", "stroke:#263238;fill:#000000"]
+					"st": ["fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:black"]
 				}
 			]
 		},
@@ -268,7 +268,7 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ev_ProxGr_med"
@@ -290,12 +290,12 @@
 				{
 					"id": "Btn3_ProxGd0",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:#000000"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:#000000"]
 				},
 				{
 					"id": "Btn3_ProxGd1",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:#000000"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:#000000"]
 				}
 			],
 			"validation": [
@@ -311,7 +311,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"js": "var gth = Math.floor($[2] * 255.99).toString(10); var g = 'rgb(' + [gth,gth,gth].join(',') + ')'; $.slice(0, 2).forEach(function (b, i) { if (b) { var lg = ctx.createLinearGradient(0, 40, 0, 460); lg.addColorStop(0, b > 0 ? 'white' : g); lg.addColorStop(1, b > 0 ? g : 'black'); ctx.fillStyle = lg; ctx.fillRect(40 + i * 335, 40, 335, 460); } });"
@@ -359,12 +359,12 @@
 				{
 					"id": "Btn3_ProxGd0_adv",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:black;stroke-linecap:round"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:#000000"]
 				},
 				{
 					"id": "Btn3_ProxGd1_adv",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:black;stroke-linecap:round"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:#000000"]
 				}
 			],
 			"validation": [
@@ -374,168 +374,14 @@
 				}
 			]
 		},
-		{
-			"name": "horiz prox front",
-			"type": "event",
-			"modes": ["basic"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_ProxH_Front_med"
-				},
-				{
-					"js": "ctx.lineWidth = 20; ctx.strokeStyle = '#6200ea'; ctx.lineCap = 'round'; var rg = ctx.createRadialGradient(0, 0, 300, 0, 0, 750); rg.addColorStop(0, 'red'); rg.addColorStop(1, 'rgba(255,0,0,0)'); ctx.fillStyle = rg; var r = 620; var w = 70; var sl = 0.2; $.forEach(function (b, i) { if (b) { var phi = 0.33 * (i - 2); ctx.save(); ctx.translate(500, 750); ctx.rotate(phi); var rgr = b > 0 ? 320 : 450; ctx.beginPath(); ctx.moveTo(-sl * 200, -300-200); ctx.lineTo(-sl * rgr, -300 - rgr); ctx.lineTo(sl * rgr, -300 - rgr); ctx.lineTo(sl * 200, -300-200); ctx.fill(); ctx.beginPath(); ctx.moveTo(-w, -r); ctx.lineTo(w, -r); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.strokeStyle = b < 0 ? '#607d8b' : '#6200ea'; ctx.stroke(); ctx.restore(); } });"
-				}
-			],
-			"styles": [
-				{
-					"id": "Obstacles",
-					"st": "visibility:hidden"
-				},
-				{
-					"id": "IR_gradients_obst",
-					"st": "visibility:hidden"
-				},
-				{
-					"id": "IR_gradients_empty",
-					"st": "visibility:hidden"
-				},
-				{
-					"id": "Led_0",
-					"st": "visibility:`$[0]>0?'visible':'hidden'`"
-				},
-				{
-					"id": "Led_1",
-					"st": "visibility:`$[1]>0?'visible':'hidden'`"
-				},
-				{
-					"id": "Led_2",
-					"st": "visibility:`$[2]>0?'visible':'hidden'`"
-				},
-				{
-					"id": "Led_2_",
-					"st": "visibility:`$[2]>0?'visible':'hidden'`"
-				},
-				{
-					"id": "Led_3",
-					"st": "visibility:`$[3]>0?'visible':'hidden'`"
-				},
-				{
-					"id": "Led_4",
-					"st": "visibility:`$[4]>0?'visible':'hidden'`"
-				}
-			],
-			"defaultParameters": [0, 0, 0, 0, 0],
-			"typicalParameters": [0, 0, 1, 0, 0],
-			"buttons": [
-				{
-					"id": "Btn3_Prox0",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox1",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox2",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox3",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox4",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				}
-			],
-			"validation": [
-				{
-					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
-					"warning": "No proximity sensor specified"
-				}
-			]
-		},
-		{
-			"name": "horiz prox back",
-			"type": "event",
-			"modes": ["basic"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Events_bg"
-				},
-				{
-					"uri": "Blocks.svg#Ev_ProxH_Back_med"
-				},
-				{
-					"js": "ctx.lineWidth = 20; ctx.strokeStyle = '#6200ea'; ctx.lineCap = 'round'; var rg = ctx.createRadialGradient(0, 0, 300, 0, 0, 750); rg.addColorStop(0, 'red'); rg.addColorStop(1, 'rgba(255,0,0,0)'); ctx.fillStyle = rg; var r = 620; var w = 70; var sl = 0.2; $.forEach(function (b, i) { if (b) { ctx.save(); ctx.translate(335 + 330 * i, 250); ctx.rotate(Math.PI); var rgr = b > 0 ? 320 : 450; ctx.beginPath(); ctx.moveTo(-sl * 200, -300-200); ctx.lineTo(-sl * rgr, -300 - rgr); ctx.lineTo(sl * rgr, -300 - rgr); ctx.lineTo(sl * 200, -300-200); ctx.fill(); ctx.beginPath(); ctx.moveTo(-w, -r); ctx.lineTo(w, -r); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.strokeStyle = b < 0 ? '#607d8b' : '#6200ea'; ctx.stroke(); ctx.restore(); } });"
-				}
-			],
-			"styles": [
-				{
-					"id": "IR_gradients_back_obst",
-					"st": "visibility:hidden"
-				},
-				{
-					"id": "IR_gradients_back_empty",
-					"st": "visibility:hidden"
-				},
-				{
-					"id": "Obstacles-2",
-					"st": "visibility:hidden"
-				},
-				{
-					"id": "Led_5",
-					"st": "visibility:`$[0]>0?'visible':'hidden'`"
-				},
-				{
-					"id": "Led_5_",
-					"st": "visibility:`$[0]>0?'visible':'hidden'`"
-				},
-				{
-					"id": "Led_6",
-					"st": "visibility:`$[1]>0?'visible':'hidden'`"
-				},
-				{
-					"id": "Led_6_",
-					"st": "visibility:`$[1]>0?'visible':'hidden'`"
-				}
-			],
-			"defaultParameters": [0, 0],
-			"typicalParameters": [1, 1],
-			"buttons": [
-				{
-					"id": "Btn3_Prox5",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				},
-				{
-					"id": "Btn3_Prox6",
-					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
-				}
-			],
-			"validation": [
-				{
-					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
-					"warning": "No proximity sensor specified"
-				}
-			]
-		},
+
 		{
 			"name": "horiz prox front adv",
 			"type": "event",
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ev_ProxH_Front_adv"
@@ -599,27 +445,27 @@
 				{
 					"id": "Btn3_Prox0_adv",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:black"]
 				},
 				{
 					"id": "Btn3_Prox1_adv",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:black"]
 				},
 				{
 					"id": "Btn3_Prox2_adv",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:black"]
 				},
 				{
 					"id": "Btn3_Prox3_adv",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:black"]
 				},
 				{
 					"id": "Btn3_Prox4_adv",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:black"]
 				}
 			],
 			"validation": [
@@ -635,13 +481,13 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ev_ProxH_Back_adv"
 				},
 				{
-					"js": "ctx.lineWidth = 20; ctx.strokeStyle = '#6200ea'; ctx.lineCap = 'round'; var rg = ctx.createRadialGradient(0, 0, 300, 0, 0, 1000); rg.addColorStop(0, 'red'); rg.addColorStop(1, 'rgba(255,0,0,0)'); ctx.fillStyle = rg; var r = 950 - 300 * $[2]; var sl = 0.2; var w = sl * (r - 300); $.slice(0, -1).forEach(function (b, i) { if (b) { var x = 335 + 330 * i; ctx.save(); ctx.translate(x, -250); ctx.rotate(Math.PI); var rgr = b > 0 ? r - 300 : 950; ctx.beginPath(); ctx.moveTo(-sl * 300, -300-300); ctx.lineTo(-sl * rgr, -300 - rgr); ctx.lineTo(sl * rgr, -300 - rgr); ctx.lineTo(sl * 300, -300-300); ctx.fill(); ctx.beginPath(); ctx.moveTo(-w, -r); ctx.lineTo(w, -r); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.stroke(); ctx.restore(); } });"
+					"js": "ctx.lineWidth = 20; ctx.strokeStyle = '#6200ea'; ctx.lineCap = 'round'; var rg = ctx.createRadialGradient(0, 0, 300, 0, 0, 1000); rg.addColorStop(0, 'red'); rg.addColorStop(1, 'rgba(255,0,0,0)'); ctx.fillStyle = rg; var r = 950 - 300 * $[2]; var sl = 0.2; var w = sl * (r - 300); $.slice(0, -1).forEach(function (b, i) { if (b) { var x = 335 + 330 * i; ctx.save(); ctx.translate(x, -250); ctx.rotate(Math.PI); var rgr = b > 0 ? r - 300 : 950; ctx.beginPath(); ctx.moveTo(-sl * 300, -300-300); ctx.lineTo(-sl * rgr, -300 - rgr); ctx.lineTo(sl * rgr, -300 - rgr); ctx.lineTo(sl * 300, -300-300); ctx.fill(); ctx.beginPath(); ctx.moveTo(-w, -r); ctx.lineTo(w, -r); ctx.setLineDash(b > 0 ? [] : [15, 30]); ctx.strokeStyle = b < 0 ? '#607d8b' : '#6200ea';ctx.stroke(); ctx.restore(); } });"
 				}
 			],
 			"styles": [
@@ -694,12 +540,12 @@
 				{
 					"id": "Btn3_Prox5_adv",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:black"]
 				},
 				{
 					"id": "Btn3_Prox6_adv",
 					"val": [0, 1, -1],
-					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#263238", "stroke:#263238;fill:none;stroke-dasharray:1 4;stroke-dashoffset:.4;stroke-linecap:round"]
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:black"]
 				}
 			],
 			"validation": [
@@ -715,7 +561,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ev_Remote1"
@@ -726,27 +572,27 @@
 				{
 					"id": "Btn2_Remote1_85",
 					"val": 0,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_80",
 					"val": 1,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_81",
 					"val": 2,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_86",
 					"val": 3,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote1_87",
 					"val": 4,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				}
 			]
 		},
@@ -756,7 +602,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ev_Remote2"
@@ -767,62 +613,62 @@
 				{
 					"id": "Btn2_Remote2_0",
 					"val": 0,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_1",
 					"val": 1,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_2",
 					"val": 2,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_3",
 					"val": 3,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_4",
 					"val": 4,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_5",
 					"val": 5,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_6",
 					"val": 6,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_7",
 					"val": 7,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_8",
 					"val": 8,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_9",
 					"val": 9,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_16",
 					"val": 16,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_Remote2_17",
 					"val": 17,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#ff6040;stroke:#263238"]
 				}
 			]
 		},
@@ -832,7 +678,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ev_TimersUp"
@@ -845,7 +691,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#EvCounter"
@@ -935,13 +781,13 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
-					"uri": "Blocks.svg#event_Bg-2"
+					"uri": "Blocks.svg#statesEv_Bg"
 				},
 				{
-					"uri": "Blocks.svg#StatesOff"
+					"uri": "Blocks.svg#StatesOff-2"
 				}
 			],
 			"defaultParameters": [false, false, false, false, false, false, false, false],
@@ -950,42 +796,42 @@
 				{
 					"id": "Btn2_State0",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State1",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State2",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State3",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State4",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State5",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State6",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State7",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				}
 			]
 		},
@@ -995,11 +841,15 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
-					"uri": "Blocks.svg#CircleLeds_adv"
+					"uri": "Blocks.svg#statesEv_Bg_adv"
+				},
+				{
+					"uri": "Blocks.svg#StatesOff_Adv"
 				}
+
 
 			],
 			"defaultParameters": [0, 0, 0, 0, 0, 0, 0, 0],
@@ -1008,42 +858,42 @@
 				{
 					"id": "Btn3_State0_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State1_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State2_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State3_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State4_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State5_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State6_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State7_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				}
 			],
 			"styles": [
@@ -1087,7 +937,7 @@
 			"modes": ["basic", "advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#ColorPalette"
@@ -1158,7 +1008,7 @@
 			"modes": ["basic", "advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Events_bg"
+					"uri": "Blocks.svg#Event_bg"
 				},
 				{
 					"uri": "Blocks.svg#ColorPalette-2"
@@ -1229,7 +1079,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Actions_bg"
+					"uri": "Blocks.svg#Act_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ac_Wheels"
@@ -1285,7 +1135,7 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Actions_bg"
+					"uri": "Blocks.svg#Act_bg"
 				},
 				{
 					"uri": "Blocks.svg#Ac_Directions"
@@ -1296,47 +1146,47 @@
 				{
 					"id": "Btn2_StopDir",
 					"val": 0,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#338bff;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_FwdDir",
 					"val": 1,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#338bff;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_FwdRightDir",
 					"val": 2,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#338bff;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_RightDir",
 					"val": 3,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#338bff;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_BwdRightDir",
 					"val": 4,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#338bff;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_BwdDir",
 					"val": 5,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#338bff;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_BwdLeftDir",
 					"val": 6,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#338bff;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_LeftDir",
 					"val": 7,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#338bff;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_FwdLeftDir",
 					"val": 8,
-					"st": ["fill:#90a4ae", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#90a4ae", "fill:#338bff;stroke:#263238"]
 				}
 			]
 		},
@@ -1346,7 +1196,7 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Actions_bg"
+					"uri": "Blocks.svg#Act_bg"
 				},
 				{
 					"uri": "Blocks.svg#ColorPalette"
@@ -1417,7 +1267,7 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Actions_bg"
+					"uri": "Blocks.svg#Act_bg"
 				},
 				{
 					"uri": "Blocks.svg#ColorPalette-2"
@@ -1488,7 +1338,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Actions_bg"
+					"uri": "Blocks.svg#Act_bg"
 				},
 				{
 					"uri": "Blocks.svg#Color_top_adv"
@@ -1531,7 +1381,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Actions_bg"
+					"uri": "Blocks.svg#Act_bg"
 				},
 				{
 					"uri": "Blocks.svg#Color_bot_adv"
@@ -1574,7 +1424,7 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Actions_bg"
+					"uri": "Blocks.svg#Act_bg"
 				},
 				{
 					"uri": "Blocks.svg#zones_Bg"
@@ -1596,7 +1446,7 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Actions_bg"
+					"uri": "Blocks.svg#Act_bg"
 				},
 				{
 					"uri": "Blocks.svg#zones_Bg"
@@ -1629,13 +1479,13 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Actions_bg"
+					"uri": "Blocks.svg#Act_bg"
 				},
 				{
-					"uri": "Blocks.svg#act_Bg-2"
+					"uri": "Blocks.svg#statesAct_Bg"
 				},
 				{
-					"uri": "Blocks.svg#StatesOff"
+					"uri": "Blocks.svg#StatesOff-2"
 				}
 			],
 			"defaultParameters": [false, false, false, false, false, false, false, false],
@@ -1644,42 +1494,42 @@
 				{
 					"id": "Btn2_State0",
 					"val": [false, true],
-					"st": ["fill:#455a64","fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64","fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State1",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State2",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State3",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State4",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State5",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State6",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				},
 				{
 					"id": "Btn2_State7",
 					"val": [false, true],
-					"st": ["fill:#455a64", "fill:#a6f7d8;stroke:#263238"]
+					"st": ["fill:#455a64", "fill:#ffee58;stroke:#263238"]
 				}
 			]
 		},
@@ -1689,16 +1539,13 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Actions_bg"
+					"uri": "Blocks.svg#Act_bg"
 				},
 				{
-					"uri": "Blocks.svg#act_Bg_Thymio"
+					"uri": "Blocks.svg#statesAct_Bg_adv"
 				},
 				{
-					"uri": "Blocks.svg#StatesOff_adv"
-				},
-				{
-					"uri": "Blocks.svg#SelectedBits"
+					"uri": "Blocks.svg#StatesOff_Adv"
 				}
 
 			],
@@ -1708,42 +1555,42 @@
 				{
 					"id": "Btn3_State0_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State1_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State2_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State3_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State4_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State5_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State6_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				},
 				{
 					"id": "Btn3_State7_adv",
 					"val": [0, 1, -1],
-					"st": ["stroke:#607d8b", "fill:#a6f7d8;stroke:#263238", "fill:#455a64;stroke:#263238"]
+					"st": ["stroke:#607d8b", "fill:#ffee58;stroke:#263238", "fill:#455a64;stroke:#263238"]
 				}
 			],
 			"styles": [
@@ -1782,44 +1629,12 @@
 			]
 		},
 		{
-			"name": "set timer",
-			"type": "action",
-			"modes": ["advanced"],
-			"draw": [
-				{
-					"uri": "Blocks.svg#Actions_bg"
-				},
-				{
-					"uri": "Blocks.svg#timer10Secods_bg"
-				},
-				{
-					"uri": "Blocks.svg#text_TimeDisplay"
-				},
-				{
-					"uri": "Blocks.svg#Slider_timer"
-				},
-				{
-					"js":
-						"ctx.moveTo(500, 470); ctx.lineTo(650, 400); ctx.lineTo(650, 380 - 50 * $[0]); ctx.lineTo(350, 380 - 50 * $[0]); ctx.lineTo(350, 400); ctx.closePath(); ctx.fillStyle = 'white'; ctx.strokeStyle = 'black'; ctx.lineWidth = 15; ctx.fill(); ctx.stroke(); ctx.font = '150px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText($[0].toFixed(1)+'s', 22, 500);"
-				}
-			],
-			"defaultParameters": [1],
-			"sliders": [
-				{
-					"id": "Slider_timer",
-					"thumbId": "Cursor_units",
-					"min": 0,
-					"max": 4
-				}
-			]
-		},
-		{
 			"name": "arithmetic",
 			"type": "action",
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Actions_bg"
+					"uri": "Blocks.svg#Act_bg"
 				},
 				{
 					"uri": "Blocks.svg#AcCounter"
@@ -1967,10 +1782,6 @@
 		"Blocks.svg"
 	],
 	"overlays": [
-		"aseba.json",
-		"l2.json",
-		"js.json",
-		"python.json",
 		"toolbars.json",
 		"buttons.json",
 		"cmd-vpl-english.json",

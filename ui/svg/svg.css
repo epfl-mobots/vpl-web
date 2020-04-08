@@ -53,15 +53,14 @@ separator {
 block {
 	width: 7vw;
 	height: 7vw;
-	min-width: 56px;
-	min-height: 56px;
+	min-width: 64px;
+	min-height: 64px;
 	border-width: 2pt;
 	border-radius: 2px;
 	box-sizing: border-box;
 }
 block.event {
 	border-color: #ffae9e;
-
 }
 block.action {
 	border-color: #64b5f6;
@@ -72,12 +71,16 @@ block.state {
 block.event-aux, block.state {
 	height: 6vw;
 	width: 6vw;
+	min-width: 56px;
+	min-height: 56px;
 	vertical-align: bottom;
 }
 block.library {
 	margin: 4px;
 	width: 5.6vw;
 	height: 5.6vw;
+	min-width: 56px;
+	min-height: 56px;
 
 }
 block.empty {
@@ -90,7 +93,7 @@ block.empty {
 }
 block.empty:only-child{
 	width: 7vw;
-	min-width: 56px;
+	min-width: 64px;
 
 }
 block-container{

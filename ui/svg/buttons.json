@@ -1,6 +1,24 @@
-
 {
 	"buttons": [
+		{
+			"name": "vpl:close",
+			"state": ["pressed"],
+			"draw": [
+
+				{
+					"uri": "Icons.svg#Close_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:close",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#Close_default"
+				}
+			]
+		},
 		{
 			"name": "vpl:about",
 			"state": ["pressed"],
@@ -161,7 +179,7 @@
 			]
 		},
 		{
-			"name": "vpl:text-toggle",
+			"name": "vpl:text",
 			"state": ["pressed"],
 			"draw": [
 				{
@@ -174,12 +192,22 @@
 			]
 		},
 		{
-			"name": "vpl:text-toggle",
+			"name": "vpl:text",
 			"state": ["selected"],
 			"draw": [
 
 				{
 					"uri": "Icons.svg#textMode_highlight"
+				}
+			]
+		},
+
+		{
+			"name": "vpl:text",
+			"state": [],
+			"draw": [
+				{
+					"uri": "Icons.svg#textMode_default"
 				}
 			]
 		},
@@ -193,45 +221,6 @@
 			]
 		},
 		{
-			"name": "vpl:text-toggle",
-			"state": [],
-			"draw": [
-				{
-					"uri": "Icons.svg#textMode_default"
-				}
-			]
-		},
-		{
-			"name": "src:locked",
-			"state": [],
-			"draw": [
-				{
-					"uri": "Icons.svg#locked_default"
-				}
-			]
-		},
-		{
-			"name": "src:locked",
-			"state": ["pressed"],
-			"draw": [
-				{
-					"uri": "Icons.svg#unlocked_default"
-				}
-			]
-		},
-		{
-			"name": "vpl:connected",
-			"state": ["unselected"],
-			"draw": [
-			{
-					"uri": "Icons.svg#Selected_bg"
-				},
-				{
-					"uri": "Icons.svg#disconnect_default"
-				}
-			]
-		},
-		{
 			"name": "vpl:connected",
 			"state": ["selected"],
 			"draw": [
@@ -239,19 +228,67 @@
 					"uri": "Icons.svg#Selected_bg"
 				},
 				{
-					"uri": "Icons.svg#robotConnect_default"
+					"uri": "Icons.svg#connectOn"
 				}
 			]
 		},
 		{
 			"name": "vpl:connected",
-			"state": [],
+			"state": ["unselected"],
 			"draw": [
 				{
 					"uri": "Icons.svg#Selected_bg"
 				},
 				{
-					"uri": "Icons.svg#robotConnect_default"
+					"uri": "Icons.svg#connectOff"
+				}
+			]
+		},
+		{
+			"name": "vpl:connected",
+			"state": ["selected", "monitored"],
+			"draw": [
+			{
+					"uri": "Icons.svg#Selected_bg"
+				},
+				{
+					"uri": "Icons.svg#connectOn_monitoredOn"
+				}
+			]
+		},
+		{
+			"name": "vpl:connected",
+			"state": ["unselected", "monitored"],
+			"draw": [
+			{
+					"uri": "Icons.svg#Selected_bg"
+				},
+				{
+					"uri": "Icons.svg#connectOff_monitoredOn"
+				}
+			]
+		},
+		{
+			"name": "vpl:connected",
+			"state": ["selected", "nonmonitored"],
+			"draw": [
+			{
+					"uri": "Icons.svg#Selected_bg"
+				},
+				{
+					"uri": "Icons.svg#connectOn_monitoredOff"
+				}
+			]
+		},
+		{
+			"name": "vpl:connected",
+			"state": ["unselected", "nonmonitored"],
+			"draw": [
+			{
+					"uri": "Icons.svg#Selected_bg"
+				},
+				{
+					"uri": "Icons.svg#connectOff_monitoredOff"
 				}
 			]
 		},
@@ -426,6 +463,37 @@
 			]
 		},
 		{
+			"name": "vpl:lock",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#lock_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:lock",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#lock_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:lock",
+			"state": [],
+			"draw": [
+				{
+					"uri": "Icons.svg#lock_default"
+				}
+			]
+		},
+		{
 			"name": "vpl:disable",
 			"state": ["pressed"],
 			"draw": [
@@ -433,7 +501,7 @@
 					"uri": "Icons.svg#Pressed_bg"
 				},
 				{
-					"uri": "Icons.svg#disable_highlight"
+					"uri": "Icons.svg#deactivate_highlight"
 				}
 			]
 		},
@@ -442,7 +510,7 @@
 			"state": ["disabled"],
 			"draw": [
 				{
-					"uri": "Icons.svg#disable_default",
+					"uri": "Icons.svg#deactivate_default",
 					"alpha": 0.5
 				}
 			]
@@ -452,7 +520,7 @@
 			"state": [],
 			"draw": [
 				{
-					"uri": "Icons.svg#disable_default"
+					"uri": "Icons.svg#deactivate_default"
 				}
 			]
 		},
@@ -529,24 +597,40 @@
 				}
 			]
 		},
+
 		{
-			"name": "src:sim",
-			"state": ["pressed"],
+			"name": "src:locked",
+			"state": [],
 			"draw": [
 				{
-					"uri": "Icons.svg#Circle_bg"
-				},
-				{
-					"uri": "Icons.svg#simulator_highlight"
+					"uri": "Icons.svg#locked_default"
 				}
 			]
 		},
 		{
-			"name": "src:sim",
+			"name": "src:locked",
+			"state": ["selected", "pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#locked_highlight"
+				}
+			]
+		},
+		{
+			"name": "src:vpl",
 			"state": [],
 			"draw": [
 				{
-					"uri": "Icons.svg#simulator_default"
+					"uri": "Icons.svg#vpl_default"
+				}
+			]
+		},
+		{
+			"name": "src:close",
+			"state": [],
+			"draw": [
+				{
+					"uri": "Icons.svg#Close_default"
 				}
 			]
 		},
@@ -555,7 +639,7 @@
 			"state": ["pressed","selected"],
 			"draw": [
 				{
-					"uri": "Icons.svg#uiSettings_highlight"
+					"uri": "Icons.svg#settingsDone_highlight"
 				}
 			]
 		},
@@ -585,6 +669,250 @@
 					"uri": "Icons.svg#clearSettings_default"
 				}
 			]
+		},
+		{
+			"name": "vpl:teacher-save",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#saveSettings_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:teacher-save",
+			"state": [],
+			"draw": [
+				{
+					"uri": "Icons.svg#saveSettings_default"
+				}
+			]
+		},
+		{
+			"name": "sim:close",
+			"state": ["pressed"],
+			"draw": [
+
+				{
+					"uri": "Icons.svg#Close_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:close",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#Close_default"
+				}
+			]
+		},
+		{
+			"name": "sim:restart",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#restart_default"
+				}
+			]
+		},
+		{
+			"name": "sim:pause",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#pause_default"
+				}
+			]
+		},
+		{
+			"name": "sim:speedup",
+			"state": ["unselected", "=1"],
+			"draw": [
+
+				{
+					"uri": "Icons.svg#_1speed_default"
+				}
+
+			]
+		},
+		{
+			"name": "sim:speedup",
+			"state": ["selected", "=2"],
+			"draw": [
+
+				{
+					"uri": "Icons.svg#_2speed_default"
+				}
+
+			]
+		},
+		{
+			"name": "sim:speedup",
+			"state": ["selected", "=5"],
+			"draw": [
+
+				{
+					"uri": "Icons.svg#_5speed_default"
+				}
+
+			]
+		},
+		{
+			"name": "sim:speedup",
+			"state": ["selected", "=0.5"],
+			"draw": [
+
+				{
+					"uri": "Icons.svg#_0_5speed_default"
+				}
+
+			]
+		},
+		{
+			"name": "sim:pen",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#pen_default"
+				}
+			]
+		},
+		{
+			"name": "sim:clear",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#simClear_default"
+				}
+			]
+		},
+		{
+			"name": "sim-event:forward",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_forward_default"
+				}
+			]
+		},
+		{
+			"name": "sim-event:left",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_left_default"
+				}
+			]
+		},
+		{
+			"name": "sim-event:backward",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_backward_default"
+				}
+			]
+		},
+		{
+			"name": "sim-event:right",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_right_default"
+				}
+			]
+		},
+		{
+			"name": "sim-event:center",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_center_default"
+				}
+			]
+		},
+		{
+			"name": "sim-event:tap",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_tap_default"
+				}
+			]
+		},
+		{
+			"name": "sim-event:clap",
+			"state": [""],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_clap_default"
+				}
+			]
+		},
+		{
+			"name": "sim-event:forward",
+			"state": ["selected"],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_forward_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:left",
+			"state": ["selected"],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_left_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:backward",
+			"state": ["selected"],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_backward_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:right",
+			"state": ["selected"],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_right_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:center",
+			"state": ["selected"],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_center_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:tap",
+			"state": ["selected"],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_tap_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:clap",
+			"state": ["selected"],
+			"draw": [
+								{
+					"uri": "Icons.svg#sim_clap_highight"
+				}
+			]
 		}
+
 	]
 }

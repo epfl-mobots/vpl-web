@@ -1,9 +1,8 @@
 {
 	"toolbars": {
 		"vpl": [
-			"!!space",
+			"vpl:close",
 			"vpl:about",
-			"!!space",
 			"!!space",
 			"vpl:new",
 			"vpl:save",
@@ -22,6 +21,7 @@
 			"!stretch",
 			"vpl:advanced",
 			"vpl:sim",
+			"vpl:text",
 			"!stretch",
 			"vpl:teacher-reset",
 			"vpl:teacher-save",
@@ -38,11 +38,15 @@
 			"vpl:disable",
 			"!!stretch",
 			"vpl:trashcan",
+			"!!stretch",
+			"vpl:lock",
 			"!!stretch"
+
 		],
 		"editor": [
-			"src:language",
-			"src:disass"
+			"src:close",
+			"src:locked",
+			"src:vpl"
 		],
 		"simulator": [
 			"sim:close",
@@ -51,19 +55,13 @@
 			"sim:pause",
 			"!space",
 			"sim:speedup",
-			"sim:noise",
 			"!stretch",
 			"sim:pen",
 			"sim:clear",
 			"!space",
 			"sim:map-kind",
 			"sim:map",
-			"!stretch",
-			"sim:vpl",
-			"sim:text",
-			"!stretch",
-			"sim:teacher-reset",
-			"sim:teacher"
+			"!stretch"
 		]
 	}
 }
