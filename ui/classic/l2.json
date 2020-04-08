@@ -189,14 +189,14 @@
 			"l2": {
 				"initVarDecl": [
 					[
-						"// variables for state\n",
-						"bool state[4];\n"
+						"int state;\n"
 					]
 				],
 				"initCodeExec": [
-					"state = [false, false, false, false];\n"
+					"state = 0;\n"
 				],
-				"clause": "`$.map(function (v, i) { return (v >= 0 ? '' : '!') + 'state[' + i + ']'; }).filter(function (v, i) { return $[i]; }).join(' && ')`"
+				"clause":
+				"(state & `$.reduce(function (a, b, i) { return b !== 0 ? a | [128,2,32,8][i] : a; }, 0)`) == `$.reduce(function (a, b, i) { return b === 1 ? a | [128,2,32,8][i] : a; }, 0)`"
 			}
 		},
 		{
@@ -204,26 +204,25 @@
 			"l2": {
 				"initVarDecl": [
 					[
-						"// variables for exclusive state\n",
-						"int state8;\n"
+						"int state;\n"
 					]
 				],
 				"initCodeExec": [
-					"state8 = 0;\n"
+					"state = 0;\n"
 				],
-				"clause": "state8 == `$[0]`"
+				"clause": "state == `1 << $[0]`"
 			}
 		},
 		{
 			"name": "counter comparison",
 			"l2": {
 				"initVarDecl": [
-					"int counter;\n"
+					"int state;\n"
 				],
 				"initCodeExec": [
-					"counter = 0;\n"
+					"state = 0;\n"
 				],
-				"clause": "counter `$[0] === 0 ? '==' : $[0] > 0 ? '>=' : '<='` `$[1]`"
+				"clause": "state `$[0] === 0 ? '==' : $[0] > 0 ? '>=' : '<='` `$[1]`"
 			}
 		},
 		{
@@ -539,24 +538,24 @@
 			"l2": {
 				"initVarDecl": [
 					[
-						"// variables for state\n",
-						"bool state[4];\n"
+						"int state;\n"
 					]
 				],
 				"initCodeExec": [
-					"state = [false, false, false, false];\n"
+					"state = 0;\n"
 				],
 				"initCodeDecl": [
 					[
-						"// display the current state\n",
-						"void display_state() {\n",
-						"leds.circle(0,state[1]?32:0,0,state[3]?32:0,0,state[2]?32:0,0,state[0]?32:0);\n",
+						"// display a binary value\n",
+						"void display_binary(int n) {\n",
+						"leds.circle((n&1)<<5,(n&2)<<4,(n&4)<<3,(n&8)<<2,",
+						"(n&16)<<1,n&32,(n&64)>>1,(n&128)>>2);\n",
 						"}\n"
 					]
 				],
 				"statement": [
-					"`$.map(function (v, i) { return v ? 'state[' + i + '] = ' + (v > 0 ? 'true' : 'false') + ';\\n' : ''; }).join('')`",
-					"`$[0] || $[1] || $[2] || $[3] ? 'display_state();\\n' : ''`"
+					"state = state & `0xff ^ $.reduce(function (a, b, i) { return b !== 0 ? a | [128,2,32,8][i] : a; }, 0)` | `$.reduce(function (a, b, i) { return b === 1 ? a | [128,2,32,8][i] : a; }, 0)`;\n",
+					"display_binary(state);\n"
 				]
 			}
 		},
@@ -565,24 +564,24 @@
 			"l2": {
 				"initVarDecl": [
 					[
-						"// variables for state\n",
-						"bool state[4];\n"
+						"int state;\n"
 					]
 				],
 				"initCodeExec": [
-					"state = [false, false, false, false];\n"
+					"state = 0;\n"
 				],
 				"initCodeDecl": [
 					[
-						"// display the current state\n",
-						"void display_state() {\n",
-						"leds.circle(0,state[1]?32:0,0,state[3]?32:0,0,state[2]?32:0,0,state[0]?32:0);\n",
+						"// display a binary value\n",
+						"void display_binary(int n) {\n",
+						"leds.circle((n&1)<<5,(n&2)<<4,(n&4)<<3,(n&8)<<2,",
+						"(n&16)<<1,n&32,(n&64)>>1,(n&128)>>2);\n",
 						"}\n"
 					]
 				],
 				"statement": [
-					"`$.map(function (v, i) { return v ? 'state[' + i + '] = !state[' + i + '];\\n' : ''; }).join('')`",
-					"`$[0] || $[1] || $[2] || $[3] ? 'display_state();\\n' : ''`"
+					"state ^= `$.reduce(function (a, b, i) { return b ? a | [128,2,32,8][i] : a; }, 0)`;\n",
+					"display_binary(state);\n"
 				]
 			}
 		},
@@ -591,25 +590,24 @@
 			"l2": {
 				"initVarDecl": [
 					[
-						"// variables for exclusive state\n",
-						"int state8;\n"
+						"int state;\n"
 					]
 				],
 				"initCodeExec": [
-					"state8 = 0;\n"
+					"state = 0;\n"
 				],
 				"initCodeDecl": [
 					[
-						"// display the current exclusive state\n",
-						"void display_state8() {\n",
-						"leds.circle(state8==0?32:0, state8==1?32:0, state8==2?32:0, state8==3?32:0, ",
-							"state8==4?32:0, state8==5?32:0, state8==6?32:0, state8==7?32:0);\n",
+						"// display a binary value\n",
+						"void display_binary(int n) {\n",
+						"leds.circle((n&1)<<5,(n&2)<<4,(n&4)<<3,(n&8)<<2,",
+						"(n&16)<<1,n&32,(n&64)>>1,(n&128)>>2);\n",
 						"}\n"
 					]
 				],
 				"statement": [
-					"state8 = `$[0]`;\n",
-					"display_state8();\n"
+					"state = `1 << $[0]`;\n",
+					"display_binary(state);\n"
 				],
 				"statementWithoutInit": [
 					"leds.circle(`$[0] === 0 ? 32 : 0`, `$[0] === 1 ? 32 : 0`, `$[0] === 2 ? 32 : 0`, `$[0] === 3 ? 32 : 0`, ",
@@ -623,24 +621,24 @@
 				"initVarDecl": [
 					[
 						"// variables for exclusive state\n",
-						"int state8;\n"
+						"int state;\n"
 					]
 				],
 				"initCodeExec": [
-					"state8 = 0;\n"
+					"state = 0;\n"
 				],
 				"initCodeDecl": [
 					[
-						"// display the current exclusive state\n",
-						"void display_state8() {\n",
-						"leds.circle(state8==0?32:0, state8==1?32:0, state8==2?32:0, state8==3?32:0, ",
-							"state8==4?32:0, state8==5?32:0, state8==6?32:0, state8==7?32:0);\n",
+						"// display a binary value\n",
+						"void display_binary(int n) {\n",
+						"leds.circle((n&1)<<5,(n&2)<<4,(n&4)<<3,(n&8)<<2,",
+						"(n&16)<<1,n&32,(n&64)>>1,(n&128)>>2);\n",
 						"}\n"
 					]
 				],
 				"statement": [
-					"state8 = (state8 + `$[0] > 0 ? 1 : 7`) % 8;\n",
-					"display_state8();\n"
+					"state = `$[0] > 0 ? '(state << 1) & 0xff | (state >> 7) & 1' : '(state >> 1) & 0x7f | (state << 7) & 0x80'`;\n",
+					"display_binary(state);\n"
 				],
 				"statementWithoutInit": [
 					"leds.circle(`$[0] === 0 ? 32 : 0`, `$[0] === 1 ? 32 : 0`, `$[0] === 2 ? 32 : 0`, `$[0] === 3 ? 32 : 0`, ",
@@ -652,23 +650,23 @@
 			"name": "set counter",
 			"l2": {
 				"initVarDecl": [
-					"int counter;\n"
+					"int state;\n"
 				],
 				"initCodeExec": [
-					"counter = 0;\n"
+					"state = 0;\n"
 				],
 				"initCodeDecl": [
 					[
-						"// display the current counter\n",
-						"void display_counter(int c) {\n",
-						"leds.circle((c&1)<<5,(c&2)<<4,(c&4)<<3,(c&8)<<2,\n",
-						"(c&16)<<1,c&32,(c&64)>>1,(c&128)>>2);\n",
+						"// display a binary value\n",
+						"void display_binary(int n) {\n",
+						"leds.circle((n&1)<<5,(n&2)<<4,(n&4)<<3,(n&8)<<2,",
+						"(n&16)<<1,n&32,(n&64)>>1,(n&128)>>2);\n",
 						"}\n"
 					]
 				],
 				"statement": [
-					"`$[0] === 0 ? 'counter = 0;' : $[0] > 0 ? 'if (counter < 255) {\\ncounter++;\\n}' : 'if (counter > 0) {\\ncounter--;\\n}'`\n",
-					"display_counter(counter);\n"
+					"`$[0] === 0 ? 'state = 0;' : $[0] > 0 ? 'if (state < 255) {\\nstate++;\\n}' : 'if (state > 0) {\\nstate--;\\n}'`\n",
+					"display_binary(state);\n"
 				]
 			}
 		},
