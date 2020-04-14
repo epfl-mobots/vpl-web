@@ -172,5 +172,9 @@ A3a.vpl.DynamicHelp.prototype.generate = function (language, blocks) {
 			html += this.convertToHTML(frag);
 		}
 	}, this);
-	return "<html>\n" + (html || "<p>Empty</p>\n") + "</html>\n";
+	return "<html>\n" +
+		"<div style='height: 100%; overflow-y: scroll;'>" +
+		(html || "<p>Empty</p>\n") +
+		"</div>" +
+		"</html>\n";
 };
