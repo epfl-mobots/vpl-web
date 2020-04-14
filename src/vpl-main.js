@@ -250,6 +250,7 @@ function vplSetup(gui, rootDir) {
 	var canvasEl = document.getElementById("programCanvas");
 
 	// application
+	var role = vplGetQueryOption("role");
 	var app = new A3a.vpl.Application(canvasEl);
 	app.simMaps = window["vplSimMaps"] == undefined
  		? "ground,height,obstacles"
@@ -480,7 +481,7 @@ function vplSetup(gui, rootDir) {
 		}
 		app.editor.toolbarDrawButton = drawButton;
 		app.editor.toolbarGetButtonBounds = getButtonBounds;
-		app.editor.setTeacherRole(vplGetQueryOption("role") === "teacher");
+		app.editor.setTeacherRole(role === "teacher");
 	}
 
 	if (app.sim2d != null) {
@@ -554,7 +555,8 @@ function vplSetup(gui, rootDir) {
 						app.program.filename = options && options["filename"] || A3a.vpl.Program.defaultFilename;
 						app.program.readOnly = options != undefined && options["readOnly"] == true;
 						if (options != undefined && options["customizationMode"] == true) {
-							app.uiConfig.customizationMode = true;
+							app.uiConfig.blockCustomizationMode = true;
+							app.uiConfig.toolbarCustomizationMode = role === A3a.vpl.Program.teacherRoleType.teacher;
 						}
 					}
 				} catch (e) {}
@@ -575,7 +577,9 @@ function vplSetup(gui, rootDir) {
 	} else {
 		app.setView(["vpl"]);
 		app.program.experimentalFeatures = experimentalFeatures;
-		app.program.setTeacherRole(vplGetQueryOption("role") === "teacher");
+		app.program.setTeacherRole(role === "teacher" ? A3a.vpl.Program.teacherRoleType.teacher
+			: role === "teacher1" ? A3a.vpl.Program.teacherRoleType.customizableBlocks
+			: A3a.vpl.Program.teacherRoleType.student);
 		app.renderProgramToCanvas();
 		if (app.editor) {
 			document.getElementById("editor").textContent = app.program.getCode(app.program.currentLanguage);
@@ -659,7 +663,7 @@ function vplSetup(gui, rootDir) {
 	// resize canvas
 	window.addEventListener("resize", function () { app.vplResize(); }, false);
 
-	app.sim2d && app.sim2d.setTeacherRole(vplGetQueryOption("role") === "teacher");
+	app.sim2d && app.sim2d.setTeacherRole(role === "teacher");
 
 	if (view === "text") {
 		// special case for source code editor without VPL

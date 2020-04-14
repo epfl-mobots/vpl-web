@@ -358,16 +358,16 @@ A3a.vpl.Application.prototype.addSim2DCommands = function () {
 		object: this,
 		keep: true,
 		isAvailable: function (app) {
-			return app.sim2d.teacherRole && app.sim2d.uiConfig.customizationMode;
+			return app.sim2d.teacherRole && app.sim2d.uiConfig.toolbarCustomizationMode;
 		}
 	});
 	this.commands.add("sim:teacher", {
 		action: function (app, modifier) {
-			app.sim2d.uiConfig.customizationMode = !app.sim2d.uiConfig.customizationMode;
+			app.sim2d.uiConfig.toolbarCustomizationMode = !app.sim2d.uiConfig.toolbarCustomizationMode;
 			app.renderSim2dViewer();
 		},
 		isSelected: function (app) {
-			return app.sim2d.uiConfig.customizationMode;
+			return app.sim2d.uiConfig.toolbarCustomizationMode;
 		},
 		object: this,
 		keep: true,

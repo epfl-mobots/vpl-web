@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -22,7 +22,10 @@ buttons and blocks) are displayed or hidden.
 A3a.vpl.UIConfig = function () {
 	/** @type {Array.<string>} */
 	this.disabledUI = [];
-	this.customizationMode = false;
+	this.toolbarCustomizationMode = false;
+	this.toolbarCustomizationDisabled = false;
+		// true to disable buttons which could be customized if toolbarCustomizationMode were true
+	this.blockCustomizationMode = false;
 };
 
 /** Reset UI

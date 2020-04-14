@@ -74,7 +74,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return !app.program.teacherRole && app.suspendBox != null;
+			return app.program.teacherRole === A3a.vpl.Program.teacherRoleType.student &&
+				app.suspendBox != null;
 		}
 	});
 	this.commands.add("vpl:new", {
@@ -491,7 +492,9 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return app.program.experimentalFeatures && app.program.teacherRole && !app.program.readOnly;
+			return app.program.experimentalFeatures &&
+				app.program.teacherRole === A3a.vpl.Program.teacherRoleType.teacher &&
+				!app.program.readOnly;
 		}
 	});
 	this.commands.add("vpl:trashcan", {
@@ -579,8 +582,13 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	})
 	this.commands.add("vpl:teacher", {
 		action: function (app, modifier) {
-			app.program.uiConfig.customizationMode = !app.program.uiConfig.customizationMode;
-			if (!app.program.uiConfig.customizationMode) {
+			app.program.uiConfig.blockCustomizationMode = !app.program.uiConfig.blockCustomizationMode;
+			if (app.program.teacherRole === A3a.vpl.Program.teacherRoleType.teacher) {
+				app.program.uiConfig.toolbarCustomizationMode = app.program.uiConfig.blockCustomizationMode;
+			} else {
+				app.program.uiConfig.toolbarCustomizationDisabled = app.program.uiConfig.blockCustomizationMode;
+			}
+			if (!app.program.uiConfig.blockCustomizationMode) {
 				app.setHelpForCurrentAppState();
 			}
 		},
@@ -588,12 +596,13 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return !app.program.noVPL && !app.program.readOnly;
 		},
 		isSelected: function (app) {
-			return app.program.uiConfig.customizationMode;
+			return app.program.uiConfig.blockCustomizationMode;
 		},
 		object: this,
 		keep: true,
 		isAvailable: function (app) {
-			return app.program.teacherRole && !app.program.readOnly;
+			return app.program.teacherRole !== A3a.vpl.Program.teacherRoleType.student &&
+				!app.program.readOnly;
 		},
 		possibleStates: [
 			{selected: false},
@@ -618,7 +627,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		keep: true,
 		isAvailable: function (app) {
-			return app.program.teacherRole && app.program.uiConfig.customizationMode && !app.program.readOnly;
+			return app.program.teacherRole !== A3a.vpl.Program.teacherRoleType.student &&
+				app.program.uiConfig.blockCustomizationMode && !app.program.readOnly;
 		}
 	});
 	this.commands.add("vpl:teacher-save", {
@@ -634,7 +644,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		keep: true,
 		isAvailable: function (app) {
-			return app.program.teacherRole && app.program.uiConfig.customizationMode && !app.program.readOnly;
+			return app.program.teacherRole !== A3a.vpl.Program.teacherRoleType.student &&
+				app.program.uiConfig.blockCustomizationMode && !app.program.readOnly;
 		}
 	});
 	this.commands.add("vpl:teacher-setasnew", {
@@ -648,7 +659,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		keep: true,
 		isAvailable: function (app) {
-			return app.program.teacherRole && app.program.uiConfig.customizationMode && !app.program.readOnly;
+			return app.program.teacherRole !== A3a.vpl.Program.teacherRoleType.student &&
+				app.program.uiConfig.blockCustomizationMode && !app.program.readOnly;
 		},
 		possibleStates: [
 			{selected: false},

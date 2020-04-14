@@ -233,16 +233,16 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 		object: this,
 		keep: true,
 		isAvailable: function (app) {
-			return app.editor.teacherRole && app.editor.uiConfig.customizationMode;
+			return app.editor.teacherRole && app.editor.uiConfig.toolbarCustomizationMode;
 		}
 	});
 	this.commands.add("src:teacher", {
 		action: function (app, modifier) {
-			app.editor.uiConfig.customizationMode = !app.editor.uiConfig.customizationMode;
+			app.editor.uiConfig.toolbarCustomizationMode = !app.editor.uiConfig.toolbarCustomizationMode;
 			app.renderSourceEditorToolbar();
 		},
 		isSelected: function (app) {
-			return app.editor.uiConfig.customizationMode;
+			return app.editor.uiConfig.toolbarCustomizationMode;
 		},
 		object: this,
 		keep: true,

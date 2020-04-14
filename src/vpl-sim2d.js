@@ -1102,7 +1102,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	playgroundBox.x = playgroundView.x + playgroundView.ox;
 	playgroundBox.y = playgroundView.y + playgroundView.oy;
 
-	if (this.uiConfig.customizationMode) {
+	if (this.uiConfig.toolbarCustomizationMode) {
 		// draw vpl:customization widget
 		var customizationBox = simCanvas.css.getBox({tag: "widget", id: "vpl-customize"});
 		simCanvas.addDecoration(function (ctx) {
