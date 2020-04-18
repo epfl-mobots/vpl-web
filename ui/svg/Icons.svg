@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48 48">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 48.03 48">
   <defs>
     <style>
       .cls-1, .cls-16, .cls-24, .cls-4, .cls-40, .cls-46, .cls-47, .cls-52, .cls-53, .cls-54 {
@@ -976,14 +976,17 @@
         <path class="cls-56" d="M24,12A12,12,0,1,1,12,24,12,12,0,0,1,24,12m0-2A14,14,0,1,0,38,24,14,14,0,0,0,24,10Z"/>
       </g>
     </g>
+    <g id="valid">
+      <rect id="frame-61" data-name="frame" class="cls-2" x="0.06" y="0.03" width="47.97" height="47.97"/>
+    </g>
     <g id="Close">
       <g id="Close_highlight">
-        <rect id="frame-61" data-name="frame" class="cls-2" width="48" height="48"/>
+        <rect id="frame-62" data-name="frame" class="cls-2" width="48" height="48"/>
         <path class="cls-6" d="M24,8A10,10,0,1,1,14,18,10,10,0,0,1,24,8m0-2A12,12,0,1,0,36,18,12,12,0,0,0,24,6Z"/>
         <path class="cls-6" d="M19.09,23a1,1,0,0,1,0-1.41L22.62,18l-3.56-3.57A1,1,0,0,1,20.47,13L24,16.61l3.54-3.54A1,1,0,0,1,29,14.48L25.45,18,29,21.53a1,1,0,0,1,0,1.41,1,1,0,0,1-1.42,0L24,19.44,20.5,23A1,1,0,0,1,19.09,23Z"/>
       </g>
       <g id="Close_default">
-        <rect id="frame-62" data-name="frame" class="cls-2" width="48" height="48"/>
+        <rect id="frame-63" data-name="frame" class="cls-2" width="48" height="48"/>
         <path class="cls-7" d="M24,8A10,10,0,1,1,14,18,10,10,0,0,1,24,8m0-2A12,12,0,1,0,36,18,12,12,0,0,0,24,6Z"/>
         <path class="cls-7" d="M19.09,23a1,1,0,0,1,0-1.41L22.62,18l-3.56-3.57A1,1,0,0,1,20.47,13L24,16.61l3.54-3.54A1,1,0,0,1,29,14.48L25.45,18,29,21.53a1,1,0,0,1,0,1.41,1,1,0,0,1-1.42,0L24,19.44,20.5,23A1,1,0,0,1,19.09,23Z"/>
       </g>
@@ -993,11 +996,11 @@
     </g>
     <g id="ScrollArrows">
       <g id="ScrollDown">
-        <rect id="frame-63" data-name="frame" class="cls-2" y="16.5" width="48" height="15"/>
+        <rect id="frame-64" data-name="frame" class="cls-2" y="16.5" width="48" height="15"/>
         <polyline class="cls-13" points="18 21.13 24 27.13 30 21.13"/>
       </g>
       <g id="ScrollUp">
-        <rect id="frame-64" data-name="frame" class="cls-2" y="16.5" width="48" height="15"/>
+        <rect id="frame-65" data-name="frame" class="cls-2" y="16.5" width="48" height="15"/>
         <polyline class="cls-13" points="30 27.13 24 21.13 18 27.13"/>
       </g>
     </g>
