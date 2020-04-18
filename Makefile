@@ -117,12 +117,10 @@ vpath %.js src
 all: vpl-min.js
 
 vpl-min.js: $(JS)
-	( \
-		echo "$(COPYRIGHT)"; \
-		echo '(function(){'; \
- 		$(CLOSURE) $(CLOSUREFLAGS) $^; \
-		echo '}).call(this);' \
-	) >$@ || (rm -f $@; false)
+	echo "$(COPYRIGHT)" >$@
+	echo '(function(){' >>$@
+	$(CLOSURE) $(CLOSUREFLAGS) $^ >>$@ || (rm -f $@; false)
+	echo '}).call(this);' >>$@
 
 .PHONY: clean
 clean:

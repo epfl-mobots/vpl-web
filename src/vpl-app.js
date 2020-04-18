@@ -274,6 +274,17 @@ A3a.vpl.Application.prototype.setHelpForCurrentAppState = function () {
 		var blocks = this.program.mode === A3a.vpl.mode.basic
 		 	? this.program.enabledBlocksBasic
 			: this.program.enabledBlocksAdvanced;
+		this.dynamicHelp.clearImageMapping();
+		var dims = A3a.vpl.Canvas.calcDims(100, 100);
+		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate) {
+			try {
+				var block = new A3a.vpl.Block(blockTemplate, null, null);
+				block.param = blockTemplate.typicalParam ? blockTemplate.typicalParam() : block.param;
+				var urlMD = "vpl:block:" + blockTemplate.name.replace(/ /g, "-");
+				var url = block.toDataURL(this.css, dims, 1);
+				this.dynamicHelp.addImageMapping(urlMD, url);
+			} catch (e) {}
+		}, this);
 		var html = this.dynamicHelp.generate(this.i18n.language, blocks);
 		this.setHelpContent(html);
 	}

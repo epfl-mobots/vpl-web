@@ -203,7 +203,7 @@ A3a.vpl.Application.prototype.addBlockTemplateToCanvas = function (canvas, block
 			disabled: crossedOut || this.readOnly,
 			crossedOut: crossedOut,
 			/** @type {?A3a.vpl.CanvasItem.mousedown} */
-			mousedown: this.uiConfig.customizationMode && !this.noVPL && !program.readOnly
+			mousedown: this.uiConfig.blockCustomizationMode && !this.noVPL && !program.readOnly
 				? function (canvas, data, width, height, x, y, downEvent) {
 					var a = program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced;
 					if (a.indexOf(blockTemplate.name) >= 0) {
@@ -652,7 +652,7 @@ A3a.vpl.Application.prototype.updateErrorInfo = function () {
 	// find first error, or first warning if there is no error
 	this.vplMessage = "";
 	this.vplMessageIsWarning = false;
-	if (!uiConfig.customizationMode) {
+	if (!uiConfig.blockCustomizationMode) {
 		for (var i = 0; i < program.program.length; i++) {
 			if (program.program[i].error) {
 				if (!program.program[i].error.isWarning) {
@@ -672,7 +672,7 @@ A3a.vpl.Application.prototype.updateErrorInfo = function () {
 
 A3a.vpl.Application.prototype.createVPLToolbar = function (toolbarConfig, cssClasses,
 	toolbarBox, toolbarSeparatorBox, toolbarItemBoxes) {
-	// top controls
+	// top or bottom controls
 	var controlBar = new A3a.vpl.ControlBar(this.vplCanvas);
 	controlBar.setButtons(this,
 		toolbarConfig,
@@ -736,7 +736,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var nEvTemplates = 0;
 	var nAcTemplates = 0;
 	A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
-		if (uiConfig.customizationMode ||
+		if (uiConfig.blockCustomizationMode ||
 			(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 				.indexOf(blockTemplate.name) >= 0) {
 			switch (blockTemplate.type) {
@@ -879,7 +879,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
 			if ((blockTemplate.type === A3a.vpl.blockType.event ||
 					blockTemplate.type === A3a.vpl.blockType.state) &&
-				(uiConfig.customizationMode ||
+				(uiConfig.blockCustomizationMode ||
 					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 						.indexOf(blockTemplate.name) >= 0)) {
 				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
@@ -920,7 +920,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
 			if ((blockTemplate.type === A3a.vpl.blockType.event ||
 					blockTemplate.type === A3a.vpl.blockType.state) &&
-				(uiConfig.customizationMode ||
+				(uiConfig.blockCustomizationMode ||
 					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 						.indexOf(blockTemplate.name) >= 0)) {
 				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
@@ -948,7 +948,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
 			if ((blockTemplate.type === A3a.vpl.blockType.action ||
 					blockTemplate.type === A3a.vpl.blockType.comment) &&
-				(uiConfig.customizationMode ||
+				(uiConfig.blockCustomizationMode ||
 					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 						.indexOf(blockTemplate.name) >= 0)) {
 				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
@@ -989,7 +989,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
 			if ((blockTemplate.type === A3a.vpl.blockType.action ||
 					blockTemplate.type === A3a.vpl.blockType.comment) &&
-				(uiConfig.customizationMode ||
+				(uiConfig.blockCustomizationMode ||
 					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 						.indexOf(blockTemplate.name) >= 0)) {
 				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
@@ -1002,7 +1002,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		}, this);
 	}
 
-	if (uiConfig.customizationMode) {
+	if (uiConfig.blockCustomizationMode) {
 		// rule skeleton to toggle program.multiEventBasic or program.multiEventAdvanced
 		(function () {
 			// size event and action boxes and rule box

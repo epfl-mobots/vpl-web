@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -29,7 +29,7 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	/** @type {A3a.vpl.mode} */
 	this.mode = mode || A3a.vpl.mode.basic;
 	this.noVPL = false;	// true for source code editor without vpl counterpart
-	this.teacherRole = true;
+	this.teacherRole = A3a.vpl.Program.teacherRoleType.student;
 	this.experimentalFeatures = false;
 	/** @type {Array.<A3a.vpl.Rule>} */
 	this.program = [];
@@ -287,12 +287,20 @@ A3a.vpl.Program.prototype.setMode = function (mode) {
 	}
 };
 
+/** @enum {string}
+*/
+A3a.vpl.Program.teacherRoleType = {
+	student: "s",
+	teacher: "t",
+	customizableBlocks: "custb"
+};
+
 /** Change role
-	@param {boolean} b
+	@param {A3a.vpl.Program.teacherRoleType} teacherRole
 	@return {void}
 */
-A3a.vpl.Program.prototype.setTeacherRole = function (b) {
-	this.teacherRole = b;
+A3a.vpl.Program.prototype.setTeacherRole = function (teacherRole) {
+	this.teacherRole = teacherRole;
 };
 
 /** Append an empty event handler

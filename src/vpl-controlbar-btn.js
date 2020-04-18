@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -52,7 +52,7 @@ A3a.vpl.ControlBar.getButtonBounds;
 A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButton, buttonBounds) {
 	var disabled = app.uiConfig.isDisabled(id);
 	if ((app.forcedCommandState ? app.forcedCommandState.isAvailable : app.commands.isAvailable(id)) &&
-		(app.uiConfig.customizationMode || !disabled)) {
+		(app.uiConfig.toolbarCustomizationMode || !disabled)) {
 		var canvas = this.canvas;
 		var cmd = app.commands.find(id);
 		var keepAvailable = cmd.keep;
@@ -63,14 +63,14 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 				if (app.forcedCommandState) {
 					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses,
 						app.i18n,
-						app.forcedCommandState.isEnabled,
+						app.forcedCommandState.isEnabled && (keepAvailable || !app.uiConfig.toolbarCustomizationDisabled),
 						app.forcedCommandState.isSelected,
 						app.forcedCommandState.isPressed,
 						app.forcedCommandState.state);
 				} else {
 					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses,
 						app.i18n,
-						app.commands.isEnabled(id),
+						app.commands.isEnabled(id) && (keepAvailable || !app.uiConfig.toolbarCustomizationDisabled),
 						app.commands.isSelected(id),
 						isPressed,
 						app.commands.getState(id));
@@ -80,24 +80,24 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 				}
 			},
 			buttonBounds,
-			app.uiConfig.customizationMode && !keepAvailable
+			app.uiConfig.toolbarCustomizationMode && !keepAvailable
 				? function (downEvent) {
 					app.uiConfig.toggle(id);
 					return 1;
 				}
-				: app.commands.hasAction(id)
+				: app.commands.hasAction(id) && (keepAvailable || !app.uiConfig.toolbarCustomizationDisabled)
  					? function (downEvent) {
 						app.commands.execute(id, downEvent.modifier);
 					}
 					: null,
 			// doDrop
-			app.uiConfig.customizationMode && !keepAvailable
+			app.uiConfig.toolbarCustomizationMode && !keepAvailable && app.uiConfig.toolbarCustomizationDisabled
         		? null
 				: function (targetItem, droppedItem) {
 					app.commands.doDrop(id, droppedItem);
 				},
 			// canDrop
-			app.uiConfig.customizationMode && !keepAvailable
+			app.uiConfig.toolbarCustomizationMode && !keepAvailable && app.uiConfig.toolbarCustomizationDisabled
 				? null
 				: function (targetItem, droppedItem) {
 					return app.commands.canDrop(id, droppedItem);

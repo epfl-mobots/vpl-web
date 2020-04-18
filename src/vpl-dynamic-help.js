@@ -22,6 +22,7 @@ Markdown syntax currently implemented:
 # title (block or button name etc.)
 ## subtitle
 [text](url)
+![text](url)
 *emphasis* or _emphasis_
 **strong** or __strong__
 
@@ -37,6 +38,11 @@ A3a.vpl.DynamicHelp = function () {
 	// section: "blocks", "buttons", etc.
 	// id: "clap", "vpl:new", etc.
 	this.fragments = {};
+
+	// this.imageMap[urlMD] = url
+	// mapping from urlMD, as used in ![text](urlMD),
+	// to url to be used in generated html, such as "data:image/png;base64,..."
+	this.images = {};
 };
 
 /** Add fragments, merging with current values
@@ -65,6 +71,22 @@ A3a.vpl.DynamicHelp.prototype.add = function (fragments) {
 	}
 };
 
+/** Clear image mapping
+	@return {void}
+*/
+A3a.vpl.DynamicHelp.prototype.clearImageMapping = function () {
+	this.images = {};
+};
+
+/** Add image mapping
+	@param {string} urlMD url used in markdown ![text](urlMD)
+	@param {string} url url used in generated html
+	@return {void}
+*/
+A3a.vpl.DynamicHelp.prototype.addImageMapping = function (urlMD, url) {
+	this.images[urlMD] = url;
+};
+
 /** Get the array of text fragments corresponding to a language, section and id
 	@param {string} language
 	@param {string} section
@@ -83,7 +105,7 @@ A3a.vpl.DynamicHelp.prototype.get = function (language, section, id) {
 	@param {Array.<string>} md
 	@return {string}
 */
-A3a.vpl.DynamicHelp.convertToHTML = function (md) {
+A3a.vpl.DynamicHelp.prototype.convertToHTML = function (md) {
 	var html = "";
 	md.forEach(function (line) {
 		// isolated ampersands
@@ -115,12 +137,24 @@ A3a.vpl.DynamicHelp.convertToHTML = function (md) {
 		handleSpans(/\*\*|__/, "strong");
 		handleSpans(/\*|_/, "em");
 
+		// images
+		while (true) {
+			var re = /!\[([^\]]*)\]\(([^)]*)\)/.exec(line);
+			if (!re) {
+				break;
+			}
+			var url = this.images[re[2]] || re[2];
+			line = line.slice(0, re.index) +
+				"<img src=\"" + url + "\" alt=\"" + re[1] + "\">" +
+				line.slice(re.index + re[0].length);
+		}
+
 		// links
 		line = line.replace(/\[([^\]]*)\]\(([^)]*)\)/g, "<a href=\"$2\">$1</a>");
 
 		// add paragraph
 		html += "<" + parEl + ">" + line + "</" + parEl + ">\n";
-	});
+	}, this);
 
 	return html;
 };
@@ -135,8 +169,12 @@ A3a.vpl.DynamicHelp.prototype.generate = function (language, blocks) {
 	blocks.forEach(function (blockId) {
 		var frag = this.get(language, "blocks", blockId);
 		if (frag) {
-			html += A3a.vpl.DynamicHelp.convertToHTML(frag);
+			html += this.convertToHTML(frag);
 		}
 	}, this);
-	return "<html>\n" + (html || "<p>Empty</p>\n") + "</html>\n";
+	return "<html>\n" +
+		"<div style='height: 100%; overflow-y: scroll;'>" +
+		(html || "<p>Empty</p>\n") +
+		"</div>" +
+		"</html>\n";
 };
