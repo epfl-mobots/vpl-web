@@ -34,6 +34,9 @@ A3a.vm.dis = function (bytecode, noLabel) {
 	// event vector table
 	var eventVectorSize = bytecode[0];
 	if (bytecode.length > 0) {
+		if (eventVectorSize % 2 !== 1 || eventVectorSize > bytecode.length) {
+			throw "Bad event table";
+		}
 		code.push({addr: 0, op: bytecode.slice(0, 1), instr: -1, str: "dc " + bytecode[0]});
 	}
 	var eventVectorTable = [];
