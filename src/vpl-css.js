@@ -1049,6 +1049,8 @@ CSSParser.VPL.Line = function (props, lengthBase) {
 	this.shadowSpreadRadius = 0;
 	this.shadowColor = null;
 
+	this.otherProperties = {};
+
 	if (props) {
 		this.setProperties(props.properties, /** @type {CSSParser.LengthBase} */(lengthBase));
 	}
@@ -1106,6 +1108,11 @@ CSSParser.VPL.Line.prototype.setProperties = function (props, lengthBase) {
 				this.shadowBlurRadius = props[key].blurRadius ? props[key].blurRadius.toValue(lengthBase) : 0;
 				this.shadowSpreadRadius = props[key].spreadRadius ? props[key].spreadRadius.toValue(lengthBase) : 0;
 				this.shadowColor = props[key].color;
+			}
+			break;
+		default:
+			if (props.hasOwnProperty(key)) {
+				this.otherProperties[key] = props[key];
 			}
 			break;
 		}

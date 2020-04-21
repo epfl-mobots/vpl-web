@@ -72,10 +72,21 @@ A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height,
 			tag: "crossout-line",
 			clas: crossoutLineClasses || []
 		});
-		var excess = 0.1 * Math.min(width, this.dims.blockSize);
 		this.ctx.beginPath();
-		this.ctx.moveTo(left - excess, top + height * 0.7);
-		this.ctx.lineTo(left + width + excess, top + height * 0.3);
+		var angle = this.css.convertAngle(crossoutLine.otherProperties["line-angle"] || "0");
+		var overflow = this.css.convertLength(crossoutLine.otherProperties["line-overflow"] || "0").toValue(this.css.lengthBase);
+		var dx = 0, dy = 0;
+		if (Math.abs(angle % Math.PI) < Math.PI * 0.25 || Math.abs((Math.PI - angle) % Math.PI) < Math.PI * 0.25) {
+			// more wide than tall
+			dx = (width / 2 + overflow) * Math.sign(Math.cos(angle));
+			dy = height / 2 * Math.sin(angle) * Math.sqrt(2);
+		} else {
+			// more tall than wide
+			dy = (height / 2 + overflow) * Math.sign(Math.sin(angle));
+			dx = width / 2 * Math.cos(angle) * Math.sqrt(2);
+		}
+		this.ctx.moveTo(left + width / 2 - dx, top + height / 2 - dy);
+		this.ctx.lineTo(left + width / 2 + dx, top + height / 2 + dy);
 		crossoutLine.stroke(this.ctx);
 		this.ctx.restore();
 	}

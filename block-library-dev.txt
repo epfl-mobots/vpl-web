@@ -513,7 +513,7 @@ Box elements:
 Line elements:
 
 - conflict-line (classes: error, warning)
-- crossout-line (classes: button, vpl, rule, block, library)
+- crossout-line (classes: button, vpl, rule, block, library; additional properties "line-angle" and "line-overflow")
 
 Text translation
 ----------------
