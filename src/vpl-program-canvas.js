@@ -71,6 +71,7 @@ A3a.vpl.Application.prototype.createVPLControlBarDoOverFun = function () {
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.Block} block
 	@param {CSSParser.VPL.Box} box
+	@param {Array.<string>} cssClasses
 	@param {number} x horizontal block position (without box padding)
 	@param {number} y vertical  block position (without box padding)
 	@param {{
@@ -84,7 +85,7 @@ A3a.vpl.Application.prototype.createVPLControlBarDoOverFun = function () {
 	}=} opts
 	@return {A3a.vpl.CanvasItem}
 */
-A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, x, y, opts) {
+A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, cssClasses, x, y, opts) {
 	/** Check if block type is for blocks on the action side (right)
 		@param {A3a.vpl.blockType} type
 		@return {boolean}
@@ -117,7 +118,7 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, x
 			}
 			if (block.disabled || opts.disabled) {
 				canvas.disabledMark(item.x + dx, item.y + dy, blockSize, blockSize,
-					["block"], ["block"], !opts.crossedOut);
+					cssClasses, cssClasses, !block.disabled && !opts.crossedOut);
 			}
 			canvas.dims = dims0;
 			ctx.restore();
@@ -195,7 +196,7 @@ A3a.vpl.Application.prototype.addBlockTemplateToCanvas = function (canvas, block
 	var program = this.program;
 	var crossedOut = (program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 		.indexOf(blockTemplate.name) < 0;
-	var canvasItem = this.addBlockToCanvas(canvas, block, box, x, y,
+	var canvasItem = this.addBlockToCanvas(canvas, block, box, ["block", "library"], x, y,
 		{
 			notInteractive: true,
 			notDropTarget: true,
@@ -484,7 +485,7 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 		var vertOffset = A3a.vpl.Program.blockVerticalOffset(blockBox, containerBox);
 		if (event) {
 			containerBox.width = blockBox.totalWidth();
-			childItem = this.addBlockToCanvas(canvas, event, blockBox,
+			childItem = this.addBlockToCanvas(canvas, event, blockBox, ["block"],
 				x, y + vertOffset,
 				{
 					notInteractive: rule.disabled || this.program.noVPL || this.program.readOnly,
@@ -496,7 +497,7 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 			childItem = this.addBlockToCanvas(canvas,
 				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.event, rule,
 					{eventSide: true, index: j}),
-				blockBox,
+				blockBox, ["block"],
 				x, y + vertOffset,
 				{
 					notDropTarget: rule.disabled || this.readOnly,
@@ -523,7 +524,8 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 		var vertOffset = A3a.vpl.Program.blockVerticalOffset(blockBox, containerBox);
 		if (action) {
 			containerBox.width = blockBox.totalWidth();
-			childItem = this.addBlockToCanvas(canvas, action, A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes),
+			childItem = this.addBlockToCanvas(canvas, action,
+				A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes), ["block"],
 				x, y + vertOffset,
 				{
 					notInteractive: rule.disabled || this.program.noVPL || this.program.readOnly,
@@ -535,7 +537,7 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 			childItem = this.addBlockToCanvas(canvas,
 				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.action, rule,
 					{eventSide: false, index: j}),
-				blockBox,
+				blockBox, ["block"],
 				x, y,
 				{
 					notDropTarget: program.readOnly,
