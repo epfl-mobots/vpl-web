@@ -136,6 +136,14 @@ overlay-rectangle.drop-target {
 	border: 0.1vw #6200ea;
 	border-radius: 4px;
 }
+overlay-rectangle.disabled {
+	background: rgba(100,100,100,0.5);
+}
+crossout-line {
+	line-width: 0.15vw;
+ 	color: white;
+	line-angle: 45deg;
+}
 
 /*Other*/
 widget {

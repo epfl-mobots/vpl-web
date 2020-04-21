@@ -159,6 +159,18 @@ overlay-rectangle.drop-target {
 crossout-line {
 	line-width: 0.75vw;
  	color: rgba(120,120,120,0.5);
+	line-angle: -10deg;
+	line-overflow: 0.5vw;
+}
+crossout-line.library {
+	line-overflow: 0.1vw;
+}
+crossout-line.rule {
+	line-angle: -20deg;
+}
+crossout-line.button {
+	line-width: 0.5vw;
+	line-overflow: 0.1vw;
 }
 crossout-line.vpl {
 	line-width: 5vw;
