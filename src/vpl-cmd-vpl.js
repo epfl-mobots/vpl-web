@@ -360,9 +360,6 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		]
 	});
 	this.commands.add("vpl:connected", {
-		isEnabled: function (app) {
-			return false;
-		},
 		isSelected: function (app) {
 			return !app.program.noVPL && app.robots[app.currentRobotIndex].runGlue.isConnected();
 		},

@@ -12,9 +12,19 @@
 		},
 		{
 			"name": "vpl:close",
-			"state": [""],
+			"state": ["disabled"],
 			"draw": [
-								{
+				{
+					"uri": "Icons.svg#Close_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:close",
+			"state": [],
+			"draw": [
+				{
 					"uri": "Icons.svg#Close_default"
 				}
 			]
@@ -28,6 +38,16 @@
 				},
 				{
 					"uri": "Icons.svg#about_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:about",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#about_default",
+					"alpha": 0.5
 				}
 			]
 		},
@@ -49,6 +69,16 @@
 				},
 				{
 					"uri": "Icons.svg#help_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:help",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#help_default",
+					"alpha": 0.5
 				}
 			]
 		},
@@ -102,6 +132,16 @@
 				},
 				{
 					"uri": "Icons.svg#open_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:load",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#open_default",
+					"alpha": 0.5
 				}
 			]
 		},
@@ -193,6 +233,16 @@
 		},
 		{
 			"name": "vpl:text",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#textMode_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:text",
 			"state": ["selected"],
 			"draw": [
 
@@ -201,7 +251,6 @@
 				}
 			]
 		},
-
 		{
 			"name": "vpl:text",
 			"state": [],
@@ -213,10 +262,30 @@
 		},
 		{
 			"name": "vpl:readonly",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#readonly_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:readonly",
 			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#readonly_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:connected",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#connectOn",
+					"alpha": 0.5
 				}
 			]
 		},
@@ -538,6 +607,16 @@
 		},
 		{
 			"name": "vpl:trashcan",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#delete_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:trashcan",
 			"state": [],
 			"draw": [
 				{
@@ -554,6 +633,16 @@
 				},
 				{
 					"uri": "Icons.svg#simulator_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:sim",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#simulator_default",
+					"alpha": 0.5
 				}
 			]
 		},
@@ -581,6 +670,16 @@
 		},
 		{
 			"name": "vpl:advanced",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#basicMode_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:advanced",
 			"state": ["selected"],
 			"draw": [
 				{
@@ -600,10 +699,11 @@
 
 		{
 			"name": "src:locked",
-			"state": [],
+			"state": ["disabled"],
 			"draw": [
 				{
-					"uri": "Icons.svg#locked_default"
+					"uri": "Icons.svg#locked_default",
+					"alpha": 0.5
 				}
 			]
 		},
@@ -617,11 +717,40 @@
 			]
 		},
 		{
+			"name": "src:locked",
+			"state": [],
+			"draw": [
+				{
+					"uri": "Icons.svg#locked_default"
+				}
+			]
+		},
+		{
+			"name": "src:vpl",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#vpl_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
 			"name": "src:vpl",
 			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#vpl_default"
+				}
+			]
+		},
+		{
+			"name": "src:close",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Close_default",
+					"alpha": 0.5
 				}
 			]
 		},
@@ -700,16 +829,36 @@
 		},
 		{
 			"name": "sim:close",
-			"state": [""],
+			"state": ["disabled"],
 			"draw": [
-								{
+				{
+					"uri": "Icons.svg#Close_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "sim:close",
+			"state": [],
+			"draw": [
+				{
 					"uri": "Icons.svg#Close_default"
 				}
 			]
 		},
 		{
 			"name": "sim:restart",
-			"state": [""],
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#restart_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "sim:restart",
+			"state": [],
 			"draw": [
 								{
 					"uri": "Icons.svg#restart_default"
@@ -718,10 +867,30 @@
 		},
 		{
 			"name": "sim:pause",
-			"state": [""],
+			"state": ["disabled"],
 			"draw": [
-								{
+				{
+					"uri": "Icons.svg#pause_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "sim:pause",
+			"state": [],
+			"draw": [
+				{
 					"uri": "Icons.svg#pause_default"
+				}
+			]
+		},
+		{
+			"name": "sim:speedup",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#_1speed_default",
+					"alpha": 0.5
 				}
 			]
 		},
@@ -729,11 +898,9 @@
 			"name": "sim:speedup",
 			"state": ["unselected", "=1"],
 			"draw": [
-
 				{
 					"uri": "Icons.svg#_1speed_default"
 				}
-
 			]
 		},
 		{
@@ -751,36 +918,52 @@
 			"name": "sim:speedup",
 			"state": ["selected", "=5"],
 			"draw": [
-
 				{
 					"uri": "Icons.svg#_5speed_default"
 				}
-
 			]
 		},
 		{
 			"name": "sim:speedup",
 			"state": ["selected", "=0.5"],
 			"draw": [
-
 				{
 					"uri": "Icons.svg#_0_5speed_default"
 				}
-
 			]
 		},
 		{
 			"name": "sim:pen",
-			"state": [""],
+			"state": ["disabled"],
 			"draw": [
-								{
+				{
+					"uri": "Icons.svg#pen_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "sim:pen",
+			"state": [],
+			"draw": [
+				{
 					"uri": "Icons.svg#pen_default"
 				}
 			]
 		},
 		{
 			"name": "sim:clear",
-			"state": [""],
+			"state": ["disabled"],
+			"draw": [
+								{
+					"uri": "Icons.svg#simClear_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "sim:clear",
+			"state": [],
 			"draw": [
 								{
 					"uri": "Icons.svg#simClear_default"
@@ -789,7 +972,7 @@
 		},
 		{
 			"name": "sim-event:forward",
-			"state": [""],
+			"state": [],
 			"draw": [
 								{
 					"uri": "Icons.svg#sim_forward_default"
@@ -798,7 +981,7 @@
 		},
 		{
 			"name": "sim-event:left",
-			"state": [""],
+			"state": [],
 			"draw": [
 								{
 					"uri": "Icons.svg#sim_left_default"
@@ -807,7 +990,7 @@
 		},
 		{
 			"name": "sim-event:backward",
-			"state": [""],
+			"state": [],
 			"draw": [
 								{
 					"uri": "Icons.svg#sim_backward_default"
@@ -816,7 +999,7 @@
 		},
 		{
 			"name": "sim-event:right",
-			"state": [""],
+			"state": [],
 			"draw": [
 								{
 					"uri": "Icons.svg#sim_right_default"
@@ -825,7 +1008,7 @@
 		},
 		{
 			"name": "sim-event:center",
-			"state": [""],
+			"state": [],
 			"draw": [
 								{
 					"uri": "Icons.svg#sim_center_default"
@@ -834,7 +1017,7 @@
 		},
 		{
 			"name": "sim-event:tap",
-			"state": [""],
+			"state": [],
 			"draw": [
 								{
 					"uri": "Icons.svg#sim_tap_default"
@@ -843,7 +1026,7 @@
 		},
 		{
 			"name": "sim-event:clap",
-			"state": [""],
+			"state": [],
 			"draw": [
 								{
 					"uri": "Icons.svg#sim_clap_default"

@@ -574,6 +574,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 				dims.controlSize * 0.1);
 		},
 		"vpl:connected": function () {
+			isEnabled = false;	// force disabled appearance
 			ctx.translate(0, 0.1 * dims.controlSize);
 			ctx.save();
 			ctx.translate(dims.controlSize * 0.8, dims.controlSize * 0.2);
