@@ -38,6 +38,12 @@ A3a.Assembler.prototype.nodeDefinitions = function () {
 	defs["_userdata"] = this.asebaNode.varSize;
 	defs["_topdata"] = this.asebaNode.maxVarSize;
 
+	// local events
+	defs["_ev.init"] = 0xffff;
+	this.asebaNode.localEvents.forEach(function (ev, i) {
+		defs["_ev." + ev.name] = 0xfffe - i;
+	});
+
 	// native functions
 	this.asebaNode.nativeFunctions.forEach(function (nf) {
 		defs["_nf." + nf.name] = nf.id;
