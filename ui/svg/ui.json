@@ -40,9 +40,6 @@
 			"modes": ["basic", "advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Event_bg"
-				},
-				{
 					"uri": "Blocks.svg#Ev_Start"
 				}
 			],
@@ -53,9 +50,6 @@
 			"type": "event",
 			"modes": ["basic", "advanced"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Event_bg"
-				},
 				{
 					"uri": "Blocks.svg#Bg_Thymio"
 				},
@@ -98,9 +92,6 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Event_bg"
-				},
-				{
 					"uri": "Blocks.svg#Rot360Rail"
 				},
 				{
@@ -123,9 +114,6 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Event_bg"
-				},
-				{
 					"uri": "Blocks.svg#Ground_accel"
 				},
 				{
@@ -139,9 +127,6 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Event_bg"
-				},
-				{
 					"uri": "Blocks.svg#Ground_accel"
 				},
 				{
@@ -154,9 +139,6 @@
 			"type": "event",
 			"modes": ["advanced"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Event_bg"
-				},
 				{
 					"uri": "Blocks.svg#Rot360Rail"
 				},
@@ -180,9 +162,6 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Event_bg"
-				},
-				{
 					"uri": "Blocks.svg#Rot360Rail"
 				},
 				{
@@ -205,9 +184,6 @@
 			"modes": ["basic", "advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Event_bg"
-				},
-				{
 					"uri": "Blocks.svg#Ev_Acc_Hit"
 				}
 			],
@@ -218,9 +194,6 @@
 			"type": "event",
 			"modes": [],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Event_bg"
-				},
 				{
 					"uri": "Blocks.svg#Ev_Acc_Fall"
 				}
@@ -233,9 +206,6 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Event_bg"
-				},
-				{
 					"uri": "Blocks.svg#Ev_Clap"
 				}
 			],
@@ -246,9 +216,6 @@
 			"type": "event",
 			"modes": ["basic"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Event_bg"
-				},
 				{
 					"uri": "Blocks.svg#Ev_ProxGr_bas"
 				}
@@ -267,9 +234,6 @@
 			"type": "event",
 			"modes": ["basic"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Event_bg"
-				},
 				{
 					"uri": "Blocks.svg#Ev_ProxGr_med"
 				}
@@ -310,9 +274,6 @@
 			"type": "event",
 			"modes": ["advanced"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Event_bg"
-				},
 				{
 					"js": "var gth = Math.floor($[2] * 255.99).toString(10); var g = 'rgb(' + [gth,gth,gth].join(',') + ')'; $.slice(0, 2).forEach(function (b, i) { if (b) { var lg = ctx.createLinearGradient(0, 40, 0, 460); lg.addColorStop(0, b > 0 ? 'white' : g); lg.addColorStop(1, b > 0 ? g : 'black'); ctx.fillStyle = lg; ctx.fillRect(40 + i * 335, 40, 335, 460); } });"
 				},
@@ -380,9 +341,6 @@
 			"type": "event",
 			"modes": ["advanced"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Event_bg"
-				},
 				{
 					"uri": "Blocks.svg#Ev_ProxH_Front_adv"
 				},
@@ -481,9 +439,6 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Event_bg"
-				},
-				{
 					"uri": "Blocks.svg#Ev_ProxH_Back_adv"
 				},
 				{
@@ -561,9 +516,6 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Event_bg"
-				},
-				{
 					"uri": "Blocks.svg#Ev_Remote1"
 				}
 			],
@@ -601,9 +553,6 @@
 			"type": "event",
 			"modes": ["advanced"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Event_bg"
-				},
 				{
 					"uri": "Blocks.svg#Ev_Remote2"
 				}
@@ -678,9 +627,6 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Event_bg"
-				},
-				{
 					"uri": "Blocks.svg#Ev_TimersUp"
 				}
 			]
@@ -690,9 +636,6 @@
 			"type": "state",
 			"modes": ["advanced"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Event_bg"
-				},
 				{
 					"uri": "Blocks.svg#EvCounter"
 				},
@@ -781,9 +724,6 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Event_bg"
-				},
-				{
 					"uri": "Blocks.svg#statesEv_Bg"
 				},
 				{
@@ -840,9 +780,6 @@
 			"type": "state",
 			"modes": ["advanced"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Event_bg"
-				},
 				{
 					"uri": "Blocks.svg#statesEv_Bg_adv"
 				},
@@ -937,9 +874,6 @@
 			"modes": ["basic", "advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Event_bg"
-				},
-				{
 					"uri": "Blocks.svg#ColorPalette"
 				},
 				{
@@ -1007,9 +941,6 @@
 			"type": "state",
 			"modes": ["basic", "advanced"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Event_bg"
-				},
 				{
 					"uri": "Blocks.svg#ColorPalette-2"
 				},
@@ -1079,9 +1010,6 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Act_bg"
-				},
-				{
 					"uri": "Blocks.svg#Ac_Wheels"
 				}
 			],
@@ -1134,9 +1062,6 @@
 			"type": "action",
 			"modes": ["basic"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Act_bg"
-				},
 				{
 					"uri": "Blocks.svg#Ac_Directions"
 				}
@@ -1195,9 +1120,6 @@
 			"type": "action",
 			"modes": ["basic"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Act_bg"
-				},
 				{
 					"uri": "Blocks.svg#ColorPalette"
 				},
@@ -1267,9 +1189,6 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Act_bg"
-				},
-				{
 					"uri": "Blocks.svg#ColorPalette-2"
 				},
 				{
@@ -1338,9 +1257,6 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Act_bg"
-				},
-				{
 					"uri": "Blocks.svg#Color_top_adv"
 				}
 			],
@@ -1380,9 +1296,6 @@
 			"type": "action",
 			"modes": ["advanced"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Act_bg"
-				},
 				{
 					"uri": "Blocks.svg#Color_bot_adv"
 				}
@@ -1424,9 +1337,6 @@
 			"modes": ["basic"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Act_bg"
-				},
-				{
 					"uri": "Blocks.svg#zones_Bg"
 				},
 				{
@@ -1445,9 +1355,6 @@
 			"type": "action",
 			"modes": ["advanced"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Act_bg"
-				},
 				{
 					"uri": "Blocks.svg#zones_Bg"
 				},
@@ -1479,9 +1386,6 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Act_bg"
-				},
-				{
 					"uri": "Blocks.svg#Ac_SD_play"
 				}
 			],
@@ -1500,9 +1404,6 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Act_bg"
-				},
-				{
 					"uri": "Blocks.svg#Ac_SD_stop"
 				}
 			],
@@ -1514,9 +1415,6 @@
 			"type": "action",
 			"modes": ["basic"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Act_bg"
-				},
 				{
 					"uri": "Blocks.svg#statesAct_Bg"
 				},
@@ -1574,9 +1472,6 @@
 			"type": "action",
 			"modes": ["advanced"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Act_bg"
-				},
 				{
 					"uri": "Blocks.svg#statesAct_Bg_adv"
 				},
@@ -1670,9 +1565,6 @@
 			"modes": ["advanced"],
 			"draw": [
 				{
-					"uri": "Blocks.svg#Act_bg"
-				},
-				{
 					"uri": "Blocks.svg#Ac_Timer"
 				}
 
@@ -1706,9 +1598,6 @@
 			"type": "action",
 			"modes": ["advanced"],
 			"draw": [
-				{
-					"uri": "Blocks.svg#Act_bg"
-				},
 				{
 					"uri": "Blocks.svg#AcCounter"
 				},
