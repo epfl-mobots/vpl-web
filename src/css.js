@@ -25,13 +25,21 @@ var CSSParser = function () {
 	this.rawRules = [];
 
 	/** @type {Object.<string,number>} */
-	this.units = {
+	this.lengthUnits = {
 		"px": 1,
 		"cm": 96 / 2.54,
 		"mm": 96 / 25.4,
 		"in": 96,
 		"pc": 96 / 6,
 		"pt": 96 / 72
+	};
+
+	/** @type {Object.<string,number>} */
+	this.angleUnits = {
+		"rad": 1,
+		"deg": Math.PI / 180,
+		"grad": Math.PI / 200,
+		"turn": 2 * Math.PI
 	};
 
 	/** @type {?CSSParser.LengthBase} */
@@ -262,8 +270,8 @@ CSSParser.prototype.convertLength = function (length) {
 		throw "Illegal length";
 	} else if (re[3] === "%") {
 		type = CSSParser.Length.type.percentage;
-	} else if (this.units.hasOwnProperty(re[3])) {
-		sc = this.units[re[3]];
+	} else if (this.lengthUnits.hasOwnProperty(re[3])) {
+		sc = this.lengthUnits[re[3]];
 	} else if (re[3] === "vw") {
 		type = CSSParser.Length.type.vw;
 	} else if (re[3] === "vh") {
@@ -287,6 +295,26 @@ CSSParser.prototype.convertLength = function (length) {
 		throw "Unknown length unit";
 	}
 	return new CSSParser.Length(parseFloat(re[1]) * sc, type);
+};
+
+/** Convert an angle (number+unit) to an angle in radians
+	@param {string} angle
+	@return {number}
+*/
+CSSParser.prototype.convertAngle = function (angle) {
+	var re = /^(-?([0-9]+\.?|[0-9]*\.[0-9]+))([a-z]*)$/.exec(angle);
+	var sc = 1;
+	if (re == null) {
+		throw "Illegal angle";
+	} else if (this.angleUnits.hasOwnProperty(re[3])) {
+		sc = this.angleUnits[re[3]];
+	} else if (parseFloat(re[1]) == 0) {
+		// unit ignored if angle is 0 (can be missing)
+		sc = 0;
+	} else {
+		throw "Unknown angle unit";
+	}
+	return parseFloat(re[1]) * sc;
 };
 
 /** Color dict (obtained from https://www.w3.org/TR/css-color-3/#svg-color with the following

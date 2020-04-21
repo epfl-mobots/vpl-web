@@ -480,6 +480,7 @@ Line properties:
 Values:
 
 - lengths: floating-point value with unit (px, cm, mm, in, pc, pt, vw, vh, vmin, vmax, ww, wh, wmin, wmax, %), or 0
+- angles: floating-point value with unit (rad, deg, grad, turn)
 - colors: #xxxxxx or #xxx or one of the colors defined in <https://www.w3.org/TR/css-color-3/#svg-color>
 - line styles: none, hidden, dotted, dashed, solid, or double
 - line caps: butt, round, square
