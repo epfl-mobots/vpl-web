@@ -188,6 +188,18 @@
 			}
 		},
 		{
+			"name": "set timer",
+			"js": {
+				"initCodeExec": [
+					[
+						"// stop timer 0\n",
+						"this.setTimer(0, -1);\n"
+					]
+				],
+				"statement": "this.setTimer(0, `$[0].toFixed(1)`);\n"
+			}
+		},
+		{
 			"name": "notes",
 			"js": {
 				"initCodeExec": [

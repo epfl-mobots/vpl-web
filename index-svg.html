@@ -1581,37 +1581,42 @@
 			]
 		},
 		{
-			"name": "setTimer",
+			"name": "set timer",
 			"type": "action",
 			"modes": ["advanced"],
 			"draw": [
 				{
 					"uri": "Blocks.svg#Ac_Timer"
+				},
+				{
+					"js": "ctx.font = 'bold 170px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(Math.floor($[0]).toString(10),330,550); ctx.fillText((10*$[0]%10).toString(10),690,550); ctx.font = '170px sans-serif'; ctx.fillText('s',450,550);"
 				}
-
 			],
-			"defaultParameters": [],
-
+			"defaultParameters": [1],
+			"otherParameters": 1,
 			"pushbuttons": [
 				{
 					"id": "SecUp",
-					"newParameters": ""
+					"newParameters": "`[Math.round((10*$[0]+10)%100)/10]`"
 				},
 				{
 					"id": "SecDown",
-					"newParameters": ""
+					"newParameters": "`[Math.round((10*$[0]+90)%100)/10]`"
 				},
 				{
 					"id": "TSecUp",
-					"newParameters": ""
+					"newParameters": "`[Math.round((10*$[0]+1)%100)/10]`"
 				},
 				{
 					"id": "TSecDown",
-					"newParameters": ""
+					"newParameters": "`[Math.round((10*$[0]+99)%100)/10]`"
 				}
 			],
 			"styles": [
-
+				{
+					"id": "S_Unit",
+					"st": "visibility:hidden"
+				}
 			]
 		},
 		{
@@ -2421,6 +2426,25 @@ sim-playground {
 			}
 		},
 		{
+			"name": "set timer",
+			"aseba": {
+				"initVarDecl": [
+					"var timerElapsed\n"
+				],
+				"initCodeExec": [
+					[
+						"# stop timer 0\n",
+						"timer.period[0] = 0\n"
+					],
+					"timerElapsed = 0\n"
+				],
+				"statement": [
+					"timer.period[0] = `Math.round(1000 * $[0])`\n",
+					"timerElapsed = 0\n"
+				]
+			}
+		},
+		{
 			"name": "notes",
 			"aseba": {
 				"initVarDecl": [
@@ -2986,6 +3010,22 @@ sim-playground {
 			}
 		},
 		{
+			"name": "set timer",
+			"l2": {
+				"initVarDecl": [
+					"bool timerElapsed;\n"
+				],
+				"initCodeExec": [
+					[
+						"// stop timer 0\n",
+						"timer.period[0] = 0;\n"
+					],
+					"timerElapsed = false;\n"
+				],
+				"statement": "timer.period[0] = `Math.round(1000 * $[0])`;\n"
+			}
+		},
+		{
 			"name": "notes",
 			"l2": {
 				"initVarDecl": [
@@ -3300,6 +3340,18 @@ sim-playground {
 			}
 		},
 		{
+			"name": "set timer",
+			"js": {
+				"initCodeExec": [
+					[
+						"// stop timer 0\n",
+						"this.setTimer(0, -1);\n"
+					]
+				],
+				"statement": "this.setTimer(0, `$[0].toFixed(1)`);\n"
+			}
+		},
+		{
 			"name": "notes",
 			"js": {
 				"initCodeExec": [
@@ -3486,6 +3538,9 @@ sim-playground {
 		},
 		{
 			"name": "bottom color"
+		},
+		{
+			"name": "set timer"
 		},
 		{
 			"name": "notes"

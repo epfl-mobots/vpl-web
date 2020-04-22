@@ -435,6 +435,25 @@
 			}
 		},
 		{
+			"name": "set timer",
+			"aseba": {
+				"initVarDecl": [
+					"var timerElapsed\n"
+				],
+				"initCodeExec": [
+					[
+						"# stop timer 0\n",
+						"timer.period[0] = 0\n"
+					],
+					"timerElapsed = 0\n"
+				],
+				"statement": [
+					"timer.period[0] = `Math.round(1000 * $[0])`\n",
+					"timerElapsed = 0\n"
+				]
+			}
+		},
+		{
 			"name": "notes",
 			"aseba": {
 				"initVarDecl": [

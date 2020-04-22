@@ -412,6 +412,22 @@
 			}
 		},
 		{
+			"name": "set timer",
+			"l2": {
+				"initVarDecl": [
+					"bool timerElapsed;\n"
+				],
+				"initCodeExec": [
+					[
+						"// stop timer 0\n",
+						"timer.period[0] = 0;\n"
+					],
+					"timerElapsed = false;\n"
+				],
+				"statement": "timer.period[0] = `Math.round(1000 * $[0])`;\n"
+			}
+		},
+		{
 			"name": "notes",
 			"l2": {
 				"initVarDecl": [
