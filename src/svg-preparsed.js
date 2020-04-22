@@ -162,13 +162,26 @@ SVG.Preparsed.prototype.parse = function () {
 			var styleDict = {};
 			SVG.parseStyle(styleDict, styleStr);
 
-			var dashArrayAttr = el.getAttribute("stroke-dasharray");
-			if (dashArrayAttr) {
-				styleDict["stroke-dasharray"] = dashArrayAttr.split(",");
+			var styleAttr;
+			styleAttr = el.getAttribute("fill");
+			if (styleAttr) {
+				styleDict["fill"] = styleAttr;
 			}
-			var dashOffsetAttr = el.getAttribute("stroke-dashoffset");
-			if (dashOffsetAttr) {
-				styleDict["stroke-dashoffset"] = dashOffsetAttr;
+			styleAttr = el.getAttribute("stroke");
+			if (styleAttr) {
+				styleDict["stroke"] = styleAttr;
+			}
+			styleAttr = el.getAttribute("stroke-width");
+			if (styleAttr) {
+				styleDict["stroke-width"] = styleAttr;
+			}
+			styleAttr = el.getAttribute("stroke-dasharray");
+			if (styleAttr) {
+				styleDict["stroke-dasharray"] = styleAttr.split(",");
+			}
+			styleAttr = el.getAttribute("stroke-dashoffset");
+			if (styleAttr) {
+				styleDict["stroke-dashoffset"] = styleAttr;
 			}
 			var idAttr = el.getAttribute("id");
 			if (idAttr) {
