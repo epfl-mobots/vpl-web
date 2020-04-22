@@ -494,6 +494,24 @@
 			}
 		},
 		{
+			"name": "play",
+			"l2": {
+				"initCodeExec": [
+					"sound.system(-1);\n"
+				],
+				"statement": "sound.play(`$[0].toString(10)`);\n"
+			}
+		},
+		{
+			"name": "play stop",
+			"l2": {
+				"initCodeExec": [
+					"sound.system(-1);\n"
+				],
+				"statement": "sound.play(-1);\n"
+			}
+		},
+		{
 			"name": "arithmetic",
 			"l2": {
 				"initVarDecl": [

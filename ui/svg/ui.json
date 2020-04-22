@@ -1381,25 +1381,32 @@
 			}
 		},
 		{
-			"name": "sd play",
+			"name": "play",
 			"type": "action",
 			"modes": ["advanced"],
 			"draw": [
 				{
 					"uri": "Blocks.svg#Ac_SD_play"
+				},
+				{
+					"js": "ctx.font = 'bold 170px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText($[0].toString(10), 770, 520);"
 				}
 			],
-			"defaultParameters": [],
+			"defaultParameters": [0],
+			"otherParameters": 1,
 			"pushbuttons": [
 				{
-					"id": "ComparatorDown",
-					"newParameters": ""
+					"id": "ClipDown",
+					"newParameters": "`[($[0]+255)%256]`"
+				},
+				{
+					"id": "ClipUp",
+					"newParameters": "`[($[0]+1)%256]`"
 				}
 			]
-
 		},
 		{
-			"name": "sd stop",
+			"name": "play stop",
 			"type": "action",
 			"modes": ["advanced"],
 			"draw": [

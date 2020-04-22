@@ -94,6 +94,12 @@
 			"name": "notes with speed"
 		},
 		{
+			"name": "play"
+		},
+		{
+			"name": "play stop"
+		},
+		{
 			"name": "set state 256"
 		},
 		{

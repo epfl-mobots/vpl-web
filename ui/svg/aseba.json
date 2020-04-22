@@ -543,6 +543,24 @@
 			}
 		},
 		{
+			"name": "play",
+			"aseba": {
+				"initCodeExec": [
+					"call sound.system(-1)\n"
+				],
+				"statement": "call sound.play(`$[0].toString(10)`)\n"
+			}
+		},
+		{
+			"name": "play stop",
+			"aseba": {
+				"initCodeExec": [
+					"call sound.system(-1)\n"
+				],
+				"statement": "call sound.play(-1)\n"
+			}
+		},
+		{
 			"name": "arithmetic",
 			"aseba": {
 				"initVarDecl": [
