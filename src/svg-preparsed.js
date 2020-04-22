@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -244,6 +244,8 @@ SVG.Preparsed.prototype.parse = function () {
 			var y = 0;
 			var xc1 = 0;	// implicit control point for S and s
 			var yc1 = 0;
+			var xSubPath0 = 0;	// initial point of current subpath
+			var ySubPath0 = 0;
 
 			d.slice(1).split(";")
 				.forEach(function (c) {
@@ -257,6 +259,8 @@ SVG.Preparsed.prototype.parse = function () {
 						if (args.length >= 2) {
 							x = args[0];
 							y = args[1];
+							xSubPath0 = x;
+							ySubPath0 = y;
 							cmds.push({cmd: "M", args: [x, y]});
 
 							for (var i = 2; i + 1 < args.length; i += 2) {
@@ -272,6 +276,8 @@ SVG.Preparsed.prototype.parse = function () {
 						if (args.length >= 2) {
 							x += args[0];
 							y += args[1];
+							xSubPath0 = x;
+							ySubPath0 = y;
 							cmds.push({cmd: "M", args: [x, y]});
 
 							for (var i = 2; i + 1 < args.length; i += 2) {
@@ -490,6 +496,8 @@ SVG.Preparsed.prototype.parse = function () {
 						break;
 					case "Z":
 					case "z":
+						x = xSubPath0;
+						y = ySubPath0;
 						cmds.push({cmd: "Z", args: []});
 						break;
 					default:
