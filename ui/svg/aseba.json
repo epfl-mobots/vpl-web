@@ -462,7 +462,8 @@
 						"wave_phase = (i - 70) * 468\n",
 						"call math.cos(wave_intensity, wave_phase)\n",
 						"wave[i] = wave_intensity / 256\n",
-						"end\ncall sound.wave(wave)\n"
+						"end\n",
+						"call sound.wave(wave)\n"
 					],
 					[
 						"call sound.system(-1)\n"
@@ -517,12 +518,6 @@
 						"wave[i] = wave_intensity / 256\n",
 						"end\n",
 						"call sound.wave(wave)\n"
-					],
-					[
-						"call leds.top(0, 0, 0)\n",
-						"call leds.bottom.left(0, 0, 0)\n",
-						"call leds.bottom.right(0, 0, 0)\n",
-						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
 					],
 					[
 						"call sound.system(-1)\n"

@@ -260,7 +260,7 @@
 			"l2": {
 				"initCodeExec": [
 					[
-						"// reset outputs\nsound.system(-1);\n",
+						"// reset outputs\n",
 						"leds.top(0, 0, 0);\n",
 						"leds.bottom.left(0, 0, 0);\n",
 						"leds.bottom.right(0, 0, 0);\n",
@@ -276,7 +276,7 @@
 			"l2": {
 				"initCodeExec": [
 					[
-						"// reset outputs\nsound.system(-1);\n",
+						"// reset outputs\n",
 						"leds.top(0, 0, 0);\n",
 						"leds.bottom.left(0, 0, 0);\n",
 						"leds.bottom.right(0, 0, 0);\n",
@@ -296,7 +296,7 @@
 				"initCodeExec": [
 					"topColor = [0, 0, 0];\n",
 					[
-						"// reset outputs\nsound.system(-1);\n",
+						"// reset outputs\n",
 						"leds.top(0, 0, 0);\n",
 						"leds.bottom.left(0, 0, 0);\n",
 						"leds.bottom.right(0, 0, 0);\n",
@@ -316,7 +316,7 @@
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0];\n",
 					[
-						"// reset outputs\nsound.system(-1);\n",
+						"// reset outputs\n",
 						"leds.top(0, 0, 0);\n",
 						"leds.bottom.left(0, 0, 0);\n",
 						"leds.bottom.right(0, 0, 0);\n",
@@ -336,7 +336,7 @@
 				"initCodeExec": [
 					"topColor = [0, 0, 0];\n",
 					[
-						"// reset outputs\nsound.system(-1);\n",
+						"// reset outputs\n",
 						"leds.top(0, 0, 0);\n",
 						"leds.bottom.left(0, 0, 0);\n",
 						"leds.bottom.right(0, 0, 0);\n",
@@ -358,7 +358,7 @@
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0];\n",
 					[
-						"// reset outputs\nsound.system(-1);\n",
+						"// reset outputs\n",
 						"leds.top(0, 0, 0);\n",
 						"leds.bottom.left(0, 0, 0);\n",
 						"leds.bottom.right(0, 0, 0);\n",
@@ -434,11 +434,7 @@
 						"note_index = 6;\n"
 					],
 					[
-						"// reset outputs\nsound.system(-1);\n",
-						"leds.top(0, 0, 0);\n",
-						"leds.bottom.left(0, 0, 0);\n",
-						"leds.bottom.right(0, 0, 0);\n",
-						"leds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+						"sound.system(-1);\n"
 					]
 				],
 				"initCodeDecl": [
@@ -479,11 +475,7 @@
 						"note_index = 6;\n"
 					],
 					[
-						"// reset outputs\nsound.system(-1);\n",
-						"leds.top(0, 0, 0);\n",
-						"leds.bottom.left(0, 0, 0);\n",
-						"leds.bottom.right(0, 0, 0);\n",
-						"leds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+						"sound.system(-1);\n"
 					]
 				],
 				"initCodeDecl": [

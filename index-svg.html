@@ -2441,7 +2441,8 @@ sim-playground {
 						"wave_phase = (i - 70) * 468\n",
 						"call math.cos(wave_intensity, wave_phase)\n",
 						"wave[i] = wave_intensity / 256\n",
-						"end\ncall sound.wave(wave)\n"
+						"end\n",
+						"call sound.wave(wave)\n"
 					],
 					[
 						"call sound.system(-1)\n"
@@ -2496,12 +2497,6 @@ sim-playground {
 						"wave[i] = wave_intensity / 256\n",
 						"end\n",
 						"call sound.wave(wave)\n"
-					],
-					[
-						"call leds.top(0, 0, 0)\n",
-						"call leds.bottom.left(0, 0, 0)\n",
-						"call leds.bottom.right(0, 0, 0)\n",
-						"call leds.circle(0, 0, 0, 0, 0, 0, 0, 0)\n"
 					],
 					[
 						"call sound.system(-1)\n"
@@ -2814,7 +2809,7 @@ sim-playground {
 			"l2": {
 				"initCodeExec": [
 					[
-						"// reset outputs\nsound.system(-1);\n",
+						"// reset outputs\n",
 						"leds.top(0, 0, 0);\n",
 						"leds.bottom.left(0, 0, 0);\n",
 						"leds.bottom.right(0, 0, 0);\n",
@@ -2830,7 +2825,7 @@ sim-playground {
 			"l2": {
 				"initCodeExec": [
 					[
-						"// reset outputs\nsound.system(-1);\n",
+						"// reset outputs\n",
 						"leds.top(0, 0, 0);\n",
 						"leds.bottom.left(0, 0, 0);\n",
 						"leds.bottom.right(0, 0, 0);\n",
@@ -2850,7 +2845,7 @@ sim-playground {
 				"initCodeExec": [
 					"topColor = [0, 0, 0];\n",
 					[
-						"// reset outputs\nsound.system(-1);\n",
+						"// reset outputs\n",
 						"leds.top(0, 0, 0);\n",
 						"leds.bottom.left(0, 0, 0);\n",
 						"leds.bottom.right(0, 0, 0);\n",
@@ -2870,7 +2865,7 @@ sim-playground {
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0];\n",
 					[
-						"// reset outputs\nsound.system(-1);\n",
+						"// reset outputs\n",
 						"leds.top(0, 0, 0);\n",
 						"leds.bottom.left(0, 0, 0);\n",
 						"leds.bottom.right(0, 0, 0);\n",
@@ -2890,7 +2885,7 @@ sim-playground {
 				"initCodeExec": [
 					"topColor = [0, 0, 0];\n",
 					[
-						"// reset outputs\nsound.system(-1);\n",
+						"// reset outputs\n",
 						"leds.top(0, 0, 0);\n",
 						"leds.bottom.left(0, 0, 0);\n",
 						"leds.bottom.right(0, 0, 0);\n",
@@ -2912,7 +2907,7 @@ sim-playground {
 				"initCodeExec": [
 					"bottomColor = [0, 0, 0];\n",
 					[
-						"// reset outputs\nsound.system(-1);\n",
+						"// reset outputs\n",
 						"leds.top(0, 0, 0);\n",
 						"leds.bottom.left(0, 0, 0);\n",
 						"leds.bottom.right(0, 0, 0);\n",
@@ -2988,11 +2983,7 @@ sim-playground {
 						"note_index = 6;\n"
 					],
 					[
-						"// reset outputs\nsound.system(-1);\n",
-						"leds.top(0, 0, 0);\n",
-						"leds.bottom.left(0, 0, 0);\n",
-						"leds.bottom.right(0, 0, 0);\n",
-						"leds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+						"sound.system(-1);\n"
 					]
 				],
 				"initCodeDecl": [
@@ -3033,11 +3024,7 @@ sim-playground {
 						"note_index = 6;\n"
 					],
 					[
-						"// reset outputs\nsound.system(-1);\n",
-						"leds.top(0, 0, 0);\n",
-						"leds.bottom.left(0, 0, 0);\n",
-						"leds.bottom.right(0, 0, 0);\n",
-						"leds.circle(0, 0, 0, 0, 0, 0, 0, 0);\n"
+						"sound.system(-1);\n"
 					]
 				],
 				"initCodeDecl": [
