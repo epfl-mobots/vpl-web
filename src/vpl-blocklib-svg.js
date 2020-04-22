@@ -27,6 +27,19 @@ A3a.vpl.BlockTemplate.initStatesInit8 =
 
 A3a.vpl.BlockTemplate.svgDict = {};
 
+/** Find the first "uri" property defined in "draw" array
+	@param {Object} aux block description in uiConfig
+	@return {string}
+*/
+A3a.vpl.Canvas.getDrawURI = function (aux) {
+	for (var i = 0; i < aux["draw"].length; i++) {
+		if (aux["draw"][i]["uri"]) {
+			return aux["draw"][i]["uri"];
+		}
+	}
+	throw "URI not found";
+};
+
 /** Decode URI with filename and id
 	@param {string} uri
 	@return {{f:string,id:string}}
@@ -37,7 +50,7 @@ A3a.vpl.Canvas.decodeURI = function (uri) {
 		f: a[0],
 		id: a[1]
 	};
-}
+};
 
 /** Draw svg
 	@param {SVG} svg
@@ -466,13 +479,7 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 		return;
 	}
 
-	var f = null;
-	for (var i = 0; i < aux["draw"].length; i++) {
-		if (aux["draw"][i]["uri"]) {
-			f = A3a.vpl.Canvas.decodeURI(aux["draw"][i]["uri"]).f;
-			break;
-		}
-	}
+	var f = A3a.vpl.Canvas.decodeURI(A3a.vpl.Canvas.getDrawURI(aux)).f;
 
 	var displacements = f ? this.getDisplacements(aux, uiConfig.svg[f], block.param) : {};
 	var diffWheelMotion = null;
@@ -564,7 +571,7 @@ A3a.vpl.Canvas.prototype.drawBlockSVG = function (uiConfig, aux, block) {
 	@return {?number}
 */
 A3a.vpl.Canvas.mousedownBlockSVG = function (uiConfig, aux, canvas, block, width, height, left, top, ev) {
-	var filename = A3a.vpl.Canvas.decodeURI(aux["draw"][0]["uri"]).f;
+	var filename = A3a.vpl.Canvas.decodeURI(A3a.vpl.Canvas.getDrawURI(aux)).f;
 	var ix0 = 0;
 	var buttons = aux["buttons"];
 	if (buttons) {
