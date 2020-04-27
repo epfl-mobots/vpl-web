@@ -349,7 +349,91 @@
 				}
 			]
 		},
-
+		{
+			"name": "horiz prox",
+			"type": "event",
+			"modes": ["basic"],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Ev_ProxH_med"
+				}
+			],
+			"styles": [
+				{
+					"id": "Obst_prox2",
+					"st": "visibility:`$[0]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Obst_prox1",
+					"st": "visibility:`$[1]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Obst_prox3",
+					"st": "visibility:`$[2]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Obst_prox0",
+					"st": "visibility:`$[3]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Obst_prox4",
+					"st": "visibility:`$[4]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Obst_prox5",
+					"st": "visibility:`$[5]>0?'visible':'hidden'`"
+				},
+				{
+					"id": "Obst_prox6",
+					"st": "visibility:`$[6]>0?'visible':'hidden'`"
+				}
+			],
+			"defaultParameters": [0, 0, 0, 0, 0, 0, 0],
+			"typicalParameters": [1, 1, 1, 0, 0, -1, -1],
+			"buttons": [
+				{
+					"id": "Btn3_Prox2",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:#000000"]
+				},
+				{
+					"id": "Btn3_Prox1",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:#000000"]
+				},
+				{
+					"id": "Btn3_Prox3",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:#000000"]
+				},
+				{
+					"id": "Btn3_Prox0",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:#000000"]
+				},
+				{
+					"id": "Btn3_Prox4",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:#000000"]
+				},
+				{
+					"id": "Btn3_Prox5",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:#000000"]
+				},
+				{
+					"id": "Btn3_Prox6",
+					"val": [0, 1, -1],
+					"st": ["fill:#90a4ae", "fill:#ffffff;stroke:#ff3d00", "stroke:#263238;fill:#000000"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No proximity sensor specified"
+				}
+			]
+		},
 		{
 			"name": "horiz prox front adv",
 			"type": "event",
