@@ -1849,6 +1849,9 @@
 		"buttons.json",
 		"cmd-vpl-english.json",
 		"french.json",
-		"cmd-vpl-french.json"
+		"cmd-vpl-french.json",
+
+		"blocks-english.json",
+		"blocks-french.json"
 	]
 }

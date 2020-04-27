@@ -1863,7 +1863,10 @@
 		"buttons.json",
 		"cmd-vpl-english.json",
 		"french.json",
-		"cmd-vpl-french.json"
+		"cmd-vpl-french.json",
+
+		"blocks-english.json",
+		"blocks-french.json"
 	]
 }
 </script>
@@ -7137,6 +7140,102 @@ sim-playground {
 			"vpl:teacher-reset": "Remet la configuration à l'état d'origine",
 			"vpl:teacher-save": "Enregistre la configuration",
 			"vpl:teacher-setasnew": "Installe la configuration pour les nouveaux programmes"
+		}
+	}
+}
+</script>
+
+<script type="application/json" id="blocks-english.json">
+{
+	"i18n": {
+		"en": {
+			"button 1": "Single button",
+			"button": "Multiple buttons",
+			"init": "Initialization",
+			"roll": "Roll angle",
+			"acc side": "Lying on its side",
+			"acc upside down": "Lying upside down",
+			"yaw": "Yaw angle",
+			"pitch": "Pitch angle",
+			"clap": "Sound detection",
+			"fall": "Fall",
+			"tap": "Impact detection",
+			"ground mean": "Average ground reflexion sensor",
+			"ground": "Ground reflection sensors",
+			"ground 1": "Ground reflection sensors with threshold",
+			"horiz prox": "Proximity sensors",
+			"horiz prox front adv": "Front proximity sensors with threshold",
+			"horiz prox back adv": "Back proximity sensors with threshold",
+			"remote control arrows": "Remote control arrow keys",
+			"remote control keypad": "Remote control keypad keys",
+			"timer": "Timer elapsed",
+			"counter comparison": "State arithmetic comparison",
+			"state 256": "State bit comparison",
+			"state 256 with mask": "State bit partial comparison",
+			"color 8 state": "Color state",
+			"bottom color 8 state": "Bottom color state",
+			"motor": "Set motor speeds",
+			"move": "Set motion",
+			"top color 8": "Set top color",
+			"bottom color 8": "Set bottom color",
+			"top color": "Set top color (RGB components)",
+			"bottom color": "Set bottom color (RGB components)",
+			"set timer": "Start timer",
+			"notes": "Play melody",
+			"notes with speed": "Play melody with tempo",
+			"play": "Play a .wav file",
+			"play stop": "Stop playing a .wav file",
+			"set state 256": "Set state bits",
+			"set state 256 with mask": "Set some state bits",
+			"arithmetic": "Arithmetic"
+		}
+	}
+}
+</script>
+
+<script type="application/json" id="blocks-french.json">
+{
+	"i18n": {
+		"fr": {
+			"button 1": "Bouton simple",
+			"button": "Boutons multiples",
+			"init": "Initialisation",
+			"roll": "Angle de roulis",
+			"acc side": "Sur le côté",
+			"acc upside down": "Sur le dos",
+			"yaw": "Angle de lacet",
+			"pitch": "Angle de tangage",
+			"clap": "Détection de son",
+			"fall": "Chute",
+			"tap": "Détection de choc",
+			"ground mean": "Moyenne des capteurs de réflexion sur le sol",
+			"ground": "Capteurs de réflexion sur le sol",
+			"ground 1": "Capteurs de réflexion sur le sol avec seuil",
+			"horiz prox": "Capteurs de proximité",
+			"horiz prox adv": "Capteurs de proximité avant avec seuils bas et haut",
+			"horiz prox adv": "Capteurs de proximité arrière avec seuils bas et haut",
+			"remote control arrows": "Touches de direction de la télécommande",
+			"remote control keypad": "Pavé numérique de la télécommande",
+			"timer": "Minuterie",
+			"counter comparison": "Comparaison arithmétique de l'état",
+			"state 256": "Comparaison des bits de l'état",
+			"state 256 with mask": "Comparaison partielle des bits de l'état",
+			"color 8 state": "État (couleur)",
+			"bottom color 8 state": "État (couleur du bas)",
+			"motor": "Change les vitesses des moteurs",
+			"move": "Change le type de déplacement",
+			"top color 8": "Change la couleur du dessus",
+			"bottom color 8": "Change la couleur du dessous",
+			"top color": "Change la couleur du dessus (composantes RVB)",
+			"bottom color": "Change la couleur du dessous (composantes RVB)",
+			"set timer": "Démarre la minuterie",
+			"notes": "Joue une mélodie",
+			"notes with speed": "Joue une mélodie avec le tempo",
+			"play": "Joue un fichier .wav",
+			"play stop": "Arrête de jouer un fichier .wav",
+			"set state 256": "Change les bits de l'état",
+			"set state 256 with mask": "Change certains bits de l'état",
+			"arithmetic": "Arithmétique"
 		}
 	}
 }
