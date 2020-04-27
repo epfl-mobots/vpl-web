@@ -189,8 +189,8 @@
         <rect class="cls-7" x="43.58" y="46.5" width="9" height="18"/>
       </g>
       <g id="Cursors">
-        <path class="cls-8" d="M84.08,37.5H66.83v8.62l8.62,8.63,8.63-8.63V37.5"/>
-        <path class="cls-8" d="M20.7,56.25l8.63,8.63V73.5H12.08V64.88l8.62-8.63"/>
+        <path id="Cursors-YPPatch-1" class="cls-8" d="M84.08,37.5H66.83v8.62l8.62,8.63,8.63-8.63V37.5"/>
+        <path id="Cursors-YPPatch-2" class="cls-8" d="M20.7,56.25l8.63,8.63V73.5H12.08V64.88l8.62-8.63"/>
       </g>
       <g id="prox0">
         <circle id="Led_prox0" class="cls-9" cx="5.7" cy="29.25" r="4.5"/>

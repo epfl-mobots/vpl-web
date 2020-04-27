@@ -1805,6 +1805,231 @@
 					"st": "visibility:`$[2]?'hidden':'visible'`"
 				}
 			]
+		},
+		{
+			"name": "button",
+			"type": "event",
+			"modes": [],
+			"draw": [
+				{
+					"uri": "Blocks16.svg#Event_bg_1_6"
+				},
+				{
+					"uri": "Blocks16.svg#button"
+				}
+			],
+			"defaultParameters": [false, false, false, false, false],
+			"typicalParameters": [false, false, false, true, true],
+			"buttons": [
+				{
+					"id": "Btn2_center",
+					"val": [false, true],
+					"st": ["", "fill:red;stroke:black"]
+				},
+				{
+					"id": "Btn2_Fwd",
+					"val": [false, true],
+					"st": ["", "fill:red;stroke:black"]
+				},
+				{
+					"id": "Btn2_Bwd",
+					"val": [false, true],
+					"st": ["", "fill:red;stroke:black"]
+				},
+				{
+					"id": "Btn2_right",
+					"val": [false, true],
+					"st": ["", "fill:red;stroke:black"]
+				},
+				{
+					"id": "Btn2_Left",
+					"val": [false, true],
+					"st": ["", "fill:red;stroke:black"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.reduce(function (acc, p) { return acc || p; }, false)`",
+					"warning": "No button specified"
+				}
+			]
+		},
+		{
+			"name": "horiz prox adv",
+			"type": "event",
+			"modes": [],
+			"draw": [
+				{
+					"uri": "Blocks16.svg#Event_bg_1_6"
+				},
+				{
+					"uri": "Blocks16.svg#horiz_prox_adv"
+				},
+				{
+					"js": "if ($[7] + 600 < $[8]) { var x1 = 120 + 0.19 * $[7], x2 = 120 + 0.19 * $[8], y0 = 575, d = 100; ctx.beginPath(); ctx.moveTo(x1, y0); ctx.lineTo(x1+d, y0-d); ctx.lineTo(x2, y0-d); ctx.lineTo(x2, y0); ctx.lineTo(x2-d, y0+d); ctx.lineTo(x1, y0+d); ctx.closePath(); ctx.fillStyle = 'silver'; ctx.strokeStyle = 'black'; ctx.lineWidth = 20; ctx.fill(); ctx.stroke(); }"
+				}
+			],
+			"styles": [
+				{
+					"id": "Led_prox2",
+					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox2-2",
+					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox1",
+					"st": "visibility:`$[1]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox3",
+					"st": "visibility:`$[2]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox0",
+					"st": "visibility:`$[3]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox4",
+					"st": "visibility:`$[4]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox5",
+					"st": "visibility:`$[5]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox6",
+					"st": "visibility:`$[6]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Grey_threshold",
+					"st": "visibility:hidden"
+				}
+			],
+			"defaultParameters": [0, 0, 0, 0, 0, 0, 0, 1000, 2000],
+			"typicalParameters": [1, 1, 1, 0, 0, 2, 2, 1000, 2000],
+			"buttons": [
+				{
+					"id": "Btn3_prox2",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_prox1",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_prox3",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_prox0",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_prox4",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_prox5",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_prox6",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#999;stroke:black"]
+				}
+			],
+			"sliders": [
+				{
+					"id": "White_threshold",
+					"thumbId": "Cursors-YPPatch-1",
+					"min": 0,
+					"max": 4000
+				},
+				{
+					"id": "Black_threshold",
+					"thumbId": "Cursors-YPPatch-2",
+					"min": 0,
+					"max": 4000
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.slice(0, 7).reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No proximity sensor specified"
+				}
+			]
+		},
+		{
+			"name": "ground adv",
+			"type": "event",
+			"modes": [],
+			"draw": [
+				{
+					"uri": "Blocks16.svg#Event_bg_1_6"
+				},
+				{
+					"uri": "Blocks16.svg#gd_prox_adv"
+				},
+				{
+					"js": "if ($[2] + 150 < $[3]) { var x1 = 120 + 0.76 * $[2], x2 = 120 + 0.76 * $[3], y0 = 575, d = 100; ctx.beginPath(); ctx.moveTo(x1, y0); ctx.lineTo(x1+d, y0-d); ctx.lineTo(x2, y0-d); ctx.lineTo(x2, y0); ctx.lineTo(x2-d, y0+d); ctx.lineTo(x1, y0+d); ctx.closePath(); ctx.fillStyle = 'silver'; ctx.strokeStyle = 'black'; ctx.lineWidth = 20; ctx.fill(); ctx.stroke(); }"
+				}
+			],
+			"styles": [
+				{
+					"id": "Led_Gd_prpx0",
+					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_Gd_prox1",
+					"st": "visibility:`$[1]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Grey_threshold-2",
+					"st": "visibility:hidden"
+				}
+			],
+			"defaultParameters": [0, 0, 400, 600],
+			"typicalParameters": [1, 1, 400, 600],
+			"buttons": [
+				{
+					"id": "Btn3_Gd_prox0",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_Gd_prox1",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				}
+			],
+			"sliders": [
+				{
+					"id": "White_threshold-2",
+					"thumbId": "White_cursor",
+					"min": 0,
+					"max": 1000
+				},
+				{
+					"id": "Black_threshold-2",
+					"thumbId": "Black_cursor",
+					"min": 0,
+					"max": 1000
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.slice(0, 2).reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No ground sensor specified"
+				}
+			]
 		}
 	],
 	"widgets": [
@@ -1851,7 +2076,8 @@
 	],
 	"svgFilenames": [
 		"Icons.svg",
-		"Blocks.svg"
+		"Blocks.svg",
+		"Blocks16.svg"
 	],
 	"overlays": [
 		"aseba.json",
@@ -7039,7 +7265,263 @@ sim-playground {
     </g>
   </g>
 </svg>
+</script>
 
+<!-- appearance of the blocks for Aseba 1.6 compatibility -->
+<script type="image/svg+xml" id="Blocks16.svg">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 96.08 96">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f68720;
+      }
+
+      .cls-1, .cls-18, .cls-2, .cls-3, .cls-8 {
+        fill-rule: evenodd;
+      }
+
+      .cls-18, .cls-2, .cls-5, .cls-8 {
+        fill: #fff;
+      }
+
+      .cls-3, .cls-4 {
+        fill: #dcdcdc;
+        stroke: #c1c0c0;
+      }
+
+      .cls-18, .cls-3, .cls-4 {
+        stroke-linecap: round;
+      }
+
+      .cls-18, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8 {
+        stroke-linejoin: round;
+        stroke-width: 2px;
+      }
+
+      .cls-5 {
+        stroke: #ed2224;
+      }
+
+      .cls-5, .cls-6, .cls-7, .cls-8 {
+        stroke-linecap: square;
+      }
+
+      .cls-17, .cls-6 {
+        fill: #010101;
+      }
+
+      .cls-18, .cls-6, .cls-8 {
+        stroke: #010101;
+      }
+
+      .cls-7 {
+        fill: none;
+        stroke: #7f1416;
+      }
+
+      .cls-9 {
+        fill: url(#radial-gradient);
+      }
+
+      .cls-10 {
+        fill: url(#radial-gradient-2);
+      }
+
+      .cls-11 {
+        fill: url(#radial-gradient-3);
+      }
+
+      .cls-12 {
+        fill: url(#radial-gradient-4);
+      }
+
+      .cls-13 {
+        fill: url(#radial-gradient-5);
+      }
+
+      .cls-14 {
+        fill: url(#radial-gradient-6);
+      }
+
+      .cls-15 {
+        fill: url(#radial-gradient-7);
+      }
+
+      .cls-16 {
+        fill: url(#radial-gradient-8);
+      }
+
+      .cls-19 {
+        fill: url(#radial-gradient-9);
+      }
+
+      .cls-20 {
+        fill: url(#radial-gradient-10);
+      }
+    </style>
+    <radialGradient id="radial-gradient" cx="-125.35" cy="146.28" r="3.91" gradientTransform="matrix(1.15, 0, 0, -1.15, 150.08, 197.73)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ed2224"/>
+      <stop offset="0.02" stop-color="#ed2224" stop-opacity="0.98"/>
+      <stop offset="0.04" stop-color="#ed2224" stop-opacity="0.96"/>
+      <stop offset="0.06" stop-color="#ed2224" stop-opacity="0.94"/>
+      <stop offset="0.08" stop-color="#ed2224" stop-opacity="0.92"/>
+      <stop offset="0.1" stop-color="#ed2224" stop-opacity="0.9"/>
+      <stop offset="0.12" stop-color="#ed2224" stop-opacity="0.88"/>
+      <stop offset="0.14" stop-color="#ed2224" stop-opacity="0.86"/>
+      <stop offset="0.16" stop-color="#ed2224" stop-opacity="0.84"/>
+      <stop offset="0.18" stop-color="#ed2224" stop-opacity="0.82"/>
+      <stop offset="0.2" stop-color="#ed2224" stop-opacity="0.8"/>
+      <stop offset="0.22" stop-color="#ed2224" stop-opacity="0.78"/>
+      <stop offset="0.24" stop-color="#ed2224" stop-opacity="0.76"/>
+      <stop offset="0.26" stop-color="#ed2224" stop-opacity="0.74"/>
+      <stop offset="0.28" stop-color="#ed2224" stop-opacity="0.72"/>
+      <stop offset="0.3" stop-color="#ed2224" stop-opacity="0.7"/>
+      <stop offset="0.32" stop-color="#ed2224" stop-opacity="0.68"/>
+      <stop offset="0.34" stop-color="#ed2224" stop-opacity="0.66"/>
+      <stop offset="0.36" stop-color="#ed2224" stop-opacity="0.64"/>
+      <stop offset="0.38" stop-color="#ed2224" stop-opacity="0.62"/>
+      <stop offset="0.4" stop-color="#ed2224" stop-opacity="0.6"/>
+      <stop offset="0.42" stop-color="#ed2224" stop-opacity="0.58"/>
+      <stop offset="0.44" stop-color="#ed2224" stop-opacity="0.56"/>
+      <stop offset="0.46" stop-color="#ed2224" stop-opacity="0.54"/>
+      <stop offset="0.48" stop-color="#ed2224" stop-opacity="0.52"/>
+      <stop offset="0.5" stop-color="#ed2224" stop-opacity="0.5"/>
+      <stop offset="0.52" stop-color="#ed2224" stop-opacity="0.48"/>
+      <stop offset="0.54" stop-color="#ed2224" stop-opacity="0.46"/>
+      <stop offset="0.56" stop-color="#ed2224" stop-opacity="0.44"/>
+      <stop offset="0.58" stop-color="#ed2224" stop-opacity="0.42"/>
+      <stop offset="0.6" stop-color="#ed2224" stop-opacity="0.4"/>
+      <stop offset="0.62" stop-color="#ed2224" stop-opacity="0.38"/>
+      <stop offset="0.64" stop-color="#ed2224" stop-opacity="0.36"/>
+      <stop offset="0.66" stop-color="#ed2224" stop-opacity="0.34"/>
+      <stop offset="0.68" stop-color="#ed2224" stop-opacity="0.32"/>
+      <stop offset="0.7" stop-color="#ed2224" stop-opacity="0.3"/>
+      <stop offset="0.72" stop-color="#ed2224" stop-opacity="0.28"/>
+      <stop offset="0.74" stop-color="#ed2224" stop-opacity="0.26"/>
+      <stop offset="0.76" stop-color="#ed2224" stop-opacity="0.24"/>
+      <stop offset="0.78" stop-color="#ed2224" stop-opacity="0.22"/>
+      <stop offset="0.8" stop-color="#ed2224" stop-opacity="0.2"/>
+      <stop offset="0.82" stop-color="#ed2224" stop-opacity="0.18"/>
+      <stop offset="0.84" stop-color="#ed2224" stop-opacity="0.16"/>
+      <stop offset="0.86" stop-color="#ed2224" stop-opacity="0.14"/>
+      <stop offset="0.88" stop-color="#ed2224" stop-opacity="0.12"/>
+      <stop offset="0.9" stop-color="#ed2224" stop-opacity="0.1"/>
+      <stop offset="0.92" stop-color="#ed2224" stop-opacity="0.08"/>
+      <stop offset="0.94" stop-color="#ed2224" stop-opacity="0.06"/>
+      <stop offset="0.96" stop-color="#ed2224" stop-opacity="0.04"/>
+      <stop offset="0.98" stop-color="#ed2224" stop-opacity="0.02"/>
+      <stop offset="1" stop-color="#010101" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="radial-gradient-2" cx="-112.65" cy="157.68" r="3.91" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-3" cx="-96.37" cy="163.21" r="3.91" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-4" cx="-80.75" cy="163.21" r="3.91" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-5" cx="-64.47" cy="157.68" r="3.91" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-6" cx="-51.77" cy="146.28" r="3.91" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-7" cx="-118.95" cy="95.49" r="3.91" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-8" cx="-58.03" cy="95.49" r="3.91" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-9" cx="-109.67" cy="603" r="4.5" gradientTransform="matrix(1, 0, 0, -1, 136, 618)" xlink:href="#radial-gradient"/>
+    <radialGradient id="radial-gradient-10" cx="-66.17" cy="603" r="4.5" gradientTransform="matrix(1, 0, 0, -1, 136, 618)" xlink:href="#radial-gradient"/>
+  </defs>
+  <title>Blocks16_export</title>
+  <g id="Layer_2" data-name="Layer 2">
+    <g id="Event_bg_1_6">
+      <path id="Orange_bg" class="cls-1" d="M.08,1.88A1.88,1.88,0,0,1,2,0H94.2a1.88,1.88,0,0,1,1.88,1.88V94.12A1.88,1.88,0,0,1,94.2,96H2A1.88,1.88,0,0,1,.08,94.12V1.88"/>
+      <path id="Thymio_contour" class="cls-2" d="M94.55,30.09C93.94,15.48,73.38,3.75,48.08,3.75S2.21,15.48,1.61,30.09a1.36,1.36,0,0,0,0,.29V92.62A1.88,1.88,0,0,0,3.45,94.5H92.7a1.88,1.88,0,0,0,1.88-1.88V30.38A2.58,2.58,0,0,0,94.55,30.09Z"/>
+    </g>
+    <g id="button">
+      <g id="Btn2_Fwd">
+        <path class="cls-3" d="M48.08,13.69,38.7,29.81H57.45L48.08,13.69"/>
+      </g>
+      <g id="Btn2_Left">
+        <path class="cls-3" d="M13.77,48l16.12,9.38V38.62L13.77,48"/>
+      </g>
+      <g id="Btn2_Bwd">
+        <path class="cls-3" d="M48.08,82.31l9.37-16.12H38.7l9.38,16.12"/>
+      </g>
+      <g id="Btn2_right">
+        <path class="cls-3" d="M82.39,48,66.27,38.62V57.38L82.39,48"/>
+      </g>
+      <g id="Btn2_center">
+        <circle class="cls-4" cx="48.08" cy="48" r="9.38"/>
+      </g>
+    </g>
+    <g id="horiz_prox_adv" data-name="horiz prox adv">
+      <g id="Threshold_bg">
+        <rect class="cls-4" x="12.08" y="37.5" width="72" height="18"/>
+        <rect class="cls-4" x="12.08" y="55.5" width="72" height="18"/>
+      </g>
+      <g id="White_threshold">
+        <rect class="cls-5" x="11.92" y="37.5" width="72.16" height="18"/>
+      </g>
+      <g id="Black_threshold">
+        <rect class="cls-6" x="12.08" y="55.5" width="72" height="18"/>
+      </g>
+      <g id="Grey_threshold">
+        <rect class="cls-7" x="43.58" y="46.5" width="9" height="18"/>
+      </g>
+      <g id="Cursors">
+        <path id="Cursors-YPPatch-1" class="cls-8" d="M84.08,37.5H66.83v8.62l8.62,8.63,8.63-8.63V37.5"/>
+        <path id="Cursors-YPPatch-2" class="cls-8" d="M20.7,56.25l8.63,8.63V73.5H12.08V64.88l8.62-8.63"/>
+      </g>
+      <g id="prox0">
+        <circle id="Led_prox0" class="cls-9" cx="5.7" cy="29.25" r="4.5"/>
+        <rect id="Btn3_prox0" class="cls-4" x="5.92" y="16.53" width="12" height="12" transform="translate(-11.7 12.94) rotate(-40)"/>
+      </g>
+      <g id="prox1">
+        <circle id="Led_prox1" class="cls-10" cx="20.33" cy="16.13" r="4.5"/>
+        <rect id="Btn3_prox1" class="cls-4" x="22.84" y="6.77" width="12" height="12" transform="translate(-2.63 10.63) rotate(-20)"/>
+      </g>
+      <g id="prox2">
+        <circle id="Led_prox2" class="cls-11" cx="39.08" cy="9.75" r="4.5"/>
+        <circle id="Led_prox2-2" data-name="Led_prox2" class="cls-12" cx="57.08" cy="9.75" r="4.5"/>
+        <rect id="Btn3_prox2" class="cls-4" x="42.08" y="3.37" width="12" height="12"/>
+      </g>
+      <g id="prox3">
+        <circle id="Led_prox3" class="cls-13" cx="75.83" cy="16.13" r="4.5"/>
+        <rect id="Btn3_prox3" class="cls-4" x="61.32" y="6.77" width="12" height="12" transform="translate(32.3 71.66) rotate(-70)"/>
+      </g>
+      <g id="prox4">
+        <circle id="Led_prox4" class="cls-14" cx="90.45" cy="29.25" r="4.5"/>
+        <rect id="Btn3_prox4" class="cls-4" x="78.24" y="16.53" width="12" height="12" transform="translate(12.83 72.58) rotate(-50)"/>
+      </g>
+      <g id="prox5">
+        <circle id="Led_prox5" class="cls-15" cx="13.08" cy="87.75" r="4.5"/>
+        <rect id="Btn3_prox5" class="cls-4" x="18.08" y="81.75" width="12" height="12"/>
+      </g>
+      <g id="prox6">
+        <circle id="Led_prox6" class="cls-16" cx="83.24" cy="87.75" r="4.5"/>
+        <rect id="Btn3_prox6" class="cls-4" x="66.08" y="81.75" width="12" height="12"/>
+      </g>
+    </g>
+    <g id="gd_prox_adv" data-name="gd prox adv">
+      <g id="Wheels">
+        <rect class="cls-17" y="59.45" width="6.75" height="30"/>
+        <rect class="cls-17" x="89.25" y="59.45" width="6.75" height="30"/>
+      </g>
+      <g id="White_threshold-2" data-name="White_threshold">
+        <rect class="cls-5" x="11.92" y="37.5" width="72.16" height="18"/>
+      </g>
+      <g id="Black_threshold-2" data-name="Black_threshold">
+        <rect class="cls-6" x="12.08" y="55.5" width="72" height="18"/>
+      </g>
+      <g id="Grey_threshold-2" data-name="Grey_threshold">
+        <rect class="cls-7" x="20.7" y="46.5" width="54.75" height="18"/>
+      </g>
+      <g id="Cursors-2" data-name="Cursors">
+        <path id="White_cursor" class="cls-18" d="M66.83,37.5v8.62l8.62,8.63,8.63-8.63V37.5Z"/>
+        <path id="Black_cursor" class="cls-18" d="M20.7,56.25l8.63,8.63V73.5H12.08V64.88l8.62-8.63"/>
+      </g>
+      <g id="Gd_prox0">
+        <circle id="Led_Gd_prpx0" class="cls-19" cx="26.33" cy="15" r="4.5"/>
+        <rect id="Btn3_Gd_prox0" class="cls-4" x="30.83" y="9" width="12" height="12"/>
+      </g>
+      <g id="Gd_prox1">
+        <circle id="Led_Gd_prox1" class="cls-20" cx="69.83" cy="15" r="4.5"/>
+        <rect id="Btn3_Gd_prox1" class="cls-4" x="53.33" y="9" width="12" height="12"/>
+      </g>
+    </g>
+  </g>
+</svg>
 </script>
 
 <script type="application/json" id="french.json">

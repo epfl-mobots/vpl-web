@@ -1791,6 +1791,231 @@
 					"st": "visibility:`$[2]?'hidden':'visible'`"
 				}
 			]
+		},
+		{
+			"name": "button",
+			"type": "event",
+			"modes": [],
+			"draw": [
+				{
+					"uri": "Blocks16.svg#Event_bg_1_6"
+				},
+				{
+					"uri": "Blocks16.svg#button"
+				}
+			],
+			"defaultParameters": [false, false, false, false, false],
+			"typicalParameters": [false, false, false, true, true],
+			"buttons": [
+				{
+					"id": "Btn2_center",
+					"val": [false, true],
+					"st": ["", "fill:red;stroke:black"]
+				},
+				{
+					"id": "Btn2_Fwd",
+					"val": [false, true],
+					"st": ["", "fill:red;stroke:black"]
+				},
+				{
+					"id": "Btn2_Bwd",
+					"val": [false, true],
+					"st": ["", "fill:red;stroke:black"]
+				},
+				{
+					"id": "Btn2_right",
+					"val": [false, true],
+					"st": ["", "fill:red;stroke:black"]
+				},
+				{
+					"id": "Btn2_Left",
+					"val": [false, true],
+					"st": ["", "fill:red;stroke:black"]
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.reduce(function (acc, p) { return acc || p; }, false)`",
+					"warning": "No button specified"
+				}
+			]
+		},
+		{
+			"name": "horiz prox adv",
+			"type": "event",
+			"modes": [],
+			"draw": [
+				{
+					"uri": "Blocks16.svg#Event_bg_1_6"
+				},
+				{
+					"uri": "Blocks16.svg#horiz_prox_adv"
+				},
+				{
+					"js": "if ($[7] + 600 < $[8]) { var x1 = 120 + 0.19 * $[7], x2 = 120 + 0.19 * $[8], y0 = 575, d = 100; ctx.beginPath(); ctx.moveTo(x1, y0); ctx.lineTo(x1+d, y0-d); ctx.lineTo(x2, y0-d); ctx.lineTo(x2, y0); ctx.lineTo(x2-d, y0+d); ctx.lineTo(x1, y0+d); ctx.closePath(); ctx.fillStyle = 'silver'; ctx.strokeStyle = 'black'; ctx.lineWidth = 20; ctx.fill(); ctx.stroke(); }"
+				}
+			],
+			"styles": [
+				{
+					"id": "Led_prox2",
+					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox2-2",
+					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox1",
+					"st": "visibility:`$[1]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox3",
+					"st": "visibility:`$[2]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox0",
+					"st": "visibility:`$[3]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox4",
+					"st": "visibility:`$[4]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox5",
+					"st": "visibility:`$[5]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_prox6",
+					"st": "visibility:`$[6]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Grey_threshold",
+					"st": "visibility:hidden"
+				}
+			],
+			"defaultParameters": [0, 0, 0, 0, 0, 0, 0, 1000, 2000],
+			"typicalParameters": [1, 1, 1, 0, 0, 2, 2, 1000, 2000],
+			"buttons": [
+				{
+					"id": "Btn3_prox2",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_prox1",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_prox3",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_prox0",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_prox4",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_prox5",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_prox6",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#999;stroke:black"]
+				}
+			],
+			"sliders": [
+				{
+					"id": "White_threshold",
+					"thumbId": "Cursors-YPPatch-1",
+					"min": 0,
+					"max": 4000
+				},
+				{
+					"id": "Black_threshold",
+					"thumbId": "Cursors-YPPatch-2",
+					"min": 0,
+					"max": 4000
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.slice(0, 7).reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No proximity sensor specified"
+				}
+			]
+		},
+		{
+			"name": "ground adv",
+			"type": "event",
+			"modes": [],
+			"draw": [
+				{
+					"uri": "Blocks16.svg#Event_bg_1_6"
+				},
+				{
+					"uri": "Blocks16.svg#gd_prox_adv"
+				},
+				{
+					"js": "if ($[2] + 150 < $[3]) { var x1 = 120 + 0.76 * $[2], x2 = 120 + 0.76 * $[3], y0 = 575, d = 100; ctx.beginPath(); ctx.moveTo(x1, y0); ctx.lineTo(x1+d, y0-d); ctx.lineTo(x2, y0-d); ctx.lineTo(x2, y0); ctx.lineTo(x2-d, y0+d); ctx.lineTo(x1, y0+d); ctx.closePath(); ctx.fillStyle = 'silver'; ctx.strokeStyle = 'black'; ctx.lineWidth = 20; ctx.fill(); ctx.stroke(); }"
+				}
+			],
+			"styles": [
+				{
+					"id": "Led_Gd_prpx0",
+					"st": "visibility:`$[0]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Led_Gd_prox1",
+					"st": "visibility:`$[1]===1?'visible':'hidden'`"
+				},
+				{
+					"id": "Grey_threshold-2",
+					"st": "visibility:hidden"
+				}
+			],
+			"defaultParameters": [0, 0, 400, 600],
+			"typicalParameters": [1, 1, 400, 600],
+			"buttons": [
+				{
+					"id": "Btn3_Gd_prox0",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				},
+				{
+					"id": "Btn3_Gd_prox1",
+					"val": [0, 1, 2, 3],
+					"st": ["", "fill:white;stroke:red", "fill:black;stroke:black", "fill:#666;stroke:black"]
+				}
+			],
+			"sliders": [
+				{
+					"id": "White_threshold-2",
+					"thumbId": "White_cursor",
+					"min": 0,
+					"max": 1000
+				},
+				{
+					"id": "Black_threshold-2",
+					"thumbId": "Black_cursor",
+					"min": 0,
+					"max": 1000
+				}
+			],
+			"validation": [
+				{
+					"assert": "`$.slice(0, 2).reduce(function (acc, p) { return acc || p != 0; }, false)`",
+					"warning": "No ground sensor specified"
+				}
+			]
 		}
 	],
 	"widgets": [
@@ -1837,7 +2062,8 @@
 	],
 	"svgFilenames": [
 		"Icons.svg",
-		"Blocks.svg"
+		"Blocks.svg",
+		"Blocks16.svg"
 	],
 	"overlays": [
 		"aseba.json",
