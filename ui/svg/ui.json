@@ -2077,7 +2077,7 @@
 		"french.json",
 		"cmd-vpl-french.json",
 
-		"blocks-english.json",
-		"blocks-french.json"
+		"block-english.json",
+		"block-french.json"
 	]
 }
