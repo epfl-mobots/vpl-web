@@ -92,7 +92,7 @@
 				"sectionBegin": "onevent tap {\n",
 				"sectionEnd": "}\n",
 				"sectionPreamble": "tapped = true;\n",
-				"clause": "tapped"
+				"clauseAsCondition": "tapped"
 			}
 		},
 		{
@@ -181,7 +181,7 @@
 				"sectionBegin": "onevent timer0 {\n",
 				"sectionEnd": "}\n",
 				"sectionPreamble": "timerElapsed = true;\ntimer.period[0] = 0;\n",
-				"clause": "timerElapsed"
+				"clauseAsCondition": "timerElapsed"
 			}
 		},
 		{

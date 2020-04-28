@@ -387,7 +387,7 @@ sim-playground {
 				],
 				"sectionBegin": "onevent tap\n",
 				"sectionPreamble": "tapped = 1\n",
-				"clause": "tapped != 0"
+				"clauseAsCondition": "tapped != 0"
 			}
 		},
 		{
@@ -479,7 +479,7 @@ sim-playground {
 				],
 				"sectionBegin": "onevent timer0\n",
 				"sectionPreamble": "timerElapsed = 1\ntimer.period[0] = 0\n",
-				"clause": "timerElapsed != 0"
+				"clauseAsCondition": "timerElapsed != 0"
 			}
 		},
 		{
@@ -1087,7 +1087,7 @@ sim-playground {
 				"sectionBegin": "onevent tap {\n",
 				"sectionEnd": "}\n",
 				"sectionPreamble": "tapped = true;\n",
-				"clause": "tapped"
+				"clauseAsCondition": "tapped"
 			}
 		},
 		{
@@ -1176,7 +1176,7 @@ sim-playground {
 				"sectionBegin": "onevent timer0 {\n",
 				"sectionEnd": "}\n",
 				"sectionPreamble": "timerElapsed = true;\ntimer.period[0] = 0;\n",
-				"clause": "timerElapsed"
+				"clauseAsCondition": "timerElapsed"
 			}
 		},
 		{
@@ -1784,8 +1784,16 @@ sim-playground {
 		{
 			"name": "tap",
 			"js": {
+				"initVarDecl": [
+					"var tapped;\n"
+				],
+				"initCodeExec": [
+					"tapped = false;\n"
+				],
 				"sectionBegin": "this.addEventListener(\"tap\", function (name, param) {\n",
-				"sectionEnd": "});\n"
+				"sectionPreamble": "tapped = true;\n",
+				"sectionEnd": "});\n",
+				"clauseAsCondition": "tapped"
 			}
 		},
 		{
@@ -2321,7 +2329,7 @@ sim-playground {
 				],
 				"sectionPreamble": "tapped = True\n",
 				"sectionEnd": "<\n",
-				"clause": "tapped"
+				"clauseAsCondition": "tapped"
 			}
 		},
 		{
@@ -2414,7 +2422,7 @@ sim-playground {
 				],
 				"sectionEnd": "<\n",
 				"sectionPreamble": "timerElapsed = True\nthymio.timer.period[0] = 0\n",
-				"clause": "timerElapsed"
+				"clauseAsCondition": "timerElapsed"
 			}
 		},
 		{

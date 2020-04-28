@@ -66,6 +66,7 @@ A3a.vpl.BlockTemplate.loadCodeGenFromJSON = function (b, genCode0) {
 				} else if (b[lang]["clause"]) {
 	 				c.clause = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clause"]), block);
 				}
+				b[lang]["clauseAsCondition"] && (c.clauseAsCondition = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clauseAsCondition"]), block));
 				c.clauseOptional = /** @type {boolean} */(b[lang]["clauseOptional"]) || false;
 				if (b[lang]["statement1"]) {
 					c.statement = block.param.map(function (p, i) {

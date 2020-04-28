@@ -86,6 +86,7 @@ A3a.vpl.Block.prototype.prepareChange = function () {
 		clauseInit: (string|undefined),
 		clause: (string|undefined),
 		clauseOptional: (boolean|undefined),
+		clauseAsCondition: (string|undefined),
 		auxClausesInit: (Array.<string>|undefined),
 		auxClauses: (string|undefined),
 		statement: (string|undefined),

@@ -76,8 +76,16 @@
 		{
 			"name": "tap",
 			"js": {
+				"initVarDecl": [
+					"var tapped;\n"
+				],
+				"initCodeExec": [
+					"tapped = false;\n"
+				],
 				"sectionBegin": "this.addEventListener(\"tap\", function (name, param) {\n",
-				"sectionEnd": "});\n"
+				"sectionPreamble": "tapped = true;\n",
+				"sectionEnd": "});\n",
+				"clauseAsCondition": "tapped"
 			}
 		},
 		{

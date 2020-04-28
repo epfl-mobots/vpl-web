@@ -114,7 +114,7 @@
 				],
 				"sectionPreamble": "tapped = True\n",
 				"sectionEnd": "<\n",
-				"clause": "tapped"
+				"clauseAsCondition": "tapped"
 			}
 		},
 		{
@@ -207,7 +207,7 @@
 				],
 				"sectionEnd": "<\n",
 				"sectionPreamble": "timerElapsed = True\nthymio.timer.period[0] = 0\n",
-				"clause": "timerElapsed"
+				"clauseAsCondition": "timerElapsed"
 			}
 		},
 		{

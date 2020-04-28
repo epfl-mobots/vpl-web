@@ -2449,7 +2449,7 @@ sim-playground {
 				],
 				"sectionBegin": "onevent tap\n",
 				"sectionPreamble": "tapped = 1\n",
-				"clause": "tapped != 0"
+				"clauseAsCondition": "tapped != 0"
 			}
 		},
 		{
@@ -2554,7 +2554,7 @@ sim-playground {
 					"timerElapsed = 1\n",
 					"timer.period[0] = 0\n"
 				],
-				"clause": "timerElapsed != 0"
+				"clauseAsCondition": "timerElapsed != 0"
 			}
 		},
 		{
@@ -3072,7 +3072,7 @@ sim-playground {
 				"sectionBegin": "onevent tap {\n",
 				"sectionEnd": "}\n",
 				"sectionPreamble": "tapped = true;\n",
-				"clause": "tapped"
+				"clauseAsCondition": "tapped"
 			}
 		},
 		{
@@ -3186,7 +3186,7 @@ sim-playground {
 					"timerElapsed = true;\n",
 					"timer.period[0] = 0;\n"
 				],
-				"clause": "timerElapsed"
+				"clauseAsCondition": "timerElapsed"
 			}
 		},
 		{
@@ -3584,7 +3584,7 @@ sim-playground {
 				"sectionBegin": "this.addEventListener(\"tap\", function (name, param) {\n",
 				"sectionPreamble": "tapped = true;\n",
 				"sectionEnd": "});\n",
-				"clause": "tapped"
+				"clauseAsCondition": "tapped"
 			}
 		},
 		{

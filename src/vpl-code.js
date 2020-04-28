@@ -238,17 +238,17 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 	var str = "";
 	rule.events.forEach(function (event, i) {
 		var code = event.generateCode(this.language);
-		if (code.clause) {
-			if (i === 0 && code.sectionBegin) {
+		if (i === 0 && code.sectionBegin) {
+			if (code.clause) {
 				clause = this.bracket(code.clause, event);
 				if (code.clauseInit) {
 					clauseInit += code.clauseInit;
 				}
-			} else {
-				auxClauses.push(this.bracket(code.clause, event));
-				if (code.clauseInit) {
-					auxClausesInit = auxClausesInit.concat(code.clauseInit);
-				}
+			}
+		} else if (code.clauseAsCondition || code.clause) {
+			auxClauses.push(this.bracket(/** @type {string} */(code.clauseAsCondition || code.clause), event));
+			if (code.clauseInit) {
+				auxClausesInit = auxClausesInit.concat(code.clauseInit);
 			}
 		}
 		if (code.initVarDecl) {
