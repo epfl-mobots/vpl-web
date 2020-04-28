@@ -59,7 +59,7 @@
 				"sectionBegin": "this.addEventListener(\"tap\", function (name, param) {\n",
 				"sectionPreamble": "tapped = true;\n",
 				"sectionEnd": "});\n",
-				"clause": "tapped"
+				"clauseAsCondition": "tapped"
 			}
 		},
 		{

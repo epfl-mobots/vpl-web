@@ -1,0 +1,54 @@
+{
+	"aeslImport": [
+		{
+			"aeslName": "acc",
+			"condition": "`$[0]===0`",
+			"blockName": "tap",
+			"parameters": []
+		},
+		{
+			"aeslName": "acc",
+			"condition": "`$[0]===1`",
+			"blockName": "roll",
+			"parameters": "`-$[1]`"
+		},
+		{
+			"aeslName": "acc",
+			"condition": "`$[0]===2`",
+			"blockName": "pitch",
+			"parameters": "`-$[1]`"
+		},
+		{
+			"aeslName": "button",
+			"blockName": "button",
+			"parameters": "`[4, 0, 2, 3, 1].map(function (i) { return $[i] !== 0; })`"
+		},
+		{
+			"aeslName": "clap",
+			"blockName": "clap",
+			"parameters": []
+		},
+		{
+			"aeslName": "colorbottom",
+			"blockName": "bottom color",
+			"parameters": "`$.map(function (v) { return v / 32; })`"
+		},
+		{
+			"aeslName": "proxground",
+			"condition": "`$[0] < 3 && $[1] < 3 && $[2] === 400 && $[3] === 450`",
+			"blockName": "ground",
+			"parameters": "`$.slice(0, 2).map(function (v) { return v === 2 ? -1 : v; })`"
+		},
+		{
+			"aeslName": "proxground",
+			"condition": "`!($[0] < 3 && $[1] < 3 && $[2] === 400 && $[3] === 450)`",
+			"blockName": "ground adv",
+			"parameters": "`$.slice(0, 2).map(function (v) { return v === 2 ? -1 : v; }).concat(values.slice(2).map(function (v) { return Math.max(0, Math.min(1, v / 1000)); }))`"
+		},
+		{
+			"aeslName": "move",
+			"blockName": "motor",
+			"parameters": "`$.map(function (v) { return v / 500; })`"
+		}
+	]
+}

@@ -2066,6 +2066,8 @@
 		"Blocks16.svg"
 	],
 	"overlays": [
+		"aesl.json",
+
 		"aseba.json",
 		"l2.json",
 		"js.json",
