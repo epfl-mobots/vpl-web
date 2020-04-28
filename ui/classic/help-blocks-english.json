@@ -4,18 +4,21 @@
 			"blocks": {
 				"button 1": [
 					"# Single button",
+					"![single button](vpl:block:button-1)",
 					"Type: event or condition block",
 					"As an event block, the _Single button_ block triggers a rule when the specified button on the Thymio is touched.",
 					"As a condition block, the _Single button_ block allows the rule to be triggered only if the specified button is being touched at the moment the event in the leftmost block occurs."
 				],
 				"horiz prox": [
 					"# Proximity sensors",
+					"![Proximity sensors](vpl:block:horiz-prox)",
 					"Type: event or condition block",
 					"As an event block, the _Proximity sensors_ block triggers a rule when the specified proximity sensors on the Thymio detect an obstacle, or the absence of obstacle, by reflecting more than a fixed amount of infrared emission. All the conditions must be satisfied simulaneously; the event occurs at the time the last specified sensor detects, or stops detecting, an obstacle.",
 					"As a condition block, the _Proximity sensors_ block allows the rule to be triggered only if the specified proximity sensors fullfil the presence of absence of an obstacle."
 				],
 				"motor": [
 					"# Set motor speeds",
+					"![Set motor speeds](vpl:block:motor)",
 					"Type: action block",
 					"The _Set motor speeds_ block sets the target speed for the left and right motors. The combination of speeds makes the robot move forward or backward, possibly, turning at the same time, or to stop."
 				]

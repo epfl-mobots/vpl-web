@@ -4,18 +4,21 @@
 			"blocks": {
 				"button 1": [
 					"# Bouton simple",
+					"![single button](vpl:block:button-1)",
 					"Type: bloc d'événement ou de condition",
 					"Comme bloc d'événement, le bloc _bouton simple_ active la règle lorsqu'on touche le bouton spécifié sur le Thymio.",
 					"Comme bloc de condition, le bloc _bouton simple_ n'autorise l'activation de la règle que si l'on touche le bouton spécifié au moment où l'événement correspondant au 1er bloc à gauche survient."
 				],
 				"horiz prox": [
 					"# Capteurs de proximité",
+					"![Proximity sensors](vpl:block:horiz-prox)",
 					"Type: bloc d'événement ou de condition",
 					"Comme bloc d'événement, le bloc _capteurs de proximité_ active la règle lorsque les capteurs de proxoîmité spécifiés détectent un obstacle, ou l'absence d'obstacle, en réfléchissant plus qu'une certaine fraction de l'émission infrarouge. Toutes les conditions doivent être remplies simultanément; l'événement ne se produit qu'au moment où le dernier capteur spécifié détecte (ou ne détecte plus) un obstacle.",
 					"Comme bloc de condition, le bloc _capteurs de proximité_ n'autorise l'activation de la règle que si les capteurs de proximité spécifiés détectent (ou pas) la présence d'un obstacle."
 				],
 				"motor": [
 					"# Change les vitesses des moteurs",
+					"![Set motor speeds](vpl:block:motor)",
 					"Type: bloc d'action",
 					"Le bloc _change les vitesses des moteurs_ fixe la vitesse à atteindre pour les moteurs gauche et droit. La combinaison de vitesses permet d'avancer ou de reculer, de tourner et de s'arrêter."
 				]
