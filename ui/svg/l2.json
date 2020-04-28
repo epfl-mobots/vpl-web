@@ -554,6 +554,30 @@
 				"statement":
 					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if (state ' + ($[0] == 2 ? '< ' + $[1] + ') {\\nstate = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ') {\\nstate = 255\\n') + '} else {\\nstate ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\n}\\n' : 'state ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + ';\\n'`display_state();\n"
 			}
+		},
+		{
+			"name": "button",
+			"l2": {
+				"sectionBegin": "onevent buttons {\n",
+				"sectionEnd": "}\n",
+				"clause": "`['center', 'forward', 'backward', 'right', 'left'].map(function (s, i) { return $[i] ? 'button.' + s : ''; }).filter(function (s) { return s; }).join(' && ') || ['center', 'forward', 'backward', 'right', 'left'].map(function (s) { return 'button.' + s; }).join(' || ')`"
+			}
+		},
+		{
+			"name": "horiz prox adv",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { var p = 'prox.horizontal[' + ix + '] ', g = '>= ' + Math.round(17 + 33 * $[8]) + '00', l = '<= ' + Math.round(17 + 33 * $[7]) + '00'; return $[i] === 1 ? p + g : $[i] === 2 ? p + l : $[i] === 3 ? p + g + ' && ' + p + l : ''; }).filter(function (s) { return s; }).join(' && ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' || ')`"
+			}
+		},
+		{
+			"name": "ground adv",
+			"l2": {
+				"sectionBegin": "onevent prox {\n",
+				"sectionEnd": "}\n",
+				"clause": "`[0, 1].map(function (ix, i) { var p = 'prox.ground.delta[' + ix + '] ', g = '>= ' + Math.round(25 + 40 * $[3]), l = '<= ' + Math.round(25 + 40 * $[2]); return $[i] === 1 ? p + g : $[i] === 2 ? p + l : $[i] === 3 ? p + g + ' && ' + p + l : ''; }).filter(function (s) { return s; }).join(' && ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' || ')`"
+			}
 		}
 	]
 }

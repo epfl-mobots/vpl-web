@@ -113,6 +113,15 @@
 		},
 		{
 			"name": "arithmetic"
+		},
+		{
+			"name": "button"
+		},
+		{
+			"name": "horiz prox adv"
+		},
+		{
+			"name": "ground adv"
 		}
 	]
 }

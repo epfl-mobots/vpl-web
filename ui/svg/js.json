@@ -300,6 +300,20 @@
 				"statement":
 					"`$[2] && $[0] != 0 && $[0] != 4 && $[1] != 0 ? 'if (state ' + ($[0] == 2 ? '< ' + $[1] + ') {\\nstate = 0\\n' : '> ' + [null,255-$[1],null,Math.floor(255/$[1])][$[0]] + ') {\\nstate = 255\\n') + '} else {\\nstate ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + '\\n}\\n' : 'state ' + ['','+','-','*','/'][$[0]] + '= ' + $[1] + ';\\n'`display_state();\n"
 			}
+		},
+		{
+			"name": "button",
+			"js": {
+				"sectionBegin": "this.addEventListener(\"buttons\", function (name, param) {\n",
+				"sectionEnd": "});\n",
+				"clause": "`['center', 'forward', 'backward', 'right', 'left'].map(function (s, i) { return $[i] ? 'this.get(\"button.' + s + '\")' : ''; }).filter(function (s) { return s; }).join(' && ') || ['center', 'forward', 'backward', 'right', 'left'].map(function (s) { return 'this.get(\"button.' + s + '\")'; }).join(' || ')`"
+			}
+		},
+		{
+			"name": "horiz prox adv"
+		},
+		{
+			"name": "ground adv"
 		}
 	]
 }
