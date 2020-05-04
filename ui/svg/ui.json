@@ -1935,13 +1935,13 @@
 			"sliders": [
 				{
 					"id": "White_threshold",
-					"thumbId": "Cursors-YPPatch-1",
+					"thumbId": "White_cursor_front",
 					"min": 0,
 					"max": 1
 				},
 				{
 					"id": "Black_threshold",
-					"thumbId": "Cursors-YPPatch-2",
+					"thumbId": "Black_cursor_front",
 					"min": 0,
 					"max": 1
 				}
