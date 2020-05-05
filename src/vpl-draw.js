@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -482,8 +482,9 @@ A3a.vpl.Canvas.prototype.tap = function (scale) {
 /**	Draw an array of buttons
 	@param {Array.<A3a.vpl.Canvas.buttonShape>} shapes
 	@param {Array.<boolean|number>} state false or 0: gray border,
-	true or 1: red, -1: black, -2: black border
-	@param {{cross:(boolean|undefined)}=} opt
+	true or 1: red, -1: black, -2: black border (or index in opt.fillColors)
+	@param {{cross:(*|undefined)}=} opt (cross: value for cross,
+		fillColors: list of fill colors, strokeColors: list of stroke colors)
 	@return {void}
 */
 A3a.vpl.Canvas.prototype.buttons = function (shapes, state, opt) {
@@ -495,11 +496,13 @@ A3a.vpl.Canvas.prototype.buttons = function (shapes, state, opt) {
 			dims.blockSize * (0.5 - shape.y));
 		ctx.rotate(shape.r || 0);
 		ctx.fillStyle = shape.fillStyle ? shape.fillStyle
+			: opt && opt.fillColors && state ? opt.fillColors[state[i]]
 			: state && state[i] === true ? "red"
 			: state && state[i] === 1 ? "#f66"
 			: state && state[i] === -1  ? "#333"
 			: "white";
 		ctx.strokeStyle = shape.strokeStyle ? shape.strokeStyle
+			: opt && opt.strokeColors && state ? opt.strokeColors[state[i]]
 			: state && (state[i] === 1 || state[i] === true) ? "#700"
 			: state && state[i] < 0 ? "black"
 			: "#aaa";
@@ -533,7 +536,7 @@ A3a.vpl.Canvas.prototype.buttons = function (shapes, state, opt) {
 			ctx.stroke();
 			break;
 		}
-		if (state && state[i] === -1 && opt && opt.cross) {
+		if (state && opt && opt.cross !== undefined && opt.cross === state[i]) {
 			// white cross
 			var s = 0.06;
 			ctx.strokeStyle = "white";

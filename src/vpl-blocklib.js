@@ -187,23 +187,29 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () {
 				return [
 					0, 0, 0, 0, 0, 0, 0,	// sensor modes
-					0.4, 0.1	// levels (700+0.4*3300 approx 2000, 700+0.1*3300 approx 1000)
+					0.1, 0.4	// levels (700+0.1*3300 approx 1000, 700+0.4*3300 approx 2000)
 				];
 			},
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			typicalParam: function () {
 				return [
-					0, 1, -1, 1, -1, 0, 0,	// sensor modes
-					0.4, 0.1	// levels (700+0.4*3300 approx 2000, 700+0.1*3300 approx 1000)
+					0, 1, 2, 1, 2, 3, 3,	// sensor modes
+					0.1, 0.4	// levels (700+0.1*3300 approx 1000, 700+0.4*3300 approx 2000)
 				];
 			},
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
-				canvas.buttons(buttons, block.param, {cross: true});
-				canvas.slider(/** @type {number} */(block.param[7]), 0.02, false,
+				canvas.buttons(buttons, block.param,
+					{
+						fillColors: ["white", "red", "#333", "#888"],
+						strokeColors: ["#aaa", "black", "black", "black"],
+						cross: 2
+					}
+				);
+				canvas.slider(/** @type {number} */(block.param[8]), 0.02, false,
 					"red", A3a.vpl.draw.levelType.high);
-				canvas.slider(/** @type {number} */(block.param[8]), -0.2, false,
+				canvas.slider(/** @type {number} */(block.param[7]), -0.2, false,
 					"black", A3a.vpl.draw.levelType.low);
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
@@ -212,17 +218,17 @@ A3a.vpl.BlockTemplate.lib =	[
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
 					block.prepareChange();
-					block.param[i] = (block.param[i] + 2) % 3 - 1;
+					block.param[i] = (block.param[i] + 1) % 4;
 					return i;
 				}
 				// slider drag
 				if (canvas.sliderCheck(0.02, false, width, height, left, top, ev)) {
 					block.prepareChange();
-					return 7;
+					return 8;
 				}
 				if (canvas.sliderCheck(-0.2, false, width, height, left, top, ev)) {
 					block.prepareChange();
-					return 8;
+					return 7;
 				}
 				return null;
 			},
@@ -418,23 +424,29 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () {
 				return [
 					0, 0,	// sensor modes
-					0.6, 0.4	// levels (0.6*1000=600, 0.4*1000=400)
+					0.4, 0.6	// levels (0.4*1000=400, 0.6*1000=600)
 				];
 			},
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			typicalParam: function () {
 				return [
-					1, -1,	// sensor modes
-					0.6, 0.4	// levels (0.6*1000=600, 0.4*1000=400)
+					1, 2,	// sensor modes
+					0.4, 0.6	// levels (0.4*1000=400, 0.6*1000=600)
 				];
 			},
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true});
-				canvas.buttons(buttons, block.param, {cross: true});
-				canvas.slider(/** @type {number} */(block.param[2]), 0.02, false,
+				canvas.buttons(buttons, block.param,
+					{
+						fillColors: ["white", "red", "#333", "#888"],
+						strokeColors: ["#aaa", "black", "black", "black"],
+						cross: 2
+					}
+				);
+				canvas.slider(/** @type {number} */(block.param[3]), 0.02, false,
 					"red", A3a.vpl.draw.levelType.high);
-				canvas.slider(/** @type {number} */(block.param[3]), -0.2, false,
+				canvas.slider(/** @type {number} */(block.param[2]), -0.2, false,
 					"black", A3a.vpl.draw.levelType.low);
 			},
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
@@ -443,17 +455,17 @@ A3a.vpl.BlockTemplate.lib =	[
 				// sensor click
 				if (i !== null) {
 					block.prepareChange();
-					block.param[i] = (block.param[i] + 2) % 3 - 1;
+					block.param[i] = (block.param[i] + 1) % 4;
 					return i;
 				}
 				// slider drag
 				if (canvas.sliderCheck(0.02, false, width, height, left, top, ev)) {
 					block.prepareChange();
-					return 2;
+					return 3;
 				}
 				if (canvas.sliderCheck(-0.2, false, width, height, left, top, ev)) {
 					block.prepareChange();
-					return 3;
+					return 2;
 				}
 				return null;
 			},
