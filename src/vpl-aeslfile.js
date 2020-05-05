@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -116,7 +116,9 @@ A3a.vpl.Rule.parseFromAESLSetElement = function (setElement, advanced, onPrepare
 	var rule = new A3a.vpl.Rule();
 	for (var i = 0; i < blocks.length; i++) {
 		var block = A3a.vpl.Block.parseFromAESLBlockElement(blocks[i], advanced);
-		rule.setBlock(block, null, onPrepareChange, true);
+		if (block) {
+			rule.setBlock(block, null, onPrepareChange, true);
+		}
 	}
 	return rule;
 };
@@ -134,33 +136,49 @@ A3a.vpl.Block.parseFromAESLBlockElement = function (blockElement, advanced) {
 		"comment": A3a.vpl.blockType.comment
 	}[blockElement.getAttribute("type")] || A3a.vpl.blockType.action;
 	var aeslName = blockElement.getAttribute("name");
-	var vplName = A3a.vpl.Rule.aesl2vpl[aeslName];
-	var descr = A3a.vpl.Rule.vpl2aesl[vplName];
-	if (descr === undefined) {
-		throw "unknown AESL block " + aeslName;
-	}
-	/** @type {Array.<number|string>} */
+	/** @type {Array.<string>} */
+	var valStr = [];
+	/** @type {Array.<number>} */
 	var val = [];
 	for (var i = 0; i < 1000; i++) {
 		var v = blockElement.getAttribute("value" + i);
 		if (v === null) {
 			break;
 		}
-		val.push(descr.stringParam ? v : parseInt(v, 10));
+		valStr.push(v);
+		val.push(parseFloat(v));
 	}
-	if (advanced && descr.adv) {
-		vplName = descr.adv;
-		descr = A3a.vpl.Rule.vpl2aesl[vplName];
+	for (var i = 0; i < A3a.vpl.BlockTemplate.aeslImportRules.length; i++) {
+		if (aeslName === A3a.vpl.BlockTemplate.aeslImportRules[i].aeslName) {
+			var cond = !A3a.vpl.BlockTemplate.aeslImportRules[i].condition ||
+				A3a.vpl.BlockTemplate.substInline(
+					/** @type {string} */(A3a.vpl.BlockTemplate.aeslImportRules[i].condition),
+					A3a.vpl.BlockTemplate.aeslImportRules[i].stringParam ? valStr : val,
+					undefined, true);
+			if (cond) {
+				var blockName = A3a.vpl.BlockTemplate.aeslImportRules[i].blockName;
+				if (blockName == undefined) {
+					return null;
+				}
+				var parameters = A3a.vpl.BlockTemplate.aeslImportRules[i].parameters
+					? A3a.vpl.BlockTemplate.substInline(
+						/** @type {string} */(A3a.vpl.BlockTemplate.aeslImportRules[i].parameters),
+						A3a.vpl.BlockTemplate.aeslImportRules[i].stringParam ? valStr : val,
+						undefined, true)
+					: null;
+				var blockTemplate = A3a.vpl.BlockTemplate.findByName(blockName);
+				var block = new A3a.vpl.Block(blockTemplate, null, null);
+				if (blockTemplate.importParam) {
+					blockTemplate.importParam(block, parameters);
+				} else {
+					block.param = /** @type {A3a.vpl.BlockTemplate.param} */(parameters);
+				}
+				return block;
+			}
+		}
 	}
-	var blockTemplate = A3a.vpl.BlockTemplate.findByName(vplName);
-	var block = new A3a.vpl.Block(blockTemplate, null, null);
-	var param = descr.valuesToParam ? descr.valuesToParam(val) : val;
-	if (blockTemplate.importParam) {
-		blockTemplate.importParam(block, param);
-	} else {
-		block.param = param;
-	}
-	return block;
+
+	throw "unknown AESL block " + aeslName;
 };
 
 /** Set anchor element so that it downloads text

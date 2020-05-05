@@ -137,7 +137,7 @@ A3a.vpl.Canvas.prototype.mousedownSVGPushbuttons = function (block, width, heigh
 			block.prepareChange();
 			var p = pushbuttons[i]["newParameters"];
 			if (typeof p === "string" && /^`.+`$/.test(p)) {
-				p = /** @type {Array} */(A3a.vpl.BlockTemplate.substInline(p, block, undefined, true));
+				p = /** @type {Array} */(A3a.vpl.BlockTemplate.substInline(p, block.param, undefined, true));
 			}
 			block.param = p;
 			return true;
@@ -171,7 +171,7 @@ A3a.vpl.Canvas.prototype.getStyles = function (aux, block) {
 	}
 	for (var i = 0; i < nStyles; i++) {
 		styles[aux["styles"][i]["id"]] =
-			/** @type {string} */(A3a.vpl.BlockTemplate.substInline(aux["styles"][i]["st"], block));
+			/** @type {string} */(A3a.vpl.BlockTemplate.substInline(aux["styles"][i]["st"], block.param));
 	}
 	return styles;
 };
@@ -359,7 +359,7 @@ A3a.vpl.Canvas.prototype.mousedragSVGSlider = function (block, dragIndex, aux, w
 		var snap = this.clientData.sliderAux["snap"];
 		snap && snap.forEach(function (s, i) {
 			if (typeof s === "string" && /^`.+`$/.test(s)) {
-				s = /** @type {number} */(A3a.vpl.BlockTemplate.substInline(s, block, i, true));
+				s = /** @type {number} */(A3a.vpl.BlockTemplate.substInline(s, block.param, i, true));
 			}
 			if (Math.abs(val - s) < Math.abs(max - min) / 10) {
 				val = s;
@@ -698,7 +698,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 	*/
 	function substInlineA(fmtArray, block) {
 		return fmtArray.map(function (fmt) {
-			return /** @type {string} */(A3a.vpl.BlockTemplate.substInline(fmt, block));
+			return /** @type {string} */(A3a.vpl.BlockTemplate.substInline(fmt, block.param));
 		});
 	}
 
@@ -758,7 +758,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 				for (var i = 0; i < validation.length; i++) {
 					var assert = validation[i]["assert"];
 					var r = typeof assert === "string" && /^`.+`$/.test(assert)
-						? A3a.vpl.BlockTemplate.substInline(assert, b, undefined, true)
+						? A3a.vpl.BlockTemplate.substInline(assert, b.param, undefined, true)
 						: assert;
 					if (!r) {
 						var w = validation[i]["warning"];

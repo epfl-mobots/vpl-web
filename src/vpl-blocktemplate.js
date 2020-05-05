@@ -82,6 +82,22 @@ A3a.vpl.BlockTemplate = function (blockParams) {
 };
 
 /**
+	@typedef {{
+		aeslName: string,
+		condition: ?string,
+		blockName: string,
+		parameters:?string,
+		stringParam: boolean
+	}}
+*/
+A3a.vpl.BlockTemplate.aeslImportRule;
+
+/**
+	@type {Array.<A3a.vpl.BlockTemplate.aeslImportRule>}
+*/
+A3a.vpl.BlockTemplate.aeslImportRules = [];
+
+/**
 	@typedef {(Array|null)}
 */
 A3a.vpl.BlockTemplate.param;
@@ -175,14 +191,14 @@ A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, box, x
 };
 
 /** Substitute inline expressions `expr` in input string, where expr is a
-	JavaScript expression; variable $ contains the block parameters
+	JavaScript expression; variable $ contains params, typically the block parameters
 	@param {string} fmt
-	@param {A3a.vpl.Block} block
+	@param {Array} params
 	@param {number=} i parameter index in clauseAnd fragments
 	@param {boolean=} keepResult true to return last result instead of string
 	@return {*}
 */
-A3a.vpl.BlockTemplate.substInline = function (fmt, block, i, keepResult) {
+A3a.vpl.BlockTemplate.substInline = function (fmt, params, i, keepResult) {
 	/** @type {*} */
 	var result = null;
 	while (true) {
@@ -193,7 +209,7 @@ A3a.vpl.BlockTemplate.substInline = function (fmt, block, i, keepResult) {
 		result = new Function("$", "i", "rgb", "toFixed",
 			"return " + r[1] + ";"
 		)(
-			block.param,
+			params,
 			i,
 			function (rgb) {
 				rgb = [

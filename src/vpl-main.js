@@ -208,6 +208,7 @@ function vplSetup(gui, rootDir) {
 				if (overlay.hasOwnProperty(key)) {
 					switch (key) {
 					case "blocks":
+					case "aeslImportRules":
 					case "buttons":
 					case "widgets":
 						// concat arrays
@@ -330,6 +331,18 @@ function vplSetup(gui, rootDir) {
 					window["console"] && window["console"]["error"](e);
 				}
 			}
+		}
+		if (gui["aeslImportRules"] && gui["aeslImportRules"].length > 0) {
+			A3a.vpl.BlockTemplate.aeslImportRules = gui["aeslImportRules"]
+				.map(function (aeslImportRule) {
+					return {
+						aeslName: aeslImportRule["aeslName"],
+						condition: aeslImportRule["condition"] || null,
+						blockName: aeslImportRule["blockName"],
+						parameters: aeslImportRule["parameters"] || null,
+						stringParam: aeslImportRule["stringParam"] || false
+					}
+				});
 		}
 		if (gui["miscSettings"] && gui["miscSettings"]["basicMultiEvent"] != undefined) {
 			A3a.vpl.Program.basicMultiEvent = gui["miscSettings"]["basicMultiEvent"] == true;

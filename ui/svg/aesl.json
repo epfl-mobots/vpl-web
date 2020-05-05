@@ -1,37 +1,65 @@
 {
-	"aeslImport": [
+	"aeslImportRules": [
 		{
 			"aeslName": "acc",
 			"condition": "`$[0]===0`",
-			"blockName": "tap",
-			"parameters": []
+			"blockName": "tap"
 		},
 		{
 			"aeslName": "acc",
 			"condition": "`$[0]===1`",
 			"blockName": "roll",
-			"parameters": "`-$[1]`"
+			"parameters": "`[-$[1]]`"
 		},
 		{
 			"aeslName": "acc",
 			"condition": "`$[0]===2`",
 			"blockName": "pitch",
-			"parameters": "`-$[1]`"
+			"parameters": "`[-$[1]]`"
 		},
 		{
 			"aeslName": "button",
+			"condition": "`$[5]===0`",
 			"blockName": "button",
 			"parameters": "`[4, 0, 2, 3, 1].map(function (i) { return $[i] !== 0; })`"
 		},
 		{
+			"aeslName": "button",
+			"condition": "`$[5]===1`",
+			"blockName": "remote control arrows",
+			"parameters": "`[[1, 0, 2, 3, 4][$[6]]]`"
+		},
+		{
+			"aeslName": "button",
+			"condition": "`$[5]===2`",
+			"blockName": "remote control keypad",
+			"parameters": "`[[1, 2, 3, 4, 5, 6, 7, 8, 9, 17, 0, 16][$[6]]]`"
+		},
+		{
 			"aeslName": "clap",
-			"blockName": "clap",
-			"parameters": []
+			"blockName": "clap"
 		},
 		{
 			"aeslName": "colorbottom",
 			"blockName": "bottom color",
 			"parameters": "`$.map(function (v) { return v / 32; })`"
+		},
+		{
+			"aeslName": "colortop",
+			"blockName": "top color",
+			"parameters": "`$.map(function (v) { return v / 32; })`"
+		},
+		{
+			"aeslName": "prox",
+			"condition": "`$[0] < 3 && $[1] < 3 && $[2] < 3 && $[3] < 3 && $[4] < 3 && $[5] < 3 && $[6] < 3 && $[7] === 1000 && $[8] === 2000`",
+			"blockName": "horiz prox",
+			"parameters": "`[2, 1, 3, 0, 4, 5, 6].map(function (v) { return $[v] >= 2 ? -1 : $[v]; })`"
+		},
+		{
+			"aeslName": "prox",
+			"condition": "`!($[0] < 3 && $[1] < 3 && $[2] < 3 && $[3] < 3 && $[4] < 3 && $[5] < 3 && $[6] < 3 && $[7] === 1000 && $[8] === 2000)`",
+			"blockName": "horiz prox adv",
+			"parameters": "`[2, 1, 3, 0, 4, 5, 6].map(function (v) { return $[v]; }).concat($.slice(7).map(function (v) { return Math.max(0, Math.min(1, (v - 700) / 3300)); }))`"
 		},
 		{
 			"aeslName": "proxground",
@@ -43,12 +71,41 @@
 			"aeslName": "proxground",
 			"condition": "`!($[0] < 3 && $[1] < 3 && $[2] === 400 && $[3] === 450)`",
 			"blockName": "ground adv",
-			"parameters": "`$.slice(0, 2).map(function (v) { return v === 2 ? -1 : v; }).concat(values.slice(2).map(function (v) { return Math.max(0, Math.min(1, v / 1000)); }))`"
+			"parameters": "`$.slice(0, 2).map(function (v) { return v; }).concat($.slice(2).map(function (v) { return Math.max(0, Math.min(1, v / 1000)); }))`"
 		},
 		{
 			"aeslName": "move",
 			"blockName": "motor",
 			"parameters": "`$.map(function (v) { return v / 500; })`"
+		},
+		{
+			"aeslName": "setstate",
+			"blockName": "set state 256 with mask",
+			"parameters": "`[0, $[1]==2?-1:$[1], 0, $[3]==2?-1:$[3], 0, $[2]==2?-1:$[2], 0, $[0]==2?-1:$[0]]`"
+		},
+		{
+			"aeslName": "sound",
+			"blockName": "notes",
+			"parameters": "`[$[0]%256,$[0]>=517?0:Math.floor($[0]/256), $[1]%256,$[1]>=517?0:Math.floor($[1]/256), $[2]%256,$[2]>=517?0:Math.floor($[2]/256), $[3]%256,$[3]>=517?0:Math.floor($[3]/256), $[4]%256,$[4]>=517?0:Math.floor($[4]/256), $[5]%256,$[5]>=517?0:Math.floor($[5]/256)]`"
+		},
+		{
+			"aeslName": "statefilter",
+			"condition": "`$[0] || $[1] || $[2] || $[3] || $[4] || $[5] || $[6] || $[7]`",
+			"blockName": "state 256 with mask",
+			"parameters": "`[0, $[1]==2?-1:$[1], 0, $[3]==2?-1:$[3], 0, $[2]==2?-1:$[2], 0, $[0]==2?-1:$[0]]`"
+		},
+		{
+			"aeslName": "statefilter",
+			"condition": "`!($[0] || $[1] || $[2] || $[3] || $[4] || $[5] || $[6] || $[7])`"
+		},
+		{
+			"aeslName": "timeout",
+			"blockName": "timer"
+		},
+		{
+			"aeslName": "timer",
+			"blockName": "set timer",
+			"parameters": "`[$[0] / 1000]`"
 		}
 	]
 }

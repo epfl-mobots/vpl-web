@@ -70,11 +70,11 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 		reader.onload = function (event) {
 			var data = event.target.result;
 			var filename = file.name;
-			try {
-				// try aesl first
+			if (data.trim()[0] === "<") {
+				// aesl (xml)
 				app.program.importFromAESLFile(data);
-			} catch (e) {
-				// then try json
+			} else {
+				// json
 				app.loadProgramJSON(data, {dontChangeProgram: ext === "vpl3ui"});
 			}
 			app.program.filename = filename;
