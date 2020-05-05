@@ -814,6 +814,40 @@ A3a.vpl.BlockTemplate.lib =	[
 			canvas.drawTimer(0, true, false);
 		}
 	}),
+	new A3a.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "t", x: -0.25, y: 0, r: -Math.PI / 2},
+			{sh: "t", x: 0, y: 0.25, r: 0},
+			{sh: "t", x: 0, y: -0.25, r: Math.PI},
+			{sh: "t", x: 0.25, y: 0, r: Math.PI / 2},
+			{sh: "c", x: 0, y: 0, r: 0},
+		];
+		return {
+			name: "remote control arrows",
+			type: A3a.vpl.blockType.event,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0]; },
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.remoteControl();
+				var i = block.param[0];
+				canvas.buttons(buttons, [i == 0, i == 1, i == 2, i == 3, i == 4]);
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					block.param[0] = i;
+				}
+				return i;
+			}
+		};
+	})()),
 	new A3a.vpl.BlockTemplate({
 		name: "state",
 		modes: [A3a.vpl.mode.advanced],

@@ -479,6 +479,19 @@ A3a.vpl.Canvas.prototype.tap = function (scale) {
 	ctx.restore();
 };
 
+/** Draw a remote control
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.remoteControl = function () {
+	var ctx = this.ctx;
+	var dims = this.dims;
+	ctx.save();
+	ctx.fillStyle = "#eee";
+	ctx.fillRect(0.1 * dims.blockSize, dims.blockLineWidth,
+		0.8 * dims.blockSize, dims.blockSize - 2 * dims.blockLineWidth);
+	ctx.restore();
+};
+
 /**	Draw an array of buttons
 	@param {Array.<A3a.vpl.Canvas.buttonShape>} shapes
 	@param {Array.<boolean|number>} state false or 0: gray border,

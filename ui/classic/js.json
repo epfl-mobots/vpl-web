@@ -164,6 +164,9 @@
 			}
 		},
 		{
+			"name": "remote control arrows"
+		},
+		{
 			"name": "state",
 			"js": {
 				"initVarDecl": [

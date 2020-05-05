@@ -211,6 +211,9 @@
 			}
 		},
 		{
+			"name": "remote control arrows"
+		},
+		{
 			"name": "state",
 			"python": {
 					"initCodeExec": [

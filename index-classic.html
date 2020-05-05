@@ -599,6 +599,13 @@ sim-playground {
 			}
 		},
 		{
+			"name": "remote control arrows",
+			"aseba": {
+				"sectionBegin": "onevent rc5\n",
+				"clause": "`[[85, 17], [80, 32], [81, 33], [86, 16, 78], [87, 13]][$[0]].map(function (c) { return 'rc5.command == ' + c; }).join(' or ')`"
+			}
+		},
+		{
 			"name": "state",
 			"aseba": {
 				"initVarDecl": [
@@ -1296,6 +1303,14 @@ sim-playground {
 			}
 		},
 		{
+			"name": "remote control arrows",
+			"l2": {
+				"sectionBegin": "onevent rc5 {\n",
+				"sectionEnd": "}\n",
+				"clause": "`[[85, 17], [80, 32], [81, 33], [86, 16, 78], [87, 13]][$[0]].map(function (c) { return 'rc5.command == ' + c; }).join(' or ')`"
+			}
+		},
+		{
 			"name": "state",
 			"l2": {
 				"initVarDecl": [
@@ -1988,6 +2003,9 @@ sim-playground {
 			}
 		},
 		{
+			"name": "remote control arrows"
+		},
+		{
 			"name": "state",
 			"js": {
 				"initVarDecl": [
@@ -2540,6 +2558,9 @@ sim-playground {
 				"sectionPreamble": "timerElapsed = True\nthymio.timer.period[0] = 0\n",
 				"clauseAsCondition": "timerElapsed"
 			}
+		},
+		{
+			"name": "remote control arrows"
 		},
 		{
 			"name": "state",
