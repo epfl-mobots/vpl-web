@@ -99,8 +99,6 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				var html = app.toHTMLDocument(app.css);
 				A3a.vpl.Program.downloadText(html, "vpl-program.html", "text/html");
 			} else {
-				// var aesl = app.program.exportAsAESLFile();
-				// A3a.vpl.Program.downloadText(aesl, "vpl.aesl");
 				var json = app.program.exportToJSON({lib: true, prog: true});
 				A3a.vpl.Program.downloadText(json,
 					app.program.filename || A3a.vpl.Program.defaultFilename,
