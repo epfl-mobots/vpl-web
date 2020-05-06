@@ -159,8 +159,7 @@
 			"state": ["pressed"],
 			"draw": [
 				{
-					"uri": "Icons.svg#Pressed_bg",
-					"alpha": 1.0
+					"uri": "Icons.svg#Pressed_bg"
 				},
 				{
 					"uri": "Icons.svg#download_highlight"
@@ -191,8 +190,7 @@
 			"state": ["pressed"],
 			"draw": [
 				{
-					"uri": "Icons.svg#Pressed_bg",
-					"alpha": 1.0
+					"uri": "Icons.svg#Pressed_bg"
 				},
 				{
 					"uri": "Icons.svg#make_html_highlight"
@@ -709,7 +707,16 @@
 		},
 		{
 			"name": "src:locked",
-			"state": ["selected", "pressed"],
+			"state": ["selected"],
+			"draw": [
+				{
+					"uri": "Icons.svg#locked_default"
+				}
+			]
+		},
+		{
+			"name": "src:locked",
+			"state": ["pressed"],
 			"draw": [
 				{
 					"uri": "Icons.svg#locked_highlight"
@@ -721,7 +728,7 @@
 			"state": [],
 			"draw": [
 				{
-					"uri": "Icons.svg#locked_default"
+					"uri": "Icons.svg#locked_highlight"
 				}
 			]
 		},
