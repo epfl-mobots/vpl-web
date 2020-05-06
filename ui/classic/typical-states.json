@@ -1,0 +1,11 @@
+{
+	"buttons": [
+		{
+			"name": "vpl:text-toggle",
+			"typicalStates": [
+				{"selected": false},
+				{"selected": true}
+			]
+		}
+	]
+}

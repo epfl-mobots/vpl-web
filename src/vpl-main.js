@@ -203,7 +203,11 @@ function vplSetup(gui, rootDir) {
 	var helpFragments = [];
 	if (gui && gui["overlays"]) {
 		gui["overlays"].forEach(function (filename) {
-			var overlay = JSON.parse(gui.rsrc[filename]);
+			try {
+				var overlay = JSON.parse(gui.rsrc[filename]);
+			} catch (e) {
+				console.error(e.message);
+			}
 			for (var key in overlay) {
 				if (overlay.hasOwnProperty(key)) {
 					switch (key) {

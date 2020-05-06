@@ -9,6 +9,12 @@
 					"As an event block, the _Single button_ block triggers a rule when the specified button on the Thymio is touched.",
 					"As a condition block, the _Single button_ block allows the rule to be triggered only if the specified button is being touched at the moment the event in the leftmost block occurs."
 				],
+				"button": [
+					"# Multiple buttons",
+					"![button](vpl:block:button)",
+					"Type: event or condition block",
+					"..."
+				],
 				"horiz prox": [
 					"# Proximity sensors",
 					"![Proximity sensors](vpl:block:horiz-prox)",
@@ -16,11 +22,257 @@
 					"As an event block, the _Proximity sensors_ block triggers a rule when the specified proximity sensors on the Thymio detect an obstacle, or the absence of obstacle, by reflecting more than a fixed amount of infrared emission. All the conditions must be satisfied simulaneously; the event occurs at the time the last specified sensor detects, or stops detecting, an obstacle.",
 					"As a condition block, the _Proximity sensors_ block allows the rule to be triggered only if the specified proximity sensors fullfil the presence of absence of an obstacle."
 				],
+				"horiz prox adv": [
+					"# Proximity sensors with low and high thresholds",
+					"![horiz prox adv](vpl:block:horiz-prox-adv)",
+					"Type: event or condition block",
+					"..."
+				],
+				"horiz prox 1": [
+					"# Proximity sensors with threshold",
+					"![horiz prox 1](vpl:block:horiz-prox-1)",
+					"Type: event or condition block",
+					"..."
+				],
+				"ground": [
+					"# Ground reflection sensors",
+					"![ground](vpl:block:ground)",
+					"Type: event or condition block",
+					"..."
+				],
+				"ground adv": [
+					"# Ground reflection sensors with low and high sensors",
+					"![ground adv](vpl:block:ground-adv)",
+					"Type: event or condition block",
+					"..."
+				],
+				"ground 1": [
+					"# Ground reflection sensors with threshold",
+					"![ground 1](vpl:block:ground-1)",
+					"Type: event or condition block",
+					"..."
+				],
+				"tap": [
+					"# Impact detection",
+					"![tap](vpl:block:tap)",
+					"Type: event or condition block",
+					"..."
+				],
+				"accelerometer": [
+					"# Accelerometer",
+					"![accelerometer](vpl:block:accelerometer)",
+					"Type: event or condition block",
+					"..."
+				],
+				"roll": [
+					"# Roll angle",
+					"![roll](vpl:block:roll)",
+					"Type: event or condition block",
+					"..."
+				],
+				"pitch": [
+					"# Pitch angle",
+					"![pitch](vpl:block:pitch)",
+					"Type: event or condition block",
+					"..."
+				],
+				"yaw": [
+					"# Yaw angle",
+					"![yaw](vpl:block:yaw)",
+					"Type: event or condition block",
+					"..."
+				],
+				"clap": [
+					"# Sound detection",
+					"![clap](vpl:block:clap)",
+					"Type: event or condition block",
+					"..."
+				],
+				"init": [
+					"# Initialization",
+					"![init](vpl:block:init)",
+					"Type: event or condition block",
+					"..."
+				],
+				"timer": [
+					"# Timer elapsed",
+					"![timer](vpl:block:timer)",
+					"Type: event or condition block",
+					"..."
+				],
+				"remote control arrows": [
+					"# remote control arrows",
+					"![remote control arrows](vpl:block:remote-control-arrows)",
+					"Type: event or condition block",
+					"..."
+				],
+				"state": [
+					"# State (4 bits)",
+					"![state](vpl:block:state)",
+					"Type: condition block",
+					"..."
+				],
+				"state 8": [
+					"# State (8 values)",
+					"![state 8](vpl:block:state-8)",
+					"Type: condition block",
+					"..."
+				],
+				"counter comparison": [
+					"# Counter comparison",
+					"![counter comparison](vpl:block:counter-comparison)",
+					"Type: condition block",
+					"..."
+				],
+				"color state": [
+					"# Color state",
+					"![color state](vpl:block:color-state)",
+					"Type: condition block",
+					"..."
+				],
+				"color 8 state": [
+					"# Color state",
+					"![color 8 state](vpl:block:color-8-state)",
+					"Type: condition block",
+					"..."
+				],
+				"motor state": [
+					"# Motor state",
+					"![motor state](vpl:block:motor-state)",
+					"Type: condition block",
+					"..."
+				],
 				"motor": [
 					"# Set motor speeds",
 					"![Set motor speeds](vpl:block:motor)",
 					"Type: action block",
 					"The _Set motor speeds_ block sets the target speed for the left and right motors. The combination of speeds makes the robot move forward or backward, possibly, turning at the same time, or to stop."
+				],
+				"move": [
+					"# Set motion",
+					"![move](vpl:block:move)",
+					"Type: action block",
+					"..."
+				],
+				"nn obstacles": [
+					"# Neural net for obstacle avoidance",
+					"![nn obstacles](vpl:block:nn-obstacles)",
+					"Type: action block",
+					"..."
+				],
+				"top color": [
+					"# Set top color (RGB components)",
+					"![top color](vpl:block:top-color)",
+					"Type: action block",
+					"..."
+				],
+				"top color 8": [
+					"# Set top color",
+					"![top color 8](vpl:block:top-color-8)",
+					"Type: action block",
+					"..."
+				],
+				"bottom color": [
+					"# Set bottom color (RGB components)",
+					"![bottom color](vpl:block:bottom-color)",
+					"Type: action block",
+					"..."
+				],
+				"bottom-left color": [
+					"# Set bottom-left color (RGB components)",
+					"![bottom-left color](vpl:block:bottom-left-color)",
+					"Type: action block",
+					"..."
+				],
+				"bottom-right color": [
+					"# Set bottom-right color (RGB components)",
+					"![bottom-right color](vpl:block:bottom-right-color)",
+					"Type: action block",
+					"..."
+				],
+				"bottom color 8": [
+					"# Set bottom color",
+					"![bottom color 8](vpl:block:bottom-color-8)",
+					"Type: action block",
+					"..."
+				],
+				"bottom-left color 8": [
+					"# Set bottom-left color",
+					"![bottom-left color 8](vpl:block:bottom-left-color-8)",
+					"Type: action block",
+					"..."
+				],
+				"bottom-right color 8": [
+					"# Set bottom-right color",
+					"![bottom-right color 8](vpl:block:bottom-right-color-8)",
+					"Type: action block",
+					"..."
+				],
+				"notes": [
+					"# Play melody",
+					"![notes](vpl:block:notes)",
+					"Type: action block",
+					"..."
+				],
+				"play": [
+					"# Play a .wav file",
+					"![play](vpl:block:play)",
+					"Type: action block",
+					"..."
+				],
+				"play stop": [
+					"# Stop playing a .wav file",
+					"![play stop](vpl:block:play-stop)",
+					"Type: action block",
+					"..."
+				],
+				"set state": [
+					"# Set state (4 bits)",
+					"![set state](vpl:block:set-state)",
+					"Type: action block",
+					"..."
+				],
+				"toggle state": [
+					"# Toggle state (4 bits)",
+					"![toggle state](vpl:block:toggle-state)",
+					"Type: action block",
+					"..."
+				],
+				"set state 8": [
+					"# Set state (8 values)",
+					"![set state 8](vpl:block:set-state-8)",
+					"Type: action block",
+					"..."
+				],
+				"change state 8": [
+					"# Set to next or previous state (8 values)",
+					"![change state 8](vpl:block:change-state-8)",
+					"Type: action block",
+					"..."
+				],
+				"set counter": [
+					"# Set counter",
+					"![set counter](vpl:block:set-counter)",
+					"Type: action block",
+					"..."
+				],
+				"set timer": [
+					"# Start timer (0-4 sec)",
+					"![set timer](vpl:block:set-timer)",
+					"Type: action block",
+					"..."
+				],
+				"set timer log": [
+					"# Set timer (0.1-10 sec)",
+					"![set timer log](vpl:block:set-timer-log)",
+					"Type: action block",
+					"..."
+				],
+				"picture comment": [
+					"# Picture comment",
+					"![picture comment](vpl:block:picture-comment)",
+					"Type: comment block",
+					"..."
 				]
 			}
 		}

@@ -828,6 +828,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		];
 		return {
 			name: "remote control arrows",
+			modes: [],
 			type: A3a.vpl.blockType.event,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
