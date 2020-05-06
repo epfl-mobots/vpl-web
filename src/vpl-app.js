@@ -228,10 +228,11 @@ A3a.vpl.Application.prototype.setUILanguage = function (language) {
 
 /** Translate message using the current language
 	@param {string} messageKey
+	@param {string=} language target language to override the current language
 	@return {string}
 */
-A3a.vpl.Application.prototype.translate = function (messageKey) {
-	return this.i18n.translate(messageKey);
+A3a.vpl.Application.prototype.translate = function (messageKey, language) {
+	return this.i18n.translate(messageKey, language);
 };
 
 /** Set or clear html content of About box
@@ -330,7 +331,7 @@ A3a.vpl.Application.prototype.generateDynamicHelpContentSkeleton = function (lan
 		.forEach(function (b) {
 			if (b.type !== A3a.vpl.blockType.hidden) {
 				blocks[b.name] = [
-					"# " + this.translate(b.name),
+					"# " + this.translate(b.name, language),
 					"![" + b.name + "](vpl:block:" + b.name.replace(/ /g, "-") + ")",
 					typeDict[b.type],
 					"..."

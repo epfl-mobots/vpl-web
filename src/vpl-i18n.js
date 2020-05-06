@@ -44,7 +44,12 @@ A3a.vpl.Translation.prototype.setLanguage = function (language) {
 	this.language = language;
 };
 
-A3a.vpl.Translation.prototype.translate = function (msg) {
-	var dict = this.dict[this.language];
+/** Translate a message, defaulting to the untranslated message
+	@param {string} msg
+	@param {string=} language target language (default: as set by setLanguage)
+	@return {string}
+*/
+A3a.vpl.Translation.prototype.translate = function (msg, language) {
+	var dict = this.dict[language || this.language];
 	return dict && dict[msg] || msg;
 };
