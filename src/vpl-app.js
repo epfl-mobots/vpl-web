@@ -290,6 +290,66 @@ A3a.vpl.Application.prototype.setHelpForCurrentAppState = function () {
 	}
 };
 
+/** Generate json help skeleton for blocks
+	@param {string=} language
+	@return {void}
+*/
+A3a.vpl.Application.prototype.generateDynamicHelpContentSkeleton = function (language) {
+	language = language || this.i18n.language;
+	var languageName = {
+		"en": "english",
+		"fr": "french",
+		"de": "german",
+		"it": "italian",
+		"sp": "spanish"
+	}[language] || "unknown";
+	var typeDictI18N = {
+		"en": {
+			"e": "Type: event or condition block",
+			"a": "Type: action block",
+			"s": "Type: condition block",
+			"c": "Type: comment block"
+		},
+		"fr": {
+			"e": "Type: bloc d'événement ou de condition",
+			"a": "Type: bloc d'action",
+			"s": "Type: bloc de condition",
+			"c": "Type: block de commentaire"
+		},
+		"de": {
+			"e": "Art: Ereignisblock oder Zustandblock",
+			"a": "Art: Aktionblock",
+			"s": "Art: Zustandblock",
+			"c": "Art: Anmerkungblock"
+		}
+	};
+	var typeDict = typeDictI18N[language] || typeDictI18N["en"];
+
+	var blocks = {};
+	A3a.vpl.BlockTemplate.lib
+		.forEach(function (b) {
+			if (b.type !== A3a.vpl.blockType.hidden) {
+				blocks[b.name] = [
+					"# " + this.translate(b.name),
+					"![" + b.name + "](vpl:block:" + b.name.replace(/ /g, "-") + ")",
+					typeDict[b.type],
+					"..."
+				];
+			}
+		}, this);
+
+	var c = {
+		"help": {}
+	};
+	c["help"][language] = {};
+	c["help"][language]["blocks"] = blocks;
+	var str = JSON.stringify(c, null, "\t");
+
+	A3a.vpl.Program.downloadText(str,
+		"help-blocks-" + languageName + ".html",
+		"application/json");
+};
+
 /** Set or clear html content of Suspend box
 	@param {?string} html
 	@return {void}
