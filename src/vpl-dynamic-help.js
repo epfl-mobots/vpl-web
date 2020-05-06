@@ -162,9 +162,22 @@ A3a.vpl.DynamicHelp.prototype.convertToHTML = function (md) {
 /** Generate html
 	@param {string} language
 	@param {Array.<string>} blocks
+	@param {string=} docTemplate html document template, where the 1st occurence of
+	string BLOCKS is replaced with the block description (should allow vertical scrolling
+	with something like "<div style='height: 100%; overflow-y: scroll;'>...</div>")
 	@return {string}
 */
-A3a.vpl.DynamicHelp.prototype.generate = function (language, blocks) {
+A3a.vpl.DynamicHelp.prototype.generate = function (language, blocks, docTemplate) {
+	docTemplate = docTemplate ||
+		"<html>\n" +
+			"<style>\n" +
+			"img {float: left; margin-right: 10px; margin-bottom: 20px;}\n" +
+			"h1, h2 {clear: left;}\n" +
+			"</style>\n" +
+			"<div style='height: 100%; overflow-y: scroll;'>" +
+			"BLOCKS" +
+			"</div>" +
+			"</html>\n";
 	var html = "";
 	blocks.forEach(function (blockId) {
 		var frag = this.get(language, "blocks", blockId);
@@ -172,9 +185,5 @@ A3a.vpl.DynamicHelp.prototype.generate = function (language, blocks) {
 			html += this.convertToHTML(frag);
 		}
 	}, this);
-	return "<html>\n" +
-		"<div style='height: 100%; overflow-y: scroll;'>" +
-		(html || "<p>Empty</p>\n") +
-		"</div>" +
-		"</html>\n";
+	return docTemplate.replace("BLOCKS", html || "<p>Empty</p>\n");
 };
