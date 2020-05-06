@@ -2328,7 +2328,13 @@ sim-playground {
 		},
 		{
 			"aeslName": "button",
-			"condition": "`$[5]===0`",
+			"condition": "`$[5]===0 && (($[0] !== 0) + ($[1] !== 0) + ($[2] !== 0) + ($[3] !== 0) + ($[4] !== 0)) === 1`",
+			"blockName": "button 1",
+			"parameters": "`[$[0] ? 1 : $[1] ? 4 : $[2] ? 2 : $[3] ? 3 : 0]`"
+		},
+		{
+			"aeslName": "button",
+			"condition": "`$[5]===0 && (($[0] !== 0) + ($[1] !== 0) + ($[2] !== 0) + ($[3] !== 0) + ($[4] !== 0)) !== 1`",
 			"blockName": "button",
 			"parameters": "`[4, 0, 2, 3, 1].map(function (i) { return $[i] !== 0; })`"
 		},
