@@ -26,6 +26,8 @@
 			"state 256 with mask": "Comparaison partielle des bits de l'état",
 			"color 8 state": "État (couleur)",
 			"bottom color 8 state": "État (couleur du bas)",
+			"horiz prox adv": "Capteurs de proximité avec seuils bas et haut",
+			"ground adv": "Capteurs de réflexion sur le sol avec seuils bas et haut",
 			"motor": "Change les vitesses des moteurs",
 			"move": "Change le type de déplacement",
 			"top color 8": "Change la couleur du dessus",

@@ -26,6 +26,8 @@
 			"state 256 with mask": "State bit partial comparison",
 			"color 8 state": "Color state",
 			"bottom color 8 state": "Bottom color state",
+			"horiz prox adv": "Proximity sensors with 2 thresholds",
+			"ground adv": "Ground reflection sensors with 2 thresholds",
 			"motor": "Set motor speeds",
 			"move": "Set motion",
 			"top color 8": "Set top color",
