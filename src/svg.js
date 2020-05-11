@@ -592,9 +592,21 @@ SVG.prototype.draw = function (ctx, options) {
 				baseStyle += ";stroke-dashoffset:" + styleAttr;
 			}
 
-			var idAttr = el.getAttribute("id");
-			if (idAttr && options && options.style && options.style.hasOwnProperty(idAttr)) {
-				overriddenStyle = (overriddenStyle || "") + ";" + options.style[idAttr];
+			if (options && options.style) {
+				var idAttr = el.getAttribute("id");
+				if (idAttr && options.style.hasOwnProperty(idAttr)) {
+					// use style[id]
+					overriddenStyle = (overriddenStyle || "") + ";" + options.style[idAttr];
+				} else {
+					// style[!otherId]? Try to find !otherId
+					for (var notOtherId in options.style) {
+						if (options.style.hasOwnProperty(notOtherId) &&
+							notOtherId[0] === "!" && notOtherId.slice(1) !== idAttr) {
+							// !otherId with otherId != id: add style
+							overriddenStyle = (overriddenStyle || "") + ";" + options.style[notOtherId];
+						}
+					}
+				}
 			}
 		}
 

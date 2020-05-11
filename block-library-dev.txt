@@ -116,7 +116,8 @@ In json, block contain the following properties:
 
 - "styles" (array of objects, optional): style applied to SVG element. Each element contains the following properties:
 
-    - "id" (string, required): id of the svg element style is applied to
+    - "id" (string, required): id of the svg element style is applied, or not applied, to
+    - "complement" (boolean, optional, default false): true to apply to all elements except with id
     - "st" (string, required): style string; usually contains backtick-expressions
 
 - "aseba" (object, optional): code fragments to generate Aseba language source code. Code fragments contain Aseba source code. Except for "clause" and "clauseAnd" which contain expression fragments, they can contain muliple lines, comments, empty lines, terminated by linefeeds ("\n"). Backticks mark JavaScript expressions which are evaluated to substitute block parameters; see below. The object contains the following properties (strings can be replaced with array of strings which are concatenated, to make the json file easier to read):

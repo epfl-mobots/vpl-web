@@ -834,6 +834,14 @@ SVG.Preparsed.prototype.draw = function (ctx, options) {
 			if (el.id && options && options.style && options.style.hasOwnProperty(el.id)) {
 				SVG.parseStyle(overriddenStyleDict, options.style[el.id]);
 			}
+			// style[!otherId]? Try to find !otherId
+			for (var notOtherId in options.style) {
+				if (options.style.hasOwnProperty(notOtherId) &&
+					notOtherId[0] === "!" && notOtherId.slice(1) !== el.id) {
+					// !otherId with otherId != id: add style
+					SVG.parseStyle(overriddenStyleDict, options.style[notOtherId]);
+				}
+			}
 		}
 
 		/** Convert a length string with unit suffix to a number
