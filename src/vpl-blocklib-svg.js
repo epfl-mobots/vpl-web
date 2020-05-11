@@ -170,7 +170,7 @@ A3a.vpl.Canvas.prototype.getStyles = function (aux, block) {
 		styles[aux["radiobuttons"][i]["id"]] = st[block.param[nButtons] === val ? 1 : 0];
 	}
 	for (var i = 0; i < nStyles; i++) {
-		styles[aux["styles"][i]["id"]] =
+		styles[(aux["styles"][i]["complement"] ? "!" : "") + aux["styles"][i]["id"]] =
 			/** @type {string} */(A3a.vpl.BlockTemplate.substInline(aux["styles"][i]["st"], block.param));
 	}
 	return styles;

@@ -92,7 +92,16 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 							if (el["alpha"]) {
 								ctx.globalAlpha = el["alpha"];
 							}
-							gui.svg[d.f].draw(ctx, {elementId: d.id});
+							var styles = {};
+							if (btn["styles"]) {
+								btn["styles"].forEach(function (style) {
+									styles[(style["complement"] ? "!" : "") + style["id"]] = style["st"];
+								});
+							}
+							gui.svg[d.f].draw(ctx, {
+								elementId: d.id,
+								style: styles
+							});
 							if (el["debug"]) {
 								ctx.fillStyle = "black";
 								ctx.textAlign = "center";
