@@ -4882,6 +4882,18 @@ sim-playground {
 		},
 		{
 			"name": "src:locked",
+			"state": ["pressed", "selected"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#locked_default"
+				}
+			]
+		},
+		{
+			"name": "src:locked",
 			"state": ["selected"],
 			"draw": [
 				{
@@ -4893,6 +4905,9 @@ sim-playground {
 			"name": "src:locked",
 			"state": ["pressed"],
 			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
 				{
 					"uri": "Icons.svg#locked_highlight"
 				}
@@ -4947,10 +4962,25 @@ sim-playground {
 		},
 		{
 			"name": "vpl:teacher",
-			"state": ["pressed","selected"],
+			"state": ["pressed", "selected"],
 			"draw": [
 				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
 					"uri": "Icons.svg#settingsDone_highlight"
+				}
+			]
+		},
+		{
+			"name": "vpl:teacher",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#uiSettings_default"
 				}
 			]
 		},
@@ -4965,8 +4995,11 @@ sim-playground {
 		},
 		{
 			"name": "vpl:teacher-reset",
-			"state": ["pressed","selected"],
+			"state": ["pressed"],
 			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
 				{
 					"uri": "Icons.svg#clearSettings_highlight"
 				}
@@ -4986,6 +5019,9 @@ sim-playground {
 			"state": ["pressed"],
 			"draw": [
 				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
 					"uri": "Icons.svg#saveSettings_highlight"
 				}
 			]
@@ -5003,7 +5039,6 @@ sim-playground {
 			"name": "sim:close",
 			"state": ["pressed"],
 			"draw": [
-
 				{
 					"uri": "Icons.svg#Close_highlight"
 				}
@@ -5040,9 +5075,21 @@ sim-playground {
 		},
 		{
 			"name": "sim:restart",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#restart_default"
+				}
+			]
+		},
+		{
+			"name": "sim:restart",
 			"state": [],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#restart_default"
 				}
 			]
@@ -5054,6 +5101,39 @@ sim-playground {
 				{
 					"uri": "Icons.svg#pause_default",
 					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "sim:pause",
+			"state": ["pressed", "selected"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#pause_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:pause",
+			"state": ["selected"],
+			"draw": [
+				{
+					"uri": "Icons.svg#pause_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:pause",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#pause_default"
 				}
 			]
 		},
@@ -5078,6 +5158,18 @@ sim-playground {
 		},
 		{
 			"name": "sim:speedup",
+			"state": ["unselected", "=1", "pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#_1speed_default"
+				}
+			]
+		},
+		{
+			"name": "sim:speedup",
 			"state": ["unselected", "=1"],
 			"draw": [
 				{
@@ -5087,9 +5179,11 @@ sim-playground {
 		},
 		{
 			"name": "sim:speedup",
-			"state": ["selected", "=2"],
+			"state": ["selected", "=2", "pressed"],
 			"draw": [
-
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
 				{
 					"uri": "Icons.svg#_2speed_default"
 				}
@@ -5098,10 +5192,43 @@ sim-playground {
 		},
 		{
 			"name": "sim:speedup",
+			"state": ["selected", "=2"],
+			"draw": [
+				{
+					"uri": "Icons.svg#_2speed_default"
+				}
+			]
+		},
+		{
+			"name": "sim:speedup",
+			"state": ["selected", "=5", "pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#_5speed_default"
+				}
+			]
+		},
+		{
+			"name": "sim:speedup",
 			"state": ["selected", "=5"],
 			"draw": [
 				{
 					"uri": "Icons.svg#_5speed_default"
+				}
+			]
+		},
+		{
+			"name": "sim:speedup",
+			"state": ["selected", "=0.5", "pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#_0_5speed_default"
 				}
 			]
 		},
@@ -5126,6 +5253,18 @@ sim-playground {
 		},
 		{
 			"name": "sim:pen",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#pen_default"
+				}
+			]
+		},
+		{
+			"name": "sim:pen",
 			"state": [],
 			"draw": [
 				{
@@ -5137,7 +5276,7 @@ sim-playground {
 			"name": "sim:clear",
 			"state": ["disabled"],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#simClear_default",
 					"alpha": 0.5
 				}
@@ -5145,9 +5284,21 @@ sim-playground {
 		},
 		{
 			"name": "sim:clear",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#simClear_default"
+				}
+			]
+		},
+		{
+			"name": "sim:clear",
 			"state": [],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#simClear_default"
 				}
 			]
@@ -5156,7 +5307,7 @@ sim-playground {
 			"name": "sim-event:forward",
 			"state": [],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_forward_default"
 				}
 			]
@@ -5165,7 +5316,7 @@ sim-playground {
 			"name": "sim-event:left",
 			"state": [],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_left_default"
 				}
 			]
@@ -5174,7 +5325,7 @@ sim-playground {
 			"name": "sim-event:backward",
 			"state": [],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_backward_default"
 				}
 			]
@@ -5183,7 +5334,7 @@ sim-playground {
 			"name": "sim-event:right",
 			"state": [],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_right_default"
 				}
 			]
@@ -5192,7 +5343,7 @@ sim-playground {
 			"name": "sim-event:center",
 			"state": [],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_center_default"
 				}
 			]
@@ -5201,7 +5352,7 @@ sim-playground {
 			"name": "sim-event:tap",
 			"state": [],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_tap_default"
 				}
 			]
@@ -5210,7 +5361,7 @@ sim-playground {
 			"name": "sim-event:clap",
 			"state": [],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_clap_default"
 				}
 			]
@@ -5219,7 +5370,7 @@ sim-playground {
 			"name": "sim-event:forward",
 			"state": ["selected"],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_forward_highlight"
 				}
 			]
@@ -5228,7 +5379,7 @@ sim-playground {
 			"name": "sim-event:left",
 			"state": ["selected"],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_left_highlight"
 				}
 			]
@@ -5237,7 +5388,7 @@ sim-playground {
 			"name": "sim-event:backward",
 			"state": ["selected"],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_backward_highlight"
 				}
 			]
@@ -5246,7 +5397,7 @@ sim-playground {
 			"name": "sim-event:right",
 			"state": ["selected"],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_right_highlight"
 				}
 			]
@@ -5255,7 +5406,7 @@ sim-playground {
 			"name": "sim-event:center",
 			"state": ["selected"],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_center_highlight"
 				}
 			]
@@ -5264,7 +5415,7 @@ sim-playground {
 			"name": "sim-event:tap",
 			"state": ["selected"],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_tap_highlight"
 				}
 			]
@@ -5273,12 +5424,11 @@ sim-playground {
 			"name": "sim-event:clap",
 			"state": ["selected"],
 			"draw": [
-								{
+				{
 					"uri": "Icons.svg#sim_clap_highight"
 				}
 			]
 		}
-
 	]
 }
 </script>
