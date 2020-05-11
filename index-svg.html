@@ -2131,13 +2131,13 @@ toolbar.top {
 
 /*Buttons & console*/
 button {
-	width: 3ww;
-	height: 3ww;
+	width: 2.5ww;
+	height: 2.5ww;
 	min-width: 32px;
 	min-height: 32px;
 	margin: 0.24vw;
 }
-button.vpl.top {
+button.vpl {
 	font-size: max(1vw, 12px) ;
 	font-weight: 300;
 	font-family: 'Rubik', sans-serif;
@@ -2145,13 +2145,14 @@ button.vpl.top {
 #vpl-message-error, #vpl-message-warning {
 	color: #455a64;
 	width: 20vw;
-	background: #FAFCFD;;
+	background: #FAFCFD;
 	padding: 0px 4px 0px 4px;
 	border-radius: 2.5wh;
+	border: 2px #ECEFF1;
 }
 separator {
-	width: 5px;
-	height: 5px;
+	width: 1ww;
+	height: 1ww;
 }
 
 /*Blocks*/
@@ -4104,46 +4105,43 @@ sim-playground {
 	"toolbars": {
 		"vpl": [
 			"vpl:close",
+			"!space",
 			"vpl:about",
-			"!!space",
+			"vpl:help",
+			"!space",
 			"vpl:new",
 			"vpl:save",
 			"vpl:load",
 			"vpl:exportToHTML",
-			"!!stretch",
-			"vpl:help",
-			"!!stretch",
-			"vpl:message-error",
-			"vpl:message-warning",
-			"!!space",
+			"!space",
+			"vpl:advanced",
+			"!stretch",
+			"vpl:readonly",
+			"!stretch",
+			"vpl:undo",
+			"vpl:redo",
+			"!stretch",
 			"vpl:connected",
 			"!stretch",
 			"vpl:run",
 			"vpl:stop",
 			"!stretch",
-			"vpl:advanced",
 			"vpl:sim",
 			"vpl:text",
 			"!stretch",
 			"vpl:teacher-reset",
 			"vpl:teacher-save",
-			"vpl:teacher",
-			"vpl:readonly"
+			"vpl:teacher"
 		],
 		"vpl2": [
 			"!!stretch",
-			"vpl:undo",
-			"vpl:redo",
+			"vpl:message-error",
+			"vpl:message-warning",
 			"!!stretch",
 			"vpl:duplicate",
-			"!!stretch",
 			"vpl:disable",
-			"!!stretch",
-			"vpl:trashcan",
-			"!!stretch",
 			"vpl:lock",
-			"!!stretch"
-
+			"vpl:trashcan"
 		],
 		"editor": [
 			"src:close",

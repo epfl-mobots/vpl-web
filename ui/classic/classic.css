@@ -22,8 +22,8 @@ toolbar.bottom {
 }
 
 button {
-	width: 3.0ww;
-	height: 3.0ww;
+	width: 2.5ww;
+	height: 2.5ww;
 	min-width: 20px;
 	min-height: 20px;
 	margin: 0.2vw;
@@ -54,8 +54,8 @@ button.vpl.bottom {
 }
 
 separator {
-	width: 5px;
-	height: 5px;
+	width: 1ww;
+	height: 1ww;
 }
 
 vpl {

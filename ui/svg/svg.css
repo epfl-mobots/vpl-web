@@ -26,13 +26,13 @@ toolbar.top {
 
 /*Buttons & console*/
 button {
-	width: 3ww;
-	height: 3ww;
+	width: 2.5ww;
+	height: 2.5ww;
 	min-width: 32px;
 	min-height: 32px;
 	margin: 0.24vw;
 }
-button.vpl.top {
+button.vpl {
 	font-size: max(1vw, 12px) ;
 	font-weight: 300;
 	font-family: 'Rubik', sans-serif;
@@ -40,13 +40,14 @@ button.vpl.top {
 #vpl-message-error, #vpl-message-warning {
 	color: #455a64;
 	width: 20vw;
-	background: #FAFCFD;;
+	background: #FAFCFD;
 	padding: 0px 4px 0px 4px;
 	border-radius: 2.5wh;
+	border: 2px #ECEFF1;
 }
 separator {
-	width: 5px;
-	height: 5px;
+	width: 1ww;
+	height: 1ww;
 }
 
 /*Blocks*/
