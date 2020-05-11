@@ -23,7 +23,8 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 	/** @const */
 	var defaultToJS = [
 		"vpl:message-error",
-		"vpl:message-warning"
+		"vpl:message-warning",
+		"vpl:filename"
 	];
 
 	return /** @type {A3a.vpl.ControlBar.drawButton} */(function (id, ctx, dims, css, cssClasses, i18n, isEnabled, isSelected, isPressed, state) {
