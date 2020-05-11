@@ -1,0 +1,26 @@
+{
+	"i18n": {
+		"en": {
+			"sim:close": "Close panel",
+			"sim:restart": "Restart simulation",
+			"sim:pause": "Pause simulation",
+			"sim:speedup": "Set simulation speedup factor",
+			"sim:pen": "Switch pen on or off",
+			"sim:clear": "Erase traces made by pen",
+			"sim:map-ground": "Switch ground map on or off",
+			"sim:map-height": "Switch height map on or off",
+			"sim:map-obstacles": "Switch obstacles map on or off",
+			"sim:vpl": "VPL panel",
+			"sim:text": "Text source code panel",
+			"sim:teacher": "Switch customization mode on or off",
+			"sim:teacher-reset": "Reset customization",
+			"sim:btn-button.forward": "Simulate a touch on the forward button",
+			"sim:btn-button.left": "Simulate a touch on the left button",
+			"sim:btn-button.center": "Simulate a touch on the center button",
+			"sim:btn-button.right": "Simulate a touch on the right button",
+			"sim:btn-button.backward": "Simulate a touch on the backward button",
+			"sim:btn-tap": "Simulate an impact detection",
+			"sim:btn-clap": "Simulate a sound detection"
+		}
+	}
+}

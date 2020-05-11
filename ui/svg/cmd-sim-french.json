@@ -1,0 +1,26 @@
+{
+	"i18n": {
+		"fr": {
+			"sim:close": "Ferme la vue",
+			"sim:restart": "Redémarre la simulation depuis le début",
+			"sim:pause": "Met la simulation en pause",
+			"sim:speedup": "Change le facteur d'accélération de la simulation",
+			"sim:pen": "Commute entre le crayon en position baissée ou levée",
+			"sim:clear": "Efface les traces faites par le crayon",
+			"sim:map-ground": "Active ou désactive la carte du sol",
+			"sim:map-height": "Active ou désactive la carte de la hauteur",
+			"sim:map-obstacles": "Active ou désactive la carte des obstacles",
+			"sim:vpl": "Affiche le programme VPL",
+			"sim:text": "Affiche le code source",
+			"sim:teacher": "Commute entre les modes de programmation et de configuration",
+			"sim:teacher-reset": "Remet la configuration à l'état d'origine",
+			"sim:btn-button.forward": "Simule une pression sur le bouton avant",
+			"sim:btn-button.left": "Simule une pression sur le bouton gauche",
+			"sim:btn-button.center": "Simule une pression sur le bouton central",
+			"sim:btn-button.right": "Simule une pression sur le bouton droit",
+			"sim:btn-button.backward": "Simule une pression sur le bouton arrière",
+			"sim:btn-tap": "Simule une détection de choc",
+			"sim:btn-clap": "Simule une détection de bruit"
+		}
+	}
+}
