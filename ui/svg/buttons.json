@@ -234,16 +234,6 @@
 		},
 		{
 			"name": "vpl:text",
-			"state": ["selected"],
-			"draw": [
-
-				{
-					"uri": "Icons.svg#textMode_highlight"
-				}
-			]
-		},
-		{
-			"name": "vpl:text",
 			"draw": [
 				{
 					"uri": "Icons.svg#textMode_default"
@@ -739,6 +729,18 @@
 		},
 		{
 			"name": "src:vpl",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#vpl_highlight"
+				}
+			]
+		},
+		{
+			"name": "src:vpl",
 			"draw": [
 				{
 					"uri": "Icons.svg#vpl_default"
@@ -1124,6 +1126,184 @@
 			"draw": [
 				{
 					"uri": "Icons.svg#simClear_default"
+				}
+			]
+		},
+		{
+			"name": "sim:map-ground",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#mapGround_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "sim:map-ground",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#mapGround_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:map-ground",
+			"state": ["selected"],
+			"draw": [
+				{
+					"uri": "Icons.svg#mapGround_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:map-ground",
+			"draw": [
+				{
+					"uri": "Icons.svg#mapGround_default"
+				}
+			]
+		},
+		{
+			"name": "sim:map-obstacles",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#mapObstacles_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "sim:map-obstacles",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#mapObstacles_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:map-obstacles",
+			"state": ["selected"],
+			"draw": [
+				{
+					"uri": "Icons.svg#mapObstacles_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:map-obstacles",
+			"draw": [
+				{
+					"uri": "Icons.svg#mapObstacles_default"
+				}
+			]
+		},
+		{
+			"name": "sim:map-height",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#mapLevels_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "sim:map-height",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#mapLevels_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:map-height",
+			"state": ["selected"],
+			"draw": [
+				{
+					"uri": "Icons.svg#mapLevels_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:map-height",
+			"draw": [
+				{
+					"uri": "Icons.svg#mapLevels_default"
+				}
+			]
+		},
+		{
+			"name": "sim:text",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg",
+					"alpha": 1.0
+				},
+				{
+					"uri": "Icons.svg#textMode_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:text",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#textMode_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "sim:text",
+			"draw": [
+				{
+					"uri": "Icons.svg#textMode_default"
+				}
+			]
+		},
+		{
+			"name": "sim:vpl",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#vpl_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "sim:vpl",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#vpl_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:vpl",
+			"draw": [
+				{
+					"uri": "Icons.svg#vpl_default"
 				}
 			]
 		},

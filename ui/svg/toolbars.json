@@ -59,7 +59,12 @@
 			"!space",
 			"sim:map-kind",
 			"sim:map",
-			"!stretch"
+			"sim:map-ground",
+			"sim:map-obstacles",
+			"sim:map-height",
+			"!stretch",
+			"sim:vpl",
+			"sim:text"
 		]
 	}
 }
