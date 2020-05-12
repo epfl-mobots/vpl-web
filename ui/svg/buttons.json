@@ -976,72 +976,8 @@
 			"state": ["disabled"],
 			"draw": [
 				{
-					"uri": "Icons.svg#_1speed_default",
+					"uri": "Icons.svg#SpeedUp_4",
 					"alpha": 0.5
-				}
-			]
-		},
-		{
-			"name": "sim:speedup",
-			"state": ["unselected", "=1", "pressed"],
-			"draw": [
-				{
-					"uri": "Icons.svg#Pressed_bg"
-				},
-				{
-					"uri": "Icons.svg#_1speed_default"
-				}
-			]
-		},
-		{
-			"name": "sim:speedup",
-			"state": ["unselected", "=1"],
-			"draw": [
-				{
-					"uri": "Icons.svg#_1speed_default"
-				}
-			]
-		},
-		{
-			"name": "sim:speedup",
-			"state": ["selected", "=2", "pressed"],
-			"draw": [
-				{
-					"uri": "Icons.svg#Pressed_bg"
-				},
-				{
-					"uri": "Icons.svg#_2speed_default"
-				}
-
-			]
-		},
-		{
-			"name": "sim:speedup",
-			"state": ["selected", "=2"],
-			"draw": [
-				{
-					"uri": "Icons.svg#_2speed_default"
-				}
-			]
-		},
-		{
-			"name": "sim:speedup",
-			"state": ["selected", "=5", "pressed"],
-			"draw": [
-				{
-					"uri": "Icons.svg#Pressed_bg"
-				},
-				{
-					"uri": "Icons.svg#_5speed_default"
-				}
-			]
-		},
-		{
-			"name": "sim:speedup",
-			"state": ["selected", "=5"],
-			"draw": [
-				{
-					"uri": "Icons.svg#_5speed_default"
 				}
 			]
 		},
@@ -1053,7 +989,20 @@
 					"uri": "Icons.svg#Pressed_bg"
 				},
 				{
-					"uri": "Icons.svg#_0_5speed_default"
+					"uri": "Icons.svg#_1speed_default"
+				},
+				{
+					"js": "ctx.font = 'bold 250px sans-serif'; ctx.fillStyle = '#6200ea'; ctx.textAlign = 'center'; ctx.fillText('\u00f72', 460, 770);"
+				}
+			],
+			"styles": [
+				{
+					"id": "_1speed_default",
+					"st": "visibility:hidden"
+				},
+				{
+					"id": "SpeedUp_4",
+					"st": "visibility:visible"
 				}
 			]
 		},
@@ -1062,7 +1011,66 @@
 			"state": ["selected", "=0.5"],
 			"draw": [
 				{
-					"uri": "Icons.svg#_0_5speed_default"
+					"uri": "Icons.svg#_1speed_default"
+				},
+				{
+					"js": "ctx.font = 'bold 250px sans-serif'; ctx.fillStyle = '#6200ea'; ctx.textAlign = 'center'; ctx.fillText('\u00f72', 460, 770);"
+				}
+			],
+			"styles": [
+				{
+					"id": "_1speed_default",
+					"st": "visibility:hidden"
+				},
+				{
+					"id": "SpeedUp_4",
+					"st": "visibility:visible"
+				}
+			]
+		},
+		{
+			"name": "sim:speedup",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#_1speed_default"
+				},
+				{
+					"js": "ctx.font = 'bold 250px sans-serif'; ctx.fillStyle = '#6200ea'; ctx.textAlign = 'center'; ctx.fillText('\u00d7' + $.state, 460, 770);"
+				}
+			],
+			"styles": [
+				{
+					"id": "_1speed_default",
+					"st": "visibility:hidden"
+				},
+				{
+					"id": "SpeedUp_4",
+					"st": "visibility:visible"
+				}
+			]
+		},
+		{
+			"name": "sim:speedup",
+			"draw": [
+				{
+					"uri": "Icons.svg#_1speed_default"
+				},
+				{
+					"js": "ctx.font = 'bold 250px sans-serif'; ctx.fillStyle = '#6200ea'; ctx.textAlign = 'center'; ctx.fillText('\u00d7' + $.state, 460, 770);"
+				}
+			],
+			"styles": [
+				{
+					"id": "_1speed_default",
+					"st": "visibility:hidden"
+				},
+				{
+					"id": "SpeedUp_4",
+					"st": "visibility:visible"
 				}
 			]
 		},
