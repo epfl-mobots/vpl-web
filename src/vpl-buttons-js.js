@@ -112,21 +112,22 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 		@return {void}
 	*/
 	function drawButtonTri(x, y, rot) {
+		var s = dims.controlSize;
 		ctx.save();
 		ctx.fillStyle = isPressed
 			? col.bgPr
 			: col.bg;
-		ctx.fillRect(x, y, box.width, box.height);
-		ctx.translate(x + box.width / 2, y + box.width / 2);
+		ctx.fillRect(x, y, s, s);
+		ctx.translate(x + s / 2, y + s / 2);
 		ctx.rotate(-rot * Math.PI / 2);
-		ctx.translate(-x - box.width / 2, -y - box.width / 2);
+		ctx.translate(-x - s / 2, -y - s / 2);
 		ctx.beginPath();
-		ctx.moveTo(x + box.width * 0.3557, y + box.width * 0.25);
-		ctx.lineTo(x + box.width * 0.3557, y + box.width * 0.75);
-		ctx.lineTo(x + box.width * 0.7887, y + box.width * 0.5);
+		ctx.moveTo(x + s * 0.3557, y + s * 0.25);
+		ctx.lineTo(x + s * 0.3557, y + s * 0.75);
+		ctx.lineTo(x + s * 0.7887, y + s * 0.5);
 		ctx.closePath();
 		ctx.strokeStyle = col.fg;
-		ctx.lineWidth = dims.controlLineWidth;
+		ctx.lineWidth = 2 * dims.controlLineWidth;
 		ctx.stroke();
 		ctx.restore();
 	}
@@ -1387,62 +1388,65 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 			drawButtonTri(0, 0, 0);
 		},
 		"sim-event:center": function () {
+			var s = dims.controlSize;
 			ctx.save();
 			ctx.fillStyle = isPressed
 				? col.bgPr
 				: col.bg;
-			ctx.fillRect(0, 0, box.width, box.height);
+			ctx.fillRect(0, 0, s, s);
 			ctx.beginPath();
-			ctx.arc(0.5 * box.width, 0.5 * box.width, 0.25 * box.width, 0, 2 * Math.PI);
+			ctx.arc(0.5 * s, 0.5 * s, 0.25 * s, 0, 2 * Math.PI);
 			ctx.strokeStyle = col.fg;
-			ctx.lineWidth = dims.controlLineWidth;
+			ctx.lineWidth = 2 * dims.controlLineWidth;
 			ctx.stroke();
 			ctx.restore();
 		},
 		"sim-event:clap": function () {
+			var s = dims.controlSize;
 			ctx.save();
 			ctx.fillStyle = isPressed
 				? col.bgPr
 				: col.bg;
-			ctx.fillRect(0, 0, box.width, box.height);
+			ctx.fillRect(0, 0, s, s);
 			ctx.beginPath();
 
 			ctx.strokeStyle = col.fg;
-			ctx.lineWidth = dims.controlLineWidth;
-			ctx.translate(0.5 * box.width, 0.5 * box.width);
+			ctx.lineWidth = 2 * dims.controlLineWidth;
+			ctx.translate(0.5 * s, 0.5 * s);
 			ctx.rotate(0.1);
 			for (var i = 0; i < 9; i++) {
 				ctx.beginPath();
-				ctx.moveTo(0.12 * box.width, 0);
-				ctx.lineTo(0.24 * box.width, 0);
-				ctx.moveTo(0.28 * box.width, 0);
-				ctx.lineTo(0.36 * box.width, 0);
+				ctx.moveTo(0.12 * s, 0);
+				ctx.lineTo(0.24 * s, 0);
+				ctx.moveTo(0.28 * s, 0);
+				ctx.lineTo(0.36 * s, 0);
 				ctx.stroke();
 				ctx.rotate(Math.PI / 4.5);
 			}
 			ctx.restore();
 		},
 		"sim-event:tap": function () {
+			var s = dims.controlSize;
 			ctx.save();
 			ctx.fillStyle = isPressed
 				? col.bgPr
 				: col.bg;
-			ctx.fillRect(0, 0, box.width, box.height);
+			ctx.fillRect(0, 0, s, s);
 			ctx.beginPath();
 
 			ctx.strokeStyle = col.fg;
-			ctx.lineWidth = dims.controlLineWidth;
-			ctx.translate(0.6 * box.width, 0.6 * box.width);
+			ctx.lineWidth = 2 * dims.controlLineWidth;
+			ctx.translate(0.6 * s, 0.6 * s);
 			for (var i = 1; i <= 3; i++) {
 				ctx.beginPath();
 				ctx.arc(0, 0,
-					0.15 * box.width * i,
+					0.15 * s * i,
 					Math.PI * 0.9, Math.PI * 1.7);
 				ctx.stroke();
 			}
-			ctx.moveTo(0.3 * box.width, 0);
+			ctx.moveTo(0.3 * s, 0);
 			ctx.lineTo(0, 0);
-			ctx.lineTo(0, 0.3 * box.width);
+			ctx.lineTo(0, 0.3 * s);
 			ctx.stroke();
 			ctx.restore();
 		}
