@@ -17,6 +17,7 @@
 			"clap": "Sound detection",
 			"init": "Initialization",
 			"timer": "Timer elapsed",
+			"remote control arrows": "Remote control arrow keys",
 			"state": "State (4 bits)",
 			"state 8": "State (8 values)",
 			"counter comparison": "Counter comparison",
