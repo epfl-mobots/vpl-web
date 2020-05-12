@@ -4458,6 +4458,54 @@ sim-playground {
 		},
 		{
 			"name": "vpl:connected",
+			"state": ["selected", "=monitored"],
+			"draw": [
+			{
+					"uri": "Icons.svg#Selected_bg"
+				},
+				{
+					"uri": "Icons.svg#connectOn_monitoredOn"
+				}
+			]
+		},
+		{
+			"name": "vpl:connected",
+			"state": ["unselected", "=monitored"],
+			"draw": [
+			{
+					"uri": "Icons.svg#Selected_bg"
+				},
+				{
+					"uri": "Icons.svg#connectOff_monitoredOn"
+				}
+			]
+		},
+		{
+			"name": "vpl:connected",
+			"state": ["selected", "=nonmonitored"],
+			"draw": [
+			{
+					"uri": "Icons.svg#Selected_bg"
+				},
+				{
+					"uri": "Icons.svg#connectOn_monitoredOff"
+				}
+			]
+		},
+		{
+			"name": "vpl:connected",
+			"state": ["unselected", "=nonmonitored"],
+			"draw": [
+			{
+					"uri": "Icons.svg#Selected_bg"
+				},
+				{
+					"uri": "Icons.svg#connectOff_monitoredOff"
+				}
+			]
+		},
+		{
+			"name": "vpl:connected",
 			"state": ["selected"],
 			"draw": [
 				{
@@ -4477,54 +4525,6 @@ sim-playground {
 				},
 				{
 					"uri": "Icons.svg#connectOff"
-				}
-			]
-		},
-		{
-			"name": "vpl:connected",
-			"state": ["selected", "monitored"],
-			"draw": [
-			{
-					"uri": "Icons.svg#Selected_bg"
-				},
-				{
-					"uri": "Icons.svg#connectOn_monitoredOn"
-				}
-			]
-		},
-		{
-			"name": "vpl:connected",
-			"state": ["unselected", "monitored"],
-			"draw": [
-			{
-					"uri": "Icons.svg#Selected_bg"
-				},
-				{
-					"uri": "Icons.svg#connectOff_monitoredOn"
-				}
-			]
-		},
-		{
-			"name": "vpl:connected",
-			"state": ["selected", "nonmonitored"],
-			"draw": [
-			{
-					"uri": "Icons.svg#Selected_bg"
-				},
-				{
-					"uri": "Icons.svg#connectOn_monitoredOff"
-				}
-			]
-		},
-		{
-			"name": "vpl:connected",
-			"state": ["unselected", "nonmonitored"],
-			"draw": [
-			{
-					"uri": "Icons.svg#Selected_bg"
-				},
-				{
-					"uri": "Icons.svg#connectOff_monitoredOff"
 				}
 			]
 		},
