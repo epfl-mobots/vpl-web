@@ -281,6 +281,7 @@ Miscellaneous settings
 
 Property "miscSettings" contains VPL global settings which aren't related to the user interface:
 
+- "advancedModeEnabled" (boolean, default true): true to enable advanced mode, false to have a single mode (basic); can be overridden by query option advmode (see below)
 - "basicMultiEvent" (boolean, default false): true to allow multiple event blocks in basic mode
 - "advancedMultiEvent" (boolean, default false): true to allow multiple event blocks in advanced mode
 - "viewRelativeSizes" (object, default {"vpl":1,"src":1,"sim":1}): relative size of vpl, src and sim views
@@ -579,6 +580,7 @@ The following options are supported:
 
 - "appearance": "classic" (icons and blocks defined in JavaScript) or "svg" (default) (icons and blocks defined in SVG and json).
 - "multiview": "true" (default) to enable the display of multiple views simultaneously (main vpl view, text source code and simulator), "false" to force a single view filling all the available space.
+- "advmode": false (default) to disable advanced VPL mode, true to enable it
 - "language": programming language the vpl program is converted to. "aseba" (default), "l2" (C-like syntax with functions, local variables, boolean and fixed-point values, and multi-dim arrays), "asm" (assembly language for Aseba bytecode), "python", or "js". Not all the languages are compatible with the Thymio or the simulator.
 - "cssdebug": "true" to display the padding and margin rectangles of css boxes, or "false" (default).
 - "adv": "true" to enable advanced features such as the Aseba virtual machine disassembler, or "false" (default).

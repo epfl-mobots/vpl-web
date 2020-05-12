@@ -348,6 +348,9 @@ function vplSetup(gui, rootDir) {
 					}
 				});
 		}
+		if (gui["miscSettings"] && gui["miscSettings"]["advancedModeEnabled"] != undefined) {
+			A3a.vpl.Program.advancedModeEnabled = gui["miscSettings"]["advancedModeEnabled"] == true;
+		}
 		if (gui["miscSettings"] && gui["miscSettings"]["basicMultiEvent"] != undefined) {
 			A3a.vpl.Program.basicMultiEvent = gui["miscSettings"]["basicMultiEvent"] == true;
 		}
@@ -367,6 +370,8 @@ function vplSetup(gui, rootDir) {
 	var commandSession = vplGetQueryOption("session");
 	var advancedFeatures = vplGetQueryOption("adv") === "true";
 	var experimentalFeatures = vplGetQueryOption("exp") === "true";
+
+	A3a.vpl.Program.advancedModeEnabled = vplGetQueryOption("advmode") === "true";
 
 	var filterBlur = 0;	// 0.1 px
 	var filterGrayscale = 0;	// %

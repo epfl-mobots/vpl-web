@@ -86,6 +86,8 @@ A3a.vpl.Program.defaultFilenameUI = "ui." + A3a.vpl.Program.suffixUI;
 /** @type {Object<string,A3a.vpl.CodeGenerator>} */
 A3a.vpl.Program.codeGenerator = {};
 
+A3a.vpl.Program.advancedModeEnabled = true;
+
 /** @type {Array.<string>} */
 A3a.vpl.Program.basicBlocks = [];
 
@@ -333,11 +335,13 @@ A3a.vpl.Program.prototype.enforceSingleTrailingEmptyEventHandler = function () {
 A3a.vpl.Program.prototype.exportToObject = function (opt) {
 	var obj = {};
 	if (!opt || opt.lib !== false) {
-		obj["advanced"] = this.mode === A3a.vpl.mode.advanced;
 		obj["basicBlocks"] = this.enabledBlocksBasic;
 		obj["basicMultiEvent"] = this.multiEventBasic;
-		obj["advancedBlocks"] = this.enabledBlocksAdvanced;
-		obj["advancedMultiEvent"] = this.multiEventAdvanced;
+		if (A3a.vpl.Program.advancedModeEnabled) {
+			obj["advanced"] = this.mode === A3a.vpl.mode.advanced;
+			obj["advancedBlocks"] = this.enabledBlocksAdvanced;
+			obj["advancedMultiEvent"] = this.multiEventAdvanced;
+		}
 		obj["disabledUI"] = this.uiConfig.disabledUI;
 	}
 	if (opt && opt.prog === false) {
@@ -420,17 +424,34 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun, options) 
 				this.uiConfig.setDisabledFeatures(obj["disabledUI"]);
 			}
 			if (!options || !options.dontChangeBlocks) {
-				this.mode = obj["advanced"]
-					? A3a.vpl.mode.advanced
-					: A3a.vpl.mode.basic;
-				this.enabledBlocksBasic = obj["basicBlocks"] || A3a.vpl.Program.basicBlocks;
-				this.multiEventBasic = obj["basicMultiEvent"] !== undefined
-					? obj["basicMultiEvent"]
-					: A3a.vpl.Program.basicMultiEvent;
-				this.enabledBlocksAdvanced = obj["advancedBlocks"] || A3a.vpl.Program.advancedBlocks;
-				this.multiEventAdvanced = obj["advancedMultiEvent"] !== undefined
-	 				? obj["advancedMultiEvent"]
-					: A3a.vpl.Program.advancedMultiEvent;
+				var isAdvanced = obj["advanced"] == true;
+				if (A3a.vpl.Program.advancedModeEnabled) {
+					// import what's found into basic and advanced
+					this.mode = isAdvanced
+						? A3a.vpl.mode.advanced
+						: A3a.vpl.mode.basic;
+					this.enabledBlocksBasic = obj["basicBlocks"] || A3a.vpl.Program.basicBlocks;
+					this.multiEventBasic = obj["basicMultiEvent"] !== undefined
+						? obj["basicMultiEvent"]
+						: A3a.vpl.Program.basicMultiEvent;
+					this.enabledBlocksAdvanced = obj["advancedBlocks"] || A3a.vpl.Program.advancedBlocks;
+					this.multiEventAdvanced = obj["advancedMultiEvent"] !== undefined
+		 				? obj["advancedMultiEvent"]
+						: A3a.vpl.Program.advancedMultiEvent;
+				} else {
+					// import selected mode into basic
+					this.mode = A3a.vpl.mode.basic;
+					this.enabledBlocksBasic = isAdvanced
+						? obj["advancedBlocks"] || A3a.vpl.Program.advancedBlocks
+						: obj["basicBlocks"] || A3a.vpl.Program.basicBlocks;
+					this.multiEventBasic = isAdvanced
+						? obj["advancedMultiEvent"] !== undefined
+							? obj["advancedMultiEvent"]
+							: A3a.vpl.Program.advancedMultiEvent
+						: obj["basicMultiEvent"] !== undefined
+							? obj["basicMultiEvent"]
+							: A3a.vpl.Program.basicMultiEvent;
+				}
 			}
 			if (!options || !options.dontChangeProgram) {
 				if (obj["program"]) {

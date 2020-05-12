@@ -225,7 +225,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		object: this,
 		isAvailable: function (app) {
-			return !app.program.readOnly;
+			return A3a.vpl.Program.advancedModeEnabled && !app.program.readOnly;
 		},
 		possibleStates: [
 			{selected: false},
