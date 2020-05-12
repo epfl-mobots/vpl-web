@@ -22,7 +22,6 @@
 		},
 		{
 			"name": "vpl:close",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#Close_default"
@@ -53,7 +52,6 @@
 		},
 		{
 			"name": "vpl:about",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#about_default"
@@ -84,7 +82,6 @@
 		},
 		{
 			"name": "vpl:help",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#help_default"
@@ -115,7 +112,6 @@
 		},
 		{
 			"name": "vpl:new",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#new2_default"
@@ -147,7 +143,6 @@
 		},
 		{
 			"name": "vpl:load",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#open_default"
@@ -178,7 +173,6 @@
 		},
 		{
 			"name": "vpl:save",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#download_default"
@@ -209,7 +203,6 @@
 		},
 		{
 			"name": "vpl:exportToHTML",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#make_html_default"
@@ -251,7 +244,6 @@
 		},
 		{
 			"name": "vpl:text",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#textMode_default"
@@ -270,7 +262,6 @@
 		},
 		{
 			"name": "vpl:readonly",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#readonly_default"
@@ -398,7 +389,6 @@
 		},
 		{
 			"name": "vpl:run",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#play_default"
@@ -429,7 +419,6 @@
 		},
 		{
 			"name": "vpl:stop",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#stop_default"
@@ -460,7 +449,6 @@
 		},
 		{
 			"name": "vpl:undo",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#undo_default"
@@ -491,7 +479,6 @@
 		},
 		{
 			"name": "vpl:redo",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#redo_default"
@@ -522,7 +509,6 @@
 		},
 		{
 			"name": "vpl:duplicate",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#duplicate_default"
@@ -553,7 +539,6 @@
 		},
 		{
 			"name": "vpl:lock",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#lock_default"
@@ -584,7 +569,6 @@
 		},
 		{
 			"name": "vpl:disable",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#deactivate_default"
@@ -615,7 +599,6 @@
 		},
 		{
 			"name": "vpl:trashcan",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#delete_default"
@@ -646,7 +629,6 @@
 		},
 		{
 			"name": "vpl:sim",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#simulator_default"
@@ -687,7 +669,6 @@
 		},
 		{
 			"name": "vpl:advanced",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#basicMode_default"
@@ -740,7 +721,6 @@
 		},
 		{
 			"name": "src:locked",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#locked_highlight"
@@ -759,7 +739,6 @@
 		},
 		{
 			"name": "src:vpl",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#vpl_default"
@@ -778,7 +757,6 @@
 		},
 		{
 			"name": "src:close",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#Close_default"
@@ -811,7 +789,6 @@
 		},
 		{
 			"name": "vpl:teacher",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#uiSettings_default"
@@ -832,7 +809,6 @@
 		},
 		{
 			"name": "vpl:teacher-reset",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#clearSettings_default"
@@ -853,7 +829,6 @@
 		},
 		{
 			"name": "vpl:teacher-save",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#saveSettings_default"
@@ -881,7 +856,6 @@
 		},
 		{
 			"name": "sim:close",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#Close_default"
@@ -912,7 +886,6 @@
 		},
 		{
 			"name": "sim:restart",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#restart_default"
@@ -964,7 +937,6 @@
 		},
 		{
 			"name": "sim:pause",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#pause_default"
@@ -1086,6 +1058,27 @@
 		},
 		{
 			"name": "sim:pen",
+			"state": ["selected", "pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#pen_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:pen",
+			"state": ["selected"],
+			"draw": [
+				{
+					"uri": "Icons.svg#pen_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim:pen",
 			"state": ["pressed"],
 			"draw": [
 				{
@@ -1098,7 +1091,6 @@
 		},
 		{
 			"name": "sim:pen",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#pen_default"
@@ -1129,7 +1121,6 @@
 		},
 		{
 			"name": "sim:clear",
-			"state": [],
 			"draw": [
 				{
 					"uri": "Icons.svg#simClear_default"
@@ -1138,7 +1129,15 @@
 		},
 		{
 			"name": "sim-event:forward",
-			"state": [],
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#sim_forward_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:forward",
 			"draw": [
 				{
 					"uri": "Icons.svg#sim_forward_default"
@@ -1147,7 +1146,15 @@
 		},
 		{
 			"name": "sim-event:left",
-			"state": [],
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#sim_left_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:left",
 			"draw": [
 				{
 					"uri": "Icons.svg#sim_left_default"
@@ -1156,7 +1163,15 @@
 		},
 		{
 			"name": "sim-event:backward",
-			"state": [],
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#sim_backward_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:backward",
 			"draw": [
 				{
 					"uri": "Icons.svg#sim_backward_default"
@@ -1165,7 +1180,15 @@
 		},
 		{
 			"name": "sim-event:right",
-			"state": [],
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#sim_right_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:right",
 			"draw": [
 				{
 					"uri": "Icons.svg#sim_right_default"
@@ -1174,7 +1197,15 @@
 		},
 		{
 			"name": "sim-event:center",
-			"state": [],
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#sim_center_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:center",
 			"draw": [
 				{
 					"uri": "Icons.svg#sim_center_default"
@@ -1183,7 +1214,15 @@
 		},
 		{
 			"name": "sim-event:tap",
-			"state": [],
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#sim_tap_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:tap",
 			"draw": [
 				{
 					"uri": "Icons.svg#sim_tap_default"
@@ -1192,7 +1231,15 @@
 		},
 		{
 			"name": "sim-event:clap",
-			"state": [],
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#sim_clap_highlight"
+				}
+			]
+		},
+		{
+			"name": "sim-event:clap",
 			"draw": [
 				{
 					"uri": "Icons.svg#sim_clap_default"
