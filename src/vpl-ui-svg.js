@@ -111,11 +111,20 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 							ctx.restore();
 						}
 						if (el["js"]) {
-							var fun = new Function("ctx", el["js"]);
+							var param = {
+								"pressed": isPressed && isEnabled,
+								"unpressed": !(isPressed && isEnabled),
+								"selected": isSelected,
+								"unselected": !isSelected,
+								"disabled": !isEnabled,
+								"enabled": isEnabled,
+								"state": state
+							};
+							var fun = new Function("ctx", "$", el["js"]);
 							ctx.save();
-							ctx.scale(box.width, box.height);
+							ctx.scale(box.width / 1000, box.height / 1000);
 							ctx.beginPath();
-							fun(ctx);
+							fun(ctx, param);
 							ctx.restore();
 						}
 					});
