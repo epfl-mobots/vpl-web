@@ -123,7 +123,7 @@ A3a.vpl.BlockTemplate.importParam;
 A3a.vpl.BlockTemplate.validateFun;
 
 /**
-	@typedef {function(A3a.vpl.Block):A3a.vpl.compiledCode}
+	@typedef {function(?A3a.vpl.Block):A3a.vpl.compiledCode}
 */
 A3a.vpl.BlockTemplate.genCodeFun;
 

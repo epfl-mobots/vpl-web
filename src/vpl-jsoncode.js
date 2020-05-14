@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -32,12 +32,12 @@ A3a.vpl.BlockTemplate.loadCodeGenFromJSON = function (b, genCode0) {
 	/** Substitute inline expressions {expr} in strings of input array, where expr is a
 		JavaScript expression; variable $ contains the block parameters
 		@param {Array.<string>} fmtArray
-		@param {A3a.vpl.Block} block
+		@param {Array} param
 		@return {Array.<string>}
 	*/
-	function substInlineA(fmtArray, block) {
+	function substInlineA(fmtArray, param) {
 		return fmtArray.map(function (fmt) {
-			return /** @type {string} */(A3a.vpl.BlockTemplate.substInline(fmt, block.param));
+			return /** @type {string} */(A3a.vpl.BlockTemplate.substInline(fmt, param));
 		});
 	}
 
@@ -46,36 +46,37 @@ A3a.vpl.BlockTemplate.loadCodeGenFromJSON = function (b, genCode0) {
 	["aseba", "l2", "js", "python"].forEach(function (lang) {
 		if (b[lang]) {
 			genCode[lang] = function (block) {
+				var param = block ? block.param : [];
 				var c = {};
-				b[lang]["initVarDecl"] && (c.initVarDecl = substInlineA(b[lang]["initVarDecl"].map(str), block));
-				b[lang]["initCodeDecl"] && (c.initCodeDecl = substInlineA(b[lang]["initCodeDecl"].map(str), block));
-				b[lang]["initCodeExec"] && (c.initCodeExec = substInlineA(b[lang]["initCodeExec"].map(str), block));
-				b[lang]["sectionBegin"] && (c.sectionBegin = A3a.vpl.BlockTemplate.substInline(str(b[lang]["sectionBegin"]), block.param));
-				b[lang]["sectionEnd"] && (c.sectionEnd = A3a.vpl.BlockTemplate.substInline(str(b[lang]["sectionEnd"]), block.param));
-				b[lang]["sectionPreamble"] && (c.sectionPreamble = A3a.vpl.BlockTemplate.substInline(str(b[lang]["sectionPreamble"]), block.param));
-				b[lang]["clauseInit"] && (c.clauseInit = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clauseInit"]), block.param));
+				b[lang]["initVarDecl"] && (c.initVarDecl = substInlineA(b[lang]["initVarDecl"].map(str), param));
+				b[lang]["initCodeDecl"] && (c.initCodeDecl = substInlineA(b[lang]["initCodeDecl"].map(str), param));
+				b[lang]["initCodeExec"] && (c.initCodeExec = substInlineA(b[lang]["initCodeExec"].map(str), param));
+				b[lang]["sectionBegin"] && (c.sectionBegin = A3a.vpl.BlockTemplate.substInline(str(b[lang]["sectionBegin"]), param));
+				b[lang]["sectionEnd"] && (c.sectionEnd = A3a.vpl.BlockTemplate.substInline(str(b[lang]["sectionEnd"]), param));
+				b[lang]["sectionPreamble"] && (c.sectionPreamble = A3a.vpl.BlockTemplate.substInline(str(b[lang]["sectionPreamble"]), param));
+				b[lang]["clauseInit"] && (c.clauseInit = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clauseInit"]), param));
 				if (b[lang]["clauseAnd"]) {
 					var clause = "";
-					block.param.forEach(function (p, i) {
-						var cl = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clauseAnd"]), block.param, i);
+					param.forEach(function (p, i) {
+						var cl = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clauseAnd"]), param, i);
 						if (cl) {
 							clause += (clause.length > 0 ? " " + A3a.vpl.Program.codeGenerator[lang].andOperator + " " : "") + cl;
 						}
 					});
 					c.clause = /** @type {string} */(clause || A3a.vpl.Program.codeGenerator[lang].trueConstant);
 				} else if (b[lang]["clause"]) {
-	 				c.clause = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clause"]), block.param);
+	 				c.clause = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clause"]), param);
 				}
-				b[lang]["clauseAsCondition"] && (c.clauseAsCondition = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clauseAsCondition"]), block.param));
+				b[lang]["clauseAsCondition"] && (c.clauseAsCondition = A3a.vpl.BlockTemplate.substInline(str(b[lang]["clauseAsCondition"]), param));
 				c.clauseOptional = /** @type {boolean} */(b[lang]["clauseOptional"]) || false;
 				if (b[lang]["statement1"]) {
-					c.statement = block.param.map(function (p, i) {
-						return A3a.vpl.BlockTemplate.substInline(str(b[lang]["statement1"]), block.param, i);
+					c.statement = param.map(function (p, i) {
+						return A3a.vpl.BlockTemplate.substInline(str(b[lang]["statement1"]), param, i);
 					}).join("");
 				} else if (b[lang]["statement"]) {
-					c.statement = A3a.vpl.BlockTemplate.substInline(str(b[lang]["statement"]), block.param);
+					c.statement = A3a.vpl.BlockTemplate.substInline(str(b[lang]["statement"]), param);
 				}
-				b[lang]["error"] && (c.clause = A3a.vpl.BlockTemplate.substInline(str(b["error"]["error"]), block.param));
+				b[lang]["error"] && (c.clause = A3a.vpl.BlockTemplate.substInline(str(b["error"]["error"]), param));
 				return c;
 			};
 		}

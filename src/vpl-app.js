@@ -585,11 +585,10 @@ A3a.vpl.Application.prototype.vplResize = function () {
 A3a.vpl.Application.prototype.stopRobot = function () {
 	if (this.currentRobotIndex >= 0) {
 		var stopBlockTemplate = A3a.vpl.BlockTemplate.findByName("!stop");
-		var stopBlock = new A3a.vpl.Block(stopBlockTemplate)
 		var language = this.program.currentLanguage;
 		var stopGenCode = stopBlockTemplate && stopBlockTemplate.genCode[language];
 		if (stopGenCode) {
-			this.robots[this.currentRobotIndex].runGlue.run(stopGenCode(stopBlock).statement, language);
+			this.robots[this.currentRobotIndex].runGlue.run(stopGenCode(null).statement, language);
 		}
 	}
 };
