@@ -763,7 +763,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		ctx.strokeStyle = "black";
 		ctx.stroke();
 
-		/** Draw a sensor value as a value between 0 and 1 in a pie chart
+		/** Draw a sensor value as a value between 0 and 1 in a hollow pie chart
 			@param {number} x
 			@param {number} y
 			@param {number} r
@@ -772,7 +772,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			@param {string=} color1
 			@return {void}
 		*/
-		function drawSensor(x, y, r, val, color0, color1) {
+		function drawSensorArc(x, y, r, val, color0, color1) {
 			ctx.save();
 			ctx.translate(x, y);
 			// color0 (or light gray) background
@@ -788,6 +788,44 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			ctx.fillStyle = color1 || "#222";
 			ctx.fill();
 			ctx.restore();
+		}
+
+		/** Draw a sensor value as a value between 0 and 1 as two discs
+			@param {number} x
+			@param {number} y
+			@param {number} r
+			@param {number} val
+			@param {string=} color0
+			@param {string=} color1
+			@return {void}
+		*/
+		function drawSensorDisc(x, y, r, val, color0, color1) {
+			function disc(r, fillStyle) {
+				ctx.beginPath();
+				ctx.arc(0, 0, r, 0, 2 * Math.PI);
+				ctx.fillStyle = fillStyle;
+				ctx.fill();
+			}
+			ctx.save();
+			ctx.translate(x, y);
+			// color0 (or dark gray) background
+			disc(r, color1 || "#222");
+			disc(r * 0.95, color0 || "#bbb");
+			disc(r * 0.95 * val, color1 || "#222");
+			ctx.restore();
+		}
+
+		/** Draw a sensor value as a value between 0 and 1 in a pie chart
+			@param {number} x
+			@param {number} y
+			@param {number} r
+			@param {number} val
+			@param {string=} color0
+			@param {string=} color1
+			@return {void}
+		*/
+		function drawSensor(x, y, r, val, color0, color1) {
+			drawSensorDisc(x, y, r, val, color0, color1);
 		}
 
 		// ground left
