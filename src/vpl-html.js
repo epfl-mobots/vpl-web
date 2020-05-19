@@ -42,8 +42,20 @@ A3a.vpl.Block.prototype.toDataURL = function (css, dims, scale) {
 	default:
 		throw "internal";	// hidden or undef, shouldn't be exported
 	}
+	var scx = dims.blockSize / box.width;
+	var scy = dims.blockSize / box.height;
 	box.width = dims.blockSize;
 	box.height = dims.blockSize;
+	function scaleBorderRadius(r) {
+		if (r) {
+			r[0] *= scx;
+			r[1] *= scy;
+		}
+	}
+	scaleBorderRadius(box.borderBottomLeftRadius);
+	scaleBorderRadius(box.borderBottomRightRadius);
+	scaleBorderRadius(box.borderTopLeftRadius);
+	scaleBorderRadius(box.borderTopRightRadius);
 
 	var item = new A3a.vpl.CanvasItem(this,
 		box.totalWidth(),
