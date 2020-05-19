@@ -248,7 +248,17 @@ A3a.vpl.Application.prototype.setAboutBoxContent = function (html) {
 	@return {void}
 */
 A3a.vpl.Application.prototype.setHelpContent = function (html) {
-	this.helpBox = html ? new A3a.vpl.HTMLPanel(html) : null;
+	this.helpBox = html
+		? new A3a.vpl.HTMLPanel(html, false, [
+			{
+				title: "\u21d3",
+				fun: function () {
+					A3a.vpl.Program.downloadText(/** @type {string} */(html),
+						"doc.html", "text/html");
+				}
+			}
+		])
+		: null;
 };
 
 /** Set the help content based on dynamicHelp and the current language and ui settings

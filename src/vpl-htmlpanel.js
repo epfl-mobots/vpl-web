@@ -19,8 +19,9 @@ Modal box for HTML content.
 	@constructor
 	@param {string} html html content
 	@param {boolean=} noCloseWidget true to suppress close widget
+	@param {Array.<{title:string,fun:function():void}>=} otherWidgets other widgets displayed on the top right
 */
-A3a.vpl.HTMLPanel = function (html, noCloseWidget) {
+A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets) {
 	this.html = html;
 
 	this.backgroundDiv = document.createElement("div");
@@ -43,25 +44,46 @@ A3a.vpl.HTMLPanel = function (html, noCloseWidget) {
 	this.backgroundDiv.appendChild(this.div);
 	document.body.appendChild(this.backgroundDiv);
 
-	// close widget
-	/** @type {?Element} */
-	this.closeWidget = null;
-	if (!noCloseWidget) {
-		this.closeWidget = document.createElement("div");
-		this.closeWidget.style.position = "absolute";
-		this.closeWidget.style.width = "32px";
-		this.closeWidget.style.height = "32px";
-		this.closeWidget.style.top = "0";
-		this.closeWidget.style.left = "0";
-		this.closeWidget.textContent = "\u00d7";	// times
-		this.closeWidget.style.font = "bold 30px sans-serif";
-		this.closeWidget.style.textAlign = "left";
-		this.closeWidget.style.padding = "5px";
-		this.closeWidget.style.paddingLeft = "10px";
-		var self = this;
-		this.closeWidget.addEventListener("click", function () {
-			self.hide();
+	/** @type {Array.<Element>} */
+	this.widgets = [];
+
+	var self = this;
+	var left = 0;
+	var right = 0;
+	function addWidget(title, rightSide, fun) {
+		var widget = document.createElement("div");
+		widget.style.position = "absolute";
+		widget.style.width = "32px";
+		widget.style.height = "32px";
+		widget.style.top = "0";
+		if (rightSide) {
+			widget.style.right = right.toString(10) + "px";
+			right += 40;
+		} else {
+			widget.style.left = left.toString(10) + "px";
+			left += 40;
+		}
+		widget.textContent = title;
+		widget.style.font = "bold 30px sans-serif";
+		widget.style.textAlign = "left";
+		widget.style.padding = "5px";
+		widget.style.paddingLeft = "10px";
+		widget.addEventListener("click", function () {
+			fun();
 		}, false);
+		self.widgets.push(widget);
+	}
+
+	// widgets
+	if (!noCloseWidget) {
+		addWidget("\u00d7",	// times
+			false,
+			function () { self.hide(); });
+	}
+	if (otherWidgets) {
+		otherWidgets.forEach(function (w) {
+			addWidget(w.title, true, w.fun);
+		});
 	}
 };
 
@@ -70,9 +92,9 @@ A3a.vpl.HTMLPanel = function (html, noCloseWidget) {
 */
 A3a.vpl.HTMLPanel.prototype.show = function () {
 	this.div.innerHTML = this.html;	// do it here to restart from the desired starting point
-	if (this.closeWidget) {
-		this.div.appendChild(this.closeWidget);
-	}
+	this.widgets.forEach(function (element) {
+		this.div.appendChild(element);
+	}, this);
 	this.backgroundDiv.style.display = "block";
 	this.center();
 };
