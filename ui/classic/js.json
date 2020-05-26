@@ -169,7 +169,7 @@
 				"initCodeExec": [
 					[
 						"// start clocks\n",
-						"this.setClock(0, 10);\n"
+						"this.setClock(0, 10);\n",
 						"this.setClock(1, 20);\n"
 					]
 				],

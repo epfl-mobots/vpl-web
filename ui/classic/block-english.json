@@ -17,6 +17,7 @@
 			"clap": "Sound detection",
 			"init": "Initialization",
 			"timer": "Timer elapsed",
+			"clock": "Clock at 10 or 20 Hz",
 			"remote control arrows": "Remote control arrow keys",
 			"state": "State (4 bits)",
 			"state 8": "State (8 values)",

@@ -17,6 +17,7 @@
 			"clap": "Détection de son",
 			"init": "Initialisation",
 			"timer": "Minuterie",
+			"clock": "Horloge à 10 ou 20 Hz",
 			"remote control arrows": "Touches de direction de la télécommande",
 			"state": "État (4 bits)",
 			"state 8": "État (8 valeurs)",
