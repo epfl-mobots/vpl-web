@@ -56,6 +56,7 @@ A3a.vpl.VPLSim2DViewer = function (canvas, robot, uiConfig) {
 	/** @type {Image} */
 	this.disabledGroundImage = null;
 	this.groundCanvas = /** @type {HTMLCanvasElement} */(document.createElement("canvas"));
+	this.fuzzyGroundCanvas = /** @type {HTMLCanvasElement} */(document.createElement("canvas"));
 	this.groundCanvasDirty = false;
 	/** @type {Image} */
 	this.heightImage = null;
@@ -106,6 +107,15 @@ A3a.vpl.VPLSim2DViewer.prototype.setTeacherRole = function (b) {
 	this.teacherRole = b;
 };
 
+A3a.vpl.VPLSim2DViewer.prototype.copyGroundToFuzzy = function () {
+	var ctx = this.fuzzyGroundCanvas.getContext("2d");
+	ctx.filter = "blur(" + (this.fuzzyGroundCanvas.width / 300).toFixed(1) + "px)";
+	// render groundCanvas on a white background
+	ctx.fillStyle = "white";
+	ctx.fillRect(0, 0, this.fuzzyGroundCanvas.width, this.fuzzyGroundCanvas.height);
+	ctx.drawImage(this.groundCanvas, 0, 0);
+};
+
 /** Restore ground (clear pen traces)
 	@return {void}
 */
@@ -127,7 +137,10 @@ A3a.vpl.Application.prototype.restoreGround = function () {
 		// clear to white
 		ctx.fillRect(0, 0, sim2d.groundCanvas.width, sim2d.groundCanvas.height);
 	}
+	sim2d.fuzzyGroundCanvas.width = sim2d.groundCanvas.width;
+	sim2d.fuzzyGroundCanvas.height = sim2d.groundCanvas.height;
 	sim2d.groundCanvasDirty = false;
+	sim2d.copyGroundToFuzzy();
 	this.renderSim2dViewer();
 };
 
@@ -169,6 +182,7 @@ A3a.vpl.VPLSim2DViewer.prototype.drawPen = function (shape, param) {
 		ctx.stroke();
 		ctx.restore();
 		this.groundCanvasDirty = true;
+		this.copyGroundToFuzzy();
 	}
 };
 
@@ -266,9 +280,9 @@ A3a.vpl.Application.prototype.setObstacleImage = function (svgSrc) {
 */
 A3a.vpl.VPLSim2DViewer.prototype.groundValue = function (x, y) {
 	// scale position to (i,j)
-	var i = Math.round(this.groundCanvas.width * (x + this.playground.width / 2) / this.playground.width);
-	var j = Math.round(this.groundCanvas.height * (this.playground.height / 2 - y) / this.playground.height);
-	var pixel = this.groundCanvas.getContext("2d").getImageData(i, j, 1, 1).data;
+	var i = Math.round(this.fuzzyGroundCanvas.width * (x + this.playground.width / 2) / this.playground.width);
+	var j = Math.round(this.fuzzyGroundCanvas.height * (this.playground.height / 2 - y) / this.playground.height);
+	var pixel = this.fuzzyGroundCanvas.getContext("2d").getImageData(i, j, 1, 1).data;
 	return pixel[0] / 255;
 };
 
