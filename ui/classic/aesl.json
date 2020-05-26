@@ -19,6 +19,12 @@
 		},
 		{
 			"aeslName": "button",
+			"condition": "`$[5]===0 && $[0]===0 && $[1]===0 && $[2]===0 && $[3]===0 && $[4]===0`",
+			"blockName": "clock",
+			"parameters": "`[20]`"
+		},
+		{
+			"aeslName": "button",
 			"condition": "`$[5]===0`",
 			"blockName": "button",
 			"parameters": "`[4, 0, 2, 3, 1].map(function (i) { return $[i] !== 0; })`"
@@ -51,6 +57,12 @@
 		},
 		{
 			"aeslName": "prox",
+			"condition": "`$[0]===0 && $[1]===0 && $[2]===0 && $[3]===0 && $[4]===0 && $[5]===0 && $[6]===0`",
+			"blockName": "clock",
+			"parameters": "`[10]`"
+		},
+		{
+			"aeslName": "prox",
 			"condition": "`$[0] < 3 && $[1] < 3 && $[2] < 3 && $[3] < 3 && $[4] < 3 && $[5] < 3 && $[6] < 3 && $[7] === 1000 && $[8] === 2000`",
 			"blockName": "horiz prox",
 			"parameters": "`[2, 1, 3, 0, 4, 5, 6].map(function (v) { return $[v] >= 2 ? -1 : $[v]; })`"
@@ -60,6 +72,12 @@
 			"condition": "`!($[0] < 3 && $[1] < 3 && $[2] < 3 && $[3] < 3 && $[4] < 3 && $[5] < 3 && $[6] < 3 && $[7] === 1000 && $[8] === 2000)`",
 			"blockName": "horiz prox adv",
 			"parameters": "`[2, 1, 3, 0, 4, 5, 6].map(function (v) { return $[v]; }).concat($.slice(7).map(function (v) { return Math.max(0, Math.min(1, (v - 700) / 3300)); }))`"
+		},
+		{
+			"aeslName": "proxground",
+			"condition": "`$[0]===0 && $[1]===0`",
+			"blockName": "clock",
+			"parameters": "`[10]`"
 		},
 		{
 			"aeslName": "proxground",

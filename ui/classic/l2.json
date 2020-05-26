@@ -185,6 +185,13 @@
 			}
 		},
 		{
+			"name": "clock",
+			"l2": {
+				"sectionBegin": "onevent `$[0] === 10 ? 'prox' : 'button'` {\n",
+				"sectionEnd": "}\n"
+			}
+		},
+		{
 			"name": "remote control arrows",
 			"l2": {
 				"sectionBegin": "onevent rc5 {\n",

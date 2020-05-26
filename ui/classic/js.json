@@ -164,6 +164,20 @@
 			}
 		},
 		{
+			"name": "clock",
+			"js": {
+				"initCodeExec": [
+					[
+						"// start clocks\n",
+						"this.setClock(0, 10);\n"
+						"this.setClock(1, 20);\n"
+					]
+				],
+				"sectionBegin": "this.addEventListener(\"`$[0] === 10 ? 'clock0' : 'clock1'`\", function (name, param) {\n",
+				"sectionEnd": "});\n"
+			}
+		},
+		{
 			"name": "remote control arrows"
 		},
 		{

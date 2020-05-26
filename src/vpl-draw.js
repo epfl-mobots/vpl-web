@@ -1001,6 +1001,47 @@ A3a.vpl.Canvas.prototype.drawTimer = function (time, isEvent, isLog) {
 		time, isEvent, isLog);
 };
 
+/** Draw a clock signal
+	@param {CanvasRenderingContext2D} ctx
+	@param {number} xl
+	@param {number} xr
+	@param {number} y
+	@param {number} h
+	@param {number} n
+	@param {{
+		style: (string | undefined),
+		lineWidth: (number | undefined),
+		alpha: (number | undefined)
+	}} opt
+*/
+A3a.vpl.Canvas.drawClock = function (ctx, xl, xr, y, h, n, opt) {
+	ctx.save();
+	if (opt) {
+		if (opt.style) {
+			ctx.strokeStyle = opt.style;
+			ctx.fillStyle = opt.style;
+		}
+		if (opt.lineWidth !== undefined) {
+			ctx.lineWidth = opt.lineWidth;
+		}
+		if (opt.alpha !== undefined) {
+			ctx.globalAlpha = opt.alpha;
+		}
+	}
+	ctx.beginPath();
+	var d = h / 2;
+	ctx.moveTo(xl, y + d);
+	for (var i = 0; i < n; i++) {
+		var x = xl + (xr - xl) * (0.5 + i) / n;
+		ctx.lineTo(x, y + d);
+		d = -d;
+		ctx.lineTo(x, y + d);
+	}
+	ctx.lineTo(xr, y + d);
+	ctx.stroke();
+	ctx.restore();
+};
+
 /** Draw a state (low-level)
 	@param {CanvasRenderingContext2D} ctx
 	@param {number} x0

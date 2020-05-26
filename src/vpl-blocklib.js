@@ -820,6 +820,53 @@ A3a.vpl.BlockTemplate.lib =	[
 			@type {Array.<A3a.vpl.Canvas.buttonShape>}
 		*/
 		var buttons = [
+			{sh: "c", x: 0.3, y: 0.2},
+			{sh: "c", x: 0.3, y: -0.2}
+		];
+		return {
+			name: "clock",
+			modes: [],
+			type: A3a.vpl.blockType.event,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [10]; },
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.robotTop();
+				var s = canvas.dims.blockSize;
+				A3a.vpl.Canvas.drawClock(canvas.ctx,
+					s * 0.1, s * 0.6, s * 0.3, s * 0.15, 4,
+					{
+						style: block.param[0] === 10 ? "black" : "#222",
+						lineWidth: canvas.dims.blockLineWidth
+					});
+				A3a.vpl.Canvas.drawClock(canvas.ctx,
+					s * 0.1, s * 0.6, s * 0.70, s * 0.15, 8,
+					{
+						style: block.param[0] === 20 ? "black" : "#222",
+						lineWidth: canvas.dims.blockLineWidth
+					});
+				canvas.buttons(buttons, [
+					block.param[0] === 10,
+					block.param[0] === 20
+				]);
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.prepareChange();
+					block.param[0] = i === 0 ? 10 : 20;
+				}
+				return i;
+			}
+		};
+	})()),
+	new A3a.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
 			{sh: "t", x: -0.25, y: 0, r: -Math.PI / 2},
 			{sh: "t", x: 0, y: 0.25, r: 0},
 			{sh: "t", x: 0, y: -0.25, r: Math.PI},
