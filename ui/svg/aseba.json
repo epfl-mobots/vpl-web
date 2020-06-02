@@ -254,6 +254,12 @@
 			}
 		},
 		{
+			"name": "clock",
+			"aseba": {
+				"sectionBegin": "onevent `$[0] === 10 ? 'prox' : 'button'`\n"
+			}
+		},
+		{
 			"name": "counter comparison",
 			"aseba": {
 				"initVarDecl": [

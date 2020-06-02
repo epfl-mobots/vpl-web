@@ -251,6 +251,13 @@
 			}
 		},
 		{
+			"name": "clock",
+			"l2": {
+				"sectionBegin": "onevent `$[0] === 10 ? 'prox' : 'button'` {\n",
+				"sectionEnd": "}\n"
+			}
+		},
+		{
 			"name": "counter comparison",
 			"l2": {
 				"initVarDecl": [
