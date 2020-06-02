@@ -717,6 +717,31 @@
 			]
 		},
 		{
+			"name": "clock",
+			"type": "event",
+			"modes": [],
+			"draw": [
+				{
+					"uri": "Blocks.svg#Ev_Freq"
+				},
+				{
+					"js": "ctx.font = 'bold 170px sans-serif'; ctx.fillStyle = 'black'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText($[0].toString(10) + ' Hz', 350, 540);"
+				}
+			],
+			"defaultParameters": [10],
+			"otherParameters": 1,
+			"pushbuttons": [
+				{
+					"id": "FreqDownDown",
+					"newParameters": "`[10]`"
+				},
+				{
+					"id": "FreqUp",
+					"newParameters": "`[20]`"
+				}
+			]
+		},
+		{
 			"name": "counter comparison",
 			"type": "state",
 			"modes": ["advanced"],
