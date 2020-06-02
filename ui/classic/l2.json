@@ -69,7 +69,7 @@
 			"l2": {
 				"sectionBegin": "onevent prox {\n",
 				"sectionEnd": "}\n",
-				"clause": "`[0, 1].map(function (ix, i) { var p = 'prox.ground.delta[' + ix + '] ', g = '>= ' + Math.round(25 + 40 * $[2]) + '0', l = '<= ' + Math.round(25 + 40 * $[3]) + '0'; return $[i] === 1 ? p + g : $[i] === 2 ? p + l : $[i] === 3 ? p + g + ' && ' + p + l : ''; }).filter(function (s) { return s; }).join(' && ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' || ')`"
+				"clause": "`[0, 1].map(function (ix, i) { var p = 'prox.ground.delta[' + ix + '] ', g = '>= ' + Math.round(25 + 40 * $[2]) + '0', l = '<= ' + Math.round(25 + 40 * $[3]) + '0'; return $[i] === 1 ? p + g : $[i] === 2 ? p + l : $[i] === 3 ? p + g + ' && ' + p + l : ''; }).filter(function (s) { return s; }).join(' && ') || [0, 1].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' || ')`"
 			}
 		},
 		{
