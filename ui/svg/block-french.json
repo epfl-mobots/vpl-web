@@ -21,6 +21,7 @@
 			"remote control arrows": "Touches de direction de la télécommande",
 			"remote control keypad": "Pavé numérique de la télécommande",
 			"timer": "Minuterie",
+			"clock": "Horloge à 10 ou 20 Hz",
 			"counter comparison": "Comparaison arithmétique de l'état",
 			"state 256": "Comparaison des bits de l'état",
 			"state 256 with mask": "Comparaison partielle des bits de l'état",

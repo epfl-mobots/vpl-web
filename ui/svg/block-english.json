@@ -21,6 +21,7 @@
 			"remote control arrows": "Remote control arrow keys",
 			"remote control keypad": "Remote control keypad keys",
 			"timer": "Timer elapsed",
+			"clock": "Clock at 10 or 20 Hz",
 			"counter comparison": "State arithmetic comparison",
 			"state 256": "State bit comparison",
 			"state 256 with mask": "State bit partial comparison",
