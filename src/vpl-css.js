@@ -60,6 +60,15 @@ CSSParser.VPL = function () {
 CSSParser.VPL.prototype = Object.create(CSSParser.prototype);
 CSSParser.VPL.prototype.constructor = CSSParser.VPL;
 
+/**
+	@inheritDoc
+*/
+CSSParser.VPL.prototype.reset = function () {
+	CSSParser.prototype.reset.call(this);
+	this.boxCache = {};
+	this.lineCache = {};
+};
+
 /** Add the tag of a supported element
 	@param {string} tag
 	@return {void}

@@ -46,6 +46,14 @@ var CSSParser = function () {
 	this.lengthBase = null;
 };
 
+/** Reset all rules
+	@return {void}
+*/
+CSSParser.prototype.reset = function () {
+	this.src = {};
+	this.rawRules = [];
+};
+
 /** Parse another css file
 	@param {string} filename
 	@param {string} src

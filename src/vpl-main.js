@@ -275,6 +275,7 @@ function vplSetup(gui, rootDir) {
 
 	// css
 	if (gui && gui["css"]) {
+		app.css.reset();	// get rid of bad values cached during app creation
 		gui["css"].forEach(function (filename) {
 			app.css.parse(filename, gui.rsrc[filename]);
 		});
