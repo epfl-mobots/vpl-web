@@ -144,7 +144,7 @@
 				"clauseInit":
 					"rollAngle = thymio.math.atan2(thymio.acc[0], thymio.acc[2])\n",
 				"clause":
-					"`$[0] === -12 ? 'rollAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'rollAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+					"`Math.abs($[0]) === 12 ? 'rollAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'rollAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -158,7 +158,7 @@
 				"clauseInit":
 					"pitchAngle = thymio.math.atan2(thymio.acc[1], thymio.acc[2])\n",
 				"clause":
-					"`$[0] === -12 ? 'pitchAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'pitchAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+					"`Math.abs($[0]) === 12 ? 'pitchAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'pitchAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -172,7 +172,7 @@
 				"clauseInit":
 					"yawAngle = thymio.math.atan2(thymio.acc[0], thymio.acc[1])\n",
 				"clause":
-					"`$[0] === -12 ? 'yawAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'yawAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+					"`Math.abs($[0]) === 12 ? 'yawAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'yawAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{

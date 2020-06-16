@@ -554,7 +554,7 @@ sim-playground {
 				"clauseInit":
 					"call math.atan2(rollAngle, acc[0], acc[2])\n",
 				"clause":
-					"`$[0] === -12 ? 'rollAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'rollAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+					"`Math.abs($[0]) === 12 ? 'rollAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'rollAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -567,7 +567,7 @@ sim-playground {
 				"clauseInit":
 					"call math.atan2(pitchAngle, acc[1], acc[2])\n",
 				"clause":
-					"`$[0] === -12 ? 'pitchAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'pitchAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+					"`Math.abs($[0]) === 12 ? 'pitchAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'pitchAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -580,7 +580,7 @@ sim-playground {
 				"clauseInit":
 					"call math.atan2(yawAngle, acc[0], acc[1])\n",
 				"clause":
-					"`$[0] === -12 ? 'yawAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'yawAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+					"`Math.abs($[0]) === 12 ? 'yawAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'yawAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -1264,9 +1264,9 @@ sim-playground {
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
 				"clauseInit":
-					"fixed rollAngle = atan2(acc[0], acc[2]);\n",
+					"fixed rollAngle = atan2(-acc[0], acc[2]);\n",
 				"clause":
-					"rollAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` && rollAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+					"`Math.abs($[0]) === 12 ? 'rollAngle >= ' + (Math.PI / 12 * (12 - 0.5)).toFixed(2) + ' or rollAngle < ' + (Math.PI / 12 * (-12 + 0.5)).toFixed(2) : 'rollAngle >= ' + (Math.PI / 12 * ($[0] - 0.5)).toFixed(2) + ' and rollAngle < ' + (Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
 			}
 		},
 		{
@@ -1277,7 +1277,7 @@ sim-playground {
 				"clauseInit":
 					"fixed pitchAngle = atan2(acc[1], acc[2]);\n",
 				"clause":
-					"pitchAngle >= `(Math.PI / 12 * (-$[0] - 0.5)).toFixed(2)` && pitchAngle < `(Math.PI / 12 * (-$[0] + 0.5)).toFixed(2)`"
+					"`Math.abs($[0]) === 12 ? 'pitchAngle >= ' + (Math.PI / 12 * (12 - 0.5)).toFixed(2) + ' or pitchAngle < ' + (Math.PI / 12 * (-12 + 0.5)).toFixed(2) : 'pitchAngle >= ' + (Math.PI / 12 * ($[0] - 0.5)).toFixed(2) + ' and pitchAngle < ' + (Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
 			}
 		},
 		{
@@ -1286,9 +1286,9 @@ sim-playground {
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
 				"clauseInit":
-					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+					"fixed yawAngle = atan2(-acc[0], acc[1]);\n",
 				"clause":
-					"yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` && yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+					"`Math.abs($[0]) === 12 ? 'yawAngle >= ' + (Math.PI / 12 * (12 - 0.5)).toFixed(2) + ' or yawAngle < ' + (Math.PI / 12 * (-12 + 0.5)).toFixed(2) : 'yawAngle >= ' + (Math.PI / 12 * ($[0] - 0.5)).toFixed(2) + ' and yawAngle < ' + (Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
 			}
 		},
 		{
@@ -1996,7 +1996,7 @@ sim-playground {
 				"sectionBegin": "this.addEventListener(\"acc\", function (name, param) {\n",
 				"sectionEnd": "});\n",
 				"clauseInit":
-					"var pitchAngle = Math.atan2(acc[1], acc[2]);\n",
+					"var pitchAngle = Math.atan2(-acc[1], acc[2]);\n",
 				"clause":
 					"pitchAngle >= `toFixed(Math.PI / 12 * (a - 0.5))` && pitchAngle < `toFixed(Math.PI / 12 * (a + 0.5))`"
 			}
@@ -2543,7 +2543,7 @@ sim-playground {
 				"clauseInit":
 					"rollAngle = thymio.math.atan2(thymio.acc[0], thymio.acc[2])\n",
 				"clause":
-					"`$[0] === -12 ? 'rollAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'rollAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+					"`Math.abs($[0]) === 12 ? 'rollAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'rollAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -2557,7 +2557,7 @@ sim-playground {
 				"clauseInit":
 					"pitchAngle = thymio.math.atan2(thymio.acc[1], thymio.acc[2])\n",
 				"clause":
-					"`$[0] === -12 ? 'pitchAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'pitchAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+					"`Math.abs($[0]) === 12 ? 'pitchAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'pitchAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -2571,7 +2571,7 @@ sim-playground {
 				"clauseInit":
 					"yawAngle = thymio.math.atan2(thymio.acc[0], thymio.acc[1])\n",
 				"clause":
-					"`$[0] === -12 ? 'yawAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'yawAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+					"`Math.abs($[0]) === 12 ? 'yawAngle >= ' + Math.round(2730.67 * 12 - 1365.33) + ' or yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33) : 'yawAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{

@@ -61,7 +61,7 @@
 				"sectionBegin": "onevent acc\n",
 				"clauseInit":
 					"call math.atan2(rollAngle, -acc[0], acc[2])\n",
-				"clause": "`$[0] === -12 ? 'rollAngle >= 31403 or rollAngle < -31403' : 'rollAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+				"clause": "`Math.abs($[0]) === 12 ? 'rollAngle >= 31403 or rollAngle < -31403' : 'rollAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and rollAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -95,7 +95,7 @@
 				"sectionBegin": "onevent acc\n",
 				"clauseInit":
 					"call math.atan2(yawAngle, -acc[0], acc[1])\n",
-				"clause": "`$[0] === -12 ? 'yawAngle >= 31403 or yawAngle < -31403' : 'yawAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+				"clause": "`Math.abs($[0]) === 12 ? 'yawAngle >= 31403 or yawAngle < -31403' : 'yawAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and yawAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{
@@ -110,7 +110,7 @@
 				"sectionBegin": "onevent acc\n",
 				"clauseInit":
 					"call math.atan2(pitchAngle, -acc[1], acc[2])\n",
-				"clause": "`$[0] === -12 ? 'pitchAngle >= 31403 or pitchAngle < -31403' : 'pitchAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
+				"clause": "`Math.abs($[0]) === 12 ? 'pitchAngle >= 31403 or pitchAngle < -31403' : 'pitchAngle >= ' + Math.round(2730.67 * $[0] - 1365.33) + ' and pitchAngle < ' + Math.round(2730.67 * $[0] + 1365.33)`"
 			}
 		},
 		{

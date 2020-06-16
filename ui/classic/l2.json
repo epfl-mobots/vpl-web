@@ -117,9 +117,9 @@
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
 				"clauseInit":
-					"fixed rollAngle = atan2(acc[0], acc[2]);\n",
+					"fixed rollAngle = atan2(-acc[0], acc[2]);\n",
 				"clause":
-					"rollAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` && rollAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+					"`Math.abs($[0]) === 12 ? 'rollAngle >= ' + (Math.PI / 12 * (12 - 0.5)).toFixed(2) + ' or rollAngle < ' + (Math.PI / 12 * (-12 + 0.5)).toFixed(2) : 'rollAngle >= ' + (Math.PI / 12 * ($[0] - 0.5)).toFixed(2) + ' and rollAngle < ' + (Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
 			}
 		},
 		{
@@ -128,9 +128,9 @@
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
 				"clauseInit":
-					"fixed pitchAngle = atan2(acc[1], acc[2]);\n",
+					"fixed pitchAngle = atan2(-acc[1], acc[2]);\n",
 				"clause":
-					"pitchAngle >= `(Math.PI / 12 * (-$[0] - 0.5)).toFixed(2)` && pitchAngle < `(Math.PI / 12 * (-$[0] + 0.5)).toFixed(2)`"
+					"`Math.abs($[0]) === 12 ? 'pitchAngle >= ' + (Math.PI / 12 * (12 - 0.5)).toFixed(2) + ' or pitchAngle < ' + (Math.PI / 12 * (-12 + 0.5)).toFixed(2) : 'pitchAngle >= ' + (Math.PI / 12 * ($[0] - 0.5)).toFixed(2) + ' and pitchAngle < ' + (Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
 			}
 		},
 		{
@@ -139,9 +139,9 @@
 				"sectionBegin": "onevent acc {\n",
 				"sectionEnd": "}\n",
 				"clauseInit":
-					"fixed yawAngle = atan2(acc[0], acc[1]);\n",
+					"fixed yawAngle = atan2(-acc[0], acc[1]);\n",
 				"clause":
-					"yawAngle >= `(Math.PI / 12 * ($[0] - 0.5)).toFixed(2)` && yawAngle < `(Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
+					"`Math.abs($[0]) === 12 ? 'yawAngle >= ' + (Math.PI / 12 * (12 - 0.5)).toFixed(2) + ' or yawAngle < ' + (Math.PI / 12 * (-12 + 0.5)).toFixed(2) : 'yawAngle >= ' + (Math.PI / 12 * ($[0] - 0.5)).toFixed(2) + ' and yawAngle < ' + (Math.PI / 12 * ($[0] + 0.5)).toFixed(2)`"
 			}
 		},
 		{
