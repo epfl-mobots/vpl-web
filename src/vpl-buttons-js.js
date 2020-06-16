@@ -26,7 +26,7 @@ Drawing of buttons defined in JavaScript.
 	@param {boolean} isSelected
 	@param {boolean} isPressed
 	@param {*=} state state for multi-value buttons
-	@return {void}
+	@return {boolean}
 */
 A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, isEnabled, isSelected, isPressed, state) {
 
@@ -1472,6 +1472,8 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 	if (dr) {
 		dr();
 	}
+
+	return false;	// no disable mark (can be set by caller)
 };
 
 /** Get button bounds

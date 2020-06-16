@@ -23,7 +23,7 @@ A3a.vpl.ControlBar = function (canvas) {
 	this.canvas = canvas;
 	/** @type {Array.<{
 		id: string,
-		draw: A3a.vpl.Canvas.controlDraw,
+		draw: A3a.vpl.ControlBar.controlBarItemDraw,
 		action: ?A3a.vpl.Canvas.controlAction,
 		doDrop: ?A3a.vpl.CanvasItem.doDrop,
 		canDrop: ?A3a.vpl.CanvasItem.canDrop,
@@ -39,6 +39,12 @@ A3a.vpl.ControlBar = function (canvas) {
 	this.x = 0;
 	this.y = 0;
 };
+
+/** Function drawing control button with origin at (0,0);
+	args are ctx, box, isPressed, return value is true to display a disabled mark
+	@typedef {function(CanvasRenderingContext2D,CSSParser.VPL.Box,boolean):boolean}
+*/
+A3a.vpl.ControlBar.controlBarItemDraw;
 
 /** @typedef {{
 		xmin: number,
@@ -58,7 +64,7 @@ A3a.vpl.ControlBar.prototype.reset = function () {
 };
 
 /** Add the definition of a control button
-	@param {A3a.vpl.Canvas.controlDraw} draw
+	@param {A3a.vpl.ControlBar.controlBarItemDraw} draw
 	@param {A3a.vpl.ControlBar.Bounds} bounds (to scale and center drawing to fill button box)
 	@param {?A3a.vpl.Canvas.controlAction=} action
 	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
@@ -181,7 +187,7 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBoxes, separ
 	@param {?function(string):void=} doOver
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes, doOver) {
+A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes, disabled, doOver) {
 	var self = this;
 	this.canvas.addDecoration(function (ctx) {
 		toolbarBox.drawAt(ctx, self.x, self.y);
@@ -195,8 +201,11 @@ A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes, doOv
 				ctx.save();
 				ctx.translate(-control.bounds.xmin, -control.bounds.ymin);
 				ctx.scale(sc, sc);
-				control.draw(ctx, box, isPressed);
+				var disableMark = control.draw(ctx, box, isPressed);
 				ctx.restore();
+				if (disableMark) {
+					self.canvas.disabledMark(0, 0, box.width, box.height, ["button"], ["button"]);
+				}
 			},
 			control.action,
 			control.doDrop, control.canDrop,

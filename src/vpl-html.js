@@ -174,9 +174,12 @@ A3a.vpl.ControlBar.prototype.toolbarButtonToDataURL = function (id, itemBox, dim
 	for (var i = 0; i < this.controls.length; i++) {
 		var control = this.controls[i];
 		if (control.id === id) {
+			var draw = function (ctx, box, isPressed) {
+				control.draw(ctx, box, isPressed);
+			};
 			var width = control.bounds.xmax - control.bounds.xmin;
 			var height = control.bounds.ymax - control.bounds.ymin;
-			return A3a.vpl.Canvas.controlToDataURL(control.draw, width, height, itemBox, dims, scale);
+			return A3a.vpl.Canvas.controlToDataURL(draw, width, height, itemBox, dims, scale);
 		}
 	}
 	throw "button id not found";

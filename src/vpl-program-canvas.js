@@ -97,7 +97,7 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, c
 	var app = this;
 	var program = app.program;
 	var blockSize = Math.min(box.width, box.height);
-	var scale = blockSize / canvas.dims.blockSize;
+	var scale = canvas.dims.blockSize != 0 ? blockSize / canvas.dims.blockSize : 1;
 	var item = new A3a.vpl.CanvasItem(block,
 		box.width, box.height,
 		x, y,

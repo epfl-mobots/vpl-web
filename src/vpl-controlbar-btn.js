@@ -26,9 +26,10 @@ Definition of methods for A3a.vpl.ControlBar which add support for buttons.
 		boolean,
 		boolean,
 		boolean,
-		?string): void}
+		?string): boolean}
 	Function to draw buttons (arguments: id, ctx, dims, css, cssClasses, translation,
-	isEnabled, isSelected, isPressed, obj)
+	isEnabled, isSelected, isPressed, obj; return true to draw a disable mark at the
+	level of its css box)
 */
 A3a.vpl.ControlBar.drawButton;
 
@@ -75,9 +76,7 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 						isPressed,
 						app.commands.getState(id));
 				}
-				if (app.forcedCommandState ? app.forcedCommandState.disabled : disabled) {
-					canvas.disabledMark(0, 0, box.width, box.height, ["button"], ["button"]);
-				}
+				return app.forcedCommandState ? app.forcedCommandState.disabled : disabled;
 			},
 			buttonBounds,
 			app.uiConfig.toolbarCustomizationMode && !keepAvailable

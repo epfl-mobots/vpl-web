@@ -1,19 +1,24 @@
 <!--
 
-VPL3 web app based on a subset of whole JavaScript source code
+VPL3 web app based on a subset of whole JavaScript source code,
+minus svg ui and blocks
+minus simulator
+minus l2, js and python
+minus editor and disassembly
+running with a canvas smaller than the whole window (window["vplDisableResize"] = true)
 
 full:
 + base vpl3
 + js blocks
 + aseba
-+ l2
-+ js
-+ python
-+ support for svg ui
-+ support for svg blocks
+- l2
+- js
+- python
+- support for svg ui
+- support for svg blocks
 + thymio
 + thymio-tdm,
-+ simulator
+- simulator
 
 -->
 
@@ -301,16 +306,14 @@ sim-playground {
 <title>VPL</title>
 
 <style>
-html {
-	height: 100%;
-}
+
 body {
-	height: 100%;
-	margin: 0;
+	margin: 50px;
+	background: #cef;
+	font-family: sans-serif;
 }
+
 #programCanvas {
-	width: 100%;
-	height: 100%;
 	display: block;
 	z-index: 10;
 }
@@ -365,6 +368,10 @@ pre#editor-lines {
 }
 </style>
 
+<script>
+	window["vplDisableResize"] = true;
+</script>
+
 <script src="../src/a3a-ns.js"></script>
 <script src="../src/svg.js"></script>
 <script src="../src/svg-preparsed.js"></script>
@@ -380,15 +387,11 @@ pre#editor-lines {
 <script src="../src/vpl-canvas-scroll.js"></script>
 <script src="../src/vpl-blocklibutil.js"></script>
 <script src="../src/vpl-blocklib.js"></script>
-<script src="../src/vpl-blocklib-svg.js"></script>
 <script src="../src/vpl-rule.js"></script>
 <script src="../src/vpl-uiconfig.js"></script>
 <script src="../src/vpl-program.js"></script>
 <script src="../src/vpl-code.js"></script>
 <script src="../src/vpl-code-aseba.js"></script>
-<script src="../src/vpl-code-l2.js"></script>
-<script src="../src/vpl-code-js.js"></script>
-<script src="../src/vpl-code-python.js"></script>
 <script src="../src/vpl-cmd.js"></script>
 <script src="../src/vpl-app.js"></script>
 <script src="../src/vpl-ui-validator.js"></script>
@@ -403,10 +406,6 @@ pre#editor-lines {
 <script src="../src/vpl-undo.js"></script>
 <script src="../src/vpl-html.js"></script>
 <script src="../src/vpl-aeslfile.js"></script>
-<script src="../src/vpl-texteditor.js"></script>
-<script src="../src/vpl-sourceedit.js"></script>
-<script src="../src/vpl-cmd-src.js"></script>
-<script src="../src/vpl-ui-svg.js"></script>
 <script src="../src/vpl-runglue.js"></script>
 <script src="../src/vpl-htmlpanel.js"></script>
 <script src="../src/vpl-files.js"></script>
@@ -420,48 +419,7 @@ pre#editor-lines {
 <script src="../src/vpl-thymio.js"></script>
 <script src="../src/vpl-thymio-tdm.js"></script>
 <script src="../src/vpl-robot.js"></script>
-<script src="../src/vpl-virtualthymio.js"></script>
-<script src="../src/compiler-ns.js"></script>
-<script src="../src/compiler-vm.js"></script>
-<script src="../src/compiler-dis.js"></script>
-<script src="../src/compiler.js"></script>
-<script src="../src/compiler-macros.js"></script>
-<script src="../src/compiler-l2.js"></script>
-<script src="../src/compiler-macros-l2.js"></script>
-<script src="../src/compiler-thymio.js"></script>
-<script src="../src/inputbuffer.js"></script>
-<script src="../src/a3a-idmapping.js"></script>
-<script src="../src/a3a-com.js"></script>
-<script src="../src/a3a-device.js"></script>
-<script src="../src/a3a-virtual-thymio.js"></script>
-<script src="../src/vpl-virtualthymio-a3a.js"></script>
-<script src="../src/vpl-obstacles.js"></script>
-<script src="../src/vpl-sim.js"></script>
-<script src="../src/vpl-sim2d.js"></script>
-<script src="../src/vpl-cmd-sim.js"></script>
-
 <script src="../thymio/thymio.js"></script>
-
-<script>
-
-// log to console
-
-window.addEventListener("load", function () {
-	window["vplApp"].addLogger(function (data) {
-		// from vpl-com.js
-		var msg = {
-			"sender": {
-				"type": "vpl",
-				"sessionid": "xxx"
-			},
-			"type": "log",
-			"data": data || null
-		};
-		console.info(msg);
-	});
-}, false);
-
-</script>
 
 </head>
 
@@ -469,16 +427,12 @@ window.addEventListener("load", function () {
 
 <div id="vpl-editor">
 
+<h1>VPL</h1>
+
 <canvas id="programCanvas" width="900" height="700"></canvas>
 
 <input id="input">
 
-</div>
-
-<div id="src-editor">
-<pre id="editor-lines"></pre>
-<textarea id="editor" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-</textarea>
 </div>
 
 </body>

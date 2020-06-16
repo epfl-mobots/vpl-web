@@ -71,8 +71,8 @@ toolbar.bottom {
 }
 
 button {
-	width: 3.0ww;
-	height: 3.0ww;
+	width: 2.5ww;
+	height: 2.5ww;
 	min-width: 20px;
 	min-height: 20px;
 	margin: 0.2vw;
@@ -97,9 +97,14 @@ button.vpl.bottom {
 	width: 20vw;
 }
 
+#vpl-filename {
+	width: 9ww;
+	font: max(1vw, 12px) sans-serif;
+}
+
 separator {
-	width: 5px;
-	height: 5px;
+	width: 1ww;
+	height: 1ww;
 }
 
 vpl {
@@ -122,6 +127,8 @@ block.library {
 block.event {
 	background: #f70;
 	border: none #f70;
+	border-top-right-cut: 0.9vw;
+	backdrop-color: #830;
 }
 block.event-aux, block.state {
 	width: 5vw;
@@ -129,14 +136,17 @@ block.event-aux, block.state {
 	min-width: 27px;
 	min-height: 27px;
 	vertical-align: bottom;
+	border-top-right-cut: 0.75vw;
 }
 block.action {
 	background: #38f;
 	border: none #38f;
+	backdrop-color: #148;
 }
 block.state {
 	background: #0c0;
 	border: none #0c0;
+	backdrop-color: #060;
 }
 block.comment {
 	background: #aaa;
@@ -147,6 +157,7 @@ block.empty {
 	background: transparent;
 	width: 1.5vw;
 	min-width: 8px;
+	backdrop-color: transparent;
 }
 block.empty.event-aux {
 	height: 5vw;
@@ -197,6 +208,18 @@ overlay-rectangle.drop-target {
 crossout-line {
 	line-width: 0.75vw;
  	color: rgba(120,120,120,0.5);
+	line-angle: -10deg;
+	line-overflow: 0.5vw;
+}
+crossout-line.library {
+	line-overflow: 0.1vw;
+}
+crossout-line.rule {
+	line-angle: -20deg;
+}
+crossout-line.button {
+	line-width: 0.5vw;
+	line-overflow: 0.1vw;
 }
 crossout-line.vpl {
 	line-width: 5vw;
@@ -210,7 +233,8 @@ widget {
 #widget-error, #widget-warning {
 	width: 3vw;
 	height: 3vw;
-	margin-right: 1vw;
+	padding: 0.2vw;
+	margin-right: 0.8vw;
 }
 
 conflict-line.error {
@@ -236,6 +260,10 @@ block.library {
 	height: 4vw;
 	min-width: 32px;
 	min-height: 32px;
+}
+
+block.library.event, block.library.state {
+	border-top-right-cut: 0.6vw;
 }
 
 hint {
