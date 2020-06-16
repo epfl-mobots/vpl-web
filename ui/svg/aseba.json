@@ -624,14 +624,14 @@
 			"name": "horiz prox adv",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { var p = 'prox.horizontal[' + ix + '] ', g = '>= ' + Math.round(17 + 33 * $[8]) + '00', l = '<= ' + Math.round(17 + 33 * $[7]) + '00'; return $[i] === 1 ? p + g : $[i] === 2 ? p + l : $[i] === 3 ? p + g + ' and ' + p + l : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
+				"clause": "`[2, 1, 3, 0, 4, 5, 6].map(function (ix, i) { var p = 'prox.horizontal[' + ix + '] ', l = Math.round(17 + 33 * $[7]) + '00', g = Math.round(17 + 33 * $[8]) + '00'; return $[i] === 1 ? p + '>= ' + g : $[i] === 2 ? p + '< ' + l : $[i] === 3 ? p + '>= ' + l + ' and ' + p + '< ' + g : ''; }).filter(function (s) { return s; }).join(' and ') || [2, 1, 3, 0, 4, 5, 6].map(function (ix) { return 'prox.horizontal[' + ix + '] >= 2000'; }).join(' or ')`"
 			}
 		},
 		{
 			"name": "ground adv",
 			"aseba": {
 				"sectionBegin": "onevent prox\n",
-				"clause": "`[0, 1].map(function (ix, i) { var p = 'prox.ground.delta[' + ix + '] ', g = '>= ' + Math.round(25 + 40 * $[2]) + '0', l = '<= ' + Math.round(25 + 40 * $[3]) + '0'; return $[i] === 1 ? p + g : $[i] === 2 ? p + l : $[i] === 3 ? p + g + ' and ' + p + l : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' or ')`"
+				"clause": "`[0, 1].map(function (ix, i) { var p = 'prox.ground.delta[' + ix + '] ', l = Math.round(25 + 40 * $[2]) + '0', g = Math.round(25 + 40 * $[3]) + '0'; return $[i] === 1 ? p + '>= ' + g : $[i] === 2 ? p + '< ' + l : $[i] === 3 ? p + '>= ' + l + ' and ' + p + '< ' + g : ''; }).filter(function (s) { return s; }).join(' and ') || [0, 1].map(function (ix) { return 'prox.ground.delta[' + ix + '] >= 450'; }).join(' or ')`"
 			}
 		}
 	]
