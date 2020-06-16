@@ -2108,6 +2108,8 @@
 		"cmd-sim-french.json",
 
 		"block-english.json",
-		"block-french.json"
+		"block-french.json",
+
+		"help-blocks-english.json"
 	]
 }

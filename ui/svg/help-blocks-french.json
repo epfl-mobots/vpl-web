@@ -87,13 +87,13 @@
 					"..."
 				],
 				"horiz prox front adv": [
-					"# horiz prox front adv",
+					"# Capteurs de proximité avant avec seuils bas et haut",
 					"![horiz prox front adv](vpl:block:horiz-prox-front-adv)",
 					"Type: bloc d'événement ou de condition",
 					"..."
 				],
 				"horiz prox back adv": [
-					"# horiz prox back adv",
+					"# Capteurs de proximité arrière avec seuils bas et haut",
 					"![horiz prox back adv](vpl:block:horiz-prox-back-adv)",
 					"Type: bloc d'événement ou de condition",
 					"..."

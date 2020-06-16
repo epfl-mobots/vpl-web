@@ -1,0 +1,383 @@
+{
+	"help": {
+		"en": {
+			"blocks": {
+				"button 1": [
+					"# Single button",
+					"![single button](vpl:block:button-1)",
+					"**Sensor(s) used:** five capacitive touch buttons on top of Thymio.",
+					"**Triggering conditions:** this event is triggered when a button is pressed.",
+					"**Parameters:** the button highlighted in orange is the button triggering the event. The grey buttons are ignored.",
+					"**Example:** when the forward button is pressed, then … (robot action, for instance start moving forward)."
+				],
+				"button": [
+					"# Multiple buttons",
+					"![button](vpl:block:button)",
+					"**Sensor(s) used:** five capacitive touch buttons on top of Thymio.",
+					"**Triggering conditions:** this event is triggered when one or more buttons are pressed.",
+					"**Parameters:** the buttons highlighted in orange are the buttons triggering the event. When several buttons are pressed, the event is triggered when all buttons are pressed at the same time. The grey buttons are ignored.",
+					"**Example:** when the forward and right buttons are pressed, then … (robot action, for instance start moving forward right)."
+				],
+				"horiz prox": [
+					"# Proximity sensors",
+					"![Proximity sensors](vpl:block:horiz-prox)",
+					"**Sensor(s) used:** five proximity sensors on the front and two on the back.", 
+					"**Triggering conditions:** proximity infrared sensors measure the reflection of objects placed in front of them. If there is reflection, there is a close or reflective obstacle in front of them. No reflection means either a black obstacle or no obstacle at all. This event is triggered by detection of obstacles around Thymio, in seven different direction, by seven different sensors.",
+					"**Parameters:** when a sensor is set in white with a red border, the sensor triggers an event when detecting a reflective obstacle.  Setting it in black makes the sensor trigger the event if there is no obstacle anymore (or a black obstacle, or a transparent surface). When a sensor is set to grey it is ignored.",
+					"When several sensors have been selected to trigger the event, the event is triggered by the combination of the conditions. If the front and the left sensors have been set to detect an obstacle, the event will be triggered when the front **AND** the left sensors detect an obstacle.",
+
+					"**Example:** When the left sensor detects an obstacle, then … (robot action, for instance turn right to avoid it)."
+				],
+				"horiz prox adv": [
+					"# Proximity sensors with low and high thresholds",
+					"![horiz prox adv](vpl:block:horiz-prox-adv)",
+					"**Sensor(s) used:** five proximity sensors on the front and two on the back.", 
+					"**Triggering conditions:** proximity infrared sensors measure the reflection of objects placed in front of them. If there is reflection, there is a close or reflective obstacle in front of them. No reflection means either a black obstacle or no obstacle at all. This event is triggered by detection of obstacles around Thymio, in seven different direction, by seven different sensors.",
+					"**Parameters:** when a sensor is set in white with a red border, the sensor triggers an event when detecting a reflective obstacle or a white surface. Setting it in black makes the sensor trigger the event if there is no obstacle anymore (or a black surface, or a transparent surface). Setting it in dark grey means makes the sensor triggering an event for a level between the previous two. When a sensor is set to light grey it is ignored. Two sliders allow to set the two required thresholds: the threshold between detection of obstacle/white and grey and the threshold between grey and black / no obstacle.",
+					"When several sensors have been selected to trigger the event, the event is triggered by the combination of the conditions. If the front and the left sensors have been set to detect an obstacle, the event will be triggered when the front **AND** the left sensors detect an obstacle.",
+
+					"**Example:** When the left sensor detects a very bright obstacle, then … (robot action, for instance turn right to avoid it)."
+				],
+				"horiz prox back adv": [
+					"# Tunable back sensors",
+					"![horiz prox back adv](vpl:block:horiz-prox-back-adv)",
+					"**Sensor(s) used:** two proximity sensors on the back of Thymio.",
+					"**Triggering conditions:** proximity infrared sensors measure the reflection of objects placed in front of them. If there is reflection, there is a close or very reflective obstacle in front of them. No reflection means either a black obstacle or no obstacle at all. This event  is triggered by detection of obstacles behind Thymio, in two different directions, by the two back infrared sensors. The level of detection can be adjusted.",
+					"**Parameters:** when a sensor is set in white with a red border, the sensor triggers an event when detecting a reflective obstacle. Setting it in black allows the sensor to trigger the event if there is no obstacle anymore (or a black obstacle, or a transparent surface). When a sensor is set to grey it is ignored.",
+					"If  both sensors are selected to trigger the event, the event is triggered by the combination of both conditions. If the back right and the back left sensors have been set to detect an obstacle, the event will be triggered when the right AND the left sensors detect an obstacle.",
+					"The programmer can tune the level of detection. This will indirectly specify if the obstacle will be detected close or far. The higher the threshold the closer to the sensor the detection is being done.",
+					"**Example:** When the back left sensor detects an obstacle, then … (robot action, for instance move forward full speed to escape)."
+				],
+				"horiz prox 1": [
+					"# Tunable proximity sensors",
+					"![horiz prox 1](vpl:block:horiz-prox-1)",
+					"**Sensor(s) used:** five proximity sensors at the front of Thymio.",
+					"**Triggering conditions:** proximity infrared sensors measure the reflection of objects placed in front of them. If there is reflection, there is a close or reflective obstacle in front of them. No reflection means either a black obstacle or no obstacle at all.  This event  is triggered by detection of obstacles in front of Thymio, in five different directions. The level of detection can be adjusted.",
+					"**Parameters:** when a sensor is set in white with a red border, the sensor triggers an event when detecting a reflective obstacle. Setting it in black allows the sensor to trigger the event if there is no obstacle anymore (or a black obstacle, or a transparent surface). When a sensor is set to grey it is ignored.",
+					"When several sensors have been selected to trigger the event, the event is triggered by the combination of the conditions. If the front and the left sensors have been set to detect an obstacle, the event will be triggered when the front AND the left sensors detect an obstacle.",
+					"The programmer can tune the level of detection. This will indirectly specify if the obstacle will be detected close or far. The higher the threshold the closer to the sensor the detection is being done.",
+					"**Example:** When the left sensor detects an obstacle, then … (robot action, for instance turn right to avoid it)."
+				],
+				"ground": [
+					"# Ground sensors",
+					"![ground](vpl:block:ground)",
+					"**Sensor(s) used:** two ground proximity sensors.",
+					"**Triggering conditions:** this event is triggered by the detection of presence or absence of a reflecting ground below Thymio. Note that a transparent or a black (matte, non reflecting) surface will be detected as absence of ground. This event allows the programmer to separately define what the left and right ground sensors should detect to trigger the event. This can be very useful to detect black lines on white paper, for instance to create line following behaviors.",
+					"**Parameters:** when the sensor is set in white with a red border, the sensor detects a reflective surface, for instance white. Setting it in black allows the sensor to detect no ground (or a black or a transparent ground). When a sensor is set to grey it is ignored.",
+					"**Example:** When the left sensor detects a white surface and the right one a black line, then … (robot action, for instance turn right toward the black line)."
+				],
+				"ground adv": [
+					"# Ground reflection sensors with 2 thresholds",
+					"![ground adv](vpl:block:ground-adv)",
+					"**Sensor(s) used:** two ground proximity sensors.",
+					"**Triggering conditions:** ground proximity infrared sensors measure the reflection of objects placed in front of them. If there is reflection, there is a close or reflective (white) surface in front of them. No reflection means either a black surface or no surface at all. This event is triggered by detection of a surface below Thymio, in two different locations in front of the robot.",
+					"**Parameters:** when a sensor is set in white with a red border, the sensor triggers an event when detecting a reflective surface, like white. Setting it in black makes the sensor trigger the event if there is no surface anymore (or a black surface, or a transparent surface). Setting it in dark grey means makes the sensor triggering an event for a level between the previous two. When a sensor is set to light grey it is ignored. Two sliders allow to set the two required thresholds: the threshold between detection of surface/white and grey, and the threshold between grey and black / no surface.",
+					"When several sensors have been selected to trigger the event, the event is triggered by the combination of the conditions. If the right and the left sensors have been set to detect a surface, the event will be triggered when the right **AND** the left sensors detect a surface.",
+
+					"**Example:** When the left sensor detects a black line on the ground, then … (robot action, for instance turn right to avoid it)."
+				],
+				"ground 1": [
+					"# Tunable ground sensors",
+					"![ground 1](vpl:block:ground-1)",
+					"**Sensor(s) used:** ground proximity sensors.",
+					"**Triggering conditions:** this event  is triggered by reflection level of the ground below Thymio. The reflection of a surface depends on its color, but also on the texture and other parameters.",
+					"For instance a transparent or a black (matte, non reflecting) surface will be detected as absence of ground. A glossy surface, even if dark, can reflect quite well. White surfaces reflect well. This event block allows to choose the triggering sensors, the triggering situation (detection of white or black) and to tune the reflection level distinguishing between black and white surfaces. Each sensor can be set to a different condition.",
+					"**Parameters:** when the sensor is set in white with a red border, the sensor detects a reflective surface, for instance white. Setting it in black allows the sensor to detect a black surface (or no surface, or a transparent surface). When a sensor is set to grey it is ignored.",
+					"The programmer can tune the distinction between detection and no detection or between white and black surfaces using a threshold (slider) to know which range of blacks or whites is detected under the Thymio. The range of detected blacks or whites is illustrated on the surface under the sensors.",
+					"**Example:** When the left sensor detects a white surface and the right one a black line, then … (robot action, for instance turn right toward the black line)."
+				],
+				"tap": [
+					"# Impact detection",
+					"![tap](vpl:block:tap)",
+					"**Sensor(s) used:** 3-axis accelerometer.",
+					"**Triggering conditions:**  This event is triggered by a shock in any direction. A tap with your hands, for instance, is detected as a shock.",
+					"**Example:** When the robot gets a tap, then … (robot action, for instance start moving forward)."
+				],
+				"accelerometer": [
+					"# Accelerometer",
+					"![accelerometer](vpl:block:accelerometer)",
+					"Type: event or condition block",
+					"..."
+				],
+				"roll": [
+					"# Roll angle",
+					"![roll](vpl:block:roll)",
+					"**Sensor(s) used:** 3-axis accelerometer.",
+					"**Triggering conditions:**  This event is triggered by Thymio’s orientation in respect to the direction of gravity, illustrated by the small orange arrow pointing down. The orientation can be defined in respect to the front-back axis of the Thymio robot. The angle is seen from the back of the Thymio robot. This is called the roll angle.",
+					"**Parameters:** Move the circular cyan handle around the circle to choose the desired orientation. The event will be triggered when the orientation of Thymio reaches approximately this position.",
+					"**Example:** When the robot start bending on the left, then … (robot action, for instance becoming red)."
+				],
+				"pitch": [
+					"# Pitch angle",
+					"![pitch](vpl:block:pitch)",
+					"**Sensor(s) used:** 3-axis accelerometer.",
+					"**Triggering conditions:**  This event is triggered by Thymio’s orientation in respect to the direction of gravity, illustrated by the small orange arrow pointing down. The orientation can be defined in respect to an axis parallel to the axis of the wheels. This is called the pitch angle.",
+					"**Parameters:** Move the circular cyan handle around the circle to choose the desired orientation. The event will be triggered when the orientation of Thymio reaches approximately this position.",
+					"**Example:** When the robot start moving uphill, then … (robot action, for instance becoming red)."
+				],
+				"yaw": [
+					"# Yaw angle",
+					"![yaw](vpl:block:yaw)",
+					"**Sensor(s) used:** 3-axis accelerometer.",
+					"**Triggering conditions:** This event is triggered by Thymio’s orientation in respect to the direction of gravity, illustrated by the small orange arrow pointing down. The orientation can be defined in respect to the up-down axis of the Thymio robot. This is called the yaw angle.",
+					"**Parameters:** Move the circular cyan handle around the circle to choose the desired orientation. The event will be triggered when the orientation of Thymio reaches approximately this position.",
+					"**Example:** When the robot is placed on it’s back side, then … (robot action, for instance becoming red)."
+				],
+				"clap": [
+					"# Clap (sound) detection",
+					"![clap](vpl:block:clap)",
+					"**Sensor used:** microphone.",
+					"**Triggering conditions:** This event is triggered when a loud sound is detected by Thymio. A tap of the robot can also trigger this event, as it generates a loud sound on the microphone. A noisy environment can trigger this event in an uncontrolled way.",
+					"**Example:** When I clap my hand, then… (robot action, for instance start moving forward)."
+				],
+				"init": [
+					"# Start of the program",
+					"![init](vpl:block:init)",
+					"**This event does not use a specific sensor of the Thymio.**",
+					"**Triggering conditions:** this event is triggered at the start of the program on the robot, as you hit the PLAY or START AGAIN button in VPL. You can use it to set actions Thymio will perform at the start of the program.",
+					"**Example:** At the beginning of the program start by (robot action, for instance setting the robot color to red)"
+				],
+				"timer": [
+					"# Timer elapsed",
+					"![timer](vpl:block:timer)",
+					"**This event does not use a specific sensor of the Thymio. It reacts to a timer inside Thymio.**",
+					"**Triggering conditions:** this event is triggered when the timer (set in the actions) is over.",
+					"**Example:** When two seconds (set in the action) have passed, then …. (robot action, for instance start to move)."			],
+				"remote control arrows": [
+					"# Remote control arrows",
+					"![remote control arrows](vpl:block:remote-control-arrows)",
+					"**Sensor(s) used:** infrared remote control receiver.",
+					"**Triggering conditions:** this event is triggered when the specified button is pressed on the remote control. The buttons represent the arrows of the remote control.",
+					"**Parameters:** the button highlighted in orange is the button triggering the event.",
+					"**Example:** When the forward button of the remote control is pressed, then … (robot action, for instance start moving forward)"
+					],
+				"remote control keypad": [
+					"# Remote control keypad",
+					"![remote control keypad](vpl:block:remote-control-keypad)",
+					"**Sensor(s) used:** infrared remote control receiver.",
+					"**Triggering conditions:** this event is triggered when the specified button is pressed on the remote control. The buttons represent the keypad of the remote control.",
+					"**Parameters:** the button highlighted in orange is the button triggering the event.",
+					"**Example:** When the button **2** of the remote control is pressed, then … (robot action, for instance start moving forward)"
+					],
+				"state": [
+					"# State (4 bits)",
+					"![state](vpl:block:state)",
+					"Type: condition block",
+					"..."
+				],
+				"state 8": [
+					"# State (8 values)",
+					"![state 8](vpl:block:state-8)",
+					"Type: condition block",
+					"..."
+				],
+				"counter comparison": [
+					"# 8-LED state arithmetic comparison",
+					"![counter comparison](vpl:block:counter-comparison)",
+					"**This condition block does not use a specific sensor of the Thymio.** It reads an internal state, an 8-bit variable inside Thymio. It can be used only as a condition, not as a main event.",
+					"**Triggering conditions:** this condition is true when the internal variable, represented on the led circle on Thymio, satisfies the comparison with a fixed value.",
+					"**Parameters:** on the left the programmer can choose which comparison to do:",
+					"= Equal to",
+					"≥ Greater than or equal to",
+					"> Strictly greater than",
+					"≤ Less than or equal to",
+					"< Strictly less than",
+					"On the right the programmer can choose an 8-bit constant value from 0 to 255. This constant value is displayed on the circular LEDs using a binary representation with the bit 0 on the top, the bit 1 on the top right, the bit 2 on the right and so on around the circle. ",
+					"**Example:** If the LEDs represent the value 6 (bit 1 and 2 are set), then …. (robot action, for instance become red)."
+				],
+				"color 8 state": [
+					"# Top color state",
+					"![color 8 state](vpl:block:color-8-state)",
+					"**This condition block does not use a specific sensor of the Thymio.** It reads the status of the RGB (Red,Green,Blue) LED displayed on the top of Thymio. It can be used only as a condition, not as a main event.",
+					"**Triggering conditions:** this condition is true when the top Thymio RGB LED is set to a specific color. The comparison on each color component is made by sectors, allowing the condition to be true also for an approximate color match.",
+					"**Parameters:** the programmer can choose one of the 7 available colors or the last parameter (bottom right) which represents the LED switched off.",
+					"**Example:** If the top LED on Thymio is yellow, then …. (robot action, for instance switch to red)."
+				],
+				"bottom color 8 state": [
+					"# Bottom color state",
+					"![bottom color 8 state](vpl:block:bottom-color-8-state)",
+					"**This condition block does not use a specific sensor of the Thymio.** It reads the status of the RGB (Red,Green,Blue) LEDs displayed on the bottom of Thymio. It can be used only as a condition, not as a main event.",
+					"**Triggering conditions:** this condition is true when the bottom Thymio RGB LEDs are set to a specific color. The comparison on each color component is made by sectors, allowing the condition to be true also for an approximate color match.",
+					"**Parameters:** the programmer can choose one of the 7 available colors or the last parameter (bottom right) which represents the LEDs switched off.",
+					"**Example:** if the bottom LEDs on Thymio are blue, then …. (robot action, for instance switch them to red)."
+				],
+				"acc side": [
+					"# On the side",
+					"![acc side](vpl:block:acc-side)",
+					"**Sensor used:** 3-axis accelerometer.",
+					"**Triggering conditions:** This event is triggered by Thymio’s orientation in respect to the direction of gravity when the robot is turned to its left or right side, be it laying on the ground or hold in the air.",
+					"**Example:** When the robot is placed on its side, then … (robot action, for instance switching on the left light on the LED circle)."
+				],
+				"acc upside down": [
+					"# On the back",
+					"![acc upside down](vpl:block:acc-upside-down)",
+					"**Sensor used:** 3-axis accelerometer.",
+					"**Triggering conditions:** This event is triggered by Thymio’s orientation in respect to the direction of gravity when the robot is turned upside-down, be it laying on the ground or hold in the air.",
+					"**Example:** When the robot is placed upside down, then … (robot action, for instance making an unhappy sound)."
+				],
+				"ground mean": [
+					"# Ground detection",
+					"![ground mean](vpl:block:ground-mean)",
+					"**Sensor(s) used:** ground proximity sensors.",
+					"**Triggering conditions:** This event  is triggered by the detection of presence or absence of a reflecting ground below Thymio. Note that a transparent or a black (matte, non reflecting) surface will be detected as absence of ground.",
+					"**Parameters:** when the ground is set in white with a red border, a ground is detected. Setting it in black allows to detect  no ground (or a black or a transparent ground).",
+					"**Example:** When I lift up Thymio and it does not detect the ground anymore, then … (robot action, for instance making a high frequency sound)."
+				],
+				"state 256": [
+					"# 8-LED state check",
+					"![state 256](vpl:block:state-256)",
+					"**This condition block does not use a specific sensor of the Thymio.** It reads the status of the 8 LEDs around Thymio’s buttons. It can be used only as a condition, not as a main event.",
+					"**Triggering conditions:** this condition is true when the LEDs on Thymio display the same pattern (LEDS on and off) as defined on the block. Since each LED can be either on or off there are 256 possible combinations.",
+					"**Parameters:** every led can be set on (yellow) or off (dark grey). None of the LEDs are ignored.",
+					"**Example:** If only the top LED is on, then …. (robot action, for instance start moving forward)."
+				],
+				"state 256 with mask": [
+					"# Selective 8-LEDs check",
+					"![state 256 with mask](vpl:block:state-256-with-mask)",
+					"**This condition block does not use a specific sensor of the Thymio.** It reads the status of the 8 LEDs around Thymio’s buttons. It can be used only as a condition, not as a main event.",
+					"**Triggering conditions:** this condition is true when the LEDs on Thymio display the same pattern (LEDS on and off) as defined on the block. You can choose to consider only some LEDs, ignoring others.",
+					"**Parameters:** every led can be set on (yellow), off (dark grey) or can be ignored (light grey). This allows to detect partial configurations of LEDs, distinguishing various patterns at the same time or making subgroups of LEDs.",
+					"**Example:** If the three left LEDs are on and the bottom, bottom-right, and right LEDs are off, then …. (robot action, for instance start moving left)."
+				],
+				"motor state": [
+					"# Motor state",
+					"![motor state](vpl:block:motor-state)",
+					"Type: condition block",
+					"..."
+				],
+				"motor": [
+					"# Set motor speeds",
+					"![Set motor speeds](vpl:block:motor)",
+					"Type: action block",
+					"The _Set motor speeds_ block sets the target speed for the left and right motors. The combination of speeds makes the robot move forward or backward, possibly, turning at the same time, or to stop."
+				],
+				"move": [
+					"# Set motion",
+					"![move](vpl:block:move)",
+					"Type: action block",
+					"..."
+				],
+				"nn obstacles": [
+					"# Neural net for obstacle avoidance",
+					"![nn obstacles](vpl:block:nn-obstacles)",
+					"Type: action block",
+					"..."
+				],
+				"top color": [
+					"# Set top color (RGB components)",
+					"![top color](vpl:block:top-color)",
+					"Type: action block",
+					"..."
+				],
+				"top color 8": [
+					"# Set top color",
+					"![top color 8](vpl:block:top-color-8)",
+					"Type: action block",
+					"..."
+				],
+				"bottom color": [
+					"# Set bottom color (RGB components)",
+					"![bottom color](vpl:block:bottom-color)",
+					"Type: action block",
+					"..."
+				],
+				"bottom-left color": [
+					"# Set bottom-left color (RGB components)",
+					"![bottom-left color](vpl:block:bottom-left-color)",
+					"Type: action block",
+					"..."
+				],
+				"bottom-right color": [
+					"# Set bottom-right color (RGB components)",
+					"![bottom-right color](vpl:block:bottom-right-color)",
+					"Type: action block",
+					"..."
+				],
+				"bottom color 8": [
+					"# Set bottom color",
+					"![bottom color 8](vpl:block:bottom-color-8)",
+					"Type: action block",
+					"..."
+				],
+				"bottom-left color 8": [
+					"# Set bottom-left color",
+					"![bottom-left color 8](vpl:block:bottom-left-color-8)",
+					"Type: action block",
+					"..."
+				],
+				"bottom-right color 8": [
+					"# Set bottom-right color",
+					"![bottom-right color 8](vpl:block:bottom-right-color-8)",
+					"Type: action block",
+					"..."
+				],
+				"notes": [
+					"# Play melody",
+					"![notes](vpl:block:notes)",
+					"Type: action block",
+					"..."
+				],
+				"play": [
+					"# Play a .wav file",
+					"![play](vpl:block:play)",
+					"Type: action block",
+					"..."
+				],
+				"play stop": [
+					"# Stop playing a .wav file",
+					"![play stop](vpl:block:play-stop)",
+					"Type: action block",
+					"..."
+				],
+				"set state": [
+					"# Set state (4 bits)",
+					"![set state](vpl:block:set-state)",
+					"Type: action block",
+					"..."
+				],
+				"toggle state": [
+					"# Toggle state (4 bits)",
+					"![toggle state](vpl:block:toggle-state)",
+					"Type: action block",
+					"..."
+				],
+				"set state 8": [
+					"# Set state (8 values)",
+					"![set state 8](vpl:block:set-state-8)",
+					"Type: action block",
+					"..."
+				],
+				"change state 8": [
+					"# Set to next or previous state (8 values)",
+					"![change state 8](vpl:block:change-state-8)",
+					"Type: action block",
+					"..."
+				],
+				"set counter": [
+					"# Set counter",
+					"![set counter](vpl:block:set-counter)",
+					"Type: action block",
+					"..."
+				],
+				"set timer": [
+					"# Start timer (0-4 sec)",
+					"![set timer](vpl:block:set-timer)",
+					"Type: action block",
+					"..."
+				],
+				"set timer log": [
+					"# Set timer (0.1-10 sec)",
+					"![set timer log](vpl:block:set-timer-log)",
+					"Type: action block",
+					"..."
+				],
+				"picture comment": [
+					"# Picture comment",
+					"![picture comment](vpl:block:picture-comment)",
+					"Type: comment block",
+					"..."
+				]
+			}
+		}
+	}
+}

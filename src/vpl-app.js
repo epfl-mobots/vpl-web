@@ -357,7 +357,7 @@ A3a.vpl.Application.prototype.generateDynamicHelpContentSkeleton = function (lan
 	var str = JSON.stringify(c, null, "\t");
 
 	A3a.vpl.Program.downloadText(str,
-		"help-blocks-" + languageName + ".html",
+		"help-blocks-" + languageName + ".json",
 		"application/json");
 };
 
