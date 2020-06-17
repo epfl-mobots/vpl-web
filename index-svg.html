@@ -3109,7 +3109,7 @@ sim-playground {
 			"name": "button",
 			"aseba": {
 				"sectionBegin": "onevent buttons\n",
-				"clause": "`['center', 'forward', 'backward', 'right', 'left'].map(function (s, i) { return $[i] ? 'button.' + s : ''; }).filter(function (s) { return s; }).join(' and ') || ['center', 'forward', 'backward', 'right', 'left'].map(function (s) { return 'button.' + s; }).join(' or ')`"
+				"clause": "`['center', 'forward', 'backward', 'right', 'left'].map(function (s, i) { return $[i] ? 'button.' + s + ' != 0' : ''; }).filter(function (s) { return s; }).join(' and ') || ['center', 'forward', 'backward', 'right', 'left'].map(function (s) { return 'button.' + s + ' != 0'; }).join(' or ')`"
 			}
 		},
 		{
