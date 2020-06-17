@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
+<head>
+
+<meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, height=device-height, maximum-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
+<title>VPL</title>
+
+<style>
+html {
+	height: 100%;
+}
+body {
+	height: 100%;
+	margin: 0;
+}
+#programCanvas {
+	width: 100%;
+	height: 100%;
+	display: block;
+	z-index: 10;
+}
+#src-editor {
+	width: 100%;
+	position: fixed;
+	z-index: 20;
+}
+#editor {
+	height: 100%;
+	display: block;
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 5pt;
+	padding-right: 5pt;
+	margin: 0;
+	border: 0;
+	box-sizing: border-box;
+	tab-size: 4;
+	font-family: monospace;
+	font-size: 11pt;
+}
+pre#editor-lines {
+	background-color: #eceff1;
+    width: 56px;
+    float: left;
+    color: #546e7a;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 5pt;
+    text-align: right;
+    overflow: hidden;
+	user-select: none;
+}
+
+#input {
+	position: absolute;
+	z-index: 1000;
+	font-family: sans-serif;
+	font-size: 15pt;
+	top: 10px;
+	left: 10px;
+	display: none;
+}
+
+@media only screen and (max-device-width: 1024px) {
+	#editor {
+		tab-size: 2;
+		font-size: 10pt;
+	}
+}
+</style>
+
+<script src="src/a3a-ns.js"></script>
+<script src="src/svg.js"></script>
+<script src="src/svg-preparsed.js"></script>
+<script src="src/svg-transform.js"></script>
+<script src="src/vpl-ns.js"></script>
+<script src="src/vpl-blocktemplate.js"></script>
+<script src="src/vpl-block.js"></script>
+<script src="src/vpl-emptyblock.js"></script>
+<script src="src/css.js"></script>
+<script src="src/vpl-css.js"></script>
+<script src="src/vpl-css-draw.js"></script>
+<script src="src/vpl-canvas.js"></script>
+<script src="src/vpl-canvas-scroll.js"></script>
+<script src="src/vpl-blocklibutil.js"></script>
+<script src="src/vpl-blocklib.js"></script>
+<script src="src/vpl-blocklib-svg.js"></script>
+<script src="src/vpl-jsoncode.js"></script>
+<script src="src/vpl-rule.js"></script>
+<script src="src/vpl-uiconfig.js"></script>
+<script src="src/vpl-program.js"></script>
+<script src="src/vpl-code.js"></script>
+<script src="src/vpl-code-aseba.js"></script>
+<script src="src/vpl-code-l2.js"></script>
+<script src="src/vpl-code-js.js"></script>
+<script src="src/vpl-code-python.js"></script>
+<script src="src/vpl-cmd.js"></script>
+<script src="src/vpl-app.js"></script>
+<script src="src/vpl-ui-validator.js"></script>
+<script src="src/vpl-cmd-vpl.js"></script>
+<script src="src/vpl-controlbar.js"></script>
+<script src="src/vpl-buttons-js.js"></script>
+<script src="src/vpl-controlbar-btn.js"></script>
+<script src="src/vpl-widgets-js.js"></script>
+<script src="src/vpl-program-canvas.js"></script>
+<script src="src/vpl-error.js"></script>
+<script src="src/vpl-draw.js"></script>
+<script src="src/vpl-undo.js"></script>
+<script src="src/vpl-html.js"></script>
+<script src="src/vpl-aeslfile.js"></script>
+<script src="src/vpl-texteditor.js"></script>
+<script src="src/vpl-sourceedit.js"></script>
+<script src="src/vpl-cmd-src.js"></script>
+<script src="src/vpl-ui-svg.js"></script>
+<script src="src/vpl-runglue.js"></script>
+<script src="src/vpl-htmlpanel.js"></script>
+<script src="src/vpl-files.js"></script>
+<script src="src/vpl-load.js"></script>
+<script src="src/vpl-com.js"></script>
+<script src="src/vpl-i18n.js"></script>
+<script src="src/vpl-dynamic-help.js"></script>
+<script src="src/vpl-main.js"></script>
+
+<script src="src/a3a-nodebase.js"></script>
+<script src="src/a3a-nodeproxy.js"></script>
+
+<script src="src/vpl-thymio.js"></script>
+<script src="src/vpl-thymio-tdm.js"></script>
+<script src="src/vpl-robot.js"></script>
+<script src="src/vpl-virtualthymio.js"></script>
+<script src="src/compiler-ns.js"></script>
+<script src="src/compiler-vm.js"></script>
+<script src="src/compiler-dis.js"></script>
+<script src="src/compiler-dis-mixed.js"></script>
+<script src="src/compiler.js"></script>
+<script src="src/compiler-macros.js"></script>
+<script src="src/compiler-l2.js"></script>
+<script src="src/compiler-macros-l2.js"></script>
+<script src="src/compiler-thymio.js"></script>
+<script src="src/compiler-asm.js"></script>
+<script src="src/inputbuffer.js"></script>
+<script src="src/a3a-idmapping.js"></script>
+<script src="src/a3a-com.js"></script>
+<script src="src/a3a-device.js"></script>
+<script src="src/a3a-virtual-thymio.js"></script>
+<script src="src/vpl-virtualthymio-a3a.js"></script>
+<script src="src/vpl-obstacles.js"></script>
+<script src="src/vpl-sim.js"></script>
+<script src="src/vpl-sim2d.js"></script>
+<script src="src/vpl-cmd-sim.js"></script>
+
+<script src="thymio/thymio.js"></script>
+
+<script>
+
+var vplUIRoot = "ui/svg";
+
+</script>
+
+</head>
+
+<body>
+
+<div id="vpl-editor">
+
+<canvas id="programCanvas" width="900" height="700"></canvas>
+
+<input id="input">
+
+</div>
+
+<div id="src-editor">
+<!-- <pre id="editor-lines"></pre> -->
+<textarea id="editor" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+</textarea>
+</div>
+
+</body>
+
+</html>

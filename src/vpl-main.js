@@ -145,6 +145,7 @@ function vplLoadResourcesInScripts(rootFilename, rootDir, getAuxiliaryFilenames,
 				rsrc[filename] = txt;
 			});
 		}
+		// doc are not embedded in script elements
 		onLoad(gui, rsrc);
 	} catch (e) {
 		onError(e);
@@ -668,6 +669,11 @@ function vplSetup(gui, rootDir) {
 		if (gui && gui["help"]) {
 			app.dynamicHelp.add(gui["help"]);
 		}
+		if (gui && gui["doc"] && gui["doc"]["doctemplate.html"] && gui.rsrc["doctemplate.html"]) {
+			// fix base url
+			app.docTemplate = gui.rsrc["doctemplate.html"]
+				.replace("<head>", "<head><base href='" + rootDir + "/" + gui["doc"]["doctemplate.html"].replace(/\/[^/]*$/, "") + "/'");
+		}
 		helpFragments.forEach(function (h) {
 			app.dynamicHelp.add(h);
 		});
@@ -730,7 +736,17 @@ window.addEventListener("load", function () {
 		uiRoot,
 		function (obj) {
 			// get subfiles
-			return (obj["svgFilenames"] || []).concat(obj["overlays"] || []).concat(obj["css"] || []);
+			var subfiles = (obj["svgFilenames"] || [])
+				.concat(obj["overlays"] || [])
+				.concat(obj["css"] || []);
+			if (obj["doc"]) {
+				for (var key in obj["doc"]) {
+					if (obj["doc"].hasOwnProperty(key)) {
+						subfiles.push(obj["doc"][key]);
+					}
+				}
+			}
+			return subfiles;
 		},
 		function (gui, rsrc) {
 			// success
@@ -751,6 +767,13 @@ window.addEventListener("load", function () {
 				gui["css"].forEach(function (filename) {
 					gui.rsrc[filename] = rsrc[filename];
 				});
+			}
+			if (gui["doc"]) {
+				for (var filename in gui["doc"]) {
+					if (gui["doc"].hasOwnProperty(filename)) {
+						gui.rsrc[filename] = rsrc[gui["doc"][filename]];
+					}
+				}
 			}
 			vplSetup(gui, uiRoot);
 		},

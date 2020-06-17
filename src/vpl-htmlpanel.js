@@ -33,16 +33,27 @@ A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets) {
 	this.backgroundDiv.style.zIndex = "1000";
 	this.backgroundDiv.style.backgroundColor = "rgba(1,1,1,0.5)";
 	this.backgroundDiv.style.display = "none";
+
+	this.panelDiv = document.createElement("div");
+	this.panelDiv.style.width = "80%";
+	this.panelDiv.style.height = "80%";
+	this.panelDiv.style.position = "fixed";
+	this.panelDiv.style.top = "50%";
+	this.panelDiv.style.left = "50%";
+	this.panelDiv.style.backgroundColor = "white";
+	this.backgroundDiv.appendChild(this.panelDiv);
+	document.body.appendChild(this.backgroundDiv);
+
+	var container = document.createElement("div");
+	container.style.width = "100%";
+	container.style.height = "100%";
+	container.style.overflowY = "scroll";
+	this.panelDiv.appendChild(container);
+
 	this.div = document.createElement("div");
-	this.div.style.width = "80%";
-	this.div.style.height = "80%";
-	this.div.style.position = "fixed";
-	this.div.style.top = "50%";
-	this.div.style.left = "50%";
 	this.div.style.backgroundColor = "white";
 	this.div.style.padding = "2em";
-	this.backgroundDiv.appendChild(this.div);
-	document.body.appendChild(this.backgroundDiv);
+	container.appendChild(this.div);
 
 	/** @type {Array.<Element>} */
 	this.widgets = [];
@@ -91,10 +102,10 @@ A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets) {
 	@return {void}
 */
 A3a.vpl.HTMLPanel.prototype.show = function () {
-	this.div.innerHTML = this.html;	// do it here to restart from the desired starting point
 	this.widgets.forEach(function (element) {
-		this.div.appendChild(element);
+		this.panelDiv.appendChild(element);
 	}, this);
+	this.div.innerHTML = this.html;	// do it here to restart from the desired starting point
 	this.backgroundDiv.style.display = "block";
 	this.center();
 };
@@ -106,11 +117,11 @@ A3a.vpl.HTMLPanel.prototype.hide = function () {
 	this.backgroundDiv.style.display = "none";
 };
 
-/** Center about box
+/** Center content
 	@return {void}
 */
 A3a.vpl.HTMLPanel.prototype.center = function () {
-	var boundingBox = this.div.getBoundingClientRect();
-	this.div.style.marginLeft = (-boundingBox.width / 2) + "px";
-	this.div.style.marginTop = (-boundingBox.height / 2) + "px";
+	var boundingBox = this.panelDiv.getBoundingClientRect();
+	this.panelDiv.style.marginLeft = (-boundingBox.width / 2) + "px";
+	this.panelDiv.style.marginTop = (-boundingBox.height / 2) + "px";
 };

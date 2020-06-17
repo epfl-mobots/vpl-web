@@ -161,6 +161,8 @@ A3a.vpl.Application = function (canvasEl) {
 	/** @type {A3a.vpl.HTMLPanel} */
 	this.suspendBox = null;
 	this.suspended = false;
+	/** @type {?string} */
+	this.docTemplate = null;	// html doc where BLOCKS is replaced by block description
 
 	/** @type {?string} */
 	this.username = null;
@@ -296,7 +298,7 @@ A3a.vpl.Application.prototype.setHelpForCurrentAppState = function () {
 				this.dynamicHelp.addImageMapping(urlMD, url);
 			} catch (e) {}
 		}, this);
-		var html = this.dynamicHelp.generate(this.i18n.language, blocks);
+		var html = this.dynamicHelp.generate(this.i18n.language, blocks, this.docTemplate);
 		this.setHelpContent(html);
 	}
 };

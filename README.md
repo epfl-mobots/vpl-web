@@ -2,7 +2,9 @@
 
 Prototype of VPL as a web application.
 
-Usage: open index.html in a web browser.
+Usage: open index-classic.html or index-svg.html in a web browser. These two files contain most resources in script elements and don't need an http server.
+
+To load resources from separate files, serve the file with an http server (e.g. run "python3 -m http.server") and open index-ext-svg.html.
 
 Options: add them as parameters in a query string; e.g.
 
