@@ -8449,7 +8449,7 @@ sim-playground {
 			"yaw": "Yaw angle",
 			"pitch": "Pitch angle",
 			"clap": "Clap (sound) detection",
-			"fall": "Fall",
+			"fall": "Falling detection",
 			"tap": "Impact detection",
 			"ground mean": "Ground detection",
 			"ground": "Ground sensors",
@@ -8467,8 +8467,8 @@ sim-playground {
 			"bottom color 8 state": "Bottom color state",
 			"horiz prox adv": "Proximity sensors with 2 thresholds",
 			"ground adv": "Ground reflection sensors with 2 thresholds",
-			"motor": "Set motor speeds",
-			"move": "Set motion",
+			"motor": "Set wheel speeds",
+			"move": "Directions",
 			"top color 8": "Set top color",
 			"bottom color 8": "Set bottom color",
 			"top color": "Set top color (RGB components)",
@@ -8476,11 +8476,11 @@ sim-playground {
 			"set timer": "Start timer",
 			"notes": "Play melody",
 			"notes with speed": "Play melody with tempo",
-			"play": "Play a .wav file",
+			"play": "Play a .wav file from SD card",
 			"play stop": "Stop playing a .wav file",
-			"set state 256": "Set state bits",
-			"set state 256 with mask": "Set some state bits",
-			"arithmetic": "Arithmetic"
+			"set state 256": "Set 8-LEDs state",
+			"set state 256 with mask": "Set some of the 8 LEDs",
+			"arithmetic": "Compute"
 		}
 	}
 }
@@ -8588,9 +8588,9 @@ sim-playground {
 					"The programmer can tune the level of detection. This will indirectly specify if the obstacle will be detected close or far. The higher the threshold the closer to the sensor the detection is being done.",
 					"**Example:** When the back left sensor detects an obstacle, then … (robot action, for instance move forward full speed to escape)."
 				],
-				"horiz prox 1": [
-					"# Tunable proximity sensors",
-					"![horiz prox 1](vpl:block:horiz-prox-1)",
+				"horiz prox front adv": [
+					"# Front proximity sensors with threshold",
+					"![horiz prox front adv](vpl:block:horiz-prox-front-adv)",
 					"**Sensor(s) used:** five proximity sensors at the front of Thymio.",
 					"**Triggering conditions:** proximity infrared sensors measure the reflection of objects placed in front of them. If there is reflection, there is a close or reflective obstacle in front of them. No reflection means either a black obstacle or no obstacle at all.  This event  is triggered by detection of obstacles in front of Thymio, in five different directions. The level of detection can be adjusted.",
 					"**Parameters:** when a sensor is set in white with a red border, the sensor triggers an event when detecting a reflective obstacle. Setting it in black allows the sensor to trigger the event if there is no obstacle anymore (or a black obstacle, or a transparent surface). When a sensor is set to grey it is ignored.",
@@ -8643,7 +8643,7 @@ sim-playground {
 					"# Roll angle",
 					"![roll](vpl:block:roll)",
 					"**Sensor(s) used:** 3-axis accelerometer.",
-					"**Triggering conditions:**  This event is triggered by Thymio’s orientation in respect to the direction of gravity, illustrated by the small orange arrow pointing down. The orientation can be defined in respect to the front-back axis of the Thymio robot. The angle is seen from the back of the Thymio robot. This is called the roll angle.",
+					"**Triggering conditions:**  This event is triggered by Thymio’s orientation in respect to the direction of gravity, illustrated by the small orange arrow pointing down. The angle observed here is the angle of rotation of Thymio around his forward direction of movement, in respect to a horizontal plane. This is called the roll angle. The angle is seen from the back of the Thymio robot. ",
 					"**Parameters:** Move the circular cyan handle around the circle to choose the desired orientation. The event will be triggered when the orientation of Thymio reaches approximately this position.",
 					"**Example:** When the robot start bending on the left, then … (robot action, for instance becoming red)."
 				],
@@ -8651,7 +8651,7 @@ sim-playground {
 					"# Pitch angle",
 					"![pitch](vpl:block:pitch)",
 					"**Sensor(s) used:** 3-axis accelerometer.",
-					"**Triggering conditions:**  This event is triggered by Thymio’s orientation in respect to the direction of gravity, illustrated by the small orange arrow pointing down. The orientation can be defined in respect to an axis parallel to the axis of the wheels. This is called the pitch angle.",
+					"**Triggering conditions:**  This event is triggered by Thymio’s orientation in respect to the direction of gravity, illustrated by the small orange arrow pointing down. The angle observed here corresponds the angle of a slope Thymio would go up, in respect to a horizontal plane. The axis of rotation is parallel to the axis of the wheels. This is called the pitch angle.",
 					"**Parameters:** Move the circular cyan handle around the circle to choose the desired orientation. The event will be triggered when the orientation of Thymio reaches approximately this position.",
 					"**Example:** When the robot start moving uphill, then … (robot action, for instance becoming red)."
 				],
@@ -8659,7 +8659,7 @@ sim-playground {
 					"# Yaw angle",
 					"![yaw](vpl:block:yaw)",
 					"**Sensor(s) used:** 3-axis accelerometer.",
-					"**Triggering conditions:** This event is triggered by Thymio’s orientation in respect to the direction of gravity, illustrated by the small orange arrow pointing down. The orientation can be defined in respect to the up-down axis of the Thymio robot. This is called the yaw angle.",
+					"**Triggering conditions:** This event is triggered by Thymio’s orientation in respect to the direction of gravity, illustrated by the small orange arrow pointing down. The angle observed here corresponds to the angle of rotation of Thymio around the pen hole when Thymio is placed vertically. This is called the yaw angle.",
 					"**Parameters:** Move the circular cyan handle around the circle to choose the desired orientation. The event will be triggered when the orientation of Thymio reaches approximately this position.",
 					"**Example:** When the robot is placed on it’s back side, then … (robot action, for instance becoming red)."
 				],
@@ -8683,6 +8683,14 @@ sim-playground {
 					"**This event does not use a specific sensor of the Thymio. It reacts to a timer inside Thymio.**",
 					"**Triggering conditions:** this event is triggered when the timer (set in the actions) is over.",
 					"**Example:** When two seconds (set in the action) have passed, then …. (robot action, for instance start to move)."			],
+				"clock": [
+					"# Repetitive event",
+					"![clock](vpl:block:clock)",
+					"**This event block does not use a specific sensor of the Thymio.** It uses the internal timers of the robot.",
+					"**Triggering conditions:** this block generates events at regular intervals.",
+					"**Parameters:** the frequency of event can be set by the user, among a choice of frequencies: at 10Hz this event is generated 10 times per second, at 20Hz this event is generated 20 times per second.",
+					"**Example:** Ten times per second increment the internal variable, which then will count the tenths of second."
+				],
 				"remote control arrows": [
 					"# Remote control arrows",
 					"![remote control arrows](vpl:block:remote-control-arrows)",
@@ -8755,6 +8763,13 @@ sim-playground {
 					"**Triggering conditions:** This event is triggered by Thymio’s orientation in respect to the direction of gravity when the robot is turned upside-down, be it laying on the ground or hold in the air.",
 					"**Example:** When the robot is placed upside down, then … (robot action, for instance making an unhappy sound)."
 				],
+				"fall": [
+					"# Falling detection",
+					"![fall](vpl:block:fall)",
+					"**Sensor used:** 3-axis accelerometer.",
+					"**Triggering conditions:** This event is triggered by Thymio’s falling. This results in the accelerometer sensing no gravity.",
+					"**Example:** When the robot falls … (robot action, for instance make it become red)."
+				],
 				"ground mean": [
 					"# Ground detection",
 					"![ground mean](vpl:block:ground-mean)",
@@ -8786,16 +8801,21 @@ sim-playground {
 					"..."
 				],
 				"motor": [
-					"# Set motor speeds",
+					"# Set wheel speeds",
 					"![Set motor speeds](vpl:block:motor)",
-					"Type: action block",
-					"The _Set motor speeds_ block sets the target speed for the left and right motors. The combination of speeds makes the robot move forward or backward, possibly, turning at the same time, or to stop."
-				],
+					"**Actuators:** two wheel motors.",
+					"**Action:** this action sets the speed of each wheel, right and left,  to make Thymio move. Thymio will set the speed and regulate the motor to maintain that speed.",
+					"**Parameters:** the two sliders represent the speed of the two wheels. Each speed can be positive (moving forward) or negative (moving backwards). The position on the slider indicates the speed of the wheel. The maximum speed is around 17cm/s.",
+					"To turn left or right, set the speed of the opposite side wheel to a higher speed than the other. Depending on both speeds Thymio will make narrower or wider curves.",
+					"The slide handle has mechanisms to help setting speeds: when a dark grey point is displayed in it, the speed is equal on both wheels. When a red square is displayed, the wheel is stopped.",
+					"**Example:** when (event, for instance detection of obstacle on the left), then start moving straight forward (two wheels at the same speed)."				],
 				"move": [
-					"# Set motion",
+					"# Directions",
 					"![move](vpl:block:move)",
-					"Type: action block",
-					"..."
+					"**Actuators:** two wheel motors.",
+					"**Action:** this action sets a direction of movement for Thymio using a set of 9 predefined speed settings.",
+					"**Parameters:** Choose any arrow to make Thymio move or choose the center button to make it stop.",
+					"**Example:** when (event, for instance detection of obstacle on the left), then start moving forward right."
 				],
 				"nn obstacles": [
 					"# Neural net for obstacle avoidance",
@@ -8806,20 +8826,26 @@ sim-playground {
 				"top color": [
 					"# Set top color (RGB components)",
 					"![top color](vpl:block:top-color)",
-					"Type: action block",
-					"..."
+					"**Actuator:** top color LED",
+					"**Action:** this action sets a specific color for the top Thymio LEDs specifying the three color components, Red, Green, and Blue (RGB).",
+					"**Parameters:** the programmer can use the sliders to set the desired color by its red, green, and blue components values following the additive color system. When equal parts of red, blue, and green are added to one another, white light is created. The intensity is low on the left and high on the right.",
+					"**Example:** when (event, for instance detection of obstacle on the left), then set the top color to green% red and 100% red (making orange)."
 				],
 				"top color 8": [
 					"# Set top color",
 					"![top color 8](vpl:block:top-color-8)",
-					"Type: action block",
-					"..."
+					"**Actuator:** top color LED",
+					"**Action:** this action allows the programmer to set a specific color for the top Thymio RGB (Red,Green,Blue) LED.",
+					"**Parameters:** the programmer can choose one of the 7 available colors or the last parameter (bottom right) which represents the LED switched off.",
+					"**Example:** when (event, for instance detection of obstacle on the left), then set the top color to yellow."
 				],
 				"bottom color": [
 					"# Set bottom color (RGB components)",
 					"![bottom color](vpl:block:bottom-color)",
-					"Type: action block",
-					"..."
+					"**Actuator:** bottom color LED",
+					"**Action:** this action sets a specific color for the bottom Thymio LEDs specifying the three color components, Red, Green, and Blue (RGB).",
+					"**Parameters:** the programmer can use the sliders to set the desired color by its red, green, and blue component values following the additive color system. When equal parts of red, blue, and green are added to one another, white light is created. The intensity is low on the left and high on the right.",
+					"**Example:** when (event, for instance detection of obstacle on the left), then set the bottom color to green% red and 100% red (making orange)."
 				],
 				"bottom-left color": [
 					"# Set bottom-left color (RGB components)",
@@ -8836,8 +8862,10 @@ sim-playground {
 				"bottom color 8": [
 					"# Set bottom color",
 					"![bottom color 8](vpl:block:bottom-color-8)",
-					"Type: action block",
-					"..."
+					"**Actuator:** bottom color LED",
+					"**Action:** this action sets a specific color for the bottom Thymio RGB (Red,Green,Blue) LEDs.",
+					"**Parameters:** the programmer can choose one of the 7 available colors or the last parameter (bottom right) which represents the LEDs switched off.",
+					"**Example:** when (event, for instance detection of obstacle on the left), then set the bottom color to blue."
 				],
 				"bottom-left color 8": [
 					"# Set bottom-left color",
@@ -8854,57 +8882,59 @@ sim-playground {
 				"notes": [
 					"# Play melody",
 					"![notes](vpl:block:notes)",
-					"Type: action block",
-					"..."
+					"**Actuator:** speaker",
+					"**Action:** this action starts playing a melody with Thymio.",
+					"**Parameters:** each blue line corresponds to a tone. Up to six notes can be placed. Each click switches between black (one time unit), white (two time units), or pause (four time units).",
+					"**Example:** when (event, for instance pressing the forward button), then play a melody illustrating the start."
+				],
+				"notes with speed": [
+					"# Play melody with tempo",
+					"![notes with speed](vpl:block:notes-with-speed)",
+					"**Actuator:** speaker",
+					"**Action:** this action starts playing a melody with Thymio.",
+					"**Parameters:** each blue line corresponds to a tone and the programmer can choose the position of a note by clicking below or above it. The duration of the note can also be changed by clicking on it. The duration is as following: a black note has a duration of one unit, a white of two units, and an empty place is a silence during 4 units of time.",
+					"The top slider allows to set the tempo of the melody, which is the speed at which it will be played.",
+					"**Example:** when (event, for instance pressing the forward button), then play a fast melody illustrating the start."
 				],
 				"play": [
-					"# Play a .wav file",
+					"# Play a .wav file from SD card",
 					"![play](vpl:block:play)",
-					"Type: action block",
-					"..."
+					"**Actuator:** speaker",
+					"**Action:** this action starts playing a sound which is saved on a micro-SD card inserted in Thymio.",
+					"**Parameters:** Sounds on the micro-SD card need to be named *Px.wav* where x is the number entered in this icon. For instance this icon will play *P1.wav*.",
+					"Sounds on the micro-SD card need to be recorded at 8000Hz, mono, non compressed, unsigned 8-bit PCM, wav format. The micro-SD card needs to be formatted in Fat32.",
+					"**Example:** when (event, for instance pressing the forward button), then play a sound illustrating the start."
 				],
 				"play stop": [
 					"# Stop playing a .wav file",
 					"![play stop](vpl:block:play-stop)",
-					"Type: action block",
-					"..."
+					"**Actuator: speaker",
+					"**Action:** this action stops a sound playing from the micro-SD card inserted in Thymio.",
+					"**Example:** when (event, for instance the timer is over), then stop playing the sound illustrating the robot waiting."
 				],
-				"set state": [
-					"# Set state (4 bits)",
-					"![set state](vpl:block:set-state)",
-					"Type: action block",
-					"..."
+				"set state 256": [
+					"# Set 8-LEDs state",
+					"![set state 256](vpl:block:set-state-256)",
+					"**Actuators:** 8 circular LEDs around Thymio buttons.",
+					"**Action:** this action sets on or off each LED.",
+					"**Parameters:**  every LED is set on (yellow) or off (dark grey).",
+					"**Example:** when (event, for instance forward button pushed), then switch on the front LED and switch off all others."
 				],
-				"toggle state": [
-					"# Toggle state (4 bits)",
-					"![toggle state](vpl:block:toggle-state)",
-					"Type: action block",
-					"..."
-				],
-				"set state 8": [
-					"# Set state (8 values)",
-					"![set state 8](vpl:block:set-state-8)",
-					"Type: action block",
-					"..."
-				],
-				"change state 8": [
-					"# Set to next or previous state (8 values)",
-					"![change state 8](vpl:block:change-state-8)",
-					"Type: action block",
-					"..."
-				],
-				"set counter": [
-					"# Set counter",
-					"![set counter](vpl:block:set-counter)",
-					"Type: action block",
-					"..."
+				"set state 256 with mask": [
+					"# Set some of the 8 LEDs",
+					"![set state 256 with mask](vpl:block:set-state-256-with-mask)",
+					"**Actuators:** 8 circular LEDs around Thymio buttons.",
+					"**Action:** this action sets on or off some of the LEDs which are placed in circle around the Thymio buttons.",
+					"**Parameters:** every led can be set on (yellow), off (dark grey), or left unchanged (light grey).",
+					"**Example:** when (event, for instance left button pushed), then switch on some LEDs on the left and switch off three back-right LED, and ignore the front-right LEDs."
 				],
 				"set timer": [
-					"# Start timer (0-4 sec)",
+					"# Start timer",
 					"![set timer](vpl:block:set-timer)",
-					"Type: action block",
-					"..."
-				],
+					"**This action does not use a specific actuator of the Thymio.** It sets a timer inside Thymio.",
+					"**Action:** this action sets a timer. Once the time set on the timer has elapsed, an event is triggered.",
+					"**Parameters:** the left digit allows to set the seconds and the right one to set the tenths of second.",
+					"**Example:** when (event, for instance front button pushed), then set the timer to 2 seconds and 0 tenths. Two seconds later, a *Timer Up* event occurs."				],
 				"set timer log": [
 					"# Set timer (0.1-10 sec)",
 					"![set timer log](vpl:block:set-timer-log)",
@@ -8916,6 +8946,22 @@ sim-playground {
 					"![picture comment](vpl:block:picture-comment)",
 					"Type: comment block",
 					"..."
+				],
+				"arithmetic": [
+					"# Compute",
+					"![arithmetic](vpl:block:arithmetic)",
+					"**This action does not use a specific actuator of the Thymio.** It sets a variable inside Thymio.",
+					"**Action:** this action performs mathematical operations on the velue represented by the 8 circular yellow LEDs.",
+					"**Parameters:** on the left the programmer can choose among a list of operators:",
+					"= Set to",
+					"+ Add",
+					"- Subtract",
+					"x Multiply",
+					"÷ Divide",
+					"On the right the programmer can choose an 8-bit constant value from 0 to 255. This value is represented on the circular segments using a binary representation with the bit 0 on the top, the bit 1 on the top right, the bit 2 on the right and so on around the circle; the value stored being 1 as dark blue and 0 as light blue.",
+					"The final operation consist in applying the chosen operator with the constant value as second argument. For instance “x 4” will multiply by four the value displayed with the yellow LEDs.",
+					"Depending on the operation, the result can be greater than 255 or less than 0. In this case the result can be saturated to 0 or 255, or can go through this limit and behave in a circular way. If not saturated, the operation 254 + 4 would result in 2, as when passing 255, the variable continues from 0.",
+					"The switch on the top left of the circle of LEDs allows enabling and disabling the saturation of the binary number. When the lever is placed between the two LEDs, the saturation is enabled (254+4=255). When the lever is outside the circle, the saturation is disabled (254+4=2)."
 				]
 			}
 		}
