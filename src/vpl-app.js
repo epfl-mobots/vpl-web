@@ -303,7 +303,31 @@ A3a.vpl.Application.prototype.setHelpForCurrentAppState = function () {
 	}
 };
 
-/** Generate json help skeleton for blocks
+/** Download json block list based on current settings
+	@return {void}
+*/
+A3a.vpl.Application.prototype.generateBlockList = function () {
+	/** @type {Array.<string>} */
+	var blockList = [];
+
+	A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
+		if (blockTemplate.type === A3a.vpl.blockType.event ||
+			blockTemplate.type === A3a.vpl.blockType.state) {
+			blockList.push(blockTemplate.name);
+		}
+	});
+	A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
+		if (blockTemplate.type === A3a.vpl.blockType.action ||
+				blockTemplate.type === A3a.vpl.blockType.comment) {
+			blockList.push(blockTemplate.name);
+		}
+	});
+
+	var str = JSON.stringify(blockList, null, "\t");
+	A3a.vpl.Program.downloadText(str, "block-list.json", "application/json");
+};
+
+/** Download json help skeleton for blocks
 	@param {string=} language
 	@return {void}
 */
