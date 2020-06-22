@@ -17,16 +17,6 @@ code generation.
 
 */
 
-/** @const */
-A3a.vpl.BlockTemplate.initStatesDecl8 =
-	"var state[8]\n";
-
-/** @const */
-A3a.vpl.BlockTemplate.initStatesInit8 =
-	"state = [0, 0, 0, 0, 0, 0, 0, 0]\n";
-
-A3a.vpl.BlockTemplate.svgDict = {};
-
 /** Find the first "uri" property defined in "draw" array
 	@param {Object} aux block description in uiConfig
 	@return {string}
