@@ -250,10 +250,21 @@ A3a.vpl.Application.prototype.setAboutBoxContent = function (html) {
 	@return {void}
 */
 A3a.vpl.Application.prototype.setHelpContent = function (html) {
+	var app = this;
+	var saveBox = new CSSParser.VPL.Box();
+	saveBox.width = saveBox.height = 64;
+	var dims = A3a.vpl.Canvas.calcDims(16, 16);
+	var saveDataURL = A3a.vpl.Canvas.controlToDataURL(function (ctx, box, isPressed) {
+		(app.program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("vpl:save", ctx, dims, app.css, ["vpl", "top", "detached"], app.i18n, true, false, false, null);
+	}, saveBox.width, saveBox.height, saveBox, dims, 1);
+
+	var saveEl = '<img src="' + saveDataURL.url +
+		'" width=' + saveDataURL.width + ' height=' + saveDataURL.height + '>';
 	this.helpBox = html
 		? new A3a.vpl.HTMLPanel(html, false, [
 			{
 				title: "\u21d3",
+				htmlElement: saveEl,
 				fun: function () {
 					A3a.vpl.Program.downloadText(/** @type {string} */(html),
 						"doc.html", "text/html");

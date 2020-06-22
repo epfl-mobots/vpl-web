@@ -1,5 +1,5 @@
 /*
-	Copyright 2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2019-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -19,7 +19,7 @@ Modal box for HTML content.
 	@constructor
 	@param {string} html html content
 	@param {boolean=} noCloseWidget true to suppress close widget
-	@param {Array.<{title:string,fun:function():void}>=} otherWidgets other widgets displayed on the top right
+	@param {Array.<{title:string,htmlElement:?string,fun:function():void}>=} otherWidgets other widgets displayed on the top right
 */
 A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets) {
 	this.html = html;
@@ -60,9 +60,18 @@ A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets) {
 
 	var self = this;
 	var left = 0;
-	var right = 0;
-	function addWidget(title, rightSide, fun) {
+	var right = 30;
+	function addWidget(title, htmlElement, rightSide, fun) {
 		var widget = document.createElement("div");
+		if (htmlElement != null) {
+			widget.innerHTML = htmlElement;
+		} else {
+			widget.textContent = title;
+			widget.style.font = "bold 30px sans-serif";
+			widget.style.textAlign = "left";
+			widget.style.padding = "5px";
+			widget.style.paddingLeft = "10px";
+		}
 		widget.style.position = "absolute";
 		widget.style.width = "32px";
 		widget.style.height = "32px";
@@ -74,11 +83,6 @@ A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets) {
 			widget.style.left = left.toString(10) + "px";
 			left += 40;
 		}
-		widget.textContent = title;
-		widget.style.font = "bold 30px sans-serif";
-		widget.style.textAlign = "left";
-		widget.style.padding = "5px";
-		widget.style.paddingLeft = "10px";
 		widget.addEventListener("click", function () {
 			fun();
 		}, false);
@@ -88,12 +92,13 @@ A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets) {
 	// widgets
 	if (!noCloseWidget) {
 		addWidget("\u00d7",	// times
+			null,
 			false,
 			function () { self.hide(); });
 	}
 	if (otherWidgets) {
 		otherWidgets.forEach(function (w) {
-			addWidget(w.title, true, w.fun);
+			addWidget(w.title, w.htmlElement, true, w.fun);
 		});
 	}
 };

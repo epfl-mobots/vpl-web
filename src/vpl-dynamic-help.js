@@ -174,9 +174,9 @@ A3a.vpl.DynamicHelp.prototype.generate = function (language, blocks, docTemplate
 			"img {float: left; margin-right: 10px; margin-bottom: 20px;}\n" +
 			"h1, h2 {clear: left;}\n" +
 			"</style>\n" +
-			"<div style='height: 100%; overflow-y: scroll;'>" +
+			"<body>\n" +
 			"BLOCKS" +
-			"</div>" +
+			"</body>\n" +
 			"</html>\n";
 	var html = "";
 	blocks.forEach(function (blockId) {
