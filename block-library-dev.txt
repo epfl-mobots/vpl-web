@@ -267,6 +267,11 @@ Example:
   ...
 }
 
+Block order
+-----------
+
+By default, all blocks defined in array "blocks" are available in that order, with event and state blocks on the left and action and remark blocks on the right, possibly filtered by the customization. Blocks can be reorder with a simple array of names in the property "blockList" of ui.json. If this property is defined, missing blocks are totally ignored; they cannot even be used in programs loaded from files. Blocks with type "hidden" are always available internally and must not be listed in blockList array.
+
 Backtick-expressions
 --------------------
 

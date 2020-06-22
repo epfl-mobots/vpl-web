@@ -213,6 +213,7 @@ function vplSetup(gui, rootDir) {
 				if (overlay.hasOwnProperty(key)) {
 					switch (key) {
 					case "blocks":
+					case "blockList":
 					case "aeslImportRules":
 					case "buttons":
 					case "widgets":
@@ -337,6 +338,24 @@ function vplSetup(gui, rootDir) {
 					window["console"] && window["console"]["error"](e);
 				}
 			}
+		}
+		if (gui["blockList"]) {
+			// reorder blocks according to list of names
+			/** @type{Array.<A3a.vpl.BlockTemplate>} */
+			var newLib = [];
+			// keep special blocks
+			A3a.vpl.BlockTemplate.lib.forEach(function (template) {
+				if (template.type === A3a.vpl.blockType.hidden) {
+					newLib.push(template);
+				}
+			});
+			// add blocks in the order specified by blockList
+			gui["blockList"].forEach(function (name) {
+				var template = A3a.vpl.BlockTemplate.findByName(name);
+				newLib.push(template);
+			});
+			// replace original lib
+			A3a.vpl.BlockTemplate.lib = newLib;
 		}
 		if (gui["aeslImportRules"] && gui["aeslImportRules"].length > 0) {
 			A3a.vpl.BlockTemplate.aeslImportRules = gui["aeslImportRules"]
