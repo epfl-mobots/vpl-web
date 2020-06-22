@@ -175,7 +175,9 @@ A3a.vpl.DynamicHelp.prototype.generate = function (language, blocks, docTemplate
 			"h1, h2 {clear: left;}\n" +
 			"</style>\n" +
 			"<body>\n" +
+			"<div style='padding: 2em; max-width: 60em; margin-left: auto; margin-right: auto;'>\n" +
 			"BLOCKS" +
+			"</div>\n" +
 			"</body>\n" +
 			"</html>\n";
 	var html = "";

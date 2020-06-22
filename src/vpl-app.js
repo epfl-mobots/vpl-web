@@ -270,7 +270,7 @@ A3a.vpl.Application.prototype.setHelpContent = function (html) {
 						"doc.html", "text/html");
 				}
 			}
-		])
+		], true)
 		: null;
 };
 

@@ -20,8 +20,9 @@ Modal box for HTML content.
 	@param {string} html html content
 	@param {boolean=} noCloseWidget true to suppress close widget
 	@param {Array.<{title:string,htmlElement:?string,fun:function():void}>=} otherWidgets other widgets displayed on the top right
+	@param {boolean=} scroll
 */
-A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets) {
+A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets, scroll) {
 	this.html = html;
 
 	this.backgroundDiv = document.createElement("div");
@@ -47,12 +48,15 @@ A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets) {
 	var container = document.createElement("div");
 	container.style.width = "100%";
 	container.style.height = "100%";
-	container.style.overflowY = "scroll";
+	if (scroll) {
+		container.style.overflowY = "scroll";
+	}
 	this.panelDiv.appendChild(container);
 
 	this.div = document.createElement("div");
 	this.div.style.backgroundColor = "white";
-	this.div.style.padding = "2em";
+	this.div.style.width = "100%";
+	this.div.style.height = "100%";
 	container.appendChild(this.div);
 
 	/** @type {Array.<Element>} */
