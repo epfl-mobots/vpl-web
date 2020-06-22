@@ -1,0 +1,20 @@
+{
+	"i18n": {
+		"en": {
+			"Duplicate action blocks": "Duplicate action blocks",
+			"Rules with same events": "Rules with same events",
+			"Missing action block": "Missing action block",
+			"Missing event block": "Missing event block",
+			"No button specified": "No button specified",
+			"No ground sensor specified": "No ground sensor specified",
+			"No proximity sensor specified": "No proximity sensor specified",
+			"No sensor specified": "No sensor specified",
+			"Open program file": "Open program file",
+			"OK": "OK",
+			"Cancel": "Cancel",
+			"Open ground image file": "Open ground image file",
+			"Open height image file": "Open height image file",
+			"Open obstacle SVG file": "Open obstacle SVG file"
+		}
+	}
+}
