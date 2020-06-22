@@ -21,10 +21,16 @@ Markdown syntax currently implemented:
 
 # title (block or button name etc.)
 ## subtitle
+### subsubtitle
 [text](url)
 ![text](url)
 *emphasis* or _emphasis_
 **strong** or __strong__
+
+css:
+p, h1, h2, h3: class "md"
+p with a single img: classes "md parimg"
+other elements: strong, em, img, a
 
 */
 
@@ -113,7 +119,10 @@ A3a.vpl.DynamicHelp.prototype.convertToHTML = function (md) {
 
 		// titles
 		var parEl = "p";
-		if (/^##/.test(line)) {
+		if (/^###/.test(line)) {
+			line = line.slice(2);
+			parEl = "h4";
+		} else if (/^##/.test(line)) {
 			line = line.slice(2);
 			parEl = "h3";
 		} else if (/^#/.test(line)) {
@@ -153,7 +162,12 @@ A3a.vpl.DynamicHelp.prototype.convertToHTML = function (md) {
 		line = line.replace(/\[([^\]]*)\]\(([^)]*)\)/g, "<a href=\"$2\">$1</a>");
 
 		// add paragraph
-		html += "<" + parEl + ">" + line + "</" + parEl + ">\n";
+		if (parEl === "p" && /^<img /.test(line) && !/^.+<img/.test(line)) {
+			// special case for paragraph with one image: class=parimg
+			html += '<p class="md parimg">' + line + "</" + parEl + ">\n";
+		} else {
+			html += "<" + parEl + ' class="md">' + line + "</" + parEl + ">\n";
+		}
 	}, this);
 
 	return html;
@@ -168,11 +182,16 @@ A3a.vpl.DynamicHelp.prototype.convertToHTML = function (md) {
 	@return {string}
 */
 A3a.vpl.DynamicHelp.prototype.generate = function (language, blocks, docTemplate) {
-	docTemplate = docTemplate ||
-		"<html>\n" +
+	docTemplate = docTemplate
+	 	? "<div style='padding: 2em; max-width: 60em; margin-left: auto; margin-right: auto;'>\n" +
+			docTemplate +
+			"</div>\n"
+		: "<html>\n" +
 			"<style>\n" +
 			"img {float: left; margin-right: 10px; margin-bottom: 20px;}\n" +
 			"h1, h2 {clear: left;}\n" +
+			"p {margin-left: 120px}\n" +
+			"p.parimg {margin-left: 0}\n" +
 			"</style>\n" +
 			"<body>\n" +
 			"<div style='padding: 2em; max-width: 60em; margin-left: auto; margin-right: auto;'>\n" +
