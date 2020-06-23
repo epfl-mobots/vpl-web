@@ -187,7 +187,7 @@ A3a.vpl.ControlBar.prototype.calcLayout = function (toolbarBox, itemBoxes, separ
 	@param {?function(string):void=} doOver
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes, disabled, doOver) {
+A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes, doOver) {
 	var self = this;
 	this.canvas.addDecoration(function (ctx) {
 		toolbarBox.drawAt(ctx, self.x, self.y);
