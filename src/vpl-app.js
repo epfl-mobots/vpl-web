@@ -73,6 +73,8 @@ A3a.vpl.Application = function (canvasEl) {
 		"vpl:stop",
 		"vpl:debug",
 		"vpl:robot",
+		"!space",
+		"vpl:flash",
 		"!stretch",
 		"vpl:sim",
 		"vpl:text",

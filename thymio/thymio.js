@@ -1,3 +1,5 @@
+/* patched manually by YP to add flashProgram method */
+
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -95,7 +97,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(Buffer) {function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+/* WEBPACK VAR INJECTION */(function(Buffer) {function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var FlexBuffers = function () {
   var _scriptDir = typeof document !== 'undefined' && document.currentScript ? document.currentScript.src : undefined;
@@ -4249,6 +4251,10 @@ function (_super) {
 
   Node.prototype.runProgram = function () {
     return this._client._set_vm_execution_state(this._id, _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.VMExecutionStateCommand.Run);
+  };
+
+  Node.prototype.flashProgram = function () {
+    return this._client._set_vm_execution_state(this._id, _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.VMExecutionStateCommand.WriteProgramToDeviceMemory);
   };
 
   Node.prototype.setVariables = function (map) {
@@ -14531,7 +14537,7 @@ function fromByteArray(uint8) {
 /* WEBPACK VAR INJECTION */(function(global) {/*!
  * The buffer module from node.js, for the browser.
  *
- * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @author   Feross Aboukhadijeh <http://feross.org>
  * @license  MIT
  */
 
@@ -17362,7 +17368,7 @@ module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
 /***/ (function(module, exports) {
 
 var core = module.exports = {
-  version: '2.6.5'
+  version: '2.6.11'
 };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
@@ -18181,7 +18187,7 @@ module.exports = function isInteger(it) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 module.exports = function (it) {
   return _typeof(it) === 'object' ? it !== null : typeof it === 'function';
@@ -18579,7 +18585,7 @@ module.exports = Math.sign || function sign(x) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var META = __webpack_require__(/*! ./_uid */ "./node_modules/core-js/modules/_uid.js")('meta');
 
@@ -18662,7 +18668,7 @@ var meta = module.exports = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var Map = __webpack_require__(/*! ./es6.map */ "./node_modules/core-js/modules/es6.map.js");
 
@@ -18867,6 +18873,8 @@ module.exports.f = function (C) {
 "use strict";
  // 19.1.2.1 Object.assign(target, source, ...)
 
+var DESCRIPTORS = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/modules/_descriptors.js");
+
 var getKeys = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/modules/_object-keys.js");
 
 var gOPS = __webpack_require__(/*! ./_object-gops */ "./node_modules/core-js/modules/_object-gops.js");
@@ -18906,7 +18914,8 @@ module.exports = !$assign || __webpack_require__(/*! ./_fails */ "./node_modules
     var key;
 
     while (length > j) {
-      if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
+      key = keys[j++];
+      if (!DESCRIPTORS || isEnum.call(S, key)) T[key] = S[key];
     }
   }
 
@@ -19104,7 +19113,7 @@ exports.f = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/mo
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
 var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/modules/_to-iobject.js");
@@ -19284,6 +19293,8 @@ module.exports = function (KEY, exec) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+var DESCRIPTORS = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/modules/_descriptors.js");
+
 var getKeys = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/modules/_object-keys.js");
 
 var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/modules/_to-iobject.js");
@@ -19300,7 +19311,9 @@ module.exports = function (isEntries) {
     var key;
 
     while (length > i) {
-      if (isEnum.call(O, key = keys[i++])) {
+      key = keys[i++];
+
+      if (!DESCRIPTORS || isEnum.call(O, key)) {
         result.push(isEntries ? [key, O[key]] : O[key]);
       }
     }
@@ -19516,7 +19529,7 @@ __webpack_require__(/*! ./_core */ "./node_modules/core-js/modules/_core.js").in
 "use strict";
 
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var classof = __webpack_require__(/*! ./_classof */ "./node_modules/core-js/modules/_classof.js");
 
@@ -20343,7 +20356,7 @@ module.exports = function (it, S) {
 "use strict";
 
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 if (__webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/modules/_descriptors.js")) {
   var LIBRARY = __webpack_require__(/*! ./_library */ "./node_modules/core-js/modules/_library.js");
@@ -22727,7 +22740,7 @@ var Base = $Number;
 var proto = $Number.prototype; // Opera ~12 has broken Object#toString
 
 var BROKEN_COF = cof(__webpack_require__(/*! ./_object-create */ "./node_modules/core-js/modules/_object-create.js")(proto)) == NUMBER;
-var TRIM = 'trim' in String.prototype; // 7.1.3 ToNumber(argument)
+var TRIM = ('trim' in String.prototype); // 7.1.3 ToNumber(argument)
 
 var toNumber = function toNumber(argument) {
   var it = toPrimitive(argument, false);
@@ -25394,7 +25407,7 @@ __webpack_require__(/*! ./_string-trim */ "./node_modules/core-js/modules/_strin
 "use strict";
  // ECMAScript 6 symbols shim
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/modules/_global.js");
 
@@ -25430,6 +25443,8 @@ var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/m
 
 var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/modules/_is-object.js");
 
+var toObject = __webpack_require__(/*! ./_to-object */ "./node_modules/core-js/modules/_to-object.js");
+
 var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/modules/_to-iobject.js");
 
 var toPrimitive = __webpack_require__(/*! ./_to-primitive */ "./node_modules/core-js/modules/_to-primitive.js");
@@ -25441,6 +25456,8 @@ var _create = __webpack_require__(/*! ./_object-create */ "./node_modules/core-j
 var gOPNExt = __webpack_require__(/*! ./_object-gopn-ext */ "./node_modules/core-js/modules/_object-gopn-ext.js");
 
 var $GOPD = __webpack_require__(/*! ./_object-gopd */ "./node_modules/core-js/modules/_object-gopd.js");
+
+var $GOPS = __webpack_require__(/*! ./_object-gops */ "./node_modules/core-js/modules/_object-gops.js");
 
 var $DP = __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/modules/_object-dp.js");
 
@@ -25462,7 +25479,7 @@ var SymbolRegistry = shared('symbol-registry');
 var AllSymbols = shared('symbols');
 var OPSymbols = shared('op-symbols');
 var ObjectProto = Object[PROTOTYPE];
-var USE_NATIVE = typeof $Symbol == 'function';
+var USE_NATIVE = typeof $Symbol == 'function' && !!$GOPS.f;
 var QObject = global.QObject; // Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
 
 var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild; // fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
@@ -25604,7 +25621,7 @@ if (!USE_NATIVE) {
   $DP.f = $defineProperty;
   __webpack_require__(/*! ./_object-gopn */ "./node_modules/core-js/modules/_object-gopn.js").f = gOPNExt.f = $getOwnPropertyNames;
   __webpack_require__(/*! ./_object-pie */ "./node_modules/core-js/modules/_object-pie.js").f = $propertyIsEnumerable;
-  __webpack_require__(/*! ./_object-gops */ "./node_modules/core-js/modules/_object-gops.js").f = $getOwnPropertySymbols;
+  $GOPS.f = $getOwnPropertySymbols;
 
   if (DESCRIPTORS && !__webpack_require__(/*! ./_library */ "./node_modules/core-js/modules/_library.js")) {
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
@@ -25661,6 +25678,16 @@ $export($export.S + $export.F * !USE_NATIVE, 'Object', {
   getOwnPropertyNames: $getOwnPropertyNames,
   // 19.1.2.8 Object.getOwnPropertySymbols(O)
   getOwnPropertySymbols: $getOwnPropertySymbols
+}); // Chrome 38 and 39 `Object.getOwnPropertySymbols` fails on primitives
+// https://bugs.chromium.org/p/v8/issues/detail?id=3443
+
+var FAILS_ON_PRIMITIVES = $fails(function () {
+  $GOPS.f(1);
+});
+$export($export.S + $export.F * FAILS_ON_PRIMITIVES, 'Object', {
+  getOwnPropertySymbols: function getOwnPropertySymbols(it) {
+    return $GOPS.f(toObject(it));
+  }
 }); // 24.3.2 JSON.stringify(value [, replacer [, space]])
 
 $JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function () {
@@ -28148,6 +28175,12 @@ flatbuffers.SIZEOF_INT = 4;
 flatbuffers.FILE_IDENTIFIER_LENGTH = 4;
 
 /**
+ * @type {number}
+ * @const
+ */
+flatbuffers.SIZE_PREFIX_LENGTH = 4;
+
+/**
  * @enum {number}
  */
 flatbuffers.Encoding = {
@@ -28203,7 +28236,7 @@ flatbuffers.Long = function(low, high) {
 /**
  * @param {number} low
  * @param {number} high
- * @returns {flatbuffers.Long}
+ * @returns {!flatbuffers.Long}
  */
 flatbuffers.Long.create = function(low, high) {
   // Special-case zero to avoid GC overhead for default values
@@ -28226,7 +28259,7 @@ flatbuffers.Long.prototype.equals = function(other) {
 };
 
 /**
- * @type {flatbuffers.Long}
+ * @type {!flatbuffers.Long}
  * @const
  */
 flatbuffers.Long.ZERO = new flatbuffers.Long(0, 0);
@@ -28364,7 +28397,7 @@ flatbuffers.Builder.prototype.dataBuffer = function() {
  * Get the bytes representing the FlatBuffer. Only call this after you've
  * called finish().
  *
- * @returns {Uint8Array}
+ * @returns {!Uint8Array}
  */
 flatbuffers.Builder.prototype.asUint8Array = function() {
   return this.bb.bytes().subarray(this.bb.position(), this.bb.position() + this.offset());
@@ -28649,7 +28682,7 @@ flatbuffers.Builder.prototype.offset = function() {
  * the end of the new buffer (since we build the buffer backwards).
  *
  * @param {flatbuffers.ByteBuffer} bb The current buffer with the existing data
- * @returns {flatbuffers.ByteBuffer} A new byte buffer with the old data copied
+ * @returns {!flatbuffers.ByteBuffer} A new byte buffer with the old data copied
  * to it. The data is located at the end of the buffer.
  *
  * uint8Array.set() formally takes {Array<number>|ArrayBufferView}, so to pass
@@ -28775,12 +28808,14 @@ outer_loop:
  *
  * @param {flatbuffers.Offset} root_table
  * @param {string=} opt_file_identifier
+ * @param {boolean=} opt_size_prefix
  */
-flatbuffers.Builder.prototype.finish = function(root_table, opt_file_identifier) {
+flatbuffers.Builder.prototype.finish = function(root_table, opt_file_identifier, opt_size_prefix) {
+  var size_prefix = opt_size_prefix ? flatbuffers.SIZE_PREFIX_LENGTH : 0;
   if (opt_file_identifier) {
     var file_identifier = opt_file_identifier;
     this.prep(this.minalign, flatbuffers.SIZEOF_INT +
-      flatbuffers.FILE_IDENTIFIER_LENGTH);
+      flatbuffers.FILE_IDENTIFIER_LENGTH + size_prefix);
     if (file_identifier.length != flatbuffers.FILE_IDENTIFIER_LENGTH) {
       throw new Error('FlatBuffers: file identifier must be length ' +
         flatbuffers.FILE_IDENTIFIER_LENGTH);
@@ -28789,9 +28824,22 @@ flatbuffers.Builder.prototype.finish = function(root_table, opt_file_identifier)
       this.writeInt8(file_identifier.charCodeAt(i));
     }
   }
-  this.prep(this.minalign, flatbuffers.SIZEOF_INT);
+  this.prep(this.minalign, flatbuffers.SIZEOF_INT + size_prefix);
   this.addOffset(root_table);
+  if (size_prefix) {
+    this.addInt32(this.bb.capacity() - this.space);
+  }
   this.bb.setPosition(this.space);
+};
+
+/**
+ * Finalize a size prefixed buffer, pointing to the given `root_table`.
+ *
+ * @param {flatbuffers.Offset} root_table
+ * @param {string=} opt_file_identifier
+ */
+flatbuffers.Builder.prototype.finishSizePrefixed = function (root_table, opt_file_identifier) {
+  this.finish(root_table, opt_file_identifier, true);
 };
 
 /// @cond FLATBUFFERS_INTERNAL
@@ -28903,7 +28951,7 @@ flatbuffers.Builder.prototype.createString = function(s) {
  *
  * @param {number} low
  * @param {number} high
- * @returns {flatbuffers.Long}
+ * @returns {!flatbuffers.Long}
  */
 flatbuffers.Builder.prototype.createLong = function(low, high) {
   return flatbuffers.Long.create(low, high);
@@ -28934,7 +28982,7 @@ flatbuffers.ByteBuffer = function(bytes) {
  * Create and allocate a new ByteBuffer with a given size.
  *
  * @param {number} byte_size
- * @returns {flatbuffers.ByteBuffer}
+ * @returns {!flatbuffers.ByteBuffer}
  */
 flatbuffers.ByteBuffer.allocate = function(byte_size) {
   return new flatbuffers.ByteBuffer(new Uint8Array(byte_size));
@@ -29030,7 +29078,7 @@ flatbuffers.ByteBuffer.prototype.readUint32 = function(offset) {
 
 /**
  * @param {number} offset
- * @returns {flatbuffers.Long}
+ * @returns {!flatbuffers.Long}
  */
 flatbuffers.ByteBuffer.prototype.readInt64 = function(offset) {
   return new flatbuffers.Long(this.readInt32(offset), this.readInt32(offset + 4));
@@ -29038,7 +29086,7 @@ flatbuffers.ByteBuffer.prototype.readInt64 = function(offset) {
 
 /**
  * @param {number} offset
- * @returns {flatbuffers.Long}
+ * @returns {!flatbuffers.Long}
  */
 flatbuffers.ByteBuffer.prototype.readUint64 = function(offset) {
   return new flatbuffers.Long(this.readUint32(offset), this.readUint32(offset + 4));
@@ -29213,7 +29261,7 @@ flatbuffers.ByteBuffer.prototype.__union = function(t, offset) {
  *
  * @param {number} offset
  * @param {flatbuffers.Encoding=} opt_encoding Defaults to UTF16_STRING
- * @returns {string|Uint8Array}
+ * @returns {string|!Uint8Array}
  */
 flatbuffers.ByteBuffer.prototype.__string = function(offset, opt_encoding) {
   offset += this.readInt32(offset);
@@ -29324,7 +29372,7 @@ flatbuffers.ByteBuffer.prototype.__has_identifier = function(ident) {
  *
  * @param {number} low
  * @param {number} high
- * @returns {flatbuffers.Long}
+ * @returns {!flatbuffers.Long}
  */
 flatbuffers.ByteBuffer.prototype.createLong = function(low, high) {
   return flatbuffers.Long.create(low, high);
@@ -29486,7 +29534,7 @@ module.exports = ws;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;function _typeof(obj){if(typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"){_typeof=function _typeof(obj){return typeof obj;};}else{_typeof=function _typeof(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol&&obj!==Symbol.prototype?"symbol":typeof obj;};}return _typeof(obj);}/**
+/* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;function _typeof(obj){"@babel/helpers - typeof";if(typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"){_typeof=function _typeof(obj){return typeof obj;};}else{_typeof=function _typeof(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol&&obj!==Symbol.prototype?"symbol":typeof obj;};}return _typeof(obj);}/**
  * @license
  * Lodash <https://lodash.com/>
  * Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
@@ -30080,8 +30128,8 @@ return freeProcess&&freeProcess.binding&&freeProcess.binding('util');}catch(e){}
      * The function whose prototype chain sequence wrappers inherit from.
      *
      * @private
-     */function baseLodash(){}// No operation performed.
-/**
+     */function baseLodash(){// No operation performed.
+}/**
      * The base constructor for creating `lodash` wrapper objects.
      *
      * @private
@@ -38293,8 +38341,8 @@ result.source=source;if(isError(result)){throw result;}return result;}/**
      *
      * _.times(2, _.noop);
      * // => [undefined, undefined]
-     */function noop(){}// No operation performed.
-/**
+     */function noop(){// No operation performed.
+}/**
      * Creates a function that gets the argument at index `n`. If `n` is negative,
      * the nth argument from the end is returned.
      *
@@ -38938,7 +38986,7 @@ module.exports = __webpack_amd_options__;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 var g; // This works in non-strict mode
 
@@ -39005,6 +39053,12 @@ module.exports = function (module) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @mobsya/thymio-api */ "./node_modules/@mobsya/thymio-api/dist/thymio.js");
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -39069,13 +39123,9 @@ window.TDM = function (url, options) {
   //      * busy         : The node is locked by someone else.
   //      * disconnected : The node is gone
 
-  client.onNodesChanged =
-  /*#__PURE__*/
-  function () {
-    var _ref = _asyncToGenerator(
-    /*#__PURE__*/
-    regeneratorRuntime.mark(function _callee(nodes) {
-      var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, node;
+  client.onNodesChanged = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(nodes) {
+      var _iterator, _step, node;
 
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
@@ -39099,19 +39149,18 @@ window.TDM = function (url, options) {
               _context.prev = 1;
 
               if (!options.uuid) {
-                _context.next = 46;
+                _context.next = 37;
                 break;
               }
 
-              _iteratorNormalCompletion = true;
-              _didIteratorError = false;
-              _iteratorError = undefined;
-              _context.prev = 6;
-              _iterator = nodes[Symbol.iterator]();
+              _iterator = _createForOfIteratorHelper(nodes);
+              _context.prev = 4;
 
-            case 8:
-              if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-                _context.next = 30;
+              _iterator.s();
+
+            case 6:
+              if ((_step = _iterator.n()).done) {
+                _context.next = 27;
                 break;
               }
 
@@ -39124,39 +39173,39 @@ window.TDM = function (url, options) {
               }
 
               if (!((!self.selectedNode || self.selectedNode.status != _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__["NodeStatus"].ready) && node.status == _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__["NodeStatus"].available && options.uuid && (options.uuid === "auto" || node.id.toString() === options.uuid))) {
-                _context.next = 24;
+                _context.next = 22;
                 break;
               }
 
-              _context.prev = 12;
+              _context.prev = 10;
               self.selectedNode = node;
               console.log("Locking ".concat(node.id)); // Lock (take ownership) of the node. We cannot mutate a node (send code to it), until we have a lock on it
               // Once locked, a node will appear busy / unavailable to other clients until we close the connection or call `unlock` explicitely
               // We can lock as many nodes as we want
 
-              _context.next = 17;
+              _context.next = 15;
               return node.lock();
 
-            case 17:
+            case 15:
               console.log("Node locked");
               options.change && options.change(true);
-              _context.next = 24;
+              _context.next = 22;
               break;
 
-            case 21:
-              _context.prev = 21;
-              _context.t0 = _context["catch"](12);
+            case 19:
+              _context.prev = 19;
+              _context.t0 = _context["catch"](10);
               console.log("Unable to lock ".concat(node.id, " (").concat(node.name, ")"));
 
-            case 24:
+            case 22:
               if (self.selectedNode) {
-                _context.next = 26;
+                _context.next = 24;
                 break;
               }
 
-              return _context.abrupt("continue", 27);
+              return _context.abrupt("continue", 25);
 
-            case 26:
+            case 24:
               if (options.variables) {
                 if (options.variables === "auto") {
                   self.selectedNode.onVariablesChanged = function (vars) {
@@ -39178,67 +39227,49 @@ window.TDM = function (url, options) {
                 }
               }
 
-            case 27:
-              _iteratorNormalCompletion = true;
-              _context.next = 8;
+            case 25:
+              _context.next = 6;
               break;
 
-            case 30:
-              _context.next = 36;
+            case 27:
+              _context.next = 32;
               break;
+
+            case 29:
+              _context.prev = 29;
+              _context.t1 = _context["catch"](4);
+
+              _iterator.e(_context.t1);
 
             case 32:
               _context.prev = 32;
-              _context.t1 = _context["catch"](6);
-              _didIteratorError = true;
-              _iteratorError = _context.t1;
 
-            case 36:
-              _context.prev = 36;
-              _context.prev = 37;
+              _iterator.f();
 
-              if (!_iteratorNormalCompletion && _iterator.return != null) {
-                _iterator.return();
-              }
+              return _context.finish(32);
 
-            case 39:
-              _context.prev = 39;
-
-              if (!_didIteratorError) {
-                _context.next = 42;
-                break;
-              }
-
-              throw _iteratorError;
-
-            case 42:
-              return _context.finish(39);
-
-            case 43:
-              return _context.finish(36);
-
-            case 44:
-              _context.next = 47;
+            case 35:
+              _context.next = 38;
               break;
 
-            case 46:
+            case 37:
               options.change && options.change();
 
-            case 47:
-              _context.next = 52;
+            case 38:
+              _context.next = 43;
               break;
 
-            case 49:
-              _context.prev = 49;
+            case 40:
+              _context.prev = 40;
               _context.t2 = _context["catch"](1);
               console.log(_context.t2);
 
-            case 52:
+            case 43:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[1, 49], [6, 32, 36, 44], [12, 21], [37,, 39, 43]]);
+      }, _callee, null, [[1, 40], [4, 29, 32, 35], [10, 19]]);
     }));
 
     return function (_x) {
@@ -39246,11 +39277,7 @@ window.TDM = function (url, options) {
     };
   }();
 
-  client.onClose =
-  /*#__PURE__*/
-  _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee2() {
+  client.onClose = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -39305,12 +39332,8 @@ window.TDM.prototype.canRun = function () {
   return this.selectedNode != null && this.selectedNode.status == _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__["NodeStatus"].ready;
 };
 
-window.TDM.prototype.run =
-/*#__PURE__*/
-function () {
-  var _ref3 = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee3(program, success) {
+window.TDM.prototype.run = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(program, success) {
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
@@ -39354,52 +39377,93 @@ function () {
   };
 }();
 
-window.TDM.runOnNode =
-/*#__PURE__*/
-function () {
-  var _ref4 = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee4(node, program, success) {
+window.TDM.prototype.flash = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(program, success) {
     return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
             _context4.prev = 0;
-            _context4.next = 3;
-            return node.lock();
 
-          case 3:
-            _context4.next = 5;
-            return node.sendAsebaProgram(program);
+            if (!(this.selectedNode.status == _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__["NodeStatus"].ready)) {
+              _context4.next = 7;
+              break;
+            }
 
-          case 5:
-            _context4.next = 7;
-            return node.runProgram();
+            _context4.next = 4;
+            return this.selectedNode.sendAsebaProgram(program);
+
+          case 4:
+            _context4.next = 6;
+            return this.selectedNode.flashProgram();
+
+          case 6:
+            success && success();
 
           case 7:
-            _context4.next = 9;
-            return node.unlock();
-
-          case 9:
-            success && success();
-            _context4.next = 15;
+            _context4.next = 12;
             break;
 
-          case 12:
-            _context4.prev = 12;
+          case 9:
+            _context4.prev = 9;
             _context4.t0 = _context4["catch"](0);
             console.log(_context4.t0);
 
-          case 15:
+          case 12:
           case "end":
             return _context4.stop();
         }
       }
-    }, _callee4, null, [[0, 12]]);
+    }, _callee4, this, [[0, 9]]);
   }));
 
-  return function (_x4, _x5, _x6) {
+  return function (_x4, _x5) {
     return _ref4.apply(this, arguments);
+  };
+}();
+
+window.TDM.runOnNode = /*#__PURE__*/function () {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(node, program, success) {
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            _context5.prev = 0;
+            _context5.next = 3;
+            return node.lock();
+
+          case 3:
+            _context5.next = 5;
+            return node.sendAsebaProgram(program);
+
+          case 5:
+            _context5.next = 7;
+            return node.runProgram();
+
+          case 7:
+            _context5.next = 9;
+            return node.unlock();
+
+          case 9:
+            success && success();
+            _context5.next = 15;
+            break;
+
+          case 12:
+            _context5.prev = 12;
+            _context5.t0 = _context5["catch"](0);
+            console.log(_context5.t0);
+
+          case 15:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5, null, [[0, 12]]);
+  }));
+
+  return function (_x6, _x7, _x8) {
+    return _ref5.apply(this, arguments);
   };
 }();
 

@@ -17,6 +17,7 @@
 			"vpl:redo": "Rétablit le dernier changement annulé",
 			"vpl:run": "Exécute le programme",
 			"vpl:stop": "Arrête le programme",
+			"vpl:flash": "Écrit le programme dans la mémoire du robot",
 			"vpl:connected": "Témoin de connexion",
 			"vpl:robot": "Change de robot",
 			"vpl:sim": "Affiche le simulateur",

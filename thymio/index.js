@@ -18,7 +18,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 This is a Derivative Work.
-Changes by Mobots, EPFL, March-September 2019
+Changes by Mobots, EPFL, 2019-2020
 
 Build:
 1. git clone https://github.com/Mobsya/thymio-js-api-demo.git
@@ -185,6 +185,18 @@ window.TDM.prototype.run = async function (program, success) {
         if (this.selectedNode.status == NodeStatus.ready) {
             await this.selectedNode.sendAsebaProgram(program);
             await this.selectedNode.runProgram();
+            success && success();
+        }
+    } catch(e) {
+        console.log(e);
+    }
+};
+
+window.TDM.prototype.flash = async function (program, success) {
+    try {
+        if (this.selectedNode.status == NodeStatus.ready) {
+            await this.selectedNode.sendAsebaProgram(program);
+            await this.selectedNode.flashProgram();
             success && success();
         }
     } catch(e) {

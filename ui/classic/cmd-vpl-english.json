@@ -17,6 +17,7 @@
 			"vpl:redo": "Redo last undone program change",
 			"vpl:run": "Run program",
 			"vpl:stop": "Stop program",
+			"vpl:flash": "Write program to robot's flash memory",
 			"vpl:connected": "Connection status",
 			"vpl:robot": "Change robot",
 			"vpl:sim": "Simulator panel",

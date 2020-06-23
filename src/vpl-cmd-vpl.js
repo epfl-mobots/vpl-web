@@ -357,6 +357,23 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			{selected: true}
 		]
 	});
+	this.commands.add("vpl:flash", {
+		action: function (app, modifier) {
+			var code = app.program.getCode(app.program.currentLanguage);
+			app.robots[app.currentRobotIndex].runGlue.flash(code, app.program.currentLanguage);
+		},
+		isEnabled: function (app) {
+			if (app.program.noVPL || !app.robots[app.currentRobotIndex].runGlue.canFlash(app.program.currentLanguage)) {
+				return false;
+			}
+			var error = app.program.getError();
+ 			return error == null || error.isWarning;
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.currentRobotIndex >= 0 && app.robots[app.currentRobotIndex].runGlue.isFlashAvailable();
+		}
+	});
 	this.commands.add("vpl:connected", {
 		isSelected: function (app) {
 			return !app.program.noVPL && app.robots[app.currentRobotIndex].runGlue.isConnected();

@@ -25,6 +25,8 @@ robot connected via asebahttp or the Thymio Device Manager or the simulator.
 		isConnected: (function():boolean | undefined),
 		isEnabled: (function(string):boolean | undefined),
 		getName: (function():(string|null) | undefined),
+		flash: (function(string,string):void | undefined),
+		canFlash: (function(string):boolean | undefined),
 		languages: (Array.<string> | undefined),
 		preferredLanguage: (string | undefined),
 		state: (Object | undefined)
@@ -35,6 +37,8 @@ A3a.vpl.RunGlue = function (options) {
 	this.initFun = options && options.init ? options.init : null;
 	this.isConnectedFun = options && options.isConnected ? options.isConnected : null;
 	this.isEnabledFun = options && options.isEnabled ? options.isEnabled : null;
+	this.flashFun = options && options.flash ? options.flash : null;
+	this.canFlashFun = options && options.canFlash ? options.canFlash : null;
 	this.getNameFun = options && options.getName ? options.getName : null;
 	this.preferredLanguage = options && options.preferredLanguage ? options.preferredLanguage : "aseba";
 	this.languages = options && options.languages ? options.languages : [this.preferredLanguage];
@@ -82,5 +86,33 @@ A3a.vpl.RunGlue.prototype.init = function (language) {
 A3a.vpl.RunGlue.prototype.run = function (code, language) {
 	if (this.isEnabled(language)) {
 		this.runFun(language, code);
+	}
+};
+
+/** Check if the RunGlue interface allows flashing
+	@param {string} language
+	@return {boolean}
+*/
+A3a.vpl.RunGlue.prototype.isFlashAvailable = function (language) {
+	return this.flashFun != null;
+};
+
+/** Check if the RunGlue interface allows flashing for a specific language
+	@param {string} language
+	@return {boolean}
+*/
+A3a.vpl.RunGlue.prototype.canFlash = function (language) {
+	return this.flashFun != null && this.languages.indexOf(language) >= 0 &&
+		(this.canFlashFun == null || this.canFlashFun(language));
+};
+
+/** Flash source code to robot's flash memory
+	@param {string} code
+	@param {string} language
+	@return {void}
+*/
+A3a.vpl.RunGlue.prototype.flash = function (code, language) {
+	if (this.canFlash(language)) {
+		this.flashFun(language, code);
 	}
 };

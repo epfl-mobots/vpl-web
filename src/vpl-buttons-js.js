@@ -574,6 +574,23 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 				dims.controlSize * 0.8,
 				dims.controlSize * 0.1);
 		},
+		"vpl:flash": function () {
+			var s = dims.controlSize;
+			ctx.fillStyle = isPressed && isEnabled
+				? col.bgPr
+				: col.bg;
+			ctx.fillRect(0, 0, s, s);
+			ctx.save();
+			ctx.translate(s * 0.5, s * 0.3);
+			ctx.scale(0.4, 0.4);
+			drawRobot();
+			ctx.restore();
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.font = "bold " + Math.round(s / 3).toString(10) + "px sans-serif";
+			ctx.fillStyle = isEnabled ? col.fg : col.fgDis;
+			ctx.fillText("flash", s * 0.5, s * 0.75);
+		},
 		"vpl:connected": function () {
 			isEnabled = false;	// force disabled appearance
 			ctx.translate(0, 0.1 * dims.controlSize);

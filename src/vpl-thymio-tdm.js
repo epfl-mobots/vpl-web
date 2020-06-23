@@ -52,6 +52,12 @@ A3a.vpl.Application.prototype.installThymioTDM = function () {
 		getName: function () {
 			return "Thymio (TDM)";
 		},
+		flash: function (language, code) {
+			tdm["flash"](code);
+		},
+		canFlash: function (language) {
+			return language === "aseba" && app.robots[app.currentRobotIndex].runGlue.state != null && tdm["canRun"]();
+		},
 		preferredLanguage: "aseba",
 		languages: ["aseba"],
 		state: null
