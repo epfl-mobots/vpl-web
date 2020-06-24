@@ -300,6 +300,11 @@ A3a.vpl.Application.prototype.setHelpForCurrentAppState = function () {
 		var blocks = this.program.mode === A3a.vpl.mode.basic
 		 	? this.program.enabledBlocksBasic
 			: this.program.enabledBlocksAdvanced;
+		blocks.sort(function (a, b) {
+			var aIx = A3a.vpl.BlockTemplate.lib.indexOf(A3a.vpl.BlockTemplate.findByName(a));
+			var bIx = A3a.vpl.BlockTemplate.lib.indexOf(A3a.vpl.BlockTemplate.findByName(b));
+			return aIx < bIx ? -1 : aIx > bIx ? 1 : 0;
+		});
 		this.dynamicHelp.clearImageMapping();
 		var dims = A3a.vpl.Canvas.calcDims(100, 100);
 		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate) {
