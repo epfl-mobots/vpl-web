@@ -205,7 +205,8 @@ A3a.vpl.Program.prototype.invalidateCode = function () {
 	@return {void}
 */
 A3a.vpl.Program.prototype.saveStateBeforeChange = function () {
-	this.undoState.saveStateBeforeChange(this.exportToObject(), this.uploaded);
+	this.undoState.saveStateBeforeChange(this.exportToObject(),
+		{uploaded: this.uploaded});
 	this.code = {};
 	this.uploaded = false;
 };
@@ -217,9 +218,10 @@ A3a.vpl.Program.prototype.saveStateBeforeChange = function () {
 */
 A3a.vpl.Program.prototype.undo = function (updateFun) {
 	if (this.undoState.canUndo()) {
-		var markedState = this.undoState.undo(this.exportToObject(), this.uploaded);
+		var markedState = this.undoState.undo(this.exportToObject(),
+			{uploaded: this.uploaded});
 		this.importFromObject(/** @type {Object} */(markedState.state), updateFun);
-		this.uploaded = markedState.mark;
+		this.uploaded = markedState.marks.uploaded;
 		this.code = {};
 	}
 };
@@ -231,9 +233,10 @@ A3a.vpl.Program.prototype.undo = function (updateFun) {
 */
 A3a.vpl.Program.prototype.redo = function (updateFun) {
 	if (this.undoState.canRedo()) {
-		var markedState = this.undoState.redo(this.exportToObject(), this.uploaded);
+		var markedState = this.undoState.redo(this.exportToObject(),
+			{uploaded: this.uploaded});
 		this.importFromObject(/** @type {Object} */(markedState.state), updateFun);
-		this.uploaded = markedState.mark;
+		this.uploaded = markedState.marks.uploaded;
 		this.code = {};
 	}
 };
