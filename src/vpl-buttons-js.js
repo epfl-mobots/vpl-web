@@ -581,15 +581,24 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 				: col.bg;
 			ctx.fillRect(0, 0, s, s);
 			ctx.save();
-			ctx.translate(s * 0.5, s * 0.3);
+			ctx.translate(s * 0.6, s * 0.4);
 			ctx.scale(0.4, 0.4);
 			drawRobot();
 			ctx.restore();
+			ctx.save();
 			ctx.textAlign = "center";
 			ctx.textBaseline = "middle";
-			ctx.font = "bold " + Math.round(s / 3).toString(10) + "px sans-serif";
+			ctx.translate(s * 0.25, s * 0.4);
+			ctx.rotate(-Math.PI / 2);
+			ctx.font = "bold " + Math.round(s / 4).toString(10) + "px sans-serif";
 			ctx.fillStyle = isEnabled ? col.fg : col.fgDis;
-			ctx.fillText("flash", s * 0.5, s * 0.75);
+			ctx.fillText("flash", 0, 0);
+			ctx.restore();
+			ctx.fillStyle = isEnabled ? isSelected || isPressed ? col.fg : col.fgOff : col.fgDis;
+			ctx.fillRect(dims.controlSize * 0.1,
+				dims.controlSize * 0.8,
+				dims.controlSize * 0.8,
+				dims.controlSize * 0.1);
 		},
 		"vpl:connected": function () {
 			isEnabled = false;	// force disabled appearance

@@ -361,6 +361,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		action: function (app, modifier) {
 			var code = app.program.getCode(app.program.currentLanguage);
 			app.robots[app.currentRobotIndex].runGlue.flash(code, app.program.currentLanguage);
+			app.program.flashed = true;
 		},
 		isEnabled: function (app) {
 			if (app.program.noVPL || !app.robots[app.currentRobotIndex].runGlue.canFlash(app.program.currentLanguage)) {
@@ -368,6 +369,9 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			}
 			var error = app.program.getError();
  			return error == null || error.isWarning;
+		},
+		isSelected: function (app) {
+			return app.program.flashed;
 		},
 		object: this,
 		isAvailable: function (app) {

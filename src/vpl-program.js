@@ -35,6 +35,7 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.program = [];
 	this.uploaded = false;	// program matches what's running
 	this.notUploadedYet = true;	// program has never been loaded since last this.new()
+	this.flashed = false;	// program matches what's flashed
 	/** @type {?function():void} */
 	this.onUpdate = null;
 
@@ -206,9 +207,10 @@ A3a.vpl.Program.prototype.invalidateCode = function () {
 */
 A3a.vpl.Program.prototype.saveStateBeforeChange = function () {
 	this.undoState.saveStateBeforeChange(this.exportToObject(),
-		{uploaded: this.uploaded});
+		{uploaded: this.uploaded, flashed: this.flashed});
 	this.code = {};
 	this.uploaded = false;
+	this.flashed = false;
 };
 
 /** Undo last change, saving current state and retrieving previous one
@@ -219,9 +221,10 @@ A3a.vpl.Program.prototype.saveStateBeforeChange = function () {
 A3a.vpl.Program.prototype.undo = function (updateFun) {
 	if (this.undoState.canUndo()) {
 		var markedState = this.undoState.undo(this.exportToObject(),
-			{uploaded: this.uploaded});
+			{uploaded: this.uploaded, flashed: this.flashed});
 		this.importFromObject(/** @type {Object} */(markedState.state), updateFun);
 		this.uploaded = markedState.marks.uploaded;
+		this.flashed = markedState.marks.flashed;
 		this.code = {};
 	}
 };
@@ -234,9 +237,10 @@ A3a.vpl.Program.prototype.undo = function (updateFun) {
 A3a.vpl.Program.prototype.redo = function (updateFun) {
 	if (this.undoState.canRedo()) {
 		var markedState = this.undoState.redo(this.exportToObject(),
-			{uploaded: this.uploaded});
+			{uploaded: this.uploaded, flashed: this.flashed});
 		this.importFromObject(/** @type {Object} */(markedState.state), updateFun);
 		this.uploaded = markedState.marks.uploaded;
+		this.flashed = markedState.marks.flashed;
 		this.code = {};
 	}
 };
