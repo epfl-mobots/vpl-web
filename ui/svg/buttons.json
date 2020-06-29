@@ -416,6 +416,45 @@
 			]
 		},
 		{
+			"name": "vpl:flash",
+			"state": ["pressed"],
+			"draw": [
+			{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#flash_check"
+				}
+			]
+		},
+		{
+			"name": "vpl:flash",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#flash_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:flash",
+			"state": ["selected"],
+			"draw": [
+				{
+					"uri": "Icons.svg#flash_check"
+				}
+			]
+		},
+		{
+			"name": "vpl:flash",
+			"draw": [
+				{
+					"uri": "Icons.svg#flash_default"
+				}
+			]
+		},
+		{
 			"name": "vpl:undo",
 			"state": ["disabled"],
 			"draw": [

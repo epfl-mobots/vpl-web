@@ -23,6 +23,8 @@
 			"!stretch",
 			"vpl:run",
 			"vpl:stop",
+			"!space",
+			"vpl:flash",
 			"!stretch",
 			"vpl:sim",
 			"vpl:text",
