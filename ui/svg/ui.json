@@ -31,7 +31,12 @@
 	},
 
 	"doc": {
-		"doctemplate.html": "help/doctemplate.html"
+		"en": {
+			"doctemplate.html": "doctemplate-english.html"
+		},
+		"fr": {
+			"doctemplate.html": "doctemplate-french.html"
+		}
 	},
 
 	"blocks": [
@@ -2116,6 +2121,7 @@
 		"block-english.json",
 		"block-french.json",
 
-		"help-blocks-english.json"
+		"help-blocks-english.json",
+		"help-blocks-french.json"
 	]
 }

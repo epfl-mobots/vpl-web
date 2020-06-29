@@ -688,10 +688,13 @@ function vplSetup(gui, rootDir) {
 		if (gui && gui["help"]) {
 			app.dynamicHelp.add(gui["help"]);
 		}
-		if (gui && gui["doc"] && gui["doc"]["doctemplate.html"] && gui.rsrc["doctemplate.html"]) {
-			// fix base url
-			app.docTemplate = gui.rsrc["doctemplate.html"]
-				.replace("<head>", "<head><base href='" + rootDir + "/" + gui["doc"]["doctemplate.html"].replace(/\/[^/]*$/, "") + "/'");
+		app.docTemplates = {};
+		if (gui && gui["doc"]) {
+			for (var key in gui["doc"]) {
+				if (gui["doc"].hasOwnProperty(key) && gui.rsrc[gui["doc"][key]["doctemplate.html"]]) {
+					app.docTemplates[key] = gui.rsrc[gui["doc"][key]["doctemplate.html"]];
+				}
+			}
 		}
 		helpFragments.forEach(function (h) {
 			app.dynamicHelp.add(h);
@@ -761,7 +764,11 @@ window.addEventListener("load", function () {
 			if (obj["doc"]) {
 				for (var key in obj["doc"]) {
 					if (obj["doc"].hasOwnProperty(key)) {
-						subfiles.push(obj["doc"][key]);
+						for (var key2 in obj["doc"][key]) {
+							if (obj["doc"][key].hasOwnProperty(key2)) {
+								subfiles.push(obj["doc"][key][key2]);
+							}
+						}
 					}
 				}
 			}
@@ -788,9 +795,13 @@ window.addEventListener("load", function () {
 				});
 			}
 			if (gui["doc"]) {
-				for (var filename in gui["doc"]) {
-					if (gui["doc"].hasOwnProperty(filename)) {
-						gui.rsrc[filename] = rsrc[gui["doc"][filename]];
+				for (var key in gui["doc"]) {
+					if (gui["doc"].hasOwnProperty(key)) {
+						for (var filename in gui["doc"][key]) {
+							if (gui["doc"][key].hasOwnProperty(filename)) {
+								gui.rsrc[gui["doc"][key][filename]] = rsrc[gui["doc"][key][filename]];
+							}
+						}
 					}
 				}
 			}

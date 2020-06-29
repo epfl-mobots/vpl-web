@@ -176,15 +176,16 @@ A3a.vpl.DynamicHelp.prototype.convertToHTML = function (md) {
 /** Generate html
 	@param {string} language
 	@param {Array.<string>} blocks
-	@param {string=} docTemplate html document template, where the 1st occurence of
-	string BLOCKS is replaced with the block description (should allow vertical scrolling
-	with something like "<div style='height: 100%; overflow-y: scroll;'>...</div>")
+	@param {Object=} docTemplates html document templates (key=language), where
+	the 1st occurence of string BLOCKS is replaced with the block description
+	(should allow vertical scrolling with something like
+		"<div style='height: 100%; overflow-y: scroll;'>...</div>")
 	@return {string}
 */
-A3a.vpl.DynamicHelp.prototype.generate = function (language, blocks, docTemplate) {
-	docTemplate = docTemplate
+A3a.vpl.DynamicHelp.prototype.generate = function (language, blocks, docTemplates) {
+	var docTemplate = docTemplates
 	 	? "<div style='padding: 2em; max-width: 60em; margin-left: auto; margin-right: auto;'>\n" +
-			docTemplate +
+			docTemplates[language] +
 			"</div>\n"
 		: "<html>\n" +
 			"<style>\n" +
