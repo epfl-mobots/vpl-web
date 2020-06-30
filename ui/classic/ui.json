@@ -20,6 +20,8 @@
 	},
 
 	"overlays": [
+		"block-list.json",
+
 		"aesl.json",
 
 		"aseba.json",
