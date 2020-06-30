@@ -686,6 +686,8 @@ A3a.vpl.Application.prototype.log = function (data) {
 				}, 0),
 				"error": this.vplMessage && !this.vplMessageIsWarning ? this.vplMessage : null,
 				"warning": this.vplMessage && this.vplMessageIsWarning ? this.vplMessage : null,
+				"error-tr": this.vplMessage && !this.vplMessageIsWarning ? this.i18n.translate(this.vplMessage) : null,
+				"warning-tr": this.vplMessage && this.vplMessageIsWarning ? this.i18n.translate(this.vplMessage) : null,
 				"robot": this.currentRobotIndex >= 0
 					? this.robots[this.currentRobotIndex].runGlue.isConnected() && this.robots[this.currentRobotIndex].runGlue.getName()
 					: null
