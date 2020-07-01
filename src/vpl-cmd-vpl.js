@@ -341,6 +341,19 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return app.currentRobotIndex >= 0;
 		}
 	});
+	this.commands.add("vpl:stop-abnormally", {
+		action: function (app, modifier) {
+			app.stopRobot(true);
+			app.program.uploaded = false;
+		},
+		isEnabled: function (app) {
+			return app.canStopRobot();
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.currentRobotIndex >= 0;
+		}
+	});
 	this.commands.add("vpl:debug", {
 		// not implemented yet
 		action: function (app) {

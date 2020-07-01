@@ -637,11 +637,19 @@ A3a.vpl.Application.prototype.vplResize = function () {
 };
 
 /** Stop robot
+	@param {boolean=} abnormal
 	@return {void}
 */
-A3a.vpl.Application.prototype.stopRobot = function () {
+A3a.vpl.Application.prototype.stopRobot = function (abnormal) {
+	abnormal=true;
 	if (this.currentRobotIndex >= 0) {
-		var stopBlockTemplate = A3a.vpl.BlockTemplate.findByName("!stop");
+		var stopBlockTemplate = null;
+		if (abnormal) {
+			stopBlockTemplate = A3a.vpl.BlockTemplate.findByName("!stop and blink");
+		}
+		if (!stopBlockTemplate) {
+			stopBlockTemplate = A3a.vpl.BlockTemplate.findByName("!stop");
+		}
 		var language = this.program.currentLanguage;
 		var stopGenCode = stopBlockTemplate && stopBlockTemplate.genCode[language];
 		if (stopGenCode) {

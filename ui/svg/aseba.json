@@ -11,6 +11,26 @@
 			}
 		},
 		{
+			"name": "!stop and blink",
+			"aseba": {
+				"statement": [
+					"var i = 16\n",
+					"var s = 17\n",
+					"motor.left.target = 0\n",
+					"motor.right.target = 0\n",
+					"call sound.system(-1)\n",
+					"timer.period[0] = 125\n",
+					"onevent timer0\n",
+					"call leds.circle((s&1)<<5,(s&2)<<4,(s&4)<<3,(s&8)<<2,(s&16)<<1,s&32,(s&64)>>1,(s&128)>>2)\n",
+					"s = (s << 1) & 0xff | (s >> 7) & 1\n",
+					"i -= 1\n",
+					"if i < 0 then\n",
+					"timer.period[0] = 0\n",
+					"end\n"
+				]
+			}
+		},
+		{
 			"name": "button 1",
 			"aseba": {
 				"sectionBegin": "onevent buttons\n",

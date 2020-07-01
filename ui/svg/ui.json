@@ -45,6 +45,10 @@
 			"type": "hidden"
 		},
 		{
+			"name": "!stop and blink",
+			"type": "hidden"
+		},
+		{
 			"name": "init",
 			"type": "event",
 			"modes": ["basic", "advanced"],

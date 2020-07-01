@@ -27,6 +27,10 @@ A3a.vpl.BlockTemplate.lib =	[
 		name: "!stop",
 		type: A3a.vpl.blockType.hidden,
 	}),
+	new A3a.vpl.BlockTemplate({
+		name: "!stop and blink",
+		type: A3a.vpl.blockType.hidden,
+	}),
 	new A3a.vpl.BlockTemplate((function () {
 		/**
 			@const
