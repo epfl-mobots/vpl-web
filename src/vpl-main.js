@@ -599,7 +599,7 @@ function vplSetup(gui, rootDir) {
 						app.program.readOnly = options != undefined && options["readOnly"] == true;
 						if (options != undefined && options["customizationMode"] == true) {
 							app.uiConfig.blockCustomizationMode = true;
-							app.uiConfig.toolbarCustomizationMode = role === A3a.vpl.Program.teacherRoleType.teacher;
+							app.uiConfig.toolbarCustomizationMode = role === "teacher";
 						}
 					}
 				} catch (e) {}
