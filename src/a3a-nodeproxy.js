@@ -42,24 +42,25 @@ A3a.NodeProxy.prototype.constructor = A3a.NodeProxy;
 */
 A3a.NodeProxy.callXHRAsync = function (method, url, cb, data) {
 	var xhr = new XMLHttpRequest();
-	xhr.timeout = 200;
-	xhr.onerror = function (xxx) {
-		cb(null);
-	};
+	xhr.timeout = 5000;
 	if (cb) {
-		xhr.onreadystatechange = function (e) {
-			if (xhr.readyState === 4) {
- 				switch (xhr.status) {
- 				case 200:
-					var txt = xhr.responseText;
-					cb(txt);
-					break;
-				default:
-					cb(null);	// done without response
-					break;
-				}
-			}
-		};
+    	xhr.addEventListener("timeout", function (e) {
+    		cb(null);
+    	});
+    	xhr.addEventListener("error", function (e) {
+    		cb(null);
+    	});
+		xhr.addEventListener("load", function (e) {
+    		switch (xhr.status) {
+    		case 200:
+    			var txt = xhr.responseText;
+    			cb(txt);
+    			break;
+    		default:
+    			cb(null);	// done without response
+    			break;
+    		}
+		});
 	}
 	xhr.open(method, url, true);
 	xhr.send(data);
