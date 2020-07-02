@@ -99,6 +99,7 @@ window.TDM = function (url, options) {
                             // We can lock as many nodes as we want
                             await node.lock();
                             console.log("Node locked");
+                            window.document.title = node._name
                             options.change && options.change(true);
                         } catch (e) {
                             console.log(`Unable to lock ${node.id} (${node.name})`)
