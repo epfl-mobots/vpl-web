@@ -13,134 +13,149 @@
 					"# Boutons multiples",
 					"![button](vpl:block:button)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _boutons multiples_ active la règle lorsqu'on touche simultanément tous les boutons spécifiés sur le Thymio.",
+					"Comme bloc de condition, le bloc _boutons multiples_ n'autorise l'activation de la règle que si l'on touche tous les boutons spécifiés au moment où l'événement correspondant au 1er bloc à gauche survient."
 				],
 				"horiz prox": [
 					"# Capteurs de proximité",
 					"![Proximity sensors](vpl:block:horiz-prox)",
 					"Type: bloc d'événement ou de condition",
-					"Comme bloc d'événement, le bloc _capteurs de proximité_ active la règle lorsque les capteurs de proxoîmité spécifiés détectent un obstacle, ou l'absence d'obstacle, en réfléchissant plus qu'une certaine fraction de l'émission infrarouge. Toutes les conditions doivent être remplies simultanément; l'événement ne se produit qu'au moment où le dernier capteur spécifié détecte (ou ne détecte plus) un obstacle.",
+					"Comme bloc d'événement, le bloc _capteurs de proximité_ active la règle lorsque les capteurs de proximité spécifiés détectent un obstacle, ou l'absence d'obstacle, en réfléchissant plus qu'une certaine fraction de l'émission infrarouge. Toutes les conditions doivent être remplies simultanément; l'événement ne se produit qu'au moment où le dernier capteur spécifié détecte (ou ne détecte plus) un obstacle.",
 					"Comme bloc de condition, le bloc _capteurs de proximité_ n'autorise l'activation de la règle que si les capteurs de proximité spécifiés détectent (ou pas) la présence d'un obstacle."
 				],
 				"horiz prox adv": [
 					"# Capteurs de proximité avec seuils bas et haut",
 					"![horiz prox adv](vpl:block:horiz-prox-adv)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _capteurs de proximité avec seuils bas et haut_ active la règle lorsque les capteurs de proximité spécifiés détectent un obstacle, ou l'absence d'obstacle, en réfléchissant plus que la fraction de l'émission infrarouge spécifiée par les seuils haut et bas, respectivement. Toutes les conditions doivent être remplies simultanément; l'événement ne se produit qu'au moment où le dernier capteur spécifié détecte (ou ne détecte plus) un obstacle.",
+					"Comme bloc de condition, le bloc _capteurs de proximité avec seuils bas et haut_ n'autorise l'activation de la règle que si les capteurs de proximité spécifiés détectent (ou pas) la présence d'un obstacle."
 				],
 				"horiz prox 1": [
 					"# Capteurs de proximité avec seuil",
 					"![horiz prox 1](vpl:block:horiz-prox-1)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _capteurs de proximité avec seuil_ active la règle lorsque les capteurs de proximité spécifiés détectent un obstacle, ou l'absence d'obstacle, en réfléchissant plus que la fraction de l'émission infrarouge spécifiée par le seuil. Toutes les conditions doivent être remplies simultanément; l'événement ne se produit qu'au moment où le dernier capteur spécifié détecte (ou ne détecte plus) un obstacle.",
+					"Comme bloc de condition, le bloc _capteurs de proximité avec seuils bas et haut_ n'autorise l'activation de la règle que si les capteurs de proximité spécifiés détectent (ou pas) la présence d'un obstacle."
 				],
 				"ground": [
 					"# Capteurs de réflexion sur le sol",
 					"![ground](vpl:block:ground)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _capteurs de réflexion sur le sol_ active la règle lorsque les capteurs de sol spécifiés détectent un sol blanc ou clair (ou son absence), en réfléchissant plus (ou moins) qu'une certaine fraction de l'émission infrarouge. Toutes les conditions doivent être remplies simultanément; quand les deux capteurs sont actifs, l'événement ne se produit qu'au moment où le second capteur détecte (ou ne détecte plus) la réflexion sur le sol.",
+					"Comme bloc de condition, le bloc _capteurs de réflexion sur le sol_ n'autorise l'activation de la règle que si les capteurs de sol spécifiés détectent (ou pas) la réflection sur le sol."
 				],
 				"ground adv": [
 					"# Capteurs de réflexion sur le sol avec seuils bas et haut",
 					"![ground adv](vpl:block:ground-adv)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _capteurs de réflexion sur le sol avec seuils bas et haut_ active la règle lorsque les capteurs de sol spécifiés détectent un sol blanc ou clair (ou son absence), en réfléchissant plus (ou moins) que la fraction de l'émission infrarouge spécifiée par les seuils haut et bas, respectivement. Toutes les conditions doivent être remplies simultanément; quand les deux capteurs sont actifs, l'événement ne se produit qu'au moment où le second capteur détecte (ou ne détecte plus) la réflexion sur le sol.",
+					"Comme bloc de condition, le bloc _capteurs de réflexion sur le sol avec seuils bas et haut_ n'autorise l'activation de la règle que si les capteurs de sol spécifiés détectent (ou pas) la réflection sur le sol."
 				],
 				"ground 1": [
 					"# Capteurs de réflexion sur le sol avec seuil",
 					"![ground 1](vpl:block:ground-1)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _capteurs de réflexion sur le sol avec seuil_ active la règle lorsque les capteurs de sol spécifiés détectent un sol blanc ou clair (ou son absence), en réfléchissant plus (ou moins) que la fraction de l'émission infrarouge spécifiée par le seuil. Toutes les conditions doivent être remplies simultanément; quand les deux capteurs sont actifs, l'événement ne se produit qu'au moment où le second capteur détecte (ou ne détecte plus) la réflexion sur le sol.",
+					"Comme bloc de condition, le bloc _capteurs de réflexion sur le sol avec seuil_ n'autorise l'activation de la règle que si les capteurs de sol spécifiés détectent (ou pas) la réflection sur le sol."
 				],
 				"tap": [
 					"# Détection de choc",
 					"![tap](vpl:block:tap)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _détection de choc_ active la règle lorsque l'accéléromètre détecte un impact tel qu'une légère tape de la main sur le robot.",
+					"Comme bloc de condition, le bloc _détection de choc_ n'autorise l'activation de la règle que si un impact a été détecté auparavant."
 				],
 				"accelerometer": [
 					"# Accéléromètre",
 					"![accelerometer](vpl:block:accelerometer)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _accéléromètre_ active la règle lorsque l'événement spécifié est détecté: un impact (typiquement une légère tape de la main sur le robot), l'angle de tangage spécifié (le tangage est la rotation autour d'un axe gauche-droite) ou l'angle de roulis spécifié (le roulis est la rotation autour d'un axe avant-arrière).",
+					"Comme bloc de condition, le bloc _accéléromètre_ n'autorise l'activation de la règle qu'après qu'un impact a été détecté, ou lorsque l'angle de tangage ou de roulis est dans l'intervalle spécifié."
 				],
 				"roll": [
 					"# Angle de roulis",
 					"![roll](vpl:block:roll)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _angle de roulis_ active la règle lorsque l'angle de roulis (la rotation autour d'un axe avant-arrière) spécifié est atteint.",
+					"Comme bloc de condition, le bloc _angle de roulis_ n'autorise l'activation de la règle que lorsque l'angle de roulis est dans l'intervalle spécifié."
 				],
 				"pitch": [
 					"# Angle de tangage",
 					"![pitch](vpl:block:pitch)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _angle de tangage_ active la règle lorsque l'angle de tangage (la rotation autour d'un axe gauche-droite) spécifié est atteint.",
+					"Comme bloc de condition, le bloc _angle de tangage_ n'autorise l'activation de la règle que lorsque l'angle de tangage est dans l'intervalle spécifié."
 				],
 				"yaw": [
 					"# Angle de lacet",
 					"![yaw](vpl:block:yaw)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _angle de lacet_ active la règle lorsque l'angle de lacet spécifié est atteint. Le lacet est la rotation autour du crayon telle qu'elle est perçue par la direction de la gravité dans le plan perpendiculaire au crayon.",
+					"Comme bloc de condition, le bloc _angle de lacet_ n'autorise l'activation de la règle que lorsque l'angle de tangage est dans l'intervalle spécifié."
 				],
 				"clap": [
 					"# Détection de son",
 					"![clap](vpl:block:clap)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _détection de son_ active la règle lorsque le micro détecte un son ou un bruit tel qu'une frappe des mains.",
+					"Comme bloc de condition, le bloc _détection de son_ n'autorise l'activation de la règle que si le volume sonore capté par le micro dépasse un certain niveau."
 				],
 				"init": [
 					"# Initialisation",
 					"![init](vpl:block:init)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _initialisation_ active la règle au lancement du programme.",
+					"Comme bloc de condition, le bloc _initialisation_ est toujours satisfait."
 				],
 				"timer": [
 					"# Minuterie",
 					"![timer](vpl:block:timer)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _minuterie_ active la règle lorsque le temps spécifié par le bloc d'action de démarrage de la minuterie est écoulé.",
+					"Comme bloc de condition, le bloc _minuterie_ n'autorise l'activation de la règle que si le temps de la minuterie est écoulé, jusqu'au prochain lancement."
 				],
 				"remote control arrows": [
-					"# remote control arrows",
+					"# Touches de direction de la télécommande",
 					"![remote control arrows](vpl:block:remote-control-arrows)",
 					"Type: bloc d'événement ou de condition",
-					"..."
+					"Comme bloc d'événement, le bloc _touches de direction de la télécommande_ active la règle lorsqu'on appuie sur le bouton spécifié de la télécommande.",
+					"Comme bloc de condition, le bloc _touches de direction de la télécommande_ n'autorise l'activation de la règle que si l'on a appuyé sur le bouton spécifié de la télécommande au moment où l'événement correspondant au 1er bloc à gauche survient."
 				],
 				"state": [
 					"# État (4 bits)",
 					"![state](vpl:block:state)",
 					"Type: bloc de condition",
-					"..."
+					"Comme bloc de condition, le bloc _état (4 bits)_ n'autorise l'activation de la règle que si les bits spécifiés de l'état, indiqués par les LEDs jaunes, valent 1 ou 0."
 				],
 				"state 8": [
 					"# État (8 valeurs)",
 					"![state 8](vpl:block:state-8)",
 					"Type: bloc de condition",
-					"..."
+					"Comme bloc de condition, le bloc _état (8 valeurs)_ n'autorise l'activation de la règle que si l'état de 8 valeurs, indiqués par les LEDs jaunes, a la valeur spécifiée."
 				],
 				"counter comparison": [
 					"# Comparaison du compteur",
 					"![counter comparison](vpl:block:counter-comparison)",
 					"Type: bloc de condition",
-					"..."
+					"Comme bloc de condition, le bloc _comparaison du compteur_ n'autorise l'activation de la règle que si l'état 8 bits, indiqués par les LEDs jaunes, remplit la condition spécifiée."
 				],
 				"color state": [
 					"# État (couleur)",
 					"![color state](vpl:block:color-state)",
 					"Type: bloc de condition",
-					"..."
+					"Comme bloc de condition, le bloc _état (couleur)_ n'autorise l'activation de la règle que si la couleur de la LED RVB du dessus du robot a approximativement la couleur spécifiée."
 				],
 				"color 8 state": [
 					"# État (couleur)",
 					"![color 8 state](vpl:block:color-8-state)",
 					"Type: bloc de condition",
-					"..."
+					"Comme bloc de condition, le bloc _état (couleur)_ n'autorise l'activation de la règle que si la couleur de la LED RVB du dessus du robot a approximativement la couleur spécifiée."
 				],
 				"motor state": [
 					"# Vitesses des moteurs",
 					"![motor state](vpl:block:motor-state)",
 					"Type: bloc de condition",
-					"..."
+					"Comme bloc de condition, le bloc _vitesse des moteurs_ n'autorise l'activation de la règle que si la vitesse des moteurs a approximativement les valeurs spécifiées."
 				],
 				"motor": [
 					"# Change les vitesses des moteurs",
@@ -152,7 +167,7 @@
 					"# Change le type de déplacement",
 					"![move](vpl:block:move)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _change le type de déplacement_ fixe la vitesse des moteurs gauche et droit pour obtenir un déplacement dans la direction indiquée. La combinaison de vitesses permet d'avancer ou de reculer, de tourner et de s'arrêter."
 				],
 				"nn obstacles": [
 					"# Réseau de neurones pour l'évitement d'obstacles",
@@ -164,115 +179,115 @@
 					"# Change la couleur du dessus (composantes RVB)",
 					"![top color](vpl:block:top-color)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _change la couleur du dessus (composantes RVB)_ change les composantes rouge, verte et bleue de la LED RVB du dessus du robot."
 				],
 				"top color 8": [
 					"# Change la couleur du dessus",
 					"![top color 8](vpl:block:top-color-8)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _change la couleur du dessus_ change la couleur de la LED RVB du dessus du robot."
 				],
 				"bottom color": [
 					"# Change la couleur du dessous (composantes RVB)",
 					"![bottom color](vpl:block:bottom-color)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _change la couleur du dessous (composantes RVB)_ change les composantes rouge, verte et bleue des LEDs RVB gauche et droite du dessous du robot."
 				],
 				"bottom-left color": [
 					"# Change la couleur du dessous à gauche (composantes RVB)",
 					"![bottom-left color](vpl:block:bottom-left-color)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _change la couleur du dessous (composantes RVB)_ change les composantes rouge, verte et bleue de la LED RVB gauche du dessous du robot."
 				],
 				"bottom-right color": [
 					"# Change la couleur du dessous à droite (composantes RVB)",
 					"![bottom-right color](vpl:block:bottom-right-color)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _change la couleur du dessous (composantes RVB)_ change les composantes rouge, verte et bleue de la LED RVB droite du dessous du robot."
 				],
 				"bottom color 8": [
 					"# Change la couleur du dessous",
 					"![bottom color 8](vpl:block:bottom-color-8)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _change la couleur du dessous_ change la couleur des LEDs RVB gauche et droite du dessous du robot."
 				],
 				"bottom-left color 8": [
 					"# Change la couleur du dessous à gauche",
 					"![bottom-left color 8](vpl:block:bottom-left-color-8)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _change la couleur du dessous_ change la couleur de la LED RVB gauche du dessous du robot."
 				],
 				"bottom-right color 8": [
 					"# Change la couleur du dessous à droite",
 					"![bottom-right color 8](vpl:block:bottom-right-color-8)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _change la couleur du dessous_ change la couleur de la LED RVB droite du dessous du robot."
 				],
 				"notes": [
 					"# Joue une mélodie",
 					"![notes](vpl:block:notes)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _joue une mélodie_ joue la mélodie spécifiée. Une mélodie est faite d'un maximum de 6 notes. Les blanches ont une durée 2x plus longue que les noires, et les pauses (absence de note) une durée 2x plus longue que les blanches."
 				],
 				"play": [
 					"# Joue un fichier .wav",
 					"![play](vpl:block:play)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _jour un fichier .wav_ joue le fichier .wav spécifié sur la carte micro-SD du robot."
 				],
 				"play stop": [
 					"# Arrête de jouer un fichier .wav",
 					"![play stop](vpl:block:play-stop)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _arrête de jouer un fichier .wav_ fait ce que son nom indique."
 				],
 				"set state": [
 					"# Change l'état (4 bits)",
 					"![set state](vpl:block:set-state)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _change l'état (4 bits)_ fait passer les bits spécifiés de l'état à 1 ou 0. L'état est affiché sur les LEDs jaunes."
 				],
 				"toggle state": [
 					"# Inverse l'état (4 bits)",
 					"![toggle state](vpl:block:toggle-state)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _inverse l'état (4 bits)_ change les bits spécifiés de l'état de 0 à 1 ou inversément."
 				],
 				"set state 8": [
 					"# Change l'état (8 valeurs)",
 					"![set state 8](vpl:block:set-state-8)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _change l'état (8 valeurs)_ fait passer l'état de 8 valeurs, qui est affiché sur les LEDs jaunes, à la valeur spécifiée."
 				],
 				"change state 8": [
 					"# Passe à l'état suivant ou précédant (8 valeurs)",
 					"![change state 8](vpl:block:change-state-8)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _passe à l'état suivant ou précédant (8 valeurs)_ fait passer l'état de 8 valeurs, qui est affiché sur les LEDs jaunes, à la valeur suivante ou précédante en tournant dans le sens spécifié."
 				],
 				"set counter": [
 					"# Change le compteur",
 					"![set counter](vpl:block:set-counter)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _change le compteur_ change l'état représenté sur les LEDs jaunes."
 				],
 				"set timer": [
-					"# Démarre la minuterie (0-4 sec)",
+					"# Démarre la minuterie (0-4 s)",
 					"![set timer](vpl:block:set-timer)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _démarre la minuterie (0-4 s)_ fait démarer la minuterie pour qu'elle se déclenche jusqu'à 4 s plus tard."
 				],
 				"set timer log": [
-					"# Démarre la minuterie (0.1-10 sec)",
+					"# Démarre la minuterie (0.1-10 s)",
 					"![set timer log](vpl:block:set-timer-log)",
 					"Type: bloc d'action",
-					"..."
+					"Le bloc _démarre la minuterie (0.1-10 s)_ fait démarer la minuterie pour qu'elle se déclenche jusqu'à 10 s plus tard."
 				],
 				"picture comment": [
 					"# Commentaire (image)",
 					"![picture comment](vpl:block:picture-comment)",
 					"Type: block de commentaire",
-					"..."
+					"Le bloc _commentaire (image)_ peut contenir une photo prise par la caméra de l'ordinateur. Il permet de documenter le programme sans en changer le comportement."
 				]
 			}
 		}

@@ -42,21 +42,21 @@
 					"![ground](vpl:block:ground)",
 					"Type: event or condition block",
 					"Type: event or condition block",
-					"As an event block, the _Ground reflection sensors_ block triggers a rule when the specified ground sensors on the Thymio detect a white or ligh ground, or its absence (dark or lack of ground), by reflecting more, or less, than a fixed amount of infrared emission. All the conditions must be satisfied simulaneously; when the two sensors are active, the event occurs at the time the second sensor detects, or stops detecting, the ground reflection.",
+					"As an event block, the _Ground reflection sensors_ block triggers a rule when the specified ground sensors on the Thymio detect a white or light ground, or its absence (dark or lack of ground), by reflecting more, or less, than a fixed amount of infrared emission. All the conditions must be satisfied simulaneously; when the two sensors are active, the event occurs at the time the second sensor detects, or stops detecting, the ground reflection.",
 					"As a condition block, the _Ground reflection sensors_ block allows the rule to be triggered only if the specified ground sensors fullfil the presence of absence of a reflective ground."
 				],
 				"ground adv": [
 					"# Ground reflection sensors with low and high thresholds",
 					"![ground adv](vpl:block:ground-adv)",
 					"Type: event or condition block",
-					"As an event block, the _Ground reflection sensors with low and high thresholds_ block triggers a rule when the specified ground sensors on the Thymio detect a white or ligh ground, or its absence (dark or lack of ground), by reflecting more, or less, infrared emission than the amounts specified by the high and low thresholds, respectively. All the conditions must be satisfied simulaneously; when the two sensors are active, the event occurs at the time the second sensor detects, or stops detecting, the ground reflection.",
+					"As an event block, the _Ground reflection sensors with low and high thresholds_ block triggers a rule when the specified ground sensors on the Thymio detect a white or light ground, or its absence (dark or lack of ground), by reflecting more, or less, infrared emission than the amounts specified by the high and low thresholds, respectively. All the conditions must be satisfied simulaneously; when the two sensors are active, the event occurs at the time the second sensor detects, or stops detecting, the ground reflection.",
 					"As a condition block, the _Ground reflection sensors with low and high thresholds_ block allows the rule to be triggered only if the specified ground sensors fullfil the presence of absence of a reflective ground."
 				],
 				"ground 1": [
 					"# Ground reflection sensors with threshold",
 					"![ground 1](vpl:block:ground-1)",
 					"Type: event or condition block",
-					"As an event block, the _Ground reflection sensors with threshold_ block triggers a rule when the specified ground sensors on the Thymio detect a white or ligh ground, or its absence (dark or lack of ground), by reflecting more, or less, infrared emission than the amounts specified by the threshold. All the conditions must be satisfied simulaneously; when the two sensors are active, the event occurs at the time the second sensor detects, or stops detecting, the ground reflection.",
+					"As an event block, the _Ground reflection sensors with threshold_ block triggers a rule when the specified ground sensors on the Thymio detect a white or light ground, or its absence (dark or lack of ground), by reflecting more, or less, infrared emission than the amounts specified by the threshold. All the conditions must be satisfied simulaneously; when the two sensors are active, the event occurs at the time the second sensor detects, or stops detecting, the ground reflection.",
 					"As a condition block, the _Ground reflection sensors with threshold_ block allows the rule to be triggered only if the specified ground sensors fullfil the presence of absence of a reflective ground."
 				],
 				"tap": [
@@ -99,7 +99,7 @@
 					"![clap](vpl:block:clap)",
 					"Type: event or condition block",
 					"As an event block, the _Sound detection_ block triggers a rule when the microphone detects sound or noise, typically a clap of the hands.",
-					"As a condition block, the _Sound detection_ block allows the rule to be triggered only after a sound has been detected by the microphone."
+					"As a condition block, the _Sound detection_ block allows the rule to be triggered only if the sound level detected by the microphone is higher than some threshold."
 				],
 				"init": [
 					"# Initialization",
@@ -138,7 +138,7 @@
 					"# Counter comparison",
 					"![counter comparison](vpl:block:counter-comparison)",
 					"Type: condition block",
-					"As a condition block, the _Counter comparison_ block allows the rule to be triggered only if the state, displayed in binary on the yellow LEDs, has the specified value."
+					"As a condition block, the _Counter comparison_ block allows the rule to be triggered only if the state, displayed in binary on the yellow LEDs, fulfils the specified test."
 				],
 				"color state": [
 					"# Color state",
@@ -240,7 +240,7 @@
 					"# Stop playing a .wav file",
 					"![play stop](vpl:block:play-stop)",
 					"Type: action block",
-					"The _Stop playing a .wav file_ block stops playing a .wav file."
+					"The _Stop playing a .wav file_ block does what its name suggests."
 				],
 				"set state": [
 					"# Set state (4 bits)",

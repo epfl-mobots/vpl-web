@@ -44,8 +44,8 @@
 			"set state 8": "Change l'état (8 valeurs)",
 			"change state 8": "Passe à l'état suivant ou précédant (8 valeurs)",
 			"set counter": "Change le compteur",
-			"set timer": "Démarre la minuterie (0-4 sec)",
-			"set timer log": "Démarre la minuterie (0.1-10 sec)",
+			"set timer": "Démarre la minuterie (0-4 s)",
+			"set timer log": "Démarre la minuterie (0.1-10 s)",
 			"picture comment": "Commentaire (image)"
 		}
 	}
