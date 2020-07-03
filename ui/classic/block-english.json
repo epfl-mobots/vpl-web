@@ -7,7 +7,7 @@
 			"horiz prox adv": "Proximity sensors with low and high thresholds",
 			"horiz prox 1": "Proximity sensors with threshold",
 			"ground": "Ground reflection sensors",
-			"ground adv": "Ground reflection sensors with low and high sensors",
+			"ground adv": "Ground reflection sensors with low and high thresholds",
 			"ground 1": "Ground reflection sensors with threshold",
 			"tap": "Impact detection",
 			"accelerometer": "Accelerometer",
