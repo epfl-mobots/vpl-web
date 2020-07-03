@@ -214,8 +214,8 @@ A3a.vpl.Program.downloadText = (function () {
 		}
 
 		if ( /ipad/i.test(navigator.userAgent) ){
-			downloadLink.href = url;
-			downloadLink.download = filename;
+			anchor.href = url;
+			anchor.download = filename;
 		} else {
 			A3a.vpl.Program.setAnchorDownload(anchor, text, filename, mimetype);
 		}
