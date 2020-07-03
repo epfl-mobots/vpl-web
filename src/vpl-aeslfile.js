@@ -216,6 +216,7 @@ A3a.vpl.Program.downloadText = (function () {
 		if ( /ipad/i.test(navigator.userAgent) ){
 			anchor.href = url;
 			anchor.download = filename;
+			window.URL.revokeObjectURL(url);
 		} else {
 			A3a.vpl.Program.setAnchorDownload(anchor, text, filename, mimetype);
 		}
