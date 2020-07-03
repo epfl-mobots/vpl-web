@@ -37,6 +37,7 @@ A3a.vpl.Application.prototype.loadProgramJSON = function (json, options) {
 					this.setView(views);
 				}
 			}
+            this.setHelpForCurrentAppState();
 			if (this.views.indexOf("vpl") >= 0) {
 				this.vplCanvas.onUpdate();
 			}

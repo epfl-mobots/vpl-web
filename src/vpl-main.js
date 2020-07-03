@@ -599,6 +599,7 @@ function vplSetup(gui, rootDir) {
 							app.uiConfig.toolbarCustomizationMode = role === "teacher";
 						}
 						app.program.importFromJSON(data, function () {
+                            app.setHelpForCurrentAppState();
 							app.renderProgramToCanvas();
 						});
 					}
@@ -609,6 +610,7 @@ function vplSetup(gui, rootDir) {
 			var vplJson = window.localStorage.getItem(A3a.vpl.Program.defaultFilename);
 			if (vplJson) {
 				app.program.importFromJSON(vplJson, function () {
+                    app.setHelpForCurrentAppState();
 					app.renderProgramToCanvas();
 				});
 			}
