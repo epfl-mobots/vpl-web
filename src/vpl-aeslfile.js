@@ -213,7 +213,13 @@ A3a.vpl.Program.downloadText = (function () {
 			url = "data:" + mimetype + ";base64," + window["btoa"](text);
 		}
 
-		A3a.vpl.Program.setAnchorDownload(anchor, text, filename, mimetype);
+		if ( /ipad/i.test(navigator.userAgent) ){
+			downloadLink.href = url;
+			downloadLink.download = filename;
+		} else {
+			A3a.vpl.Program.setAnchorDownload(anchor, text, filename, mimetype);
+		}
+	
 		anchor.click();
 		if (typeof url !== "string") {
 			window.URL.revokeObjectURL(url);
