@@ -212,17 +212,16 @@ A3a.vpl.Program.downloadText = (function () {
 			// data URL
 			url = "data:" + mimetype + ";base64," + window["btoa"](text);
 		}
-
-		if ( /ipad/i.test(navigator.userAgent) ){
+		
+		if ( /ipad/i.test(navigator.userAgent) ) {
 			anchor.href = url;
-			anchor.download = filename;
-			window.URL.revokeObjectURL(url);
+    		anchor.download = filename;
 		} else {
 			A3a.vpl.Program.setAnchorDownload(anchor, text, filename, mimetype);
 		}
 	
 		anchor.click();
-		if (typeof url !== "string") {
+		if ( typeof url !== "string" || /ipad/i.test(navigator.userAgent) ) {
 			window.URL.revokeObjectURL(url);
 		}
 	};
