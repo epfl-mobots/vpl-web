@@ -183,7 +183,7 @@ A3a.vpl.DynamicHelp.prototype.convertToHTML = function (md) {
 	@return {string}
 */
 A3a.vpl.DynamicHelp.prototype.generate = function (language, blocks, docTemplates) {
-	var docTemplate = docTemplates
+	var docTemplate = docTemplates && docTemplates[language]
 	 	? "<div style='padding: 2em; max-width: 60em; margin-left: auto; margin-right: auto;'>\n" +
 			docTemplates[language] +
 			"</div>\n"

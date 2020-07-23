@@ -13,134 +13,150 @@
 					"# Multiple buttons",
 					"![button](vpl:block:button)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Multiple buttons_ block triggers a rule when all the specified buttons on the Thymio are touched simultaneously.",
+					"As a condition block, the _Multiple buttons_ block allows the rule to be triggered only if all the specified buttons are being touched at the moment the event in the leftmost block occurs."
 				],
 				"horiz prox": [
 					"# Proximity sensors",
 					"![Proximity sensors](vpl:block:horiz-prox)",
 					"Type: event or condition block",
-					"As an event block, the _Proximity sensors_ block triggers a rule when the specified proximity sensors on the Thymio detect an obstacle, or the absence of obstacle, by reflecting more than a fixed amount of infrared emission. All the conditions must be satisfied simulaneously; the event occurs at the time the last specified sensor detects, or stops detecting, an obstacle.",
+					"As an event block, the _Proximity sensors_ block triggers a rule when the specified proximity sensors on the Thymio detect an obstacle, or the absence of obstacle, by reflecting more, or less, than a fixed amount of infrared emission. All the conditions must be satisfied simulaneously; the event occurs at the time the last specified sensor detects, or stops detecting, an obstacle.",
 					"As a condition block, the _Proximity sensors_ block allows the rule to be triggered only if the specified proximity sensors fullfil the presence of absence of an obstacle."
 				],
 				"horiz prox adv": [
 					"# Proximity sensors with low and high thresholds",
 					"![horiz prox adv](vpl:block:horiz-prox-adv)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Proximity sensors with low and high thresholds_ block triggers a rule when the specified proximity sensors on the Thymio detect an obstacle by reflecting more infrared emission than the amount specified by the high threshold; or the absence of obstacle by reflecting less emission than the amount specified by the low threshold. All the conditions must be satisfied simulaneously; the event occurs at the time the last specified sensor detects, or stops detecting, an obstacle.",
+					"As a condition block, the _Proximity sensors with low and high thresholds_ block allows the rule to be triggered only if the specified proximity sensors fullfil the presence of absence of an obstacle."
 				],
 				"horiz prox 1": [
 					"# Proximity sensors with threshold",
 					"![horiz prox 1](vpl:block:horiz-prox-1)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Proximity sensors with threshold_ block triggers a rule when the specified proximity sensors on the Thymio detect an obstacle, or the absence of obstacle, by reflecting more, or less, infrared emission than the amount specified by the threshold. All the conditions must be satisfied simulaneously; the event occurs at the time the last specified sensor detects, or stops detecting, an obstacle.",
+					"As a condition block, the _Proximity sensors with threshold_ block allows the rule to be triggered only if the specified proximity sensors fullfil the presence of absence of an obstacle."
 				],
 				"ground": [
 					"# Ground reflection sensors",
 					"![ground](vpl:block:ground)",
 					"Type: event or condition block",
-					"..."
+					"Type: event or condition block",
+					"As an event block, the _Ground reflection sensors_ block triggers a rule when the specified ground sensors on the Thymio detect a white or light ground, or its absence (dark or lack of ground), by reflecting more, or less, than a fixed amount of infrared emission. All the conditions must be satisfied simulaneously; when the two sensors are active, the event occurs at the time the second sensor detects, or stops detecting, the ground reflection.",
+					"As a condition block, the _Ground reflection sensors_ block allows the rule to be triggered only if the specified ground sensors fullfil the presence of absence of a reflective ground."
 				],
 				"ground adv": [
-					"# Ground reflection sensors with low and high sensors",
+					"# Ground reflection sensors with low and high thresholds",
 					"![ground adv](vpl:block:ground-adv)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Ground reflection sensors with low and high thresholds_ block triggers a rule when the specified ground sensors on the Thymio detect a white or light ground, or its absence (dark or lack of ground), by reflecting more, or less, infrared emission than the amounts specified by the high and low thresholds, respectively. All the conditions must be satisfied simulaneously; when the two sensors are active, the event occurs at the time the second sensor detects, or stops detecting, the ground reflection.",
+					"As a condition block, the _Ground reflection sensors with low and high thresholds_ block allows the rule to be triggered only if the specified ground sensors fullfil the presence of absence of a reflective ground."
 				],
 				"ground 1": [
 					"# Ground reflection sensors with threshold",
 					"![ground 1](vpl:block:ground-1)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Ground reflection sensors with threshold_ block triggers a rule when the specified ground sensors on the Thymio detect a white or light ground, or its absence (dark or lack of ground), by reflecting more, or less, infrared emission than the amounts specified by the threshold. All the conditions must be satisfied simulaneously; when the two sensors are active, the event occurs at the time the second sensor detects, or stops detecting, the ground reflection.",
+					"As a condition block, the _Ground reflection sensors with threshold_ block allows the rule to be triggered only if the specified ground sensors fullfil the presence of absence of a reflective ground."
 				],
 				"tap": [
 					"# Impact detection",
 					"![tap](vpl:block:tap)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Impact detection_ block triggers a rule when the accelerometer sensor detects an impact, typically a gentle tap of the hand on the robot.",
+					"As a condition block, the _Impact detection_ block allows the rule to be triggered only after an impact has been detected by the accelerometer sensor."
 				],
 				"accelerometer": [
 					"# Accelerometer",
 					"![accelerometer](vpl:block:accelerometer)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Accelerometer_ block triggers a rule when the specified event is detected: an impact (typically a gentle tap of the hand on the robot), the specified pitch angle (gravity orientation in the plane perpendicular to the left-right axis of the robot), or the specified roll roll angle (gravity orientation in the plane perpendicular to the back-front axis of the robot).",
+					"As a condition block, the _Accelerometer_ block allows the rule to be triggered only after an impactt has been detected, or when the gravity is in the specified direction, depending on the mode."
 				],
 				"roll": [
 					"# Roll angle",
 					"![roll](vpl:block:roll)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Roll angle_ block triggers a rule when the accelerometer sensor detects that the robot roll angle (the angle of the vertical direction projected in a plane perpendicular to the back-front axis of the robot) reaches the specified value.",
+					"As a condition block, the _Roll angle_ block allows the rule to be triggered only when the specified roll angle is reached."
 				],
 				"pitch": [
 					"# Pitch angle",
 					"![pitch](vpl:block:pitch)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Pitch angle_ block triggers a rule when the accelerometer sensor detects that the robot pitch angle (the angle of the vertical direction projected in a plane perpendicular to the left-right axis of the robot) reaches the specified value.",
+					"As a condition block, the _Pitch angle_ block allows the rule to be triggered only when the specified pitch angle is reached."
 				],
 				"yaw": [
 					"# Yaw angle",
 					"![yaw](vpl:block:yaw)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Yaw angle_ block triggers a rule when the accelerometer sensor detects that the robot yaw angle (the angle of the vertical direction projected in a plane perpendicular to the pen hole of the robot) reaches the specified value.",
+					"As a condition block, the _Yaw angle_ block allows the rule to be triggered only when the specified yaw angle is reached."
 				],
 				"clap": [
 					"# Sound detection",
 					"![clap](vpl:block:clap)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Sound detection_ block triggers a rule when the microphone detects sound or noise, typically a clap of the hands.",
+					"As a condition block, the _Sound detection_ block allows the rule to be triggered only if the sound level detected by the microphone is higher than some threshold."
 				],
 				"init": [
 					"# Initialization",
 					"![init](vpl:block:init)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Initialization_ block triggers a rule when the program starts.",
+					"As a condition block, the _Initialization_ block is always satisfied."
 				],
 				"timer": [
 					"# Timer elapsed",
 					"![timer](vpl:block:timer)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Timer elapsed_ block triggers a rule when the timer, started with the _Timer_ action block, reaches 0.",
+					"As a condition block, the _Timer elapsed_ block allows the rule to be triggered only after the timer has reached 0, and before the _Timer_ action block has restarted the timer to a new value."
 				],
 				"remote control arrows": [
 					"# remote control arrows",
 					"![remote control arrows](vpl:block:remote-control-arrows)",
 					"Type: event or condition block",
-					"..."
+					"As an event block, the _Remote control arrow keys_ block triggers a rule when the specified key of the remote control is pressed.",
+					"As a condition block, the _Remote control arrow keys_ block allows the rule to be triggered only after the specified button has been pressed at the moment the event in the leftmost block occurs."
 				],
 				"state": [
 					"# State (4 bits)",
 					"![state](vpl:block:state)",
 					"Type: condition block",
-					"..."
+					"As a condition block, the _State (4 bits)_ block allows the rule to be triggered only if the specified bits of the state, displayed on the yellow LEDs, are ON or OFF."
 				],
 				"state 8": [
 					"# State (8 values)",
 					"![state 8](vpl:block:state-8)",
 					"Type: condition block",
-					"..."
+					"As a condition block, the _State (8 values)_ block allows the rule to be triggered only if the 8-value state, displayed on the yellow LEDs, has the specified value."
 				],
 				"counter comparison": [
 					"# Counter comparison",
 					"![counter comparison](vpl:block:counter-comparison)",
 					"Type: condition block",
-					"..."
+					"As a condition block, the _Counter comparison_ block allows the rule to be triggered only if the state, displayed in binary on the yellow LEDs, fulfils the specified test."
 				],
 				"color state": [
 					"# Color state",
 					"![color state](vpl:block:color-state)",
 					"Type: condition block",
-					"..."
+					"As a condition block, the _Color state_ block allows the rule to be triggered only if the top RGB LED has approximately the specified color."
 				],
 				"color 8 state": [
 					"# Color state",
 					"![color 8 state](vpl:block:color-8-state)",
 					"Type: condition block",
-					"..."
+					"As a condition block, the _Color state_ block allows the rule to be triggered only if the top RGB LED has the specified color."
 				],
 				"motor state": [
 					"# Motor state",
 					"![motor state](vpl:block:motor-state)",
 					"Type: condition block",
-					"..."
+					"As a condition block, the _Motor state_ block allows the rule to be triggered only if the motor speeds have approximately the specified values."
 				],
 				"motor": [
 					"# Set motor speeds",
@@ -152,7 +168,7 @@
 					"# Set motion",
 					"![move](vpl:block:move)",
 					"Type: action block",
-					"..."
+					"The _Set motor speeds_ block sets the speed for the left and right motors to move in the specified direction or to stop."
 				],
 				"nn obstacles": [
 					"# Neural net for obstacle avoidance",
@@ -164,115 +180,115 @@
 					"# Set top color (RGB components)",
 					"![top color](vpl:block:top-color)",
 					"Type: action block",
-					"..."
+					"The _Set top color (RGB components)_ block sets the color of the top RGB LED to the color specified by the addition of red, green, and blue components."
 				],
 				"top color 8": [
 					"# Set top color",
 					"![top color 8](vpl:block:top-color-8)",
 					"Type: action block",
-					"..."
+					"The _Set top color_ block sets the color of the top RGB LED to the specified color."
 				],
 				"bottom color": [
 					"# Set bottom color (RGB components)",
 					"![bottom color](vpl:block:bottom-color)",
 					"Type: action block",
-					"..."
+					"The _Set bottom color (RGB components)_ block sets the color of the two bottom RGB LEDs to the color specified by the addition of red, green, and blue components."
 				],
 				"bottom-left color": [
 					"# Set bottom-left color (RGB components)",
 					"![bottom-left color](vpl:block:bottom-left-color)",
 					"Type: action block",
-					"..."
+					"The _Set bottom-left color (RGB components)_ block sets the color of the bottom-left RGB LED to the color specified by the addition of red, green, and blue components."
 				],
 				"bottom-right color": [
 					"# Set bottom-right color (RGB components)",
 					"![bottom-right color](vpl:block:bottom-right-color)",
 					"Type: action block",
-					"..."
+					"The _Set bottom-right color (RGB components)_ block sets the color of the bottom-right RGB LED to the color specified by the addition of red, green, and blue components."
 				],
 				"bottom color 8": [
 					"# Set bottom color",
 					"![bottom color 8](vpl:block:bottom-color-8)",
 					"Type: action block",
-					"..."
+					"The _Set bottom color_ block sets the color of the two bottom RGB LEDs to the specified color."
 				],
 				"bottom-left color 8": [
 					"# Set bottom-left color",
 					"![bottom-left color 8](vpl:block:bottom-left-color-8)",
 					"Type: action block",
-					"..."
+					"The _Set bottom-left color_ block sets the color of the bottom-left RGB LED to the specified color."
 				],
 				"bottom-right color 8": [
 					"# Set bottom-right color",
 					"![bottom-right color 8](vpl:block:bottom-right-color-8)",
 					"Type: action block",
-					"..."
+					"The _Set bottom-right color_ block sets the color of the bottom-right RGB LED to the specified color."
 				],
 				"notes": [
 					"# Play melody",
 					"![notes](vpl:block:notes)",
 					"Type: action block",
-					"..."
+					"The _Play melody_ block plays the specified melody. A melody is made of up to 6 notes. Hollow notes have twice the duration of solid notes, and lack of note twice the duration of hollow notes."
 				],
 				"play": [
 					"# Play a .wav file",
 					"![play](vpl:block:play)",
 					"Type: action block",
-					"..."
+					"The _Play a .wav file_ block plays the specified .wav file stored on the micro-SD card."
 				],
 				"play stop": [
 					"# Stop playing a .wav file",
 					"![play stop](vpl:block:play-stop)",
 					"Type: action block",
-					"..."
+					"The _Stop playing a .wav file_ block does what its name suggests."
 				],
 				"set state": [
 					"# Set state (4 bits)",
 					"![set state](vpl:block:set-state)",
 					"Type: action block",
-					"..."
+					"The _Set state (4 bits)_ block sets or clears the specified bits of the state."
 				],
 				"toggle state": [
 					"# Toggle state (4 bits)",
 					"![toggle state](vpl:block:toggle-state)",
 					"Type: action block",
-					"..."
+					"The _Toggle state (4 bits)_ block toggles (changes) the specified bits of the state."
 				],
 				"set state 8": [
 					"# Set state (8 values)",
 					"![set state 8](vpl:block:set-state-8)",
 					"Type: action block",
-					"..."
+					"The _Set state (8 values)_ block sets the 8-value state, displayed on the yellow LEDs, to the specified value."
 				],
 				"change state 8": [
 					"# Set to next or previous state (8 values)",
 					"![change state 8](vpl:block:change-state-8)",
 					"Type: action block",
-					"..."
+					"The _Set to next or previous state (8 values)_ block changes the 8-value state, displayed on the yellow LEDs, with a clockwise or anticlockwise rotation of one step."
 				],
 				"set counter": [
 					"# Set counter",
 					"![set counter](vpl:block:set-counter)",
 					"Type: action block",
-					"..."
-				],
+					"The _Set counter_ block sets or changes the state, displayed in binary on the yellow LEDs."
+                ],
 				"set timer": [
 					"# Start timer (0-4 sec)",
 					"![set timer](vpl:block:set-timer)",
 					"Type: action block",
-					"..."
+					"The _Start timer (0-4 sec)_ block sets the timer to a value between 0 and 4 seconds and starts a count down. When the time is elapsed, a timer event is triggered."
 				],
 				"set timer log": [
 					"# Set timer (0.1-10 sec)",
 					"![set timer log](vpl:block:set-timer-log)",
 					"Type: action block",
-					"..."
+					"The _Set timer (0.1-10 sec)_ block sets the timer to a value between 0.1 and 10 seconds and starts a count down. When the time is elapsed, a timer event is triggered."
 				],
 				"picture comment": [
 					"# Picture comment",
 					"![picture comment](vpl:block:picture-comment)",
 					"Type: comment block",
-					"..."
+					"The _Picture comment_ can contain a webcam snapshot. Its only role is to document the VPL program; it has no other effect."
 				]
 			}
 		}

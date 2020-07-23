@@ -504,6 +504,7 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun, options) 
 			}
 		}
 	} catch (e) {}
+    this.enforceSingleTrailingEmptyEventHandler();
 	this.noVPL = view === "src";
 	updateFun && updateFun(view);
 	importFinished = true;
