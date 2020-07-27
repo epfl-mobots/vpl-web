@@ -2,19 +2,19 @@
 	"i18n": {
 		"fr": {
 			"Duplicate action blocks": "Un bloc d'action fait doublon",
-			"Rules with same events": "Règles avec les mêmes événements",
-			"Missing action block": "Il manque un bloc d'action",
-			"Missing event block": "Il manque un bloc d'événement",
-			"No button specified": "Aucun bouton n'est spécifié",
-			"No ground sensor specified": "Aucun capteur de sol n'est spécifié",
-			"No proximity sensor specified": "Aucun capteur de proximité n'est spécifié",
-			"No sensor specified": "Aucun capteur n'est spécifié",
-			"Open program file": "Ouvrir un programme",
+			"Rules with same events": "Evénements identiques",
+			"Missing action block": "Bloc d'action manquant",
+			"Missing event block": "Bloc d'événement manquant",
+			"No button specified": "Aucun bouton spécifié",
+			"No ground sensor specified": "Aucun capteur au sol spécifié",
+			"No proximity sensor specified": "Aucun capteur de proximité spécifié",
+			"No sensor specified": "Aucun capteur spécifié",
+			"Open program file": "Ouvrir un fichier de programme",
 			"OK": "OK",
 			"Cancel": "Annuler",
-			"Open ground image file": "Ouvrir une image pour le sol",
-			"Open height image file": "Ouvrir une image pour la hauteur",
-			"Open obstacle SVG file": "Ouvrir un fichier SVG pour les obstacles"
+			"Open ground image file": "Ouvrir un fichier d'image de sol",
+			"Open height image file": "Ouvrir un fichier d'image d'altitude",
+			"Open obstacle SVG file": "Ouvrir un fichier SVG d'obstacles"
 		}
 	}
 }
