@@ -1229,17 +1229,6 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		});
 	}
 
-	// copyright
-	canvas.addDecoration(function (ctx) {
-		ctx.font = "9px sans-serif";
-		ctx.textAlign = "start";
-		ctx.textBaseline = "bottom";
-		ctx.rotate(-Math.PI / 2);
-		ctx.fillText("EPFL 2018-2020",
-			-canvasSize.height + canvas.dims.blockLineWidth,
-			canvasSize.width - canvas.dims.blockLineWidth);
-	});
-
 	program.onUpdate && program.onUpdate();
 	canvas.redraw();
 };
