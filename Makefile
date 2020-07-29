@@ -114,13 +114,16 @@ JS = \
 vpath %.js src
 
 .PHONY: all
-all: vpl-min.js
+all: vpl-min.js index-svg.html index-svg-min.html index-classic.html index-classic-min.html
 
 vpl-min.js: $(JS)
 	echo "$(COPYRIGHT)" >$@
 	echo '(function(){' >>$@
 	$(CLOSURE) $(CLOSUREFLAGS) $^ >>$@ || (rm -f $@; false)
 	echo '}).call(this);' >>$@
+
+%.html: %-template.html
+	python3 inlinersrctool.py $< >$@
 
 .PHONY: clean
 clean:

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, height=device-height, maximum-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
+<!-- definition of the user interface and blocks -->
+<script type="application/json" id="ui.json">
+$INCLUDE(ui/classic/ui.json)
+</script>
+
+<script type="text/x-vpl-css" id="classic.css">
+$INCLUDE(ui/classic/classic.css)
+</script>
+
+<script type="application/json" id="block-list.json">
+$INCLUDE(ui/classic/block-list.json)
+</script>
+
+<script type="application/json" id="aesl.json">
+$INCLUDE(ui/classic/aesl.json)
+</script>
+
+<script type="application/json" id="aseba.json">
+$INCLUDE(ui/classic/aseba.json)
+</script>
+
+<script type="application/json" id="l2.json">
+$INCLUDE(ui/classic/l2.json)
+</script>
+
+<script type="application/json" id="js.json">
+$INCLUDE(ui/classic/js.json)
+</script>
+
+<script type="application/json" id="python.json">
+$INCLUDE(ui/classic/python.json)
+</script>
+
+<script type="application/json" id="french.json">
+$INCLUDE(ui/classic/french.json)
+</script>
+
+<script type="application/json" id="typical-param-set.json">
+$INCLUDE(ui/classic/typical-param-set.json)
+</script>
+
+<script type="application/json" id="typical-states.json">
+$INCLUDE(ui/classic/typical-states.json)
+</script>
+
+<script type="application/json" id="block-english.json">
+$INCLUDE(ui/classic/block-english.json)
+</script>
+
+<script type="application/json" id="cmd-vpl-english.json">
+$INCLUDE(ui/classic/cmd-vpl-english.json)
+</script>
+
+<script type="application/json" id="cmd-sim-english.json">
+$INCLUDE(ui/classic/cmd-sim-english.json)
+</script>
+
+<script type="application/json" id="block-french.json">
+$INCLUDE(ui/classic/block-french.json)
+</script>
+
+<script type="application/json" id="cmd-vpl-french.json">
+$INCLUDE(ui/classic/cmd-vpl-french.json)
+</script>
+
+<script type="application/json" id="cmd-sim-french.json">
+$INCLUDE(ui/classic/cmd-sim-french.json)
+</script>
+
+<script type="application/json" id="help-blocks-english.json">
+$INCLUDE(ui/classic/help-blocks-english.json)
+</script>
+
+<script type="application/json" id="help-blocks-french.json">
+$INCLUDE(ui/classic/help-blocks-french.json)
+</script>
+
+<title>VPL</title>
+
+<style>
+html {
+	height: 100%;
+}
+body {
+	height: 100%;
+	margin: 0;
+}
+#programCanvas {
+	width: 100%;
+	height: 100%;
+	display: block;
+	z-index: 10;
+}
+#src-editor {
+	width: 100%;
+	position: fixed;
+	z-index: 20;
+}
+#editor {
+	height: 100%;
+	display: block;
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 5pt;
+	padding-right: 5pt;
+	margin: 0;
+	border: 0;
+	box-sizing: border-box;
+	tab-size: 4;
+	font-family: monospace;
+	font-size: 11pt;
+}
+pre#editor-lines {
+	background-color: silver;
+    width: 70px;
+    float: left;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 5pt;
+    text-align: right;
+    overflow: hidden;
+	user-select: none;
+}
+
+#input {
+	position: absolute;
+	z-index: 1000;
+	font-family: sans-serif;
+	font-size: 15pt;
+	top: 10px;
+	left: 10px;
+	display: none;
+}
+
+@media only screen and (max-device-width: 1024px) {
+	#editor {
+		tab-size: 2;
+		font-size: 10pt;
+	}
+}
+</style>
+
+<script src="vpl-min.js"></script>
+<script src="thymio/thymio.js"></script>
+
+</head>
+
+<body>
+
+<div id="vpl-editor">
+
+<canvas id="programCanvas" width="900" height="700"></canvas>
+
+<input id="input">
+
+</div>
+
+<div id="src-editor">
+<pre id="editor-lines"></pre>
+<textarea id="editor" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+</textarea>
+</div>
+
+</body>
+
+</html>
