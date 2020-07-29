@@ -145,6 +145,18 @@ function vplLoadResourcesInScripts(rootFilename, rootDir, getAuxiliaryFilenames,
 				rsrc[filename] = txt;
 			});
 		}
+		if (gui["doc"]) {
+			for (var key in gui["doc"]) {
+				if (gui["doc"].hasOwnProperty(key)) {
+					for (var key2 in gui["doc"][key]) {
+						if (gui["doc"][key].hasOwnProperty(key2)) {
+							txt = document.getElementById(gui["doc"][key][key2]).textContent.trim();
+							rsrc[gui["doc"][key][key2]] = txt;
+						}
+					}
+				}
+			}
+		}
 		// doc are not embedded in script elements
 		onLoad(gui, rsrc);
 	} catch (e) {
