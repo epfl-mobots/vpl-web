@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
+	<head>
+		<title>About VPL 3</title>
+		<style>
+
+			body, html {
+				width: 100%;
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+
+			nav {
+				position: absolute;
+				top: 40px;
+				left: 0;
+				padding: 5px;
+				padding-left: 10px;
+			}
+			nav p {
+				padding: 0;
+				margin: 0;
+				font: 30px;
+			}
+
+			#container {
+				display: flex;
+				width: 100%;
+				height: 100%;
+			}
+
+			iframe {
+				flex-grow: 1;
+				width: 100%;
+				height: 100%;
+				border: none;
+				margin: 0;
+				padding: 0;
+				padding-left: 50px;
+			}
+
+		</style>
+
+		<script>
+			window.addEventListener("load", function () {
+				document.getElementById("license").src = document.location.search.slice(1);
+			}, false);
+		</script>
+	</head>
+	<body>
+		<nav>
+			<p><span onclick="window.history.back();">&#x25c4;</span></p>
+		</nav>
+		<div id="container">
+			<iframe id="license" frameBorder="0"></iframe>
+		</div>
+	</body>
+</html>
