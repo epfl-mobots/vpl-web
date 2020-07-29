@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
+<head>
+
+<meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="viewport" content="width=device-width, height=device-height, maximum-scale=1, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
+<!-- main definition of the user interface and blocks -->
+<script type="application/json" id="ui.json">
+$INCLUDE(ui/svg/ui.json)
+</script>
+
+<script type="text/x-vpl-css" id="svg.css">
+$INCLUDE(ui/svg/svg.css)
+</script>
+
+<script type="application/json" id="block-list.json">
+$INCLUDE(ui/svg/block-list.json)
+</script>
+
+<script type="application/json" id="aesl.json">
+$INCLUDE(ui/svg/aesl.json)
+</script>
+
+<script type="application/json" id="aseba.json">
+$INCLUDE(ui/svg/aseba.json)
+</script>
+
+<script type="application/json" id="l2.json">
+$INCLUDE(ui/svg/l2.json)
+</script>
+
+<script type="application/json" id="js.json">
+$INCLUDE(ui/svg/js.json)
+</script>
+
+<script type="application/json" id="python.json">
+$INCLUDE(ui/svg/python.json)
+</script>
+
+<script type="application/json" id="toolbars.json">
+$INCLUDE(ui/svg/toolbars.json)
+</script>
+
+<script type="application/json" id="buttons.json">
+$INCLUDE(ui/svg/buttons.json)
+</script>
+
+<!--appearance of interface icons -->
+<script type="image/svg+xml" id="Icons.svg">
+$INCLUDE(ui/svg/Icons.svg)
+</script>
+
+<!-- appearance of the blocks -->
+<script type="image/svg+xml" id="Blocks.svg">
+$INCLUDE(ui/svg/Blocks.svg)
+</script>
+
+<!-- appearance of the blocks for Aseba 1.6 compatibility -->
+<script type="image/svg+xml" id="Blocks16.svg">
+$INCLUDE(ui/svg/Blocks16.svg)
+</script>
+
+<script type="application/json" id="french.json">
+$INCLUDE(ui/svg/french.json)
+</script>
+
+<script type="application/json" id="cmd-vpl-english.json">
+$INCLUDE(ui/svg/cmd-vpl-english.json)
+</script>
+
+<script type="application/json" id="cmd-sim-english.json">
+{
+	"i18n": {
+		"en": {
+			"sim:close": "Close panel",
+			"sim:restart": "Restart simulation",
+			"sim:pause": "Pause simulation",
+			"sim:speedup": "Set simulation speedup factor",
+			"sim:pen": "Switch pen on or off",
+			"sim:clear": "Erase traces made by pen",
+			"sim:map-ground": "Switch ground map on or off",
+			"sim:map-height": "Switch height map on or off",
+			"sim:map-obstacles": "Switch obstacles map on or off",
+			"sim:vpl": "VPL panel",
+			"sim:text": "Text source code panel",
+			"sim:teacher": "Switch customization mode on or off",
+			"sim:teacher-reset": "Reset customization",
+			"sim:btn-button.forward": "Simulate a touch on the forward button",
+			"sim:btn-button.left": "Simulate a touch on the left button",
+			"sim:btn-button.center": "Simulate a touch on the center button",
+			"sim:btn-button.right": "Simulate a touch on the right button",
+			"sim:btn-button.backward": "Simulate a touch on the backward button",
+			"sim:btn-tap": "Simulate an impact detection",
+			"sim:btn-clap": "Simulate a sound detection"
+		}
+	}
+}
+</script>
+
+<script type="application/json" id="cmd-vpl-french.json">
+$INCLUDE(ui/svg/cmd-vpl-french.json)
+</script>
+
+<script type="application/json" id="cmd-sim-french.json">
+{
+	"i18n": {
+		"fr": {
+			"sim:close": "Fermer le panneau",
+			"sim:restart": "Recommencer la simulation",
+			"sim:pause": "Mettre en pause la simulation",
+			"sim:speedup": "Spécifier le facteur d'accélération de la simulation",
+			"sim:pen": "Activer ou désactiver le crayon",
+			"sim:clear": "Effacer les marquages au crayon",
+			"sim:map-ground": "Activer ou désactiver la carte de sol",
+			"sim:map-height": "Activer ou désactiver la carte d'altitude",
+			"sim:map-obstacles": "Activer ou désactiver la carte d'obstacles",
+			"sim:vpl": "Panneau de VPL",
+			"sim:text": "Panneau de code source textuel",
+			"sim:teacher": "Activer ou désactiver le mode de personnalisation",
+			"sim:teacher-reset": "Réinitialiser la personnalisation",
+			"sim:btn-button.forward": "Simuler une pression sur le bouton avant",
+			"sim:btn-button.left": "Simuler une pression sur le bouton gauche",
+			"sim:btn-button.center": "Simuler une pression sur le bouton central",
+			"sim:btn-button.right": "Simuler une pression sur le bouton droite",
+			"sim:btn-button.backward": "Simuler une pression sur le bouton arrière",
+			"sim:btn-tap": "Simuler une détection de choc",
+			"sim:btn-clap": "Simuler une détection de son"
+		}
+	}
+}
+</script>
+
+<script type="application/json" id="block-english.json">
+$INCLUDE(ui/svg/block-english.json)
+</script>
+
+<script type="application/json" id="block-french.json">
+$INCLUDE(ui/svg/block-french.json)
+</script>
+
+<script type="application/json" id="help-blocks-english.json">
+$INCLUDE(ui/svg/help-blocks-english.json)
+</script>
+
+<script type="application/json" id="help-blocks-french.json">
+$INCLUDE(ui/svg/help-blocks-french.json)
+</script>
+
+<script type="text/html" id="doctemplate-english.html">
+$INCLUDE(ui/svg/doctemplate-english.html)
+</script>
+
+<script type="text/html" id="doctemplate-french.html">
+$INCLUDE(ui/svg/doctemplate-french.html)
+</script>
+
+<title>VPL</title>
+
+<style>
+html {
+	height: 100%;
+}
+body {
+	height: 100%;
+	margin: 0;
+}
+#programCanvas {
+	width: 100%;
+	height: 100%;
+	display: block;
+	z-index: 10;
+}
+#src-editor {
+	width: 100%;
+	position: fixed;
+	z-index: 20;
+}
+#editor {
+	height: 100%;
+	display: block;
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-left: 5pt;
+	padding-right: 5pt;
+	margin: 0;
+	border: 0;
+	box-sizing: border-box;
+	tab-size: 4;
+	font-family: monospace;
+	font-size: 11pt;
+}
+pre#editor-lines {
+	background-color: #eceff1;
+    width: 56px;
+    float: left;
+    color: #546e7a;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 5pt;
+    text-align: right;
+    overflow: hidden;
+	user-select: none;
+}
+
+#input {
+	position: absolute;
+	z-index: 1000;
+	font-family: sans-serif;
+	font-size: 15pt;
+	top: 10px;
+	left: 10px;
+	display: none;
+}
+
+@media only screen and (max-device-width: 1024px) {
+	#editor {
+		tab-size: 2;
+		font-size: 10pt;
+	}
+}
+</style>
+
+<script src="vpl-min.js"></script>
+<script src="thymio/thymio.js"></script>
+
+<script>
+
+var vplUIRoot = "ui/svg";
+
+</script>
+
+</head>
+
+<body>
+
+<div id="vpl-editor">
+
+<canvas id="programCanvas" width="900" height="700"></canvas>
+
+<input id="input">
+
+</div>
+
+<div id="src-editor">
+<!-- <pre id="editor-lines"></pre> -->
+<textarea id="editor" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+</textarea>
+</div>
+
+</body>
+
+</html>
