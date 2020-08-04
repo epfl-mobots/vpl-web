@@ -300,6 +300,11 @@ A3a.vpl.Application.prototype.setHelpForCurrentAppState = function () {
 	}
 
 	if (this.dynamicHelp) {
+		var commands = this.vplToolbarConfig.concat(this.vplToolbar2Config)
+			.filter(function (id) {
+				return id[0] !== "!" && this.commands.isAvailable(id);
+			}, this);
+
 		var blocks = this.program.mode === A3a.vpl.mode.basic
 		 	? this.program.enabledBlocksBasic
 			: this.program.enabledBlocksAdvanced;
@@ -310,6 +315,35 @@ A3a.vpl.Application.prototype.setHelpForCurrentAppState = function () {
 		});
 		this.dynamicHelp.clearImageMapping();
 		var dims = A3a.vpl.Canvas.calcDims(100, 100);
+		var cssBoxes = this.getCSSBoxes(this.css);
+		var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, this.vplToolbarConfig, ["vpl", "top"]);
+		var toolbar2ItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, this.vplToolbar2Config, ["vpl", "bottom"]);
+		this.forcedCommandState = {
+			disabled: false,
+			isAvailable: true,
+			isPressed: false,
+			isEnabled: true,
+			isSelected: false,
+			state: null
+		};
+		var controlBar = this.createVPLToolbar(this.vplToolbarConfig, ["vpl", "top"],
+			cssBoxes.toolbarBox, cssBoxes.toolbarSeparatorBox, toolbarItemBoxes);
+		var controlBar2 = this.createVPLToolbar(this.vplToolbar2Config, ["vpl", "bottom"],
+			cssBoxes.toolbar2Box, cssBoxes.toolbarSeparator2Box, toolbar2ItemBoxes);
+		var scale = 50 / toolbarItemBoxes["vpl:new"].width;
+		this.vplToolbarConfig.forEach(function (id) {
+			var url = controlBar.toolbarButtonToDataURL(id, [id], dims, scale);
+			if (url) {
+				this.dynamicHelp.addImageMapping("vpl:cmd:" + id.replace(/:/g, "-"), url.url);
+			}
+		}, this);
+		this.vplToolbar2Config.forEach(function (id) {
+			var url = controlBar2.toolbarButtonToDataURL(id, [id], dims, scale);
+			if (url) {
+				this.dynamicHelp.addImageMapping("vpl:cmd:" + id.replace(/:/g, "-"), url.url);
+			}
+		}, this);
+		this.forcedCommandState = null;
 		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate) {
 			try {
 				var block = new A3a.vpl.Block(blockTemplate, null, null);
@@ -319,7 +353,7 @@ A3a.vpl.Application.prototype.setHelpForCurrentAppState = function () {
 				this.dynamicHelp.addImageMapping(urlMD, url);
 			} catch (e) {}
 		}, this);
-		var html = this.dynamicHelp.generate(this.i18n.language, blocks, this.docTemplates);
+		var html = this.dynamicHelp.generate(this.i18n.language, commands, blocks, this.docTemplates);
 		this.setHelpContent(html);
 	}
 };
@@ -348,11 +382,48 @@ A3a.vpl.Application.prototype.generateBlockList = function () {
 	A3a.vpl.Program.downloadText(str, "block-list.json", "application/json");
 };
 
+/** Download json help skeleton for buttons
+	@param {string=} language
+	@return {void}
+*/
+A3a.vpl.Application.prototype.generateDynamicHelpButtonContentSkeleton = function (language) {
+	language = language || this.i18n.language;
+	var languageName = {
+		"en": "english",
+		"fr": "french",
+		"de": "german",
+		"it": "italian",
+		"sp": "spanish"
+	}[language] || "unknown";
+
+	var buttons = {};
+	this.vplToolbarConfig.concat(this.vplToolbar2Config).forEach(function (id) {
+		if (id[0] !== "!") {
+			buttons[id] = [
+				"# " + this.translate(id, language),
+				"![" + id + "](vpl:cmd:" + id.replace(/:/g, "-") + ")",
+				"..."
+			];
+		}
+	}, this);
+
+	var c = {
+		"help": {}
+	};
+	c["help"][language] = {};
+	c["help"][language]["buttons"] = buttons;
+	var str = JSON.stringify(c, null, "\t");
+
+	A3a.vpl.Program.downloadText(str,
+		"help-buttons-" + languageName + ".json",
+		"application/json");
+};
+
 /** Download json help skeleton for blocks
 	@param {string=} language
 	@return {void}
 */
-A3a.vpl.Application.prototype.generateDynamicHelpContentSkeleton = function (language) {
+A3a.vpl.Application.prototype.generateDynamicHelpBlockContentSkeleton = function (language) {
 	language = language || this.i18n.language;
 	var languageName = {
 		"en": "english",

@@ -279,7 +279,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 			ctx.strokeStyle = isEnabled ? col.fg : col.fgDis;
 			ctx.lineWidth = dims.controlLineWidth;
 			ctx.stroke();
-			ctx.lineWidth = 2 * dims.controlLineWidth;
+			ctx.lineWidth = 1.5 * dims.controlLineWidth;
 			ctx.beginPath();
 			ctx.moveTo(dims.controlSize * 0.8,
 				dims.controlSize * 0.5);
@@ -300,7 +300,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 			ctx.fillRect(0, 0,
 				dims.controlSize, dims.controlSize);
 			ctx.strokeStyle = isEnabled ? col.fg : col.fgDis;
-			ctx.lineWidth = 2 * dims.controlLineWidth;
+			ctx.lineWidth = 1.5 * dims.controlLineWidth;
 			ctx.beginPath();
 			ctx.moveTo(dims.controlSize * 0.8,
 				dims.controlSize * 0.2);
@@ -346,7 +346,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 			ctx.strokeStyle = isEnabled ? col.fg : col.fgDis;
 			ctx.lineWidth = dims.controlLineWidth;
 			ctx.stroke();
-			ctx.lineWidth = 2 * dims.controlLineWidth;
+			ctx.lineWidth = 1.5 * dims.controlLineWidth;
 			ctx.beginPath();
 			ctx.moveTo(dims.controlSize * 0.8,
 				dims.controlSize * 0.55);
@@ -387,7 +387,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 			ctx.strokeStyle = isEnabled ? col.fg : col.fgDis;
 			ctx.lineWidth = dims.controlLineWidth;
 			ctx.stroke();
-			ctx.lineWidth = 2 * dims.controlLineWidth;
+			ctx.lineWidth = 1.5 * dims.controlLineWidth;
 			ctx.beginPath();
 			ctx.moveTo(dims.controlSize * 0.8,
 				dims.controlSize * 0.5);
@@ -897,7 +897,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 				dims.controlSize * 0.27);
 			ctx.lineWidth = dims.controlLineWidth;
 			ctx.stroke();
-			ctx.lineWidth = 2 * dims.controlLineWidth;
+			ctx.lineWidth = 1.5 * dims.controlLineWidth;
 			ctx.beginPath();
 			ctx.moveTo(dims.controlSize * 0.8,
 				dims.controlSize * 0.5);
@@ -943,7 +943,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 				dims.controlSize * 0.27);
 			ctx.lineWidth = dims.controlLineWidth;
 			ctx.stroke();
-			ctx.lineWidth = 2 * dims.controlLineWidth;
+			ctx.lineWidth = 1.5 * dims.controlLineWidth;
 			ctx.beginPath();
 			ctx.moveTo(dims.controlSize * 0.8,
 				dims.controlSize * 0.5);
