@@ -712,7 +712,6 @@ A3a.vpl.Application.prototype.vplResize = function () {
 	@return {void}
 */
 A3a.vpl.Application.prototype.stopRobot = function (abnormal) {
-	abnormal=true;
 	if (this.currentRobotIndex >= 0) {
 		var stopBlockTemplate = null;
 		if (abnormal) {
