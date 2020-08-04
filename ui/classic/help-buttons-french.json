@@ -1,0 +1,163 @@
+{
+	"help": {
+		"fr": {
+			"buttons": {
+				"vpl:close": [
+					"# Ferme la vue",
+					"![vpl:close](vpl:cmd:vpl-close)",
+					"..."
+				],
+				"vpl:about": [
+					"# Affiche des informations sur l'application",
+					"![vpl:about](vpl:cmd:vpl-about)",
+					"..."
+				],
+				"vpl:help": [
+					"# Affiche la documentation",
+					"![vpl:help](vpl:cmd:vpl-help)",
+					"..."
+				],
+				"vpl:new": [
+					"# Nouveau programme",
+					"![vpl:new](vpl:cmd:vpl-new)",
+					"..."
+				],
+				"vpl:save": [
+					"# Enregistre le programme",
+					"![vpl:save](vpl:cmd:vpl-save)",
+					"..."
+				],
+				"vpl:load": [
+					"# Charge le programme",
+					"![vpl:load](vpl:cmd:vpl-load)",
+					"..."
+				],
+				"vpl:upload": [
+					"# Téléverse le programme",
+					"![vpl:upload](vpl:cmd:vpl-upload)",
+					"..."
+				],
+				"vpl:filename": [
+					"# Nom de fichier",
+					"![vpl:filename](vpl:cmd:vpl-filename)",
+					"..."
+				],
+				"vpl:exportToHTML": [
+					"# Exporte le programme en HTML",
+					"![vpl:exportToHTML](vpl:cmd:vpl-exportToHTML)",
+					"..."
+				],
+				"vpl:advanced": [
+					"# Commute entre les modes de base et avancés",
+					"![vpl:advanced](vpl:cmd:vpl-advanced)",
+					"..."
+				],
+				"vpl:readonly": [
+					"# Programme en mode lecture seule",
+					"![vpl:readonly](vpl:cmd:vpl-readonly)",
+					"..."
+				],
+				"vpl:undo": [
+					"# Annule le dernier changement",
+					"![vpl:undo](vpl:cmd:vpl-undo)",
+					"..."
+				],
+				"vpl:redo": [
+					"# Rétablit le dernier changement annulé",
+					"![vpl:redo](vpl:cmd:vpl-redo)",
+					"..."
+				],
+				"vpl:connected": [
+					"# Témoin de connexion",
+					"![vpl:connected](vpl:cmd:vpl-connected)",
+					"..."
+				],
+				"vpl:run": [
+					"# Exécute le programme",
+					"![vpl:run](vpl:cmd:vpl-run)",
+					"..."
+				],
+				"vpl:stop": [
+					"# Arrête le programme",
+					"![vpl:stop](vpl:cmd:vpl-stop)",
+					"..."
+				],
+				"vpl:debug": [
+					"# vpl:debug",
+					"![vpl:debug](vpl:cmd:vpl-debug)",
+					"..."
+				],
+				"vpl:robot": [
+					"# Change de robot",
+					"![vpl:robot](vpl:cmd:vpl-robot)",
+					"..."
+				],
+				"vpl:flash": [
+					"# Écrit le programme dans la mémoire du robot",
+					"![vpl:flash](vpl:cmd:vpl-flash)",
+					"..."
+				],
+				"vpl:sim": [
+					"# Affiche le simulateur",
+					"![vpl:sim](vpl:cmd:vpl-sim)",
+					"..."
+				],
+				"vpl:text": [
+					"# Affiche le code source",
+					"![vpl:text](vpl:cmd:vpl-text)",
+					"..."
+				],
+				"vpl:teacher-reset": [
+					"# Remet la configuration à l'état d'origine",
+					"![vpl:teacher-reset](vpl:cmd:vpl-teacher-reset)",
+					"..."
+				],
+				"vpl:teacher-save": [
+					"# Enregistre la configuration",
+					"![vpl:teacher-save](vpl:cmd:vpl-teacher-save)",
+					"..."
+				],
+				"vpl:teacher-setasnew": [
+					"# Installe la configuration pour les nouveaux programmes",
+					"![vpl:teacher-setasnew](vpl:cmd:vpl-teacher-setasnew)",
+					"..."
+				],
+				"vpl:teacher": [
+					"# Commute entre les modes de programmation et de configuration",
+					"![vpl:teacher](vpl:cmd:vpl-teacher)",
+					"..."
+				],
+				"vpl:message-error": [
+					"# Message d'erreur",
+					"![vpl:message-error](vpl:cmd:vpl-message-error)",
+					"..."
+				],
+				"vpl:message-warning": [
+					"# Message d'avertissement",
+					"![vpl:message-warning](vpl:cmd:vpl-message-warning)",
+					"..."
+				],
+				"vpl:duplicate": [
+					"# Duplique une règle (cible de glisser/déposer)",
+					"![vpl:duplicate](vpl:cmd:vpl-duplicate)",
+					"..."
+				],
+				"vpl:disable": [
+					"# Désactive un bloc ou une règle (cible de glisser/déposer)",
+					"![vpl:disable](vpl:cmd:vpl-disable)",
+					"..."
+				],
+				"vpl:lock": [
+					"# Verrouille un bloc ou une règle (cible de glisser/déposer)",
+					"![vpl:lock](vpl:cmd:vpl-lock)",
+					"..."
+				],
+				"vpl:trashcan": [
+					"# Supprime un bloc ou une règle (cible de glisser/déposer)",
+					"![vpl:trashcan](vpl:cmd:vpl-trashcan)",
+					"..."
+				]
+			}
+		}
+	}
+}
