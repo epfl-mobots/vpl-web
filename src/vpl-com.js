@@ -1,5 +1,5 @@
 /*
-	Copyright 2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2019-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -100,6 +100,50 @@ A3a.vpl.Com.prototype.connect = function () {
 	});
 
 	this.ws.addEventListener("message", function (event) {
+
+		function toHTML(content, isBase64, suffix) {
+
+			function centeredImage(mimetype) {
+				var img = "<img src='data:" + mimetype + ";base64," + (isBase64 ? content : btoa(content)) + "' style='max-width:100%;max-height:100%;'>";
+				return "<div style='display: table; height: 100%; width: 100%; overflow: hidden;'>" +
+					"<div style='display: table-cell; vertical-align: middle; text-align: center;'>" +
+					img +
+					"</div>" +
+					"</div>";
+			}
+
+			switch (suffix.toLowerCase()) {
+			case "html":
+			case "htm":
+				return isBase64 ? atob(content) : content;
+			case "txt":
+				if (isBase64) {
+					content = atob(content);
+				}
+				return "<pre style='width: 100%; height: 100%;'>" +
+					content
+						.replace(/&/g, "&amp;")
+					 	.replace(/</g, "&lt;") +
+					"</pre>";
+				break;
+			case "gif":
+				return centeredImage("image/gif");
+			case "jpg":
+			case "jpeg":
+				return centeredImage("image/jpeg");
+			case "png":
+				return centeredImage("image/png");
+			case "svg":
+				return centeredImage("image/svg+xml");
+			default:
+				return "";
+			}
+		}
+
+		function toDataURL(mimetype, data) {
+			return "data:" + mimetype + ";base64," + btoa(data);
+		}
+
 		try {
 			var msg = JSON.parse(event.data);
 			switch (msg["type"]) {
@@ -113,9 +157,13 @@ A3a.vpl.Com.prototype.connect = function () {
 			case "file":
 				var kind = msg["data"]["kind"];
 				var content = msg["data"]["content"];
+				var isBase64 = msg["data"]["base64"] || false;
+				var suffix = A3a.vpl.Application.getFileSuffix(msg["data"]["name"] || "");
 				switch (kind) {
 				case "vpl":
-					var suffix = A3a.vpl.Application.getFileSuffix(msg["data"]["name"] || "");
+					if (isBase64) {
+						content = btoa(content);
+					}
 					if (/^[\s]*{/.test(content)) {
 						// json
 						self.app.loadProgramJSON(content, {dontChangeProgram: suffix === "vpl3ui"});
@@ -128,13 +176,13 @@ A3a.vpl.Com.prototype.connect = function () {
 					self.app.vplCanvas.update();
 					break;
 				case "about":
-					self.app.setAboutBoxContent(content);
+					self.app.setAboutBoxContent(toHTML(content, isBase64, suffix));
 					break;
 				case "help":
-					self.app.setHelpContent(content);
+					self.app.setHelpContent(toHTML(content, isBase64, suffix));
 					break;
 				case "suspend":
-					self.app.setSuspendBoxContent(content);
+					self.app.setSuspendBoxContent(toHTML(content, isBase64, suffix));
 					break;
 				}
 			}
