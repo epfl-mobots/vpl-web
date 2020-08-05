@@ -172,7 +172,9 @@ A3a.vpl.Com.prototype.connect = function () {
 						self.app.program.importFromAESLFile(content);
 						self.app.vplCanvas.onUpdate();
 					}
-					self.app.program.filename = msg["data"]["name"] || null;
+					if (suffix !== "vpl3ui") {
+						self.app.program.filename = msg["data"]["name"] || null;
+					}
 					self.app.vplCanvas.update();
 					break;
 				case "about":
