@@ -138,7 +138,7 @@
 				"vpl:message-warning": [
 					"# Warning message",
 					"![vpl:message-warning](vpl:cmd:vpl-message-warning)",
-					"Description of the first warning og the VPL program, provided there are no errors. A warning symbol is also displayed next to the problematic rule.",
+					"Description of the first warning of the VPL program, provided there are no errors. A warning symbol is also displayed next to the problematic rule.",
 					"A program with warning(s) can be run, but its behavior can be unexpected."
 				],
 				"vpl:duplicate": [
