@@ -762,6 +762,7 @@ A3a.vpl.Application.prototype.log = function (data) {
 				"nblocks": this.program.program.reduce(function (acc, cur) {
 					return acc + cur.events.length + cur.actions.length;
 				}, 0),
+				"uploadedToServer": this.program.uploadedToServer,
 				"error": this.vplMessage && !this.vplMessageIsWarning ? this.vplMessage : null,
 				"warning": this.vplMessage && this.vplMessageIsWarning ? this.vplMessage : null,
 				"error-tr": this.vplMessage && !this.vplMessageIsWarning ? this.i18n.translate(this.vplMessage) : null,
