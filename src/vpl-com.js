@@ -208,7 +208,7 @@ A3a.vpl.Com.prototype.connect = function () {
 A3a.vpl.Com.prototype.log = function (data) {
 	try {
 		if (data["type"] === "cmd" && data["data"] &&
-			["vpl:run"].indexOf(data["data"]["cmd"]) >= 0) {
+			["vpl:run", "vpl:save", "vpl:upload"].indexOf(data["data"]["cmd"]) >= 0) {
 			// send file before logging command
 			var json = this.app.program.exportToJSON({lib: false, prog: true});
 			var fileMsg = {
@@ -220,7 +220,8 @@ A3a.vpl.Com.prototype.log = function (data) {
 				"data": {
 					"name": this.app.program.filename,
 					"content": json
-				}
+				},
+				"reason": data["data"]["cmd"]
 			};
 			this.ws.send(JSON.stringify(fileMsg));
 		}
