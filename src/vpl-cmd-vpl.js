@@ -133,9 +133,13 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		action: function (app, modifier) {
 			var json = app.program.exportToJSON({lib: false, prog: true});
 			window["vplUpload"](app.program.filename, json);
+			app.program.uploadedToServer = true;
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.readOnly && !app.program.isEmpty();
+		},
+		isSelected: function (app) {
+			return app.program.uploadedToServer;
 		},
 		object: this,
 		isAvailable: function (app) {

@@ -368,38 +368,43 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 				dims.controlSize, dims.controlSize);
 			ctx.beginPath();
 			ctx.moveTo(dims.controlSize * 0.25,
-				dims.controlSize * 0.3);
+				dims.controlSize * 0.25);
 			ctx.lineTo(dims.controlSize * 0.25,
-				dims.controlSize * 0.8);
+				dims.controlSize * 0.75);
 			ctx.lineTo(dims.controlSize * 0.67,
-				dims.controlSize * 0.8);
+				dims.controlSize * 0.75);
 			ctx.lineTo(dims.controlSize * 0.67,
-				dims.controlSize * 0.37);
+				dims.controlSize * 0.32);
 			ctx.lineTo(dims.controlSize * 0.6,
-				dims.controlSize * 0.3);
+				dims.controlSize * 0.25);
 			ctx.closePath();
 			ctx.moveTo(dims.controlSize * 0.6,
-				dims.controlSize * 0.3);
+				dims.controlSize * 0.25);
 			ctx.lineTo(dims.controlSize * 0.6,
-				dims.controlSize * 0.37);
+				dims.controlSize * 0.32);
 			ctx.lineTo(dims.controlSize * 0.67,
-				dims.controlSize * 0.37);
+				dims.controlSize * 0.32);
 			ctx.strokeStyle = isEnabled ? col.fg : col.fgDis;
 			ctx.lineWidth = dims.controlLineWidth;
 			ctx.stroke();
 			ctx.lineWidth = 1.5 * dims.controlLineWidth;
 			ctx.beginPath();
 			ctx.moveTo(dims.controlSize * 0.8,
-				dims.controlSize * 0.5);
+				dims.controlSize * 0.45);
 			ctx.lineTo(dims.controlSize * 0.8,
-				dims.controlSize * 0.2);
+				dims.controlSize * 0.15);
 			ctx.moveTo(dims.controlSize * 0.7,
-				dims.controlSize * 0.3);
+				dims.controlSize * 0.25);
 			ctx.lineTo(dims.controlSize * 0.8,
-				dims.controlSize * 0.2);
+				dims.controlSize * 0.15);
 			ctx.lineTo(dims.controlSize * 0.9,
-				dims.controlSize * 0.3);
+				dims.controlSize * 0.25);
 			ctx.stroke();
+			ctx.fillStyle = isEnabled ? isSelected || isPressed ? col.fg : col.fgOff : col.fgDis;
+			ctx.fillRect(dims.controlSize * 0.1,
+				dims.controlSize * 0.8,
+				dims.controlSize * 0.8,
+				dims.controlSize * 0.1);
 		},
 		"vpl:text": function () {
 			ctx.fillStyle = isPressed && isEnabled
