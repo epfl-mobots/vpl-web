@@ -366,6 +366,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 				: col.bg;
 			ctx.fillRect(0, 0,
 				dims.controlSize, dims.controlSize);
+			// sheet with folded corner
 			ctx.beginPath();
 			ctx.moveTo(dims.controlSize * 0.25,
 				dims.controlSize * 0.25);
@@ -387,18 +388,38 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 			ctx.strokeStyle = isEnabled ? col.fg : col.fgDis;
 			ctx.lineWidth = dims.controlLineWidth;
 			ctx.stroke();
+			// uploaded dummy
+			var top = 0.15;
+			if (state === "uploaded" || state === "canUploadAgain") {
+				ctx.beginPath();
+				ctx.moveTo(dims.controlSize * 0.7,
+					dims.controlSize * 0.1);
+				ctx.lineTo(dims.controlSize * 0.7,
+					dims.controlSize * 0.35);
+				ctx.lineTo(dims.controlSize * 0.9,
+					dims.controlSize * 0.35);
+				ctx.lineTo(dims.controlSize * 0.9,
+					dims.controlSize * 0.16);
+				ctx.lineTo(dims.controlSize * 0.84,
+					dims.controlSize * 0.1);
+				ctx.closePath();
+				ctx.fillStyle = col.fgDim;
+				ctx.fill();
+				top = 0.4;	// lower arrow
+			}
+			// arrow
 			ctx.lineWidth = 1.5 * dims.controlLineWidth;
 			ctx.beginPath();
 			ctx.moveTo(dims.controlSize * 0.8,
-				dims.controlSize * 0.45);
+				dims.controlSize * (top / 1.5 + 0.35));
 			ctx.lineTo(dims.controlSize * 0.8,
-				dims.controlSize * 0.15);
+				dims.controlSize * top);
 			ctx.moveTo(dims.controlSize * 0.7,
-				dims.controlSize * 0.25);
+				dims.controlSize * (top + 0.1));
 			ctx.lineTo(dims.controlSize * 0.8,
-				dims.controlSize * 0.15);
+				dims.controlSize * top);
 			ctx.lineTo(dims.controlSize * 0.9,
-				dims.controlSize * 0.25);
+				dims.controlSize * (top + 0.1));
 			ctx.stroke();
 			ctx.fillStyle = isEnabled ? isSelected || isPressed ? col.fg : col.fgOff : col.fgDis;
 			ctx.fillRect(dims.controlSize * 0.1,

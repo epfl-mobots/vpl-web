@@ -177,6 +177,8 @@ A3a.vpl.Application = function (canvasEl) {
 		self.log(data);
 	});
 
+	this.programNotUploadedToServerYet = true;	// program has never been uploaded to the server since last this.new()
+
 	this.vplMessage = "";
 	this.vplMessageIsWarning = false;	// false for error, true for warning
 

@@ -331,7 +331,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:new": reset VPL program to start a new program
 - "vpl:save": download the VPL program
 - "vpl:exportToHTML": export the VPL program to a self-contained HTML file
-- "vpl:upload": upload VPL program to the central repository (to the teacher computer)
+- "vpl:upload": upload VPL program to the central repository or to the teacher computer (state is "empty" if the program is empty, "uploaded" if the program on the screen is the uploaded program, "canUpload" if the program has never been uploaded, or "canUploadAgain" if the program has already been uploaded but is not the one on the screen)
 - "vpl:text": switch to the text programming language editor (Aseba, L2 or JavaScript)
 - "vpl:text-toggle": toggle visibility of text editor (replaces "vpl:text" and "src:close")
 - "vpl:advanced": toggle between basic and advanced VPL mode
