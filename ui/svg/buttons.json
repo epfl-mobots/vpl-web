@@ -180,6 +180,98 @@
 			]
 		},
 		{
+			"name": "vpl:upload",
+			"state": ["pressed", "=uploaded"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#submit3_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:upload",
+			"state": ["disabled", "=uploaded"],
+			"draw": [
+				{
+					"uri": "Icons.svg#submit3_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:upload",
+			"state": ["=uploaded"],
+			"draw": [
+				{
+					"uri": "Icons.svg#submit3_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:upload",
+			"state": ["pressed", "=canUploadAgain"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#submit2b_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:upload",
+			"state": ["disabled", "=canUploadAgain"],
+			"draw": [
+				{
+					"uri": "Icons.svg#submit2b_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:upload",
+			"state": ["=canUploadAgain"],
+			"draw": [
+				{
+					"uri": "Icons.svg#submit2b_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:upload",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#submit2_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:upload",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#submit2_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:upload",
+			"draw": [
+				{
+					"uri": "Icons.svg#submit2_default"
+				}
+			]
+		},
+		{
 			"name": "vpl:exportToHTML",
 			"state": ["pressed"],
 			"draw": [
