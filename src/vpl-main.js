@@ -40,11 +40,11 @@ document.addEventListener("mouseup", function (e) {
 // window-level touch drag
 A3a.vpl.lastTouch = null;
 document.addEventListener("touchmove", function (e) {
-	e.preventDefault();
 	if (A3a.vpl.dragFun !== null) {
 		var touches = e.targetTouches;
 		A3a.vpl.lastTouch = touches[0];
 		A3a.vpl.dragFun(A3a.vpl.lastTouch, false, true);
+		e.preventDefault();
 	}
 	return false;
 }, {"capture": false, "passive": false});
