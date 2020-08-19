@@ -280,7 +280,7 @@
 		{
 			"name": "clock",
 			"aseba": {
-				"sectionBegin": "onevent `$[0] === 10 ? 'prox' : 'button'`\n"
+				"sectionBegin": "onevent `$[0] === 10 ? 'prox' : 'buttons'`\n"
 			}
 		},
 		{
