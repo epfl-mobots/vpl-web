@@ -1,0 +1,169 @@
+{
+	"help": {
+		"en": {
+			"buttons": {
+				"vpl:close": [
+					"# Close panel",
+					"![vpl:close](vpl:cmd:vpl-close)",
+					"Close the VPL programming environment panel."
+				],
+				"vpl:about": [
+					"# Show application information",
+					"![show application information](vpl:cmd:vpl-about)",
+					"Show information about the VPL application and its copyright."
+				],
+				"vpl:help": [
+					"# Show documentation",
+					"![show documentation](vpl:cmd:vpl-help)",
+					"Show VPL documentation."
+				],
+				"vpl:new": [
+					"# New program",
+					"![new program](vpl:cmd:vpl-new)",
+					"Create a new program without any rule. Like any action which modifies the program, this can be undone with the Undo button."
+				],
+				"vpl:save": [
+					"# Save program",
+					"![vpl:save](vpl:cmd:vpl-save)",
+					"Save the VPL program to the local computer."
+				],
+				"vpl:load": [
+					"# Load program",
+					"![vpl:load](vpl:cmd:vpl-load)",
+					"Load an existing VPL program from the local computer."
+				],
+				"vpl:upload": [
+					"# Upload program",
+					"![vpl:upload](vpl:cmd:vpl-upload)",
+					"Submit the VPL program."
+				],
+				"vpl:filename": [
+					"# Filename",
+					"![vpl:filename](vpl:cmd:vpl-filename)",
+					"Filename of the current VPL program."
+				],
+				"vpl:exportToHTML": [
+					"# Export program view to HTML",
+					"![vpl:exportToHTML](vpl:cmd:vpl-exportToHTML)",
+					"Export the VPL program to an HTML file saved on the local computer."
+				],
+				"vpl:advanced": [
+					"# Switch advanced mode on or off",
+					"![vpl:advanced](vpl:cmd:vpl-advanced)",
+					"Toggles the advanced mode on or off. The advanced mode has more advanced blocks."
+				],
+				"vpl:readonly": [
+					"# Read-only program",
+					"![read-only program](vpl:cmd:vpl-readonly)",
+					"Indicator displayed if the VPL program cannot be modified."
+				],
+				"vpl:undo": [
+					"# Undo last program change",
+					"![vpl:undo](vpl:cmd:vpl-undo)",
+					"Undo the last action which modified the VPL program."
+				],
+				"vpl:redo": [
+					"# Redo last undone program change",
+					"![vpl:redo](vpl:cmd:vpl-redo)",
+					"Redo the last undone action. Multiple undone actions can be redone, step by step."
+				],
+				"vpl:connected": [
+					"# Connection status",
+					"![vpl:connected](vpl:cmd:vpl-connected)",
+					"Indicator showing if VPL can communicate with the robot. The rectangle at the bottom represents VPL on your computer. A cross on the link indicates a broken connection, such as a disconnected cable or a robot switched off."
+				],
+				"vpl:run": [
+					"# Run program",
+					"![vpl:run](vpl:cmd:vpl-run)",
+					"Run the VPL program on the robot. The confirmation bar is displayed when the program running on the robot matches the one on the screen, i.e. after you have clicked the button and before you have made changes or stopped the program."
+				],
+				"vpl:stop": [
+					"# Stop program",
+					"![vpl:stop](vpl:cmd:vpl-stop)",
+					"Stop the robot."
+				],
+				"vpl:debug": [
+					"# vpl:debug",
+					"![vpl:debug](vpl:cmd:vpl-debug)",
+					"Toggle the debugging mode on or off."
+				],
+				"vpl:robot": [
+					"# Change robot",
+					"![vpl:robot](vpl:cmd:vpl-robot)",
+					"Change the robot."
+				],
+				"vpl:flash": [
+					"# Write program to robot's flash memory",
+					"![vpl:flash](vpl:cmd:vpl-flash)",
+					"Store the VPL program in the flash memory of the robot (permanent memory). Then you can disconnect the robot and switch it off. The program starts automatically when the robot is switched on.",
+					"The number of times a program can be written to the flash memory is limited to a few hundreds."
+				],
+				"vpl:sim": [
+					"# Simulator panel",
+					"![vpl:sim](vpl:cmd:vpl-sim)",
+					"Display the simulator panel. The simulator is a program which lets you run a VPL program without a real robot and to simulate the motion, state, leds, and some of the events."
+				],
+				"vpl:text": [
+					"# Text source code panel",
+					"![vpl:text](vpl:cmd:vpl-text)",
+					"Display the text source code panel.",
+					"Upon every change, the VPL program is translated to another programming language such as Aseba which is displayed in this panel. You can also modify it directly, but then you loose the relationship with the original VPL program."
+				],
+				"vpl:teacher-reset": [
+					"# Reset customization",
+					"![vpl:teacher-reset](vpl:cmd:vpl-teacher-reset)",
+					"Reset the customization to the standard user interface and selection of blocks."
+				],
+				"vpl:teacher-save": [
+					"# Save customization",
+					"![vpl:teacher-save](vpl:cmd:vpl-teacher-save)",
+					"Save the customization of the user interface and selection of blocks to a .vpl3ui file."
+				],
+				"vpl:teacher-setasnew": [
+					"# Install customization for new programs",
+					"![vpl:teacher-setasnew](vpl:cmd:vpl-teacher-setasnew)",
+					"Use the current customization of the user interface and selection of blocks as the application state after a \"New program\" command."
+				],
+				"vpl:teacher": [
+					"# Switch customization mode on or off",
+					"![vpl:teacher](vpl:cmd:vpl-teacher)",
+					"Toggle the customization mode of the user interface and the selectino of blocks."
+				],
+				"vpl:message-error": [
+					"# Error message",
+					"![vpl:message-error](vpl:cmd:vpl-message-error)",
+					"Description of the first error in the VPL program. An error symbol is also displayed next to the problematic rule.",
+					"A program with error(s) cannot be run."
+				],
+				"vpl:message-warning": [
+					"# Warning message",
+					"![vpl:message-warning](vpl:cmd:vpl-message-warning)",
+					"Description of the first warning of the VPL program, provided there are no errors. A warning symbol is also displayed next to the problematic rule.",
+					"A program with warning(s) can be run, but its behavior can be unexpected."
+				],
+				"vpl:duplicate": [
+					"# Duplicate rule (rule drop target)",
+					"![vpl:duplicate](vpl:cmd:vpl-duplicate)",
+					"By dragging a rule and dropping it on this button, the rule is duplicated. Then the blocks in the duplicate can (and should to avoid errors) be changed."
+				],
+				"vpl:disable": [
+					"# Disable block or rule (drop target)",
+					"![vpl:disable](vpl:cmd:vpl-disable)",
+					"By dragging a block or a whole rule and dropping it on this button, the block or rule is disabled or reenabled.",
+					"A disabled block or rule has no effect; it is ignored when checking for errors or changing the behavior of the robot. But it can be convenient to test different versions of the program."
+				],
+				"vpl:lock": [
+					"# Lock block or rule (drop target)",
+					"![vpl:lock](vpl:cmd:vpl-lock)",
+					"By dragging a block or a whole rule on this button, the block or rule is locked.",
+					"The parameters of a locked block canot be changed. The blocks in a locked rule cannot be changed."
+				],
+				"vpl:trashcan": [
+					"# Remove block or rule (drop target)",
+					"![vpl:trashcan](vpl:cmd:vpl-trashcan)",
+					"By dragging a block or a whole rule on this button, the block or rule is deleted. Like any action which modifies the program, this can be undone with the Undo button."
+				]
+			}
+		}
+	}
+}

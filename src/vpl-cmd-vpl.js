@@ -61,7 +61,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			app.suspended = !app.suspended;
 			if (app.suspended) {
 				if (app.canStopRobot()) {
-					app.stopRobot();
+					app.stopRobot(true);
 					app.program.uploaded = false;
 				}
 				app.suspendBox.show();
@@ -133,9 +133,27 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		action: function (app, modifier) {
 			var json = app.program.exportToJSON({lib: false, prog: true});
 			window["vplUpload"](app.program.filename, json);
+			app.program.uploadedToServer = true;
+			app.programNotUploadedToServerYet = false;
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.readOnly && !app.program.isEmpty();
+		},
+		isSelected: function (app) {
+			return app.program.uploadedToServer;
+		},
+		getState: function (app) {
+			if (app.program.isEmpty()) {
+				return "empty";
+			} else if (app.program.uploadedToServer) {
+				return "uploaded";
+			} else {
+				if (app.programNotUploadedToServerYet) {
+					return "canUpload";
+				} else {
+					return "canUploadAgain";
+				}
+			}
 		},
 		object: this,
 		isAvailable: function (app) {

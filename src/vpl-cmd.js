@@ -204,6 +204,10 @@ A3a.vpl.Commands.prototype.canDrop = function (name, droppedItem) {
 	@return {boolean}
 */
 A3a.vpl.Commands.prototype.isAvailable = function (name) {
+	if (window["vplConfig"] && window["vplConfig"]["ignoredCommands"] &&
+		window["vplConfig"]["ignoredCommands"].indexOf(name) >= 0) {
+			return false;
+		}
 	var cmd = this.find(name);
 	return cmd != null && cmd.isAvailable();
 };

@@ -35,6 +35,7 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.program = [];
 	this.uploaded = false;	// program matches what's running
 	this.notUploadedYet = true;	// program has never been loaded since last this.new()
+	this.uploadedToServer = false;	// program matches what's been uploaded to the server
 	this.flashed = false;	// program matches what's flashed
 	/** @type {?function():void} */
 	this.onUpdate = null;
@@ -207,9 +208,14 @@ A3a.vpl.Program.prototype.invalidateCode = function () {
 */
 A3a.vpl.Program.prototype.saveStateBeforeChange = function () {
 	this.undoState.saveStateBeforeChange(this.exportToObject(),
-		{uploaded: this.uploaded, flashed: this.flashed});
+		{
+			uploaded: this.uploaded,
+			uploadedToServer: this.uploadedToServer,
+			flashed: this.flashed
+		});
 	this.code = {};
 	this.uploaded = false;
+	this.uploadedToServer = false;
 	this.flashed = false;
 };
 
@@ -221,9 +227,14 @@ A3a.vpl.Program.prototype.saveStateBeforeChange = function () {
 A3a.vpl.Program.prototype.undo = function (updateFun) {
 	if (this.undoState.canUndo()) {
 		var markedState = this.undoState.undo(this.exportToObject(),
-			{uploaded: this.uploaded, flashed: this.flashed});
+			{
+				uploaded: this.uploaded,
+				uploadedToServer: this.uploadedToServer,
+				flashed: this.flashed
+			});
 		this.importFromObject(/** @type {Object} */(markedState.state), updateFun);
 		this.uploaded = markedState.marks.uploaded;
+		this.uploadedToServer = markedState.marks.uploadedToServer;
 		this.flashed = markedState.marks.flashed;
 		this.code = {};
 	}
@@ -237,9 +248,14 @@ A3a.vpl.Program.prototype.undo = function (updateFun) {
 A3a.vpl.Program.prototype.redo = function (updateFun) {
 	if (this.undoState.canRedo()) {
 		var markedState = this.undoState.redo(this.exportToObject(),
-			{uploaded: this.uploaded, flashed: this.flashed});
+			{
+				uploaded: this.uploaded,
+				uploadedToServer: this.uploadedToServer,
+				flashed: this.flashed
+			});
 		this.importFromObject(/** @type {Object} */(markedState.state), updateFun);
 		this.uploaded = markedState.marks.uploaded;
+		this.uploadedToServer = markedState.marks.uploadedToServer;
 		this.flashed = markedState.marks.flashed;
 		this.code = {};
 	}

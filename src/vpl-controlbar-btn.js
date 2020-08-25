@@ -163,8 +163,7 @@ A3a.vpl.ControlBar.buttonBoxes = function (app, buttons, cssClasses) {
 	/** @type {Object.<string,CSSParser.VPL.Box>} */
 	var boxes = {};
 	for (var i = 0; i < buttons.length; i++) {
-		if (buttons[i][0] !== "!" &&
-			(app.forcedCommandState ? app.forcedCommandState.isAvailable : app.commands.find(buttons[i]).isAvailable())) {
+		if (buttons[i][0] !== "!") {
 			var buttonBox = app.css.getBox({tag: "button", id: buttons[i].replace(/:/g, "-"), clas: cssClasses});
 			boxes[buttons[i]] = buttonBox;
 		}

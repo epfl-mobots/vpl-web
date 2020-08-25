@@ -175,37 +175,52 @@ A3a.vpl.DynamicHelp.prototype.convertToHTML = function (md) {
 
 /** Generate html
 	@param {string} language
+	@param {Array.<string>} buttons
 	@param {Array.<string>} blocks
 	@param {Object=} docTemplates html document templates (key=language), where
+	the 1st occurence of string BUTTONS is replaced with the command description and
 	the 1st occurence of string BLOCKS is replaced with the block description
-	(should allow vertical scrolling with something like
-		"<div style='height: 100%; overflow-y: scroll;'>...</div>")
 	@return {string}
 */
-A3a.vpl.DynamicHelp.prototype.generate = function (language, blocks, docTemplates) {
+A3a.vpl.DynamicHelp.prototype.generate = function (language, buttons, blocks, docTemplates) {
 	var docTemplate = docTemplates && docTemplates[language]
 	 	? "<div style='padding: 2em; max-width: 60em; margin-left: auto; margin-right: auto;'>\n" +
 			docTemplates[language] +
 			"</div>\n"
 		: "<html>\n" +
 			"<style>\n" +
+			"body {font-family: sans-serif;}\n" +
 			"img {float: left; margin-right: 10px; margin-bottom: 20px;}\n" +
-			"h1, h2 {clear: left;}\n" +
+			"h1, h2, hr {clear: left;}\n" +
 			"p {margin-left: 120px}\n" +
 			"p.parimg {margin-left: 0}\n" +
 			"</style>\n" +
 			"<body>\n" +
 			"<div style='padding: 2em; max-width: 60em; margin-left: auto; margin-right: auto;'>\n" +
+			"BUTTONS" +
+			"<hr>\n" +
 			"BLOCKS" +
 			"</div>\n" +
 			"</body>\n" +
 			"</html>\n";
-	var html = "";
+
+	var htmlButtons = "";
+	buttons.forEach(function (commandId) {
+		var frag = this.get(language, "buttons", commandId);
+		if (frag) {
+			htmlButtons += this.convertToHTML(frag);
+		}
+	}, this);
+
+	var htmlBlocks = "";
 	blocks.forEach(function (blockId) {
 		var frag = this.get(language, "blocks", blockId);
 		if (frag) {
-			html += this.convertToHTML(frag);
+			htmlBlocks += this.convertToHTML(frag);
 		}
 	}, this);
-	return docTemplate.replace("BLOCKS", html || "<p>Empty</p>\n");
+
+	return docTemplate
+		.replace("BUTTONS", htmlButtons)
+		.replace("BLOCKS", htmlBlocks);
 };

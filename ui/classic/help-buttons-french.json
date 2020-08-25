@@ -1,0 +1,168 @@
+{
+	"help": {
+		"fr": {
+			"buttons": {
+				"vpl:close": [
+					"# Ferme la vue",
+					"![vpl:close](vpl:cmd:vpl-close)",
+					"Ferme le panneau de l'environnement de programmation VPL."
+				],
+				"vpl:about": [
+					"# Affiche des informations sur l'application",
+					"![vpl:about](vpl:cmd:vpl-about)",
+					"Affiche l'information sur l'application VPL et les mentions légales."
+				],
+				"vpl:help": [
+					"# Affiche la documentation",
+					"![vpl:help](vpl:cmd:vpl-help)",
+					"Affiche la documentation de VPL."
+				],
+				"vpl:new": [
+					"# Nouveau programme",
+					"![vpl:new](vpl:cmd:vpl-new)",
+					"Crée un nouveau programme vide. Tout comme pour les autres actions qui modifient le programme, ceci peut être annulé avec le bouton Annuler."
+				],
+				"vpl:save": [
+					"# Enregistre le programme",
+					"![vpl:save](vpl:cmd:vpl-save)",
+					"Enregistre le programme sur l'ordinateur local."
+				],
+				"vpl:load": [
+					"# Charge le programme",
+					"![vpl:load](vpl:cmd:vpl-load)",
+					"Charge un programme VPL existant depuis l'ordinateur local."
+				],
+				"vpl:upload": [
+					"# Téléverse le programme",
+					"![vpl:upload](vpl:cmd:vpl-upload)",
+					"Soumet le programme VPL."
+				],
+				"vpl:filename": [
+					"# Nom de fichier",
+					"![vpl:filename](vpl:cmd:vpl-filename)",
+					"Nom de fichier du programme VPL."
+				],
+				"vpl:exportToHTML": [
+					"# Exporte le programme en HTML",
+					"![vpl:exportToHTML](vpl:cmd:vpl-exportToHTML)",
+					"Exporte le programme VPL au format HTML sur l'ordinateur local."
+				],
+				"vpl:advanced": [
+					"# Commute entre les modes de base et avancés",
+					"![vpl:advanced](vpl:cmd:vpl-advanced)",
+					"Commute le mode de programmation avancé."
+				],
+				"vpl:readonly": [
+					"# Programme en mode lecture seule",
+					"![vpl:readonly](vpl:cmd:vpl-readonly)",
+					"Indicateur affiché si le programme ne peut pas être modifié."
+				],
+				"vpl:undo": [
+					"# Annule le dernier changement",
+					"![vpl:undo](vpl:cmd:vpl-undo)",
+					"Annule l'effet de la dernière action qui a changé le programme VPL."
+				],
+				"vpl:redo": [
+					"# Rétablit le dernier changement annulé",
+					"![vpl:redo](vpl:cmd:vpl-redo)",
+					"Rétablit l'effet de la dernière action annulée. Plusieurs annulations peuvent être rétablies une par une."
+				],
+				"vpl:connected": [
+					"# Témoin de connexion",
+					"![vpl:connected](vpl:cmd:vpl-connected)",
+					"Indicateur qui montre si VPL peut communiquer avec le robot. Le rectangle du bas correspond à VPL sur votre ordinateur. Une croix sur le lien indique une déconnexion telle qu'un câble débranché ou un robot éteint."
+				],
+				"vpl:run": [
+					"# Exécute le programme",
+					"![vpl:run](vpl:cmd:vpl-run)",
+					"Lance le programme sur le robot. La barre de confirmation est affichée lorsque le programme qui tourne sur le robot correspond à celui à l'écran, entre le clic sur le bouton et la prochain changement ou l'arrêt du programme."
+				],
+				"vpl:stop": [
+					"# Arrête le programme",
+					"![vpl:stop](vpl:cmd:vpl-stop)",
+					"Arrête le robot."
+				],
+				"vpl:debug": [
+					"# vpl:debug",
+					"![vpl:debug](vpl:cmd:vpl-debug)",
+					"Commute le mode de débogage."
+				],
+				"vpl:robot": [
+					"# Change de robot",
+					"![vpl:robot](vpl:cmd:vpl-robot)",
+					"Change de robot."
+				],
+				"vpl:flash": [
+					"# Écrit le programme dans la mémoire du robot",
+					"![vpl:flash](vpl:cmd:vpl-flash)",
+					"Écrit le programme dans la mémoire flash du robot (mémoire permanente). Le robot peut ensuite être éteint et déconnecté. Le programme est relancé lorsque le robot est rallumé."
+				],
+				"vpl:sim": [
+					"# Affiche le simulateur",
+					"![vpl:sim](vpl:cmd:vpl-sim)",
+					"Affiche le panneau du simulateur. Le simulateur est un programme qui vous permet de tester un programme sans robot réel et de simuler les déplacements, les états, les leds, ainsi que la plupart des événements."
+				],
+				"vpl:text": [
+					"# Affiche le code source",
+					"![vpl:text](vpl:cmd:vpl-text)",
+					"Affiche le panneau de l'éditeur de code source.",
+					"À chaque changement, le programme VPL est traduit dans un langage de programmation tel qu'Aseba qui est affiché dans cet éditeur. Vous pouvez aussi le modifier directement, perdant ainsi la correspondance avec le programme VPL."
+				],
+				"vpl:teacher-reset": [
+					"# Remet la configuration à l'état d'origine",
+					"![vpl:teacher-reset](vpl:cmd:vpl-teacher-reset)",
+					"Réinitialise la configuration pour retrouver l'état standard de l'interface utilisateur et de l'assortiment de blocs."
+				],
+				"vpl:teacher-save": [
+					"# Enregistre la configuration",
+					"![vpl:teacher-save](vpl:cmd:vpl-teacher-save)",
+					"Enregistre la configuration de l'interface utilisateur et de l'assortiment de blocs dans un fichier .vpl3ui."
+				],
+				"vpl:teacher-setasnew": [
+					"# Installe la configuration pour les nouveaux programmes",
+					"![vpl:teacher-setasnew](vpl:cmd:vpl-teacher-setasnew)",
+					"Utilise la configuration actuelle de l'interface utilisateur et de l'assortiment de blocs lorsque la commande \"Nouveau programme\" est exécutée."
+				],
+				"vpl:teacher": [
+					"# Commute entre les modes de programmation et de configuration",
+					"![vpl:teacher](vpl:cmd:vpl-teacher)",
+					"Commute le mode de configuration de l'interface utilisateur et de l'assortiment de blocs."
+				],
+				"vpl:message-error": [
+					"# Message d'erreur",
+					"![vpl:message-error](vpl:cmd:vpl-message-error)",
+					"Description de la première erreur rencontrée dans le programme VPL. Une marque indique précisément où se trouve l'erreur.",
+					"Un programme ne doit pas avoir d'erreurs pour pouvoir être exécuté."
+				],
+				"vpl:message-warning": [
+					"# Message d'avertissement",
+					"![vpl:message-warning](vpl:cmd:vpl-message-warning)",
+					"Description du premier avertissement dans le programme VPL s'il n'y a aucune erreur. Une marque indique précisément où se trouve le problème.",
+					"Un programme qui provoque des avertissements peut être lancé, mais son comportement peut être inattendu."
+				],
+				"vpl:duplicate": [
+					"# Duplique une règle (cible de glisser/déposer)",
+					"![vpl:duplicate](vpl:cmd:vpl-duplicate)",
+					"En glissant et déposant une règle sur ce bouton, on duplique la règle. Les blocs peuvent ensuite être modifiés."
+				],
+				"vpl:disable": [
+					"# Désactive un bloc ou une règle (cible de glisser/déposer)",
+					"![vpl:disable](vpl:cmd:vpl-disable)",
+					"En glissant et déposant un bloc ou une règle sur ce bouton, on le désactive ou réactive.",
+					"Un bloc ou une règle désactivé n'a aucun effet sur l'exécution du programme. Cela peut être pratique pour faire des tests en cours de développement."
+				],
+				"vpl:lock": [
+					"# Verrouille un bloc ou une règle (cible de glisser/déposer)",
+					"![vpl:lock](vpl:cmd:vpl-lock)",
+					"En glissant et déponsant un bloc ou une règle sur ce bouton, on le verrouille ou le déverrouille.",
+					"Les paramètres d'un bloc verrouillé, ou les blocs d'une règle verrouillée, ne peuvent pas être changées."
+				],
+				"vpl:trashcan": [
+					"# Supprime un bloc ou une règle (cible de glisser/déposer)",
+					"![vpl:trashcan](vpl:cmd:vpl-trashcan)",
+					"En glissant et déponsant un bloc ou une règle sur ce bouton, on le supprime. Tout comme pour les autres actions qui modifient le programme, ceci peut être annulé avec le bouton Annuler."
+				]
+			}
+		}
+	}
+}

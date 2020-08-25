@@ -6,7 +6,12 @@
 				"statement": [
 					"motor.left.target = 0;\n",
 					"motor.right.target = 0;\n",
-					"sound.system(-1);\n"
+					"sound.system(-1);\n",
+					"leds.circle(32,32,32,32,32,32,32,32);\n",
+					"timer.period[0] = 100;\n",
+					"onevent timer0 {\n",
+					"leds.circle(0,0,0,0,0,0,0,0);\n",
+					"}\n"
 				]
 			}
 		},
@@ -256,7 +261,7 @@
 		{
 			"name": "clock",
 			"l2": {
-				"sectionBegin": "onevent `$[0] === 10 ? 'prox' : 'button'` {\n",
+				"sectionBegin": "onevent `$[0] === 10 ? 'prox' : 'buttons'` {\n",
 				"sectionEnd": "}\n"
 			}
 		},

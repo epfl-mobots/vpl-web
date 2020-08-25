@@ -168,7 +168,7 @@ A3a.vpl.Canvas.controlToDataURL = function (draw, width, height, itemBox, dims, 
 	@param {CSSParser.VPL.Box} itemBox
 	@param {A3a.vpl.Canvas.dims} dims
 	@param {number=} scale
-	@return {{url: string, width: number, height: number}}
+	@return {?{url: string, width: number, height: number}}
 */
 A3a.vpl.ControlBar.prototype.toolbarButtonToDataURL = function (id, itemBox, dims, scale) {
 	for (var i = 0; i < this.controls.length; i++) {
@@ -182,7 +182,7 @@ A3a.vpl.ControlBar.prototype.toolbarButtonToDataURL = function (id, itemBox, dim
 			return A3a.vpl.Canvas.controlToDataURL(draw, width, height, itemBox, dims, scale);
 		}
 	}
-	throw "button id not found";
+	return null;
 };
 
 /** Export toolbar button to an img HTML element

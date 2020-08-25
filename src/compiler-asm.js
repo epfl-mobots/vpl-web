@@ -113,7 +113,7 @@ A3a.Assembler.prototype.assemble = function () {
 							}
 							return arg;
 						});
-						bytecode = bytecode.concat(instr.toCode(bytecode.length, args, label, pass == 1 ? defs : null, i + 1));
+						bytecode = bytecode.concat(instr.toCode(bytecode.length, args, label, defs, pass, i + 1));
 					}
 					if (label && defs[label] !== bytecode.length) {
 						label = null;
@@ -130,14 +130,15 @@ A3a.Assembler.prototype.assemble = function () {
 /** Convert instruction argument to numerical value
 	@param {(number|string)} arg
 	@param {Object} defs
+	@param {boolean} required
 	@param {number} line
 	@return {number}
 */
-A3a.Assembler.resolveSymbol = function (arg, defs, line) {
+A3a.Assembler.resolveSymbol = function (arg, defs, required, line) {
 	/** Convert definition in defs
 	*/
 	function resolveDef(name) {
-		if (defs == null) {
+		if (!required) {
 			return 0;
 		}
 		if (/^(0x[0-9a-f]+|[0-9]+)$/i.test(name)) {
@@ -181,21 +182,21 @@ A3a.Assembler.resolveSymbol = function (arg, defs, line) {
 A3a.Assembler.instr = {
 	"dc": {
 		numArgs: -1,
-		toCode: function (pc, args, label, defs, line) {
+		toCode: function (pc, args, label, defs, pass, line) {
 			return args.map(function (w) {
-				w = A3a.Assembler.resolveSymbol(w, defs, line);
+				w = A3a.Assembler.resolveSymbol(w, defs, pass === 1, line);
 				return w & 0xffff;
 			});
 		}
 	},
 	"equ": {
 		numArgs: 1,
-		toCode: function (pc, args, label, defs, line) {
+		toCode: function (pc, args, label, defs, pass, line) {
 			if (!label) {
 				throw "No label for pseudo-instruction \"equ\" (line " + line.toString(10) + ")";
 			}
 			if (defs) {
-				defs[label] = A3a.Assembler.resolveSymbol(args[0], defs, line);
+				defs[label] = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
 			}
 			return [];
 		}
@@ -206,8 +207,8 @@ A3a.Assembler.instr = {
 	},
 	"push.s": {
 		numArgs: 1,
-		toCode: function (pc, args, label, defs, line) {
-			var arg = A3a.Assembler.resolveSymbol(args[0], defs, line);
+		toCode: function (pc, args, label, defs, pass, line) {
+			var arg = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
 			if (arg >= 0x1000 || -arg > 0x1000) {
 				throw "Small integer overflow (line " + line.toString(10) + ")";
 			}
@@ -216,15 +217,15 @@ A3a.Assembler.instr = {
 	},
 	"push": {
 		numArgs: 1,
-		toCode: function (pc, args, label, defs, line) {
-			var arg = A3a.Assembler.resolveSymbol(args[0], defs, line);
+		toCode: function (pc, args, label, defs, pass, line) {
+			var arg = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
 			return [0x2000, arg & 0xffff];
 		}
 	},
 	"load": {
 		numArgs: 1,
-		toCode: function (pc, args, label, defs, line) {
-			var arg = A3a.Assembler.resolveSymbol(args[0], defs, line);
+		toCode: function (pc, args, label, defs, pass, line) {
+			var arg = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
 			if (arg < 0 || arg >= 0x1000) {
 				throw "Data address out of range (line " + line.toString(10) + ")";
 			}
@@ -233,8 +234,8 @@ A3a.Assembler.instr = {
 	},
 	"store": {
 		numArgs: 1,
-		toCode: function (pc, args, label, defs, line) {
-			var arg = A3a.Assembler.resolveSymbol(args[0], defs, line);
+		toCode: function (pc, args, label, defs, pass, line) {
+			var arg = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
 			if (arg < 0 || arg >= 0x1000) {
 				throw "Data address out of range (line " + line.toString(10) + ")";
 			}
@@ -243,23 +244,23 @@ A3a.Assembler.instr = {
 	},
 	"load.ind": {
 		numArgs: 2,
-		toCode: function (pc, args, label, defs, line) {
-			var arg = A3a.Assembler.resolveSymbol(args[0], defs, line);
+		toCode: function (pc, args, label, defs, pass, line) {
+			var arg = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
 			if (arg < 0 || arg >= 0x1000) {
 				throw "Data address out of range (line " + line.toString(10) + ")";
 			}
-			var sizeArg = A3a.Assembler.resolveSymbol(args[1], defs, line);
+			var sizeArg = A3a.Assembler.resolveSymbol(args[1], defs, pass === 1, line);
 			return [0x5000 | arg & 0xfff, sizeArg & 0xffff];
 		}
 	},
 	"store.ind": {
 		numArgs: 2,
-		toCode: function (pc, args, label, defs, line) {
-			var arg = A3a.Assembler.resolveSymbol(args[0], defs, line);
+		toCode: function (pc, args, label, defs, pass, line) {
+			var arg = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
 			if (arg < 0 || arg >= 0x1000) {
 				throw "Data address out of range (line " + line.toString(10) + ")";
 			}
-			var sizeArg = A3a.Assembler.resolveSymbol(args[1], defs, line);
+			var sizeArg = A3a.Assembler.resolveSymbol(args[1], defs, pass === 1, line);
 			return [0x6000 | arg & 0xfff, sizeArg & 0xffff];
 		}
 	},
@@ -273,7 +274,7 @@ A3a.Assembler.instr = {
 		code: [0x7002]
 	},
 	"not": {
-		toCode: function (pc, args, label, defs, line) {
+		toCode: function (pc, args, label, defs, pass, line) {
 			throw "Unary not not implemented in the VM (line " + line.toString(10) + ")";
 		}
 	},
@@ -333,63 +334,63 @@ A3a.Assembler.instr = {
 	},
 	"jump": {
 		numArgs: 1,
-		toCode: function (pc, args, label, defs, line) {
-			var arg = A3a.Assembler.resolveSymbol(args[0], defs, line);
+		toCode: function (pc, args, label, defs, pass, line) {
+			var arg = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
 			return [0x9000 | (arg - pc) & 0x0fff];
 		}
 	},
 	"jump.if.not": {
 		numArgs: 2,
-		toCode: function (pc, args, label, defs, line) {
+		toCode: function (pc, args, label, defs, pass, line) {
 			var testInstr = A3a.Assembler.instr[args[0]];
 			if (testInstr == undefined || testInstr.code == undefined ||
 				testInstr.code.length !== 1 || (testInstr.code[0] & 0xf000) !== 0x8000) {
 				throw "Unknown op \"" + args[0] + "\" for jump.if.not (line " + line.toString(10) + ")";
 			}
-			var arg = A3a.Assembler.resolveSymbol(args[1], defs, line);
+			var arg = A3a.Assembler.resolveSymbol(args[1], defs, pass === 1, line);
 			return [0xa000 | (testInstr.code[0] & 0x00ff), (arg - pc) & 0xffff];
 		}
 	},
 	"do.jump.when.not": {
 		numArgs: 2,
-		toCode: function (pc, args, label, defs, line) {
+		toCode: function (pc, args, label, defs, pass, line) {
 			var testInstr = A3a.Assembler.instr[args[0]];
 			if (testInstr == undefined || testInstr.code == undefined ||
 				testInstr.code.length !== 1 || (testInstr.code[0] & 0xf000) !== 0x8000) {
 				throw "Unknown op \"" + args[0] + "\" for do.jump.when.not (line " + line.toString(10) + ")";
 			}
-			var arg = A3a.Assembler.resolveSymbol(args[1], defs, line);
+			var arg = A3a.Assembler.resolveSymbol(args[1], defs, pass === 1, line);
 			return [0xa100 | (testInstr.code[0] & 0x00ff), (arg - pc) & 0xffff];
 		}
 	},
 	"do.jump.always": {
 		numArgs: 2,
-		toCode: function (pc, args, label, defs, line) {
+		toCode: function (pc, args, label, defs, pass, line) {
 			var testInstr = A3a.Assembler.instr[args[0]];
 			if (testInstr == undefined || testInstr.code == undefined ||
 				testInstr.code.length !== 1 || (testInstr.code[0] & 0xf000) !== 0x8000) {
 				throw "Unknown op \"" + args[0] + "\" for do.jump.always (line " + line.toString(10) + ")";
 			}
-			var arg = A3a.Assembler.resolveSymbol(args[1], defs, line);
+			var arg = A3a.Assembler.resolveSymbol(args[1], defs, pass === 1, line);
 			return [0xa300 | (testInstr.code[0] & 0x00ff), (arg - pc) & 0xffff];
 		}
 	},
 	"emit": {
 		numArgs: 3,
-		toCode: function (pc, args, label, defs, line) {
-			var id = A3a.Assembler.resolveSymbol(args[0], defs, line);
+		toCode: function (pc, args, label, defs, pass, line) {
+			var id = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
 			if (id < 0 || id >= 0x1000) {
 				throw "Event id out of range (line " + line.toString(10) + ")";
 			}
-			var addr = A3a.Assembler.resolveSymbol(args[1], defs, line);
-			var size = A3a.Assembler.resolveSymbol(args[2], defs, line);
+			var addr = A3a.Assembler.resolveSymbol(args[1], defs, pass === 1, line);
+			var size = A3a.Assembler.resolveSymbol(args[2], defs, pass === 1, line);
 			return [0xb000 | id & 0xfff, addr & 0xffff, size & 0xffff];
 		}
 	},
 	"callnat": {
 		numArgs: 1,
-		toCode: function (pc, args, label, defs, line) {
-			var arg = A3a.Assembler.resolveSymbol(args[0], defs, line);
+		toCode: function (pc, args, label, defs, pass, line) {
+			var arg = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
 			if (arg < 0 || arg >= 0x1000) {
 				throw "Native call id out of range (line " + line.toString(10) + ")";
 			}
@@ -398,8 +399,8 @@ A3a.Assembler.instr = {
 	},
 	"callsub": {
 		numArgs: 1,
-		toCode: function (pc, args, label, defs, line) {
-			var arg = A3a.Assembler.resolveSymbol(args[0], defs, line);
+		toCode: function (pc, args, label, defs, pass, line) {
+			var arg = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
 			if (arg < 0 || arg >= 0x1000) {
 				throw "Subroutine address out of range (line " + line.toString(10) + ")";
 			}

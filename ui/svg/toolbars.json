@@ -9,6 +9,7 @@
 			"vpl:new",
 			"vpl:save",
 			"vpl:load",
+			"vpl:upload",
 			"vpl:filename",
 			"vpl:exportToHTML",
 			"!space",
