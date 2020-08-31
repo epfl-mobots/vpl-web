@@ -37,6 +37,10 @@ button.vpl {
 	font-weight: 300;
 	font-family: 'Rubik', sans-serif;
 }
+button.vpl.bottom {
+	min-width: 64px;
+	min-height: 64px;
+}
 #vpl-message-error, #vpl-message-warning {
 	color: #455a64;
 	width: 20vw;

@@ -24,8 +24,8 @@ toolbar.bottom {
 button {
 	width: 2.5ww;
 	height: 2.5ww;
-	min-width: 20px;
-	min-height: 20px;
+	min-width: 32px;
+	min-height: 32px;
 	margin: 0.2vw;
 }
 
@@ -36,6 +36,8 @@ button {
 
 button.vpl.bottom {
 	font: max(1.7vw, 12px) sans-serif;
+	min-width: 48px;
+	min-height: 48px;
 }
 
 #vpl-message-error {
