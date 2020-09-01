@@ -1,5 +1,3 @@
-/* patched manually by YP to add flashProgram method */
-
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -4251,10 +4249,6 @@ function (_super) {
 
   Node.prototype.runProgram = function () {
     return this._client._set_vm_execution_state(this._id, _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.VMExecutionStateCommand.Run);
-  };
-
-  Node.prototype.flashProgram = function () {
-    return this._client._set_vm_execution_state(this._id, _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.VMExecutionStateCommand.WriteProgramToDeviceMemory);
   };
 
   Node.prototype.setVariables = function (map) {
@@ -17368,7 +17362,7 @@ module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
 /***/ (function(module, exports) {
 
 var core = module.exports = {
-  version: '2.6.11'
+  version: '2.6.5'
 };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
@@ -18873,8 +18867,6 @@ module.exports.f = function (C) {
 "use strict";
  // 19.1.2.1 Object.assign(target, source, ...)
 
-var DESCRIPTORS = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/modules/_descriptors.js");
-
 var getKeys = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/modules/_object-keys.js");
 
 var gOPS = __webpack_require__(/*! ./_object-gops */ "./node_modules/core-js/modules/_object-gops.js");
@@ -18914,8 +18906,7 @@ module.exports = !$assign || __webpack_require__(/*! ./_fails */ "./node_modules
     var key;
 
     while (length > j) {
-      key = keys[j++];
-      if (!DESCRIPTORS || isEnum.call(S, key)) T[key] = S[key];
+      if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
     }
   }
 
@@ -19293,8 +19284,6 @@ module.exports = function (KEY, exec) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var DESCRIPTORS = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/modules/_descriptors.js");
-
 var getKeys = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/modules/_object-keys.js");
 
 var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/modules/_to-iobject.js");
@@ -19311,9 +19300,7 @@ module.exports = function (isEntries) {
     var key;
 
     while (length > i) {
-      key = keys[i++];
-
-      if (!DESCRIPTORS || isEnum.call(O, key)) {
+      if (isEnum.call(O, key = keys[i++])) {
         result.push(isEntries ? [key, O[key]] : O[key]);
       }
     }
@@ -25443,8 +25430,6 @@ var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/m
 
 var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/modules/_is-object.js");
 
-var toObject = __webpack_require__(/*! ./_to-object */ "./node_modules/core-js/modules/_to-object.js");
-
 var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/modules/_to-iobject.js");
 
 var toPrimitive = __webpack_require__(/*! ./_to-primitive */ "./node_modules/core-js/modules/_to-primitive.js");
@@ -25456,8 +25441,6 @@ var _create = __webpack_require__(/*! ./_object-create */ "./node_modules/core-j
 var gOPNExt = __webpack_require__(/*! ./_object-gopn-ext */ "./node_modules/core-js/modules/_object-gopn-ext.js");
 
 var $GOPD = __webpack_require__(/*! ./_object-gopd */ "./node_modules/core-js/modules/_object-gopd.js");
-
-var $GOPS = __webpack_require__(/*! ./_object-gops */ "./node_modules/core-js/modules/_object-gops.js");
 
 var $DP = __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/modules/_object-dp.js");
 
@@ -25479,7 +25462,7 @@ var SymbolRegistry = shared('symbol-registry');
 var AllSymbols = shared('symbols');
 var OPSymbols = shared('op-symbols');
 var ObjectProto = Object[PROTOTYPE];
-var USE_NATIVE = typeof $Symbol == 'function' && !!$GOPS.f;
+var USE_NATIVE = typeof $Symbol == 'function';
 var QObject = global.QObject; // Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
 
 var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild; // fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
@@ -25621,7 +25604,7 @@ if (!USE_NATIVE) {
   $DP.f = $defineProperty;
   __webpack_require__(/*! ./_object-gopn */ "./node_modules/core-js/modules/_object-gopn.js").f = gOPNExt.f = $getOwnPropertyNames;
   __webpack_require__(/*! ./_object-pie */ "./node_modules/core-js/modules/_object-pie.js").f = $propertyIsEnumerable;
-  $GOPS.f = $getOwnPropertySymbols;
+  __webpack_require__(/*! ./_object-gops */ "./node_modules/core-js/modules/_object-gops.js").f = $getOwnPropertySymbols;
 
   if (DESCRIPTORS && !__webpack_require__(/*! ./_library */ "./node_modules/core-js/modules/_library.js")) {
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
@@ -25678,16 +25661,6 @@ $export($export.S + $export.F * !USE_NATIVE, 'Object', {
   getOwnPropertyNames: $getOwnPropertyNames,
   // 19.1.2.8 Object.getOwnPropertySymbols(O)
   getOwnPropertySymbols: $getOwnPropertySymbols
-}); // Chrome 38 and 39 `Object.getOwnPropertySymbols` fails on primitives
-// https://bugs.chromium.org/p/v8/issues/detail?id=3443
-
-var FAILS_ON_PRIMITIVES = $fails(function () {
-  $GOPS.f(1);
-});
-$export($export.S + $export.F * FAILS_ON_PRIMITIVES, 'Object', {
-  getOwnPropertySymbols: function getOwnPropertySymbols(it) {
-    return $GOPS.f(toObject(it));
-  }
 }); // 24.3.2 JSON.stringify(value [, replacer [, space]])
 
 $JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function () {
@@ -28175,12 +28148,6 @@ flatbuffers.SIZEOF_INT = 4;
 flatbuffers.FILE_IDENTIFIER_LENGTH = 4;
 
 /**
- * @type {number}
- * @const
- */
-flatbuffers.SIZE_PREFIX_LENGTH = 4;
-
-/**
  * @enum {number}
  */
 flatbuffers.Encoding = {
@@ -28236,7 +28203,7 @@ flatbuffers.Long = function(low, high) {
 /**
  * @param {number} low
  * @param {number} high
- * @returns {!flatbuffers.Long}
+ * @returns {flatbuffers.Long}
  */
 flatbuffers.Long.create = function(low, high) {
   // Special-case zero to avoid GC overhead for default values
@@ -28259,7 +28226,7 @@ flatbuffers.Long.prototype.equals = function(other) {
 };
 
 /**
- * @type {!flatbuffers.Long}
+ * @type {flatbuffers.Long}
  * @const
  */
 flatbuffers.Long.ZERO = new flatbuffers.Long(0, 0);
@@ -28397,7 +28364,7 @@ flatbuffers.Builder.prototype.dataBuffer = function() {
  * Get the bytes representing the FlatBuffer. Only call this after you've
  * called finish().
  *
- * @returns {!Uint8Array}
+ * @returns {Uint8Array}
  */
 flatbuffers.Builder.prototype.asUint8Array = function() {
   return this.bb.bytes().subarray(this.bb.position(), this.bb.position() + this.offset());
@@ -28682,7 +28649,7 @@ flatbuffers.Builder.prototype.offset = function() {
  * the end of the new buffer (since we build the buffer backwards).
  *
  * @param {flatbuffers.ByteBuffer} bb The current buffer with the existing data
- * @returns {!flatbuffers.ByteBuffer} A new byte buffer with the old data copied
+ * @returns {flatbuffers.ByteBuffer} A new byte buffer with the old data copied
  * to it. The data is located at the end of the buffer.
  *
  * uint8Array.set() formally takes {Array<number>|ArrayBufferView}, so to pass
@@ -28808,14 +28775,12 @@ outer_loop:
  *
  * @param {flatbuffers.Offset} root_table
  * @param {string=} opt_file_identifier
- * @param {boolean=} opt_size_prefix
  */
-flatbuffers.Builder.prototype.finish = function(root_table, opt_file_identifier, opt_size_prefix) {
-  var size_prefix = opt_size_prefix ? flatbuffers.SIZE_PREFIX_LENGTH : 0;
+flatbuffers.Builder.prototype.finish = function(root_table, opt_file_identifier) {
   if (opt_file_identifier) {
     var file_identifier = opt_file_identifier;
     this.prep(this.minalign, flatbuffers.SIZEOF_INT +
-      flatbuffers.FILE_IDENTIFIER_LENGTH + size_prefix);
+      flatbuffers.FILE_IDENTIFIER_LENGTH);
     if (file_identifier.length != flatbuffers.FILE_IDENTIFIER_LENGTH) {
       throw new Error('FlatBuffers: file identifier must be length ' +
         flatbuffers.FILE_IDENTIFIER_LENGTH);
@@ -28824,22 +28789,9 @@ flatbuffers.Builder.prototype.finish = function(root_table, opt_file_identifier,
       this.writeInt8(file_identifier.charCodeAt(i));
     }
   }
-  this.prep(this.minalign, flatbuffers.SIZEOF_INT + size_prefix);
+  this.prep(this.minalign, flatbuffers.SIZEOF_INT);
   this.addOffset(root_table);
-  if (size_prefix) {
-    this.addInt32(this.bb.capacity() - this.space);
-  }
   this.bb.setPosition(this.space);
-};
-
-/**
- * Finalize a size prefixed buffer, pointing to the given `root_table`.
- *
- * @param {flatbuffers.Offset} root_table
- * @param {string=} opt_file_identifier
- */
-flatbuffers.Builder.prototype.finishSizePrefixed = function (root_table, opt_file_identifier) {
-  this.finish(root_table, opt_file_identifier, true);
 };
 
 /// @cond FLATBUFFERS_INTERNAL
@@ -28951,7 +28903,7 @@ flatbuffers.Builder.prototype.createString = function(s) {
  *
  * @param {number} low
  * @param {number} high
- * @returns {!flatbuffers.Long}
+ * @returns {flatbuffers.Long}
  */
 flatbuffers.Builder.prototype.createLong = function(low, high) {
   return flatbuffers.Long.create(low, high);
@@ -28982,7 +28934,7 @@ flatbuffers.ByteBuffer = function(bytes) {
  * Create and allocate a new ByteBuffer with a given size.
  *
  * @param {number} byte_size
- * @returns {!flatbuffers.ByteBuffer}
+ * @returns {flatbuffers.ByteBuffer}
  */
 flatbuffers.ByteBuffer.allocate = function(byte_size) {
   return new flatbuffers.ByteBuffer(new Uint8Array(byte_size));
@@ -29078,7 +29030,7 @@ flatbuffers.ByteBuffer.prototype.readUint32 = function(offset) {
 
 /**
  * @param {number} offset
- * @returns {!flatbuffers.Long}
+ * @returns {flatbuffers.Long}
  */
 flatbuffers.ByteBuffer.prototype.readInt64 = function(offset) {
   return new flatbuffers.Long(this.readInt32(offset), this.readInt32(offset + 4));
@@ -29086,7 +29038,7 @@ flatbuffers.ByteBuffer.prototype.readInt64 = function(offset) {
 
 /**
  * @param {number} offset
- * @returns {!flatbuffers.Long}
+ * @returns {flatbuffers.Long}
  */
 flatbuffers.ByteBuffer.prototype.readUint64 = function(offset) {
   return new flatbuffers.Long(this.readUint32(offset), this.readUint32(offset + 4));
@@ -29261,7 +29213,7 @@ flatbuffers.ByteBuffer.prototype.__union = function(t, offset) {
  *
  * @param {number} offset
  * @param {flatbuffers.Encoding=} opt_encoding Defaults to UTF16_STRING
- * @returns {string|!Uint8Array}
+ * @returns {string|Uint8Array}
  */
 flatbuffers.ByteBuffer.prototype.__string = function(offset, opt_encoding) {
   offset += this.readInt32(offset);
@@ -29372,7 +29324,7 @@ flatbuffers.ByteBuffer.prototype.__has_identifier = function(ident) {
  *
  * @param {number} low
  * @param {number} high
- * @returns {!flatbuffers.Long}
+ * @returns {flatbuffers.Long}
  */
 flatbuffers.ByteBuffer.prototype.createLong = function(low, high) {
   return flatbuffers.Long.create(low, high);
@@ -39083,7 +39035,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 This is a Derivative Work.
-Changes by Mobots, EPFL, March-September 2019
+Changes by Mobots, EPFL, 2019-2020
 
 Build:
 1. git clone https://github.com/Mobsya/thymio-js-api-demo.git
@@ -39341,7 +39293,7 @@ window.TDM.prototype.run = /*#__PURE__*/function () {
             _context3.prev = 0;
 
             if (!(this.selectedNode.status == _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__["NodeStatus"].ready)) {
-              _context3.next = 7;
+              _context3.next = 9;
               break;
             }
 
@@ -39350,26 +39302,30 @@ window.TDM.prototype.run = /*#__PURE__*/function () {
 
           case 4:
             _context3.next = 6;
-            return this.selectedNode.runProgram();
+            return this.selectedNode.setScratchPad(program, _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__["ProgrammingLanguage"].Aseba);
 
           case 6:
+            _context3.next = 8;
+            return this.selectedNode.runProgram();
+
+          case 8:
             success && success();
 
-          case 7:
-            _context3.next = 12;
+          case 9:
+            _context3.next = 14;
             break;
 
-          case 9:
-            _context3.prev = 9;
+          case 11:
+            _context3.prev = 11;
             _context3.t0 = _context3["catch"](0);
             console.log(_context3.t0);
 
-          case 12:
+          case 14:
           case "end":
             return _context3.stop();
         }
       }
-    }, _callee3, this, [[0, 9]]);
+    }, _callee3, this, [[0, 11]]);
   }));
 
   return function (_x2, _x3) {
