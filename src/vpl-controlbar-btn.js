@@ -22,12 +22,13 @@ Definition of methods for A3a.vpl.ControlBar which add support for buttons.
 		A3a.vpl.Canvas.dims,
 		CSSParser.VPL,
 		Array.<string>,
+		CSSParser.VPL.Box,
 		A3a.vpl.Translation,
 		boolean,
 		boolean,
 		boolean,
 		?string): boolean}
-	Function to draw buttons (arguments: id, ctx, dims, css, cssClasses, translation,
+	Function to draw buttons (arguments: id, ctx, dims, css, cssClasses, cssBox, translation,
 	isEnabled, isSelected, isPressed, obj; return true to draw a disable mark at the
 	level of its css box)
 */
@@ -62,14 +63,14 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 		this.addControl(
 			function (ctx, box, isPressed) {
 				if (app.forcedCommandState) {
-					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses,
+					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses, box,
 						app.i18n,
 						app.forcedCommandState.isEnabled && (keepAvailable || !app.uiConfig.toolbarCustomizationDisabled),
 						app.forcedCommandState.isSelected,
 						app.forcedCommandState.isPressed,
 						app.forcedCommandState.state);
 				} else {
-					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses,
+					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses, box,
 						app.i18n,
 						app.commands.isEnabled(id) && (keepAvailable || !app.uiConfig.toolbarCustomizationDisabled),
 						app.commands.isSelected(id),

@@ -200,7 +200,13 @@ A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes, doOv
 					box.height / (control.bounds.ymax - control.bounds.ymin));
 				ctx.save();
 				ctx.translate(-control.bounds.xmin, -control.bounds.ymin);
-				ctx.scale(sc, sc);
+				if (sc !== 1) {
+					ctx.scale(sc, sc);
+					// inverse scale box, so that control.draw can use it to position drawings
+					box = box.copy();
+					box.width /= sc;
+					box.height /= sc;
+				}
 				var disableMark = control.draw(ctx, box, isPressed);
 				ctx.restore();
 				if (disableMark) {
