@@ -21,6 +21,7 @@ Drawing of buttons defined in JavaScript.
 	@param {A3a.vpl.Canvas.dims} dims
 	@param {CSSParser.VPL} css
 	@param {Array.<string>} cssClasses
+	@param {CSSParser.VPL.Box} box
 	@param {A3a.vpl.Translation} i18n
 	@param {boolean} isEnabled
 	@param {boolean} isSelected
@@ -28,7 +29,7 @@ Drawing of buttons defined in JavaScript.
 	@param {*=} state state for multi-value buttons
 	@return {boolean}
 */
-A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, isEnabled, isSelected, isPressed, state) {
+A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i18n, isEnabled, isSelected, isPressed, state) {
 
 	// 2018 colors (white on navy)
 	var col = {
@@ -64,8 +65,6 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, i18n, 
 		fgTeacherDis: "#866",
 		fgTeacherOff: "#faa"
 	};
-
-	var box = css.getBox({tag: "button", clas: cssClasses, id: id.replace(/:/g, "-")});
 
 	/** Draw control for undo (back arrow) or redo (flipped)
 		@param {number} x

@@ -37,18 +37,25 @@ button.vpl {
 	font-weight: 300;
 	font-family: 'Rubik', sans-serif;
 }
+button.vpl.bottom {
+	min-width: 64px;
+	min-height: 64px;
+}
 #vpl-message-error, #vpl-message-warning {
 	color: #455a64;
 	width: 20vw;
-	background: #FAFCFD;
 	padding: 0px 4px 0px 4px;
-	border-radius: 2.5wh;
+	border-width: 4px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-left-style: none;
+	border-right-style: none;
 }
 #vpl-message-error {
-	background: #fcc;
+	border-color: #fcc;
 }
 #vpl-message-warning {
-	background: #fbca00;
+	border-color: #fbca00;
 }
 #vpl-filename {
 	width: 9ww;

@@ -772,7 +772,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, this.vplToolbarConfig, ["vpl", "top"]);
 	var toolbarItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
 	var toolbar2ItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, this.vplToolbar2Config, ["vpl", "bottom"]);
-	var toolbar2ItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
+	var toolbar2ItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbar2ItemBoxes);
 
 	cssBoxes.viewBox.setTotalWidth(canvasSize.width);
 	cssBoxes.viewBox.setTotalHeight(canvasSize.height);

@@ -41,7 +41,7 @@ tdm.run(asebaSourceCode, success);
 
 */
 
-import {createClient, Node, NodeStatus, Request, setup, mobsya} from '@mobsya/thymio-api'
+import {createClient, Node, NodeStatus, ProgrammingLanguage, Request, setup, mobsya} from '@mobsya/thymio-api'
 
 window.TDM = function (url, options) {
     options = options || {};
@@ -185,6 +185,7 @@ window.TDM.prototype.run = async function (program, success) {
     try {
         if (this.selectedNode.status == NodeStatus.ready) {
             await this.selectedNode.sendAsebaProgram(program);
+            await this.selectedNode.setScratchPad(program, ProgrammingLanguage.Aseba);
             await this.selectedNode.runProgram();
             success && success();
         }
