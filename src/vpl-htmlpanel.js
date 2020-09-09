@@ -80,6 +80,7 @@ A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets, scroll) {
 		widget.style.width = "32px";
 		widget.style.height = "32px";
 		widget.style.top = "0";
+		widget.style.cursor = "default";
 		if (rightSide) {
 			widget.style.right = right.toString(10) + "px";
 			right += 40;

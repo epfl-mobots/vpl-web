@@ -324,7 +324,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			}
 		},
 		canDrop: function (app, draggedItem) {
-			return app.robots[app.currentRobotIndex].runGlue.isEnabled(app.program.currentLanguage) &&
+			return app.currentRobotIndex >= 0 &&
+				app.robots[app.currentRobotIndex].runGlue.isEnabled(app.program.currentLanguage) &&
 				draggedItem.data instanceof A3a.vpl.Rule &&
 						/** @type {A3a.vpl.Rule} */(draggedItem.data).hasBlockOfType(A3a.vpl.blockType.action) ||
 				draggedItem.data instanceof A3a.vpl.Block &&

@@ -165,7 +165,14 @@ A3a.vpl.ControlBar.buttonBoxes = function (app, buttons, cssClasses) {
 	var boxes = {};
 	for (var i = 0; i < buttons.length; i++) {
 		if (buttons[i][0] !== "!") {
-			var buttonBox = app.css.getBox({tag: "button", id: buttons[i].replace(/:/g, "-"), clas: cssClasses});
+			var buttonBox = app.css.getBox({
+				tag: "button",
+				id: buttons[i].replace(/:/g, "-"),
+				clas: cssClasses,
+				pseudoClass: app.draggedItem && app.commands.canDrop(buttons[i], app.draggedItem)
+					? ["possible-drop-target"]
+					: null
+			});
 			boxes[buttons[i]] = buttonBox;
 		}
 	}

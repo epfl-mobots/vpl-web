@@ -182,7 +182,18 @@ A3a.vpl.Application = function (canvasEl) {
 	this.vplMessage = "";
 	this.vplMessageIsWarning = false;	// false for error, true for warning
 
-	this.vplCanvas = new A3a.vpl.Canvas(canvasEl, {css: this.css});
+	/** @type {A3a.vpl.CanvasItem} */
+	this.draggedItem = null;
+
+	this.vplCanvas = new A3a.vpl.Canvas(canvasEl, {
+		css: this.css,
+		prepareDrag: function (draggedItem) {
+			self.draggedItem = draggedItem;
+			if (draggedItem) {
+				self.renderProgramToCanvas();
+			}
+		}
+	});
 	this.vplCanvas.state = {
 		vpl: new A3a.vpl.Program.CanvasRenderingState()
 	};
@@ -209,6 +220,11 @@ A3a.vpl.Application = function (canvasEl) {
 			self.vplHint = null;
 			self.renderProgramToCanvas();
 		}
+	};
+
+	this.vplCanvas.defaultEndDrag = function () {
+		// restore normal view when self.draggedItem has been reset to null
+		self.renderProgramToCanvas();
 	};
 
 	/** @type {?string} */

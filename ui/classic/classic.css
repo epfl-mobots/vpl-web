@@ -40,6 +40,10 @@ button.vpl.bottom {
 	min-height: 48px;
 }
 
+button.vpl:possible-drop-target {
+	background-color: #ddd;
+}
+
 #vpl-message-error {
 	color: #e44;
 	width: 20vw;
