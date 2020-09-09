@@ -10,6 +10,39 @@
 <meta name="viewport" content="width=device-width, height=device-height, maximum-scale=1, user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 
+<!-- default activation of the user interface and blocks -->
+<script>
+window["vplStorageGetFunction"] = function (filename, load) {
+    program = JSON.stringify({
+    	"basicBlocks": [
+		"init",
+		"button 1",
+		"acc side",
+		"acc upside down",
+		"tap",
+		"ground mean",
+		"ground",
+		"horiz prox",
+		"color 8 state",
+		"bottom color 8 state",
+		"state 256",
+		"move",
+		"top color 8",
+		"bottom color 8",
+		"set state 256",
+		"notes"
+	],
+	"basicMultiEvent": true,
+	"disabledUI": [
+		"src:language",
+		"vpl:exportToHTML",
+		"vpl:flash"
+	]
+    });
+    load(program);
+}
+</script>
+
 <!-- main definition of the user interface and blocks -->
 <script type="application/json" id="ui.json">
 $INCLUDE(ui/svg/ui.json)
