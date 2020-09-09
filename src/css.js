@@ -628,11 +628,9 @@ CSSParser.Selector.Options;
 	@return {string}
 */
 CSSParser.Selector.stringifyOptions = function (opt, lengthBase) {
-	var str = opt.id
-		? "#" + opt.id
-		: (opt.tag || "") +
-			(opt.clas && opt.clas.length > 0 ? "." + opt.clas.join(".") : "") +
-			(opt.pseudoClass && opt.pseudoClass.length > 0 ? ":" + opt.pseudoClass.join(".") : "") || "*";
+	var str = (opt.id ? "#" + opt.id :opt.tag || "") +
+		(opt.clas && opt.clas.length > 0 ? "." + opt.clas.join(".") : "") +
+		(opt.pseudoClass && opt.pseudoClass.length > 0 ? ":" + opt.pseudoClass.join(".") : "") || "*";
 	if (lengthBase) {
 		str += "/" + (Math.round(lengthBase.base).toString(10)) +
 			"," + (Math.round(lengthBase.vw).toString(10)) +
