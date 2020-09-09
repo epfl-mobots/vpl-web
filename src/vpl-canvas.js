@@ -209,6 +209,11 @@ A3a.vpl.CanvasItem.doScroll;
 */
 A3a.vpl.CanvasItem.doOver;
 
+/**
+	@typedef {function():void}
+*/
+A3a.vpl.CanvasItem.endDrag;
+
 A3a.vpl.CanvasItem.prototype.getTranslation = function () {
 	return this.clippingRect
 		? {dx: this.clippingRect.xOffset, dy: this.clippingRect.yOffset}
@@ -233,7 +238,8 @@ A3a.vpl.CanvasItem.prototype.isInClip = function (x, y) {
 	@param {{
 		relativeArea: (?A3a.vpl.Canvas.RelativeArea | undefined),
 		css: (CSSParser.VPL | undefined),
-		pixelRatio: (number | undefined)
+		pixelRatio: (number | undefined),
+		prepareDrag: (A3a.vpl.Canvas.prepareDrag | undefined)
 	}=} options
 */
 A3a.vpl.Canvas = function (canvas, options) {
@@ -257,8 +263,14 @@ A3a.vpl.Canvas = function (canvas, options) {
 	/** @type {?A3a.vpl.CanvasItem.doOver} */
 	this.defaultDoOver = null;
 
+	/** @type {?A3a.vpl.Canvas.prepareDrag} */
+	this.prepareDrag = options && options.prepareDrag || null;
+
 	/** @type {Array.<{tag:string,doDrop:A3a.vpl.Canvas.defaultDoDrop}>} */
 	this.defaultDoDrop = [];
+
+	/** @type {?A3a.vpl.CanvasItem.endDrag} */
+	this.defaultEndDrag = null;
 
 	this.clickTimestamp = 0;
 	this.zoomedItemIndex = -1;
@@ -380,6 +392,9 @@ A3a.vpl.Canvas = function (canvas, options) {
 				var y0 = mouseEvent.y - d.dy;
 				A3a.vpl.dragFun = function (dragEvent, isUp, isTouch) {
 					var mouseEvent = self.makeMouseEvent(dragEvent, backingScale);
+					if (self.prepareDrag) {
+						self.prepareDrag(isUp ? null : item);
+					}
 					if (isUp) {
 						if ((isTouch ? item.zoomOnLongTouchPress : item.zoomOnLongPress) &&
 							item === self.items[self.clickedItemIndex(mouseEvent, false)[0]]) {
@@ -390,11 +405,17 @@ A3a.vpl.Canvas = function (canvas, options) {
 							dropTargetItem.doDrop(dropTargetItem, draggedItem);
 						} else if (dropTargetItem == null || dropTargetItem.doDrop == null ||
 							(dropTargetItem.canDrop && !dropTargetItem.canDrop(dropTargetItem, draggedItem))) {
-							for (var i = 0; i < self.defaultDoDrop.length; i++) {
+							var i;
+							for (i = 0; i < self.defaultDoDrop.length; i++) {
 								if (self.defaultDoDrop[i].doDrop(dropTargetItem, draggedItem, mouseEvent.x, mouseEvent.y)) {
 									break;
 								}
 							}
+							if (i >= self.defaultDoDrop.length && self.defaultEndDrag) {
+								self.defaultEndDrag();
+							}
+						} else if (self.defaultEndDrag) {
+							self.defaultEndDrag();
 						}
 						self.redraw();
 						self.canvas.style.cursor = "default";
@@ -533,6 +554,10 @@ A3a.vpl.Canvas = function (canvas, options) {
 	}}
 */
 A3a.vpl.Canvas.RelativeArea;
+
+/** @typedef {function(A3a.vpl.CanvasItem):void}
+*/
+A3a.vpl.Canvas.prepareDrag;
 
 /** Change relative area in canvas element
 	@param {A3a.vpl.Canvas.RelativeArea=} relativeArea
