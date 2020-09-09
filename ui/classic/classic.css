@@ -41,7 +41,7 @@ button.vpl.bottom {
 }
 
 button.vpl:possible-drop-target {
-	background-color: red;
+	background-color: #ddd;
 }
 
 #vpl-message-error {
