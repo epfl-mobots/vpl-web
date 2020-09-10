@@ -707,8 +707,8 @@ A3a.vpl.Canvas.prototype.applyInverseTransform = function (p) {
 A3a.vpl.Canvas.prototype.makeMouseEvent = function (e, pixelRatio) {
 	var canvasBB = this.canvas.getBoundingClientRect();
 	var mouseEvent = {
-		x: e.clientX * this.canvas.width / canvasBB.width,
-		y: e.clientY * this.canvas.height / canvasBB.height,
+		x: e.clientX * this.canvas.width / canvasBB.width / pixelRatio,
+		y: e.clientY * this.canvas.height / canvasBB.height / pixelRatio,
 		modifier: e.altKey
 	};
 	var p1 = this.applyInverseTransform([mouseEvent.x, mouseEvent.y]);
