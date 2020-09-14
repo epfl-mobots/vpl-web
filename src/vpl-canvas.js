@@ -251,6 +251,7 @@ A3a.vpl.Canvas = function (canvas, options) {
 	this.width = this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin);
 	this.height = this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin);
 	this.visible = true;
+	this.clickNoDragTolerance = 10;
 	/** @type {?Array.<number>} */
 	this.transform0 = null;
 	/** @type {?Array.<number>} */
@@ -397,7 +398,7 @@ A3a.vpl.Canvas = function (canvas, options) {
 					}
 					if (isUp) {
 						if ((isTouch ? item.zoomOnLongTouchPress : item.zoomOnLongPress) &&
-							item === self.items[self.clickedItemIndex(mouseEvent, false)[0]]) {
+							Math.abs(mouseEvent.x - x0) + Math.abs(mouseEvent.y - y0) < self.clickNoDragTolerance) {
 							self.zoomedItemIndex = indices[0];
 							self.zoomedItemProxy = (isTouch ? item.zoomOnLongTouchPress : item.zoomOnLongPress)(item, isTouch);
 						} else if (dropTargetItem && dropTargetItem.doDrop
