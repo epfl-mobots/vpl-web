@@ -185,10 +185,12 @@ A3a.vpl.Rule.prototype.removeBlock = function (posInRule) {
 	if (posInRule.eventSide) {
 		if (this.events[posInRule.index]) {
 			this.events.splice(posInRule.index, 1);
+			this.fixBlockContainerRefs();
 		}
 	} else {
 		if (this.actions[posInRule.index]) {
 			this.actions.splice(posInRule.index, 1);
+			this.fixBlockContainerRefs();
 		}
 	}
 };
