@@ -1,0 +1,20 @@
+{
+	"i18n": {
+		"it": {
+			"Duplicate action blocks": "Duplicare i blocchi azione",
+			"Rules with same events": "Eventi identici",
+			"Missing action block": "Blocco azione mancante",
+			"Missing event block": "Blocco evento mancante",
+			"No button specified": "Nessun pulsante specificato",
+			"No ground sensor specified": "Nessun sensore di suolo specificato",
+			"No proximity sensor specified": "Nessun sensore di prossimità specificato",
+			"No sensor specified": "Nessun sensore specificato",
+			"Open program file": "Aprire un file di programma",
+			"OK": "OK",
+			"Cancel": "Annullare",
+			"Open ground image file": "Apri un file immagine del suolo",
+			"Open height image file": "Apri un file immagine di altitudine",
+			"Open obstacle SVG file": "Apri il file in formato SVG degli ostacoli"
+		}
+	}
+}

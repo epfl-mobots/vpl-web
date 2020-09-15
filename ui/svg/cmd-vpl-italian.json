@@ -1,0 +1,37 @@
+{
+	"i18n": {
+		"it": {
+			"vpl:close": "Chiudi il pannello",
+			"vpl:about": "Mostra le informazioni sull'app",
+			"vpl:help": "Mostra la documentazione",
+			"vpl:readonly": "Programma di sola lettura",
+			"vpl:new": "Nuovo programma",
+			"vpl:save": "Salva il programma",
+			"vpl:load": "Carica il programma",
+			"vpl:upload": "Invia il programma",
+			"vpl:exportToHTML": "Esporta la visualizzazione del programma in HTML",
+			"vpl:text": "Pannello del codice sorgente testuale",
+			"vpl:text-toggle": "Mostra o nasconde il pannello del codice sorgente testuale",
+			"vpl:advanced": "Abilita o disabilita la modalità avanzata",
+			"vpl:undo": "Annulla l'ultima modifica",
+			"vpl:redo": "Ripristina l'ultima modifica annullata",
+			"vpl:run": "Esegui il programma",
+			"vpl:stop": "Interrompi il programma",
+			"vpl:connected": "Stato della connessione",
+			"vpl:robot": "Cambia il robot",
+			"vpl:sim": "Pannello del simulatore",
+			"vpl:duplicate": "Duplica regola (trascinare l’oggetto qui)",
+			"vpl:disable": "Disattiva il blocco o la regola (trascinare l’oggetto qui)",
+			"vpl:lock": "Blocca il blocco o la regola (trascinare l’oggetto qui)",
+			"vpl:trashcan": "Rimuovi blocco o regola (trascinare l’oggetto qui)",
+			"vpl:message-error": "Messaggio d'errore",
+			"vpl:message-warning": "Messaggio d'avviso",
+			"vpl:message-empty": " ",
+			"vpl:filename": "Nome del file",
+			"vpl:teacher": "Attiva o disattiva la modalità di personalizzazione",
+			"vpl:teacher-reset": "Ripristina personalizzazione",
+			"vpl:teacher-save": "Salva personalizzazione",
+			"vpl:teacher-setasnew": "Installa la personalizzazione per i nuovi programmi"
+		}
+	}
+}

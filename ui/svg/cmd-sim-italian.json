@@ -1,0 +1,26 @@
+{
+	"i18n": {
+		"it": {
+			"sim:close": "Chiudi il pannello",
+			"sim:restart": "Ripeti la simulazione",
+			"sim:pause": "Metti in pausa la simulazione",
+			"sim:speedup": "Specificare il fattore di accelerazione per la simulazione",
+			"sim:pen": "Attiva o disattiva la matita",
+			"sim:clear": "Cancella i segni della matita",
+			"sim:map-ground": "Attiva o disattiva la mappa del suolo",
+			"sim:map-height": "Attiva o disattiva la mappa dell'altitudine",
+			"sim:map-obstacles": "Attiva o disattiva la mappa degli ostacoli",
+			"sim:vpl": "Pannello VPL",
+			"sim:text": "Pannello del codice sorgente testuale",
+			"sim:teacher": "Attiva o disattiva la modalità di personalizzazione",
+			"sim:teacher-reset": "Ripristina personalizzazione",
+			"sim:btn-button.forward": "Simula la pressione del pulsante avanti",
+			"sim:btn-button.left": "Simula la pressione del pulsante sinistro",
+			"sim:btn-button.center": "Simula la pressione del pulsante centrale",
+			"sim:btn-button.right": "Simula la pressione del pulsante destro",
+			"sim:btn-button.backward": "Simula la pressione del pulsante indietro",
+			"sim:btn-tap": "Simuler une détection de choc",
+			"sim:btn-clap": "Simuler une détection de son"
+		}
+	}
+}
