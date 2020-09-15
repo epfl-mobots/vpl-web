@@ -208,10 +208,10 @@ A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes, doOv
 					box.height /= sc;
 				}
 				var disableMark = control.draw(ctx, box, isPressed);
-				ctx.restore();
 				if (disableMark) {
 					self.canvas.disabledMark(0, 0, box.width, box.height, ["button"], ["button"]);
 				}
+				ctx.restore();
 			},
 			control.action,
 			control.doDrop, control.canDrop,
