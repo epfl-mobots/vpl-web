@@ -182,6 +182,21 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 			} else if (rule.events[i].blockTemplate.type === A3a.vpl.blockType.state) {
 				hasState = true;
 			}
+			if ((rule.events[i].blockTemplate.type === A3a.vpl.blockType.event ||
+				rule.events[i].blockTemplate.type === A3a.vpl.blockType.state) &&
+					rule.error === null) {
+				for (var j = i + 1; j < rule.events.length; j++) {
+					if (!rule.events[j].disabled &&
+						rule.events[j].blockTemplate === rule.events[i].blockTemplate) {
+							var err = new A3a.vpl.Error(rule.events[i].blockTemplate.type === A3a.vpl.blockType.event
+								? "Duplicate event blocks"
+								: "Duplicate state blocks",
+								true);
+							err.addEventError([i, j]);
+							rule.error = err;
+						}
+				}
+			}
 		}
 	}
 	var hasAction = false;
