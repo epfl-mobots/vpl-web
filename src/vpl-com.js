@@ -120,7 +120,7 @@ A3a.vpl.Com.prototype.connect = function () {
 				if (isBase64) {
 					content = atob(content);
 				}
-				return "<pre style='width: 100%; height: 100%;'>" +
+				return "<pre style='width: 100%; height: 100%; padding: 3em;'>" +
 					content
 						.replace(/&/g, "&amp;")
 					 	.replace(/</g, "&lt;") +
