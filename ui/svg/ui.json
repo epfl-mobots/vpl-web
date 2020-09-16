@@ -36,6 +36,9 @@
 		},
 		"fr": {
 			"doctemplate.html": "doctemplate-french.html"
+		},
+		"it": {
+			"doctemplate.html": "doctemplate-italian.html"
 		}
 	},
 
@@ -2121,11 +2124,16 @@
 		"french.json",
 		"cmd-vpl-french.json",
 		"cmd-sim-french.json",
+		"italian.json",
+		"cmd-vpl-italian.json",
+		"cmd-sim-italian.json",
 
 		"block-english.json",
 		"block-french.json",
+		"block-italian.json",
 
 		"help-blocks-english.json",
-		"help-blocks-french.json"
+		"help-blocks-french.json",
+		"help-blocks-italian.json"
 	]
 }

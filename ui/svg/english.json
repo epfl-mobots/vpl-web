@@ -2,6 +2,8 @@
 	"i18n": {
 		"en": {
 			"Duplicate action blocks": "Duplicate action blocks",
+			"Duplicate event blocks": "Duplicate event blocks",
+			"Duplicate state blocks": "Duplicate state blocks",
 			"Rules with same events": "Rules with same events",
 			"Missing action block": "Missing action block",
 			"Missing event block": "Missing event block",

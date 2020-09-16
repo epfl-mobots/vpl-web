@@ -2,6 +2,8 @@
 	"i18n": {
 		"fr": {
 			"Duplicate action blocks": "Un bloc d'action fait doublon",
+			"Duplicate event blocks": "Un bloc d'événement fait doublon",
+			"Duplicate state blocks": "Un bloc d'état fait doublon",
 			"Rules with same events": "Evénements identiques",
 			"Missing action block": "Bloc d'action manquant",
 			"Missing event block": "Bloc d'événement manquant",
