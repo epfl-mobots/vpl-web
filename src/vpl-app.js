@@ -278,7 +278,7 @@ A3a.vpl.Application.prototype.setHelpContent = function (html) {
 	saveBox.width = saveBox.height = 64;
 	var dims = A3a.vpl.Canvas.calcDims(16, 16);
 	var saveDataURL = A3a.vpl.Canvas.controlToDataURL(function (ctx, box, isPressed) {
-		(app.program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("vpl:save", ctx, dims, app.css, ["vpl", "top", "detached"], app.i18n, true, false, false, null);
+		(app.program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("vpl:save", ctx, dims, app.css, ["vpl", "top", "detached"], saveBox, app.i18n, true, false, false, null);
 	}, saveBox.width, saveBox.height, saveBox, dims, 1);
 
 	var saveEl = '<img src="' + saveDataURL.url +
