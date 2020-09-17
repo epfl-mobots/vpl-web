@@ -209,8 +209,8 @@ hint {
 
 /* simulator */
 sim-controller {
-	background: #eee;
-	margin: 5px;
+	background: #ECEFF1;
+	margin-left: 5px;
 	padding: 1vw;
 }
 button.event {
@@ -219,7 +219,7 @@ button.event {
 	margin: 0.2vw;
 }
 sim-playground-area {
-	background: #eee;
+	background: transparent;
 	margin: 5px;
 	padding: 5px;
 }
