@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -188,9 +188,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 				for (var j = i + 1; j < rule.events.length; j++) {
 					if (!rule.events[j].disabled &&
 						rule.events[j].blockTemplate === rule.events[i].blockTemplate) {
-							var err = new A3a.vpl.Error(rule.events[i].blockTemplate.type === A3a.vpl.blockType.event
-								? "Duplicate event blocks"
-								: "Duplicate state blocks",
+							var err = new A3a.vpl.Error("Same block used multiple times",
 								true);
 							err.addEventError([i, j]);
 							rule.error = err;
@@ -228,7 +226,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 					if (!rule.actions[j].disabled &&
 						rule.actions[j].blockTemplate.type === A3a.vpl.blockType.action &&
 						rule.actions[j].blockTemplate === rule.actions[i].blockTemplate) {
-						var err = new A3a.vpl.Error("Duplicate action blocks", true);
+						var err = new A3a.vpl.Error("Same block used multiple times", true);
 						err.addActionError(i);
 						err.addActionError(j);
 						rule.error = err;
