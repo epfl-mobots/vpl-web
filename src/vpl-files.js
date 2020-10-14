@@ -51,9 +51,7 @@ A3a.vpl.Application.prototype.loadProgramJSON = function (json, options) {
 	@return {string}
 */
 A3a.vpl.Application.getFileSuffix = function (filename) {
-	var r = /^[^.]+\.(.*)$/.exec(filename);
-	var ext = r ? r[1].toLowerCase() : "";
-	return ext;
+	return /(\.[^.]*|)$/.exec(filename)[0].slice(1).toLowerCase();
 };
 
 /** Load a program file (aesl or vpl3 (json))
