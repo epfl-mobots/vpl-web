@@ -275,7 +275,10 @@ A3a.vpl.Application.prototype.setAboutBoxContent = function (html) {
 A3a.vpl.Application.prototype.setHelpContent = function (html) {
 	var app = this;
 	var saveBox = new CSSParser.VPL.Box();
-	saveBox.width = saveBox.height = 64;
+	if (/ipad/i.test(navigator.userAgent))
+		saveBox.width = saveBox.height = 0;
+	else
+		saveBox.width = saveBox.height = 64;
 	var dims = A3a.vpl.Canvas.calcDims(16, 16);
 	var saveDataURL = A3a.vpl.Canvas.controlToDataURL(function (ctx, box, isPressed) {
 		(app.program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("vpl:save", ctx, dims, app.css, ["vpl", "top", "detached"], saveBox, app.i18n, true, false, false, null);
