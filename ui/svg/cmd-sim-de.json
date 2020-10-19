@@ -1,0 +1,26 @@
+{
+	"i18n": {
+		"de": {
+			"sim:close": "Panel schliessen",
+			"sim:restart": "Neustart der Simulation",
+			"sim:pause": "Simulation anhalten",
+			"sim:speedup": "Beschleunigungsfaktor für die Simulation einstellen",
+			"sim:pen": "Stift ein- oder ausschalten",
+			"sim:clear": "Mit dem Stift erstellte Spuren löschen",
+			"sim:map-ground": "Bodenkarte ein- oder ausschalten",
+			"sim:map-height": "Höhenkarte ein- oder ausschalten",
+			"sim:map-obstacles": "Hinderniskarte ein- oder ausschalten",
+			"sim:vpl": "VPL panel",
+			"sim:text": "Text-Quellcode-Panel",
+			"sim:teacher": "Anpassungsmodus ein- oder ausschalten",
+			"sim:teacher-reset": "Anpassung zurückgängig machen",
+			"sim:btn-button.forward": "Simulieren einer Berührung der Vorwärts-Taste",
+			"sim:btn-button.left": "Simulieren einer Berührung der linken Taste",
+			"sim:btn-button.center": "Simulieren einer Berührung der mittleren Taste",
+			"sim:btn-button.right": "Simulieren einer Berührung der rechten Taste",
+			"sim:btn-button.backward": "Simulieren einer Berührung der Vorwärts-Taste",
+			"sim:btn-tap": "Aufprallerkennung simulieren",
+			"sim:btn-clap": "Schallerkennung simulieren"
+		}
+	}
+}

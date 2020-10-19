@@ -1,0 +1,433 @@
+{
+	"help": {
+		"fr": {
+			"blocks": {
+				"button 1": [
+					"# Bouton unique",
+					"![Icône de bouton unique](vpl:block:button-1)",
+					"**Capteur(s) utilisé(s):** les cinq touches capacitives sur Thymio.",
+					"**Conditions de déclenchement :** cet événement est déclenché lorsqu'on touche un des boutons.",
+					"**Paramètres :** le bouton orange est celui qui déclenche l'événement. Les boutons grisés sont ignorés.",
+					"**Exemple :** lorsqu'on touche le bouton avant, alors … (une action du robot, par exemple rouler vers l'avant)."
+				],
+				"button": [
+					"# Boutons multiples",
+					"![Icône de boutons multiples](vpl:block:button)",
+					"**Capteur(s) utilisé(s):** les cinq touches capacitives sur Thymio.",
+					"**Conditions de déclenchement :** cet événement est déclenché lorsqu'on touche ou plusieurs boutons.",
+					"**Paramètres :** les boutons oranges sont ceux qui déclenchent l'événement. Si plusieurs boutons sont sélectionnés, l'événement est déclenché quand tous ces boutons sont touchés en même temps.Les boutons grisés sont ignorés.",
+					"**Exemple :** lorsqu'on touche simultanément les boutons avant et droit, alors … (une action du robot, par exemple avancer tout en tournant à droite)."
+				],
+				"horiz prox": [
+					"# Capteurs de proximité",
+					"![Icône de capteurs de proximité](vpl:block:horiz-prox)",
+					"**Capteur(s) utilisé(s):** Les cinq capteurs de proximité à l'avant de Thymio et les deux à l'arrière.",
+					"**Conditions de déclenchement :** les capteurs de proximité infrarouge mesurent la lumière IR réfléchie sur les objets placés devant eux. Si un objet est proche ou très réfléchissant, le capteur détectera un réflexion de lumière. Si il n'y a pas de réflexion détectée, cela peut signifier qu'il n'y a rien devant le capteur, ou qu'il y a un objet qui absorbe l'IR (un objet noir). L'événement est déclenché par la détection d'objets autour de Thymio, dans sept directions, par sept capteurs différents.",
+					"**Paramètres :** un capteur blanc avec un bord rouge montre que le déclenchement de l'événement se fait quand il y a réflexion de lumière IR, donc quand un objet est détecté devant le capteur. Un capteur noir montre que l'événement est déclenché quand il n'y a pas de réflection (obstacle retiré, objet noir ou transparent). Un capteur grisé est ignoré et ne participe pas au déclenchement de l'événement.",
+					"Lorsque plusieurs capteurs sont sélectionnés conjointement pour déclencher l'événement, le déclenchement si fait si toutes les conditions sont réunies simultanément. Si le capteur avant et le capteur gauche sont réglés sur la détection d'un objet, l'événement a lieu seulement si le capteur avant **ET** le capteur gauche voient un objet.",
+
+					"**Exemple :** Quand le capteur de gauche détecte un obstacle, alors ... (action du robot, par exemple tourner à droite pour éviter l'obstacle)."
+				],
+				"horiz prox adv": [
+					"# Capteurs de proximité avec seuils haut et bas",
+					"![Icône de capteurs de proximité avec seuils haut et bas](vpl:block:horiz-prox-adv)",
+					"**Capteur(s) utilisé(s):** Les cinq capteurs de proximité à l'avant de Thymio et les deux à l'arrière.",
+					"**Conditions de déclenchement :** les capteurs de proximité infrarouge mesurent la lumière IR réfléchie sur les objets placés devant eux. Si un objet est proche ou très réfléchissant, le capteur détectera un réflexion de lumière. Si il n'y a pas de réflexion détectée, cela peut signifier qu'il n'y a rien devant le capteur, ou qu'il y a un objet qui absorbe l'IR (un objet noir). L'événement est déclenché par la détection d'objets autour de Thymio, dans sept directions, par sept capteurs différents.",
+					"**Paramètres :** un capteur blanc avec un bord rouge montre que le déclenchement de l'événement se fait quand il y a réflexion de lumière IR, donc quand un objet est détecté devant le capteur. Un capteur noir montre que l'événement est déclenché quand il n'y a pas de réflection (obstacle retiré, objet noir ou transparent). Un capteur gris foncé déclenche une événement pour un niveau de reflection intermédiaire, entre les deux conditions précédentes. Un capteur grisé clair est ignoré et ne participe pas au déclenchement de l'événement. Deux curseurs règlent les seuils haut et bas: la seuil entre la détection d'un objet proche (blanc) et la détection un peu plus lointaine (gris foncé) et celui entre la détection d'un objet éloigné (gris foncé) et l'absence d'objet (noir).",
+					"Lorsque plusieurs capteurs sont sélectionnés conjointement pour déclencher l'événement, le déclenchement si fait si toutes les conditions sont réunies simultanément. Si le capteur avant et le capteur gauche sont réglés sur la détection d'un objet, l'événement a lieu seulement si le capteur avant **ET** le capteur gauche voient un objet.",
+
+					"**Exemple :**  Quand le capteur de gauche détecte un obstacle très réfléchissant, alors ... (action du robot, par exemple tourner à droite pour éviter l'obstacle)."
+				],
+				"horiz prox back adv": [
+					"# Capteurs de proximité arrière avec seuils",
+					"![Icône de capteurs de proximité arrière avec seuils](vpl:block:horiz-prox-back-adv)",
+					"**Capteur(s) utilisé(s):** Les deux capteurs de proximité à l'arrière de Thymio.",
+					"**Conditions de déclenchement :** les capteurs de proximité infrarouge mesurent la lumière IR réfléchie sur les objets placés devant eux. Si un objet est proche ou très réfléchissant, le capteur détectera un réflexion de lumière. Si il n'y a pas de réflexion détectée, cela peut signifier qu'il n'y a rien devant le capteur, ou qu'il y a un objet qui absorbe l'IR (un objet noir). L'événement est déclenché par la détection d'objets derrière Thymio, dans deux directions, par deux capteurs différents. La distance de détection peut être ajustée.",
+					"**Paramètres :** un capteur blanc avec un bord rouge montre que le déclenchement de l'événement se fait quand il y a réflexion de lumière IR, donc quand un objet est détecté devant le capteur. Un capteur noir montre que l'événement est déclenché quand il n'y a pas de réflection (obstacle retiré, objet noir ou transparent). Un capteur grisé est ignoré et ne participe pas au déclenchement de l'événement.",
+					"Lorsque les deux capteurs sont sélectionnés conjointement pour déclencher l'événement, le déclenchement si fait si toutes les conditions sont réunies simultanément. Si le capteur arrière gauche et le capteur arrière droit sont réglés sur la détection d'un objet, l'événement a lieu seulement si le capteur arrière gauche **ET** le capteur arrière droit voient un objet.",
+					"L'utilisateur peut régler le niveau de détection. Ceci spécifie indirectement si l'objet détecté est proche ou éloigné. Plus le seuil est haut, plus la détection est faite proche du capteur.",
+					"**Exemple :**  Quand le capteur arrière gauche détecte un obstacle, alors ... (action du robot, par exemple avancer à vitesse maximale pour s'échapper)."
+				],
+				"horiz prox front adv": [
+					"# Capteurs de proximité avants avec seuils",
+					"![Icône de capteurs de proximité avants avec seuils](vpl:block:horiz-prox-front-adv)",
+					"**Capteur(s) utilisé(s):** Les cinq capteurs de proximité à l'avant de Thymio.",
+					"**Conditions de déclenchement :** les capteurs de proximité infrarouge mesurent la lumière IR réfléchie sur les objets placés devant eux. Si un objet est proche ou très réfléchissant, le capteur détectera un réflexion de lumière. Si il n'y a pas de réflexion détectée, cela peut signifier qu'il n'y a rien devant le capteur, ou qu'il y a un objet qui absorbe l'IR (un objet noir). L'événement est déclenché par la détection d'objets devant Thymio, dans cinq directions, par cinq capteurs différents. La distance de détection peut être ajustée.",
+					"**Paramètres :** un capteur blanc avec un bord rouge montre que le déclenchement de l'événement se fait quand il y a réflexion de lumière IR, donc quand un objet est détecté devant le capteur. Un capteur noir montre que l'événement est déclenché quand il n'y a pas de réflection (obstacle retiré, objet noir ou transparent). Un capteur grisé est ignoré et ne participe pas au déclenchement de l'événement.",
+					"Lorsque plusieurs capteurs sont sélectionnés conjointement pour déclencher l'événement, le déclenchement si fait si toutes les conditions sont réunies simultanément. Si le capteur avant et le capteur gauche sont réglés sur la détection d'un objet, l'événement a lieu seulement si le capteur avant **ET** le capteur gauche voient un objet.",
+					"L'utilisateur peut régler le niveau de détection. Ceci spécifie indirectement si l'objet détecté est proche ou éloigné. Plus le seuil est haut, plus la détection est faite proche du capteur.",
+					"**Exemple :**  Quand le capteur de gauche détecte un obstacle, alors ... (action du robot, par exemple tourner à droite pour éviter l'obstacle)"
+				],
+				"ground": [
+					"# Capteurs au sol",
+					"![Icône de capteurs au sol](vpl:block:ground)",
+					"**Capteur(s) utilisé(s):** les deux capteurs de proximité au sol.",
+					"**Conditions de déclenchement :** cet événement est déclenché par la détection de la réflection de lumière IR sous Thymio, donc par la présence ou l'absence d'une surface réfléchissante sous le robot. Une surface noire matte, non réfléchissante, ou une surface transparente provoqueront une réponse du capteur similaire à une absence de surface. De même, une surface noire brillante peut réfléchir beaucoup de lumière et donner une réponse similaire à du papier blanc.",
+					"Cet événement permet à l'utilisateur de définir séparément ce que les capteurs gauche et droit doivent détecter pour déclencher l'événement. Ceci permet de détecter facilement des lignes noires sur du papier blanc, par exemple pour créer un comportement de suivi de piste.",
+					"**Paramètres :** un capteur blanc avec un bord rouge montre que le déclenchement de l'événement se fait quand le robot est sur une surface réfléchissante, par exemple blanche. Un capteur noir montre que l'événement est déclenché quand la surface n'est pas détectée (robot soulevé, ou posé sur une surface noire ou transparente). Un capteur grisé est ignoré et ne participe pas au déclenchement de l'événement.",
+					"**Exemple :**  Quand le capteur de gauche détecte une surface blanche, alors ... (action du robot, par exemple tourner à droite pour retourner sur une piste noire)."
+				],
+				"ground adv": [
+					"# Capteurs au sol avec double seuil",
+					"![Icône de capteurs au sol avec double seui](vpl:block:ground-adv)",
+					"**Capteur(s) utilisé(s):** les deux capteurs de proximité au sol.",
+					"**Conditions de déclenchement :** cet événement est déclenché par la détection de la réflection de lumière IR sous Thymio, donc par la présence ou l'absence d'une surface réfléchissante sous le robot. Une surface noire matte, non réfléchissante, ou une surface transparente provoqueront une réponse du capteur similaire à une absence de surface. De même, une surface noire brillante peut réfléchir beaucoup de lumière et donner une réponse similaire à du papier blanc.",
+					"Cet événement permet à l'utilisateur de définir séparément ce que les capteurs gauche et droit doivent détecter pour déclencher l'événement. Ceci permet de détecter facilement des lignes noires sur du papier blanc, par exemple pour créer un comportement de suivi de piste.",
+					"**Paramètres :** un capteur blanc avec un bord rouge montre que le déclenchement de l'événement se fait quand le robot est sur une surface réfléchissante, par exemple blanche. Un capteur noir montre que l'événement est déclenché quand la surface n'est pas détectée (robot soulevé, ou posé sur une surface noire ou transparente). Un capteur gris foncé détecte un certain niveau de réflexion entre les deux détection précédentes (par exemple, une surface grise). Deux seuils permettet de régler le niveau de détection: l'un fait la limite entre le blanc (surface détectée) et le gris, l'autre la limite entre le gris et le noir (surface non détectée). ",
+					"Lorsque les deux capteurs sont sélectionnés conjointement pour déclencher l'événement, le déclenchement si fait si toutes les conditions sont réunies simultanément. Si le capteur droit et le capteur gauche sont réglés sur la détection d'une surface réfléchissante, l'événement a lieu seulement si le capteur droit **ET** le capteur gauche détectent la surface.",
+
+					"**Exemple :** Quand le capteur de gauche détecte une surface blanche, alors ... (action du robot, par exemple tourner à droite pour retourner sur une piste noire)."
+				],
+				"ground 1": [
+					"# Capteurs au sol réglables",
+					"![Icône de capteurs au sol réglables](vpl:block:ground-1)",
+					"**Capteur(s) utilisé(s):** les deux capteurs de proximité au sol.",
+					"**Conditions de déclenchement :** cet événement est déclenché par la détection de la réflection de lumière IR sous Thymio, donc par la présence ou l'absence d'une surface réfléchissante sous le robot. Une surface noire matte, non réfléchissante, ou une surface transparente provoqueront une réponse du capteur similaire à une absence de surface. De même, une surface noire brillante peut réfléchir beaucoup de lumière et donner une réponse similaire à du papier blanc.",
+					"Cet événement permet à l'utilisateur de définir séparément ce que les capteurs gauche et droit doivent détecter pour déclencher l'événement, ainsi que de définir le niveau de lumière réfléchie conduisant à la détection du noir ou du blanc. Ceci permet de détecter facilement des lignes noires sur du papier blanc, par exemple pour créer un comportement de suivi de piste.",
+					"**Paramètres :** un capteur blanc avec un bord rouge montre que le déclenchement de l'événement se fait quand le robot est sur une surface réfléchissante, par exemple blanche. Un capteur noir montre que l'événement est déclenché quand la surface n'est pas détectée (robot soulevé, ou posé sur une surface noire ou transparente). Un capteur grisé est ignoré et ne participe pas au déclenchement de l'événement.",
+					"L'utilisateur peut régler le niveau de détection entre une surface détectée ou non détectée, ou entre le noir et le blanc. Un curseur glissant permet de spécifier quels niveaux de noir ou de blanc sont détectés sous Thymio. Ces niveaux sont illustrés sur la surface sous les capteurs.",
+					"**Exemple :** Quand le capteur de gauche détecte une surface blanche et celui de droite une surface noire, alors ... (action du robot, par exemple tourner à droite pour retourner sur une piste noire)."
+				],
+				"tap": [
+					"# Détection de chocs",
+					"![Icône de détection de chocs](vpl:block:tap)",
+					"**Capteur(s) utilisé(s):** accéléromètre 3-axes.",
+					"**Conditions de déclenchement :**  cet événement est déclenché par un choc, dans n'importe que direction. Une tape de la main sur le robot, par exemple, est détectée comme un choc.",
+					"**Exemple :** Quand le robot est tapé, alors... (action du robot, par exemple avancer)."
+				],
+				"accelerometer": [
+					"# Accéléromètre",
+					"![Icône de accéléromètre](vpl:block:accelerometer)",
+					"Type: event or condition block",
+					"..."
+				],
+				"roll": [
+					"# Angle de roulis",
+					"![Icône d'angle de roulis](vpl:block:roll)",
+					"**Capteur(s) utilisé(s):** accéléromètre 3-axes.",
+					"**Conditions de déclenchement :** Cet événement est déclenché par l'orientation de Thymio par rapport à la direction de la gravité, illustrée par la petite flèche orange pointant vers le bas. L'angle observé ici est l'angle de rotation de Thymio autour de sa direction de mouvement avant, par rapport à un plan horizontal. Cet angle est appelé roulis. L'angle est vu depuis l'arrière de Thymio. ",
+					"**Paramètres :** Le déplacement de la poignée circulaire cyan sur le cercle permet de spécifier l'orientation souhaitée. L'événement est déclenché lorsque l'orientation de Thymio est suffisamment proche de cette position.",
+					"**Exemple :** Lorsque le robot est penché sur sa gauche, alors... (action du robot, par exemple s'allumer en rouge)."
+				],
+				"pitch": [
+					"# Angle de tangage",
+					"![Icône d'angle de tangage](vpl:block:pitch)",
+					"**Capteur(s) utilisé(s):** accéléromètre 3-axes.",
+					"**Conditions de déclenchement :** Cet événement est déclenché par l'orientation de Thymio par rapport à la direction de la gravité, illustrée par la petite flèche orange pointant vers le bas. L'angle observé ici est l'angle d'une pente sur laquelle grimperait Thymio, par rapport à un plan horizontal. l'axe de rotation est parallèle à l'axe des roues du robot. Cet angle est appelé tangage. ",
+					"**Paramètres :** Le déplacement de la poignée circulaire cyan sur le cercle permet de spécifier l'orientation souhaitée. L'événement est déclenché lorsque l'orientation de Thymio est suffisamment proche de cette position.",
+					"**Exemple :** Lorsque le robot commence à grimper une pente montante, alors... (action du robot, par exemple s'allumer en rouge)"
+				],
+				"yaw": [
+					"# Angle de lacet",
+					"![Icône d'angle de lacet](vpl:block:yaw)",
+					"**Capteur(s) utilisé(s):** accéléromètre 3-axes.",
+					"**Conditions de déclenchement :**  Cet événement est déclenché par l'orientation de Thymio par rapport à la direction de la gravité, illustrée par la petite flèche orange pointant vers le bas. L'angle observé ici est l'angle de rotation autour de l'axe du trou pour le crayon, lorsque Thymio est placé verticalement. Cet angle est appelé lacet.",
+					"**Paramètres :** Le déplacement de la poignée circulaire cyan sur le cercle permet de spécifier l'orientation souhaitée. L'événement est déclenché lorsque l'orientation de Thymio est suffisamment proche de cette position.",
+					"**Exemple :** Lorsque le robot est posé sur sa face arrière, alors... (action du robot, par exemple s'allumer en rouge)."
+				],
+				"clap": [
+					"# Détection de clap (bruit)",
+					"![Icône de détection de clap](vpl:block:clap)",
+					"**Capteur(s) utilisé(s):** microphone.",
+					"**Conditions de déclenchement :** Cet événement est déclenché lorsqu'un bruit fort est perçu par le robot. Taper sur Thymio peut déclencher cet événement puisque cela génère un bruit proche du micro. En environnement bruyant peut mener à des déclenchements intempestifs de cet événement.",
+					"**Exemple :** Quand je tape dans les mains, alors... (action du robot, par exemple avancer)."
+				],
+				"init": [
+					"# Démarrage du programme",
+					"![Icône de démarrage du programme](vpl:block:init)",
+					"**Cet événement n'utilise pas de capteur de Thymio.**",
+					"**Conditions de déclenchement :** cet événement est déclenché au démarrage du programme sur le robot, lorsqu'on appuie sur le bouton DEMARRER ou RECOMMENCER dans VPL. Il peut être utilisé pour déterminer des actions qui seront exécutées au début du programme.",
+					"**Exemple :** au début du programme, commencer par (action du robot, par exemple s'allumer en rouge)."
+				],
+				"timer": [
+					"# Minuteur écoulé",
+					"![Icône de minuteur écoulé](vpl:block:timer)",
+					"**Cet événement n'utilise pas de capteur de Thymio.** Il réagit à la valeur interne d'un timer de Thymio.",
+					"**Conditions de déclenchement :** cet événement est déclenché lorsque le minuteur (défini dans les actions) arrive à 0.",
+					"**Exemple :** Quand deux secondes (spécifié via l'action correspondante) sont écoulées, alors... (action du robot, par exemple avancer)."
+				],
+				"clock": [
+					"# Evénement régulier",
+					"![Icône d'événement régulier](vpl:block:clock)",
+					"**Cet événement n'utilise pas de capteur de Thymio.**  Il réagit à la valeur interne d'un timer de Thymio.",
+					"**Conditions de déclenchement :** ce bloc génère des événements à intervalles réguliers.",
+					"**Paramètres :** la fréquence de l'événement peut être spécifiée par l'utilisateur, parmi certaines fréquences existantes: à 10Hz il a lieu 10 fois pas seconde, à 20Hz il a lieu 20 fois par seconde.",
+					"**Exemple :** 10 fois par seconde, incrémenter la variable interne, qui comptera ainsi les dixièmes de secondes écoulés."
+				],
+				"remote control arrows": [
+					"# Flèches de la télécommande",
+					"![Icône des flèches de la télécommande](vpl:block:remote-control-arrows)",
+					"**Capteur(s) utilisé(s):** récepteur de télécommande infrarouge.",
+					"**Conditions de déclenchement :** cet événement est déclenché quand le bouton spécifié est appuyé sur la télécommande. Les boutons représentent les flèches de la télécommande.",
+					"**Paramètres :** le bouton orange est celui qui déclenche l'événement. Les boutons grisés sont ignorés.",
+					"**Exemple :** Lorsqu'on appuie sur le bouton avant de la télécommande, alors … (une action du robot, par exemple rouler vers l'avant)."
+					],
+				"remote control keypad": [
+					"# Touches numériques de la télécommande",
+					"![Icône de touches numériques de la télécommande](vpl:block:remote-control-keypad)",
+					"**Capteur(s) utilisé(s):**  récepteur de télécommande infrarouge.",
+					"**Conditions de déclenchement :**  cet événement est déclenché quand le bouton spécifié est appuyé sur la télécommande. Les boutons représentent le pavé numérique de la télécommande.",
+					"**Paramètres :** le bouton orange est celui qui déclenche l'événement. Les boutons grisés sont ignorés.",
+					"**Exemple :** Lorsqu'on appuie sur le bouton *2* de la télécommande, alors … (une action du robot, par exemple rouler vers l'avant)."
+					],
+				"state": [
+					"# Etats (4 bits)",
+					"![state](vpl:block:state)",
+					"Type: condition block",
+					"..."
+				],
+				"state 8": [
+					"# Etats (8 valeurs)",
+					"![state 8](vpl:block:state-8)",
+					"Type: condition block",
+					"..."
+				],
+				"counter comparison": [
+					"# Comparaison arithmétique de l'état des 8 LED",
+					"![Icône de comparaison arithmétique](vpl:block:counter-comparison)",
+					"**Cette condition n'utilise pas de capteur de Thymio.** Elle lit l'état d'une valeur interne de Thymio, une variable de 8 bits. Ce bloc ne peut être utilisé que comme condition, pas comme événement principal.",
+					"**Conditions de déclenchement :** cette condition est vraie lorsque la variable interne, représentée sur le cercle de LED de Thymio, satisfait la comparaison choisie avec la valeur fixée.",
+					"**Paramètres :** à gauche, l'utilisateur peut choisir la comparaison à effectuer :",
+					"= égal à",
+					"≥ plus grand que ou égal à",
+					"> strictement plus grand que",
+					"≤ plus petit que ou égal à",
+					"< strictement plus petit que",
+					"A droite, l'utilisateur peut fixer une valeur constante de 0 à 255. Cette valeur est représentée de manière binaire sur les segments circulaires du bloc, avec le bit 0 en haut, le bit 1 en haut à droite, le bit 2 à droite et ainsi de suite le long du cercle. ",
+					"**Exemple :** Si le cercle de LED représente la valeur *6* (les bits 1 et 2 sont allumés) alors... (action du robot, par exemple s'allumer en rouge)."
+				],
+				"color 8 state": [
+					"# Etat de la couleur du haut",
+					"![Icône de l'état de la couleur du haut](vpl:block:color-8-state)",
+					"**Cette condition n'utilise pas de capteur de Thymio.** Elle lit l'état de la LED RGB (valeurs de rouge, vert et bleu) en haut de Thymio. Ce bloc ne peut être utilisé que comme condition, pas comme événement principal.",
+					"**Conditions de déclenchement :** cette condition est vraie si la LED RGB du haut de Thymio est réglée sur une certaine couleur. La comparaison de chaque composante est fait sur une tranche de valeurs, permettant ainsi à la condition d'être remplie même pour une correspondance de couleur approximative.",
+					"**Paramètres :** l'utilisateur peut choisir parmi 7 couleurs ou le dernier paramètre, qui représente la LED éteinte",
+					"**Exemple :** Si la LED du haut de Thymio est jaune, alors... (action du robot, par exemple s'allumer en rouge)."
+				],
+				"bottom color 8 state": [
+					"# Etat de la couleur du bas",
+					"![Icône de l'état de la couleur du bas](vpl:block:bottom-color-8-state)",
+					"**Cette condition n'utilise pas de capteur de Thymio.** Elle lit l'état de la LED RGB (valeurs de rouge, vert et bleu) en bas de Thymio. Ce bloc ne peut être utilisé que comme condition, pas comme événement principal.",
+					"**Conditions de déclenchement :** cette condition est vraie si la LED RGB du bas de Thymio est réglée sur une certaine couleur. La comparaison de chaque composante est fait sur une tranche de valeurs, permettant ainsi à la condition d'être remplie même pour une correspondance de couleur approximative.",
+					"**Paramètres :** l'utilisateur peut choisir parmi 7 couleurs ou le dernier paramètre, qui représente la LED éteinte",
+					"**Exemple :** Si les LED du basde Thymio sont bleues, alors... (action du robot, par exemple s'allumer en rouge)."
+				],
+				"acc side": [
+					"# Sur le côté",
+					"![Icône de sur le côté](vpl:block:acc-side)",
+					"**Capteur(s) utilisé(s):** accéléromètre 3 axes.",
+					"**Conditions de déclenchement :** Cet événement est déclenché par l'orientation de Thymio par rapport à la direction de la gravité: quand Thymio est posé (ou tenu en l'air) sur son flanc gauche ou droit).",
+					"**Exemple :** Quand le robot est posé sur le côté, alors ... (action du robot, par exemple allumer la lumière de gauche sur le cercle de LED)."
+				],
+				"acc upside down": [
+					"# Posé sur le dos",
+					"![Icône de posé sur le dos](vpl:block:acc-upside-down)",
+					"**Capteur(s) utilisé(s):** accéléromètre 3 axes.",
+					"**Conditions de déclenchement :** Cet événement est déclenché par l'orientation de Thymio par rapport à la direction de la gravité: quand Thymio est posé (ou tenu en l'air) sur son dos).",
+					"**Exemple :** Quand le robot est posé à l'envers, alors ... (action du robot, par exemple émettre un bruit énervé)."
+				],
+				"fall": [
+					"# Détection de chute libre",
+					"![Icône de détection de chute libre](vpl:block:fall)",
+					"**Capteur(s) utilisé(s):** accéléromètre 3 axes.",
+					"**Conditions de déclenchement :** cet événement est provoqué par la chute libre de Thymio. Dans ce cas, l'accéléromètre ne perçoit plus la gravité, ce qui permet de reconnaître la chute.",
+					"**Exemple :** Lorsque le robot tombe... (action du robot, par exemple s'allumer en rouge)."
+				],
+				"ground mean": [
+					"# Détection du sol",
+					"![Icône de détection du sol](vpl:block:ground-mean)",
+					"**Capteur(s) utilisé(s):** les deux capteurs de proximité au sol.",
+					"**Conditions de déclenchement :** cet événement est déclenché par la détection de la réflection de lumière IR sous Thymio, donc par la présence ou l'absence d'une surface réfléchissante sous le robot. Une surface noire matte, non réfléchissante, ou une surface transparente provoqueront une réponse du capteur similaire à une absence de surface. De même, une surface noire brillante peut réfléchir beaucoup de lumière et donner une réponse similaire à du papier blanc.",
+					"**Paramètres :** quand le sol est blanc avec une bordure rouge, l'événement est déclenché si une surface est détectée. Quand il est noir, l'événement est déclenché si aucune surface n'est détectée (vide, mais aussi surface transparente ou noire).",
+					"**Exemple :** Quand Thymio est soulevé et qu'il ne détecte plus le sol, alors... (action du robot, par exemple émettre un bruit aigu)."
+				],
+				"state 256": [
+					"# Etat des 8 LED",
+					"![Icône d'état des 8 LED](vpl:block:state-256)",
+					"**Cette condition n'utilise pas de capteur de Thymio.** Elle lit l'état des 8 LEDs en cercle autour des boutons de Thymio. Ce bloc ne peut être utilisé que comme condition, pas comme événement principal.",
+					"**Conditions de déclenchement :** cette condition est vraie si les LED du cercle de Thymio montrent la même configuration de LED allumées et éteintes que celle spécifiée sur le bloc. Comme chaque LED peut être allumée ou éteinte, il y a 256 combinaisons possibles.",
+					"**Paramètres :** chaque LED peut être réglée sur allumée (jaune) ou éteinte (gris foncé). Aucune LED n'est ignorée.",
+					"**Exemple :** Si uniquement la LED avant est allumée, alors... (action du robot, par exemple avancer)."
+				],
+				"state 256 with mask": [
+					"# Etat partiel des 8 LED",
+					"![Icône d'état partiel des 8 LED](vpl:block:state-256-with-mask)",
+					"**Cette condition n'utilise pas de capteur de Thymio.** Elle lit l'état des 8 LEDs en cercle autour des boutons de Thymio. Ce bloc ne peut être utilisé que comme condition, pas comme événement principal.",
+					"**Conditions de déclenchement :** cette condition est vraie si les LED du cercle de Thymio montrent la même configuration de LED allumées et éteintes que celle spécifiée sur le bloc. Il est possible de ne prendre en compte que certaines LED.",
+					"**Paramètres :** chaque LED peut être réglée sur allumée (jaune), éteinte (gris foncé), ou ignorée (gris clair). Ceci permet de détecté des combinaisons partielles de LED, pour reconnaitre plusieurs configurations en parallèle ou pour faire des sous groupes de LED.",
+					"**Exemple :** Si les trois LED de gauche du cercle sont allumées et que les LED arrière, arrière-droite et droite sont éteintes, alors... (action du robot, par exemple tourner à gauche)."
+				],
+				"motor state": [
+					"# Motor state",
+					"![motor state](vpl:block:motor-state)",
+					"Type: condition block",
+					"..."
+				],
+				"motor": [
+					"# Spécifier la vitesse des moteurs",
+					"![Icône pour spécifier la vitesse des moteurs](vpl:block:motor)",
+					"**Actuateurs:** les deux moteurs des roues.",
+					"**Action:** cette action règle la vitesse de chacune des roues de Thymio pour le faire se déplacer. Une fois la vitesse réglée, Thymio régule les moteurs pour maintenir cette vitesse.",
+					"**Paramètres :** les deux curseurs représentent les vitesses des deux roues. Chacune peut être positive (mouvement vers l'avant) ou négative (mouvement vers l'arrière). La position du curseur spécifie la vitesse de la roue. la vitesse maximale est d'environ 17cm/s.",
+					"Pour tourner à gauche ou à droite, il faut définir une vitesse plus grande sur la roue opposée à la direction que sur l'autre. Selon les vitesses choisies Thymio fera des virages plus serrés ou plus larges.",
+					"Le curseur a quelques mécanismes pour aider é régler les vitesses: lorsqu'un point gris foncé apparaît, les vitesses des deux moteurs sont égales. Lorsqu'un carré rouge apparaît, la roue est à l'arrêt.",
+					"**Exemple :** Lorsque... (événement, par exemple détection d'un obstacle à gauche), alors avancer tout droit (vitesse identique sur les deux roues)."				],
+				"move": [
+					"# Directions",
+					"![Icône de directions](vpl:block:move)",
+					"**Actuateurs:** les deux moteurs des roues.",
+					"**Action:** cette action spécifie une direction de mouvement pour Thymio, parmi un choix de 9 configurations prédéfinies.",
+					"**Paramètres :** Chaque flèche représente un déplacement de Thymio. Le bouton central arrête Thymio.",
+					"**Exemple :** lorsque... (événement, par exemple détection d'un obstacle à gauche), alors avancer en direction avant droite."
+				],
+				"nn obstacles": [
+					"# Neural net for obstacle avoidance",
+					"![nn obstacles](vpl:block:nn-obstacles)",
+					"Type: action block",
+					"..."
+				],
+				"top color": [
+					"# Spécifier la couleur du haut (composantes RGB)",
+					"![Icône pour spécifier la couleur du haut](vpl:block:top-color)",
+					"**Actuateur:** LED RGB du haut",
+					"**Action:** cette action règle la couleur des LED du dessus de Thymio, en spécifiant les composantes rouge (R), verte (G) et bleue (B).",
+					"**Paramètres :** l'utilisateur peut se servir des curseurs pour régler la couleur souhaitée par ses composantes rouge, verte et bleue (synthèse additive). Quand des proportions égales de rouges, vert et bleu sont combinées, de la lumière blanche est créée. L'intensité lumineuse est basse à gauche du curseur et haute à droite.",
+					"**Exemple :** lorsque... (événement, par exemple détection d'un obstacle à gauche), alors définir la couleur du haut à 60% de vert et 100% de rouge (créant de l'orange)."
+				],
+				"top color 8": [
+					"# Spécifier la couleur du haut",
+					"![Icône pour spécifier la couleur du haut](vpl:block:top-color-8)",
+					"**Actuateur:** LED RGB du haut",
+					"**Action:** cette action règle la couleur des LED du dessus de Thymio, en choisissant parmi des couleurs prédéfinies.",
+					"**Paramètres :** l'utilisateur peut choisir parmi 7 couleurs ou le dernier paramètre, qui représente la LED éteinte.",
+					"**Exemple :** lorsque... (événement, par exemple détection d'un obstacle à gauche), alors définir la couleur du haut à jaune."
+				],
+				"bottom color": [
+					"# Spécifier la couleur du bas (composantes RGB)",
+					"![Icône pour spécifier la couleur du bas en RGB](vpl:block:bottom-color)",
+					"**Actuateur:** LED RGB du bas",
+					"**Action:** cette action règle la couleur des LED du dessous de Thymio, en spécifiant les composantes rouge (R), verte (G) et bleue (B).",
+					"**Paramètres :** l'utilisateur peut se servir des curseurs pour régler la couleur souhaitée par ses composantes rouge, verte et bleue (synthèse additive). Quand des proportions égales de rouges, vert et bleu sont combinées, de la lumière blanche est créée. L'intensité lumineuse est basse à gauche du curseur et haute à droite.",
+					"**Exemple :** lorsque... (événement, par exemple détection d'un obstacle à gauche), alors définir la couleur du bas à 60% de vert et 100% de rouge (créant de l'orange)."
+				],
+				"bottom-left color": [
+					"# Set bottom-left color (RGB components)",
+					"![bottom-left color](vpl:block:bottom-left-color)",
+					"Type: action block",
+					"..."
+				],
+				"bottom-right color": [
+					"# Set bottom-right color (RGB components)",
+					"![bottom-right color](vpl:block:bottom-right-color)",
+					"Type: action block",
+					"..."
+				],
+				"bottom color 8": [
+					"# Spécifier la couleur du bas",
+					"![Icône pour spécifier la couleur du bas](vpl:block:bottom-color-8)",
+					"**Actuateur:** LED RGB du bas",
+					"**Action:** cette action règle la couleur des LED du dessous de Thymio, en choisissant parmi des couleurs prédéfinies.",
+					"**Paramètres :** l'utilisateur peut choisir parmi 7 couleurs ou le dernier paramètre, qui représente la LED éteinte.",
+					"**Exemple :** lorsque... (événement, par exemple détection d'un obstacle à gauche), alors définir la couleur du bas à bleu."
+				],
+				"bottom-left color 8": [
+					"# Set bottom-left color",
+					"![bottom-left color 8](vpl:block:bottom-left-color-8)",
+					"Type: action block",
+					"..."
+				],
+				"bottom-right color 8": [
+					"# Set bottom-right color",
+					"![bottom-right color 8](vpl:block:bottom-right-color-8)",
+					"Type: action block",
+					"..."
+				],
+				"notes": [
+					"# Jouer une mélodie",
+					"![Icône pour jouer une mélodie](vpl:block:notes)",
+					"**Actuateur:** haut-parleur",
+					"**Action:** cette action fait jouer une mélodie à Thymio.",
+					"**Paramètres :** chaque ligne bleue correspond à un ton. Jusqu'à 6 notes peuvent être placées sur ces lignes. Des clics consécutifs permettent de passer d'une noire (1 unité de temps), à une blanche (deux unités de temps), à une pause (4 unités de temps).",
+					"**Exemple :** lorsque... (événement, par exemple si le bouton avant a été touché), alors jouer la mélodie de début."
+				],
+				"notes with speed": [
+					"# Jouer une mélodie avec rythme",
+					"![Icône pour jouer une mélodie avec rythme](vpl:block:notes-with-speed)",
+					"**Actuateur:** haut-parleur",
+					"**Action:** cette action fait jouer une mélodie à Thymio.",
+					"**Paramètres :** chaque ligne bleue correspond à un ton. Jusqu'à 6 notes peuvent être placées sur ces lignes. Des clics consécutifs permettent de passer d'une noire (1 unité de temps), à une blanche (deux unités de temps), à une pause (4 unités de temps).",
+					"Le curseur du haut règle le tempo de la mélodie, donc la vitesse à laquelle la mélodie sera jouée",
+					"**Exemple :** lorsque... (événement, par exemple si le bouton avant a été touché), alors jouer rapidement la mélodie de début."
+				],
+				"play": [
+					"# Jouer un fichier .wav depuis la carte SD",
+					"![Icône pour jouer un fichier wav depuis la carte SD](vpl:block:play)",
+					"**Actuateur:** haut-parleur",
+					"**Action:** cette action fait jouer à Thymio un fichier son stocké sur une carte SD insérée dans Thymio.",
+					"**Paramètres :** Le fichier son stocké sur la carte SD doit être nommé *Px.wav*, où x est le nombre choisi dans ce bloc. Ce bloc, par exemple, jouera le fichier *P1.wav*.",
+					"Les sons sur la carte micro-SD doivent être enregistrés avec ces caractéristiques: 8000Hz, mono, non compressé, unsigned 8-bit PCM, format wav. La carte micro-SD doit être formatée en Fat32.",
+					"**Exemple :** lorsque... (événement, par exemple si le bouton avant a été touché), alors jouer le fichier son de début."
+				],
+				"play stop": [
+					"# Arrêter de jouer un fichier .wav depuis la carte SD",
+					"![Icône pour arrêter de jouer un fichier wav depuis la carte SD](vpl:block:play-stop)",
+					"**Actuateur: haut-parleur",
+					"**Action:** cette action interrompt la lecture du fichier son depuis la carte SD.",
+					"**Exemple :** lorsque... (événement, par exemple le minuteur est écoulé), alors arrêter de jouer le fichier son d'attente du robot."
+				],
+				"set state 256": [
+					"# Spécifier l'état des 8 LED",
+					"![Icône pour spécifier l'état des 8 LED](vpl:block:set-state-256)",
+					"**Actuateurs:** Les 8 LED du cercle autour des boutons de Thymio.",
+					"**Action:** cette action allume ou éteint chacune des LED du cercle.",
+					"**Paramètres :** chaque led peut être allumée (jaune) ou éteinte (gris foncé).",
+					"**Exemple :** lorsque... (événement, par exemple si le bouton avant a été touché), alors allumer la LED avant et éteindre toutes les autres."
+				],
+				"set state 256 with mask": [
+					"# Spécifier partiellement l'état des 8 LED",
+					"![Icône pour spécifier partiellement l'état des 8 LED](vpl:block:set-state-256-with-mask)",
+					"**Actuateurs:** Les 8 LED du cercle autour des boutons de Thymio.",
+					"**Action:** cette action allume ou éteint certaines LED du cercle.",
+					"**Paramètres :** chaque led peut être allumée (jaune), éteinte (gris foncé), ou laissée telle quelle (gris clair).",
+					"**Exemple :** lorsque... (événement, par exemple si le bouton gauche a été touché), alors allumer quelques LED à gauche et éteindre les trois LED arrière, et laisser les leds avant droite comme elles sont."
+				],
+				"set timer": [
+					"# Démarrer un minuteur",
+					"![Icône pour démarrer un minuteur](vpl:block:set-timer)",
+					"**Cette action n'utilise pas de capteur de Thymio.** Elle configure un timer interne de Thymio.",
+					"**Action:** cette action configure un minuteur. Une fois la durée choisie écoulée, un événement est déclenché.",
+					"**Paramètres :** le nombre de gauche permet de spécifier les secondes et celui de droite les dixièmes de secondes.",
+					"**Exemple :** lorsque... (événement, par exemple si le bouton avant a été touché), alors démarrer un minuteur de 2 secondes 0 dixièmes. Deux secondes après, un événement *minuteur écoulé* a lieu."
+				],
+				"set timer log": [
+					"# Set timer (0.1-10 sec)",
+					"![set timer log](vpl:block:set-timer-log)",
+					"Type: action block",
+					"..."
+				],
+				"picture comment": [
+					"# Picture comment",
+					"![picture comment](vpl:block:picture-comment)",
+					"Type: comment block",
+					"..."
+				],
+				"arithmetic": [
+					"# Calculer",
+					"![Icône pour calculer](vpl:block:arithmetic)",
+					"**Cette action n'utilise pas de capteur de Thymio.** Elle assigne une valeur à une variable interne de Thymio.",
+					"**Action:** cette action effectue des opérations mathématiques sur la variable représentée par le cercle de 8 LED autour des boutons de Thymio.",
+					"**Paramètres :** à gauche, l'utilisateur peut choisir dans une liste d'opérateurs:",
+					"= Assigner la valeur",
+					"+ Ajouter",
+					"- Soustraire",
+					"x Multiplier",
+					"÷ Diviser",
+					"A droite l'utilisateur peut choisir une valeur constante de 8 bits, de 0 à 255. Cette valeur est représentée de manière binaire sur les segments circulaires du bloc, avec le bit 0 en haut, le bit 1 en haut à droite, le bit 2 à droite et ainsi de suite le long du cercle; le bleu foncé représente la valeur 1 et le bleu clair la valeur 0.",
+					"L'opération effectuée consiste à appliquer l'opérateur choisi sur la variable interne, avec la constante spécifiée comme second argument. Par exemple “x 4” multipliera par 4 la valeur interne affichée sur les LED du cercle.",
+					"Selon les caulculs effectués, le résultat peut être plus grand que 255 ou plus petit que 0. Dans ce cas le résultat peut soit être saturé à 255 et 0, soit dépasser la limite et se comporter de manière circulaire. Dans le cas non saturé, 254+4 donnera 2, car après la valeur 255 la variable reprend depuis 0.",
+					"Le bouton en haut à gauche du cercle de LED permet d'activer ou de désactiver la saturation du nombre binaire. Quand le levier est entre les deux LED, la saturation est activée(254+4=255). Quand le levier est en dehors du cercle, la saturation est désactivée(254+4=2)."
+				]
+			}
+		}
+	}
+}

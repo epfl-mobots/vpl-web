@@ -1,0 +1,20 @@
+{
+	"i18n": {
+		"de": {
+			"Same block used multiple times": "Doppelte Aktionsblöcke",
+			"Rules with same events": "Regeln mit gleichen Ereignissen",
+			"Missing action block": "Fehlender Aktionsblock",
+			"Missing event block": "Fehlender Ereignisblock",
+			"No button specified": "Keine Taste ausgewählt",
+			"No ground sensor specified": "Kein Bodensensor ausgewählt",
+			"No proximity sensor specified": "Kein Näherungssensor ausgewählt",
+			"No sensor specified": "Kein Sensor ausgewählt",
+			"Open program file": "Programm-Datei öffnen",
+			"OK": "OK",
+			"Cancel": "Abbrechen",
+			"Open ground image file": "Boden-Bilddatei öffnen",
+			"Open height image file": "Höhen-Bilddatei öffnen",
+			"Open obstacle SVG file": "Hindernis-SVG-Datei öffnen"
+		}
+	}
+}

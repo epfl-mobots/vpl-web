@@ -32,13 +32,16 @@
 
 	"doc": {
 		"en": {
-			"doctemplate.html": "doctemplate-english.html"
+			"doctemplate.html": "doctemplate-en.html"
+		},
+		"de": {
+			"doctemplate.html": "doctemplate-de.html"
 		},
 		"fr": {
-			"doctemplate.html": "doctemplate-french.html"
+			"doctemplate.html": "doctemplate-fr.html"
 		},
 		"it": {
-			"doctemplate.html": "doctemplate-italian.html"
+			"doctemplate.html": "doctemplate-it.html"
 		}
 	},
 
@@ -2119,21 +2122,28 @@
 
 		"toolbars.json",
 		"buttons.json",
-		"cmd-vpl-english.json",
-		"cmd-sim-english.json",
-		"french.json",
-		"cmd-vpl-french.json",
-		"cmd-sim-french.json",
-		"italian.json",
-		"cmd-vpl-italian.json",
-		"cmd-sim-italian.json",
 
-		"block-english.json",
-		"block-french.json",
-		"block-italian.json",
+		"block-en.json",
+		"cmd-sim-en.json",
+		"cmd-vpl-en.json",
+		"help-blocks-en.json",
 
-		"help-blocks-english.json",
-		"help-blocks-french.json",
-		"help-blocks-italian.json"
+		"block-de.json",
+		"cmd-sim-de.json",
+		"cmd-vpl-de.json",
+		"help-blocks-de.json",
+		"messages-de.json",
+
+		"block-fr.json",
+		"cmd-sim-fr.json",
+		"cmd-vpl-fr.json",
+		"help-blocks-fr.json",
+		"messages-fr.json",
+
+		"block-it.json",
+		"cmd-vpl-it.json",
+		"cmd-sim-it.json",
+		"help-blocks-it.json",
+		"messages-it.json"
 	]
 }

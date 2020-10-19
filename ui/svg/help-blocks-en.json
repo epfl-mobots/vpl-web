@@ -21,7 +21,7 @@
 				"horiz prox": [
 					"# Proximity sensors",
 					"![Proximity sensors](vpl:block:horiz-prox)",
-					"**Sensor(s) used:** five proximity sensors on the front and two on the back.", 
+					"**Sensor(s) used:** five proximity sensors on the front and two on the back.",
 					"**Triggering conditions:** proximity infrared sensors measure the reflection of objects placed in front of them. If there is reflection, there is a close or reflective obstacle in front of them. No reflection means either a black obstacle or no obstacle at all. This event is triggered by detection of obstacles around Thymio, in seven different direction, by seven different sensors.",
 					"**Parameters:** when a sensor is set in white with a red border, the sensor triggers an event when detecting a reflective obstacle.  Setting it in black makes the sensor trigger the event if there is no obstacle anymore (or a black obstacle, or a transparent surface). When a sensor is set to grey it is ignored.",
 					"When several sensors have been selected to trigger the event, the event is triggered by the combination of the conditions. If the front and the left sensors have been set to detect an obstacle, the event will be triggered when the front **AND** the left sensors detect an obstacle.",
@@ -31,7 +31,7 @@
 				"horiz prox adv": [
 					"# Proximity sensors with low and high thresholds",
 					"![horiz prox adv](vpl:block:horiz-prox-adv)",
-					"**Sensor(s) used:** five proximity sensors on the front and two on the back.", 
+					"**Sensor(s) used:** five proximity sensors on the front and two on the back.",
 					"**Triggering conditions:** proximity infrared sensors measure the reflection of objects placed in front of them. If there is reflection, there is a close or reflective obstacle in front of them. No reflection means either a black obstacle or no obstacle at all. This event is triggered by detection of obstacles around Thymio, in seven different direction, by seven different sensors.",
 					"**Parameters:** when a sensor is set in white with a red border, the sensor triggers an event when detecting a reflective obstacle or a white surface. Setting it in black makes the sensor trigger the event if there is no obstacle anymore (or a black surface, or a transparent surface). Setting it in dark grey means makes the sensor triggering an event for a level between the previous two. When a sensor is set to light grey it is ignored. Two sliders allow to set the two required thresholds: the threshold between detection of obstacle/white and grey and the threshold between grey and black / no obstacle.",
 					"When several sensors have been selected to trigger the event, the event is triggered by the combination of the conditions. If the front and the left sensors have been set to detect an obstacle, the event will be triggered when the front **AND** the left sensors detect an obstacle.",
