@@ -21,10 +21,10 @@
 
 	"doc": {
 		"en": {
-			"doctemplate.html": "doctemplate-english.html"
+			"doctemplate.html": "doctemplate-en.html"
 		},
 		"fr": {
-			"doctemplate.html": "doctemplate-french.html"
+			"doctemplate.html": "doctemplate-fr.html"
 		}
 	},
 
@@ -41,16 +41,17 @@
 		"typical-param-set.json",
 		"typical-states.json",
 
-		"block-english.json",
-		"cmd-vpl-english.json",
-		"cmd-sim-english.json",
-		"french.json",
-		"block-french.json",
-		"cmd-vpl-french.json",
-		"cmd-sim-french.json",
-		"help-buttons-english.json",
-		"help-buttons-french.json",
-		"help-blocks-english.json",
-		"help-blocks-french.json"
+		"block-en.json",
+		"cmd-sim-en.json",
+		"cmd-vpl-en.json",
+		"help-blocks-en.json",
+		"help-buttons-en.json",
+
+		"block-fr.json",
+		"cmd-sim-fr.json",
+		"cmd-vpl-fr.json",
+		"help-buttons-fr.json",
+		"help-blocks-fr.json",
+		"messages-fr.json"
 	]
 }
