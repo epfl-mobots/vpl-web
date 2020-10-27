@@ -1,0 +1,427 @@
+{
+	"help": {
+		"de": {
+			"blocks": {
+				"button 1": [
+					"# Einzelne Taste",
+					"![Symbol für einzelne Taste](vpl:block:button-1)",
+					"**Verwendete Sensoren:** fünf kapazitive Berührungstasten auf der Oberseite des Thymios.",
+					"**Auslösebedingungen:** Dieses Ereignis wird ausgelöst, wenn eine Taste betätigt wird.",
+					"**Parameter:** Die orange hervorgehobene Taste ist die Taste, die das Ereignis auslöst. Die grau eingefärbten Tasten werden ignoriert.",
+					"**Beispiel:** Wenn die Vorwärtstaste gedrückt wird, dann … (Aktion des Roboters, z.B. sich vorwärts bewegen)."
+				],
+				"button": [
+					"# Mehrere Tasten ",
+					"![Symbol für mehrere Tasten](vpl:block:button)",
+					"**Verwendete Sensoren:** fünf kapazitive Berührungstasten auf der Oberseite des Thymios.",
+					"**Auslösebedingungen:** Dieses Ereignis wird ausgelöst, wenn eine oder mehrere Tasten betätigt werden.",
+					"**Parameter:** Die orange hervorgehobenen Tasten sind die Schaltflächen, die das Ereignis auslösen. Wenn mehrere Tasten gedrückt werden, wird das Ereignis ausgelöst, wenn alle ausgewählten Tasten gleichzeitig gedrückt werden. Die grau eingefärbten Tasten werden ignoriert.",
+					"**Beispiel:** Wenn die Vorwärts- und die Rechts-Taste gedrückt werden, dann … (Aktion des Roboters, z.B. Beginn einer Vorwärtsbewegung nach rechts)."
+				],
+				"remote control arrows": [
+					"# Pfeiltasten der Fernbedienung ",
+					"![Symbol für Pfeile auf der Fernbedienung](vpl:block:remote-control-arrows)",
+					"**Verwendete Sensoren:** Infrarot-Fernbedienungsempfänger.",
+					"**Auslösebedingungen:** Dieses Ereignis wird ausgelöst, wenn die festgelegte Taste auf der Fernbedienung gedrückt wird. Die Tasten stellen die Pfeiltasten auf der Fernbedienung dar.",
+					"**Parameter:** Die orange hervorgehobene Taste ist die Taste, die das Ereignis auslöst.",
+					"**Beispiel:** Wenn die Vorwärtstaste der Fernbedienung gedrückt wird, dann … (Aktion des Roboters, z.B. sich vorwärts bewegen)"
+					],
+				"remote control keypad": [
+					"# Eingabetasten der Fernbedienung ",
+					"![Symbol der Fernbedienungstastatur](vpl:block:remote-control-keypad)",
+					"**Verwendete Sensoren:** Infrarot-Fernbedienungsempfänger.",
+					"**Auslösebedingungen:** Dieses Ereignis wird ausgelöst, wenn die festgelegte Taste auf der Fernbedienung gedrückt wird. Die Tasten stellen das Tastenfeld der Fernbedienung dar.",
+					"**Parameter:** Die orange hervorgehobene Taste ist die Taste, die das Ereignis auslöst.",
+					"**Beispiel:** Wenn die Taste **2** der Fernbedienung gedrückt wird, dann … (Aktion des Roboters, z.B. sich vorwärts bewegen)"
+					],
+				"init": [
+					"# Programm-Startereignis",
+					"![Symbol für den Programmstart](vpl:block:init)",
+					"** Dieses Ereignis verwendet keinen spezifischen Sensor des Thymios.**",
+					"**Auslösebedingungen:** Dieses Ereignis wird beim Start des Programms auf dem Roboter ausgelöst, sobald Sie die START- oder NEUSTART-Schaltfläche in der VPL3-Programmierumgebung anklicken. Sie können es benutzen, um Aktionen festzulegen, die Thymio beim Start des Programms ausführen soll.",
+					"**Beispiel:** Am Anfang des Programms starte mit  (Aktion des Roboters, z.B., die Farbe des Roboters auf Rot setzen.)"
+				],
+				"acc side": [
+					"# Seitenlage ",
+					"![Symbol für die Seitenlage](vpl:block:acc-side)",
+					"**Verwendete Sensoren:** 3-Achsen-Beschleunigungssensor.",
+					"**Auslösebedingungen:** Dieses Ereignis wird durch die Lage des Thymios in Bezug auf die Richtung der Schwerkraft ausgelöst, wenn der Roboter nach links oder rechts gedreht wird. Es spielt dabei keine Rolle, ob Thymio auf einem Untergrund steht oder ob er in die Luft gehalten wird.",
+					"**Beispiel:** Wenn der Roboter auf die Seite gelegt wird, dann … (Aktion des Roboters, z.B. Einschalten der linken LED auf dem LED-Kreis)."
+				],
+				"acc upside down": [
+					"# Auf dem Kopf liegend",
+					"![Symbol für die Kopflage](vpl:block:acc-upside-down)",
+					"**Verwendete Sensoren:** 3-Achsen-Beschleunigungssensor.",
+					"**Auslösebedingungen:** Dieses Ereignis wird durch die Lage des Thymios in Bezug auf die Richtung der Schwerkraft ausgelöst, wenn der Roboter auf den Kopf gedreht wird. Es spielt dabei keine Rolle, ob Thymio auf einem Untergrund steht oder ob er in die Luft gehalten wird.",
+					"**Beispiel:** Wenn der Roboter mit seiner Oberseite nach unten gedreht wird, dann … (Aktion des Roboters, z.B. ein ‘unglückliches’ Ton-Signal von sich geben)."
+				],
+				"roll": [
+					"# Rollwinkel",
+					"![Symbol für Rollwinkel](vpl:block:roll)",
+					"**Verwendete Sensoren:** 3-Achsen-Beschleunigungssensor.",
+					"**Auslösebedingungen:**  Dieses Ereignis wird durch die Lage des Thymios in Bezug auf die Richtung der Schwerkraft ausgelöst, welche durch den kleinen orangefarbenen Pfeil, der nach unten zeigt, veranschaulicht wird. Der hier beobachtete Winkel ist der Drehwinkel von Thymio um seine Vorwärtsbewegungsrichtung, in Bezug zur horizontalen Ebene. Dieser Winkel wird als Rollwinkel bezeichnet. Der Winkel wird von der Rückseite des Roboters aus betrachtet.",
+					"**Parameter:** Bewegen Sie den kreisförmigen, cyanfarbenen Punkt der Kreislinie entlang, um den gewünschten Rollwinkel zu wählen. Das Ereignis wird ausgelöst, sobald die Lage von Thymio ungefähr diese Position erreicht.",
+					"**Beispiel:** Wenn der Roboter beginnt, sich nach links zu neigen, dann … (Aktion des Roboters, z.B. sich rot färben)."
+				],
+				"pitch": [
+					"# Steigungswinkel ",
+					"![Symbol für Steigungswinkel](vpl:block:pitch)",
+					"**Verwendete Sensoren:** 3-Achsen-Beschleunigungssensor.",
+					"**Auslösebedingungen:**  Dieses Ereignis wird durch die Lage des Thymios in Bezug auf die Richtung der Schwerkraft ausgelöst, welche durch den kleinen orangefarbenen Pfeil, der nach unten zeigt, veranschaulicht wird. Der hier betrachtete Winkel entspricht dem Winkel einer schiefen Ebene, auf der sich Thymio, in Bezug auf die horizontale Ebene, vorwärtsbewegen würde. Die Drehachse ist dabei parallel zur Achse der Antriebsräder. Dieser Winkel wird als Neigungswinkel bezeichnet.",
+					"**Parameter:** Bewegen Sie den kreisförmigen, cyanfarbenen Punkt der Kreislinie entlang, um den gewünschten Neigungswinkel zu wählen. Das Ereignis wird ausgelöst, sobald die Lage von Thymio ungefähr diese Position erreicht.",
+					"**Beispiel:** Wenn der Roboter anfängt, sich bergauf zu bewegen, dann … (Aktion des Roboters, z.B. sich rot färben)."
+				],
+				"yaw": [
+					"# Gierwinkel ",
+					"![Symbol für Gierwinkel](vpl:block:yaw)",
+					"**Verwendete Sensoren:** 3-Achsen-Beschleunigungssensor.",
+					"**Auslösebedingungen:** Dieses Ereignis wird durch die Lage des Thymios in Bezug auf die Richtung der Schwerkraft ausgelöst, welche durch den kleinen orangefarbenen Pfeil, der nach unten zeigt, veranschaulicht wird. Der hier betrachtete Winkel entspricht dem Rotationswinkel von Thymio um das Stiftloch, wenn Thymio vertikal platziert wird. Dieser Winkel wird als Gierwinkel bezeichnet.",
+					"**Parameter:** Bewegen Sie den kreisförmigen, cyanfarbenen Punkt der Kreislinie entlang, um den gewünschten Gierwinkel zu wählen. Das Ereignis wird ausgelöst, sobald die Lage von Thymio ungefähr diese Position erreicht.",
+					"**Beispiel:** Wenn der Roboter auf seine Rückseite gestellt wird, dann … (Aktion des Roboters, z.B. sich rot färben)."
+				],
+				"fall": [
+					"# Sturzerkennung ",
+					"![Symbol für Sturzerkennung](vpl:block:fall)",
+					"** Verwendete Sensoren:** 3-Achsen-Beschleunigungssensor.",
+					"**Auslösebedingungen:** Dieses Ereignis wird ausgelöst durch das Fallen des Thymios. Dies führt dazu, dass der Beschleunigungsmesser keine Schwerkraft mehr erfasst.",
+					"**Beispiel:** Wenn der Roboter herunterfällt, dann … (Aktion des Roboters, z.B. sich rot färben)."
+				],
+				"tap": [
+					"# Aufprallerkennung",
+					"![Symbol für Aufprallerkennung](vpl:block:tap)",
+					"**Verwendete Sensoren:** 3-Achsen-Beschleunigungssensor.",
+					"**Auslösebedingungen:** Dieses Ereignis wird durch einen Stoss in irgendeine Richtung ausgelöst. Zum Beispiel ein leichter Schlag mit der Hand wird als Stoss erkannt.",
+					"**Beispiel:** Wenn der Roboter einen Klaps bekommt, dann … (Aktion des Roboters, z.B. anfangen sich vorwärts zu bewegen)."
+				],
+				"clap": [
+					"# Klatsch-(Ton-)Erkennung",
+					"![Symbol für Klatsch-(Ton-)Erkennung](vpl:block:clap)",
+					"** Verwendeter Sensor:** Mikrofon.",
+					"**Auslösebedingungen:** Dieses Ereignis wird ausgelöst, wenn von Thymio ein lautes Geräusch erkannt wird. Auch ein Schlag auf den Roboter kann dieses Ereignis auslösen, da dieser ein lautes Geräusch auf dem Mikrofon erzeugt. Vorsicht: Laute Umgebungsgeräusche können dieses Ereignis auf nicht kontrollierbare Weise auslösen.",
+					"**Beispiel:** Wenn ich in die Hände klatsche, dann … (Aktion des Roboters, z.B. anfangen sich vorwärts zu bewegen)."
+				],
+				"ground mean": [
+					"# Boden-Erkennung",
+					"![Symbol für Boden-Erkennung](vpl:block:ground-mean)",
+					"**Verwendete Sensoren:** Bodennäherungssensoren.",
+					"**Auslösebedingungen:** Dieses Ereignis wird ausgelöst durch die Erkennung der An- oder Abwesenheit eines reflektierenden Bodens unter Thymio. Beachten Sie, dass eine transparente oder schwarze (matte, nicht reflektierende) Oberfläche als fehlender Boden erkannt wird.",
+					"**Parameter:** Wenn auf dem Ereignisblock die weisse, rot umrandete Bodenfläche ausgewählt ist, wird das Ereignis ausgelöst, sobald ein (reflektierender) Boden erkannt wird. Wird hingegen die schwarze Bodenfläche ausgewählt, löst das Ereignis dann aus, wenn der Boden nicht mehr erkannt wird (oder wenn ein schwarzer oder transparenter Boden erkannt wird).",
+					"**Beispiel:** Wenn ich den Thymio anhebe und er den Boden nicht mehr erkennt, dann … (Aktion des Roboters, z.B. einen hochfrequenten Ton erzeugen)."
+				],
+				"ground": [
+					"# Bodensensoren",
+					"![Symbol für Bodensensoren](vpl:block:ground)",
+					"**Verwendete Sensoren:** zwei Bodennäherungssensoren.",
+					"**Auslösebedingungen:** Dieses Ereignis wird ausgelöst durch die Erkennung der An- oder Abwesenheit eines reflektierenden Bodens unter Thymio. Beachten Sie, dass eine transparente oder schwarze (matte, nicht reflektierende) Oberfläche als fehlender Boden erkannt wird. Dieses Ereignis ermöglicht es dem Programmierer, getrennt zu definieren, was der linke und rechte Bodensensor erkennen soll, um das Ereignis auszulösen. Dies kann sehr nützlich sein, um einen schwarzen Streifen auf weissem Papier zu erkennen, z.B. um ein Verhalten zu definieren, bei dem der Roboter einem schwarzen Streifen auf dem Untergrund folgt.",
+					"**Parameter:** Wenn beim jeweiligen Sensor das weisse Feld mit dem roten Rand angewählt ist, erkennt der Sensor eine helle, reflektierende Oberfläche, z.B. weiss. Wenn das schwarze Feld angewählt ist, wird ein Ereignis ausgelöst, wenn der Sensor keinen Boden mehr erkennt (bzw. wenn er einen schwarzen oder transparenten Boden erkennt). Wird für den Sensor das graue Feld angewählt, so wird dieser ignoriert.",
+					"**Beispiel:** Wenn der linke Sensor eine weisse Fläche und der rechte einen schwarzen Streifen erkennt, dann ... (Aktion des Roboters, z.B., nach rechts zum schwarzen Streifen abdrehen)."
+				],
+				"ground 1": [
+					"# Einstellbare Bodensensoren",
+					"![Symbol für einstellbare Bodensensoren](vpl:block:ground-1)",
+					"**Verwendete Sensoren:** zwei Bodennäherungssensoren.",
+					"**Auslösebedingungen:** Dieses Ereignis wird durch den Reflexionsgrad des Bodens unter Thymio ausgelöst. Die Reflexion einer Oberfläche hängt von ihrer Farbe, aber auch von ihrer Oberflächenbeschaffenheit und weiteren Parametern ab.",					" Beispielsweise wird eine transparente oder schwarze (matte, nicht reflektierende) Oberfläche als Abwesenheit von Boden erkannt. Eine glänzende Oberfläche, auch wenn sie dunkel ist, kann recht gut reflektieren. Weisse Oberflächen reflektieren gut. Bei diesem Ereignisblock kann man die auslösenden Sensoren wählen, sowie die auslösende Situation (Erkennung von weiss oder schwarz) und den Reflexionsgrad, zur Unterscheidung zwischen schwarzen und weissen Oberflächen, einstellen. Ob ein Sensor auf eine helle oder dunkle Oberfläche reagieren soll, kann für jeden Sensor individuell gewählt werden.",
+					"**Parameter:** Wenn bei einem Sensor das weisse Feld mit dem roten Rand angewählt ist, erkennt dieser eine helle, reflektierende Oberfläche, z.B. weiss. Wenn das schwarze Feld angewählt ist, wird ein Ereignis ausgelöst, wenn der Sensor eine schwarze Oberfläche erkennt (bzw. keine oder eine transparente Oberfläche). Wird für einen Sensor das graue Feld angewählt, so wird dieser ignoriert.",
+					". Der Programmierer kann zur Unterscheidung zwischen der Erkennung und nicht Erkennung der Oberfläche bzw. zwischen hellen und dunklen Flächen einen Schwellenwert (Schieberegler) einstellen und damit festzulegen, in welchem Bereich eine Oberfläche als dunkel oder als hell erkannt werden soll. Der Bereich der erkannten Schwarz- oder Weisstöne wird im Ereignisblock auf der Oberfläche unter den Sensoren (links und rechts) visualisiert.",
+					"**Beispiel:** Wenn der linke Sensor eine weisse Fläche und der rechte einen schwarzen Streifen erkennt, dann ... (Aktion des Roboters, z.B., nach rechts zum schwarzen Streifen abdrehen)."
+				],
+				"ground adv": [
+					"# Bodenreflexionssensoren mit 2 Schwellenwerten",
+					"![Symbol für Bodenreflexionssensoren mit 2 Schwellenwerten](vpl:block:ground-adv)",
+					"**Verwendete Sensoren:** zwei Bodennäherungssensoren.",
+					"**Auslösebedingungen:** Die Bodennäherungs-Infrarotsensoren messen die Reflexion von Objekten, die sich vor ihnen befinden. Eine Reflexion bedeutet, dass sich vor ihnen eine nahe oder reflektierende (weisse) Fläche befindet. Keine Reflexion bedeutet entweder eine schwarze oder überhaupt keine Oberfläche. Dieses Ereignis wird durch die Erkennung einer Oberfläche in zwei verschiedenen Abständen unterhalb von Thymio (mit zwei Schaltschwellen) ausgelöst.",
+					"**Parameter:** Wenn bei einem Sensor das weisse Feld mit dem roten Rand angewählt ist, erkennt dieser eine helle, reflektierende Oberfläche, z.B. weiss. Wenn das schwarze Feld angewählt ist, wird ein Ereignis ausgelöst, wenn der Sensor eine schwarze Oberfläche erkennt (bzw. keine oder eine transparente Oberfläche). Wird für einen Bodensensor das dunkelgraue Feld angewählt, bedeutet dies, dass der Sensor ein Ereignis auslöst sobald der Signalpegel einen Wert annimmt, der zwischen den beiden Schwellwerten liegt. Wird für einen Sensor das graue Feld angewählt, so wird dieser ignoriert. Mit den zwei Schiebereglern können die beiden erforderlichen Schwellenwerte individuell eingestellt werden: die Schwelle zur Unterscheidung zwischen einer weissen und einer grauen Oberfläche und die Schwelle zwischen einer grauen und einer schwarzen, bzw. keiner Oberfläche.",
+					" Wenn beide Sensoren ausgewählt wurden, um das Ereignis auszulösen, wird das Ereignis durch die Kombination der Bedingungen ausgelöst. Wenn der rechte und der linke Sensor gleichzeitig ausgewählt wurde, um eine Oberfläche zu erkennen, wird das Ereignis ausgelöst, sobald der rechte **UND** der linke Sensor eine Oberfläche erkennen.",
+
+					"**Beispiel:** Wenn der linke Sensor einen schwarzen Streifen auf dem Boden erkennt, dann … (Aktion des Roboters, z.B. rechts abbiegen, um ihm auszuweichen)."
+				],
+				"horiz prox": [
+					"# Näherungssensoren",
+					"![Symbol für Näherungssensoren](vpl:block:horiz-prox)",
+					"**Verwendete Sensoren:** fünf Näherungssensoren auf der Vorderseite und zwei auf der Rückseite.",
+					"**Auslösebedingungen:** Infrarot-Näherungssensoren messen die Reflexion von Objekten, die sich vor ihnen befinden. Wenn ein Sensor eine Reflexion erkennt, steht ein nahes oder reflektierendes Hindernis vor ihm. Keine Reflexion bedeutet entweder ein schwarzes Hindernis oder überhaupt kein Hindernis. Dieses Ereignis wird durch die Erkennung von Hindernissen um Thymio herum ausgelöst, mit sieben verschiedenen Sensoren, von denen jeder einen anderen Bereich abdeckt. ",
+					"**Parameter:** Wenn bei einem Sensor das weisse Feld mit dem roten Rand angewählt ist, erkennt dieser eine helle, reflektierende Oberfläche. Wenn das schwarze Feld angewählt ist, wird ein Ereignis ausgelöst, wenn der Sensor eine schwarze Oberfläche erkennt (bzw. ein schwarzes Hindernis oder eine transparente Oberfläche). Wird für einen Sensor das graue Feld angewählt, so wird dieser ignoriert.",
+					"Wenn mehrere Sensoren zur Auslösung des Ereignisses ausgewählt wurden, wird das Ereignis durch die Kombination der Bedingungen ausgelöst. Wenn z.B. der vordere und die linken Sensoren so eingestellt wurden, dass sie ein Hindernis erkennen, wird das Ereignis ausgelöst, wenn der vordere **UND** die linken Sensoren ein Hindernis erkennen.",
+					"**Beispiel:** Wenn der linke Sensor ein Hindernis erkennt, dann … (Aktion des Roboters, z.B. rechts abbiegen, um dem Hindernis auszuweichen)."
+				],
+				"horiz prox front adv": [
+					"# Vordere Näherungssensoren mit Schwellenwert",
+					"![Symbol für vordere Näherungssensoren mit Schwellenwert](vpl:block:horiz-prox-front-adv)",
+					"**Verwendete Sensoren:** fünf Näherungssensoren auf der Vorderseite des Thymios.",
+					"**Auslösebedingungen:** Infrarot-Näherungssensoren messen die Reflexion von Objekten, die sich vor ihnen befinden. Wenn ein Sensor eine Reflexion erkennt, steht ein nahes oder reflektierendes Hindernis vor ihm. Keine Reflexion bedeutet entweder ein schwarzes Hindernis oder überhaupt kein Hindernis. Dieses Ereignis wird durch die Erkennung von Hindernissen vor der runden Frontseite von Thymio ausgelöst, mit fünf verschiedenen Sensoren, von denen jeder einen anderen Bereich abdeckt. Die Schaltschwelle, zur Erkennung der Reflexion des Hindernisses kann eingestellt werden.",
+					"**Parameter:** Wenn bei einem Sensor das weisse Feld mit dem roten Rand angewählt ist, erkennt dieser ein helles, reflektierendes Hindernis. Wenn das schwarze Feld angewählt ist, wird ein Ereignis ausgelöst, wenn der Sensor kein Hindernis mehr erkennt (bzw. ein schwarzes Hindernis oder eine transparente Oberfläche). Wird für einen Sensor das graue Feld angewählt, so wird dieser ignoriert.",
+					"Wenn mehrere Sensoren zur Auslösung des Ereignisses ausgewählt wurden, wird das Ereignis durch die Kombination der Bedingungen ausgelöst. Wenn z.B. der vordere und die linken Sensoren so eingestellt wurden, dass sie ein Hindernis erkennen, wird das Ereignis ausgelöst, wenn der vordere **UND** die linken Sensoren ein Hindernis erkennen.",
+					"Der Programmierer kann die Schaltschwelle einstellen. Dadurch wird indirekt festgelegt, ob das Hindernis in der Nähe oder in der Ferne erkannt wird. Je höher die Schaltschwelle, desto näher am Sensor wird das Hindernis erkannt.",
+					"**Beispiel:** Wenn der linke Sensor ein Hindernis erkennt, dann … (Aktion des Roboters, z.B. rechts abbiegen, um dem Hindernis auszuweichen)."
+				],
+				"horiz prox back adv": [
+					"# Hintere Näherungssensoren mit Schwellenwert",
+					"![Symbol für hintere Näherungssensoren mit Schwellenwert](vpl:block:horiz-prox-back-adv)",
+					"**Verwendete Sensoren:** zwei Näherungssensoren auf der Rückseite des Thymios.",
+					"**Auslösebedingungen:** Infrarot-Näherungssensoren messen die Reflexion von Objekten, die sich vor ihnen befinden. Wenn ein Sensor eine Reflexion erkennt, steht ein nahes oder reflektierendes Hindernis vor ihm. Keine Reflexion bedeutet entweder ein schwarzes Hindernis oder überhaupt kein Hindernis. Dieses Ereignis wird durch die Erkennung von Hindernissen vor der flachen Heckseite des Thymios ausgelöst, mit zwei Sensoren, von denen einer die linke und einer die rechte Seite abdeckt. Die Schaltschwelle, zur Erkennung der Reflexion des Hindernisses kann eingestellt werden.",
+					"**Parameter:** Wenn bei einem Sensor das weisse Feld mit dem roten Rand angewählt ist, erkennt dieser ein helles, reflektierendes Hindernis. Wenn das schwarze Feld angewählt ist, wird ein Ereignis ausgelöst, wenn der Sensor kein Hindernis mehr erkennt (bzw. ein schwarzes Hindernis oder eine transparente Oberfläche). Wird für einen Sensor das graue Feld angewählt, so wird dieser ignoriert.",
+					"Wenn beide Sensoren zur Auslösung des Ereignisses ausgewählt wurden, wird das Ereignis durch die Kombination beider Bedingungen ausgelöst. Wenn z.B. der Sensor hinten links und der Sensor hinten rechts so eingestellt wurden, dass sie ein Hindernis erkennen, wird das Ereignis ausgelöst, wenn der linke **UND** die rechte Sensor auf der Heckseite ein Hindernis erkennen.",
+					"Der Programmierer kann die Schaltschwelle einstellen. Dadurch wird indirekt festgelegt, ob das Hindernis in der Nähe oder in der Ferne erkannt wird. Je höher die Schaltschwelle, desto näher am Sensor wird das Hindernis erkannt.",
+					"**Beispiel:** Wenn der linke Sensor auf der Heckseite ein Hindernis erkennt, dann … (Aktion des Roboters, z.B. mit voller Geschwindigkeit vorwärts fahren, um zu entkommen)."
+				],
+				"horiz prox adv": [
+					"# Näherungssensoren mit 2 Schwellenwerten",
+					"![Symbol für Näherungssensoren mit 2 Schwellenwerten](vpl:block:horiz-prox-adv)",
+					"**Verwendete Sensoren:** fünf Näherungssensoren auf der Vorderseite und zwei auf der Rückseite.",
+					"**Auslösebedingungen:** Infrarot-Näherungssensoren messen die Reflexion von Objekten, die sich vor ihnen befinden. Wenn ein Sensor eine Reflexion erkennt, steht ein nahes oder reflektierendes Hindernis vor ihm. Keine Reflexion bedeutet entweder ein schwarzes Hindernis oder überhaupt kein Hindernis. Dieses Ereignis wird durch die Erkennung von Hindernissen, rund um Thymio herum,ausgelöst, mit sieben verschiedenen Sensoren, von denen jeder einen anderen Bereich abdeckt. Der Schaltschwelle, zur Erkennung der Reflexion des Hindernisses kann eingestellt werden.",
+					"**Parameter:** Wenn bei einem Sensor das weisse Feld mit dem roten Rand angewählt ist, erkennt dieser ein helles, reflektierendes Hindernis. Wenn das schwarze Feld angewählt ist, wird ein Ereignis ausgelöst, wenn der Sensor kein Hindernis mehr erkennt (bzw. ein schwarzes Hindernis oder eine transparente Oberfläche). Wird für einen Sensor das dunkelgraue Feld angewählt, bedeutet dies, dass der Sensor ein Ereignis auslöst sobald der Signalpegel einen Wert annimmt, der zwischen den beiden Schwellwerten liegt. Wird für einen Sensor das graue Feld angewählt, so wird dieser ignoriert. Mit den zwei Schiebereglern können die beiden erforderlichen Schwellenwerte individuell eingestellt werden: die Schwelle zur Unterscheidung zwischen einem Hindernis in naher oder mittlerer Distanz, bzw. einer weissen und einer grauen Oberfläche und die Schwelle zwischen einer mittleren und weiteren Distanz, bzw. einer grauen und einer schwarzen oder keiner Oberfläche.",
+					"Wenn mehrere Sensoren zur Auslösung des Ereignisses ausgewählt wurden, wird das Ereignis durch die Kombination der Bedingungen ausgelöst. Wenn z.B. der vordere und die linken Sensoren so eingestellt wurden, dass sie ein Hindernis erkennen, wird das Ereignis ausgelöst, wenn der vordere **UND** die linken Sensoren ein Hindernis erkennen.",
+					"**Beispiel:** Wenn der linke Sensor ein sehr helles Hindernis erkennt, dann … (Aktion des Roboters, z.B. rechts abbiegen, um dem Hindernis auszuweichen)."
+				],
+				"state 256": [
+					"# 8-LED-Zustandsprüfung ",
+					"![Symbol für 8-LED-Zustandsprüfung](vpl:block:state-256)",
+					"**Dieser Bedingungsblock verwendet keinen spezifischen Sensor des Thymios.** Er liest den Zustand der 8 LEDs, die um die Berührungstasten herum angeordnet sind. Dieser Block kann nur als Bedingung und nicht als Hauptereignis verwendet werden.",
+					"**Auslösebedingungen:** Diese Bedingung ist wahr, wenn die 8 LEDs auf der Oberseite des Thymios das gleiche Muster (LEDs ein und aus), wie auf dem Bedingungsblock definiert, anzeigen. Da jede LED entweder ein oder ausgeschaltet sein kann, ergeben sich 256 mögliche Kombinationen.",
+					"**Parameter:** Jede LED kann auf eingeschaltet (gelb) oder ausgeschaltet (dunkelgrau) gesetzt werden. Es werden immer alle 8 LEDs für die Auswertung der Bedingung berücksichtigt.",
+					"**Beispiel:** Falls nur die vorderste LED leuchtet, dann …. (Aktion des Roboters, z.B. sich vorwärtsbewegen)."
+				],
+				"state 256 with mask": [
+					"# Selektive 8-LED-Zustandsprüfung",
+					"![Symbol für selektive 8-LED-Zustandsprüfung](vpl:block:state-256-with-mask)",
+					"** Dieser Bedingungsblock verwendet keinen spezifischen Sensor des Thymios.** Er liest den Zustand der 8 LEDs, die um die Berührungstasten herum angeordnet sind. Dieser Block kann nur als Bedingung und nicht als Hauptereignis verwendet werden.",
+					"**Auslösebedingungen:** Diese Bedingung ist wahr, wenn die 8 LEDs auf der Oberseite des Thymios das gleiche Muster (LEDs ein und aus), wie auf dem Bedingungsblock definiert, anzeigen. Dabei kann aber ausgewählt werden, welche LEDs für die Auswertung der Bedingung berücksichtigt und welche ignoriert werden sollen.",
+					"**Parameter:** Jede LED kann auf eingeschaltet (gelb) oder ausgeschaltet (dunkelgrau) gesetzt werden, oder sie kann ignoriert (hellgrau) werden. Dies ermöglicht es, Teilkonfigurationen von LEDs als Muster zu erkennen, verschiedene Muster gleichzeitig zu unterscheiden oder Untergruppen von LEDs zu bilden.",
+					"**Beispiel:**  Falls alle drei LEDs auf der linken Seite eingeschaltet sind und die drei LEDs hinten, hinten rechts und rechts ausgeschaltet sind, dann …. (Aktion des Roboters, z.B. anfangen sich nach links abzudrehen)."
+				],
+				"counter comparison": [
+					"# 8-LED-Zählervergleich",
+					"![Symbol für 8-LED-Zählervergleich](vpl:block:counter-comparison)",
+					"**Dieser Bedingungsblock verwendet keinen spezifischen Sensor des Thymios.** Er liest einen internen Zustand, eine interne 8-Bit-Variable. Dieser Block kann nur als Bedingung und nicht als Hauptereignis verwendet werden.",
+					"**Auslösebedingungen:** Diese Bedingung ist wahr, wenn die interne Variable, welche mit den 8 LEDs um die Berührungstasten herum dargestellt ist, den Vergleich mit einem festen Wert erfüllt.",
+					"**Parameter:** Auf der linken Seite kann der Programmierer wählen, welchen Vergleich er durchführen möchte:",
+					"= gleich",
+					"? grösser oder gleich ",
+					"> grösser als",
+					"? kleiner oder gleich ",
+					"< kleiner als ",
+					" Auf der rechten Seite kann der Programmierer einen konstanten 8-Bit-Wert von 0 bis 255 einstellen. Dieser konstante Wert wird mit Hilfe der 8 kreisförmig angeordneten Segmente in binärer Form angezeigt, wobei das Bit 0 ganz vorne und die Bits 1 bis 7 im Uhrzeigersinn (der kreisförmigen Anordnung folgend) angeordnet sind.",
+					"**Beispiel:** Falls die LEDs den Wert 6 darstellen (Bit 1 und 2 gesetzt), …. (Aktion des Roboters, z.B. seine Farbe auf Rot wechseln)."
+				],
+				"color 8 state": [
+					"# Oberer Farbzustand",
+					"![Symbol für oberen Farbzustand](vpl:block:color-8-state)",
+					"**Dieser Bedingungsblock verwendet keinen spezifischen Sensor des Thymios.** Er liest den Zustand der RGB-LED (Rot, Grün, Blau), die auf der Oberseite des Thymios angeordnet ist. Dieser Block kann nur als Bedingung und nicht als Hauptereignis verwendet werden.",
+					"**Auslösebedingungen:** Diese Bedingung ist wahr, wenn die RGB-LED auf der Oberseite des Thymio auf eine bestimmte Farbe eingestellt ist. Der Vergleich für jede Farbkomponente basiert auf Sektoren, so dass die Bedingung auch bei einer ungefähren Farbübereinstimmung erfüllt ist.",
+					"**Parameter:** Der Programmierer kann eine der 7 verfügbaren Farben oder die letzte Option (unten rechts) wählen, welche die ausgeschaltete RGB-LED darstellt.",
+					"**Beispiel:** Falls die RGB-LED auf der Oberseite des Thymios gelb leuchtet, dann .... (Aktion des Roboters, z.B. seine Farbe auf Rot wechseln)."
+				],
+				"bottom color 8 state": [
+					"# Unterer Farbzustand",
+					"![Symbol für unteren Farbzustand](vpl:block:bottom-color-8-state)",
+					"**Dieser Bedingungsblock verwendet keinen spezifischen Sensor des Thymios.** Er liest den Zustand der RGB-LEDs (Rot, Grün, Blau), die auf der Unterseite des Thymios angeordnet sind. Dieser Block kann nur als Bedingung und nicht als Hauptereignis verwendet werden.",
+					"**Auslösebedingungen:** Diese Bedingung ist wahr, wenn die RGB-LEDs auf der Unterseite des Thymio auf eine bestimmte Farbe eingestellt sind. Der Vergleich für jede Farbkomponente basiert auf Sektoren, so dass die Bedingung auch bei einer ungefähren Farbübereinstimmung erfüllt ist.",
+					"**Parameter:** Der Programmierer kann eine der 7 verfügbaren Farben oder die letzte Option (unten rechts) wählen, welche die ausgeschaltete RGB-LED darstellt.",
+					"**Beispiel:** Falls die RGB-LEDs auf der Unterseite des Thymios blau leuchten, dann .... (Aktion des Roboters, z.B. seine Farbe auf Rot wechseln)."
+				],
+				"set state 256": [
+					"# 8-LED-Zustand festlegen",
+					"![Symbol für 8-LED-Zustand festlegen](vpl:block:set-state-256)",
+					"**Aktoren:** 8 LEDs, die um die Berührungstasten herum angeordnet sind.",
+					"**Aktion:** Diese Aktion schaltet jede der 8 LEDs ein oder aus.",
+					"**Parameter:**  jede LED wird eingeschaltet (gelb) oder ausgeschaltet (dunkelgrau).",
+					"**Beispiel:** wenn (Ereignis, z.B. Vorwärtstaste gedrückt), dann schalte die vorderste LED ein und alle anderen aus."
+				],
+				"set state 256 with mask": [
+					"# Selektives Setzen des 8-LED-Zustands",
+					"![Symbol für Selektives Setzen des 8-LED-Zustands](vpl:block:set-state-256-with-mask)",
+					"**Aktoren:** 8 LEDs, die um die Berührungstasten herum angeordnet sind.",
+					"**Aktion:** Diese Aktion schaltet bestimmte, ausgewählte LEDs ein oder aus.",
+					"**Parameter:** jede LED kann eingeschaltet (gelb) oder ausgeschaltet (dunkelgrau) werden oder ihr Zustand kann unverändert bleiben (hellgrau).",
+					"**Beispiel:** wenn (Ereignis, z.B. linke Taste gedrückt), dann schalte die drei LEDs auf der linken Seite ein, schalte die drei LEDs auf der rechten Seite aus und behalte den Zustand der vordersten und der hintersten LED bei."
+				],
+				"top color 8": [
+					"# Obere Farbe festlegen",
+					"![Symbol für Obere Farbe festlegen](vpl:block:top-color-8)",
+					"**Aktor:** obere RGB-LED",
+					"**Aktion:** Mit dieser Aktion kann eine bestimmte Farbe für die RGB-LED (Rot, Grün, Blau) auf der Oberseite des Thymios eingestellt werden.",
+					"**Parameter:** Der Programmierer kann eine der 7 verfügbaren Farben oder die letzte Option (unten rechts) wählen, welche die ausgeschaltete RGB-LED darstellt.",
+					"**Beispiel:** wenn (Ereignis, z.B. Hindernis auf der linken Seite erkannt), dann setze die obere Farbe auf gelb."
+				],
+				"bottom color 8": [
+					"# Untere Farbe festlegen",
+					"![Symbol für Untere Farbe festlegen](vpl:block:bottom-color-8)",
+					"**Aktor:** untere RGB-LEDs ",
+					"**Aktion:** Mit dieser Aktion kann eine bestimmte Farbe für die RGB-LEDs (Rot,Grün,Blau) auf der Unterseite des Thymios eingestellt werden.",
+					"**Parameter:** Der Programmierer kann eine der 7 verfügbaren Farben oder die letzte Option (unten rechts) wählen, welche die ausgeschaltete RGB-LED darstellt.",
+					"**Beispiel:** wenn (Ereignis, z.B. Hindernis auf der linken Seite erkannt), dann setze die untere Farbe auf blau."
+				],
+				"top color": [
+					"# Obere Farbe festlegen (RGB-Komponenten)",
+					"![Symbol für Obere Farbe festlegen (RGB-Komponenten)](vpl:block:top-color)",
+					"**Aktor:** obere RGB-LED",
+					"**Aktion:** Mit dieses Aktion kann eine bestimmte Farbe für die RGB-LED (Rot, Grün, Blau) auf der Oberseite des Thymios eingestellt werden. Dazu werden die drei Farbkomponenten Rot, Grün und Blau (RGB) angegeben.",
+					"**Parameter:** Der Programmierer kann, nach dem additiven Farbsystem, mit drei Schiebereglern die gewünschte Farbe anhand ihrer Rot-, Grün- und Blau-Komponentenwerte einstellen. Wenn gleiche Anteile von Rot, Blau und Grün zugefügt werden, entsteht weisses Licht. Auf der linken Seite der Schieberegler ist die Intensität gering und auf der rechten Seite hoch.",
+					"**Beispiel:** wenn (Ereignis, z.B. Hindernis auf der linken Seite erkannt), dann setze den Farbanteil für rot auf 100% und den für grün auf 50% (ergibt orange)."
+				],
+				"bottom color": [
+					"# Untere Farbe festlegen (RGB-Komponenten)",
+					"![Symbol für Untere Farbe festlegen (RGB-Komponenten)](vpl:block:bottom-color)",
+					"**Aktor:** untere RGB-LEDs",
+					"**Aktion:** Mit dieses Aktion kann eine bestimmte Farbe für die RGB-LED (Rot, Grün, Blau) auf der Unterseite des Thymios eingestellt werden. Dazu werden die drei Farbkomponenten Rot, Grün und Blau (RGB) angegeben.",
+					"**Parameter:** Der Programmierer kann, nach dem additiven Farbsystem, mit drei Schiebereglern die gewünschte Farbe anhand ihrer Rot-, Grün- und Blau-Komponentenwerte einstellen. Wenn gleiche Anteile von Rot, Blau und Grün zugefügt werden, entsteht weisses Licht. Auf der linken Seite der Schieberegler ist die Intensität gering und auf der rechten Seite hoch.",
+					"**Beispiel:** wenn (Ereignis, z.B. Hindernis auf der linken Seite erkannt), dann setze den Farbanteil für rot auf 100% und den für grün auf 50% (ergibt orange)."
+				],
+				"motor": [
+					"# Radgeschwindigkeiten festlegen",
+					"![Symbol für Radgeschwindigkeiten festlegen](vpl:block:motor)",
+					"**Aktoren:** zwei Antriebsmotoren.",
+					"**Aktion:** Mit dieser Aktion werden die Geschwindigkeiten für das rechte und das linke Antriebsrad festgelegt, um Thymio in Bewegung zu setzen. Mit einem Regelkreis sorgt Thymio dafür, dass die eingestellten Geschwindigkeiten auch bei kleinen Laständerung konstant bleiben.",
+					"**Parameter:** Die beiden Schieberegler stellen die Geschwindigkeiten der beiden Räder dar. Diese Geschwindigkeiten können einen positiven (vorwärts bewegend) oder einen negativen Wert (rückwärts bewegend) annehmen. Die Position auf dem Schieberegler gibt die Geschwindigkeit des Rades an, wobei die Position des roten Quadrates einem Geschwindigkeitswert von Null (d.h. Stillstand) entspricht. Die maximale Geschwindigkeit beträgt etwa 17cm/s.",
+					" Um mit einer Kurve nach links oder rechts ab zu drehen, muss die Geschwindigkeit des äusseren Rades jeweils grösser sein als die des inneren. Abhängig von den beiden Geschwindigkeiten fährt Thymio engere oder weitere Kurven.",
+					"Die Schieberegler verfügen über zwei Mechanismen, um die Einstellung der Geschwindigkeiten erleichtern: Wenn ein dunkelgrauer Punkt darin angezeigt wird, ist die Geschwindigkeit (betragsmässig) auf beiden Rädern gleich. Bei der Position des roten Quadrates, wird das Rad angehalten.",
+					"**Beispiel:** wenn (Ereignis, z.B. Hindernis auf der linken Seite erkannt), dann soll Thymio beginnen, sich geradeaus zu bewegen (beide Räder drehen mit gleicher Geschwindigkeit)."				],
+				"move": [
+					"# Fahrrichtung festlegen",
+					"![Symbol für Fahrrichtung festlegen](vpl:block:move)",
+					"**Aktoren:** zwei Antriebsmotoren.",
+					"**Aktion:** Diese Aktion legt eine Bewegungsrichtung für Thymio fest, mit Hilfe von 9 vordefinierten Geschwindigkeitseinstellungen.",
+					"**Parameter:** Durch die Wahl einer der 8 Pfeile kann Thymio mit der entsprechenden Richtung in Bewegung gesetzt werden. Mit der quadratischen Schaltfläche in der Mitte kann die Bewegung gestoppt werden.",
+					"**Beispiel:** wenn (Ereignis, z.B. Hindernis auf der linken Seite erkannt), dann leite eine Rechtskurve ein.."
+				],
+				"timer": [
+					"# Zeitgeber abgelaufen",
+					"![Symbol für Zeitgeber abgelaufen](vpl:block:timer)",
+					"**Bei diesem Ereignis handelt es sich um ein internes Ereignis, das nicht durch einen Sensor, sondern durch den internen Zeitgeber ausgelöst wird.**",
+					"**Auslösebedingungen:** Dieses Ereignis wird ausgelöst, sobald der (durch die entsprechende Aktion eingestellte) Zeitgeber abgelaufen ist.",
+					"**Beispiel:** Wenn zwei (durch die entsprechende Aktion eingestellte) Sekunden verstrichen sind, dann .... (Aktion des Roboters, z.B. sich zu bewegen beginnen)."			],
+				"set timer": [
+					"# Zeitgeber starten",
+					"![Symbol für Zeitgeber starten](vpl:block:set-timer)",
+					"**Diese Aktion greift nicht auf einen sichtbaren Aktor zu.** Sie startet den internen Zeitgeber.",
+					"**Aktion:** Diese Aktion setzt den internen Zeitgeber. Sobald die am Zeitgeber eingestellte Zeit abgelaufen ist, wird ein Ereignis ausgelöst.",
+					"**Parameter:** Mit der linken Ziffer wird die Anzahl Sekunden eingestellt und mit der rechten die Zehntelsekunden.",
+					"**Beispiel:** wenn (Ereignis, z.B. Vorwärtstaste betätigt), dann setze den Zeitgeber auf 2 Sekunden und 0 Zehntelsekunden. Zwei Sekunden später wird dann, durch den Ablauf des Zeitgebers, das entsprechende Ereignis ausgelöst."
+      ],
+				"clock": [
+					"# Wiederholtes Ereignis",
+					"![Symbol für Wiederholtes Ereignis](vpl:block:clock)",
+					"**Bei diesem Ereignis handelt es sich um ein internes Ereignis, das nicht durch einen Sensor, sondern durch den internen Taktgeber ausgelöst wird.** ",
+					"**Auslösebedingungen:**Dieser Ereignisblock erzeugt Ereignisse in regelmässigen zeitlichen Abständen.",
+					"**Parameter:**Die Häufigkeit des Ereignisses kann vom Benutzer mit der gegebenen Auswahl eingestellt werden: bei 10 Hz wird dieses Ereignis 10 Mal pro Sekunde ausgelöst, bei 20 Hz wird dieses Ereignis 20 Mal pro Sekunde ausgelöst.",
+					"**Beispiel:**Inkrementiere zehn Mal pro Sekunde die interne Variable, die dann Zehntelsekunden zählt."
+				],
+				"notes": [
+					"# Melodie spielen",
+					"![Symbol für Melodie spielen](vpl:block:notes)",
+					"**Aktor:** Lautsprecher",
+					"**Aktion:** Diese Aktion startet das Abspielen einer Melodie.",
+					"**Parameter:** Jeder blaue Streifen entspricht einem bestimmten Ton, und der Programmierer kann die Position einer Note durch Klicken, unter- oder oberhalb der aktuellen Notenposition, verändern. Bis zu sechs Noten können platziert werden. Die Tondauer einer Note kann durch einen direkten Klick auf das runde Notensymbol verändert werden. Jeder Klick auf das Notensymbol wechselt zwischen schwarz (eine Zeiteinheit), weiss (zwei Zeiteinheiten) oder Pause (vier Zeiteinheiten).",
+					"**Beispiel:** wenn (Ereignis, z.B. Vorwärtstaste betätigt), dann spiele eine Startmelodie."
+				],
+				"notes with speed": [
+					"# Melodie spielen mit Geschwindigkeit",
+					"![Symbol für Melodie spielen mit Geschwindigkeit](vpl:block:notes-with-speed)",
+					"**Aktor:** Lautsprecher",
+					"**Aktion:** Diese Aktion startet das Abspielen einer Melodie.",
+					"**Parameter:** Jeder blaue Streifen entspricht einem bestimmten Ton, und der Programmierer kann die Position einer Note durch Klicken, unter- oder oberhalb der aktuellen Notenposition, verändern. Bis zu sechs Noten können platziert werden. Die Tondauer einer Note kann durch einen direkten Klick auf das runde Notensymbol verändert werden. Jeder Klick auf das Notensymbol wechselt zwischen schwarz (eine Zeiteinheit), weiss (zwei Zeiteinheiten) oder Pause (vier Zeiteinheiten).",
+					"Mit dem Schieberegler oberhalb der Noten kann die Abspielgeschwindigkeit der Melodie verändert werden.",
+					"**Beispiel:** wenn (Ereignis, z.B. Vorwärtstaste betätigt), dann spiele eine schnelle Startmelodie."
+				],
+				"play": [
+					"# Wiedergabe einer .wav-Datei von SD-Karte",
+					"![Symbol für Wiedergabe einer .wav-Datei](vpl:block:play)",
+					"**Aktor:** Lautsprecher",
+					"**Aktion:** Diese Aktion startet die Wiedergabe einer Audiodatei von einer Mikro-SD-Karte, die in Thymio eingefügt wurde.",
+					"**Parameter:** Audiodateien auf der Micro-SD-Karte müssen mit *Px.wav* bezeichnet werden, wobei x der in diesem Aktionsblock eingestellten Zahl entspricht. Dies bedeutet, wenn z.B. die Zahl 1 eingestellt ist, die Datei *P1.wav* abgespielt wird.",
+					" Audiosequenzen auf der Mikro-SD-Karte müssen mit 8’000 Hz, Mono, nicht komprimiert, mit unsigned 8-Bit-PCM im wav-Format aufgezeichnet werden. Die Micro-SD-Karte muss in Fat32 formatiert sein.",
+					"**Beispiel:** wenn (Ereignis, z.B. Vorwärtstaste betätigt), dann spiele eine Tonsequenz von der Mikro-SD-Karte."
+				],
+				"play stop": [
+					"# Wiedergabe einer .wav-Datei beenden",
+					"![Symbol für Wiedergabe einer .wav-Datei beenden](vpl:block:play-stop)",
+					"**Aktor: Lautsprecher",
+					"**Aktion:** Diese Aktion stoppt die Wiedergabe einer Audiodatei von einer Mikro-SD-Karte, die in Thymio eingefügt wurde.",
+					"**Beispiel:** wenn (Ereignis, z.B. Zeitgeber abgelaufen), dann beende die Wiedergabe der aktuellen Audiodatei."
+				],
+				"arithmetic": [
+					"# Berechnen",
+					"![Symbol für Berechnen](vpl:block:arithmetic)",
+					"** Diese Aktion greift nicht auf einen sichtbaren Aktor zu.** Sie setzt eine interne Variable.",
+					"**Aktion:** Diese Aktion führt mathematische Operationen aus mit dem Wert, der durch die 8 gelben LEDs, die um die Berührungstasten herum angeordnet sind, in binärer Form dargestellt ist.",
+					"**Parameter:** Auf der linken Seite kann der Programmierer aus einer Liste von Operatoren wählen:",
+					"= zuweisen",
+					"+ addieren",
+					"- subtrahieren",
+					"x multiplizieren",
+					"÷ dividieren",
+					" Auf der rechten Seite kann der Programmierer einen konstanten 8-Bit-Wert von 0 bis 255 einstellen. Dieser konstante Wert wird mit Hilfe der 8 kreisförmig angeordneten Segmente in binärer Form angezeigt, wobei Bit 0 ganz vorne und die Bits 1 bis 7 im Uhrzeigersinn (der kreisförmigen Anordnung folgend) angeordnet sind; die Binärstellen des gespeicherten Wertes werden mit dunkelblau als 1 und hellblau als 0 dargestellt.",
+					" Die auszuführende Operation besteht aus dem gewählten Operator und dem konstanten Wert. Als Beispiel multipliziert die Einstellung “x 4” den mit den 8 gelben LEDs angezeigten Wert mit vier.",
+					" Abhängig von der Operation kann das Ergebnis grösser als 255 oder kleiner als 0 sein. In diesem Fall kann das Ergebnis auf 0 oder den Maximalwert von 255 begrenzt werden, oder es kann diese Grenzen überschreiten und sich zirkulär verhalten, wenn man den Überlauf zulässt. Ohne Begrenzung würde z.B. die Operation 254 + 4 als Resultat 2 ergeben, weil der Wert der Variablen beim Überlauf nach 255 wieder auf null springt (254, 255, 0, 1, 2, …).",
+					" Mit dem Schalter, oben links im Kreis mit den LED-Segmenten, kann die Begrenzung der Binärzahl ein- oder ausgeschaltet werden. Wenn, durch Klicken auf das Schaltersymbol, der Hebel so platziert wird, dass er zwischen den beiden LED-Segmenten oben links liegt (Bit 7 und Bit 0), ist die Begrenzung eingeschaltet, d.h. die Operation 254 + 4 ergibt dann 255. Liegt hingegen der Hebel des Schalters ausserhalb des Kreises mit den LED-Segmenten, ist die Begrenzung ausgeschaltet, d.h. die Operation 254 + 4 ergibt in diesem Fall 2 (nach dem Überlauf)."
+				],
+				"picture comment": [
+					"# Bildkommentar",
+					"![Symbol für Bildkommentar](vpl:block:picture-comment)",
+					"Typ: Kommentarblock",
+					"..."
+				],
+				"set timer log": [
+					"# Setze Zeitgeber (0.1-10 sec)",
+					"![Symbol für Setze Zeitgeber](vpl:block:set-timer-log)",
+					"Typ: Aktionsblock",
+					"..."
+				],
+				"bottom-left color 8": [
+					"# Untere Farbe links festlegen",
+					"![Symbol für Untere Farbe links festlegen](vpl:block:bottom-left-color-8)",
+					"Type: Aktionsblock",
+					"..."
+				],
+				"bottom-right color 8": [
+					"# Untere Farbe rechts festlegen",
+					"![Symbol für Untere Farbe rechts festlegen](vpl:block:bottom-right-color-8)",
+					"Typ: Aktionsblock",
+					"..."
+				],
+				"bottom-left color": [
+					"# Untere Farbe links festlegen (RGB-Komponenten)",
+					"![Symbol für Untere Farbe links festlegen (RGB-Komponenten)](vpl:block:bottom-left-color)",
+					"Typ: Aktionsblock",
+					"..."
+				],
+				"bottom-right color": [
+					"# Untere Farbe rechts festlegen (RGB-Komponenten)",
+					"![Symbol für Untere Farbe rechts festlegen (RGB-Komponenten)](vpl:block:bottom-right-color)",
+					"Typ: Aktionsblock",
+					"..."
+				],
+				"nn obstacles": [
+					"# Neuronales Netz zur Vermeidung von Hindernissen",
+					"![Symbol für Neuronales Netz zur Vermeidung von Hindernissen](vpl:block:nn-obstacles)",
+					"Typ: Aktionsblock",
+					"..."
+				],
+				"state": [
+					"# Zustand (4 Bits)",
+					"![Symbol Zustand (4 Bits)](vpl:block:state)",
+					"Typ: Bedingungsblock",
+					"..."
+				],
+				"state 8": [
+					"# Zustand (8 Werte)",
+					"![Symbol Zustand (8 Werte)](vpl:block:state-8)",
+					"Typ: Bedingungsblock",
+					"..."
+				],
+				"motor state": [
+					"# Motor-Zustand",
+					"![Symbol Motor-Zustand](vpl:block:motor-state)",
+					"Typ: Bedingungsblock",
+					"..."
+				],
+				"accelerometer": [
+					"# Beschleunigungssensor",
+					"![Symbol für Beschleunigungssensor](vpl:block:accelerometer)",
+					"Typ: Ereignis- oder Bedingungsblock ",
+					"..."
+				]
+			}
+		}
+	}
+}

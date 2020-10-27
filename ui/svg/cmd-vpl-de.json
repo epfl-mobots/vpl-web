@@ -1,0 +1,37 @@
+{
+	"i18n": {
+		"de": {
+			"vpl:close": "Panel schliessen",
+			"vpl:about": "Anwendungsinformationen anzeigen",
+			"vpl:help": "Dokumentation anzeigen",
+			"vpl:readonly": "Schreibgeschütztes Programm",
+			"vpl:new": "Neues Programm",
+			"vpl:save": "Programm speichern",
+			"vpl:load": "Programm laden",
+			"vpl:upload": "Programm hochladen",
+			"vpl:exportToHTML": "Programmansicht als HTML-Datei exportieren",
+			"vpl:text": "Text-Quellcode-Panel",
+			"vpl:text-toggle": "Text-Quellcode-Panel ein- oder ausblenden",
+			"vpl:advanced": "Erweiterten Modus ein- oder ausschalten",
+			"vpl:undo": "Letzte Programmänderung rückgängig machen",
+			"vpl:redo": "Letzte rückgängig gemachte Programmänderung wiederherstellen ",
+			"vpl:run": "Programm ausführen",
+			"vpl:stop": "Programm beenden",
+			"vpl:connected": "Verbindungsstatus",
+			"vpl:robot": "Roboter austauschen",
+			"vpl:sim": "Simulator-Panel",
+			"vpl:duplicate": "Regel duplizieren (verschieben und loslassen)",
+			"vpl:disable": "Block oder Regel deaktivieren (verschieben und loslassen)",
+			"vpl:lock": "Block oder Regel sperren (verschieben und loslassen)",
+			"vpl:trashcan": "Block oder Regel löschen (verschieben und loslassen)",
+			"vpl:message-error": "Fehlermeldung",
+			"vpl:message-warning": "Warnmeldung",
+			"vpl:message-empty": " ",
+			"vpl:filename": "Dateiname",
+			"vpl:teacher": "Anpassungsmodus ein- oder ausschalten",
+			"vpl:teacher-reset": "Anpassung zurückgängig machen",
+			"vpl:teacher-save": "Anpassung speichern",
+			"vpl:teacher-setasnew": "Anpassung für neue Programme installieren"
+		}
+	}
+}
