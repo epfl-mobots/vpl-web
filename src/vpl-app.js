@@ -269,7 +269,19 @@ A3a.vpl.Application.prototype.translate = function (messageKey, language) {
 	@return {void}
 */
 A3a.vpl.Application.prototype.setAboutBoxContent = function (html) {
-	this.aboutBox = html ? new A3a.vpl.HTMLPanel(html) : null;
+	var self = this;
+	this.aboutBox = html
+		? new A3a.vpl.HTMLPanel(html, {
+			onShow: function () {
+				self.keyboard.pushKeyHandler("Escape", function () {
+					self.aboutBox.hide();
+				});
+			},
+			onHide: function () {
+				self.keyboard.popHandler();
+			}
+		})
+		: null;
 };
 
 /** Set or clear html content of Help
@@ -287,6 +299,7 @@ A3a.vpl.Application.prototype.setHelpContent = function (html) {
 
 	var saveEl = '<img src="' + saveDataURL.url +
 		'" width=' + saveDataURL.width + ' height=' + saveDataURL.height + '>';
+	var self = this;
 	this.helpBox = html
 		? new A3a.vpl.HTMLPanel(html, {
 			otherWidgets: [
@@ -299,7 +312,15 @@ A3a.vpl.Application.prototype.setHelpContent = function (html) {
 					}
 				}
 			],
-			scroll: true
+			scroll: true,
+			onShow: function () {
+				self.keyboard.pushKeyHandler("Escape", function () {
+					self.helpBox.hide();
+				});
+			},
+			onHide: function () {
+				self.keyboard.popHandler();
+			}
 		})
 		: null;
 };

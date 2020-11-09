@@ -57,6 +57,22 @@
 		}
 
 		</style>
+
+		<script>
+			// forward keydown event to parent to handle close shortcut etc.
+			window.addEventListener("keydown", function (ev) {
+				window.parent.postMessage({
+					charCode: ev.charCode,
+					code: ev.code,
+					ctrlKey: ev.ctrlKey,
+					key: ev.key,
+					keyCode: ev.keyCode,
+					metaKey: ev.metaKey,
+					shiftKey: ev.shiftKey
+				}, window.origin === "null" ? "*" : window.origin);
+			}, false);
+		</script>
+
 	</head>
 	<body>
 		<div>

@@ -49,7 +49,7 @@ A3a.vpl.Keyboard.prototype.attach = function () {
 		handleEvent(ev);
 	});
 	window.addEventListener("message", function (ev) {
-		if (ev.origin === window.origin) {
+		if (ev.origin === window["origin"]) {
 			handleEvent(ev.data);
 		}
 	}, false);
