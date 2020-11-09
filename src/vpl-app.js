@@ -235,6 +235,10 @@ A3a.vpl.Application = function (canvasEl) {
 	this.logDataPrevious = null;
 	/** @type {?boolean} */
 	this.supervisorConnected = null;
+
+	// keyboard
+	this.keyboard = new A3a.vpl.Keyboard();
+	this.keyboard.attach();
 };
 
 /** @typedef {function(Object=):void}
