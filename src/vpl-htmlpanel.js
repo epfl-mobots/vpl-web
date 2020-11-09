@@ -18,11 +18,19 @@ Modal box for HTML content.
 /** HTML panel
 	@constructor
 	@param {string} html html content
-	@param {boolean=} noCloseWidget true to suppress close widget
-	@param {Array.<{title:string,htmlElement:?string,fun:function():void}>=} otherWidgets other widgets displayed on the top right
-	@param {boolean=} scroll
+	@param {{
+		noCloseWidget: (boolean | undefined),
+		otherWidgets: (Array.<{title:string,htmlElement:?string,fun:function():void}> | undefined),
+		scroll: (boolean | undefined),
+		onShow: ((function():void) | undefined),
+		onHide: ((function():void) | undefined)
+	}=} options options (noCloseWidget: true to suppress close widget;
+	otherWidgets: other widgets displayed on the top right;
+	scroll: true to have a vertical scrollbar;
+	onShow: function called when showing the panel (can install keyboard handler);
+	onHide: function called when hiding the panel (can remove keyboard handler))
 */
-A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets, scroll) {
+A3a.vpl.HTMLPanel = function (html, options) {
 	this.html = html;
 
 	this.backgroundDiv = document.createElement("div");
@@ -48,7 +56,7 @@ A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets, scroll) {
 	var container = document.createElement("div");
 	container.style.width = "100%";
 	container.style.height = "100%";
-	if (scroll) {
+	if (options && options.scroll) {
 		container.style.overflowY = "scroll";
 	}
 	this.panelDiv.appendChild(container);
@@ -95,17 +103,20 @@ A3a.vpl.HTMLPanel = function (html, noCloseWidget, otherWidgets, scroll) {
 	}
 
 	// widgets
-	if (!noCloseWidget) {
+	if (!options || !options.noCloseWidget) {
 		addWidget("\u00d7",	// times
 			null,
 			false,
 			function () { self.hide(); });
 	}
-	if (otherWidgets) {
-		otherWidgets.forEach(function (w) {
+	if (options && options.otherWidgets) {
+		options.otherWidgets.forEach(function (w) {
 			addWidget(w.title, w.htmlElement, true, w.fun);
 		});
 	}
+
+	this.onShow = options && options.onShow || null;
+	this.onHide = options && options.onHide || null;
 };
 
 /** Show panel
@@ -118,6 +129,9 @@ A3a.vpl.HTMLPanel.prototype.show = function () {
 	this.div.innerHTML = this.html;	// do it here to restart from the desired starting point
 	this.backgroundDiv.style.display = "block";
 	this.center();
+	if (this.onShow) {
+		this.onShow();
+	}
 };
 
 /** Hide about box
@@ -125,6 +139,9 @@ A3a.vpl.HTMLPanel.prototype.show = function () {
 */
 A3a.vpl.HTMLPanel.prototype.hide = function () {
 	this.backgroundDiv.style.display = "none";
+	if (this.onHide) {
+		this.onHide();
+	}
 };
 
 /** Center content

@@ -284,16 +284,19 @@ A3a.vpl.Application.prototype.setHelpContent = function (html) {
 	var saveEl = '<img src="' + saveDataURL.url +
 		'" width=' + saveDataURL.width + ' height=' + saveDataURL.height + '>';
 	this.helpBox = html
-		? new A3a.vpl.HTMLPanel(html, false, [
-			{
-				title: "\u21d3",
-				htmlElement: saveEl,
-				fun: function () {
-					A3a.vpl.Program.downloadText(/** @type {string} */(html),
-						"doc.html", "text/html");
+		? new A3a.vpl.HTMLPanel(html, {
+			otherWidgets: [
+				{
+					title: "\u21d3",
+					htmlElement: saveEl,
+					fun: function () {
+						A3a.vpl.Program.downloadText(/** @type {string} */(html),
+							"doc.html", "text/html");
+					}
 				}
-			}
-		], true)
+			],
+			scroll: true
+		})
 		: null;
 };
 
@@ -506,7 +509,7 @@ A3a.vpl.Application.prototype.setSuspendBoxContent = function (html) {
 	if (suspended && this.suspendBox) {
 		this.suspendBox.hide();
 	}
-	this.suspendBox = html ? new A3a.vpl.HTMLPanel(html, true) : null;
+	this.suspendBox = html ? new A3a.vpl.HTMLPanel(html, {noCloseWidget: true}) : null;
 	if (html && suspended) {
 		this.suspendBox.show();
 	}
