@@ -239,6 +239,7 @@ A3a.vpl.Application = function (canvasEl) {
 	// keyboard
 	this.keyboard = new A3a.vpl.Keyboard();
 	this.keyboard.attach();
+	this.pushVPLKeyShortcuts();
 };
 
 /** @typedef {function(Object=):void}
@@ -253,6 +254,24 @@ A3a.vpl.Application.initialized = false;
 */
 A3a.vpl.Application.prototype.setUILanguage = function (language) {
 	return this.i18n.setLanguage(language);
+};
+
+/** Push to the keyboard handler stack the shortcuts for VPL
+	@return {void}
+*/
+A3a.vpl.Application.prototype.pushVPLKeyShortcuts = function () {
+	var self = this;
+	this.keyboard.pushHandler(function (event) {
+		if (self.views.indexOf("vpl") >= 0) {
+			var cmd = self.commands.findByKeyShortcut(event.key,
+				self.vplToolbarConfig.concat(self.vplToolbar2Config));
+			if (cmd) {
+				cmd.execute(event.altKey);
+				return true;
+			}
+		}
+		return false;
+	});
 };
 
 /** Translate message using the current language

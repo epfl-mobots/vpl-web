@@ -27,7 +27,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.views.length > 1 && app.views.indexOf("vpl") >= 0;
-		}
+		},
+		keyShortcut: "w"
 	});
 	this.commands.add("vpl:about", {
 		action: function (app, modifier) {
@@ -36,7 +37,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.aboutBox != null;
-		}
+		},
+		keyShortcut: "i"
 	});
 	this.commands.add("vpl:help", {
 		action: function (app, modifier) {
@@ -45,7 +47,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.helpBox != null;
-		}
+		},
+		keyShortcut: "?"
 	});
 	this.commands.add("vpl:readonly", {
 		isEnabled: function (app) {
@@ -92,7 +95,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return !app.program.readOnly;
-		}
+		},
+		keyShortcut: "n"
 	});
 	this.commands.add("vpl:save", {
 		action: function (app, modifier) {
@@ -112,7 +116,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return !app.program.readOnly;
-		}
+		},
+		keyShortcut: "s"
 	});
 	this.commands.add("vpl:load", {
 		action: function (app, modifier) {
@@ -128,7 +133,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return !app.program.readOnly;
-		}
+		},
+		keyShortcut: "o"
 	});
 	this.commands.add("vpl:upload", {
 		action: function (app, modifier) {
@@ -174,7 +180,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.isEmpty();
 		},
-		object: this
+		object: this,
+		keyShortcut: "h"
 	});
 	this.commands.add("vpl:text", {
 		action: function (app, modifier) {
@@ -261,7 +268,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return !app.program.readOnly;
-		}
+		},
+		keyShortcut: "z"
 	});
 	this.commands.add("vpl:redo", {
 		action: function (app, modifier) {
@@ -273,7 +281,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return !app.program.readOnly;
-		}
+		},
+		keyShortcut: "y"
 	});
 	this.commands.add("vpl:run", {
 		action: function (app, modifier) {
@@ -346,7 +355,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			{state: "error"},
 			{state: "canLoad"},
 			{state: "canReload"}
-		]
+		],
+		keyShortcut: "r"
 	});
 	this.commands.add("vpl:stop", {
 		action: function (app, modifier) {
@@ -359,7 +369,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.currentRobotIndex >= 0;
-		}
+		},
+		keyShortcut: "."
 	});
 	this.commands.add("vpl:stop-abnormally", {
 		action: function (app, modifier) {
