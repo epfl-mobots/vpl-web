@@ -308,7 +308,16 @@ function vplSetup(gui, rootDir) {
 	app.setUILanguage(uiLanguage);
 
 	// load box
-	app.loadBox = new A3a.vpl.Load(app);
+	app.loadBox = new A3a.vpl.Load(app, {
+		onShow: function () {
+			app.keyboard.pushKeyHandler("Escape", function () {
+				app.loadBox.hide();
+			});
+		},
+		onHide: function () {
+			app.keyboard.popHandler();
+		}
+	});
 
 	// general settings
 	var isClassic = gui == undefined || gui["hardcoded-gui"] || vplGetQueryOption("appearance") === "classic";
