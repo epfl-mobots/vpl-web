@@ -76,9 +76,27 @@ A3a.vpl.Keyboard.prototype.pushKeyHandler = function (key, keyHandler) {
 	});
 };
 
-/** Pop last key handler which had been pushed
+/** Extend the top handler
+	@param {A3a.vpl.Keyboard.Handler} extensionHandler
+	@param {boolean=} execFirst true if extensionHandler is executed first, false (default) if last
 	@return {void}
 */
+A3a.vpl.Keyboard.prototype.extendHandler = function (extensionHandler, execFirst) {
+	var topHandler = this.popHandler();
+	if (execFirst) {
+		this.pushHandler(function (ev) {
+			return extensionHandler(ev) || topHandler(ev);
+		});
+	} else {
+		this.pushHandler(function (ev) {
+			return topHandler(ev) || extensionHandler(ev);
+		});
+	}
+};
+
+/** Pop last key handler which had been pushed
+	@return {A3a.vpl.Keyboard.Handler}
+*/
 A3a.vpl.Keyboard.prototype.popHandler = function () {
-	this.handlers.pop();
+	return this.handlers.pop();
 };
