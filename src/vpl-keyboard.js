@@ -38,10 +38,8 @@ A3a.vpl.Keyboard.prototype.attach = function () {
 		@return {void}
 	*/
 	function handleEvent(ev) {
-		for (var i = self.handlers.length - 1; i >= 0; i--) {
-			if (self.handlers[i](ev)) {
-				return;
-			}
+		if (self.handlers.length > 0) {
+			self.handlers[self.handlers.length - 1](ev);
 		}
 	}
 
