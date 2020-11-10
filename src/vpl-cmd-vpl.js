@@ -84,6 +84,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			if (app.jsonForNew) {
 				app.loadProgramJSON(app.jsonForNew);
 			}
+			app.renderProgramToCanvas();
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.readOnly && !app.program.isEmpty();
