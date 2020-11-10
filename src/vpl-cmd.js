@@ -79,7 +79,8 @@ A3a.vpl.Commands.isAvailable;
 		object: (?Object | undefined),
 		keep: (boolean | undefined),
 		isAvailable: (?A3a.vpl.Commands.isAvailable | undefined),
-		possibleStates: (?Array.<{selected:(?boolean|undefined),state:(?string|undefined)}> | undefined)
+		possibleStates: (?Array.<{selected:(?boolean|undefined),state:(?string|undefined)}> | undefined),
+		keyShortcut: (?string | undefined)
 	}}
 */
 A3a.vpl.Commands.CommandProperties;
@@ -91,6 +92,22 @@ A3a.vpl.Commands.CommandProperties;
 A3a.vpl.Commands.prototype.find = function (name) {
 	for (var i = 0; i < this.commands.length; i++) {
 		if (this.commands[i].name === name) {
+			return this.commands[i];
+		}
+	}
+	return null;
+};
+
+/** Find a command by shortcut
+	@param {string} key
+	@param {Array.<string>=} names list of commands to consider
+	@return {?A3a.vpl.Commands.Command}
+*/
+A3a.vpl.Commands.prototype.findByKeyShortcut = function (key, names) {
+	for (var i = 0; i < this.commands.length; i++) {
+		if ((!names || names.indexOf(this.commands[i].name) >= 0) &&
+		 	this.commands[i].keyShortcut && this.commands[i].keyShortcut === key &&
+			this.commands[i].isAvailable()) {
 			return this.commands[i];
 		}
 	}
@@ -266,6 +283,9 @@ A3a.vpl.Commands.Command = function (name, opt) {
 
 	/** @type {?Array.<{selected:(?boolean|undefined),state:(?string|undefined)}>} */
 	this.possibleStates = opt.possibleStates || null;
+
+	/** @type {?string} */
+	this.keyShortcut = opt.keyShortcut || null;
 };
 
 /** Execute command
