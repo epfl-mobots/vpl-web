@@ -153,6 +153,7 @@ CSSParser.VPL.prototype.processValue = function (key, val) {
 	case "border-right-width":
 	case "border-top-width":
 	case "border-bottom-width":
+	case "border-corner-length":
 	case "line-width":
 	case "width":
 	case "height":
@@ -504,6 +505,8 @@ CSSParser.VPL.Box = function (props, lengthBase) {
 	this.borderBottomLeftCut = false;
 	this.borderBottomRightCut = false;
 
+	this.borderCornerLength = 0;
+
 	this.paddingLeft = 0;
 	this.paddingRight = 0;
 	this.paddingTop = 0;
@@ -574,6 +577,9 @@ CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 		case "border-bottom-width":
 			this.borderBottomWidth = props[key].toValue(lengthBase);
 			this.sameBorder = false;
+			break;
+		case "border-corner-length":
+			this.borderCornerLength = props[key].toValue(lengthBase);
 			break;
 		case "padding-left":
 			this.paddingLeft = props[key].toValue(lengthBase);
@@ -947,6 +953,8 @@ CSSParser.VPL.Box.prototype.copy = function () {
 	box.borderTopRightCut = this.borderTopRightCut;
 	box.borderBottomLeftCut = this.borderBottomLeftCut;
 	box.borderBottomRightCut = this.borderBottomRightCut;
+
+	box.borderCornerLength = this.borderCornerLength;
 
 	box.paddingLeft = this.paddingLeft;
 	box.paddingRight = this.paddingRight;

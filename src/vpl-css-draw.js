@@ -117,6 +117,20 @@ CSSParser.VPL.Box.prototype.drawAt = function (ctx, x, y, includePadding) {
 
 	ctx.save();
 
+	if (this.borderCornerLength > 0) {
+		// clip to 4 squares of half-side borderCornerLength around corners
+		ctx.beginPath();
+		ctx.rect(x - this.borderCornerLength, y - this.borderCornerLength,
+			2 * this.borderCornerLength, 2 * this.borderCornerLength);
+		ctx.rect(x + w - this.borderCornerLength, y - this.borderCornerLength,
+			2 * this.borderCornerLength, 2 * this.borderCornerLength);
+		ctx.rect(x - this.borderCornerLength, y + h - this.borderCornerLength,
+			2 * this.borderCornerLength, 2 * this.borderCornerLength);
+		ctx.rect(x + w - this.borderCornerLength, y + h - this.borderCornerLength,
+			2 * this.borderCornerLength, 2 * this.borderCornerLength);
+		ctx.clip();
+	}
+
 	if (this.backdropColor !== "transparent") {
 		// display filled rectangle behind box
 		ctx.fillStyle = this.backdropColor;
