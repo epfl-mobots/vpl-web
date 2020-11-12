@@ -84,6 +84,7 @@ JS = \
 	vpl-load.js \
 	vpl-com.js \
 	vpl-keyboard.js \
+	vpl-kbd-control.js \
 	vpl-main.js \
 	vpl-robot.js \
 	vpl-virtualthymio.js \

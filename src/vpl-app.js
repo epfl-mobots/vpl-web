@@ -240,6 +240,8 @@ A3a.vpl.Application = function (canvasEl) {
 	this.keyboard = new A3a.vpl.Keyboard();
 	this.keyboard.attach();
 	this.pushVPLKeyShortcuts();
+	this.kbdControl = new A3a.vpl.KbdControl(this);
+	this.kbdControl.addHandlers();
 };
 
 /** @typedef {function(Object=):void}

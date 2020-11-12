@@ -62,10 +62,6 @@ A3a.vpl.Canvas.prototype.overlayRect = function (left, top, width, height, overl
 A3a.vpl.Canvas.prototype.disabledMark = function (left, top, width, height,
 	overlayRectClasses, crossoutLineClasses, noCrossoutLine) {
 	this.overlayRect(left, top, width, height, (overlayRectClasses || []).concat("disabled"));
-	var overlayRect = this.css.getBox({
-		tag: "overlay-rectangle",
-		clas: overlayRectClasses || []
-	});
 	if (!noCrossoutLine) {
 		this.ctx.save();
 		var crossoutLine = this.css.getLine({

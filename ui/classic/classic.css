@@ -162,6 +162,30 @@ overlay-rectangle.drop-target {
 	border-radius: 0.2vw;
 }
 
+overlay-rectangle.kbd-selected {
+	border: 0.5vw rgba(0,0,0,0.4);
+	border-radius: 0.1vw;
+	border-corner-length: 1vw;
+}
+overlay-rectangle.event.kbd-target {
+	border: 0.2vw rgba(200,0,0,0.7);
+	border-top-right-cut: 0.9vw;
+}
+overlay-rectangle.event-aux.kbd-target {
+	border: 0.2vw rgba(200,0,0,0.7);
+	border-top-right-cut: 0.75vw;
+}
+overlay-rectangle.action.kbd-target {
+	border: 0.2vw rgba(0,0,200,0.7);
+}
+overlay-rectangle.state.kbd-target {
+	border: 0.2vw rgba(0,150,0,0.7);
+	border-top-right-cut: 0.75vw;
+}
+overlay-rectangle.comment.kbd-target {
+	border: 0.2vw rgba(100,100,100,0.7);
+}
+
 crossout-line {
 	line-width: 0.75vw;
  	color: rgba(120,120,120,0.5);

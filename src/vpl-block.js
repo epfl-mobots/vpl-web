@@ -29,6 +29,7 @@ A3a.vpl.Block = function (blockTemplate, ruleContainer, positionInContainer) {
 	this.positionInContainer = positionInContainer;
 	this.disabled = false;
 	this.locked = false;
+	this.marks = {};
 	/** @type {A3a.vpl.BlockTemplate.param} */
 	this.param = blockTemplate.defaultParam ? blockTemplate.defaultParam() : null;
 	/** @type {?function():void} */

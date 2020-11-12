@@ -804,7 +804,7 @@ A3a.vpl.Canvas.prototype.recalcSize = function (pixelRatio) {
 */
 A3a.vpl.Canvas.prototype.resize = function (width, height, pixelRatio) {
 	var backingScale = pixelRatio || ("devicePixelRatio" in window ? window["devicePixelRatio"] : 1);
-	this.canvas.width  = width * backingScale;
+	this.canvas.width = width * backingScale;
 	this.canvas.height = height * backingScale;
 	this.canvas.style.width = width + "px";
 	this.canvas.style.height = height + "px";
