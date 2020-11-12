@@ -152,6 +152,7 @@ A3a.vpl.Program.prototype.new = function (resetUndoStack) {
 	this.program = [];
 	this.code = {};
 	this.notUploadedYet = true;
+	this.enforceSingleTrailingEmptyEventHandler();
 };
 
 /** Check if empty (no non-empty event handler)
