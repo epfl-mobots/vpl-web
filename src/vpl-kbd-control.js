@@ -171,6 +171,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 							self.app.program.saveStateBeforeChange();
 						});
 				}
+				self.app.program.enforceSingleTrailingEmptyEventHandler();
 				break;
 			}
 			self.app.renderProgramToCanvas();
@@ -249,7 +250,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 			case A3a.vpl.KbdControl.ObjectType.rule:
 				self.selectionType = A3a.vpl.KbdControl.ObjectType.libLeft;
 				self.selectionIndex1 = 0;
-				self.selectionIndex2 = Math.floor(self.libLeftNum / self.libLeftColLen);
+				self.selectionIndex2 = Math.ceil(self.libLeftNum / self.libLeftColLen) - 1;
 				break;
 			case A3a.vpl.KbdControl.ObjectType.libLeft:
 				self.selectionIndex2 = Math.max(self.selectionIndex2 - 1, 0);
