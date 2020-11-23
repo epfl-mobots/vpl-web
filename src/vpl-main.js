@@ -773,6 +773,40 @@ function vplSetup(gui, rootDir) {
 }
 
 window.addEventListener("load", function () {
+	// check that the compiler and the simulator have the same vm definitions
+	if (A3a.Device.VirtualThymio && A3a.thymioDescr) {
+		var vTh = new A3a.Device.VirtualThymio();
+		// variables
+		if (vTh.variableSize !== A3a.thymioDescr["maxVarSize"]) {
+			throw "internal: vm var size mismatch";
+		}
+		if (vTh.variables.length !== A3a.thymioDescr["variables"].length) {
+			throw "internal: vm var count mismatch";
+		}
+		for (var i = 0; i < vTh.variables.length; i++) {
+			if (vTh.variables[i].name !== A3a.thymioDescr["variables"][i]["name"] ||
+				vTh.variables[i].val.length !== A3a.thymioDescr["variables"][i]["size"]) {
+				throw "internal: vm var mismatch";
+			}
+		}
+		if (vTh.localEvents.length !== A3a.thymioDescr["localEvents"].length) {
+			throw "internal: vm ev count mismatch";
+		}
+		for (var i = 0; i < vTh.localEvents.length; i++) {
+			if (vTh.localEvents[i].name !== A3a.thymioDescr["localEvents"][i]["name"]) {
+				throw "internal: vm var mismatch";
+			}
+		}
+		if (vTh.nativeFunctions.length !== A3a.thymioDescr["nativeFunctions"].length) {
+			throw "internal: vm nat fun count mismatch";
+		}
+		for (var i = 0; i < vTh.localEvents.length; i++) {
+			if (vTh.nativeFunctions[i].name !== A3a.thymioDescr["nativeFunctions"][i]["name"]) {
+				throw "internal: vm nat fun mismatch";
+			}
+		}
+	}
+
 	var uiDoc = vplGetQueryOption("ui") || "ui.json";
 	var isInScripts = document.getElementById(uiDoc) != null;
 	var uiRoot = window["vplUIRoot"] ? window["vplUIRoot"] : isInScripts ? "." : uiDoc.indexOf("/") >= 0 ? uiDoc.replace(/\/[^/]*$/, "") : ".";
