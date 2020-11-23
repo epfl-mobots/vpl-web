@@ -264,6 +264,9 @@ A3a.vpl.Application.prototype.setUILanguage = function (language) {
 A3a.vpl.Application.prototype.pushVPLKeyShortcuts = function () {
 	var self = this;
 	this.keyboard.pushHandler(function (event) {
+		if (event.altKey || event.ctrlKey || event.metaKey) {
+			return false;
+		}
 		if (self.views.indexOf("vpl") >= 0) {
 			var cmd = self.commands.findByKeyShortcut(event.key,
 				self.vplToolbarConfig.concat(self.vplToolbar2Config));
