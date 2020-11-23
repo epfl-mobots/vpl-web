@@ -58,6 +58,26 @@ A3a.vpl.CodeGenerator.Mark.prototype.findInCode = function (code) {
 	return code.indexOf(this.str);
 };
 
+/** Find mark positions (in code without marks) and leave them
+	@param {string} code generated code
+	@return {Array.<A3a.vpl.CodeGenerator.Mark>}
+*/
+A3a.vpl.CodeGenerator.Mark.getMarksInCode = function (code) {
+	/** @type {Array.<A3a.vpl.CodeGenerator.Mark>} */
+	var marks = [];
+
+	// find marks (ignore ref and isBegin)
+	for (var i = 0; i < code.length; i++) {
+		if (code.charCodeAt(i) >= 0xe000 && code.charCodeAt(i) <= 0xf8ff) {
+			var mark = new A3a.vpl.CodeGenerator.Mark(code.charCodeAt(i) - 0xe000, null, false);
+			mark.pos = i - marks.length;
+			marks.push(mark);
+		}
+	}
+
+	return marks;
+};
+
 /** Find mark positions (in code without marks) and remove them
 	@param {Array.<A3a.vpl.CodeGenerator.Mark>} a
 	@param {string} code generated code

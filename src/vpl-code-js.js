@@ -214,13 +214,6 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 		if (actionsTestCode) {
 			strInit += "this.setTimer(1, 0.1, true);\n";
 		}
-		// init implicit event
-		for (var i = 0; i < program.program.length; i++) {
-			if (initEventIndices.indexOf(i) >= 0 && c[i].statement) {
-				strInit += (strInit.length > 0 ? "\n" : "") +
-					(c[i].sectionBegin || "") + (c[i].statement || "") + (c[i].sectionEnd || "");
-			}
-		}
 		if (strInit) {
 			str += (str.length > 0 ? "\n" : "") +
 				"this.addEventListener(\"init\", function (name, param) {\n" +
