@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -67,7 +67,12 @@ A3a.Device.VirtualThymio = function (nodeId) {
 				{name: "motor.right.speed", val: [0]},
 				{name: "motor.left.pwm", val: [0]},
 				{name: "motor.right.pwm", val: [0]},
+				{name: "_integrator", val: [0, 0]},
 				{name: "acc", val: [0, 0, 0]},
+				{name: "leds.top", val: [0, 0, 0]},
+				{name: "leds.bottom.left", val: [0, 0, 0]},
+				{name: "leds.bottom.right", val: [0, 0, 0]},
+				{name: "leds.circle", val: [0, 0, 0, 0, 0, 0, 0, 0]},
 				{name: "temperature", val: [0]},
 				{name: "rc5.address", val: [0]},
 				{name: "rc5.command", val: [0]},
