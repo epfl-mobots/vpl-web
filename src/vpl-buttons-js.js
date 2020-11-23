@@ -1144,7 +1144,23 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i
                 dims.controlSize * 0.1);
 			ctx.restore();
 		},
-		// "src:run": "vpl:run"
+		"src:run": function () {
+			ctx.fillStyle = isPressed && isEnabled
+				? col.bgPr
+				: col.bg;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			ctx.beginPath();
+			ctx.moveTo(dims.controlSize * 0.3,
+				dims.controlSize * 0.25);
+			ctx.lineTo(dims.controlSize * 0.3,
+				dims.controlSize * 0.75);
+			ctx.lineTo(dims.controlSize * 0.8,
+				dims.controlSize * 0.5);
+			ctx.closePath();
+			ctx.fillStyle = isEnabled ? col.fg : col.fgDis;
+			ctx.fill();
+		},
 		// "src:stop": "vpl:stop"
 		// "src:sim": "vpl:sim"
 		// "src:teacher": "vpl:teacher"
@@ -1507,7 +1523,6 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i
 	draw["src:new"] = draw["vpl:new"];
 	draw["src:save"] = draw["vpl:save"];
 	draw["src:load"] = draw["vpl:load"];
-	draw["src:run"] = draw["vpl:run"];
 	draw["src:stop"] = draw["vpl:stop"];
 	draw["src:connected"] = draw["vpl:connected"];
 	draw["src:sim"] = draw["vpl:sim"];

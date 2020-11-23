@@ -159,27 +159,10 @@ A3a.vpl.Application.prototype.addSrcCommands = function () {
 		isEnabled: function (app) {
 			return app.robots[app.currentRobotIndex].runGlue.isEnabled(app.editor.language);
 		},
-		getState: function (app) {
-			var code = app.editor.getCode();
-			if (code.length === 0) {
-				return "empty";
-			} else {
-				return "canLoad";
-			}
-		},
 		object: this,
 		isAvailable: function (app) {
 			return app.currentRobotIndex >= 0;
-		},
-		possibleStates: [
-			{selected: false},
-			{selected: true},
-			{state: "empty"},
-			{state: "running"},
-			{state: "error"},
-			{state: "canLoad"},
-			{state: "canReload"}
-		]
+		}
 	});
 	this.commands.add("src:stop", {
 		action: function (app, modifier) {
