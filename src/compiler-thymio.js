@@ -25,7 +25,7 @@ A3a.thymioDescr = {
 	"maxVarSize": 620,
 	"variables": [
 		// low-level from aseba_target_thymio2/skel-usb-user.c
-		// validated with current Thymio firmware, as of 22 June 2018
+		// validated with current Thymio firmware, as of 17 Nov 2020
 		{"name": "_id", "size": 1},
 		{"name": "event.source", "size": 1},
 		{"name": "event.args", "size": 32},
@@ -55,7 +55,12 @@ A3a.thymioDescr = {
 		{"name": "motor.right.speed", "size": 1},
 		{"name": "motor.left.pwm", "size": 1},
 		{"name": "motor.right.pwm", "size": 1},
+		{"name": "_integrator", "size": 2},
 		{"name": "acc", "size": 3},
+		{"name": "leds.top", "size": 3},
+		{"name": "leds.bottom.left", "size": 3},
+		{"name": "leds.bottom.right", "size": 3},
+		{"name": "leds.circle", "size": 8},
 		{"name": "temperature", "size": 1},
 		{"name": "rc5.address", "size": 1},
 		{"name": "rc5.command", "size": 1},
@@ -63,8 +68,8 @@ A3a.thymioDescr = {
 		{"name": "mic.threshold", "size": 1},
 		{"name": "mic._mean", "size": 1},
 		{"name": "timer.period", "size": 2},
-		{"name": "acc._tap", "size": 1}
-		// {"name": "sd.present", "size": 1}
+		{"name": "acc._tap", "size": 1},
+		{"name": "sd.present", "size": 1}
 	],
 	"localEvents": [
 		{"name": "button.backward"},
