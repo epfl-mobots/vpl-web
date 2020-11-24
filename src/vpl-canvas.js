@@ -1030,9 +1030,12 @@ A3a.vpl.Canvas.controlDraw;
 */
 A3a.vpl.Canvas.controlAction;
 
-/** Function implementing the control button action
+/** Functions implementing the control button behavior (action executed upon mouseup
+	as a standard click, doMouseDown/doMouseUp for more control)
 	@typedef {{
 		action: (A3a.vpl.Canvas.controlAction | null | undefined),
+		doMouseDown: (A3a.vpl.Canvas.controlCallbacks | null | undefined),
+		doMouseUp: (A3a.vpl.Canvas.controlCallbacks | null | undefined),
 		doDrop: (A3a.vpl.CanvasItem.doDrop | null | undefined),
 		canDrop: (A3a.vpl.CanvasItem.canDrop | null | undefined),
 		doOver: (A3a.vpl.CanvasItem.doOver | null | undefined)
@@ -1066,7 +1069,7 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, cb, id) {
 					item.dropTarget);
 			ctx.restore();
 		}),
-		cb && cb.action ? {
+		cb && (cb.action || cb.doMouseDown || cb.doMouseUp) ? {
 			/** @type {A3a.vpl.CanvasItem.mousedown} */
 			mousedown: function (canvas, data, width, height, left, top, ev) {
 				self.downControl = {
@@ -1080,6 +1083,9 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, cb, id) {
 					isInside: true
 				};
 				downEvent = ev;
+				if (cb.doMouseDown) {
+					cb.doMouseDown(downEvent);
+				}
 				self.redraw();
 				return 0;
 			},
@@ -1096,8 +1102,12 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, cb, id) {
 			},
 			/** @type {A3a.vpl.CanvasItem.mouseup} */
 			mouseup: function (canvas, data, dragIndex) {
-				if (self.downControl.isInside) {
-					cb.action(downEvent);
+				if (cb.action) {
+					if (self.downControl.isInside) {
+						cb.action(downEvent);
+					}
+				} else if (cb.doMouseUp) {
+					cb.doMouseUp(downEvent);
 				}
 				self.downControl = {};
 				self.redraw();
