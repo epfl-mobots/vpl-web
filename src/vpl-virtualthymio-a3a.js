@@ -42,7 +42,7 @@ A3a.vpl.VirtualThymioVM = function () {
 	this.vthymio.onVarChanged = function (name, index, newValue, oldValue) {
 		switch (name) {
 		case "timer.period":
-			self["setTimer"](index, newValue * 0.001, true);
+			self["setTimer"](index, "timer" + index.toString(10), newValue * 0.001, true);
 			break;
 		}
 	};
@@ -76,6 +76,12 @@ A3a.vpl.VirtualThymioVM.prototype.constructor = A3a.vpl.VirtualThymioVM;
 A3a.vpl.VirtualThymioVM.prototype["reset"] = function (t0) {
 	A3a.vpl.VirtualThymio.prototype["reset"].call(this, t0);
 	this.vthymio.reset();
+
+	// fixed Thymio timers
+	this["setTimer"](20, "prox", 1 / 10, true);
+	this["setTimer"](21, "acc", 1 / 16, true);
+	this["setTimer"](22, "buttons", 1 / 20, true);
+	this["setTimer"](23, "temperature", 1, true);
 };
 
 /** Get variable from the Thymio VM

@@ -201,10 +201,10 @@
 				"initCodeExec": [
 					[
 						"// stop timer 0\n",
-						"this.setTimer(0, -1);\n"
+						"this.setTimer(0, 'timer0', -1);\n"
 					]
 				],
-				"statement": "this.setTimer(0, `$[0].toFixed(1)`);\n"
+				"statement": "this.setTimer(0, 'timer0', `$[0].toFixed(1)`);\n"
 			}
 		},
 		{
