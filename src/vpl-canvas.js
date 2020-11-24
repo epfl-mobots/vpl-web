@@ -1025,24 +1025,31 @@ A3a.vpl.Canvas.prototype.addDecoration = function (fun) {
 */
 A3a.vpl.Canvas.controlDraw;
 
-/** Function implementung the control button action
+/** Function implementing the control button action
 	@typedef {function(A3a.vpl.CanvasItem.mouseEvent):void}
 */
 A3a.vpl.Canvas.controlAction;
+
+/** Function implementing the control button action
+	@typedef {{
+		action: (A3a.vpl.Canvas.controlAction | null | undefined),
+		doDrop: (A3a.vpl.CanvasItem.doDrop | null | undefined),
+		canDrop: (A3a.vpl.CanvasItem.canDrop | null | undefined),
+		doOver: (A3a.vpl.CanvasItem.doOver | null | undefined)
+	}}
+*/
+A3a.vpl.Canvas.controlCallbacks;
 
 /** Add active control
 	@param {number} x
 	@param {number} y
 	@param {CSSParser.VPL.Box} box
 	@param {A3a.vpl.Canvas.controlDraw} draw
-	@param {?A3a.vpl.Canvas.controlAction=} action
-	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
-	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
-	@param {?A3a.vpl.CanvasItem.doOver=} doOver
+	@param {A3a.vpl.Canvas.controlCallbacks=} cb
 	@param {string=} id
 	@return {A3a.vpl.CanvasItem}
 */
-A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop, canDrop, doOver, id) {
+A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, cb, id) {
 	/** @type {A3a.vpl.CanvasItem.mouseEvent} */
 	var downEvent;
 	var self = this;
@@ -1059,7 +1066,7 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 					item.dropTarget);
 			ctx.restore();
 		}),
-		action ? {
+		cb && cb.action ? {
 			/** @type {A3a.vpl.CanvasItem.mousedown} */
 			mousedown: function (canvas, data, width, height, left, top, ev) {
 				self.downControl = {
@@ -1090,16 +1097,16 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 			/** @type {A3a.vpl.CanvasItem.mouseup} */
 			mouseup: function (canvas, data, dragIndex) {
 				if (self.downControl.isInside) {
-					action(downEvent);
+					cb.action(downEvent);
 				}
 				self.downControl = {};
 				self.redraw();
 			}
 		} : null,
-		doDrop,
-		canDrop,
+		cb && cb.doDrop,
+		cb && cb.canDrop,
 		id);
-	item.doOver = doOver || null;
+	item.doOver = cb && cb.doOver || null;
 	item.draggable = false;
 	item.noDropHint = true;	// drawn with isPressed=true for better control on appearance
 	this.setItem(item);

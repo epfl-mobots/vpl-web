@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -24,9 +24,7 @@ A3a.vpl.ControlBar = function (canvas) {
 	/** @type {Array.<{
 		id: string,
 		draw: A3a.vpl.ControlBar.controlBarItemDraw,
-		action: ?A3a.vpl.Canvas.controlAction,
-		doDrop: ?A3a.vpl.CanvasItem.doDrop,
-		canDrop: ?A3a.vpl.CanvasItem.canDrop,
+		cb: ?A3a.vpl.Canvas.controlCallbacks,
 		bounds: A3a.vpl.ControlBar.Bounds,
 		x: number,
 		y: number
@@ -66,18 +64,14 @@ A3a.vpl.ControlBar.prototype.reset = function () {
 /** Add the definition of a control button
 	@param {A3a.vpl.ControlBar.controlBarItemDraw} draw
 	@param {A3a.vpl.ControlBar.Bounds} bounds (to scale and center drawing to fill button box)
-	@param {?A3a.vpl.Canvas.controlAction=} action
-	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
-	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
+	@param {?A3a.vpl.Canvas.controlCallbacks=} cb
 	@param {string=} id
 	@return {void}
 */
-A3a.vpl.ControlBar.prototype.addControl = function (draw, bounds, action, doDrop, canDrop, id) {
+A3a.vpl.ControlBar.prototype.addControl = function (draw, bounds, cb, id) {
 	this.controls.push({
 		draw: draw,
-		action: action || null,
-		doDrop: doDrop || null,
-		canDrop: canDrop || null,
+		cb: cb || null,
 		id: id || "",
 		bounds: bounds,
 		x: 0,
@@ -213,13 +207,16 @@ A3a.vpl.ControlBar.prototype.addToCanvas = function (toolbarBox, itemBoxes, doOv
 				}
 				ctx.restore();
 			},
-			control.action,
-			control.doDrop, control.canDrop,
-			doOver
-				? function () {
-					doOver(control.id);
-				}
-				: null,
+			{
+				action: control.cb.action || null,
+				doDrop: control.cb.doDrop || null,
+				canDrop: control.cb.canDrop || null,
+				doOver: doOver
+					? function () {
+						doOver(control.id);
+					}
+					: null
+			},
 			control.id);
 	}, this);
 };
