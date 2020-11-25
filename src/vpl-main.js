@@ -270,7 +270,12 @@ function vplSetup(gui, rootDir) {
 
 	// application
 	var role = vplGetQueryOption("role");
+	var keyboardShortcuts = vplGetQueryOption("shortcuts");
 	var app = new A3a.vpl.Application(canvasEl);
+	if (keyboardShortcuts) {
+		app.uiConfig.keyboardShortcutsEnabled = keyboardShortcuts === "true";
+	}
+	app.uiConfig.keyboardAccessibility = vplGetQueryOption("accessibility").split("+").indexOf("kbd") >= 0;
 	app.simMaps = window["vplSimMaps"] == undefined
  		? "ground,height,obstacles"
 		: window["vplSimMaps"] === "merged"
@@ -278,6 +283,7 @@ function vplSetup(gui, rootDir) {
 			: window["vplSimMaps"].split(",");
 	window["vplApp"] = app;
 	app.username = vplGetQueryOption("user") || window["vplUsername"] || app.username;
+	app.pushVPLKeyShortcuts();
 
 	// validate ui (correct usage of blocks, control elements etc.)
 	if (gui && A3a.vpl.validateUI) {
@@ -308,16 +314,20 @@ function vplSetup(gui, rootDir) {
 	app.setUILanguage(uiLanguage);
 
 	// load box
-	app.loadBox = new A3a.vpl.Load(app, {
-		onShow: function () {
-			app.keyboard.pushKeyHandler("Escape", function () {
-				app.loadBox.hide();
-			});
-		},
-		onHide: function () {
-			app.keyboard.popHandler();
-		}
-	});
+	app.loadBox = new A3a.vpl.Load(app,
+		app.uiConfig.keyboardShortcutsEnabled
+			? {
+				onShow: function () {
+					app.keyboard.pushKeyHandler("Escape", function () {
+						app.loadBox.hide();
+					});
+				},
+				onHide: function () {
+					app.keyboard.popHandler();
+				}
+			}
+			: null
+	);
 
 	// general settings
 	var isClassic = gui == undefined || gui["hardcoded-gui"] || vplGetQueryOption("appearance") === "classic";

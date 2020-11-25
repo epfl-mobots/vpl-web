@@ -598,6 +598,8 @@ The following options are supported:
 - "ui": filename of the main json file (default "ui.json")
 - "uilanguage": 2-letter language code used to translate messages (default: "en"; otherwise, as defined in dictionary "i18n" of the user interface json file)
 - "user": username displayed in the "vpl:filename" indicator (overrides window["vplUsername"])
+- "shortcuts": true or false to override the default setting (default: true)
+- "accessibility": list of accessibility features, separated by '+'. Default: none. Supported: "kbd" to edit vpl with keyboard.
 
 Global variables
 ----------------

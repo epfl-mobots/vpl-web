@@ -18,12 +18,12 @@ Modal box for HTML content.
 /** HTML panel
 	@constructor
 	@param {string} html html content
-	@param {{
+	@param {?{
 		noCloseWidget: (boolean | undefined),
 		otherWidgets: (Array.<{title:string,htmlElement:?string,fun:function():void}> | undefined),
 		scroll: (boolean | undefined),
-		onShow: ((function():void) | undefined),
-		onHide: ((function():void) | undefined)
+		onShow: ((function():void) | null | undefined),
+		onHide: ((function():void) | null | undefined)
 	}=} options options (noCloseWidget: true to suppress close widget;
 	otherWidgets: other widgets displayed on the top right;
 	scroll: true to have a vertical scrollbar;

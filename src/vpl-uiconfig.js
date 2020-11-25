@@ -26,6 +26,8 @@ A3a.vpl.UIConfig = function () {
 	this.toolbarCustomizationDisabled = false;
 		// true to disable buttons which could be customized if toolbarCustomizationMode were true
 	this.blockCustomizationMode = false;
+	this.keyboardShortcutsEnabled = true;
+	this.keyboardAccessibility = false;
 };
 
 /** Reset UI

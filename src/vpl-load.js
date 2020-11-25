@@ -17,12 +17,12 @@ Modal box for selecting a file.
 
 /** Load modal box
 	@param {A3a.vpl.Application} app
-	@param {{
+	@param {?{
 		noCloseWidget: (boolean | undefined),
 		otherWidgets: (Array.<{title:string,htmlElement:?string,fun:function():void}> | undefined),
 		scroll: (boolean | undefined),
-		onShow: ((function():void) | undefined),
-		onHide: ((function():void) | undefined)
+		onShow: ((function():void) | null | undefined),
+		onHide: ((function():void) | null | undefined)
 	}=} options options
 	(onShow: function called when showing the panel (can install keyboard handler);
 	onHide: function called when hiding the panel (can remove keyboard handler))

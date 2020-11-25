@@ -239,9 +239,7 @@ A3a.vpl.Application = function (canvasEl) {
 	// keyboard
 	this.keyboard = new A3a.vpl.Keyboard();
 	this.keyboard.attach();
-	this.pushVPLKeyShortcuts();
 	this.kbdControl = new A3a.vpl.KbdControl(this);
-	this.kbdControl.addHandlers();
 };
 
 /** @typedef {function(Object=):void}
@@ -264,7 +262,8 @@ A3a.vpl.Application.prototype.setUILanguage = function (language) {
 A3a.vpl.Application.prototype.pushVPLKeyShortcuts = function () {
 	var self = this;
 	this.keyboard.pushHandler(function (event) {
-		if (event.altKey || event.ctrlKey || event.metaKey) {
+		if (!self.uiConfig.keyboardShortcutsEnabled ||
+			(event.altKey || event.ctrlKey || event.metaKey)) {
 			return false;
 		}
 		if (self.views.indexOf("vpl") >= 0) {
@@ -277,6 +276,9 @@ A3a.vpl.Application.prototype.pushVPLKeyShortcuts = function () {
 		}
 		return false;
 	});
+	if (this.uiConfig.keyboardAccessibility) {
+		this.kbdControl.addHandlers();
+	}
 };
 
 /** Translate message using the current language
@@ -295,16 +297,19 @@ A3a.vpl.Application.prototype.translate = function (messageKey, language) {
 A3a.vpl.Application.prototype.setAboutBoxContent = function (html) {
 	var self = this;
 	this.aboutBox = html
-		? new A3a.vpl.HTMLPanel(html, {
-			onShow: function () {
-				self.keyboard.pushKeyHandler("Escape", function () {
-					self.aboutBox.hide();
-				});
-			},
-			onHide: function () {
-				self.keyboard.popHandler();
-			}
-		})
+		? new A3a.vpl.HTMLPanel(html,
+			this.uiConfig.keyboardShortcutsEnabled
+				? {
+					onShow: function () {
+						self.keyboard.pushKeyHandler("Escape", function () {
+							self.aboutBox.hide();
+						});
+					},
+					onHide: function () {
+						self.keyboard.popHandler();
+					}
+				}
+				: null)
 		: null;
 };
 
@@ -337,14 +342,18 @@ A3a.vpl.Application.prototype.setHelpContent = function (html) {
 				}
 			],
 			scroll: true,
-			onShow: function () {
-				self.keyboard.pushKeyHandler("Escape", function () {
-					self.helpBox.hide();
-				});
-			},
-			onHide: function () {
-				self.keyboard.popHandler();
-			}
+			onShow: this.uiConfig.keyboardShortcutsEnabled
+				? function () {
+					self.keyboard.pushKeyHandler("Escape", function () {
+						self.helpBox.hide();
+					});
+				}
+				: null,
+			onHide: this.uiConfig.keyboardShortcutsEnabled
+				? function () {
+					self.keyboard.popHandler();
+				}
+				: null
 		})
 		: null;
 };
