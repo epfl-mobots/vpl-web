@@ -51,7 +51,7 @@ A3a.Device = function (opt) {
 	/** @type {?function(number):void} */
 	this.onEmit = null;
 	/**
-		@type {?function(string,number,number,number):void}
+		@type {?function(string,number,number,number,Array.<number>):void}
 		Called with variable name, index in array, new value, old value, old array value for the whole array variable
 	*/
 	this.onVarChanged = null;
