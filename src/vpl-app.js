@@ -263,6 +263,7 @@ A3a.vpl.Application.prototype.pushVPLKeyShortcuts = function () {
 	var self = this;
 	this.keyboard.pushHandler(function (event) {
 		if (!self.uiConfig.keyboardShortcutsEnabled ||
+			self.views.indexOf("src") >= 0 ||
 			(event.altKey || event.ctrlKey || event.metaKey)) {
 			return false;
 		}
