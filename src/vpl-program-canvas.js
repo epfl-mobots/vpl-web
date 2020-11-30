@@ -408,12 +408,12 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 			}
 			if (self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.rule &&
 				self.kbdControl.selectionIndex1 === ruleIndex) {
-				canvas.overlayRect(item.x, item.y, item.width, item.height,
+				canvas.overlayRect(item.x + dx, item.y + dy, item.width, item.height,
 					["rule", "kbd-selected"]);
 			}
 			if (self.kbdControl.targetType === A3a.vpl.KbdControl.ObjectType.rule &&
 				self.kbdControl.targetIndex1 === ruleIndex) {
-				canvas.overlayRect(item.x, item.y, item.width, item.height,
+				canvas.overlayRect(item.x + dx, item.y + dy, item.width, item.height,
 					["rule", "kbd-target"]);
 			}
 			// block container boxes
@@ -1265,6 +1265,16 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		var vplWidth = cssBoxes.ruleBox.totalWidth() + cssBoxes.vplBox.paddingLeft + cssBoxes.vplBox.paddingRight + cssBoxes.errorWidgetBox.totalWidth();
 		renderingState.programScroll.setTotalWidth(vplWidth);
 		renderingState.programScroll.setTotalHeight(program.program.length * cssBoxes.ruleBox.totalHeight());
+
+		// ensure keyboard selection is visible
+		switch (self.kbdControl.selectionType) {
+		case A3a.vpl.KbdControl.ObjectType.rule:
+		case A3a.vpl.KbdControl.ObjectType.blockLeft:
+		case A3a.vpl.KbdControl.ObjectType.blockRight:
+			renderingState.programScroll.scrollToShowVertSpan(cssBoxes.ruleBox.totalHeight() * self.kbdControl.selectionIndex1,
+				cssBoxes.ruleBox.totalHeight() * (self.kbdControl.selectionIndex1 + 1));
+			break;
+		}
 
 		// program
 		renderingState.programScroll.resize(cssBoxes.vplBox.x, cssBoxes.vplBox.y,
