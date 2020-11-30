@@ -84,6 +84,8 @@ A3a.vpl.KbdControl.prototype.getSelectedBlockTemplate = function () {
 */
 A3a.vpl.KbdControl.prototype.getTargetObject = function () {
 	switch (this.targetType) {
+	case A3a.vpl.KbdControl.ObjectType.rule:
+		return this.app.program.program[this.targetIndex1];
 	case A3a.vpl.KbdControl.ObjectType.blockLeft:
 		return this.app.program.program[this.targetIndex1].events[this.targetIndex2] || this.app.program.program[this.targetIndex1];
 	case A3a.vpl.KbdControl.ObjectType.blockRight:
@@ -133,16 +135,28 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 			case A3a.vpl.KbdControl.ObjectType.none:
 				self.selectionType = A3a.vpl.KbdControl.ObjectType.rule;
 				self.selectionIndex1 = 0;
+				self.targetType = A3a.vpl.KbdControl.ObjectType.rule;
+				self.targetIndex1 = 0;
 				break;
 			case A3a.vpl.KbdControl.ObjectType.rule:
 				self.selectionType = A3a.vpl.KbdControl.ObjectType.blockLeft;
 				self.selectionIndex2 = 0;
 				break;
+			}
+			self.app.renderProgramToCanvas();
+			return true;
+		case " ":
+			switch (self.selectionType) {
 			case A3a.vpl.KbdControl.ObjectType.blockLeft:
 			case A3a.vpl.KbdControl.ObjectType.blockRight:
 				self.targetType = self.selectionType;
 				self.targetIndex1 = self.selectionIndex1;
 				self.targetIndex2 = self.selectionIndex2;
+				break;
+			case A3a.vpl.KbdControl.ObjectType.rule:
+				self.targetType = self.selectionType;
+				self.targetIndex1 = self.selectionIndex1;
+				self.selectionIndex2 = 0;
 				break;
 			case A3a.vpl.KbdControl.ObjectType.libLeft:
 			case A3a.vpl.KbdControl.ObjectType.libRight:
@@ -285,6 +299,10 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 			switch (self.selectionType) {
 			case A3a.vpl.KbdControl.ObjectType.rule:
 				self.selectionIndex1 = Math.max(self.selectionIndex1 - 1, 0);
+				if (self.targetType === null || self.targetType === A3a.vpl.KbdControl.ObjectType.rule) {
+					self.targetType = A3a.vpl.KbdControl.ObjectType.rule;
+					self.targetIndex1 = self.selectionIndex1;
+				}
 				break;
 			case A3a.vpl.KbdControl.ObjectType.blockLeft:
 			case A3a.vpl.KbdControl.ObjectType.blockRight:
@@ -303,6 +321,10 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 			switch (self.selectionType) {
 			case A3a.vpl.KbdControl.ObjectType.rule:
 				self.selectionIndex1 = Math.min(self.selectionIndex1 + 1, self.app.program.program.length - 1);
+				if (self.targetType === null || self.targetType === A3a.vpl.KbdControl.ObjectType.rule) {
+					self.targetType = A3a.vpl.KbdControl.ObjectType.rule;
+					self.targetIndex1 = self.selectionIndex1;
+				}
 				break;
 			case A3a.vpl.KbdControl.ObjectType.blockLeft:
 			case A3a.vpl.KbdControl.ObjectType.blockRight:

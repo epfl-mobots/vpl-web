@@ -411,6 +411,11 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 				canvas.overlayRect(item.x, item.y, item.width, item.height,
 					["rule", "kbd-selected"]);
 			}
+			if (self.kbdControl.targetType === A3a.vpl.KbdControl.ObjectType.rule &&
+				self.kbdControl.targetIndex1 === ruleIndex) {
+				canvas.overlayRect(item.x, item.y, item.width, item.height,
+					["rule", "kbd-target"]);
+			}
 			// block container boxes
 			var x = item.x + dx + cssBoxes.ruleBox.paddingLeft;
 			if (maxWidthForEventRightAlign > 0) {
