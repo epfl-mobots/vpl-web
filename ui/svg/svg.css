@@ -147,7 +147,6 @@ rule:small{
 	background: #ECEFF1;
 }
 
-/*Disable states*/
 overlay-rectangle.disabled {
 	background: rgba(120,144,156,0.5);
 	border-radius: 4px;
@@ -163,6 +162,28 @@ crossout-line {
 	line-width: 0.15vw;
  	color: white;
 	line-angle: 45deg;
+}
+
+overlay-rectangle.kbd-selected {
+	border: 0.5vw rgba(0,0,0,0.4);
+	border-radius: 0.1vw;
+	border-corner-length: 1vw;
+}
+overlay-rectangle.rule.kbd-target {
+	border: 0.2vw rgba(0,0,0,0.7);
+	border-radius: 4px;
+}
+overlay-rectangle.event.kbd-target {
+	border: 0.2vw rgba(200,0,0,0.7);
+}
+overlay-rectangle.event-aux.kbd-target {
+	border: 0.2vw rgba(200,0,0,0.7);
+}
+overlay-rectangle.action.kbd-target {
+	border: 0.2vw rgba(0,0,200,0.7);
+}
+overlay-rectangle.state.kbd-target {
+	border: 0.2vw rgba(0,150,0,0.7);
 }
 
 /*Other*/
