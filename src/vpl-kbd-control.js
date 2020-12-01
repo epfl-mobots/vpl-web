@@ -168,6 +168,8 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 						: selection.type === A3a.vpl.blockType.event || selection.type === A3a.vpl.blockType.state)) {
 					// block target on the wrong side: let setBlock choose
 					target = target.ruleContainer;
+					// set rule as target instead of wrong block
+					self.targetType = A3a.vpl.KbdControl.ObjectType.rule;
 				}
 				if (target instanceof A3a.vpl.Rule) {
 					var block = new A3a.vpl.Block(selection, null, null);
