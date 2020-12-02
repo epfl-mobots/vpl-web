@@ -35,6 +35,7 @@ JS = \
 	a3a-nodeproxy.js \
 	vpl-ns.js \
 	vpl-blocktemplate.js \
+	vpl-blockparam-acc.js \
 	vpl-block.js \
 	vpl-emptyblock.js \
 	vpl-rule.js \

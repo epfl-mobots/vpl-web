@@ -31,6 +31,7 @@ A3a.vpl.KbdControl = function (app) {
 	this.selectionType = A3a.vpl.KbdControl.ObjectType.none;
 	this.selectionIndex1 = 0;
 	this.selectionIndex2 = 0;
+	this.selectionParamIndex = 0;
 	this.targetType = A3a.vpl.KbdControl.ObjectType.none;
 	this.targetIndex1 = 0;
 	this.targetIndex2 = 0;
@@ -42,6 +43,8 @@ A3a.vpl.KbdControl.ObjectType = {
 	none: "",
 	blockLeft: "bl",
 	blockRight: "br",
+	blockLeftParam: "blp",
+	blockRightParam: "brp",
 	rule: "r",
 	libLeft: "ll",
 	libRight: "lr"
@@ -57,6 +60,20 @@ A3a.vpl.KbdControl.prototype.getSelectedObject = function () {
 	case A3a.vpl.KbdControl.ObjectType.blockLeft:
 		return this.app.program.program[this.selectionIndex1].events[this.selectionIndex2];
 	case A3a.vpl.KbdControl.ObjectType.blockRight:
+		return this.app.program.program[this.selectionIndex1].actions[this.selectionIndex2];
+	default:
+		return null;
+	}
+};
+
+/** Get block containing the selected block parameter
+	@return {null|A3a.vpl.Block}
+*/
+A3a.vpl.KbdControl.prototype.getBlockOfSelectedParam = function () {
+	switch (this.selectionType) {
+	case A3a.vpl.KbdControl.ObjectType.blockLeftParam:
+		return this.app.program.program[this.selectionIndex1].events[this.selectionIndex2];
+	case A3a.vpl.KbdControl.ObjectType.blockRightParam:
 		return this.app.program.program[this.selectionIndex1].actions[this.selectionIndex2];
 	default:
 		return null;
@@ -123,6 +140,12 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 					self.selectionType = A3a.vpl.KbdControl.ObjectType.rule;
 				}
 				break;
+			case A3a.vpl.KbdControl.ObjectType.blockLeftParam:
+				self.selectionType = A3a.vpl.KbdControl.ObjectType.blockLeft;
+				break;
+			case A3a.vpl.KbdControl.ObjectType.blockRightParam:
+				self.selectionType = A3a.vpl.KbdControl.ObjectType.blockRight;
+				break;
 			default:
 				self.selectionType = A3a.vpl.KbdControl.ObjectType.none;
 				self.targetType = A3a.vpl.KbdControl.ObjectType.none;
@@ -142,6 +165,31 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 				self.selectionType = A3a.vpl.KbdControl.ObjectType.blockLeft;
 				self.selectionIndex2 = 0;
 				break;
+			case A3a.vpl.KbdControl.ObjectType.blockLeft:
+			case A3a.vpl.KbdControl.ObjectType.blockRight:
+				var selection = self.getSelectedObject();
+				if (selection instanceof A3a.vpl.Block && selection.blockTemplate.paramAccessibility) {
+					self.selectionType = self.selectionType === A3a.vpl.KbdControl.ObjectType.blockLeft
+						? A3a.vpl.KbdControl.ObjectType.blockLeftParam
+						: A3a.vpl.KbdControl.ObjectType.blockRightParam;
+					self.selectionParamIndex = 0;
+				}
+				break;
+			/* confusing
+			case A3a.vpl.KbdControl.ObjectType.libLeft:
+			case A3a.vpl.KbdControl.ObjectType.libRight:
+				// change parameters of target if there is one (typically the block just added)
+				var target = self.getTargetObject();
+				if (target instanceof A3a.vpl.Block && target.param && target.param.length > 0) {
+					self.selectionType = self.targetType === A3a.vpl.KbdControl.ObjectType.blockLeft
+						? A3a.vpl.KbdControl.ObjectType.blockLeftParam
+						: A3a.vpl.KbdControl.ObjectType.blockRightParam;
+					self.selectionIndex1 = self.targetIndex1;
+					self.selectionIndex2 = self.targetIndex2;
+					self.selectionParamIndex = 0;
+				}
+				break;
+			*/
 			}
 			self.app.renderProgramToCanvas();
 			return true;
@@ -152,6 +200,16 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 				self.targetType = self.selectionType;
 				self.targetIndex1 = self.selectionIndex1;
 				self.targetIndex2 = self.selectionIndex2;
+				break;
+			case A3a.vpl.KbdControl.ObjectType.blockLeftParam:
+			case A3a.vpl.KbdControl.ObjectType.blockRightParam:
+				var selectionBlock = self.getBlockOfSelectedParam();
+				if (selectionBlock.blockTemplate.paramAccessibility != null) {
+					var c = selectionBlock.blockTemplate.paramAccessibility.controls[self.selectionParamIndex];
+					if (c.onSelect) {
+						c.onSelect(selectionBlock);
+					}
+				}
 				break;
 			case A3a.vpl.KbdControl.ObjectType.rule:
 				self.targetType = self.selectionType;
@@ -258,6 +316,16 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 					self.selectionType = A3a.vpl.KbdControl.ObjectType.rule;
 				}
 				break;
+			case A3a.vpl.KbdControl.ObjectType.blockLeftParam:
+			case A3a.vpl.KbdControl.ObjectType.blockRightParam:
+				var selectionBlock = self.getBlockOfSelectedParam();
+				if (selectionBlock.blockTemplate.paramAccessibility != null) {
+					var c = selectionBlock.blockTemplate.paramAccessibility.controls[self.selectionParamIndex];
+					if (c.onUp) {
+						c.onUp(selectionBlock);
+					}
+				}
+				break;
 			}
 			self.app.renderProgramToCanvas();
 			return true;
@@ -294,6 +362,16 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 					self.selectionIndex2--;
 				}
 				break;
+			case A3a.vpl.KbdControl.ObjectType.blockLeftParam:
+			case A3a.vpl.KbdControl.ObjectType.blockRightParam:
+				var selectionBlock = self.getBlockOfSelectedParam();
+				if (selectionBlock.blockTemplate.paramAccessibility != null) {
+					var c = selectionBlock.blockTemplate.paramAccessibility.controls[self.selectionParamIndex];
+					if (c.onDown) {
+						c.onDown(selectionBlock);
+					}
+				}
+				break;
 			}
 			self.app.renderProgramToCanvas();
 			return true;
@@ -315,6 +393,16 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 			case A3a.vpl.KbdControl.ObjectType.libLeft:
 			case A3a.vpl.KbdControl.ObjectType.libRight:
 				self.selectionIndex1 = Math.max(self.selectionIndex1 - 1, 0);
+				break;
+			case A3a.vpl.KbdControl.ObjectType.blockLeftParam:
+			case A3a.vpl.KbdControl.ObjectType.blockRightParam:
+				var selectionBlock = self.getBlockOfSelectedParam();
+				if (selectionBlock.blockTemplate.paramAccessibility != null) {
+					var c = selectionBlock.blockTemplate.paramAccessibility.controls[self.selectionParamIndex];
+					if (c.onUp) {
+						c.onUp(selectionBlock);
+					}
+				}
 				break;
 			}
 			self.app.renderProgramToCanvas();
@@ -341,6 +429,29 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 			case A3a.vpl.KbdControl.ObjectType.libRight:
 				self.selectionIndex1 = Math.min(self.selectionIndex1 + 1,
 					(self.selectionIndex2 < Math.floor(self.libRightNum / self.libRightColLen) ? self.libRightColLen : self.libRightNum % self.libRightColLen) - 1);
+				break;
+			case A3a.vpl.KbdControl.ObjectType.blockLeftParam:
+			case A3a.vpl.KbdControl.ObjectType.blockRightParam:
+				var selectionBlock = self.getBlockOfSelectedParam();
+				if (selectionBlock.blockTemplate.paramAccessibility != null) {
+					var c = selectionBlock.blockTemplate.paramAccessibility.controls[self.selectionParamIndex];
+					if (c.onDown) {
+						c.onDown(selectionBlock);
+					}
+				}
+				break;
+			}
+			self.app.renderProgramToCanvas();
+			return true;
+		case "Tab":
+			switch (self.selectionType) {
+			case A3a.vpl.KbdControl.ObjectType.blockLeftParam:
+			case A3a.vpl.KbdControl.ObjectType.blockRightParam:
+				var selectionBlock = self.getBlockOfSelectedParam();
+				if (selectionBlock.blockTemplate.paramAccessibility != null) {
+					var numControls = selectionBlock.blockTemplate.paramAccessibility.controls.length;
+					self.selectionParamIndex = (self.selectionParamIndex + (ev.shiftKey ? numControls - 1 : 1)) % numControls;
+				}
 				break;
 			}
 			self.app.renderProgramToCanvas();

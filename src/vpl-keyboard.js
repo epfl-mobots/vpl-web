@@ -39,7 +39,9 @@ A3a.vpl.Keyboard.prototype.attach = function () {
 	*/
 	function handleEvent(ev) {
 		if (self.handlers.length > 0) {
-			self.handlers[self.handlers.length - 1](ev);
+			if (self.handlers[self.handlers.length - 1](ev)) {
+				ev.preventDefault();
+			}
 		}
 	}
 
