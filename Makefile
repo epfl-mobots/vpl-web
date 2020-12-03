@@ -125,8 +125,14 @@ vpl-min.js: $(JS)
 	$(CLOSURE) $(CLOSUREFLAGS) $^ >>$@ || (rm -f $@; false)
 	echo '}).call(this);' >>$@
 
+# dependencies
+index-classic.html: $(shell python3 inlinersrctool.py --input=index-classic-min-template.html --dep)
+index-svg.html: $(shell python3 inlinersrctool.py --input=index-svg-min-template.html --dep)
+index-classic-min.html: $(shell python3 inlinersrctool.py --input=index-classic-min-template.html --dep)
+index-svg-min.html: $(shell python3 inlinersrctool.py --input=index-svg-min-template.html --dep)
+
 %.html: %-template.html
-	python3 inlinersrctool.py $< >$@
+	python3 inlinersrctool.py --input=$< >$@
 
 .PHONY: clean
 clean:
