@@ -1314,13 +1314,13 @@ A3a.vpl.BlockTemplate.lib =	[
 		paramAccessibility: [
 			A3a.vpl.BlockTemplate.sliderToAccessibilityControl(0,
 				0.3, -0.05, 0.1, 1.05,
-				0, 1, 11),
+				0, 1, 2),
 			A3a.vpl.BlockTemplate.sliderToAccessibilityControl(1,
 				0.6, -0.05, 0.4, 1.05,
-				0, 1, 11),
+				0, 1, 2),
 			A3a.vpl.BlockTemplate.sliderToAccessibilityControl(2,
 				0.9, -0.05, 0.7, 1.05,
-				0, 1, 11)
+				0, 1, 2)
 		],
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
@@ -1400,10 +1400,10 @@ A3a.vpl.BlockTemplate.lib =	[
 		paramAccessibility: [
 			A3a.vpl.BlockTemplate.sliderToAccessibilityControl(0,
 				1.05, 0, -0.05, 0.2,
-				-1, 1, 11),
+				-1, 1, 3),
 			A3a.vpl.BlockTemplate.sliderToAccessibilityControl(1,
 				1.05, 0.8, -0.05, 1,
-				-1, 1, 11)
+				-1, 1, 3)
 		],
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
