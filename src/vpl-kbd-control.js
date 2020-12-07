@@ -50,6 +50,18 @@ A3a.vpl.KbdControl.ObjectType = {
 	libRight: "lr"
 };
 
+/** Exit kbd control
+	@return {void}
+*/
+A3a.vpl.KbdControl.prototype.exit = function () {
+	if (this.selectionType !== A3a.vpl.KbdControl.ObjectType.none ||
+		this.targetType !== A3a.vpl.KbdControl.ObjectType.none) {
+		this.selectionType = A3a.vpl.KbdControl.ObjectType.none;
+		this.targetType = A3a.vpl.KbdControl.ObjectType.none;
+		this.app.renderProgramToCanvas();
+	}
+};
+
 /** Get selected rule or rule's block
 	@return {null|A3a.vpl.Rule|A3a.vpl.Block}
 */

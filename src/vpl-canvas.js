@@ -251,6 +251,8 @@ A3a.vpl.Canvas = function (canvas, options) {
 	this.width = this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin);
 	this.height = this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin);
 	this.visible = true;
+	/** @type {Array.<function(Event):boolean>} */
+	this.preMousedown = [];
 	this.clickNoDragTolerance = 10;
 	/** @type {?Array.<number>} */
 	this.transform0 = null;
@@ -301,6 +303,12 @@ A3a.vpl.Canvas = function (canvas, options) {
 	function mousedown(downEvent) {
 		if (!self.visible) {
 			return;
+		}
+
+		for (var i = 0; i < self.preMousedown.length; i++) {
+			if (!self.preMousedown[i](downEvent)) {
+				return;
+			}
 		}
 
 		var mouseEvent = self.makeMouseEvent(downEvent, backingScale);
@@ -544,6 +552,15 @@ A3a.vpl.Canvas = function (canvas, options) {
 	this.onUpdate = null;
 	/** @type {?function():void} */
 	this.onDraw = null;
+};
+
+/** Add preMousedown function, called first upon visible canvas
+	and which can cancel further action by returning false
+	@param {function(Event):boolean} preMousedown
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.addPreMousedown = function (preMousedown) {
+	this.preMousedown.push(preMousedown);
 };
 
 /** @typedef
