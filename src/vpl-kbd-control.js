@@ -138,6 +138,16 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 		function numBlocksRight() {
 			return self.app.program.program[self.selectionIndex1].actions.length + 1;
 		}
+		function setHint() {
+			var selectedObject = self.getSelectedObject() || self.getSelectedBlockTemplate();
+			if (selectedObject instanceof A3a.vpl.Block) {
+				self.app.vplHint = selectedObject.blockTemplate.name;
+			} else if (selectedObject instanceof A3a.vpl.BlockTemplate) {
+				self.app.vplHint = selectedObject.name;
+			} else {
+				self.app.vplHint = null;
+			}
+		}
 
 		switch (ev.key) {
 		case "Escape":
@@ -163,6 +173,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 				self.targetType = A3a.vpl.KbdControl.ObjectType.none;
 				break;
 			}
+			setHint();
 			self.app.renderProgramToCanvas();
 			return true;
 		case "Enter":
@@ -203,6 +214,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 				break;
 			*/
 			}
+			setHint();
 			self.app.renderProgramToCanvas();
 			return true;
 		case " ":
@@ -260,6 +272,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 				self.app.program.enforceSingleTrailingEmptyEventHandler();
 				break;
 			}
+			setHint();
 			self.app.renderProgramToCanvas();
 			return true;
 		case "Backspace":
@@ -288,6 +301,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 						break;
 					}
 					self.targetType = A3a.vpl.KbdControl.ObjectType.none;
+					setHint();
 					self.app.renderProgramToCanvas();
 				}
 				break;
@@ -339,6 +353,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 				}
 				break;
 			}
+			setHint();
 			self.app.renderProgramToCanvas();
 			return true;
 		case "ArrowLeft":
@@ -385,6 +400,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 				}
 				break;
 			}
+			setHint();
 			self.app.renderProgramToCanvas();
 			return true;
 		case "ArrowUp":
@@ -417,6 +433,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 				}
 				break;
 			}
+			setHint();
 			self.app.renderProgramToCanvas();
 			return true;
 		case "ArrowDown":
@@ -453,6 +470,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 				}
 				break;
 			}
+			setHint();
 			self.app.renderProgramToCanvas();
 			return true;
 		case "Tab":
@@ -466,6 +484,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 				}
 				break;
 			}
+			setHint();
 			self.app.renderProgramToCanvas();
 			return true;
 		}
