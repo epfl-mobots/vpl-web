@@ -786,6 +786,190 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 		/** @type {Object<string,A3a.vpl.BlockTemplate.genCodeFun>} */
 		var genCode = A3a.vpl.BlockTemplate.loadCodeGenFromJSON(b, blockTemplate0 && blockTemplate0.genCode);
 
+		/** @type {A3a.vpl.BlockParamAccessibility} */
+		var paramAccessibility = blockTemplate0 && blockTemplate0.paramAccessibility || null;
+		if ((blockTemplate0 == null || blockTemplate0.draw == null) && type !== A3a.vpl.blockType.hidden) {
+			var filename = A3a.vpl.Canvas.decodeURI(A3a.vpl.Canvas.getDrawURI(b)).f;
+			var svg = uiConfig.svg[filename];
+			var nButtons = 0;
+			if (b["buttons"]) {
+				b["buttons"].forEach(function (button, i) {
+					var id = button["id"];
+					var bounds = svg.getElementBounds(id);
+					var control = new A3a.vpl.BlockParamAccessibility.Control(
+						(bounds.ymin - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
+						(bounds.xmin - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
+						(bounds.ymax - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
+						(bounds.xmax - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
+						function (block) {
+							var ix = button["val"].indexOf(block.param[i]);
+							if (ix >= 0) {
+								block.prepareChange();
+								block.param[i] = button["val"][(ix + 1) % button["val"].length];
+							}
+						},
+						null, null
+					);
+					if (paramAccessibility == null) {
+						paramAccessibility = new A3a.vpl.BlockParamAccessibility();
+					}
+					paramAccessibility.addControl(control);
+				});
+				nButtons = b["buttons"].length;
+			}
+			var nRadioButtons = 0;
+			if (b["radiobuttons"]) {
+				b["radiobuttons"].forEach(function (radiobutton, i) {
+					var id = radiobutton["id"];
+					var bounds = svg.getElementBounds(id);
+					var control = new A3a.vpl.BlockParamAccessibility.Control(
+						(bounds.ymin - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
+						(bounds.xmin - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
+						(bounds.ymax - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
+						(bounds.xmax - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
+						function (block) {
+							block.prepareChange();
+							block.param[nButtons] = radiobutton["val"];
+						},
+						null, null
+					);
+					if (paramAccessibility == null) {
+						paramAccessibility = new A3a.vpl.BlockParamAccessibility();
+					}
+					paramAccessibility.addControl(control);
+				});
+				nRadioButtons = b["radiobuttons"].length;
+			}
+			var nSliders = 0;
+			if (b["sliders"]) {
+				b["sliders"].forEach(function (slider, i) {
+					var id = slider["id"];
+					var bounds = svg.getElementBounds(id);
+					var bndsThumb = svg.getElementBounds(slider["thumbId"]);
+					var bndThumbWidth = Math.abs(bndsThumb.xmax - bndsThumb.xmin);
+					var bndThumbHeight = Math.abs(bndsThumb.ymax - bndsThumb.ymin);
+					var min = slider["min"];
+					var max = slider["max"];
+					var discrete = slider["discrete"];
+					var control = new A3a.vpl.BlockParamAccessibility.Control(
+						(bounds.ymin - bndThumbHeight / 2 - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
+						(bounds.xmin - bndThumbWidth / 2 - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
+						(bounds.ymax + bndThumbHeight / 2 - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
+						(bounds.xmax + bndThumbWidth / 2 - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
+						null,
+						function (block) {
+							var val = block.param[nButtons + nRadioButtons + i];
+							if (discrete) {
+								var ix = discrete.indexOf(val);
+								val = ix >= 0 && ix + 1 < discrete.length ? discrete[ix + 1]
+									: discrete.length > 0 ? discrete[discrete.length - 1]
+									: Math.max(min, max);
+							} else {
+								val = Math.min(Math.max(min, max), val + Math.abs(max - min) / 10);
+							}
+							block.param[nButtons + nRadioButtons + i] = val;
+						},
+						function (block) {
+							var val = block.param[nButtons + nRadioButtons + i];
+							if (discrete) {
+								var ix = discrete.indexOf(val);
+								val = ix >= 0 && ix > 0 ? discrete[ix - 1]
+									: discrete.length > 0 ? discrete[0]
+									: Math.min(min, max);
+							} else {
+								val = Math.max(Math.min(min, max), val - Math.abs(max - min) / 10);
+							}
+							block.param[nButtons + nRadioButtons + i] = val;
+						}
+					);
+					if (paramAccessibility == null) {
+						paramAccessibility = new A3a.vpl.BlockParamAccessibility();
+					}
+					paramAccessibility.addControl(control);
+				});
+				nSliders = b["sliders"].length;
+			}
+			var nRotatings = 0;
+			if (b["rotating"]) {
+				b["rotating"].forEach(function (rotating, i) {
+					var id = rotating["id"];
+					var bounds = svg.getElementBounds(id);
+					var bndsCenter = svg.getElementBounds(rotating["centerId"]);
+					var x0 = (bndsCenter.xmin + bndsCenter.xmax) / 2;
+					var y0 = (bndsCenter.ymin + bndsCenter.ymax) / 2;
+					var r = Math.max(
+						Math.max(Math.abs(bounds.xmin - x0), Math.abs(bounds.xmax - x0)),
+						Math.max(Math.abs(bounds.ymin - y0), Math.abs(bounds.ymax - y0))
+					);
+					var numSteps = rotating["numSteps"];
+					var min = -Math.floor(numSteps / 2);
+					var control = new A3a.vpl.BlockParamAccessibility.Control(
+						(y0 - r - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
+						(x0 - r - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
+						(y0 + r - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
+						(x0 + r - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
+						null,
+						function (block) {
+							var val = (block.param[nButtons + nRadioButtons + nSliders + i] + numSteps - min + 1) % numSteps + min;
+							block.param[nButtons + nRadioButtons + nSliders + i] = val;
+						},
+						function (block) {
+							var val = (block.param[nButtons + nRadioButtons + nSliders + i] + numSteps - min - 1) % numSteps + min;
+							block.param[nButtons + nRadioButtons + nSliders + i] = val;
+						}
+					);
+					if (paramAccessibility == null) {
+						paramAccessibility = new A3a.vpl.BlockParamAccessibility();
+					}
+					paramAccessibility.addControl(control);
+				});
+				nRotatings = b["rotating"].length;
+			}
+			if (b["score"]) {
+				var id = b["score"]["id"];
+				var bounds = svg.getElementBounds(id);
+				var numNotes = (b["defaultParameters"].length - nButtons - nRadioButtons - nSliders - nRotatings) / 2;
+				var numHeights = b["score"]["numHeights"] || 5;
+				for (var i = 0; i < numNotes; i++) {
+					(function (i) {
+						var po = nButtons + nRadioButtons + nSliders + nRotatings;
+						var control = new A3a.vpl.BlockParamAccessibility.Control(
+							(bounds.ymin - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
+							(bounds.xmin - svg.viewBox[0] + (bounds.xmax - bounds.xmin) * i / numNotes) / (svg.viewBox[2] - svg.viewBox[0]),
+							(bounds.ymax - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
+							(bounds.xmin - svg.viewBox[0] + (bounds.xmax - bounds.xmin) * (i + 1) / numNotes) / (svg.viewBox[2] - svg.viewBox[0]),
+							function (block) {
+								// select: change duration
+								block.param[po + 2 * i + 1] = A3a.vpl.BlockTemplate.nextCheckboxState(block.param[po + 2 * i + 1], [0, 1, 2]);
+							},
+							function (block) {
+								// up
+								if (block.param[po + 2 * i + 1] === 0) {
+									block.param[po + 2 * i] = 0;
+									block.param[po + 2 * i + 1] = 1;
+								} else {
+									block.param[po + 2 * i] =  Math.min(block.param[po + 2 * i] + 1, numHeights - 1);
+								}
+							},
+							function (block) {
+								// down
+								if (block.param[po + 2 * i + 1] === 0) {
+									block.param[po + 2 * i] = 0;
+									block.param[po + 2 * i + 1] = 1;
+								} else {
+									block.param[po + 2 * i] =  Math.max(block.param[po + 2 * i] - 1, 0);
+								}
+							}
+						);
+						if (paramAccessibility == null) {
+							paramAccessibility = new A3a.vpl.BlockParamAccessibility();
+						}
+						paramAccessibility.addControl(control);
+					})(i);
+				}
+			}
+		}
+
 		/** @type {A3a.vpl.BlockTemplate.params} */
 		var p = {
 			name: name,
@@ -800,6 +984,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 			typicalParamSet: blockTemplate0
 				? blockTemplate0.typicalParamSet || null
 				: b["typicalParamSet"] || null,
+			paramAccessibility: paramAccessibility,
 			draw: draw,
 			alwaysZoom: blockTemplate0
 				? blockTemplate0.alwaysZoom || false

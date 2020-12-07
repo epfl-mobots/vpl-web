@@ -19,10 +19,11 @@ and associated classes and types.
 
 /**
 	@constructor
+	@param {?Array.<A3a.vpl.BlockParamAccessibility.Control>=} controls
 */
-A3a.vpl.BlockParamAccessibility = function () {
+A3a.vpl.BlockParamAccessibility = function (controls) {
 	/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-	this.controls = [];
+	this.controls = controls || [];
 };
 
 /**

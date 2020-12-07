@@ -228,8 +228,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.event,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons),
+			paramAccessibility:
+				new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons)),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
@@ -267,8 +267,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () { return [false, false, false, false, false]; },
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			typicalParam: function () { return [false, false, true, false, true]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [false, true]),
+			paramAccessibility:
+				new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [false, true])),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
@@ -316,8 +316,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () { return [0, 0, 0, 0, 0, 0, 0]; },
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			typicalParam: function () { return [0, 1, -1, 1, -1, 0, 0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [0, 1, -1]),
+			paramAccessibility:
+				new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [0, 1, -1])),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
@@ -387,17 +387,18 @@ A3a.vpl.BlockTemplate.lib =	[
 					0.1, 0.4	// levels (700+0.1*3300 approx 1000, 700+0.4*3300 approx 2000)
 				];
 			},
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
 			paramAccessibility:
-				A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [0, 1, 2, 3])
-					.concat(
-						A3a.vpl.BlockTemplate.sliderToAccessibilityControl(7,
-							0.6, -0.05, 0.8, 1.05,
-							0.25, 0.75, 3),
-						A3a.vpl.BlockTemplate.sliderToAccessibilityControl(8,
-							0.58, -0.05, 0.38, 1.05,
-							0.25, 0.75, 3)
-					),
+				new A3a.vpl.BlockParamAccessibility(
+					A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [0, 1, 2, 3])
+						.concat(
+							A3a.vpl.BlockTemplate.sliderToAccessibilityControl(7,
+								0.6, -0.05, 0.8, 1.05,
+								0.25, 0.75, 3),
+							A3a.vpl.BlockTemplate.sliderToAccessibilityControl(8,
+								0.58, -0.05, 0.38, 1.05,
+								0.25, 0.75, 3)
+						)
+				),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
@@ -499,12 +500,13 @@ A3a.vpl.BlockTemplate.lib =	[
 					0.25	// levels (700+0.25*3300 approx 1500)
 				];
 			},
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
 			paramAccessibility:
-				A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [0, 1, -1])
-					.concat(A3a.vpl.BlockTemplate.sliderToAccessibilityControl(7,
-						0.6, -0.05, 0.4, 1.05,
-						0.25, 0.75, 3)),
+				new A3a.vpl.BlockParamAccessibility(
+					A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [0, 1, -1])
+						.concat(A3a.vpl.BlockTemplate.sliderToAccessibilityControl(7,
+							0.6, -0.05, 0.4, 1.05,
+							0.25, 0.75, 3))
+				),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
@@ -579,8 +581,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			defaultParam: function () { return [0, 0]; },
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			typicalParam: function () { return [1, -1]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [0, 1, -1]),
+			paramAccessibility:
+				new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [0, 1, -1])),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true});
@@ -643,17 +645,18 @@ A3a.vpl.BlockTemplate.lib =	[
 					0.4, 0.6	// levels (0.4*1000=400, 0.6*1000=600)
 				];
 			},
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
 			paramAccessibility:
-				A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [0, 1, 2, 3])
-					.concat(
-						A3a.vpl.BlockTemplate.sliderToAccessibilityControl(2,
-							0.6, -0.05, 0.8, 1.05,
-							0.25, 0.75, 3),
-						A3a.vpl.BlockTemplate.sliderToAccessibilityControl(3,
-							0.58, -0.05, 0.38, 1.05,
-							0.25, 0.75, 3)
-					),
+				new A3a.vpl.BlockParamAccessibility(
+					A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [0, 1, 2, 3])
+						.concat(
+							A3a.vpl.BlockTemplate.sliderToAccessibilityControl(2,
+								0.6, -0.05, 0.8, 1.05,
+								0.25, 0.75, 3),
+							A3a.vpl.BlockTemplate.sliderToAccessibilityControl(3,
+								0.58, -0.05, 0.38, 1.05,
+								0.25, 0.75, 3)
+						)
+				),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true});
@@ -748,12 +751,13 @@ A3a.vpl.BlockTemplate.lib =	[
 					0.5	// levels (0.5*1000=500)
 				];
 			},
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
 			paramAccessibility:
-				A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [0, 1, -1])
-					.concat(A3a.vpl.BlockTemplate.sliderToAccessibilityControl(2,
-						0.6, -0.05, 0.4, 1.05,
-						0.25, 0.75, 3)),
+				new A3a.vpl.BlockParamAccessibility(
+					A3a.vpl.BlockTemplate.checkboxesToAccessibilityControls(buttons, [0, 1, -1])
+						.concat(A3a.vpl.BlockTemplate.sliderToAccessibilityControl(2,
+							0.6, -0.05, 0.4, 1.05,
+							0.25, 0.75, 3))
+				),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true});
@@ -851,25 +855,26 @@ A3a.vpl.BlockTemplate.lib =	[
 					0 // integer from -6 to 6
 				];
 			},
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
 			paramAccessibility:
-			 	A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons)
-					.concat(
-						new A3a.vpl.BlockParamAccessibility.Control(0.1, 0.1, 0.9, 0.9,
-							null,
-							function (block) {
-								block.param[1] = block.param[0] === 0 ? 0
-									: block.param[0] === 1
-										? Math.min(block.param[1] + 1, 6)
-										: Math.max(block.param[1] - 1, -6);
-							},
-							function (block) {
-								block.param[1] = block.param[0] === 0 ? 0
-									: block.param[0] === 1
-										? Math.max(block.param[1] - 1, -6)
-										: Math.min(block.param[1] + 1, 6);
-							})
-						),
+			 	new A3a.vpl.BlockParamAccessibility(
+						A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons)
+						.concat(
+							new A3a.vpl.BlockParamAccessibility.Control(0.1, 0.1, 0.9, 0.9,
+								null,
+								function (block) {
+									block.param[1] = block.param[0] === 0 ? 0
+										: block.param[0] === 1
+											? Math.min(block.param[1] + 1, 6)
+											: Math.max(block.param[1] - 1, -6);
+								},
+								function (block) {
+									block.param[1] = block.param[0] === 0 ? 0
+										: block.param[0] === 1
+											? Math.max(block.param[1] - 1, -6)
+											: Math.min(block.param[1] + 1, 6);
+								})
+							)
+					),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				/** @type {number} */
@@ -940,13 +945,12 @@ A3a.vpl.BlockTemplate.lib =	[
 				2 // integer from -12 to 11
 			];
 		},
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: [
+		paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 			new A3a.vpl.BlockParamAccessibility.Control(0.1, 0.1, 0.9, 0.9,
 				null,
 				function (block) { block.param[0] = (block.param[0] + 13) % 24 - 12; },
 				function (block) { block.param[0] = (block.param[0] + 11) % 24 - 12; })
-		],
+		]),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			/** @type {number} */
@@ -983,13 +987,12 @@ A3a.vpl.BlockTemplate.lib =	[
 				2 // integer from -12 to 11
 			];
 		},
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: [
+		paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 			new A3a.vpl.BlockParamAccessibility.Control(0.1, 0.1, 0.9, 0.9,
 				null,
 				function (block) { block.param[0] = (block.param[0] + 13) % 24 - 12; },
 				function (block) { block.param[0] = (block.param[0] + 11) % 24 - 12; })
-		],
+		]),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			/** @type {number} */
@@ -1026,13 +1029,12 @@ A3a.vpl.BlockTemplate.lib =	[
 				2 // integer from -12 to 11
 			];
 		},
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: [
+		paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 			new A3a.vpl.BlockParamAccessibility.Control(0.1, 0.1, 0.9, 0.9,
 				null,
 				function (block) { block.param[0] = (block.param[0] + 13) % 24 - 12; },
 				function (block) { block.param[0] = (block.param[0] + 11) % 24 - 12; })
-		],
+		]),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			/** @type {number} */
@@ -1095,11 +1097,10 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.event,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [10]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: [
+			paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 				A3a.vpl.BlockTemplate.buttonToAccessibilityControl(buttons[0], function (block) { block.param[0] = 10; }, null, null),
 				A3a.vpl.BlockTemplate.buttonToAccessibilityControl(buttons[1], function (block) { block.param[0] = 20; }, null, null)
-			],
+			]),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
@@ -1150,8 +1151,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.event,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons),
+			paramAccessibility:
+				new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons)),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.remoteControl();
@@ -1177,8 +1178,8 @@ A3a.vpl.BlockTemplate.lib =	[
 		defaultParam: function () { return [0, 0, 0, 0]; },
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		typicalParam: function () { return [1, 0, 0, -1]; },
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: A3a.vpl.BlockTemplate.state4ToAccessibilityControls([0, 1, -1]),
+		paramAccessibility:
+			new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.state4ToAccessibilityControls([0, 1, -1])),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotTop();
@@ -1212,8 +1213,8 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.state,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0]; },
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: A3a.vpl.BlockTemplate.state8ToAccessibilityControls(),
+		paramAccessibility:
+			new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.state8ToAccessibilityControls()),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotTop();
@@ -1247,8 +1248,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.state,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: [
+			paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 				new A3a.vpl.BlockParamAccessibility.Control(0, 0, 1, 0.4,
 					null,
 					function (block) { block.param[0] = Math.min(1, block.param[0] + 1); },
@@ -1262,7 +1262,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						block.param[1] = 0;
 					},
 					null, null)
-			],
+			]),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.text(block.param[0] === 0 ? "=" : block.param[0] > 0 ? "≥" : "≤",
@@ -1310,8 +1310,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.state,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0, 0, 0]; },
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: [
+		paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 			A3a.vpl.BlockTemplate.sliderToAccessibilityControl(0,
 				0.3, -0.05, 0.1, 1.05,
 				0, 1, 2),
@@ -1321,7 +1320,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			A3a.vpl.BlockTemplate.sliderToAccessibilityControl(2,
 				0.9, -0.05, 0.7, 1.05,
 				0, 1, 2)
-		],
+		]),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotTop({rgb: block.param});
@@ -1369,8 +1368,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.state,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons),
+			paramAccessibility:
+				new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons)),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({rgb: [block.param & 1, (block.param & 2) / 2, (block.param & 4) / 4]});
@@ -1396,15 +1395,14 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.state,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0, 0]; },
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: [
+		paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 			A3a.vpl.BlockTemplate.sliderToAccessibilityControl(0,
 				1.05, 0, -0.05, 0.2,
 				-1, 1, 3),
 			A3a.vpl.BlockTemplate.sliderToAccessibilityControl(1,
 				1.05, 0.8, -0.05, 1,
 				-1, 1, 3)
-		],
+		]),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			var rw = 0.19;
@@ -1474,15 +1472,14 @@ A3a.vpl.BlockTemplate.lib =	[
 		defaultParam: function () { return [0, 0]; },
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		typicalParam: function () { return [0.5, 0.2]; },
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: [
+		paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 			A3a.vpl.BlockTemplate.sliderToAccessibilityControl(0,
 				1.05, 0, -0.05, 0.2,
 				-1, 1, 11),
 			A3a.vpl.BlockTemplate.sliderToAccessibilityControl(1,
 				1.05, 0.8, -0.05, 1,
 				-1, 1, 11)
-		],
+		]),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			var rw = 0.19;
@@ -1621,8 +1618,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0, 0]; },
 			typicalParam: function () { return [0.3, 0.2, 0.1, 0.3]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: [
+			paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 				new A3a.vpl.BlockParamAccessibility.Control(0, 0, 0.25, 1,
 					null,
 					function (block) { block.param[0] = Math.min(1, block.param[0] + 0.1); },
@@ -1639,7 +1635,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					null,
 					function (block) { block.param[3] = Math.min(1, block.param[3] + 0.1); },
 					function (block) { block.param[3] = Math.max(0, block.param[3] - 0.1); }),
-			],
+			]),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block, box, isZoomed) {
 				var sc = isZoomed ? 0.5 : 1;
@@ -1727,8 +1723,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: [
+			paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 				A3a.vpl.BlockTemplate.sliderToAccessibilityControl(0,
 					0.3, -0.05, 0.1, 1.05,
 					0, 1, 11),
@@ -1738,7 +1733,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				A3a.vpl.BlockTemplate.sliderToAccessibilityControl(2,
 					0.9, -0.05, 0.7, 1.05,
 					0, 1, 11)
-			],
+			]),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({rgb: block.param});
@@ -1787,8 +1782,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons),
+			paramAccessibility:
+				new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons)),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({rgb: [block.param & 1, (block.param & 2) / 2, (block.param & 4) / 4]});
@@ -1815,9 +1810,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
-			/** @type {A3a.vpl.BlockTemplate.drawFun} */
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: [
+			paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 				A3a.vpl.BlockTemplate.sliderToAccessibilityControl(0,
 					0.3, -0.05, 0.1, 1.05,
 					0, 1, 11),
@@ -1827,7 +1820,8 @@ A3a.vpl.BlockTemplate.lib =	[
 				A3a.vpl.BlockTemplate.sliderToAccessibilityControl(2,
 					0.9, -0.05, 0.7, 1.05,
 					0, 1, 11)
-			],
+			]),
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true, rgb: block.param});
 				canvas.slider(/** @type {number} */(block.param[0]), 0.3, false, "red");
@@ -1864,8 +1858,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: [
+			paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 				A3a.vpl.BlockTemplate.sliderToAccessibilityControl(0,
 					0.3, -0.05, 0.1, 1.05,
 					0, 1, 11),
@@ -1875,7 +1868,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				A3a.vpl.BlockTemplate.sliderToAccessibilityControl(2,
 					0.9, -0.05, 0.7, 1.05,
 					0, 1, 11)
-			],
+			]),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true, rgb: block.param, side: "left"});
@@ -1913,8 +1906,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0, 0, 0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: [
+			paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 				A3a.vpl.BlockTemplate.sliderToAccessibilityControl(0,
 					0.3, -0.05, 0.1, 1.05,
 					0, 1, 11),
@@ -1924,7 +1916,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				A3a.vpl.BlockTemplate.sliderToAccessibilityControl(2,
 					0.9, -0.05, 0.7, 1.05,
 					0, 1, 11)
-			],
+			]),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true, rgb: block.param, side: "right"});
@@ -1973,8 +1965,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons),
+			paramAccessibility:
+				new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons)),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true, rgb: [block.param & 1, (block.param & 2) / 2, (block.param & 4) / 4]});
@@ -2012,8 +2004,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons),
+			paramAccessibility:
+				new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons)),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true, rgb: [block.param & 1, (block.param & 2) / 2, (block.param & 4) / 4], side: "left"});
@@ -2051,8 +2043,8 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons),
+			paramAccessibility:
+				new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.radiobuttonsToAccessibilityControls(buttons)),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop({withWheels: true, rgb: [block.param & 1, (block.param & 2) / 2, (block.param & 4) / 4], side: "right"});
@@ -2077,8 +2069,8 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.action,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0, 1, 1, 1, 2, 1, 0, 1, 2, 1, 4, 2]; },
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: A3a.vpl.BlockTemplate.notesToAccessibilityControls(0.1, 0.9, 0.9, 0.1, 6, 5),
+		paramAccessibility:
+			new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.notesToAccessibilityControls(0.1, 0.9, 0.9, 0.1, 6, 5)),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.notes(block.param);
@@ -2114,13 +2106,12 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: [
+			paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 				new A3a.vpl.BlockParamAccessibility.Control(0, 0, 1, 0.4,
 					null,
 					function (block) { block.param[0] = (block.param[0] + 1) % 100; },
 					function (block) { block.param[0] = (block.param[0] + 99) % 100; })
-			],
+			]),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.playSDFile(block.param[0]);
@@ -2161,8 +2152,8 @@ A3a.vpl.BlockTemplate.lib =	[
 		defaultParam: function () { return [0, 0, 0, 0]; },
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		typicalParam: function () { return [0, 1, -1, 0]; },
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: A3a.vpl.BlockTemplate.state4ToAccessibilityControls([0, 1, -1]),
+		paramAccessibility:
+			new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.state4ToAccessibilityControls([0, 1, -1])),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotTop();
@@ -2186,8 +2177,8 @@ A3a.vpl.BlockTemplate.lib =	[
 		defaultParam: function () { return [false, false, false, false]; },
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		typicalParam: function () { return [true, false, false, false]; },
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: A3a.vpl.BlockTemplate.state4ToAccessibilityControls([false, true]),
+		paramAccessibility:
+			new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.state4ToAccessibilityControls([false, true])),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotTop();
@@ -2225,8 +2216,8 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.action,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [0]; },
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: A3a.vpl.BlockTemplate.state8ToAccessibilityControls(),
+		paramAccessibility:
+			new A3a.vpl.BlockParamAccessibility(A3a.vpl.BlockTemplate.state8ToAccessibilityControls()),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.robotTop();
@@ -2257,11 +2248,10 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [1]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: [
+			paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 				A3a.vpl.BlockTemplate.buttonToAccessibilityControl(buttons[0], function (block) { block.param[0] = -1; }, null, null),
 				A3a.vpl.BlockTemplate.buttonToAccessibilityControl(buttons[1], function (block) { block.param[0] = 1; }, null, null)
-			],
+			]),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.robotTop();
@@ -2314,13 +2304,12 @@ A3a.vpl.BlockTemplate.lib =	[
 			type: A3a.vpl.blockType.action,
 			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 			defaultParam: function () { return [0]; },
-			/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-			paramAccessibility: [
+			paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 				new A3a.vpl.BlockParamAccessibility.Control(0.1, 0.25, 0.9, 0.75,
 					null,
 					function (block) { block.param[0] = Math.min(1, block.param[0] + 1); },
 					function (block) { block.param[0] = Math.max(-1, block.param[0] - 1); })
-			],
+			]),
 			/** @type {A3a.vpl.BlockTemplate.drawFun} */
 			draw: function (canvas, block) {
 				canvas.text(block.param[0] === 0 ? "= 0" : block.param[0] > 0 ? "+1" : "−1");
@@ -2353,13 +2342,12 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.action,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [1]; },
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: [
+		paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 			new A3a.vpl.BlockParamAccessibility.Control(0.93, 0.15, 0.13, 0.95,
 				null,
 				function (block) { block.param[0] = Math.min(block.param[0] + 0.1, 4); },
 				function (block) { block.param[0] = Math.max(block.param[0] - 0.1, 0); })
-		],
+		]),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.drawTimer(/** @type {number} */(block.param[0]), false, false);
@@ -2384,13 +2372,12 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.action,
 		/** @type {A3a.vpl.BlockTemplate.defaultParam} */
 		defaultParam: function () { return [1]; },
-		/** @type {Array.<A3a.vpl.BlockParamAccessibility.Control>} */
-		paramAccessibility: [
+		paramAccessibility: new A3a.vpl.BlockParamAccessibility([
 			new A3a.vpl.BlockParamAccessibility.Control(0.93, 0.15, 0.13, 0.95,
 				null,
 				function (block) { block.param[0] = Math.round(100 * Math.min(block.param[0] * 1.05, 10)) / 100; },
 				function (block) { block.param[0] = Math.round(100 * Math.max(block.param[0] * 0.95, 0.1)) / 100; })
-		],
+		]),
 		/** @type {A3a.vpl.BlockTemplate.drawFun} */
 		draw: function (canvas, block) {
 			canvas.drawTimer(/** @type {number} */(block.param[0]), false, true);

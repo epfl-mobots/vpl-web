@@ -169,6 +169,10 @@ overlay-rectangle.kbd-selected {
 	border-radius: 0.1vw;
 	border-corner-length: 1vw;
 }
+overlay-rectangle.kbd-selected.param {
+	border: 0.3vw rgba(0,0,0,0.4);
+	border-radius: 0.1vw;
+}
 overlay-rectangle.rule.kbd-target {
 	border: 0.2vw rgba(0,0,0,0.7);
 	border-radius: 4px;

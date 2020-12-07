@@ -50,13 +50,7 @@ A3a.vpl.BlockTemplate = function (blockParams) {
 	this.defaultParam = blockParams.defaultParam || null;
 	this.typicalParam = blockParams.typicalParam || null;
 	this.typicalParamSet = blockParams.typicalParamSet || null;
-	this.paramAccessibility = null;
-	if (blockParams.paramAccessibility) {
-		this.paramAccessibility = new A3a.vpl.BlockParamAccessibility();
-		blockParams.paramAccessibility.forEach(function (c) {
-			this.paramAccessibility.addControl(c);
-		}, this);
-	}
+	this.paramAccessibility = blockParams.paramAccessibility;
 	this.exportParam = blockParams.exportParam || null;
 	this.importParam = blockParams.importParam || null;
 	this.validate = blockParams.validate || null;
@@ -168,7 +162,7 @@ A3a.vpl.BlockTemplate.sectionPriFun;
 		defaultParam: (A3a.vpl.BlockTemplate.defaultParam | null | undefined),
 		typicalParam: (A3a.vpl.BlockTemplate.defaultParam | null | undefined),
 		typicalParamSet: (Array.<A3a.vpl.BlockTemplate.param> | undefined),
-		paramAccessibility: (Array.<A3a.vpl.BlockParamAccessibility.Control> | undefined),
+		paramAccessibility: (A3a.vpl.BlockParamAccessibility | null | undefined),
 		exportParam: (A3a.vpl.BlockTemplate.exportParam | null | undefined),
 		validate: (A3a.vpl.BlockTemplate.validateFun | null | undefined),
 		genCode: (Object<string,A3a.vpl.BlockTemplate.genCodeFun> | null | undefined),
