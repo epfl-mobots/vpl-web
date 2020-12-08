@@ -193,6 +193,11 @@ overlay-rectangle.state.kbd-target {
 overlay-rectangle.comment.kbd-target {
 	border: 0.2vw rgba(100,100,100,0.7);
 }
+overlay-rectangle.button.kbd-selected {
+	border: 0.3vw rgba(0,0,0,0.4);
+	border-radius: 0.1vw;
+	border-corner-length: 0.8vw;
+}
 
 crossout-line {
 	line-width: 0.75vw;

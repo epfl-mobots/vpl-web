@@ -41,6 +41,8 @@ A3a.vpl.KbdControl = function (app) {
 */
 A3a.vpl.KbdControl.ObjectType = {
 	none: "",
+	toolbarTop: "tb1",
+	toolbarBottom: "tb2",
 	blockLeft: "bl",
 	blockRight: "br",
 	blockLeftParam: "blp",
@@ -122,6 +124,59 @@ A3a.vpl.KbdControl.prototype.getTargetObject = function () {
 	default:
 		return null;
 	}
+};
+
+/** Count the number of items in a toolbar
+	@param {boolean} bottom true for bottom, false for top
+	@return {number}
+*/
+A3a.vpl.KbdControl.prototype.toolbarItemCount = function (bottom) {
+	var config = bottom ? this.app.vplToolbar2Config : this.app.vplToolbarConfig;
+	if (config) {
+		var n = 0;
+		for (var i = 0; i < config.length; i++) {
+			if (config[i] && config[i][0] !== "!" && this.app.isButtonAvailable(config[i])) {
+				// check that the control has actionFun or doDropFun
+				var cmd = this.app.commands.find(config[i]);
+				if (cmd.actionFun || cmd.doDropFun) {
+					n++;
+				}
+			}
+		}
+		return n;
+	} else {
+		return 0;
+	}
+};
+
+/** Get command for selected toolbar item
+	@return {A3a.vpl.Commands.Command}
+*/
+A3a.vpl.KbdControl.prototype.getSelectedCmd = function () {
+	var config;
+	switch (this.selectionType) {
+	case A3a.vpl.KbdControl.ObjectType.toolbarTop:
+		config = this.app.vplToolbarConfig;
+		break;
+	case A3a.vpl.KbdControl.ObjectType.toolbarBottom:
+		config = this.app.vplToolbar2Config;
+		break;
+	default:
+		return null;
+	}
+	var n = this.selectionIndex1;
+	for (var i = 0; i < config.length; i++) {
+		if (config[i] && config[i][0] !== "!" && this.app.isButtonAvailable(config[i])) {
+			var cmd = this.app.commands.find(config[i]);
+			if (cmd.actionFun || cmd.doDropFun) {
+				if (n === 0) {
+					return cmd;
+				}
+				n--;
+			}
+		}
+	}
+	return null;
 };
 
 /** Attach to document's keyboard events
@@ -213,6 +268,20 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 				}
 				break;
 			*/
+			case A3a.vpl.KbdControl.ObjectType.toolbarTop:
+			case A3a.vpl.KbdControl.ObjectType.toolbarBottom:
+				var cmd = self.getSelectedCmd();
+				if (cmd != null) {
+					if (cmd.actionFun) {
+						cmd.actionFun(self.app, false);
+					} else {
+						var targetObject = self.getTargetObject();
+						if (targetObject && cmd.canDropFun ? cmd.canDropFun(self.app, {data: targetObject}) : cmd.doDropFun) {
+							cmd.doDropFun(self.app, {data: targetObject});
+						}
+					}
+				}
+				break;
 			}
 			setHint();
 			self.app.renderProgramToCanvas();
@@ -310,6 +379,11 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 		case "ArrowRight":
 			switch (self.selectionType) {
 			case A3a.vpl.KbdControl.ObjectType.rule:
+				if (self.targetType === null || self.targetType === A3a.vpl.KbdControl.ObjectType.rule) {
+					// auto-target
+					self.targetType = A3a.vpl.KbdControl.ObjectType.rule;
+					self.targetIndex1 = self.selectionIndex1;
+				}
 				self.selectionType = A3a.vpl.KbdControl.ObjectType.libRight;
 				self.selectionIndex1 = 0;
 				self.selectionIndex2 = 0;
@@ -352,6 +426,12 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 					}
 				}
 				break;
+			case A3a.vpl.KbdControl.ObjectType.toolbarTop:
+				self.selectionIndex1 = Math.min(self.selectionIndex1 + 1, self.toolbarItemCount(false) - 1);
+				break;
+			case A3a.vpl.KbdControl.ObjectType.toolbarBottom:
+				self.selectionIndex1 = Math.min(self.selectionIndex1 + 1, self.toolbarItemCount(true) - 1);
+				break;
 			}
 			setHint();
 			self.app.renderProgramToCanvas();
@@ -359,6 +439,11 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 		case "ArrowLeft":
 			switch (self.selectionType) {
 			case A3a.vpl.KbdControl.ObjectType.rule:
+				if (self.targetType === null || self.targetType === A3a.vpl.KbdControl.ObjectType.rule) {
+					// auto-target
+					self.targetType = A3a.vpl.KbdControl.ObjectType.rule;
+					self.targetIndex1 = self.selectionIndex1;
+				}
 				self.selectionType = A3a.vpl.KbdControl.ObjectType.libLeft;
 				self.selectionIndex1 = 0;
 				self.selectionIndex2 = Math.ceil(self.libLeftNum / self.libLeftColLen) - 1;
@@ -399,6 +484,12 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 					}
 				}
 				break;
+			case A3a.vpl.KbdControl.ObjectType.toolbarTop:
+				self.selectionIndex1 = Math.max(self.selectionIndex1 - 1, 0);
+				break;
+			case A3a.vpl.KbdControl.ObjectType.toolbarBottom:
+				self.selectionIndex1 = Math.max(self.selectionIndex1 - 1, 0);
+				break;
 			}
 			setHint();
 			self.app.renderProgramToCanvas();
@@ -406,17 +497,29 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 		case "ArrowUp":
 			switch (self.selectionType) {
 			case A3a.vpl.KbdControl.ObjectType.rule:
-				self.selectionIndex1 = Math.max(self.selectionIndex1 - 1, 0);
-				if (self.targetType === null || self.targetType === A3a.vpl.KbdControl.ObjectType.rule) {
-					self.targetType = A3a.vpl.KbdControl.ObjectType.rule;
-					self.targetIndex1 = self.selectionIndex1;
+				if (self.selectionIndex1 === 0) {
+					// first rule: go to top toolbar
+					if (self.toolbarItemCount(false) > 0) {
+						self.selectionType = A3a.vpl.KbdControl.ObjectType.toolbarTop;
+						self.selectionIndex1 = 0;
+					}
+				} else {
+					self.selectionIndex1 = Math.max(self.selectionIndex1 - 1, 0);
 				}
 				break;
 			case A3a.vpl.KbdControl.ObjectType.blockLeft:
 			case A3a.vpl.KbdControl.ObjectType.blockRight:
-				self.selectionIndex1 = Math.max(self.selectionIndex1 - 1, 0);
-				self.selectionIndex2 = Math.min(self.selectionIndex2,
-					(self.selectionType === A3a.vpl.KbdControl.ObjectType.blockLeft ? numBlocksLeft() : numBlocksRight()) - 1);
+				if (self.selectionIndex1 === 0) {
+					// block in first rule: go to top toolbar
+					if (self.toolbarItemCount(false) > 0) {
+						self.selectionType = A3a.vpl.KbdControl.ObjectType.toolbarTop;
+						self.selectionIndex1 = 0;
+					}
+				} else {
+					self.selectionIndex1 = Math.max(self.selectionIndex1 - 1, 0);
+					self.selectionIndex2 = Math.min(self.selectionIndex2,
+						(self.selectionType === A3a.vpl.KbdControl.ObjectType.blockLeft ? numBlocksLeft() : numBlocksRight()) - 1);
+				}
 				break;
 			case A3a.vpl.KbdControl.ObjectType.libLeft:
 			case A3a.vpl.KbdControl.ObjectType.libRight:
@@ -432,6 +535,10 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 					}
 				}
 				break;
+			case A3a.vpl.KbdControl.ObjectType.toolbarBottom:
+				self.selectionType = A3a.vpl.KbdControl.ObjectType.rule;
+				self.selectionIndex1 = Math.max(self.app.program.program.length - 1, 0);
+				break;
 			}
 			setHint();
 			self.app.renderProgramToCanvas();
@@ -439,17 +546,29 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 		case "ArrowDown":
 			switch (self.selectionType) {
 			case A3a.vpl.KbdControl.ObjectType.rule:
-				self.selectionIndex1 = Math.min(self.selectionIndex1 + 1, self.app.program.program.length - 1);
-				if (self.targetType === null || self.targetType === A3a.vpl.KbdControl.ObjectType.rule) {
-					self.targetType = A3a.vpl.KbdControl.ObjectType.rule;
-					self.targetIndex1 = self.selectionIndex1;
+				if (self.selectionIndex1 >= self.app.program.program.length - 1) {
+					// last rule: go to bottom toolbar
+					if (self.toolbarItemCount(true) > 0) {
+						self.selectionType = A3a.vpl.KbdControl.ObjectType.toolbarBottom;
+						self.selectionIndex1 = 0;
+					}
+				} else {
+					self.selectionIndex1 = Math.min(self.selectionIndex1 + 1, self.app.program.program.length - 1);
 				}
 				break;
 			case A3a.vpl.KbdControl.ObjectType.blockLeft:
 			case A3a.vpl.KbdControl.ObjectType.blockRight:
-				self.selectionIndex1 = Math.min(self.selectionIndex1 + 1, self.app.program.program.length - 1);
-				self.selectionIndex2 = Math.min(self.selectionIndex2,
-					(self.selectionType === A3a.vpl.KbdControl.ObjectType.blockLeft ? numBlocksLeft() : numBlocksRight()) - 1);
+				if (self.selectionIndex1 >= self.app.program.program.length - 1) {
+					// block last rule: go to bottom toolbar
+					if (self.toolbarItemCount(true) > 0) {
+						self.selectionType = A3a.vpl.KbdControl.ObjectType.toolbarBottom;
+						self.selectionIndex1 = 0;
+					}
+				} else {
+					self.selectionIndex1 = Math.min(self.selectionIndex1 + 1, self.app.program.program.length - 1);
+					self.selectionIndex2 = Math.min(self.selectionIndex2,
+						(self.selectionType === A3a.vpl.KbdControl.ObjectType.blockLeft ? numBlocksLeft() : numBlocksRight()) - 1);
+				}
 				break;
 			case A3a.vpl.KbdControl.ObjectType.libLeft:
 				self.selectionIndex1 = Math.min(self.selectionIndex1 + 1,
@@ -468,6 +587,10 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 						c.onDown(selectionBlock);
 					}
 				}
+				break;
+			case A3a.vpl.KbdControl.ObjectType.toolbarTop:
+				self.selectionType = A3a.vpl.KbdControl.ObjectType.rule;
+				self.selectionIndex1 = 0;
 				break;
 			}
 			setHint();

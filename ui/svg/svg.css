@@ -189,6 +189,11 @@ overlay-rectangle.action.kbd-target {
 overlay-rectangle.state.kbd-target {
 	border: 0.2vw rgba(0,150,0,0.7);
 }
+overlay-rectangle.button.kbd-selected {
+	border: 0.2vw rgba(0,0,0,0.4);
+	border-radius: 0.1vw;
+	border-corner-length: 0.8vw;
+}
 
 /*Other*/
 widget {

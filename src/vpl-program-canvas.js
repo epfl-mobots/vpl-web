@@ -770,6 +770,14 @@ A3a.vpl.Application.prototype.updateErrorInfo = function () {
 	return this.vplMessage !== "" && !this.vplMessageIsWarning;
 };
 
+/**
+	@param {Array.<string>} toolbarConfig button id, "!space" for space, "!stretch" for stretch
+	@param {Array.<string>} cssClasses
+	@param {CSSParser.VPL.Box} toolbarBox
+	@param {CSSParser.VPL.Box} toolbarSeparatorBox
+	@param {Object.<string,CSSParser.VPL.Box>} toolbarItemBoxes
+	@return {A3a.vpl.ControlBar}
+*/
 A3a.vpl.Application.prototype.createVPLToolbar = function (toolbarConfig, cssClasses,
 	toolbarBox, toolbarSeparatorBox, toolbarItemBoxes) {
 	// top or bottom controls
@@ -973,13 +981,45 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		cssBoxes.toolbarBox, cssBoxes.toolbarSeparatorBox, toolbarItemBoxes);
 	controlBar.addToCanvas(cssBoxes.toolbarBox, toolbarItemBoxes,
 		self.createVPLControlBarDoOverFun());
+	if (this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.toolbarTop) {
+		// find control via its id, because this.kbdControl.selectionIndex1 skips passive controls
+		var selectedTBCmd = this.kbdControl.getSelectedCmd();
+		var selectedTBControl = null;
+		for (var i = 0; i < controlBar.controls.length; i++) {
+			if (controlBar.controls[i].id === selectedTBCmd.name) {
+				selectedTBControl = controlBar.controls[i];
+				break;
+			}
+		}
+		var selectedTBControlBox = toolbarItemBoxes[selectedTBControl.id];
+		canvas.addDecoration(function (ctx) {
+			canvas.overlayRect(selectedTBControl.x, selectedTBControl.y, selectedTBControlBox.width, selectedTBControlBox.height,
+				["button", "top", "kbd-selected"]);
+		});
+	}
 
 	// 2nd toolbar at bottom between templates
 	if (toolbar2HasAvButtons > 0) {
 		var controlBar2 = this.createVPLToolbar(this.vplToolbar2Config, ["vpl", "bottom"],
 			cssBoxes.toolbar2Box, cssBoxes.toolbarSeparator2Box, toolbar2ItemBoxes);
 		controlBar2.addToCanvas(cssBoxes.toolbar2Box, toolbar2ItemBoxes,
-		self.createVPLControlBarDoOverFun());
+			self.createVPLControlBarDoOverFun());
+		if (this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.toolbarBottom) {
+			// find control via its id, because this.kbdControl.selectionIndex1 skips passive controls
+			var selectedTBCmd = this.kbdControl.getSelectedCmd();
+			var selectedTBControl = null;
+			for (var i = 0; i < controlBar2.controls.length; i++) {
+				if (controlBar2.controls[i].id === selectedTBCmd.name) {
+					selectedTBControl = controlBar2.controls[i];
+					break;
+				}
+			}
+			var selectedTBControlBox = toolbar2ItemBoxes[selectedTBControl.id];
+			canvas.addDecoration(function (ctx) {
+				canvas.overlayRect(selectedTBControl.x, selectedTBControl.y, selectedTBControlBox.width, selectedTBControlBox.height,
+					["button", "bottom", "kbd-selected"]);
+			});
+		}
 	}
 
 	// templates

@@ -416,13 +416,13 @@ A3a.vpl.Application.prototype.setHelpForCurrentAppState = function () {
 			cssBoxes.toolbar2Box, cssBoxes.toolbarSeparator2Box, toolbar2ItemBoxes);
 		var scale = 50 / toolbarItemBoxes["vpl:new"].width;
 		this.vplToolbarConfig.forEach(function (id) {
-			var url = controlBar.toolbarButtonToDataURL(id, [id], dims, scale);
+			var url = controlBar.toolbarButtonToDataURL(id, toolbarItemBoxes[id], dims, scale);
 			if (url) {
 				this.dynamicHelp.addImageMapping("vpl:cmd:" + id.replace(/:/g, "-"), url.url);
 			}
 		}, this);
 		this.vplToolbar2Config.forEach(function (id) {
-			var url = controlBar2.toolbarButtonToDataURL(id, [id], dims, scale);
+			var url = controlBar2.toolbarButtonToDataURL(id, toolbar2ItemBoxes[id], dims, scale);
 			if (url) {
 				this.dynamicHelp.addImageMapping("vpl:cmd:" + id.replace(/:/g, "-"), url.url);
 			}
