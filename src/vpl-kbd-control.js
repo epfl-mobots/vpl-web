@@ -213,6 +213,21 @@ A3a.vpl.KbdControl.prototype.activateTemplate = function (blockTemplate) {
 	this.app.program.enforceSingleTrailingEmptyEventHandler();
 };
 
+/** Execute a command (action or drop with target element)
+	@param {A3a.vpl.Commands.Command} cmd
+	@return {void}
+*/
+A3a.vpl.KbdControl.prototype.executeCommand = function (cmd) {
+	if (cmd.actionFun) {
+		cmd.actionFun(this.app, false);
+	} else {
+		var targetObject = this.getTargetObject();
+		if (targetObject && cmd.canDropFun ? cmd.canDropFun(this.app, {data: targetObject}) : cmd.doDropFun) {
+			cmd.doDropFun(this.app, {data: targetObject});
+		}
+	}
+};
+
 /** Attach to document's keyboard events
 	@return {void}
 */
@@ -306,14 +321,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 			case A3a.vpl.KbdControl.ObjectType.toolbarBottom:
 				var cmd = self.getSelectedCmd();
 				if (cmd != null) {
-					if (cmd.actionFun) {
-						cmd.actionFun(self.app, false);
-					} else {
-						var targetObject = self.getTargetObject();
-						if (targetObject && cmd.canDropFun ? cmd.canDropFun(self.app, {data: targetObject}) : cmd.doDropFun) {
-							cmd.doDropFun(self.app, {data: targetObject});
-						}
-					}
+					self.executeCommand(cmd);
 				}
 				break;
 			}

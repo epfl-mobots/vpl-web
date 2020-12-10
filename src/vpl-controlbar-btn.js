@@ -99,7 +99,11 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 	 					? function (downEvent) {
 							app.commands.execute(id, downEvent.modifier);
 						}
-						: null,
+						: app.uiConfig.nodragAccessibility && !(app.uiConfig.toolbarCustomizationMode && !keepAvailable && app.uiConfig.toolbarCustomizationDisabled)
+							? function (downEvent) {
+								app.kbdControl.executeCommand(cmd);
+							}
+							: null,
 				doDrop: app.uiConfig.toolbarCustomizationMode && !keepAvailable && app.uiConfig.toolbarCustomizationDisabled
 	        		? null
 					: function (targetItem, droppedItem) {
