@@ -316,11 +316,13 @@ A3a.vpl.Canvas = function (canvas, options) {
 		function startInteraction(item) {
 			var canvasBndRect = self.canvas.getBoundingClientRect();
 			var d = item.getTranslation();
-			item.dragging = item.interactiveCB.mousedown(self, item.data,
-				item.width, item.height,
-				canvasBndRect.left + item.x + d.dx,
-				canvasBndRect.top + item.y + d.dy,
-				mouseEvent);
+			item.dragging = item.interactiveCB.mousedown
+				? item.interactiveCB.mousedown(self, item.data,
+					item.width, item.height,
+					canvasBndRect.left + item.x + d.dx,
+					canvasBndRect.top + item.y + d.dy,
+					mouseEvent)
+				: 0;
 			if (item.dragging !== null) {
 				// call immediately
 				item.interactiveCB.mousedrag
@@ -333,22 +335,26 @@ A3a.vpl.Canvas = function (canvas, options) {
 				self.onUpdate && self.onUpdate();
 				self.onDraw ? self.onDraw() : self.redraw();
 				// continue with window-level handler
-				A3a.vpl.dragFun = item.interactiveCB.mousedrag
+				A3a.vpl.dragFun = item.interactiveCB.mousedrag || item.interactiveCB.mouseup
 					? function (e, isUp, isTouch) {
 						if (!isUp) {
-							item.interactiveCB.mousedrag(self, item.data,
-								/** @type {number} */(item.dragging),
-								item.width, item.height,
-								canvasBndRect.left + item.x + d.dx,
-								canvasBndRect.top + item.y + d.dy,
-								self.makeMouseEvent(e, backingScale));
-							self.onUpdate && self.onUpdate();
-							self.onDraw ? self.onDraw() : self.redraw();
+							if (item.interactiveCB.mousedrag) {
+								item.interactiveCB.mousedrag(self, item.data,
+									/** @type {number} */(item.dragging),
+									item.width, item.height,
+									canvasBndRect.left + item.x + d.dx,
+									canvasBndRect.top + item.y + d.dy,
+									self.makeMouseEvent(e, backingScale));
+								self.onUpdate && self.onUpdate();
+								self.onDraw ? self.onDraw() : self.redraw();
+							}
 						} else if (item.interactiveCB.mouseup) {
-							item.interactiveCB.mouseup(self, item.data,
-								/** @type {number} */(item.dragging));
-							self.onUpdate && self.onUpdate();
-							self.onDraw ? self.onDraw() : self.redraw();
+							if (item.interactiveCB.mouseup) {
+								item.interactiveCB.mouseup(self, item.data,
+									/** @type {number} */(item.dragging));
+								self.onUpdate && self.onUpdate();
+								self.onDraw ? self.onDraw() : self.redraw();
+							}
 						}
 					}
 					: null;

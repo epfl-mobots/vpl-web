@@ -276,6 +276,7 @@ function vplSetup(gui, rootDir) {
 		app.uiConfig.keyboardShortcutsEnabled = keyboardShortcuts === "true";
 	}
 	app.uiConfig.keyboardAccessibility = vplGetQueryOption("accessibility").split("+").indexOf("kbd") >= 0;
+	app.uiConfig.nodragAccessibility = vplGetQueryOption("accessibility").split("+").indexOf("nodrag") >= 0;
 	app.simMaps = window["vplSimMaps"] == undefined
  		? "ground,height,obstacles"
 		: window["vplSimMaps"] === "merged"

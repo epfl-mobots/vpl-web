@@ -28,6 +28,7 @@ A3a.vpl.UIConfig = function () {
 	this.blockCustomizationMode = false;
 	this.keyboardShortcutsEnabled = true;
 	this.keyboardAccessibility = false;
+	this.nodragAccessibility = false;
 };
 
 /** Reset UI

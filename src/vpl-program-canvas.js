@@ -75,6 +75,15 @@ A3a.vpl.Application.blockTypeCSSSelectors = {
 	"c": "comment"
 };
 
+/** @typedef {{
+		type: A3a.vpl.KbdControl.ObjectType,
+		index1: number,
+		index2: number,
+		click: (function():void | null | undefined)
+	}}
+*/
+A3a.vpl.Application.ItemActivityOptions;
+
 /** Add a block to a canvas
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.Block} block
@@ -89,7 +98,8 @@ A3a.vpl.Application.blockTypeCSSSelectors = {
 		notDraggable:(boolean|undefined),
 		scale:(number|undefined),
 		disabled: (boolean|undefined),
-		crossedOut: (boolean|undefined)
+		crossedOut: (boolean|undefined),
+		accessibility: (A3a.vpl.Application.ItemActivityOptions|null|undefined)
 	}=} opts
 	@return {A3a.vpl.CanvasItem}
 */
@@ -202,6 +212,40 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, c
 	item.draggable = !(opts && opts.notDraggable);
 	item.doOver = app.createVPLFixedStringDoOverFun(block.blockTemplate.name);
 	var index = canvas.itemIndex(block);
+	if (this.uiConfig.nodragAccessibility && opts && opts.accessibility) {
+		item.draggable = false;
+		var self = this;
+		item.interactiveCB = opts.accessibility.type !== A3a.vpl.KbdControl.ObjectType.none ? {
+			/** @type {A3a.vpl.CanvasItem.mousedown} */
+			mousedown: function (canvas, data, width, height, left, top, ev) {
+				self.kbdControl.targetType = opts.accessibility.type;
+				self.kbdControl.targetIndex1 = opts.accessibility.index1;
+				self.kbdControl.targetIndex2 = opts.accessibility.index2;
+				canvas.redraw();
+				return 0;
+			},
+			/** @type {A3a.vpl.CanvasItem.mousedrag} */
+			mousedrag: function (canvas, data, dragIndex, width, height, left, top, ev) {
+				var canvasBndRect = canvas.canvas.getBoundingClientRect();
+				var x = ev.x - canvasBndRect.left;
+				var y = ev.y - canvasBndRect.top;
+				var isInside = x >= item.x && x < item.x + item.width &&
+					y >= item.y && y < item.y + item.height;
+				if (self.kbdControl.targetType !== (isInside ? opts.accessibility.type : A3a.vpl.KbdControl.ObjectType)) {
+					self.kbdControl.targetType = isInside ? opts.accessibility.type : A3a.vpl.KbdControl.ObjectType;
+					canvas.redraw();
+				}
+			}
+		}
+		: {
+			/** @type {A3a.vpl.CanvasItem.mouseup} */
+			mouseup: function (canvas, data, dragIndex) {
+				if (opts.accessibility.click) {
+					opts.accessibility.click();
+				}
+			}
+		};
+	}
 	canvas.setItem(item, index);
 	return item;
 };
@@ -221,10 +265,11 @@ A3a.vpl.BlockTemplate.BlockMarks;
 	@param {CSSParser.VPL.Box} box
 	@param {number} x horizontal block template position (without box padding)
 	@param {number} y vertical  block template position (without box padding)
-	@param {boolean=} kbdSelected
+	@param {boolean} kbdSelected
+	@param {?A3a.vpl.Application.ItemActivityOptions} accessibility
 	@return {void}
 */
-A3a.vpl.Application.prototype.addBlockTemplateToCanvas = function (canvas, blockTemplate, box, x, y, kbdSelected) {
+A3a.vpl.Application.prototype.addBlockTemplateToCanvas = function (canvas, blockTemplate, box, x, y, kbdSelected, accessibility) {
 	var block = new A3a.vpl.Block(blockTemplate, null, null);
 	if (blockTemplate.typicalParam) {
 		block.param = blockTemplate.typicalParam();
@@ -255,7 +300,8 @@ A3a.vpl.Application.prototype.addBlockTemplateToCanvas = function (canvas, block
 					}
 					return 1;
 				}
-				: null
+				: null,
+			accessibility: accessibility
 		});
 	if (blockTemplate.typicalParam) {
 		canvasItem.makeDraggedItem = function (item) {
@@ -513,6 +559,30 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 	if (this.program.noVPL || this.program.readOnly) {
 		item.draggable = false;
 	}
+	if (this.uiConfig.nodragAccessibility) {
+		item.draggable = false;
+		item.interactiveCB = {
+			/** @type {A3a.vpl.CanvasItem.mousedown} */
+			mousedown: function (canvas, data, width, height, left, top, ev) {
+				self.kbdControl.targetType = A3a.vpl.KbdControl.ObjectType.rule;
+				self.kbdControl.targetIndex1 = ruleIndex;
+				canvas.redraw();
+				return 0;
+			},
+			/** @type {A3a.vpl.CanvasItem.mousedrag} */
+			mousedrag: function (canvas, data, dragIndex, width, height, left, top, ev) {
+				var canvasBndRect = canvas.canvas.getBoundingClientRect();
+				var x = ev.x - canvasBndRect.left;
+				var y = ev.y - canvasBndRect.top;
+				var isInside = x >= item.x && x < item.x + item.width &&
+					y >= item.y && y < item.y + item.height;
+				if (self.kbdControl.targetType !== (isInside ? A3a.vpl.KbdControl.ObjectType.rule : A3a.vpl.KbdControl.ObjectType)) {
+					self.kbdControl.targetType = isInside ? A3a.vpl.KbdControl.ObjectType.rule : A3a.vpl.KbdControl.ObjectType;
+					canvas.redraw();
+				}
+			}
+		};
+	}
 	canvas.setItem(item);
 
 	/** @type {A3a.vpl.CanvasItem} */
@@ -555,7 +625,12 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 				{
 					notInteractive: rule.disabled || this.program.noVPL || this.program.readOnly,
 					notClickable: rule.disabled || this.program.noVPL || this.program.readOnly,
-					notDraggable: this.program.noVPL || this.program.readOnly
+					notDraggable: this.program.noVPL || this.program.readOnly,
+					accessibility: {
+						type: A3a.vpl.KbdControl.ObjectType.blockLeft,
+						index1: ruleIndex,
+						index2: j
+					}
 				});
 		} else {
 			event = new A3a.vpl.EmptyBlock(A3a.vpl.blockType.event, rule,
@@ -577,7 +652,12 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 				{
 					notDropTarget: rule.disabled || this.readOnly,
 					notClickable: true,
-					notDraggable: true
+					notDraggable: true,
+					accessibility: {
+						type: A3a.vpl.KbdControl.ObjectType.blockLeft,
+						index1: ruleIndex,
+						index2: j
+					}
 				});
 		}
 		item.attachItem(childItem);
@@ -618,7 +698,12 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 				{
 					notInteractive: rule.disabled || this.program.noVPL || this.program.readOnly,
 					notClickable: rule.disabled || this.program.noVPL || this.program.readOnly,
-					notDraggable: this.program.noVPL || this.program.readOnly
+					notDraggable: this.program.noVPL || this.program.readOnly,
+					accessibility: {
+						type: A3a.vpl.KbdControl.ObjectType.blockRight,
+						index1: ruleIndex,
+						index2: j
+					}
 				});
 		} else {
 			action = new A3a.vpl.EmptyBlock(A3a.vpl.blockType.action, rule,
@@ -640,7 +725,12 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 				{
 					notDropTarget: program.readOnly,
 					notClickable: true,
-					notDraggable: true
+					notDraggable: true,
+					accessibility: {
+						type: A3a.vpl.KbdControl.ObjectType.blockRight,
+						index1: ruleIndex,
+						index2: j
+					}
 				});
 		}
 		item.attachItem(childItem);
@@ -1053,7 +1143,15 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				var y = cssBoxes.blockEventLibBox.y + box.offsetTop() + row * stepEvent;
 				this.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y,
 					self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.libLeft &&
-						self.kbdControl.selectionIndex1 === row);
+						self.kbdControl.selectionIndex1 === row,
+					{
+						type: A3a.vpl.KbdControl.ObjectType.none,
+						index1: 0,
+						index2: 0,
+						click: function () {
+							self.kbdControl.activateTemplate(blockTemplate);
+						}
+					});
 				row++;
 			}
 		}, this);
@@ -1098,7 +1196,15 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				self.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y,
 					self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.libLeft &&
 						self.kbdControl.selectionIndex1 === row % colLen &&
-						self.kbdControl.selectionIndex2 === Math.floor(row / colLen));
+						self.kbdControl.selectionIndex2 === Math.floor(row / colLen),
+					{
+						type: A3a.vpl.KbdControl.ObjectType.none,
+						index1: 0,
+						index2: 0,
+						click: function () {
+							self.kbdControl.activateTemplate(blockTemplate);
+						}
+					});
 				row++;
 			}
 		}, this);
@@ -1129,7 +1235,15 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 					cssBoxes.blockActionLibBox.x + cssBoxes.blockActionLibItemBox.offsetLeft(),
 					cssBoxes.blockActionLibBox.y + cssBoxes.blockActionLibItemBox.offsetTop() + row * stepAction,
 					self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.libRight &&
-						self.kbdControl.selectionIndex1 === row);
+						self.kbdControl.selectionIndex1 === row,
+					{
+						type: A3a.vpl.KbdControl.ObjectType.none,
+						index1: 0,
+						index2: 0,
+						click: function () {
+							self.kbdControl.activateTemplate(blockTemplate);
+						}
+					});
 				row++;
 			}
 		}, this);
@@ -1175,7 +1289,15 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				self.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y,
 					self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.libRight &&
 						self.kbdControl.selectionIndex1 === row % colLen &&
-						self.kbdControl.selectionIndex2 === Math.floor(row / colLen));
+						self.kbdControl.selectionIndex2 === Math.floor(row / colLen),
+					{
+						type: A3a.vpl.KbdControl.ObjectType.none,
+						index1: 0,
+						index2: 0,
+						click: function () {
+							self.kbdControl.activateTemplate(blockTemplate);
+						}
+					});
 				row++;
 			}
 		}, this);

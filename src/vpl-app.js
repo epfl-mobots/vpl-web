@@ -241,7 +241,9 @@ A3a.vpl.Application = function (canvasEl) {
 	this.keyboard.attach();
 	this.kbdControl = new A3a.vpl.KbdControl(this);
 	this.vplCanvas.addPreMousedown(function () {
-		self.kbdControl.exit();
+		if (!self.uiConfig.nodragAccessibility) {
+			self.kbdControl.exit();
+		}
 		return true;
 	});
 };

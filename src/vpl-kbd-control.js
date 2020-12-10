@@ -179,6 +179,40 @@ A3a.vpl.KbdControl.prototype.getSelectedCmd = function () {
 	return null;
 };
 
+/** Activate a template to replace or insert in current target
+	@param {A3a.vpl.BlockTemplate} blockTemplate
+	@return {void}
+*/
+A3a.vpl.KbdControl.prototype.activateTemplate = function (blockTemplate) {
+	var target = this.getTargetObject();
+	if (target instanceof A3a.vpl.Block &&
+		(this.targetType === A3a.vpl.KbdControl.ObjectType.blockLeft
+			? blockTemplate.type === A3a.vpl.blockType.action
+			: blockTemplate.type === A3a.vpl.blockType.event || blockTemplate.type === A3a.vpl.blockType.state)) {
+		// block target on the wrong side: let setBlock choose
+		target = target.ruleContainer;
+		// set rule as target instead of wrong block
+		this.targetType = A3a.vpl.KbdControl.ObjectType.rule;
+	}
+	if (target instanceof A3a.vpl.Rule) {
+		var block = new A3a.vpl.Block(blockTemplate, null, null);
+		target.setBlock(block, null, function () {
+			this.app.program.saveStateBeforeChange();
+		});
+	} else if (target instanceof A3a.vpl.Block) {
+		var block = new A3a.vpl.Block(blockTemplate, null, null);
+		target.ruleContainer.setBlock(block,
+			{
+				eventSide: this.targetType === A3a.vpl.KbdControl.ObjectType.blockLeft,
+				index: this.targetIndex2
+			},
+			function () {
+				this.app.program.saveStateBeforeChange();
+			});
+	}
+	this.app.program.enforceSingleTrailingEmptyEventHandler();
+};
+
 /** Attach to document's keyboard events
 	@return {void}
 */
@@ -312,33 +346,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 			case A3a.vpl.KbdControl.ObjectType.libLeft:
 			case A3a.vpl.KbdControl.ObjectType.libRight:
 				var selection = self.getSelectedBlockTemplate();
-				var target = self.getTargetObject();
-				if (target instanceof A3a.vpl.Block &&
-					(self.targetType === A3a.vpl.KbdControl.ObjectType.blockLeft
-						? selection.type === A3a.vpl.blockType.action
-						: selection.type === A3a.vpl.blockType.event || selection.type === A3a.vpl.blockType.state)) {
-					// block target on the wrong side: let setBlock choose
-					target = target.ruleContainer;
-					// set rule as target instead of wrong block
-					self.targetType = A3a.vpl.KbdControl.ObjectType.rule;
-				}
-				if (target instanceof A3a.vpl.Rule) {
-					var block = new A3a.vpl.Block(selection, null, null);
-					target.setBlock(block, null, function () {
-						self.app.program.saveStateBeforeChange();
-					});
-				} else if (target instanceof A3a.vpl.Block) {
-					var block = new A3a.vpl.Block(selection, null, null);
-					target.ruleContainer.setBlock(block,
-						{
-							eventSide: self.targetType === A3a.vpl.KbdControl.ObjectType.blockLeft,
-							index: self.targetIndex2
-						},
-						function () {
-							self.app.program.saveStateBeforeChange();
-						});
-				}
-				self.app.program.enforceSingleTrailingEmptyEventHandler();
+				self.activateTemplate(selection);
 				break;
 			}
 			setHint();
