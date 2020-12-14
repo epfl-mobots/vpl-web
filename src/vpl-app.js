@@ -297,6 +297,18 @@ A3a.vpl.Application.prototype.translate = function (messageKey, language) {
 	return this.i18n.translate(messageKey, language);
 };
 
+/** Replace current VPL program with a new (empty) one
+	@return {void}
+*/
+A3a.vpl.Application.prototype.newVPL = function () {
+	this.program.new();
+	this.kbdControl.reset();
+	if (this.uiConfig.nodragAccessibility) {
+		this.kbdControl.targetType = A3a.vpl.KbdControl.ObjectType.rule;
+		this.kbdControl.targetIndex1 = 0;
+	}
+};
+
 /** Set or clear html content of About box
 	@param {?string} html
 	@return {void}

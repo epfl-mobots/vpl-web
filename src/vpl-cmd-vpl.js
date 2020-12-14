@@ -83,7 +83,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:new", {
 		action: function (app, modifier) {
-			app.program.new();
+			app.newVPL();
 			if (app.jsonForNew) {
 				app.loadProgramJSON(app.jsonForNew);
 			}

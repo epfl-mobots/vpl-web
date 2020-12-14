@@ -52,7 +52,15 @@ A3a.vpl.KbdControl.ObjectType = {
 	libRight: "lr"
 };
 
-/** Exit kbd control
+/** Reset kbd control
+	@return {void}
+*/
+A3a.vpl.KbdControl.prototype.reset = function () {
+	this.selectionType = A3a.vpl.KbdControl.ObjectType.none;
+	this.targetType = A3a.vpl.KbdControl.ObjectType.none;
+};
+
+/** Exit kbd control (render if needed)
 	@return {void}
 */
 A3a.vpl.KbdControl.prototype.exit = function () {
