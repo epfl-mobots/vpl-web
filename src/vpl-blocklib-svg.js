@@ -840,6 +840,33 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 				});
 				nRadioButtons = b["radiobuttons"].length;
 			}
+			var nPushButtons = 0;
+			if (b["pushbuttons"]) {
+				b["pushbuttons"].forEach(function (pushbutton, i) {
+					var id = pushbutton["id"];
+					var bounds = svg.getElementBounds(id);
+					var control = new A3a.vpl.BlockParamAccessibility.Control(
+						(bounds.ymin - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
+						(bounds.xmin - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
+						(bounds.ymax - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
+						(bounds.xmax - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
+						function (block) {
+							block.prepareChange();
+							var p = pushbutton["newParameters"];
+							if (typeof p === "string" && /^`.+`$/.test(p)) {
+								p = /** @type {Array} */(A3a.vpl.BlockTemplate.substInline(p, block.param, undefined, true));
+							}
+							block.param = p;
+						},
+						null, null
+					);
+					if (paramAccessibility == null) {
+						paramAccessibility = new A3a.vpl.BlockParamAccessibility();
+					}
+					paramAccessibility.addControl(control);
+				});
+				nPushButtons = b["pushbuttons"].length;
+			}
 			var nSliders = 0;
 			if (b["sliders"]) {
 				b["sliders"].forEach(function (slider, i) {
@@ -858,7 +885,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 						(bounds.xmax + bndThumbWidth / 2 - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
 						null,
 						function (block) {
-							var val = block.param[nButtons + nRadioButtons + i];
+							var val = block.param[nButtons + nRadioButtons + nPushButtons + i];
 							if (discrete) {
 								var ix = discrete.indexOf(val);
 								val = ix >= 0 && ix + 1 < discrete.length ? discrete[ix + 1]
@@ -867,10 +894,10 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 							} else {
 								val = Math.min(Math.max(min, max), val + Math.abs(max - min) / 10);
 							}
-							block.param[nButtons + nRadioButtons + i] = val;
+							block.param[nButtons + nRadioButtons + nPushButtons + i] = val;
 						},
 						function (block) {
-							var val = block.param[nButtons + nRadioButtons + i];
+							var val = block.param[nButtons + nRadioButtons + nPushButtons + i];
 							if (discrete) {
 								var ix = discrete.indexOf(val);
 								val = ix >= 0 && ix > 0 ? discrete[ix - 1]
@@ -879,7 +906,7 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 							} else {
 								val = Math.max(Math.min(min, max), val - Math.abs(max - min) / 10);
 							}
-							block.param[nButtons + nRadioButtons + i] = val;
+							block.param[nButtons + nRadioButtons + nPushButtons + i] = val;
 						}
 					);
 					if (paramAccessibility == null) {
@@ -910,12 +937,12 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 						(x0 + r - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
 						null,
 						function (block) {
-							var val = (block.param[nButtons + nRadioButtons + nSliders + i] + numSteps - min + 1) % numSteps + min;
-							block.param[nButtons + nRadioButtons + nSliders + i] = val;
+							var val = (block.param[nButtons + nRadioButtons + nPushButtons + nSliders + i] + numSteps - min + 1) % numSteps + min;
+							block.param[nButtons + nRadioButtons + nPushButtons + nSliders + i] = val;
 						},
 						function (block) {
-							var val = (block.param[nButtons + nRadioButtons + nSliders + i] + numSteps - min - 1) % numSteps + min;
-							block.param[nButtons + nRadioButtons + nSliders + i] = val;
+							var val = (block.param[nButtons + nRadioButtons + nPushButtons + nSliders + i] + numSteps - min - 1) % numSteps + min;
+							block.param[nButtons + nRadioButtons + nPushButtons + nSliders + i] = val;
 						}
 					);
 					if (paramAccessibility == null) {
@@ -928,11 +955,11 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 			if (b["score"]) {
 				var id = b["score"]["id"];
 				var bounds = svg.getElementBounds(id);
-				var numNotes = (b["defaultParameters"].length - nButtons - nRadioButtons - nSliders - nRotatings) / 2;
+				var numNotes = (b["defaultParameters"].length - nButtons - nRadioButtons - nPushButtons - nSliders - nRotatings) / 2;
 				var numHeights = b["score"]["numHeights"] || 5;
 				for (var i = 0; i < numNotes; i++) {
 					(function (i) {
-						var po = nButtons + nRadioButtons + nSliders + nRotatings;
+						var po = nButtons + nRadioButtons + nPushButtons + nSliders + nRotatings;
 						var control = new A3a.vpl.BlockParamAccessibility.Control(
 							(bounds.ymin - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
 							(bounds.xmin - svg.viewBox[0] + (bounds.xmax - bounds.xmin) * i / numNotes) / (svg.viewBox[2] - svg.viewBox[0]),
