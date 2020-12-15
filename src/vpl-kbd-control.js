@@ -264,7 +264,7 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 
 		// no kbd control in customization mode
 		if (self.app.uiConfig.blockCustomizationMode) {
-			return;
+			return false;
 		}
 
 		switch (ev.key) {

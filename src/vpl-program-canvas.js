@@ -307,7 +307,8 @@ A3a.vpl.Application.prototype.addBlockTemplateToCanvas = function (canvas, block
 					return 1;
 				}
 				: null,
-			accessibility: accessibility
+			// keep normal behavior during customization
+			accessibility: this.uiConfig.blockCustomizationMode ? null : accessibility
 		});
 	if (blockTemplate.typicalParam) {
 		canvasItem.makeDraggedItem = function (item) {
