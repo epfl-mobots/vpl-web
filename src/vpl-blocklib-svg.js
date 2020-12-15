@@ -986,6 +986,18 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 								} else {
 									block.param[po + 2 * i] =  Math.max(block.param[po + 2 * i] - 1, 0);
 								}
+							},
+							function (block, x, y) {
+								// click (nodrag accessibility mode)
+								var pitch = numHeights - 1 - Math.floor(y * numHeights * 0.9999);
+								if (block.param[po + 2 * i + 1] === 0) {
+									block.param[po + 2 * i] = pitch;
+									block.param[po + 2 * i + 1] = 1;
+								} else if (block.param[po + 2 * i] === pitch) {
+									block.param[po + 2 * i + 1] = A3a.vpl.BlockTemplate.nextCheckboxState(block.param[po + 2 * i + 1], [0, 1, 2]);
+								} else {
+									block.param[po + 2 * i] = pitch;
+								}
 							}
 						);
 						if (paramAccessibility == null) {
