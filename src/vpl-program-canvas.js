@@ -218,9 +218,15 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, c
 		item.interactiveCB = opts.accessibility.type !== A3a.vpl.KbdControl.ObjectType.none ? {
 			/** @type {A3a.vpl.CanvasItem.mousedown} */
 			mousedown: function (canvas, data, width, height, left, top, ev) {
-				self.kbdControl.targetType = opts.accessibility.type;
-				self.kbdControl.targetIndex1 = opts.accessibility.index1;
-				self.kbdControl.targetIndex2 = opts.accessibility.index2;
+				if (self.kbdControl.targetType !== opts.accessibility.type ||
+					self.kbdControl.targetIndex1 !== opts.accessibility.index1 ||
+					self.kbdControl.targetIndex2 !== opts.accessibility.index2) {
+					self.kbdControl.targetType = opts.accessibility.type;
+					self.kbdControl.targetIndex1 = opts.accessibility.index1;
+					self.kbdControl.targetIndex2 = opts.accessibility.index2;
+				} else {
+					self.kbdControl.clickOnParamControl((ev.x - left) / width, (ev.y - top) / height);
+				}
 				canvas.redraw();
 				return 0;
 			},

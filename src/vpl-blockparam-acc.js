@@ -43,9 +43,10 @@ A3a.vpl.BlockParamAccessibility.prototype.addControl = function (control) {
 	@param {A3a.vpl.BlockParamAccessibility.Control.OnAction} onSelect
 	@param {A3a.vpl.BlockParamAccessibility.Control.OnAction} onUp
 	@param {A3a.vpl.BlockParamAccessibility.Control.OnAction} onDown
+	@param {A3a.vpl.BlockParamAccessibility.Control.OnClick=} onClick
 */
 A3a.vpl.BlockParamAccessibility.Control = function (top, left, bottom, right,
-	onSelect, onUp, onDown) {
+	onSelect, onUp, onDown, onClick) {
 	this.top = top;
 	this.left = left;
 	this.bottom = bottom;
@@ -53,9 +54,15 @@ A3a.vpl.BlockParamAccessibility.Control = function (top, left, bottom, right,
 	this.onSelect = onSelect;
 	this.onUp = onUp;
 	this.onDown = onDown;
+	this.onClick = onClick || null;
 };
 
 /**
 	@typedef {(function(A3a.vpl.Block):void | null)}
 */
 A3a.vpl.BlockParamAccessibility.Control.OnAction;
+
+/**
+	@typedef {(function(A3a.vpl.Block,number,number):void | null)}
+*/
+A3a.vpl.BlockParamAccessibility.Control.OnClick;

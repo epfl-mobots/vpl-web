@@ -638,3 +638,44 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 		return false;
 	});
 };
+
+/** Handle a plain mouse click, assuming no drag is possible
+	@param {number} x
+	@param {number} y
+	@return {void}
+*/
+A3a.vpl.KbdControl.prototype.clickOnParamControl = function (x, y) {
+
+	/** Check if mouse is over half of control for onUp
+		@param {A3a.vpl.BlockParamAccessibility.Control} c
+	*/
+	function inUpperPart(c) {
+		return c.bottom - c.top > c.right - c.left	// vertical
+			? y < (c.top + c.bottom) / 2
+			: x > (c.left + c.right) / 2;
+	}
+
+	var target = this.getTargetObject();
+	if (target instanceof A3a.vpl.Block) {
+		var p = /** @type {A3a.vpl.Block} */(target).blockTemplate.paramAccessibility;
+		if (p != undefined) {
+			for (var i = 0; i < p.controls.length; i++) {
+				var c = p.controls[i];
+				if (x >= c.left && x <= c.right && y >= c.top && y <= c.bottom) {
+					if (c.onClick) {
+						c.onClick(/** @type {A3a.vpl.Block} */(target),
+							(x - c.left) / (c.right - c.left),
+							(y - c.top) / (c.bottom - c.top));
+					} else if (c.onSelect) {
+						c.onSelect(/** @type {A3a.vpl.Block} */(target));
+					} else if (c.onDown && !inUpperPart(c)) {
+						c.onDown(/** @type {A3a.vpl.Block} */(target));
+					} else if (c.onUp && inUpperPart(c)) {
+						c.onUp(/** @type {A3a.vpl.Block} */(target));
+					}
+					break;
+				}
+			}
+		}
+	}
+};
