@@ -193,6 +193,7 @@ A3a.vpl.KbdControl.prototype.getSelectedCmd = function () {
 */
 A3a.vpl.KbdControl.prototype.activateTemplate = function (blockTemplate) {
 	var target = this.getTargetObject();
+	var app = this.app;
 	if (target instanceof A3a.vpl.Block &&
 		(this.targetType === A3a.vpl.KbdControl.ObjectType.blockLeft
 			? blockTemplate.type === A3a.vpl.blockType.action
@@ -205,7 +206,7 @@ A3a.vpl.KbdControl.prototype.activateTemplate = function (blockTemplate) {
 	if (target instanceof A3a.vpl.Rule) {
 		var block = new A3a.vpl.Block(blockTemplate, null, null);
 		target.setBlock(block, null, function () {
-			this.app.program.saveStateBeforeChange();
+			app.program.saveStateBeforeChange();
 		});
 	} else if (target instanceof A3a.vpl.Block) {
 		var block = new A3a.vpl.Block(blockTemplate, null, null);
@@ -215,10 +216,10 @@ A3a.vpl.KbdControl.prototype.activateTemplate = function (blockTemplate) {
 				index: this.targetIndex2
 			},
 			function () {
-				this.app.program.saveStateBeforeChange();
+				app.program.saveStateBeforeChange();
 			});
 	}
-	this.app.program.enforceSingleTrailingEmptyEventHandler();
+	app.program.enforceSingleTrailingEmptyEventHandler();
 };
 
 /** Execute a command (action or drop with target element)
