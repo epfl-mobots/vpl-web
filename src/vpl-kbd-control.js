@@ -262,6 +262,11 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 			}
 		}
 
+		// no kbd control in customization mode
+		if (self.app.uiConfig.blockCustomizationMode) {
+			return;
+		}
+
 		switch (ev.key) {
 		case "Escape":
 			switch (self.selectionType) {

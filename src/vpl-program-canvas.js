@@ -1077,7 +1077,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		cssBoxes.toolbarBox, cssBoxes.toolbarSeparatorBox, toolbarItemBoxes);
 	controlBar.addToCanvas(cssBoxes.toolbarBox, toolbarItemBoxes,
 		self.createVPLControlBarDoOverFun());
-	if (this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.toolbarTop) {
+	if (this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.toolbarTop &&
+		!this.uiConfig.blockCustomizationMode) {
 		// find control via its id, because this.kbdControl.selectionIndex1 skips passive controls
 		var selectedTBCmd = this.kbdControl.getSelectedCmd();
 		var selectedTBControl = null;
@@ -1100,7 +1101,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			cssBoxes.toolbar2Box, cssBoxes.toolbarSeparator2Box, toolbar2ItemBoxes);
 		controlBar2.addToCanvas(cssBoxes.toolbar2Box, toolbar2ItemBoxes,
 			self.createVPLControlBarDoOverFun());
-		if (this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.toolbarBottom) {
+		if (this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.toolbarBottom &&
+			!this.uiConfig.blockCustomizationMode) {
 			// find control via its id, because this.kbdControl.selectionIndex1 skips passive controls
 			var selectedTBCmd = this.kbdControl.getSelectedCmd();
 			var selectedTBControl = null;
