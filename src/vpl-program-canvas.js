@@ -1538,6 +1538,13 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			ctx.textAlign = "start";
 			ctx.textBaseline = "middle";
 			var msg = self.i18n.translate(/** @type {string} */(self.vplHint));
+			if (self.uiConfig.nodragAccessibility) {
+				var msgNoDrag = self.i18n.translate(/** @type {string} */(self.vplHint + ";nodrag"));
+				if (msgNoDrag.slice(-7) !== ";nodrag") {
+					// specific message for nodragAccessibility
+					msg = msgNoDrag;
+				}
+			}
 
 			box.width = ctx.measureText(msg).width;
 			box.height = box.fontSize * 1.2;
