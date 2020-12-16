@@ -79,9 +79,15 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 						app.forcedCommandState.isPressed,
 						app.forcedCommandState.state);
 				} else {
+					var isEnabled = app.commands.isEnabled(id) && (keepAvailable || !app.uiConfig.toolbarCustomizationDisabled);
+					if (isEnabled && app.uiConfig.nodragAccessibility) {
+						// drop target; test current selection against canDrop
+						var targetObject = app.kbdControl.getTargetObject();
+						isEnabled = app.commands.canDrop(id, {data: targetObject});
+					}
 					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses, box,
 						app.i18n,
-						app.commands.isEnabled(id) && (keepAvailable || !app.uiConfig.toolbarCustomizationDisabled),
+						isEnabled,
 						app.commands.isSelected(id),
 						isPressed,
 						app.commands.getState(id));
