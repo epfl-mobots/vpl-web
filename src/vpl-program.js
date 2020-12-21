@@ -33,6 +33,7 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.experimentalFeatures = false;
 	/** @type {Array.<A3a.vpl.Rule>} */
 	this.program = [];
+	this.slowdownFactor = 1;
 	this.uploaded = false;	// program matches what's running
 	this.notUploadedYet = true;	// program has never been loaded since last this.new()
 	this.uploadedToServer = false;	// program matches what's been uploaded to the server
@@ -195,6 +196,14 @@ A3a.vpl.Program.prototype.displaySingleEvent = function () {
 		}
 	}
 	return true;
+};
+
+/** Change the slowdown factor
+	@param {number} slowdownFactor
+	@return {void}
+*/
+A3a.vpl.Program.prototype.setSlowdownFactor = function (slowdownFactor) {
+	this.slowdownFactor = slowdownFactor;
 };
 
 /** Make code invalid so that it's generated again when needed

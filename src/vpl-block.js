@@ -99,12 +99,13 @@ A3a.vpl.compiledCode;
 
 /** Generate code
 	@param {string} language
+	@param {A3a.vpl.Program} program
 	@return {A3a.vpl.compiledCode}
 */
-A3a.vpl.Block.prototype.generateCode = function (language) {
+A3a.vpl.Block.prototype.generateCode = function (language, program) {
 	return this.disabled
 		? {}
 		: this.blockTemplate.genCode[language]
-			? this.blockTemplate.genCode[language](this)
-			: A3a.vpl.Program.codeGenerator[language].generateMissingCodeForBlock(this);
+			? this.blockTemplate.genCode[language](this, program)
+			: A3a.vpl.Program.codeGenerator[language].generateMissingCodeForBlock(this, program);
 };

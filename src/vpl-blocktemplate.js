@@ -124,7 +124,7 @@ A3a.vpl.BlockTemplate.importParam;
 A3a.vpl.BlockTemplate.validateFun;
 
 /**
-	@typedef {function(?A3a.vpl.Block):A3a.vpl.compiledCode}
+	@typedef {function(?A3a.vpl.Block,?A3a.vpl.Program):A3a.vpl.compiledCode}
 */
 A3a.vpl.BlockTemplate.genCodeFun;
 
@@ -196,23 +196,27 @@ A3a.vpl.BlockTemplate.prototype.renderToCanvas = function (canvas, block, box, x
 	JavaScript expression; variable $ contains params, typically the block parameters
 	@param {string} fmt
 	@param {Array} params
-	@param {number=} i parameter index in clauseAnd fragments
+	@param {{i:number,slowdown:number}=} options i=parameter index in clauseAnd fragments,
+	slowdown=factor applied to slow down the execution (1 for normal speed, <1 for
+	slowdown, >1 for speedup)
 	@param {boolean=} keepResult true to return last result instead of string
 	@return {*}
 */
-A3a.vpl.BlockTemplate.substInline = function (fmt, params, i, keepResult) {
+A3a.vpl.BlockTemplate.substInline = function (fmt, params, options, keepResult) {
 	/** @type {*} */
 	var result = null;
+	options = options || {i: 0, slowdown: 1};
 	while (true) {
 		var r = /`([^`]*)`/.exec(fmt);
 		if (r == null) {
 			break;
 		}
-		result = new Function("$", "i", "rgb", "toFixed",
+		result = new Function("$", "i", "slowdown", "rgb", "toFixed",
 			"return " + r[1] + ";"
 		)(
 			params,
-			i,
+			options.i,
+			options.slowdown,
 			function (rgb) {
 				rgb = [
 					rgb[0],

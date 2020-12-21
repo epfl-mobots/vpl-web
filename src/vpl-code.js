@@ -172,9 +172,10 @@ A3a.vpl.CodeGenerator.prototype.findMark = function (ref, isBegin) {
 
 /** Generate code for a rule
 	@param {A3a.vpl.Rule} rule
+	@param {A3a.vpl.Program} program
 	@return {A3a.vpl.compiledCode}
 */
-A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
+A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule, program) {
 	if (rule.disabled || rule.isEmpty()) {
 		return {};
 	}
@@ -273,7 +274,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 	var auxClausesInit = [];
 	var str = "";
 	rule.events.forEach(function (event, i) {
-		var code = event.generateCode(this.language);
+		var code = event.generateCode(this.language, program);
 		if (i === 0 && code.sectionBegin) {
 			if (code.clause) {
 				clause = this.bracket(code.clause, event);
@@ -302,7 +303,7 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 	}, this);
 
 	for (var i = 0; i < rule.actions.length; i++) {
-		var code = rule.actions[i].generateCode(this.language);
+		var code = rule.actions[i].generateCode(this.language, program);
 		str += code.statement ? this.bracket(code.statement, rule.actions[i]) : "";
 		if (code.initVarDecl) {
 			code.initVarDecl.forEach(function (frag) {
@@ -328,12 +329,12 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule) {
 	}
 	if (str.length > 0) {
 		var eventCode = rule.events[0].blockTemplate.type === A3a.vpl.blockType.event
-			? rule.events[0].generateCode(this.language)
+			? rule.events[0].generateCode(this.language, program)
 			: null;
 		var auxEventCode = rule.events
 			.slice(1)
 			.filter(function (eb) { return eb.blockTemplate.type === A3a.vpl.blockType.event; })
-			.map(function (eb) { return eb.generateCode(this.language); }, this);
+			.map(function (eb) { return eb.generateCode(this.language, program); }, this);
 		return {
 			firstEventType: rule.events[0] ? rule.events[0].blockTemplate.name : "",
 			initVarDecl: initVarDecl,
@@ -375,8 +376,9 @@ A3a.vpl.CodeGenerator.prototype.generate = function (program, runBlocks) {
 
 /** Generate code block when the implementation is missing
 	@param {A3a.vpl.Block} block
+	@param {A3a.vpl.Program} program
 	@return {A3a.vpl.compiledCode}
 */
-A3a.vpl.CodeGenerator.prototype.generateMissingCodeForBlock = function (block) {
+A3a.vpl.CodeGenerator.prototype.generateMissingCodeForBlock = function (block, program) {
 	throw "internal";	// base class method shouldn't be called
 };
