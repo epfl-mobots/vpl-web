@@ -385,6 +385,26 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return app.currentRobotIndex >= 0;
 		}
 	});
+	this.commands.add("vpl:slowdown", {
+		action: function (app, modifier) {
+			/** @const */
+			var s = [0.1, 0.2, 0.5, 1];
+			app.program.setSlowdownFactor(s[(s.indexOf(app.program.slowdownFactor) + 1) % s.length]);
+		},
+		isSelected: function (app) {
+			return app.program.slowdownFactor !== 1;
+		},
+		getState: function (app) {
+			return app.program.slowdownFactor;
+		},
+		object: this,
+		possibleStates: [
+			{selected: true, state: 0.1},
+			{selected: true, state: 0.2},
+			{selected: true, state: 0.5},
+			{selected: false, state: 1}
+		]
+	});
 	this.commands.add("vpl:debug", {
 		// not implemented yet
 		action: function (app) {

@@ -562,6 +562,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i
 				dims.controlSize * 0.28,
 				dims.controlSize * 0.44, dims.controlSize * 0.44);
 		},
+		// "vpl:slowdown": "sim:speedup"
 		"vpl:debug": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? col.bgPr
@@ -1519,6 +1520,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i
 		}
 	};
 	draw["vpl:message-warning"] = draw["vpl:message-error"];
+	draw["vpl:slowdown"] = draw["sim:speedup"];
 	draw["src:close"] = draw["vpl:close"];
 	draw["src:new"] = draw["vpl:new"];
 	draw["src:save"] = draw["vpl:save"];
