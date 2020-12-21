@@ -262,8 +262,8 @@
 			"name": "motor state",
 			"python": {
 				"clause": [
-					"`$[0] == 0 ? 'abs(' : ''`thymio.motor.left.target`$[0] > 0 ? ' > ' : $[0] < 0 ? ' < -' : ') < '`0.1 ",
-					"and `$[1] == 0 ? 'abs(' : ''`thymio.motor.right.target`$[1] > 0 ? ' > ' : $[1] < 0 ? ' < -' : ') < '`0.1"
+					"`$[0] == 0 ? 'abs(' : ''`thymio.motor.left.target`$[0] > 0 ? ' > ' : $[0] < 0 ? ' < -' : ') < '``0.1 * slowdown` ",
+					"and `$[1] == 0 ? 'abs(' : ''`thymio.motor.right.target`$[1] > 0 ? ' > ' : $[1] < 0 ? ' < -' : ') < '``0.1 * slowdown`"
 				]
 			}
 		},
@@ -280,8 +280,8 @@
 					]
 				],
 				"statement": [
-					"thymio.motor.left.target = `toFixed($[0])`\n",
-					"thymio.motor.right.target = `toFixed($[1])`\n"
+					"thymio.motor.left.target = `toFixed($[0] * slowdown)`\n",
+					"thymio.motor.right.target = `toFixed($[1] * slowdown)`\n"
 				]
 			}
 		},
@@ -298,8 +298,8 @@
 					]
 				],
 				"statement": [
-					"thymio.motor.left.target = `toFixed([0, 0.2, -0.2, 0.2-0.05, 0.2+0.05, -0.2, 0.2][$[0]])`\n",
-					"thymio.motor.right.target = `toFixed([0, 0.2, -0.2, 0.2+0.05, 0.2-0.05, 0.2, -0.2][$[0]])`\n"
+					"thymio.motor.left.target = `toFixed([0, 0.2, -0.2, 0.2-0.05, 0.2+0.05, -0.2, 0.2][$[0]] * slowdown)`\n",
+					"thymio.motor.right.target = `toFixed([0, 0.2, -0.2, 0.2+0.05, 0.2-0.05, 0.2, -0.2][$[0]] * slowdown)`\n"
 				]
 			}
 		},
@@ -316,11 +316,11 @@
 					]
 				],
 				"statement": [
-					"thymio.motor.left.target = `Math.round(500 * $[0])`",
+					"thymio.motor.left.target = `Math.round(500 * $[0] * slowdown)`",
 					"`Math.round(20 * $[1]) ? ' - thymio.prox.horizontal[2] / 10 * ' + Math.round(20 * $[1]).toString(10) + ' / 16' : ''`",
 					"`Math.round(20 * $[2]) ? ' + thymio.prox.horizontal[0] / 10 * ' + Math.round(20 * $[2]).toString(10) + ' / 16' : ''`",
 					"`Math.round(20 * $[3]) ? ' - thymio.thymio.thymio.thymio.prox.horizontal[4] / 10 * ' + Math.round(20 * $[3]).toString(10) + ' / 16' : ''`\n",
-					"thymio.motor.right.target = `Math.round(500 * $[0])`",
+					"thymio.motor.right.target = `Math.round(500 * $[0] * slowdown)`",
 					"`Math.round(20 * $[1]) ? ' - thymio.thymio.thymio.prox.horizontal[2] / 10 * ' + Math.round(20 * $[1]).toString(10) + ' / 16' : ''`",
 					"`Math.round(20 * $[2]) ? ' + thymio.thymio.prox.horizontal[4] / 10 * ' + Math.round(20 * $[2]).toString(10) + ' / 16' : ''`",
 					"`Math.round(20 * $[3]) ? ' - thymio.prox.horizontal[0] / 10 * ' + Math.round(20 * $[3]).toString(10) + ' / 16' : ''`\n"
@@ -601,7 +601,7 @@
 					"timerElapsed = False\n"
 				],
 				"statement": [
-					"thymio.timer.period[0] = `Math.round(1000 * $[0])`\n",
+					"thymio.timer.period[0] = `Math.round(1000 * $[0] / slowdown)`\n",
 					"timerElapsed = False\n"
 				]
 			}
@@ -617,7 +617,7 @@
 					"timerElapsed = False\n"
 				],
 				"statement": [
-					"thymio.timer.period[0] = `Math.round(1000 * $[0])`\n",
+					"thymio.timer.period[0] = `Math.round(1000 * $[0] / slowdown)`\n",
 					"thymio.timerElapsed = False\n"
 				]
 			}
