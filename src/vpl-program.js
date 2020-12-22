@@ -412,17 +412,26 @@ A3a.vpl.Program.prototype.exportToObject = function (opt) {
 					});
 				}
 			}
-			rule.events.forEach(function (event) {
-				addBlock(event);
-			});
-			rule.actions.forEach(function (action) {
-				addBlock(action);
-			});
-			return {
-				"blocks": b,
-				"disabled": rule.disabled,
-				"locked": rule.locked
-			};
+
+			if (rule instanceof A3a.vpl.RuleComment) {
+				return {
+					"comment": /** @type {A3a.vpl.RuleComment} */(rule).comment,
+					"disabled": rule.disabled,
+					"locked": rule.locked
+				}
+			} else {
+				rule.events.forEach(function (event) {
+					addBlock(event);
+				});
+				rule.actions.forEach(function (action) {
+					addBlock(action);
+				});
+				return {
+					"blocks": b,
+					"disabled": rule.disabled,
+					"locked": rule.locked
+				};
+			}
 		});
 	}
 
@@ -498,33 +507,40 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun, options) 
 			if (!options || !options.dontChangeProgram) {
 				if (obj["program"]) {
 					this.program = obj["program"].map(function (rule) {
-						var eh = new A3a.vpl.Rule();
-						rule["blocks"].forEach(function (block) {
-							var bt = A3a.vpl.BlockTemplate.findByName(block["name"]);
-							if (bt) {
-								var b = new A3a.vpl.Block(bt, null, null);
-								b.disabled = block["disabled"] || false;
-								b.locked = block["locked"] || false;
-								if (bt.importParam) {
-									bt.importParam(b, block["param"],
+						if (rule.hasOwnProperty("comment")) {
+							var rc = new A3a.vpl.RuleComment(rule.comment);
+							rc.disabled = rule["disabled"] || false;
+							rc.locked = rule["locked"] || false;
+							return rc;
+						} else {
+							var eh = new A3a.vpl.Rule();
+							rule["blocks"].forEach(function (block) {
+								var bt = A3a.vpl.BlockTemplate.findByName(block["name"]);
+								if (bt) {
+									var b = new A3a.vpl.Block(bt, null, null);
+									b.disabled = block["disabled"] || false;
+									b.locked = block["locked"] || false;
+									if (bt.importParam) {
+										bt.importParam(b, block["param"],
+											function () {
+												if (importFinished && updateFun) {
+													updateFun("vpl");
+												}
+											});
+									} else {
+										b.param = block["param"];
+									}
+									eh.setBlock(b, null,
 										function () {
-											if (importFinished && updateFun) {
-												updateFun("vpl");
-											}
-										});
-								} else {
-									b.param = block["param"];
+											self.saveStateBeforeChange();
+										},
+										true);
 								}
-								eh.setBlock(b, null,
-									function () {
-										self.saveStateBeforeChange();
-									},
-									true);
-							}
-						}, this);
-						eh.disabled = rule["disabled"] || false;
-						eh.locked = rule["locked"] || false;
-						return eh;
+							}, this);
+							eh.disabled = rule["disabled"] || false;
+							eh.locked = rule["locked"] || false;
+							return eh;
+						}
 					}, this);
 				} else {
 					this.program = [];
