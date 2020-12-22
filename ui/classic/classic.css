@@ -153,6 +153,13 @@ rule:small {
 	background: white;
 }
 
+rule.comment {
+	background: transparent;
+	border-color: white;
+	color: #333;
+	font: max(1.3vw, 12px) sans-serif;
+}
+
 overlay-rectangle.disabled {
 	background: rgba(255,255,255,0.5);
 }

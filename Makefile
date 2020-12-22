@@ -39,6 +39,7 @@ JS = \
 	vpl-block.js \
 	vpl-emptyblock.js \
 	vpl-rule.js \
+	vpl-rule-comment.js \
 	vpl-uiconfig.js \
 	vpl-i18n.js \
 	vpl-dynamic-help.js \

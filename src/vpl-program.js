@@ -339,11 +339,20 @@ A3a.vpl.Program.prototype.setTeacherRole = function (teacherRole) {
 };
 
 /** Append an empty event handler
-	@param {boolean=} withState
 	@return {void}
 */
-A3a.vpl.Program.prototype.addEventHandler = function (withState) {
+A3a.vpl.Program.prototype.addEventHandler = function () {
 	this.program.push(new A3a.vpl.Rule());
+	this.enforceSingleTrailingEmptyEventHandler();
+};
+
+/** Append an empty event handler
+	@param {string=} comment
+	@return {void}
+*/
+A3a.vpl.Program.prototype.addComment = function (comment) {
+	this.program.push(new A3a.vpl.RuleComment(comment));
+	this.enforceSingleTrailingEmptyEventHandler();
 };
 
 /** If there is no trailing event handler, add one; if there are more than one,
