@@ -248,6 +248,9 @@ A3a.vpl.Application = function (canvasEl) {
 		if (!self.uiConfig.nodragAccessibility) {
 			self.kbdControl.exit();
 		}
+		if (self.textField !== null) {
+			self.textField.finish(true);
+		}
 		return true;
 	});
 };
