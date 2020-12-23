@@ -6,7 +6,7 @@ VPL 3 is released as open source. More specifically:
   (Creative Commons Attribution-NonCommercial-NoDerivatives 4.0
   International Public License);
 - the trademarks and logos remain the exclusive property of their
-  respective owners.
+  respective owners and are outside the scope of this license.
 
 Please see the files LICENSE-BSD-3.txt and LICENSE-CC-BY-NC-ND-4.txt
 for details.
