@@ -241,6 +241,8 @@ A3a.vpl.Application = function (canvasEl) {
 	// keyboard
 	this.keyboard = new A3a.vpl.Keyboard();
 	this.keyboard.attach();
+	/** @type {?A3a.vpl.TextField} */
+	this.textField = null;
 	this.kbdControl = new A3a.vpl.KbdControl(this);
 	this.vplCanvas.addPreMousedown(function () {
 		if (!self.uiConfig.nodragAccessibility) {
@@ -288,6 +290,17 @@ A3a.vpl.Application.prototype.pushVPLKeyShortcuts = function () {
 	if (this.uiConfig.keyboardAccessibility) {
 		this.kbdControl.addHandlers();
 	}
+};
+
+/** Start editing text field
+	@param {A3a.vpl.TextField.Options} options
+	@return {void}
+*/
+A3a.vpl.Application.prototype.startTextField = function (options) {
+	if (this.textField !== null) {
+		this.textField.finish(true);
+	}
+	this.textField = new A3a.vpl.TextField(this, options);
 };
 
 /** Translate message using the current language

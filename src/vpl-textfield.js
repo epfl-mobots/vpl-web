@@ -24,6 +24,7 @@ with the keyboard.
 A3a.vpl.TextField = function (app, options) {
 	this.app = app;
 	this.str = options.initialValue || "";
+	this.ref = options.ref;
 	this.selBegin = 0;
 	this.selEnd = this.str.length;
 	this.displayCB = options.display || function () {};
@@ -105,6 +106,7 @@ A3a.vpl.TextField.FinishCB;
 
 /** @typedef {{
 	initialValue: (string | undefined),
+	ref: (* | undefined),
 	display: (A3a.vpl.TextField.DisplayCB | undefined),
 	finish: (A3a.vpl.TextField.FinishCB | undefined)
 }}

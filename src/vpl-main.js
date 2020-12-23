@@ -520,7 +520,6 @@ function vplSetup(gui, rootDir) {
 
 	app.program.currentLanguage = language;
 	app.vplCanvas.widgets = widgets;
-	app.program.addEventHandler(true);
 	if (app.simCanvas != null) {
 		app.simCanvas.widgets = widgets;
 	}

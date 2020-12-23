@@ -471,7 +471,34 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 				ctx.font = ruleBox.cssFontString();
 				ctx.textAlign = "left";
 				ctx.textBaseline = "middle";
-				ctx.fillText(/** @type {A3a.vpl.RuleComment} */(rule).comment, item.x + dx + ruleBox.paddingLeft, item.y + dy + ruleBox.height / 2);
+				if (self.textField && self.textField.ref === rule) {
+					// being edited
+					var strLeftSize = ctx.measureText(self.textField.str.slice(0, self.textField.selBegin));
+					var h = (strLeftSize["fontBoundingBoxAscent"] || 0) + (strLeftSize["fontBoundingBoxDescent"] || 0);
+					if (h === 0) {
+						// vertical metrics missing in TextMetrics: use css
+						h = ruleBox.fontSize;
+					}
+					if (self.textField.selEnd === self.textField.selBegin) {
+						// plain cursor
+						ctx.strokeStyle = "black";
+						ctx.beginPath();
+						ctx.moveTo(item.x + dx + ruleBox.paddingLeft + strLeftSize.width, item.y + dy + (ruleBox.height - h) / 2);
+						ctx.lineTo(item.x + dx + ruleBox.paddingLeft + strLeftSize.width, item.y + dy + (ruleBox.height + h) / 2);
+						ctx.stroke();
+					} else {
+						// selection
+						var strSelSize = ctx.measureText(self.textField.str.slice(self.textField.selBegin, self.textField.selEnd));
+						ctx.save();
+						ctx.fillStyle = "silver";
+						ctx.fillRect(item.x + dx + ruleBox.paddingLeft + strLeftSize.width - 1, item.y + dy + (ruleBox.height - h) / 2,
+							strSelSize.width, h);
+						ctx.restore();
+					}
+					ctx.fillText(self.textField.str, item.x + dx + ruleBox.paddingLeft, item.y + dy + ruleBox.height / 2);
+				} else {
+					ctx.fillText(/** @type {A3a.vpl.RuleComment} */(rule).comment, item.x + dx + ruleBox.paddingLeft, item.y + dy + ruleBox.height / 2);
+				}
 				ctx.restore();
 			} else {
 				// event/action separator
@@ -535,7 +562,27 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 			}
 		},
 		// interactiveCB
-		null,
+		isComment
+			? {
+				mouseup: function (canvas) {
+					self.textField = new A3a.vpl.TextField(self, {
+						initialValue: /** @type {A3a.vpl.RuleComment} */(rule).comment,
+						display: function (str, selBegin, selEnd) {
+							console.info(str);
+							canvas.onUpdate && canvas.onUpdate();
+						},
+						finish: function (str) {
+							if (str !== null) {
+								/** @type {A3a.vpl.RuleComment} */(rule).comment = str;
+							}
+							self.textField = null;
+							canvas.onUpdate && canvas.onUpdate();
+						},
+						ref: rule
+					});
+				}
+			}
+			: null,
 		// doDrop: reorder event handler or add dropped block
 		function (targetItem, droppedItem) {
 			if (droppedItem.data instanceof A3a.vpl.Rule) {
