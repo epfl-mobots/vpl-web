@@ -33,7 +33,7 @@ A3a.vpl.TextField = function (app, options) {
 	var self = this;
 
 	this.app.keyboard.pushHandler(function (ev) {
-		if (event.ctrlKey || event.metaKey) {
+		if (ev.ctrlKey || ev.metaKey) {
 			// ignore shortcuts
 			return false;
 		}

@@ -495,9 +495,9 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 							strSelSize.width, h);
 						ctx.restore();
 					}
-					ctx.fillText(self.textField.str, item.x + dx + ruleBox.paddingLeft, item.y + dy + ruleBox.height / 2);
+					ctx.fillText(self.textField.str, item.x + dx + ruleBox.paddingLeft, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2);
 				} else {
-					ctx.fillText(/** @type {A3a.vpl.RuleComment} */(rule).comment, item.x + dx + ruleBox.paddingLeft, item.y + dy + ruleBox.height / 2);
+					ctx.fillText(/** @type {A3a.vpl.RuleComment} */(rule).comment, item.x + dx + ruleBox.paddingLeft, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2);
 				}
 				ctx.restore();
 			} else {
@@ -568,7 +568,6 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 					self.textField = new A3a.vpl.TextField(self, {
 						initialValue: /** @type {A3a.vpl.RuleComment} */(rule).comment,
 						display: function (str, selBegin, selEnd) {
-							console.info(str);
 							canvas.onUpdate && canvas.onUpdate();
 						},
 						finish: function (str) {
@@ -1007,7 +1006,14 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var nMaxEventHandlerALength = 0;
 	var maxEventsWidth = 0;
 	var maxActionsWidth = 0;
+	var nNormalRules = 0;
+	var nCommentRules = 0;
 	program.program.forEach(function (rule) {
+		if (rule instanceof A3a.vpl.RuleComment) {
+			nCommentRules++;
+		} else {
+			nNormalRules++;
+		}
 		var blocks = rule.events;
 		nMaxEventHandlerELength = Math.max(nMaxEventHandlerELength,
 			blocks.length
@@ -1110,7 +1116,16 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	cssBoxes.ruleBox.width = ruleWidth;
 	cssBoxes.ruleBox.height = cssBoxes.blockContainerBox.totalHeight();
 	cssBoxes.ruleCommentBox.width = ruleWidth;
-	cssBoxes.ruleCommentBox.height = cssBoxes.blockContainerBox.totalHeight();
+	cssBoxes.ruleCommentBox.height = cssBoxes.ruleCommentBox.fontSize;
+
+	// find rule vertial offsets (for next one: [0]=2nd, [last]=total vert size)
+	var ruleVerticalOffset = [];
+	program.program.forEach(function (rule, i) {
+		var height = rule instanceof A3a.vpl.RuleComment
+			? cssBoxes.ruleCommentBox.totalHeight()
+			: cssBoxes.ruleBox.totalHeight();
+		ruleVerticalOffset.push(i === 0 ? height : ruleVerticalOffset[i - 1] + height);
+	});
 
 	/** Get box for the specified block template
 		@param {Object} cssBoxes
@@ -1531,7 +1546,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		// program scroll region
 		var vplWidth = cssBoxes.ruleBox.totalWidth() + cssBoxes.vplBox.paddingLeft + cssBoxes.vplBox.paddingRight + cssBoxes.errorWidgetBox.totalWidth();
 		renderingState.programScroll.setTotalWidth(vplWidth);
-		renderingState.programScroll.setTotalHeight(program.program.length * cssBoxes.ruleBox.totalHeight());
+		renderingState.programScroll.setTotalHeight(ruleVerticalOffset[ruleVerticalOffset.length - 1]);
 
 		// ensure keyboard selection is visible
 		switch (self.kbdControl.selectionType) {
@@ -1540,8 +1555,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		case A3a.vpl.KbdControl.ObjectType.blockRight:
 		case A3a.vpl.KbdControl.ObjectType.blockLeftParam:
 		case A3a.vpl.KbdControl.ObjectType.blockRightParam:
-			renderingState.programScroll.scrollToShowVertSpan(cssBoxes.ruleBox.totalHeight() * self.kbdControl.selectionIndex1,
-				cssBoxes.ruleBox.totalHeight() * (self.kbdControl.selectionIndex1 + 1));
+			renderingState.programScroll.scrollToShowVertSpan(self.kbdControl.selectionIndex1 > 0 ? ruleVerticalOffset[self.kbdControl.selectionIndex1 - 1] : 0,
+				ruleVerticalOffset[self.kbdControl.selectionIndex1]);
 			break;
 		}
 
@@ -1565,7 +1580,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				displaySingleEvent,
 				canvas.dims.eventRightAlign ? maxEventsWidth : 0,
 				eventX0, actionX0,
-				cssBoxes.vplBox.y + cssBoxes.ruleBox.totalHeight() * i + cssBoxes.ruleBox.offsetTop() + cssBoxes.blockContainerBox.offsetTop(),
+				cssBoxes.vplBox.y + (i > 0 ? ruleVerticalOffset[i - 1] : 0) + cssBoxes.ruleBox.offsetTop() + cssBoxes.blockContainerBox.offsetTop(),
 				cssBoxes);
 			if (rule.error !== null && errorMsg === "") {
 				errorMsg = rule.error.msg;
