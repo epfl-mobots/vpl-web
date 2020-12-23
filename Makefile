@@ -86,6 +86,7 @@ JS = \
 	vpl-load.js \
 	vpl-com.js \
 	vpl-keyboard.js \
+	vpl-textfield.js \
 	vpl-kbd-control.js \
 	vpl-main.js \
 	vpl-robot.js \
