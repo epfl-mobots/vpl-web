@@ -33,6 +33,11 @@ A3a.vpl.TextField = function (app, options) {
 	var self = this;
 
 	this.app.keyboard.pushHandler(function (ev) {
+		if (event.ctrlKey || event.metaKey) {
+			// ignore shortcuts
+			return false;
+		}
+
 		switch (ev.key) {
 		case "Escape":
 			self.finish(false);
