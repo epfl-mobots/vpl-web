@@ -169,12 +169,15 @@ CSSParser.prototype.parse = function (filename, src) {
 	*/
 	function parseValue() {
 		var j = 0;
-		while (i + j < src.length && src[i + j] !== ";" && src[i + j] !== "}") {
+		var quoted = false;
+		while (i + j < src.length && (quoted || (src[i + j] !== ";" && src[i + j] !== "}"))) {
 			if (src[i] === "\n") {
 				line++;
 				col = 1;
 			} else if (src[i] !== "\r") {
 				col++;
+			} else if (src[i] === '"') {
+				quoted = !quoted;
 			}
 			j++;
 		}
