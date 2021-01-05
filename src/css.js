@@ -223,7 +223,7 @@ CSSParser.prototype.parse = function (filename, src) {
 				i++;
 				col++;
 				break;
-			} else if (!/[a-z_]/i.test(src[i])) {
+			} else if (!/[-a-z_]/i.test(src[i])) {
 				throw "Syntax error " + location();
 			}
 
