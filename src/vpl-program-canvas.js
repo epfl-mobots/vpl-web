@@ -451,7 +451,9 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 
 	var self = this;
 	var program = this.program;
-	var ruleBox = isComment ? cssBoxes.ruleCommentBox : cssBoxes.ruleBox;
+	var ruleBox = isComment
+		? self.textField && self.textField.ref === rule ? cssBoxes.ruleCommentEditedBox : cssBoxes.ruleCommentBox
+		: cssBoxes.ruleBox;
 	var block0Box = rule.events.length > 0 && rule.events[0].blockTemplate.type === A3a.vpl.blockType.event
 		? cssBoxes.blockEventMainBox
 		: cssBoxes.blockEventAuxBox;
@@ -474,25 +476,27 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 				if (self.textField && self.textField.ref === rule) {
 					// being edited
 					var strLeftSize = ctx.measureText(self.textField.str.slice(0, self.textField.selBegin));
-					var h = (strLeftSize["fontBoundingBoxAscent"] || 0) + (strLeftSize["fontBoundingBoxDescent"] || 0);
-					if (h === 0) {
+					var ascent = strLeftSize["fontBoundingBoxAscent"] || 0;
+					var descent = strLeftSize["fontBoundingBoxDescent"] || 0;
+					if (ascent === 0 || descent === 0) {
 						// vertical metrics missing in TextMetrics: use css
-						h = ruleBox.fontSize;
+						ascent = ruleBox.fontSize / 2;
+						descent = ascent;
 					}
 					if (self.textField.selEnd === self.textField.selBegin) {
 						// plain cursor
 						ctx.strokeStyle = "black";
 						ctx.beginPath();
-						ctx.moveTo(item.x + dx + ruleBox.paddingLeft + strLeftSize.width, item.y + dy + (ruleBox.height - h) / 2);
-						ctx.lineTo(item.x + dx + ruleBox.paddingLeft + strLeftSize.width, item.y + dy + (ruleBox.height + h) / 2);
+						ctx.moveTo(item.x + dx + ruleBox.paddingLeft + strLeftSize.width, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2 - ascent);
+						ctx.lineTo(item.x + dx + ruleBox.paddingLeft + strLeftSize.width, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2 + descent);
 						ctx.stroke();
 					} else {
 						// selection
 						var strSelSize = ctx.measureText(self.textField.str.slice(self.textField.selBegin, self.textField.selEnd));
 						ctx.save();
 						ctx.fillStyle = "silver";
-						ctx.fillRect(item.x + dx + ruleBox.paddingLeft + strLeftSize.width - 1, item.y + dy + (ruleBox.height - h) / 2,
-							strSelSize.width, h);
+						ctx.fillRect(item.x + dx + ruleBox.paddingLeft + strLeftSize.width - 1, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2 - ascent,
+							strSelSize.width, ascent + descent);
 						ctx.restore();
 					}
 					ctx.fillText(self.textField.str, item.x + dx + ruleBox.paddingLeft, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2);
@@ -500,6 +504,16 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 					ctx.fillText(/** @type {A3a.vpl.RuleComment} */(rule).comment, item.x + dx + ruleBox.paddingLeft, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2);
 				}
 				ctx.restore();
+				if (self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.rule &&
+					self.kbdControl.selectionIndex1 === ruleIndex) {
+					canvas.overlayRect(item.x + dx, item.y + dy, item.width, item.height,
+						["rule", "comment", "kbd-selected"]);
+				}
+				if (self.kbdControl.targetType === A3a.vpl.KbdControl.ObjectType.rule &&
+					self.kbdControl.targetIndex1 === ruleIndex) {
+					canvas.overlayRect(item.x + dx, item.y + dy, item.width, item.height,
+						["rule", "comment", "kbd-target"]);
+				}
 			} else {
 				// event/action separator
 				var separatorWidth = cssBoxes.ruleSeparatorBox.totalWidth();
@@ -889,6 +903,7 @@ A3a.vpl.Application.prototype.getCSSBoxes = function (css) {
 	cssBoxes.ruleBox = css.getBox({tag: "rule", pseudoClass: zoomBlocks ? ["small"] : []});
 	cssBoxes.ruleSeparatorBox = css.getBox({tag: "widget", id: "widget-then", pseudoClass: zoomBlocks ? ["small"] : []});
 	cssBoxes.ruleCommentBox = css.getBox({tag: "rule", clas: ["comment"], pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.ruleCommentEditedBox = css.getBox({tag: "rule", clas: ["comment"], pseudoClass: zoomBlocks ? ["small", "edited"] : ["edited"]});
 	cssBoxes.blockEventLibItemBox = css.getBox({tag: "block", clas: ["library", "event"]});
 	cssBoxes.blockActionLibItemBox = css.getBox({tag: "block", clas: ["library", "action"]});
 	cssBoxes.blockStateLibItemBox = css.getBox({tag: "block", clas: ["library", "state"]});
@@ -1117,6 +1132,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	cssBoxes.ruleBox.height = cssBoxes.blockContainerBox.totalHeight();
 	cssBoxes.ruleCommentBox.width = ruleWidth;
 	cssBoxes.ruleCommentBox.height = cssBoxes.ruleCommentBox.fontSize;
+	cssBoxes.ruleCommentEditedBox.width = ruleWidth;
+	cssBoxes.ruleCommentEditedBox.height = cssBoxes.ruleCommentBox.fontSize;
 
 	// find rule vertial offsets (for next one: [0]=2nd, [last]=total vert size)
 	var ruleVerticalOffset = [];

@@ -510,7 +510,7 @@ Box elements:
 - vpl
 - block (classes: event, event-main, event-aux, action, state, comment (class of block), empty, library (as displayed in block-library elements); pseudo-class: small (when they must be zoomed for interaction), only-child (for class "empty" only))
 - block-container (classes: error, warning; used only in rules, not in block-library)
-- rule (class: comment; pseudo-class: small)
+- rule (class: comment; pseudo-classes: small, edited)
 - block-library (classes: event (for event and state blocks), action (for action and comment blocks))
 - button-small (small buttons in simulator)
 - sim-controller (area where robot control buttons and indicators are displayed)

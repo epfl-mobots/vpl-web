@@ -159,6 +159,11 @@ rule.comment {
 	color: #333;
 	font: max(1.3vw, 12px) sans-serif;
 }
+rule.comment:edited {
+	background: white;
+	border-color: #333;
+	color: #333;
+}
 
 overlay-rectangle.disabled {
 	background: rgba(255,255,255,0.5);
