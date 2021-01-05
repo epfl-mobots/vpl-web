@@ -84,7 +84,7 @@ CSSParser.VPL.prototype.addElement = function (tag) {
 CSSParser.VPL.prototype.defineProperties = function () {
 	for (var i = 0; i < this.rawRules.length; i++) {
 		var props = new CSSParser.VPL.Properties();
-		props.setProperties(this.rawRules[i].properties);
+		props.setProperties(this.rawRules[i].properties, this.rawRules[i].selector.specificity());
 		this.rules.push({
 			selector: this.rawRules[i].selector,
 			props: props
@@ -424,16 +424,21 @@ CSSParser.VPL.prototype.getLine = function (opt) {
 */
 CSSParser.VPL.Properties = function () {
 	this.properties = {};
+	/** @type {Object.<string,number>} */
+	this.propSpecificity = {};
 };
 
 /** Set the properties from those obtained from css
 	@param {Object} props css properties
+	@param {number} specificity default specificity unless specified in propSpecificity
+	@param {Object.<string,number>=} propSpecificity
 	@return {void}
 */
-CSSParser.VPL.Properties.prototype.setProperties = function (props) {
+CSSParser.VPL.Properties.prototype.setProperties = function (props, specificity, propSpecificity) {
 	for (var key in props) {
 		if (props.hasOwnProperty(key)) {
 			this.properties[key] = props[key];
+			this.propSpecificity[key] = propSpecificity && propSpecificity[key] || specificity;
 		}
 	}
 };
@@ -443,7 +448,7 @@ CSSParser.VPL.Properties.prototype.setProperties = function (props) {
 */
 CSSParser.VPL.Properties.prototype.copy = function () {
 	var props = new CSSParser.VPL.Properties();
-	props.setProperties(this.properties);
+	props.setProperties(this.properties, 0, this.propSpecificity);
 	return props;
 };
 
@@ -454,7 +459,8 @@ CSSParser.VPL.Properties.prototype.copy = function () {
 CSSParser.VPL.Properties.prototype.merge = function (overridingProps) {
 	var props = this.copy();
 	for (var key in overridingProps.properties) {
-		if (overridingProps.properties.hasOwnProperty(key)) {
+		if (overridingProps.properties.hasOwnProperty(key) &&
+			(!props.hasOwnProperty(key) || overridingProps.propSpecificity[key] >= props.propSpecificity[key])) {
 			props.properties[key] = overridingProps.properties[key];
 		}
 	}
@@ -528,6 +534,8 @@ CSSParser.VPL.Box = function (props, lengthBase) {
 	this.shadowBlurRadius = 0;
 	this.shadowSpreadRadius = 0;
 	this.shadowColor = null;
+
+	this.otherProperties = {};
 
 	if (props) {
 		this.setProperties(props.properties, /** @type {CSSParser.LengthBase} */(lengthBase));
@@ -852,6 +860,11 @@ CSSParser.VPL.Box.prototype.setProperties = function (props, lengthBase) {
 			break;
 		case "max-height":
 			maxHeight = props[key].toValue(lengthBase);
+			break;
+		default:
+			if (props.hasOwnProperty(key)) {
+				this.otherProperties[key] = props[key];
+			}
 			break;
 		}
 	}
