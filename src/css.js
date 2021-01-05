@@ -622,6 +622,15 @@ CSSParser.Selector = function (opt) {
 */
 CSSParser.Selector.Options;
 
+/** Calculate selector specificity (higher specificity is picked when merging properties)
+	@return {number}
+*/
+CSSParser.Selector.prototype.specificity = function () {
+	return (this.id != null ? 100 : 0) +
+		10 * (this.clas.length + this.pseudoClass.length) +
+		(this.tag != null ? 1 : 0);
+};
+
 /** Convert selector description to a string which can be used as a key in a cache
 	@param {CSSParser.Selector.Options} opt
 	@param {CSSParser.LengthBase} lengthBase
