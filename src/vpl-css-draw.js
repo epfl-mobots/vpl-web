@@ -210,6 +210,17 @@ CSSParser.VPL.Box.prototype.drawAt = function (ctx, x, y, includePadding) {
 	}
 
 	ctx.restore();
+
+	// -vpl-debug
+	if (CSSParser.VPL.debug && this.otherProperties["-vpl-debug"]) {
+		ctx.save();
+		ctx.font = "9px sans-serif";
+		ctx.textAlign = "start";
+		ctx.textBaseline = "top";
+		ctx.fillStyle = "black";
+		ctx.fillText(this.otherProperties["-vpl-debug"], x, y);
+		ctx.restore();
+	}
 };
 
 CSSParser.VPL.Box.prototype.draw = function (ctx) {
