@@ -346,12 +346,25 @@ A3a.vpl.Program.prototype.addEventHandler = function () {
 	this.enforceSingleTrailingEmptyEventHandler();
 };
 
-/** Append an empty event handler
+/** Add a comment
 	@param {string=} comment
+	@param {?number=} position position in program (default: end)
 	@return {void}
 */
-A3a.vpl.Program.prototype.addComment = function (comment) {
-	this.program.push(new A3a.vpl.RuleComment(comment));
+A3a.vpl.Program.prototype.addComment = function (comment, position) {
+	var ruleComment = new A3a.vpl.RuleComment(comment);
+
+	if (position != null && position < this.program.length) {
+		// at position
+		this.program.splice(position, 0, ruleComment);
+	} else if (this.program.length === 0 || !this.program[this.program.length - 1].isEmpty()) {
+		// append
+		this.program.push(ruleComment);
+	} else {
+		// append before trailing empty rule
+		this.program.splice(this.program.length - 1, 0, ruleComment);
+	}
+
 	this.enforceSingleTrailingEmptyEventHandler();
 };
 
