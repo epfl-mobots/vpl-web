@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -528,6 +528,27 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i
 		},
 		"vpl:redo": function () {
 			drawUndo(0, 0, true);
+		},
+		"vpl:add-comment": function () {
+			ctx.fillStyle = isPressed && isEnabled
+				? col.bgPr
+				: col.bg;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			// line
+			ctx.beginPath();
+			ctx.moveTo(dims.controlSize * 0.2, dims.controlSize * 0.6);
+			ctx.lineTo(dims.controlSize * 0.8, dims.controlSize * 0.6);
+			// +
+			ctx.moveTo(dims.controlSize * 0.7, dims.controlSize * 0.35);
+			ctx.lineTo(dims.controlSize * 0.9, dims.controlSize * 0.35);
+			ctx.moveTo(dims.controlSize * 0.8, dims.controlSize * 0.25);
+			ctx.lineTo(dims.controlSize * 0.8, dims.controlSize * 0.45);
+			ctx.strokeStyle = isEnabled ? col.fg : col.fgDis;
+			ctx.lineWidth = dims.controlLineWidth;
+			ctx.stroke();
+			ctx.strokeRect(dims.controlSize * 0.1, dims.controlSize * 0.5,
+				dims.controlSize * 0.8, dims.controlSize * 0.2);
 		},
 		"vpl:run": function () {
 			ctx.fillStyle = isPressed && isEnabled

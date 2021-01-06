@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -63,6 +63,8 @@ A3a.vpl.Application = function (canvasEl) {
 		"vpl:advanced",
 		"!stretch",
 		"vpl:readonly",
+		"!stretch",
+		"vpl:add-comment",
 		"!stretch",
 		"vpl:undo",
 		"vpl:redo",
@@ -316,10 +318,11 @@ A3a.vpl.Application.prototype.translate = function (messageKey, language) {
 };
 
 /** Replace current VPL program with a new (empty) one
+	@param {boolean=} resetUndoStack
 	@return {void}
 */
-A3a.vpl.Application.prototype.newVPL = function () {
-	this.program.new();
+A3a.vpl.Application.prototype.newVPL = function (resetUndoStack) {
+	this.program.new(resetUndoStack);
 	this.kbdControl.reset();
 	if (this.uiConfig.nodragAccessibility) {
 		this.kbdControl.targetType = A3a.vpl.KbdControl.ObjectType.rule;

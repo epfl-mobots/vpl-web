@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -618,7 +618,7 @@ function vplSetup(gui, rootDir) {
 	}
 
 	// new VPL program to make sure everything is setup correctly
-	app.newVPL();
+	app.newVPL(true);
 
 	// reload from storage
 	if (window["vplStorageGetFunction"]) {
