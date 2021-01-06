@@ -349,7 +349,7 @@ A3a.vpl.Program.prototype.addEventHandler = function () {
 /** Add a comment
 	@param {string=} comment
 	@param {?number=} position position in program (default: end)
-	@return {void}
+	@return {number} effective index in program
 */
 A3a.vpl.Program.prototype.addComment = function (comment, position) {
 	var ruleComment = new A3a.vpl.RuleComment(comment);
@@ -359,13 +359,17 @@ A3a.vpl.Program.prototype.addComment = function (comment, position) {
 		this.program.splice(position, 0, ruleComment);
 	} else if (this.program.length === 0 || !this.program[this.program.length - 1].isEmpty()) {
 		// append
+		position = this.program.length;
 		this.program.push(ruleComment);
 	} else {
 		// append before trailing empty rule
-		this.program.splice(this.program.length - 1, 0, ruleComment);
+		position = this.program.length - 1;
+		this.program.splice(position, 0, ruleComment);
 	}
 
 	this.enforceSingleTrailingEmptyEventHandler();
+
+	return position;
 };
 
 /** If there is no trailing event handler, add one; if there are more than one,

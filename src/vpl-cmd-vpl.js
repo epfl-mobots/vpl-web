@@ -284,6 +284,15 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		keyShortcut: "y"
 	});
+	this.commands.add("vpl:add-comment", {
+		action: function (app, modifier) {
+			var position = app.kbdControl.targetType === A3a.vpl.KbdControl.ObjectType.rule ? app.kbdControl.targetIndex1 : null;
+			position = app.program.addComment("", position, true);
+			app.editComment(position);
+			app.renderProgramToCanvas();
+		},
+		object: this
+	});
 	this.commands.add("vpl:run", {
 		action: function (app, modifier) {
 			var code = app.program.getCode(app.program.currentLanguage);

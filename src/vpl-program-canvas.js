@@ -425,6 +425,31 @@ A3a.vpl.Program.blockVerticalOffset = function (blockBox, containerBox) {
 	}
 };
 
+/** Start editing a comment
+	@param {number} ruleIndex
+	@return {void}
+*/
+A3a.vpl.Application.prototype.editComment = function (ruleIndex) {
+	var self = this;
+	var canvas = this.vplCanvas;
+	var rule = this.program.program[ruleIndex];
+
+	this.textField = new A3a.vpl.TextField(this, {
+		initialValue: /** @type {A3a.vpl.RuleComment} */(rule).comment,
+		display: function (str, selBegin, selEnd) {
+			canvas.onUpdate && canvas.onUpdate();
+		},
+		finish: function (str) {
+			if (str !== null) {
+				/** @type {A3a.vpl.RuleComment} */(rule).comment = str;
+			}
+			self.textField = null;
+			canvas.onUpdate && canvas.onUpdate();
+		},
+		ref: rule
+	});
+};
+
 /** Add a rule to a canvas
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.Rule} rule
@@ -579,20 +604,7 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 		isComment
 			? {
 				mouseup: function (canvas) {
-					self.textField = new A3a.vpl.TextField(self, {
-						initialValue: /** @type {A3a.vpl.RuleComment} */(rule).comment,
-						display: function (str, selBegin, selEnd) {
-							canvas.onUpdate && canvas.onUpdate();
-						},
-						finish: function (str) {
-							if (str !== null) {
-								/** @type {A3a.vpl.RuleComment} */(rule).comment = str;
-							}
-							self.textField = null;
-							canvas.onUpdate && canvas.onUpdate();
-						},
-						ref: rule
-					});
+					self.editComment(ruleIndex);
 				}
 			}
 			: null,
