@@ -1649,6 +1649,28 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		}, this);
 		renderingState.programScroll.end();
 
+		// more high and low hints
+		if (!renderingState.programScroll.isTop() || !renderingState.programScroll.isBottom()) {
+			canvas.addDecoration(function (ctx) {
+				var moreHighBox = canvas.css.getBox({tag: "widget", id: "widget-moreHigh"});
+				var moreLowBox = canvas.css.getBox({tag: "widget", id: "widget-moreLow"});
+				if (!renderingState.programScroll.isTop()) {
+					// more to see above
+					canvas.drawWidget("vpl:moreHigh",
+						cssBoxes.vplBox.x + cssBoxes.vplBox.width - moreLowBox.totalWidth() / 2,
+						cssBoxes.vplBox.y + moreHighBox.totalHeight() / 2,
+						moreHighBox);
+				}
+				if (!renderingState.programScroll.isBottom()) {
+					// more to see below
+					canvas.drawWidget("vpl:moreLow",
+						cssBoxes.vplBox.x + cssBoxes.vplBox.width - moreLowBox.totalWidth() / 2,
+						cssBoxes.vplBox.y + cssBoxes.vplBox.height - moreLowBox.totalHeight() / 2,
+						moreLowBox);
+				}
+			});
+		}
+
 		if (program.noVPL) {
 			canvas.addDecoration(function (ctx) {
 				canvas.disabledMark(cssBoxes.vplBox.x, cssBoxes.vplBox.y,
