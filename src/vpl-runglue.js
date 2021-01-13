@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -15,12 +15,30 @@ Implementation of A3a.vpl.RunGlue, the interface to what runs the source code
 produced by VPL3 or entered directly in the source code editor: a Thymio II
 robot connected via asebahttp or the Thymio Device Manager or the simulator.
 
+Options passed to constructor:
+
+- run: function(language,code):void to load and execute source code
+- check: function(language,code,cb):void to check source code; result is
+passed by calling back cb (function(?string):void) with null for success
+or error message for failure, typically a program too large which cannot
+be determined easily otherwise
+- init: function(language):void
+- isConnected: function():boolean
+- isEnabled: function(language):boolean
+- getName: function():string
+- flash: function(language,code):void to store program in robot's flash memory
+- canFlash: function(language):boolean
+- languages: array of strings, list of supported languages
+- preferredLanguage: string, preferred language
+- state: object which can be used by callbacks
+
 */
 
 /** Interface to run a program on a robot or a simulator
 	@constructor
 	@param {{
 		run: (function(string,string):void | undefined),
+		check: (function(string,string,function(?string):void):void | undefined),
 		init: (function(string):void | undefined),
 		isConnected: (function():boolean | undefined),
 		isEnabled: (function(string):boolean | undefined),
@@ -34,6 +52,7 @@ robot connected via asebahttp or the Thymio Device Manager or the simulator.
 */
 A3a.vpl.RunGlue = function (options) {
 	this.runFun = options && options.run ? options.run : null;
+	this.checkFun = options && options.check ? options.check : null;
 	this.initFun = options && options.init ? options.init : null;
 	this.isConnectedFun = options && options.isConnected ? options.isConnected : null;
 	this.isEnabledFun = options && options.isEnabled ? options.isEnabled : null;
@@ -43,6 +62,10 @@ A3a.vpl.RunGlue = function (options) {
 	this.preferredLanguage = options && options.preferredLanguage ? options.preferredLanguage : "aseba";
 	this.languages = options && options.languages ? options.languages : [this.preferredLanguage];
 	this.state = options && options.state ? options.state : null;
+
+	this.lastCheckedCode = null;
+	this.lastCheckedLanguage = null;
+	this.lastCheckResult = null;
 };
 
 /** Check if a robot is connected
@@ -76,6 +99,37 @@ A3a.vpl.RunGlue.prototype.init = function (language) {
 	if (this.initFun) {
 		this.initFun(language);
 	}
+};
+
+/** Check source code
+	@param {string} code
+	@param {string} language
+	@param {function(?string):void} errorFun error function, called asynchronously
+	with null for success or error message for failure (not called if same as
+	immediate reply)
+	@return {?string} immediate reply
+*/
+A3a.vpl.RunGlue.prototype.check = function (code, language, errorFun) {
+	// check for cached result
+	if (this.checkFun == null ||
+		(code === this.lastCheckedCode && language === this.lastCheckedLanguage)) {
+		return this.lastCheckResult;
+	}
+
+	// cache immediate result
+	var self = this;
+	this.checkFun(language, code,
+		function (result) {
+			self.lastCheckedCode = code;
+			self.lastCheckedLanguage = language;
+			if (result !== self.lastCheckResult) {
+				self.lastCheckResult = result;
+				errorFun(result);
+			}
+		});
+
+	// return immediate result
+	return this.lastCheckResult;
 };
 
 /** Run source code

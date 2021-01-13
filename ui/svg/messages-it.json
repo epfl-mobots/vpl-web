@@ -14,7 +14,9 @@
 			"Cancel": "Annullare",
 			"Open ground image file": "Apri un file immagine del suolo",
 			"Open height image file": "Apri un file immagine di altitudine",
-			"Open obstacle SVG file": "Apri il file in formato SVG degli ostacoli"
+			"Open obstacle SVG file": "Apri il file in formato SVG degli ostacoli",
+
+			"Script too big for target bytecode size": "Programma troppo lungo per Thymio"
 		}
 	}
 }
