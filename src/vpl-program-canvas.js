@@ -1623,12 +1623,15 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		var errorMsg = "";
 		var isWarning = false;
 		program.program.forEach(function (rule, i) {
-			this.addRuleToCanvas(canvas, rule, i,
-				displaySingleEvent,
-				canvas.dims.eventRightAlign ? maxEventsWidth : 0,
-				eventX0, actionX0,
-				cssBoxes.vplBox.y + (i > 0 ? ruleVerticalOffset[i - 1] : 0) + cssBoxes.ruleBox.offsetTop() + cssBoxes.blockContainerBox.offsetTop(),
-				cssBoxes);
+			if ((i > 0 ? ruleVerticalOffset[i - 1] : 0) < cssBoxes.vplBox.height + renderingState.programScroll.vertScroll &&
+				ruleVerticalOffset[i] > renderingState.programScroll.vertScroll) {
+				this.addRuleToCanvas(canvas, rule, i,
+					displaySingleEvent,
+					canvas.dims.eventRightAlign ? maxEventsWidth : 0,
+					eventX0, actionX0,
+					cssBoxes.vplBox.y + (i > 0 ? ruleVerticalOffset[i - 1] : 0) + cssBoxes.ruleBox.offsetTop() + cssBoxes.blockContainerBox.offsetTop(),
+					cssBoxes);
+			}
 			if (rule.error !== null && errorMsg === "") {
 				errorMsg = rule.error.msg;
 				isWarning = rule.error.isWarning;
