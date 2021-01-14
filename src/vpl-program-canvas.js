@@ -1653,25 +1653,55 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		renderingState.programScroll.end();
 
 		// more high and low hints
-		if (!renderingState.programScroll.isTop() || !renderingState.programScroll.isBottom()) {
-			canvas.addDecoration(function (ctx) {
-				var moreHighBox = canvas.css.getBox({tag: "widget", id: "widget-moreHigh"});
-				var moreLowBox = canvas.css.getBox({tag: "widget", id: "widget-moreLow"});
-				if (!renderingState.programScroll.isTop()) {
-					// more to see above
+		if (!renderingState.programScroll.isTop()) {
+			// more to see above
+			var moreHighBox = canvas.css.getBox({tag: "widget", id: "widget-moreHigh"});
+			var item = new A3a.vpl.CanvasItem(null,
+				moreHighBox.totalWidth(),
+				moreHighBox.totalHeight(),
+				cssBoxes.vplBox.x + cssBoxes.vplBox.width - moreHighBox.totalWidth(),
+				cssBoxes.vplBox.y + moreHighBox.totalHeight() - moreHighBox.totalHeight(),
+				/** @type {A3a.vpl.CanvasItem.draw} */
+				(function (canvas, item, dx, dy) {
 					canvas.drawWidget("vpl:moreHigh",
-						cssBoxes.vplBox.x + cssBoxes.vplBox.width - moreLowBox.totalWidth() / 2,
+						cssBoxes.vplBox.x + cssBoxes.vplBox.width - moreHighBox.totalWidth() / 2,
 						cssBoxes.vplBox.y + moreHighBox.totalHeight() / 2,
 						moreHighBox);
-				}
-				if (!renderingState.programScroll.isBottom()) {
-					// more to see below
+				}),
+				{
+					mouseup: function () {
+						renderingState.programScroll.scrollCanvas(0, -cssBoxes.ruleBox.totalHeight());
+						canvas.redraw();
+					}
+				},
+				null, null,
+				"scrollUp");
+			canvas.setItem(item);
+		}
+		if (!renderingState.programScroll.isBottom()) {
+			// more to see below
+			var moreLowBox = canvas.css.getBox({tag: "widget", id: "widget-moreLow"});
+			var item = new A3a.vpl.CanvasItem(null,
+				moreLowBox.totalWidth(),
+				moreLowBox.totalHeight(),
+				cssBoxes.vplBox.x + cssBoxes.vplBox.width - moreLowBox.totalWidth(),
+				cssBoxes.vplBox.y + cssBoxes.vplBox.height - moreLowBox.totalHeight(),
+				/** @type {A3a.vpl.CanvasItem.draw} */
+				(function (canvas, item, dx, dy) {
 					canvas.drawWidget("vpl:moreLow",
 						cssBoxes.vplBox.x + cssBoxes.vplBox.width - moreLowBox.totalWidth() / 2,
 						cssBoxes.vplBox.y + cssBoxes.vplBox.height - moreLowBox.totalHeight() / 2,
 						moreLowBox);
-				}
-			});
+				}),
+				{
+					mouseup: function () {
+						renderingState.programScroll.scrollCanvas(0, cssBoxes.ruleBox.totalHeight());
+						canvas.redraw();
+					}
+				},
+				null, null,
+				"scrollDown");
+			canvas.setItem(item);
 		}
 
 		if (program.noVPL) {
