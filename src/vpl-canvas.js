@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -412,7 +412,7 @@ A3a.vpl.Canvas = function (canvas, options) {
 					}
 					if (isUp) {
 						if ((isTouch ? item.zoomOnLongTouchPress : item.zoomOnLongPress) &&
-							Math.abs(mouseEvent.x - x0) + Math.abs(mouseEvent.y - y0) < self.clickNoDragTolerance) {
+							Math.abs(mouseEvent.x - d.dx - x0) + Math.abs(mouseEvent.y - d.dy - y0) < self.clickNoDragTolerance) {
 							self.zoomedItemIndex = indices[0];
 							self.zoomedItemProxy = (isTouch ? item.zoomOnLongTouchPress : item.zoomOnLongPress)(item, isTouch);
 						} else if (dropTargetItem && dropTargetItem.doDrop
