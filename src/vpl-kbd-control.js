@@ -1,5 +1,5 @@
 /*
-	Copyright 2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2020-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -203,7 +203,7 @@ A3a.vpl.KbdControl.prototype.activateTemplate = function (blockTemplate) {
 		// set rule as target instead of wrong block
 		this.targetType = A3a.vpl.KbdControl.ObjectType.rule;
 	}
-	if (target instanceof A3a.vpl.Rule) {
+	if (target instanceof A3a.vpl.Rule && !(target instanceof A3a.vpl.RuleComment)) {
 		var block = new A3a.vpl.Block(blockTemplate, null, null);
 		target.setBlock(block, null, function () {
 			app.program.saveStateBeforeChange();
@@ -303,8 +303,15 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 				self.targetIndex1 = 0;
 				break;
 			case A3a.vpl.KbdControl.ObjectType.rule:
-				self.selectionType = A3a.vpl.KbdControl.ObjectType.blockLeft;
-				self.selectionIndex2 = 0;
+				var selection = self.getSelectedObject();
+				if (selection instanceof A3a.vpl.RuleComment) {
+					// comment: edit
+					self.app.editComment(self.selectionIndex1);
+				} else {
+					// plain rule: select left-most block
+					self.selectionType = A3a.vpl.KbdControl.ObjectType.blockLeft;
+					self.selectionIndex2 = 0;
+				}
 				break;
 			case A3a.vpl.KbdControl.ObjectType.blockLeft:
 			case A3a.vpl.KbdControl.ObjectType.blockRight:
@@ -596,8 +603,14 @@ A3a.vpl.KbdControl.prototype.addHandlers = function () {
 					}
 				} else {
 					self.selectionIndex1 = Math.min(self.selectionIndex1 + 1, self.app.program.program.length - 1);
-					self.selectionIndex2 = Math.min(self.selectionIndex2,
-						(self.selectionType === A3a.vpl.KbdControl.ObjectType.blockLeft ? numBlocksLeft() : numBlocksRight()) - 1);
+				 	if (self.app.program.program[self.selectionIndex1] instanceof A3a.vpl.RuleComment) {
+						// enter a comment: select comment itself since it doesn't contain a block
+						self.selectionType = A3a.vpl.KbdControl.ObjectType.rule;
+					} else {
+						// select block aligned vertically if possible
+						self.selectionIndex2 = Math.min(self.selectionIndex2,
+							(self.selectionType === A3a.vpl.KbdControl.ObjectType.blockLeft ? numBlocksLeft() : numBlocksRight()) - 1);
+					}
 				}
 				break;
 			case A3a.vpl.KbdControl.ObjectType.libLeft:
