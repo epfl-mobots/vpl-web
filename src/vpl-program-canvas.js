@@ -427,9 +427,10 @@ A3a.vpl.Program.blockVerticalOffset = function (blockBox, containerBox) {
 
 /** Start editing a comment
 	@param {number} ruleIndex
+	@param {number=} x click position, used to move cursor if comment is already being edited
 	@return {void}
 */
-A3a.vpl.Application.prototype.editComment = function (ruleIndex) {
+A3a.vpl.Application.prototype.editComment = function (ruleIndex, x) {
 	var self = this;
 	var canvas = this.vplCanvas;
 	var rule = this.program.program[ruleIndex];
@@ -603,8 +604,10 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 		// interactiveCB
 		isComment
 			? {
-				mouseup: function (canvas) {
-					self.editComment(ruleIndex);
+				/** @type {A3a.vpl.CanvasItem.mouseup} */
+				mouseup: function (canvas, data, dragIndex, width, height, left, top, ev) {
+					var x = ev.x - left;
+					self.editComment(ruleIndex, x);
 				}
 			}
 			: null,

@@ -184,7 +184,7 @@ A3a.vpl.CanvasItem.mousedown;
 A3a.vpl.CanvasItem.mousedrag;
 
 /**
-	@typedef {function(A3a.vpl.Canvas,*,number):void}
+	@typedef {function(A3a.vpl.Canvas,*,number,number,number,number,number,A3a.vpl.CanvasItem.mouseEvent):void}
 */
 A3a.vpl.CanvasItem.mouseup;
 
@@ -355,7 +355,11 @@ A3a.vpl.Canvas = function (canvas, options) {
 						} else if (item.interactiveCB.mouseup) {
 							if (item.interactiveCB.mouseup) {
 								item.interactiveCB.mouseup(self, item.data,
-									/** @type {number} */(item.dragging));
+									/** @type {number} */(item.dragging),
+									item.width, item.height,
+									canvasBndRect.left + item.x + d.dx,
+									canvasBndRect.top + item.y + d.dy,
+									self.makeMouseEvent(e, backingScale));
 								self.onUpdate && self.onUpdate();
 								self.onDraw ? self.onDraw() : self.redraw();
 							}
