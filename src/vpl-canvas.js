@@ -313,6 +313,10 @@ A3a.vpl.Canvas = function (canvas, options) {
 
 		var mouseEvent = self.makeMouseEvent(downEvent, backingScale);
 
+		/**
+			@param {A3a.vpl.CanvasItem} item
+			@return {boolean} true to intercept drag and prevent item drag-and-drop
+		*/
 		function startInteraction(item) {
 			var canvasBndRect = self.canvas.getBoundingClientRect();
 			var d = item.getTranslation();
@@ -360,7 +364,8 @@ A3a.vpl.Canvas = function (canvas, options) {
 					: null;
 				self.onUpdate && self.onUpdate();
 				self.onDraw ? self.onDraw() : self.redraw();
-				return true;
+				// allow item drag-and-drop if item is draggable and its content is only clickable
+				return !item.draggable || item.interactiveCB != null && item.interactiveCB.mousedrag != null;
 			}
 			return false;
 		}
@@ -405,6 +410,7 @@ A3a.vpl.Canvas = function (canvas, options) {
 				var d = draggedItem.getTranslation();
 				var x0 = mouseEvent.x - d.dx;
 				var y0 = mouseEvent.y - d.dy;
+				var dragFunForNoItemDrag = A3a.vpl.dragFun;
 				A3a.vpl.dragFun = function (dragEvent, isUp, isTouch) {
 					var mouseEvent = self.makeMouseEvent(dragEvent, backingScale);
 					if (self.prepareDrag) {
@@ -413,8 +419,15 @@ A3a.vpl.Canvas = function (canvas, options) {
 					if (isUp) {
 						if ((isTouch ? item.zoomOnLongTouchPress : item.zoomOnLongPress) &&
 							Math.abs(mouseEvent.x - d.dx - x0) + Math.abs(mouseEvent.y - d.dy - y0) < self.clickNoDragTolerance) {
+							// zoom
 							self.zoomedItemIndex = indices[0];
 							self.zoomedItemProxy = (isTouch ? item.zoomOnLongTouchPress : item.zoomOnLongPress)(item, isTouch);
+						} else if (item.interactiveCB && item.interactiveCB.mouseup &&
+							Math.abs(mouseEvent.x - d.dx - x0) + Math.abs(mouseEvent.y - d.dy - y0) < self.clickNoDragTolerance) {
+							// click
+							dragFunForNoItemDrag(dragEvent, isUp, isTouch);
+							return;
+
 						} else if (dropTargetItem && dropTargetItem.doDrop
 							&& (!dropTargetItem.canDrop || dropTargetItem.canDrop(dropTargetItem, draggedItem))) {
 							dropTargetItem.doDrop(dropTargetItem, draggedItem);
