@@ -246,12 +246,20 @@ A3a.vpl.Application = function (canvasEl) {
 	/** @type {?A3a.vpl.TextField} */
 	this.textField = null;
 	this.kbdControl = new A3a.vpl.KbdControl(this);
-	this.vplCanvas.addPreMousedown(function () {
+	this.vplCanvas.addPreMousedown(function (rawMouseEvent, mouseEvent) {
 		if (!self.uiConfig.nodragAccessibility) {
 			self.kbdControl.exit();
 		}
 		if (self.textField !== null) {
-			self.textField.finish(true);
+			var cursorIndex = self.textField.findCursorByPos(mouseEvent.x, mouseEvent.y);
+			if (cursorIndex == null) {
+				// click outside text field: update value and stop editing
+				self.textField.finish(true);
+				self.textField = null;
+			} else {
+				// click inside text field: set cursor position
+				self.textField.selBegin = self.textField.selEnd = /** @type {number} */(cursorIndex);
+			}
 		}
 		return true;
 	});

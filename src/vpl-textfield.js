@@ -1,5 +1,5 @@
 /*
-	Copyright 2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2020-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -27,6 +27,10 @@ A3a.vpl.TextField = function (app, options) {
 	this.ref = options.ref;
 	this.selBegin = 0;
 	this.selEnd = this.str.length;
+	/** @type {?{top:number,left:number,bottom:number,right:number}} */
+	this.frame = null;
+	/** @type {Array.<number>} */
+	this.rightPos = [];
 	this.displayCB = options.display || function () {};
 	this.finishCB = options.finish || function () {};
 
@@ -132,4 +136,38 @@ A3a.vpl.TextField.prototype.display = function () {
 A3a.vpl.TextField.prototype.finish = function (ok) {
 	this.finishCB(ok ? this.str : null);
 	this.app.keyboard.popHandler();
+};
+
+/** Set the rendering position of bounds and of the the cursor at the
+	right of the specified char (the with of the first n characters for n
+	from 1 to len(str)); should be consistent with findIndexByPos
+	@param {{top:number,left:number,bottom:number,right:number}} frame
+	@param {Array.<number>} rightPos
+	@return {void}
+*/
+A3a.vpl.TextField.prototype.setRenderingPos = function (frame, rightPos) {
+	this.frame = frame;
+	this.rightPos = rightPos;
+};
+
+/** Find the cursor index from a position, based on the array
+	specified by setRightPos
+	@param {number} x
+	@param {number} y
+	@return {?number}
+*/
+A3a.vpl.TextField.prototype.findCursorByPos = function (x, y) {
+	if (this.frame &&
+		x >= this.frame.left && x < this.frame.right &&
+		y >= this.frame.top && y < this.frame.bottom) {
+		var xr = x - this.frame.left;
+		var i;
+		for (i = 0; i < this.rightPos.length && xr > this.rightPos[i]; i++) {}
+		return i === 0
+			? this.rightPos.length === 0 || xr < this.rightPos[0] / 2 ? 0 : 1
+			: i >= this.rightPos.length ? this.rightPos.length
+			: xr < (this.rightPos[i - 1] + this.rightPos[i]) / 2 ? i : i + 1;
+	} else {
+		return null;
+	}
 };

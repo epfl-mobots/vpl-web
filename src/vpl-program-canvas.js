@@ -427,13 +427,17 @@ A3a.vpl.Program.blockVerticalOffset = function (blockBox, containerBox) {
 
 /** Start editing a comment
 	@param {number} ruleIndex
-	@param {number=} x click position, used to move cursor if comment is already being edited
 	@return {void}
 */
-A3a.vpl.Application.prototype.editComment = function (ruleIndex, x) {
+A3a.vpl.Application.prototype.editComment = function (ruleIndex) {
 	var self = this;
 	var canvas = this.vplCanvas;
 	var rule = this.program.program[ruleIndex];
+
+	if (this.textField && this.textField.ref === rule) {
+		// rule already being edited
+		return;
+	}
 
 	this.textField = new A3a.vpl.TextField(this, {
 		initialValue: /** @type {A3a.vpl.RuleComment} */(rule).comment,
@@ -509,23 +513,33 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 						ascent = ruleBox.fontSize / 2;
 						descent = ascent;
 					}
+					var textFieldFrame = {
+						top: item.y + dy + ruleBox.paddingTop + ruleBox.height / 2 - ascent,
+						bottom: item.y + dy + ruleBox.paddingTop + ruleBox.height / 2 + descent,
+						left: item.x + dx + ruleBox.paddingLeft,
+						right: item.x + dx + ruleBox.paddingLeft + ctx.measureText(self.textField.str).width
+					};
+					var rightPos = self.textField.str.split("").map(function (c, i) {
+						return ctx.measureText(self.textField.str.slice(0, i + 1)).width;
+					});
+					self.textField.setRenderingPos(textFieldFrame, rightPos);
 					if (self.textField.selEnd === self.textField.selBegin) {
 						// plain cursor
 						ctx.strokeStyle = "black";
 						ctx.beginPath();
-						ctx.moveTo(item.x + dx + ruleBox.paddingLeft + strLeftSize.width, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2 - ascent);
-						ctx.lineTo(item.x + dx + ruleBox.paddingLeft + strLeftSize.width, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2 + descent);
+						ctx.moveTo(textFieldFrame.left + strLeftSize.width, textFieldFrame.top);
+						ctx.lineTo(textFieldFrame.left + strLeftSize.width, textFieldFrame.bottom);
 						ctx.stroke();
 					} else {
 						// selection
 						var strSelSize = ctx.measureText(self.textField.str.slice(self.textField.selBegin, self.textField.selEnd));
 						ctx.save();
 						ctx.fillStyle = "silver";
-						ctx.fillRect(item.x + dx + ruleBox.paddingLeft + strLeftSize.width - 1, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2 - ascent,
+						ctx.fillRect(textFieldFrame.left + strLeftSize.width - 1, textFieldFrame.top,
 							strSelSize.width, ascent + descent);
 						ctx.restore();
 					}
-					ctx.fillText(self.textField.str, item.x + dx + ruleBox.paddingLeft, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2);
+					ctx.fillText(self.textField.str, textFieldFrame.left, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2);
 				} else {
 					ctx.fillText(/** @type {A3a.vpl.RuleComment} */(rule).comment, item.x + dx + ruleBox.paddingLeft, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2);
 				}
@@ -606,8 +620,7 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 			? {
 				/** @type {A3a.vpl.CanvasItem.mouseup} */
 				mouseup: function (canvas, data, dragIndex, width, height, left, top, ev) {
-					var x = ev.x - left;
-					self.editComment(ruleIndex, x);
+					self.editComment(ruleIndex);
 				}
 			}
 			: null,
