@@ -221,51 +221,57 @@ A3a.vpl.Application.prototype.toHTMLDocument = function (css) {
 		"<body>\n" +
 		"<table class='program'>\n" +
 		this.program.program.map(function (rule) {
-			return rule.isEmpty()
-				? ""
-				: "<tr class='rule'>\n" +
-					"<td class='events'>\n" +
-					"<table class='events'>\n" +
-					"<tr class='events'>\n" +
-					rule.events.map(function (event, i) {
-						var classes = "block";
-						switch (event.blockTemplate.type) {
-						case A3a.vpl.blockType.event:
-							classes += " event";
-							classes += i === 0 ? " event-main" : " event-aux";
-							break;
-						case A3a.vpl.blockType.state:
-							classes += " state";
-							break;
-						case A3a.vpl.blockType.comment:
-							classes += " comment";
-							break;
-						}
-						return "<td class='" + classes + "'>" + event.toImgElement(css, dims, scale) + "</td>\n";
-					}).join("") +
-					"</tr>\n" +
-					"</table>\n" +
+			return rule instanceof A3a.vpl.RuleComment
+				? "<tr class='rule-comment'>\n" +
+					"<td class='comment'>\n" +
+					rule.comment + "\n" +
 					"</td>\n" +
-					"<td class='then'>" + thenWidgetImg + "</td>\n" +
-					"<td class='actions'>\n" +
-					"<table class='actions'>\n" +
-					"<tr class='actions'>\n" +
-					rule.actions.map(function (action) {
-						var classes = "block";
-						switch (action.blockTemplate.type) {
-						case A3a.vpl.blockType.action:
-							classes += " action";
-							break;
-						case A3a.vpl.blockType.comment:
-							classes += " comment";
-							break;
-						}
-						return "<td class='" + classes + "'>" + action.toImgElement(css, dims, scale) + "</td>\n";
-					}).join("") +
-					"</tr>\n" +
-					"</table>\n" +
-					"</td>\n" +
-					"</tr>\n";
+					"</tr>\n"
+				: rule.isEmpty()
+					? ""
+					: "<tr class='rule'>\n" +
+						"<td class='events'>\n" +
+						"<table class='events'>\n" +
+						"<tr class='events'>\n" +
+						rule.events.map(function (event, i) {
+							var classes = "block";
+							switch (event.blockTemplate.type) {
+							case A3a.vpl.blockType.event:
+								classes += " event";
+								classes += i === 0 ? " event-main" : " event-aux";
+								break;
+							case A3a.vpl.blockType.state:
+								classes += " state";
+								break;
+							case A3a.vpl.blockType.comment:
+								classes += " comment";
+								break;
+							}
+							return "<td class='" + classes + "'>" + event.toImgElement(css, dims, scale) + "</td>\n";
+						}).join("") +
+						"</tr>\n" +
+						"</table>\n" +
+						"</td>\n" +
+						"<td class='then'>" + thenWidgetImg + "</td>\n" +
+						"<td class='actions'>\n" +
+						"<table class='actions'>\n" +
+						"<tr class='actions'>\n" +
+						rule.actions.map(function (action) {
+							var classes = "block";
+							switch (action.blockTemplate.type) {
+							case A3a.vpl.blockType.action:
+								classes += " action";
+								break;
+							case A3a.vpl.blockType.comment:
+								classes += " comment";
+								break;
+							}
+							return "<td class='" + classes + "'>" + action.toImgElement(css, dims, scale) + "</td>\n";
+						}).join("") +
+						"</tr>\n" +
+						"</table>\n" +
+						"</td>\n" +
+						"</tr>\n";
 		}).join("") +
 		"</table>\n" +
 		"</body>\n" +

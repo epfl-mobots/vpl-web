@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -25,7 +25,22 @@ A3a.vpl.Application.prototype.installThymioTDM = function () {
 	var tdm = null;
 	return new A3a.vpl.RunGlue({
 		run: function (language, code) {
-			tdm["run"](code);
+			tdm["run"](code, null,
+				function (e) {
+					console.info("Run error");
+					console.info(e);
+				});
+		},
+		check: function (language, code, checkFun) {
+			tdm["check"](code,
+				function () {
+					checkFun(null);
+				},
+				function (e) {
+					checkFun(e);
+				});
+			// no immediate result to report
+			return null;
 		},
 		init: function (language) {
 			// initialize the list of nodes

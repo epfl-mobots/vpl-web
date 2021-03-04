@@ -33,6 +33,7 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.experimentalFeatures = false;
 	/** @type {Array.<A3a.vpl.Rule>} */
 	this.program = [];
+	this.slowdownFactor = 1;
 	this.uploaded = false;	// program matches what's running
 	this.notUploadedYet = true;	// program has never been loaded since last this.new()
 	this.uploadedToServer = false;	// program matches what's been uploaded to the server
@@ -152,6 +153,7 @@ A3a.vpl.Program.prototype.new = function (resetUndoStack) {
 	this.program = [];
 	this.code = {};
 	this.notUploadedYet = true;
+	this.enforceSingleTrailingEmptyEventHandler();
 };
 
 /** Check if empty (no non-empty event handler)
@@ -194,6 +196,14 @@ A3a.vpl.Program.prototype.displaySingleEvent = function () {
 		}
 	}
 	return true;
+};
+
+/** Change the slowdown factor
+	@param {number} slowdownFactor
+	@return {void}
+*/
+A3a.vpl.Program.prototype.setSlowdownFactor = function (slowdownFactor) {
+	this.slowdownFactor = slowdownFactor;
 };
 
 /** Make code invalid so that it's generated again when needed
@@ -329,11 +339,37 @@ A3a.vpl.Program.prototype.setTeacherRole = function (teacherRole) {
 };
 
 /** Append an empty event handler
-	@param {boolean=} withState
 	@return {void}
 */
-A3a.vpl.Program.prototype.addEventHandler = function (withState) {
+A3a.vpl.Program.prototype.addEventHandler = function () {
 	this.program.push(new A3a.vpl.Rule());
+	this.enforceSingleTrailingEmptyEventHandler();
+};
+
+/** Add a comment
+	@param {string=} comment
+	@param {?number=} position position in program (default: end)
+	@return {number} effective index in program
+*/
+A3a.vpl.Program.prototype.addComment = function (comment, position) {
+	var ruleComment = new A3a.vpl.RuleComment(comment);
+
+	if (position != null && position < this.program.length) {
+		// at position
+		this.program.splice(position, 0, ruleComment);
+	} else if (this.program.length === 0 || !this.program[this.program.length - 1].isEmpty()) {
+		// append
+		position = this.program.length;
+		this.program.push(ruleComment);
+	} else {
+		// append before trailing empty rule
+		position = this.program.length - 1;
+		this.program.splice(position, 0, ruleComment);
+	}
+
+	this.enforceSingleTrailingEmptyEventHandler();
+
+	return position;
 };
 
 /** If there is no trailing event handler, add one; if there are more than one,
@@ -393,17 +429,26 @@ A3a.vpl.Program.prototype.exportToObject = function (opt) {
 					});
 				}
 			}
-			rule.events.forEach(function (event) {
-				addBlock(event);
-			});
-			rule.actions.forEach(function (action) {
-				addBlock(action);
-			});
-			return {
-				"blocks": b,
-				"disabled": rule.disabled,
-				"locked": rule.locked
-			};
+
+			if (rule instanceof A3a.vpl.RuleComment) {
+				return {
+					"comment": /** @type {A3a.vpl.RuleComment} */(rule).comment,
+					"disabled": rule.disabled,
+					"locked": rule.locked
+				}
+			} else {
+				rule.events.forEach(function (event) {
+					addBlock(event);
+				});
+				rule.actions.forEach(function (action) {
+					addBlock(action);
+				});
+				return {
+					"blocks": b,
+					"disabled": rule.disabled,
+					"locked": rule.locked
+				};
+			}
 		});
 	}
 
@@ -479,33 +524,40 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun, options) 
 			if (!options || !options.dontChangeProgram) {
 				if (obj["program"]) {
 					this.program = obj["program"].map(function (rule) {
-						var eh = new A3a.vpl.Rule();
-						rule["blocks"].forEach(function (block) {
-							var bt = A3a.vpl.BlockTemplate.findByName(block["name"]);
-							if (bt) {
-								var b = new A3a.vpl.Block(bt, null, null);
-								b.disabled = block["disabled"] || false;
-								b.locked = block["locked"] || false;
-								if (bt.importParam) {
-									bt.importParam(b, block["param"],
+						if (rule.hasOwnProperty("comment")) {
+							var rc = new A3a.vpl.RuleComment(rule.comment);
+							rc.disabled = rule["disabled"] || false;
+							rc.locked = rule["locked"] || false;
+							return rc;
+						} else {
+							var eh = new A3a.vpl.Rule();
+							rule["blocks"].forEach(function (block) {
+								var bt = A3a.vpl.BlockTemplate.findByName(block["name"]);
+								if (bt) {
+									var b = new A3a.vpl.Block(bt, null, null);
+									b.disabled = block["disabled"] || false;
+									b.locked = block["locked"] || false;
+									if (bt.importParam) {
+										bt.importParam(b, block["param"],
+											function () {
+												if (importFinished && updateFun) {
+													updateFun("vpl");
+												}
+											});
+									} else {
+										b.param = block["param"];
+									}
+									eh.setBlock(b, null,
 										function () {
-											if (importFinished && updateFun) {
-												updateFun("vpl");
-											}
-										});
-								} else {
-									b.param = block["param"];
+											self.saveStateBeforeChange();
+										},
+										true);
 								}
-								eh.setBlock(b, null,
-									function () {
-										self.saveStateBeforeChange();
-									},
-									true);
-							}
-						}, this);
-						eh.disabled = rule["disabled"] || false;
-						eh.locked = rule["locked"] || false;
-						return eh;
+							}, this);
+							eh.disabled = rule["disabled"] || false;
+							eh.locked = rule["locked"] || false;
+							return eh;
+						}
 					}, this);
 				} else {
 					this.program = [];

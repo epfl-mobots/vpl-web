@@ -50,7 +50,10 @@ A3a.Device = function (opt) {
 	this.breakpoints = [];
 	/** @type {?function(number):void} */
 	this.onEmit = null;
-	/** @type {?function(string,number,number,number):void} */
+	/**
+		@type {?function(string,number,number,number,Array.<number>):void}
+		Called with variable name, index in array, new value, old value, old array value for the whole array variable
+	*/
 	this.onVarChanged = null;
 	/**
 		@type {?function(string,A3a.Device,Array.<Array.<number>>):boolean}
@@ -160,7 +163,8 @@ A3a.Device.prototype.setVariableData = function (varOffset, varData) {
 						&& this.variables[i].offset + j - varOffset < varData.length) {
 						this.onVarChanged(this.variables[i].name, j,
 							varData[this.variables[i].offset + j - varOffset],
-							this.varData[this.variables[i].offset + j]);
+							this.varData[this.variables[i].offset + j],
+							this.varData.slice(this.variables[i].offset, this.variables[i].offset + this.variables[i].val.length));
 					}
 				}
 			}

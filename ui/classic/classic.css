@@ -153,6 +153,18 @@ rule:small {
 	background: white;
 }
 
+rule.comment {
+	background: transparent;
+	border-color: white;
+	color: #333;
+	font: max(1.3vw, 12px) sans-serif;
+}
+rule.comment:edited {
+	background: white;
+	border-color: #333;
+	color: #333;
+}
+
 overlay-rectangle.disabled {
 	background: rgba(255,255,255,0.5);
 }
@@ -160,6 +172,43 @@ overlay-rectangle.disabled {
 overlay-rectangle.drop-target {
 	border: 0.2vw rgba(0,0,0,0.5);
 	border-radius: 0.2vw;
+}
+
+overlay-rectangle.kbd-selected {
+	border: 0.5vw rgba(0,0,0,0.4);
+	border-radius: 0.1vw;
+	border-corner-length: 1vw;
+}
+overlay-rectangle.kbd-selected.param {
+	border: 0.3vw rgba(0,0,0,0.4);
+	border-radius: 0.1vw;
+}
+overlay-rectangle.rule.kbd-target {
+	border: 0.2vw rgba(0,0,0,0.7);
+	border-radius: 0.6vw;
+}
+overlay-rectangle.event.kbd-target {
+	border: 0.2vw rgba(200,0,0,0.7);
+	border-top-right-cut: 0.9vw;
+}
+overlay-rectangle.event-aux.kbd-target {
+	border: 0.2vw rgba(200,0,0,0.7);
+	border-top-right-cut: 0.75vw;
+}
+overlay-rectangle.action.kbd-target {
+	border: 0.2vw rgba(0,0,200,0.7);
+}
+overlay-rectangle.state.kbd-target {
+	border: 0.2vw rgba(0,150,0,0.7);
+	border-top-right-cut: 0.75vw;
+}
+overlay-rectangle.comment.kbd-target {
+	border: 0.2vw rgba(100,100,100,0.7);
+}
+overlay-rectangle.button.kbd-selected {
+	border: 0.3vw rgba(0,0,0,0.4);
+	border-radius: 0.1vw;
+	border-corner-length: 0.8vw;
 }
 
 crossout-line {

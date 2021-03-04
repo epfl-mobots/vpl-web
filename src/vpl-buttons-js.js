@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -529,6 +529,27 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i
 		"vpl:redo": function () {
 			drawUndo(0, 0, true);
 		},
+		"vpl:add-comment": function () {
+			ctx.fillStyle = isPressed && isEnabled
+				? col.bgPr
+				: col.bg;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			// line
+			ctx.beginPath();
+			ctx.moveTo(dims.controlSize * 0.2, dims.controlSize * 0.6);
+			ctx.lineTo(dims.controlSize * 0.8, dims.controlSize * 0.6);
+			// +
+			ctx.moveTo(dims.controlSize * 0.7, dims.controlSize * 0.35);
+			ctx.lineTo(dims.controlSize * 0.9, dims.controlSize * 0.35);
+			ctx.moveTo(dims.controlSize * 0.8, dims.controlSize * 0.25);
+			ctx.lineTo(dims.controlSize * 0.8, dims.controlSize * 0.45);
+			ctx.strokeStyle = isEnabled ? col.fg : col.fgDis;
+			ctx.lineWidth = dims.controlLineWidth;
+			ctx.stroke();
+			ctx.strokeRect(dims.controlSize * 0.1, dims.controlSize * 0.5,
+				dims.controlSize * 0.8, dims.controlSize * 0.2);
+		},
 		"vpl:run": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? col.bgPr
@@ -562,6 +583,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i
 				dims.controlSize * 0.28,
 				dims.controlSize * 0.44, dims.controlSize * 0.44);
 		},
+		// "vpl:slowdown": "sim:speedup"
 		"vpl:debug": function () {
 			ctx.fillStyle = isPressed && isEnabled
 				? col.bgPr
@@ -1144,7 +1166,23 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i
                 dims.controlSize * 0.1);
 			ctx.restore();
 		},
-		// "src:run": "vpl:run"
+		"src:run": function () {
+			ctx.fillStyle = isPressed && isEnabled
+				? col.bgPr
+				: col.bg;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			ctx.beginPath();
+			ctx.moveTo(dims.controlSize * 0.3,
+				dims.controlSize * 0.25);
+			ctx.lineTo(dims.controlSize * 0.3,
+				dims.controlSize * 0.75);
+			ctx.lineTo(dims.controlSize * 0.8,
+				dims.controlSize * 0.5);
+			ctx.closePath();
+			ctx.fillStyle = isEnabled ? col.fg : col.fgDis;
+			ctx.fill();
+		},
 		// "src:stop": "vpl:stop"
 		// "src:sim": "vpl:sim"
 		// "src:teacher": "vpl:teacher"
@@ -1503,11 +1541,11 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i
 		}
 	};
 	draw["vpl:message-warning"] = draw["vpl:message-error"];
+	draw["vpl:slowdown"] = draw["sim:speedup"];
 	draw["src:close"] = draw["vpl:close"];
 	draw["src:new"] = draw["vpl:new"];
 	draw["src:save"] = draw["vpl:save"];
 	draw["src:load"] = draw["vpl:load"];
-	draw["src:run"] = draw["vpl:run"];
 	draw["src:stop"] = draw["vpl:stop"];
 	draw["src:connected"] = draw["vpl:connected"];
 	draw["src:sim"] = draw["vpl:sim"];

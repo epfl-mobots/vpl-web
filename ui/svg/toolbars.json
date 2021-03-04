@@ -24,6 +24,7 @@
 			"!stretch",
 			"vpl:run",
 			"vpl:stop",
+"vpl:slowdown",
 			"!space",
 			"vpl:flash",
 			"!stretch",

@@ -622,15 +622,17 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		function (ctx, box, isPressed) {
 			drawButton("sim-event:forward", ctx, box, isPressed);
 		},
-		// action
-		function (ev) {
-			robot["set"]("button.forward", true);
-			robot["sendEvent"]("buttons", null);
-			robot["set"]("button.forward", false);
-			robot["sendEvent"]("buttons", null);	// reset "when" state
+		{
+			doMouseDown: function (ev) {
+				robot["set"]("button.forward", true);
+				robot["sendEvent"]("button.forward", null);
+			},
+			doMouseUp: function (ev) {
+				robot["set"]("button.forward", false);
+				robot["sendEvent"]("button.forward", null);
+			},
+			doOver: createDoOverFun("sim:btn-button.forward")
 		},
-		null, null,
-		createDoOverFun("sim:btn-button.forward"),
 		"button.forward"));
 	// left
 	yRobotControl += smallButtonBox.totalHeight();
@@ -642,15 +644,17 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		function (ctx, box, isPressed) {
 			drawButton("sim-event:left", ctx, box, isPressed);
 		},
-		// action
-		function (ev) {
-			robot["set"]("button.left", true);
-			robot["sendEvent"]("buttons", null);
-			robot["set"]("button.left", false);
-			robot["sendEvent"]("buttons", null);	// reset "when" state
+		{
+			doMouseDown: function (ev) {
+				robot["set"]("button.left", true);
+				robot["sendEvent"]("button.left", null);
+			},
+			doMouseUp: function (ev) {
+				robot["set"]("button.left", false);
+				robot["sendEvent"]("button.left", null);
+			},
+			doOver: createDoOverFun("sim:btn-button.left")
 		},
-		null, null,
-		createDoOverFun("sim:btn-button.left"),
 		"button.left"));
 	// center
 	simControls.push(simCanvas.addControl(
@@ -661,15 +665,17 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		function (ctx, box, isPressed) {
 			drawButton("sim-event:center", ctx, box, isPressed);
 		},
-		// action
-		function (ev) {
-			robot["set"]("button.center", true);
-			robot["sendEvent"]("buttons", null);
-			robot["set"]("button.center", false);
-			robot["sendEvent"]("buttons", null);	// reset "when" state
+		{
+			doMouseDown: function (ev) {
+				robot["set"]("button.center", true);
+				robot["sendEvent"]("button.center", null);
+			},
+			doMouseUp: function (ev) {
+				robot["set"]("button.center", false);
+				robot["sendEvent"]("button.center", null);
+			},
+			doOver: createDoOverFun("sim:btn-button.center")
 		},
-		null, null,
-		createDoOverFun("sim:btn-button.center"),
 		"button.center"));
 	// right
 	simControls.push(simCanvas.addControl(
@@ -680,15 +686,17 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		function (ctx, box, isPressed) {
 			drawButton("sim-event:right", ctx, box, isPressed);
 		},
-		// action
-		function (ev) {
-			robot["set"]("button.right", true);
-			robot["sendEvent"]("buttons", null);
-			robot["set"]("button.right", false);
-			robot["sendEvent"]("buttons", null);	// reset "when" state
+		{
+			doMouseDown: function (ev) {
+				robot["set"]("button.center", true);
+				robot["sendEvent"]("button.center", null);
+			},
+			doMouseUp: function (ev) {
+				robot["set"]("button.center", false);
+				robot["sendEvent"]("button.center", null);
+			},
+			doOver: createDoOverFun("sim:btn-button.right")
 		},
-		null, null,
-		createDoOverFun("sim:btn-button.right"),
 		"button.right"));
 	// backward
 	yRobotControl += smallButtonBox.totalHeight();
@@ -700,15 +708,17 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		function (ctx, box, isPressed) {
 			drawButton("sim-event:backward", ctx, box, isPressed);
 		},
-		// action
-		function (ev) {
-			robot["set"]("button.backward", true);
-			robot["sendEvent"]("buttons", null);
-			robot["set"]("button.backward", false);
-			robot["sendEvent"]("buttons", null);	// reset "when" state
+		{
+			doMouseDown: function (ev) {
+				robot["set"]("button.backward", true);
+				robot["sendEvent"]("button.backward", null);
+			},
+			doMouseUp: function (ev) {
+				robot["set"]("button.backward", false);
+				robot["sendEvent"]("button.backward", null);
+			},
+			doOver: createDoOverFun("sim:btn-button.backward")
 		},
-		null, null,
-		createDoOverFun("sim:btn-button.backward"),
 		"button.backward"));
 	yRobotControl += smallButtonBox.totalHeight() + separatorControlBox.totalHeight();
 
@@ -721,12 +731,12 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		function (ctx, box, isPressed) {
 			drawButton("sim-event:tap", ctx, box, isPressed);
 		},
-		// action
-		function (ev) {
-			robot["sendEvent"]("tap", null);
+		{
+			action: function (ev) {
+				robot["sendEvent"]("tap", null);
+			},
+			doOver: createDoOverFun("sim:btn-tap")
 		},
-		null, null,
-		createDoOverFun("sim:btn-tap"),
 		"tap"));
 	// clap
 	simControls.push(simCanvas.addControl(
@@ -737,12 +747,12 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		function (ctx, box, isPressed) {
 			drawButton("sim-event:clap", ctx, box, isPressed);
 		},
-		// action
-		function (ev) {
-			robot["sendEvent"]("mic", null);
+		{
+			action: function (ev) {
+				robot["sendEvent"]("mic", null);
+			},
+			doOver: createDoOverFun("sim:btn-clap")
 		},
-		null, null,
-		createDoOverFun("sim:btn-clap"),
 		"clap"));
 	yRobotControl += 2 * smallBtnSize;
 

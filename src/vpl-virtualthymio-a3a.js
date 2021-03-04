@@ -39,10 +39,15 @@ A3a.vpl.VirtualThymioVM = function () {
 	};
 
 	// forward variable change notifications from vthymio to this
-	this.vthymio.onVarChanged = function (name, index, newValue, oldValue) {
+	this.vthymio.onVarChanged = function (name, index, newValue, oldValue, oldArrayValue) {
 		switch (name) {
+		case "leds.circle":
+			var newArrayValue = oldArrayValue.slice();
+			newArrayValue[index] = newValue;
+			self.stateChangeListener[name] && self.stateChangeListener[name](name, newArrayValue);
+			break;
 		case "timer.period":
-			self["setTimer"](index, newValue * 0.001, true);
+			self["setTimer"](index, "timer" + index.toString(10), newValue * 0.001, true);
 			break;
 		}
 	};
@@ -76,6 +81,12 @@ A3a.vpl.VirtualThymioVM.prototype.constructor = A3a.vpl.VirtualThymioVM;
 A3a.vpl.VirtualThymioVM.prototype["reset"] = function (t0) {
 	A3a.vpl.VirtualThymio.prototype["reset"].call(this, t0);
 	this.vthymio.reset();
+
+	// fixed Thymio timers
+	this["setTimer"](20, "prox", 1 / 10, true);
+	this["setTimer"](21, "acc", 1 / 16, true);
+	this["setTimer"](22, "buttons", 1 / 20, true);
+	this["setTimer"](23, "temperature", 1, true);
 };
 
 /** Get variable from the Thymio VM
@@ -154,16 +165,16 @@ A3a.vpl.VirtualThymioVM.prototype["get"] = function (name) {
 		var varDescr;
 		switch (name) {
 		case "leds.top":
-			return (this.vthymio.state && this.vthymio.state["leds.top"] || [0, 0, 0])
+			return this.getVMVar("leds.top")
 				.map(function (x) { return x >= 32 ? 1 : x <= 0 ? 0 : x / 32; });
 		case "leds.bottom.left":
-			return (this.vthymio.state && this.vthymio.state["leds.bottom.left"] || [0, 0, 0])
+			return this.getVMVar("leds.bottom.left")
 				.map(function (x) { return x >= 32 ? 1 : x <= 0 ? 0 : x / 32; });
 		case "leds.bottom.right":
-			return (this.vthymio.state && this.vthymio.state["leds.bottom.right"] || [0, 0, 0])
+			return this.getVMVar("leds.bottom.right")
 				.map(function (x) { return x >= 32 ? 1 : x <= 0 ? 0 : x / 32; });
 		case "leds.circle":
-			return (this.vthymio.state && this.vthymio.state["leds.circle"] || [0, 0, 0, 0, 0, 0, 0, 0])
+			return this.getVMVar("leds.circle")
 				.map(function (x) { return x >= 16 ? 1 : 0; });
 		case "motor.left":
 			return this.getVMVar("motor.left.target")[0] / 200;	// scalar

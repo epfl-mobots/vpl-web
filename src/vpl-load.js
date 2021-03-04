@@ -17,9 +17,18 @@ Modal box for selecting a file.
 
 /** Load modal box
 	@param {A3a.vpl.Application} app
+	@param {?{
+		noCloseWidget: (boolean | undefined),
+		otherWidgets: (Array.<{title:string,htmlElement:?string,fun:function():void}> | undefined),
+		scroll: (boolean | undefined),
+		onShow: ((function():void) | null | undefined),
+		onHide: ((function():void) | null | undefined)
+	}=} options options
+	(onShow: function called when showing the panel (can install keyboard handler);
+	onHide: function called when hiding the panel (can remove keyboard handler))
 	@constructor
 */
-A3a.vpl.Load = function (app) {
+A3a.vpl.Load = function (app, options) {
 	var self = this;
 
 	this.backgroundDiv = document.createElement("div");
@@ -101,6 +110,9 @@ A3a.vpl.Load = function (app) {
 
 	this.i18n = app.i18n;
 	this.loadFun = null;
+
+	this.onShow = options && options.onShow || null;
+	this.onHide = options && options.onHide || null;
 };
 
 /** Show Load modal box
@@ -119,6 +131,10 @@ A3a.vpl.Load.prototype.show = function (title, accept, loadFun) {
 	var boundingBox = this.div.getBoundingClientRect();
 	this.div.style.marginLeft = (-boundingBox.width / 2) + "px";
 	this.div.style.marginTop = (-boundingBox.height / 2) + "px";
+
+	if (this.onShow) {
+		this.onShow();
+	}
 };
 
 /** Hide Load modal box
@@ -126,4 +142,7 @@ A3a.vpl.Load.prototype.show = function (title, accept, loadFun) {
 */
 A3a.vpl.Load.prototype.hide = function () {
 	this.backgroundDiv.style.display = "none";
+	if (this.onHide) {
+		this.onHide();
+	}
 };

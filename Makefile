@@ -1,4 +1,4 @@
-#	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+#	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 #	Miniature Mobile Robots group, Switzerland
 #	Author: Yves Piguet
 
@@ -10,7 +10,7 @@
 .PHONY: main
 main:	all
 
-COPYRIGHT = /* Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE - author Yves Piguet */
+COPYRIGHT = /* Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE - author Yves Piguet */
 
 # Default closure compiler in current directory, used if closure-compiler isn't found
 # Update here or build with "make CLOSURECOMPILER=path" to match your environment
@@ -35,9 +35,11 @@ JS = \
 	a3a-nodeproxy.js \
 	vpl-ns.js \
 	vpl-blocktemplate.js \
+	vpl-blockparam-acc.js \
 	vpl-block.js \
 	vpl-emptyblock.js \
 	vpl-rule.js \
+	vpl-rule-comment.js \
 	vpl-uiconfig.js \
 	vpl-i18n.js \
 	vpl-dynamic-help.js \
@@ -83,6 +85,9 @@ JS = \
 	vpl-files.js \
 	vpl-load.js \
 	vpl-com.js \
+	vpl-keyboard.js \
+	vpl-textfield.js \
+	vpl-kbd-control.js \
 	vpl-main.js \
 	vpl-robot.js \
 	vpl-virtualthymio.js \
@@ -122,8 +127,14 @@ vpl-min.js: $(JS)
 	$(CLOSURE) $(CLOSUREFLAGS) $^ >>$@ || (rm -f $@; false)
 	echo '}).call(this);' >>$@
 
+# dependencies
+index-classic.html: $(shell python3 inlinersrctool.py --input=index-classic-min-template.html --dep)
+index-svg.html: $(shell python3 inlinersrctool.py --input=index-svg-min-template.html --dep)
+index-classic-min.html: $(shell python3 inlinersrctool.py --input=index-classic-min-template.html --dep)
+index-svg-min.html: $(shell python3 inlinersrctool.py --input=index-svg-min-template.html --dep)
+
 %.html: %-template.html
-	python3 inlinersrctool.py $< >$@
+	python3 inlinersrctool.py --input=$< >$@
 
 .PHONY: clean
 clean:

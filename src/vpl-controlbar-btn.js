@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -43,6 +43,16 @@ A3a.vpl.ControlBar.drawButton;
 */
 A3a.vpl.ControlBar.getButtonBounds;
 
+/** Check if a control button is available (displayed)
+	@param {string} id
+	@return {boolean}
+*/
+A3a.vpl.Application.prototype.isButtonAvailable = function (id) {
+	var disabled = this.uiConfig.isDisabled(id);
+	return (this.forcedCommandState ? this.forcedCommandState.isAvailable : this.commands.isAvailable(id)) &&
+		(this.uiConfig.toolbarCustomizationMode || !disabled);
+};
+
 /** Add a control button, taking care of disabled ones
 	@param {A3a.vpl.Application} app
 	@param {string} id
@@ -53,8 +63,7 @@ A3a.vpl.ControlBar.getButtonBounds;
 */
 A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButton, buttonBounds) {
 	var disabled = app.uiConfig.isDisabled(id);
-	if ((app.forcedCommandState ? app.forcedCommandState.isAvailable : app.commands.isAvailable(id)) &&
-		(app.uiConfig.toolbarCustomizationMode || !disabled)) {
+	if (app.isButtonAvailable(id)) {
 		var canvas = this.canvas;
 		var cmd = app.commands.find(id);
 		var keepAvailable = cmd.keep;
@@ -70,9 +79,15 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 						app.forcedCommandState.isPressed,
 						app.forcedCommandState.state);
 				} else {
+					var isEnabled = app.commands.isEnabled(id) && (keepAvailable || !app.uiConfig.toolbarCustomizationDisabled);
+					if (!isEnabled && app.uiConfig.nodragAccessibility) {
+						// drop target; test current selection against canDrop
+						var targetObject = app.kbdControl.getTargetObject();
+						isEnabled = app.commands.canDrop(id, {data: targetObject});
+					}
 					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses, box,
 						app.i18n,
-						app.commands.isEnabled(id) && (keepAvailable || !app.uiConfig.toolbarCustomizationDisabled),
+						isEnabled,
 						app.commands.isSelected(id),
 						isPressed,
 						app.commands.getState(id));
@@ -80,28 +95,32 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 				return app.forcedCommandState ? app.forcedCommandState.disabled : disabled;
 			},
 			buttonBounds,
-			app.uiConfig.toolbarCustomizationMode && !keepAvailable
-				? function (downEvent) {
-					app.uiConfig.toggle(id);
-					return 1;
-				}
-				: app.commands.hasAction(id) && (keepAvailable || !app.uiConfig.toolbarCustomizationDisabled)
- 					? function (downEvent) {
-						app.commands.execute(id, downEvent.modifier);
+			{
+				action: app.uiConfig.toolbarCustomizationMode && !keepAvailable
+					? function (downEvent) {
+						app.uiConfig.toggle(id);
+						return 1;
 					}
-					: null,
-			// doDrop
-			app.uiConfig.toolbarCustomizationMode && !keepAvailable && app.uiConfig.toolbarCustomizationDisabled
-        		? null
-				: function (targetItem, droppedItem) {
-					app.commands.doDrop(id, droppedItem);
-				},
-			// canDrop
-			app.uiConfig.toolbarCustomizationMode && !keepAvailable && app.uiConfig.toolbarCustomizationDisabled
-				? null
-				: function (targetItem, droppedItem) {
-					return app.commands.canDrop(id, droppedItem);
-				},
+					: app.commands.hasAction(id) && (keepAvailable || !app.uiConfig.toolbarCustomizationDisabled)
+	 					? function (downEvent) {
+							app.commands.execute(id, downEvent.modifier);
+						}
+						: app.uiConfig.nodragAccessibility && !(app.uiConfig.toolbarCustomizationMode && !keepAvailable && app.uiConfig.toolbarCustomizationDisabled)
+							? function (downEvent) {
+								app.kbdControl.executeCommand(cmd);
+							}
+							: null,
+				doDrop: app.uiConfig.toolbarCustomizationMode && !keepAvailable && app.uiConfig.toolbarCustomizationDisabled
+	        		? null
+					: function (targetItem, droppedItem) {
+						app.commands.doDrop(id, droppedItem);
+					},
+				canDrop: app.uiConfig.toolbarCustomizationMode && !keepAvailable && app.uiConfig.toolbarCustomizationDisabled
+					? null
+					: function (targetItem, droppedItem) {
+						return app.commands.canDrop(id, droppedItem);
+					}
+			},
 			id);
 	}
 };

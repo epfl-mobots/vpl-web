@@ -4232,8 +4232,8 @@ function (_super) {
     configurable: true
   });
 
-  Node.prototype.sendAsebaProgram = function (code) {
-    return this._client._send_program(this._id, code, _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.ProgrammingLanguage.Aseba);
+  Node.prototype.sendAsebaProgram = function (code, dontLoadOnTarget) {
+    return this._client._send_program(this._id, code, _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.ProgrammingLanguage.Aseba, dontLoadOnTarget);
   };
   /** Load an aesl program on the VM
    *  The device must be locked & ready before calling this function
@@ -4243,8 +4243,8 @@ function (_super) {
    */
 
 
-  Node.prototype.send_aesl_program = function (code) {
-    return this._client._send_program(this._id, code, _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.ProgrammingLanguage.Aesl);
+  Node.prototype.send_aesl_program = function (code, dontLoadOnTarget) {
+    return this._client._send_program(this._id, code, _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.ProgrammingLanguage.Aesl, dontLoadOnTarget);
   };
 
   Node.prototype.runProgram = function () {
@@ -4484,7 +4484,9 @@ function () {
 
           if (req) {
             //TODO
-            req._trigger_error("Compilation error");
+            // YP did it on 11 Jan 2021
+            // req._trigger_error("Compilation error");
+            req._trigger_error(msg.message());
           }
 
           break;
@@ -4621,7 +4623,7 @@ function () {
     return this._prepare_request(req_id);
   };
 
-  Client.prototype._send_program = function (id, code, language) {
+  Client.prototype._send_program = function (id, code, language, dontLoadOnTarget) {
     var builder = new flatbuffers__WEBPACK_IMPORTED_MODULE_0__["flatbuffers"].Builder();
 
     var req_id = this._gen_request_id();
@@ -4635,7 +4637,9 @@ function () {
     _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.CompileAndLoadCodeOnVM.addNodeId(builder, nodeOffset);
     _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.CompileAndLoadCodeOnVM.addProgram(builder, codeOffset);
     _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.CompileAndLoadCodeOnVM.addLanguage(builder, language);
-    _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.CompileAndLoadCodeOnVM.addOptions(builder, _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.CompilationOptions.LoadOnTarget);
+    if (!dontLoadOnTarget) {
+        _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.CompileAndLoadCodeOnVM.addOptions(builder, _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.CompilationOptions.LoadOnTarget);
+    }
     var offset = _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.CompileAndLoadCodeOnVM.endCompileAndLoadCodeOnVM(builder);
 
     this._wrap_message_and_send(builder, offset, _thymio_generated__WEBPACK_IMPORTED_MODULE_1__["mobsya"].fb.AnyMessage.CompileAndLoadCodeOnVM);
@@ -39035,7 +39039,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 This is a Derivative Work.
-Changes by Mobots, EPFL, 2019-2020
+Changes by Mobots, EPFL, 2019-2021
 
 Build:
 1. git clone https://github.com/Mobsya/thymio-js-api-demo.git
@@ -39052,9 +39056,10 @@ Build:
 // options.change: function(connected) called upon connection change, or node change if !options.uuid
 // options.variables: function(v) called upon variable change, or "auto" to only enable this.getVariable
 // default for success (function called once code sent success): null (none)
+// default for failure (function called upon failure): null (write error with console.error)
 var tdm = new TDM(websocketURL, options);
 var b = tdm.canRun();
-tdm.run(asebaSourceCode, success);
+tdm.run(asebaSourceCode, success, failure);
 
 */
 
@@ -39286,73 +39291,90 @@ window.TDM.prototype.canRun = function () {
 };
 
 window.TDM.prototype.run = /*#__PURE__*/function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(program, success) {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(program, success, failure) {
     return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
             _context3.prev = 0;
 
-            if (!(this.selectedNode.status == _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__["NodeStatus"].ready)) {
-              _context3.next = 9;
+            if (!(this.selectedNode == null)) {
+              _context3.next = 3;
               break;
             }
 
-            _context3.next = 4;
-            return this.selectedNode.sendAsebaProgram(program);
+            throw "Robot not connected";
 
-          case 4:
+          case 3:
+            if (!(this.selectedNode.status == _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__["NodeStatus"].ready)) {
+              _context3.next = 11;
+              break;
+            }
+
             _context3.next = 6;
-            return this.selectedNode.setScratchPad(program, _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__["ProgrammingLanguage"].Aseba);
+            return this.selectedNode.sendAsebaProgram(program);
 
           case 6:
             _context3.next = 8;
-            return this.selectedNode.runProgram();
+            return this.selectedNode.setScratchPad(program, _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__["ProgrammingLanguage"].Aseba);
 
           case 8:
+            _context3.next = 10;
+            return this.selectedNode.runProgram();
+
+          case 10:
             success && success();
 
-          case 9:
-            _context3.next = 14;
+          case 11:
+            _context3.next = 16;
             break;
 
-          case 11:
-            _context3.prev = 11;
+          case 13:
+            _context3.prev = 13;
             _context3.t0 = _context3["catch"](0);
-            console.log(_context3.t0);
 
-          case 14:
+            if (failure) {
+              failure(_context3.t0);
+            } else {
+              console.error(_context3.t0);
+            }
+
+          case 16:
           case "end":
             return _context3.stop();
         }
       }
-    }, _callee3, this, [[0, 11]]);
+    }, _callee3, this, [[0, 13]]);
   }));
 
-  return function (_x2, _x3) {
+  return function (_x2, _x3, _x4) {
     return _ref3.apply(this, arguments);
   };
 }();
 
-window.TDM.prototype.flash = /*#__PURE__*/function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(program, success) {
+window.TDM.prototype.check = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(program, success, failure) {
     return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
-            _context4.prev = 0;
+            if (!(this.selectedNode == null)) {
+              _context4.next = 2;
+              break;
+            }
+
+            return _context4.abrupt("return");
+
+          case 2:
+            _context4.prev = 2;
 
             if (!(this.selectedNode.status == _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__["NodeStatus"].ready)) {
               _context4.next = 7;
               break;
             }
 
-            _context4.next = 4;
-            return this.selectedNode.sendAsebaProgram(program);
-
-          case 4:
             _context4.next = 6;
-            return this.selectedNode.flashProgram();
+            return this.selectedNode.sendAsebaProgram(program, true);
 
           case 6:
             success && success();
@@ -39363,64 +39385,124 @@ window.TDM.prototype.flash = /*#__PURE__*/function () {
 
           case 9:
             _context4.prev = 9;
-            _context4.t0 = _context4["catch"](0);
-            console.log(_context4.t0);
+            _context4.t0 = _context4["catch"](2);
+
+            if (failure) {
+              failure(_context4.t0);
+            } else {
+              console.error(_context4.t0);
+            }
 
           case 12:
           case "end":
             return _context4.stop();
         }
       }
-    }, _callee4, this, [[0, 9]]);
+    }, _callee4, this, [[2, 9]]);
   }));
 
-  return function (_x4, _x5) {
+  return function (_x5, _x6, _x7) {
     return _ref4.apply(this, arguments);
   };
 }();
 
-window.TDM.runOnNode = /*#__PURE__*/function () {
-  var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(node, program, success) {
+window.TDM.prototype.flash = /*#__PURE__*/function () {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(program, success, failure) {
     return regeneratorRuntime.wrap(function _callee5$(_context5) {
       while (1) {
         switch (_context5.prev = _context5.next) {
           case 0:
             _context5.prev = 0;
-            _context5.next = 3;
-            return node.lock();
 
-          case 3:
-            _context5.next = 5;
-            return node.sendAsebaProgram(program);
+            if (!(this.selectedNode.status == _mobsya_thymio_api__WEBPACK_IMPORTED_MODULE_0__["NodeStatus"].ready)) {
+              _context5.next = 7;
+              break;
+            }
 
-          case 5:
-            _context5.next = 7;
-            return node.runProgram();
+            _context5.next = 4;
+            return this.selectedNode.sendAsebaProgram(program);
+
+          case 4:
+            _context5.next = 6;
+            return this.selectedNode.flashProgram();
+
+          case 6:
+            success && success();
 
           case 7:
-            _context5.next = 9;
-            return node.unlock();
-
-          case 9:
-            success && success();
-            _context5.next = 15;
+            _context5.next = 12;
             break;
 
-          case 12:
-            _context5.prev = 12;
+          case 9:
+            _context5.prev = 9;
             _context5.t0 = _context5["catch"](0);
-            console.log(_context5.t0);
 
-          case 15:
+            if (failure) {
+              failure(_context5.t0);
+            } else {
+              console.error(_context5.t0);
+            }
+
+          case 12:
           case "end":
             return _context5.stop();
         }
       }
-    }, _callee5, null, [[0, 12]]);
+    }, _callee5, this, [[0, 9]]);
   }));
 
-  return function (_x6, _x7, _x8) {
+  return function (_x8, _x9, _x10) {
     return _ref5.apply(this, arguments);
+  };
+}();
+
+window.TDM.runOnNode = /*#__PURE__*/function () {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(node, program, success, failure) {
+    return regeneratorRuntime.wrap(function _callee6$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            _context6.prev = 0;
+            _context6.next = 3;
+            return node.lock();
+
+          case 3:
+            _context6.next = 5;
+            return node.sendAsebaProgram(program);
+
+          case 5:
+            _context6.next = 7;
+            return node.runProgram();
+
+          case 7:
+            _context6.next = 9;
+            return node.unlock();
+
+          case 9:
+            success && success();
+            _context6.next = 15;
+            break;
+
+          case 12:
+            _context6.prev = 12;
+            _context6.t0 = _context6["catch"](0);
+
+            if (failure) {
+              failure(_context6.t0);
+            } else {
+              console.error(_context6.t0);
+            }
+
+          case 15:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    }, _callee6, null, [[0, 12]]);
+  }));
+
+  return function (_x11, _x12, _x13, _x14) {
+    return _ref6.apply(this, arguments);
   };
 }();
 

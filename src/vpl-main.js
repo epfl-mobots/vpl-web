@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -270,7 +270,13 @@ function vplSetup(gui, rootDir) {
 
 	// application
 	var role = vplGetQueryOption("role");
+	var keyboardShortcuts = vplGetQueryOption("shortcuts");
 	var app = new A3a.vpl.Application(canvasEl);
+	if (keyboardShortcuts) {
+		app.uiConfig.keyboardShortcutsEnabled = keyboardShortcuts === "true";
+	}
+	app.uiConfig.keyboardAccessibility = vplGetQueryOption("accessibility").split("+").indexOf("kbd") >= 0;
+	app.uiConfig.nodragAccessibility = vplGetQueryOption("accessibility").split("+").indexOf("nodrag") >= 0;
 	app.simMaps = window["vplSimMaps"] == undefined
  		? "ground,height,obstacles"
 		: window["vplSimMaps"] === "merged"
@@ -278,6 +284,7 @@ function vplSetup(gui, rootDir) {
 			: window["vplSimMaps"].split(",");
 	window["vplApp"] = app;
 	app.username = vplGetQueryOption("user") || window["vplUsername"] || app.username;
+	app.pushVPLKeyShortcuts();
 
 	// validate ui (correct usage of blocks, control elements etc.)
 	if (gui && A3a.vpl.validateUI) {
@@ -308,7 +315,20 @@ function vplSetup(gui, rootDir) {
 	app.setUILanguage(uiLanguage);
 
 	// load box
-	app.loadBox = new A3a.vpl.Load(app);
+	app.loadBox = new A3a.vpl.Load(app,
+		app.uiConfig.keyboardShortcutsEnabled
+			? {
+				onShow: function () {
+					app.keyboard.pushKeyHandler("Escape", function () {
+						app.loadBox.hide();
+					});
+				},
+				onHide: function () {
+					app.keyboard.popHandler();
+				}
+			}
+			: null
+	);
 
 	// general settings
 	var isClassic = gui == undefined || gui["hardcoded-gui"] || vplGetQueryOption("appearance") === "classic";
@@ -500,7 +520,6 @@ function vplSetup(gui, rootDir) {
 
 	app.program.currentLanguage = language;
 	app.vplCanvas.widgets = widgets;
-	app.program.addEventHandler(true);
 	if (app.simCanvas != null) {
 		app.simCanvas.widgets = widgets;
 	}
@@ -597,6 +616,9 @@ function vplSetup(gui, rootDir) {
 
 		app.sim2d.disabledObstacleSVG = '<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 1052 744" version="1.1"><g transform="translate(0,-308)"><path style="fill:none;stroke:#000;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter" d="M 172,928 137,420 763,371 905,688 708,981 Z" /><path style="fill:none;stroke:#949494;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter" d="m 402,754 168,91 101,-142" /><circle style="fill:none;stroke:#000;stroke-width:6" cx="531" cy="550" r="59" /></g></svg>';
 	}
+
+	// new VPL program to make sure everything is setup correctly
+	app.newVPL(true);
 
 	// reload from storage
 	if (window["vplStorageGetFunction"]) {
@@ -764,6 +786,40 @@ function vplSetup(gui, rootDir) {
 }
 
 window.addEventListener("load", function () {
+	// check that the compiler and the simulator have the same vm definitions
+	if (A3a.Device.VirtualThymio && A3a.thymioDescr) {
+		var vTh = new A3a.Device.VirtualThymio();
+		// variables
+		if (vTh.variableSize !== A3a.thymioDescr["maxVarSize"]) {
+			throw "internal: vm var size mismatch";
+		}
+		if (vTh.variables.length !== A3a.thymioDescr["variables"].length) {
+			throw "internal: vm var count mismatch";
+		}
+		for (var i = 0; i < vTh.variables.length; i++) {
+			if (vTh.variables[i].name !== A3a.thymioDescr["variables"][i]["name"] ||
+				vTh.variables[i].val.length !== A3a.thymioDescr["variables"][i]["size"]) {
+				throw "internal: vm var mismatch";
+			}
+		}
+		if (vTh.localEvents.length !== A3a.thymioDescr["localEvents"].length) {
+			throw "internal: vm ev count mismatch";
+		}
+		for (var i = 0; i < vTh.localEvents.length; i++) {
+			if (vTh.localEvents[i].name !== A3a.thymioDescr["localEvents"][i]["name"]) {
+				throw "internal: vm var mismatch";
+			}
+		}
+		if (vTh.nativeFunctions.length !== A3a.thymioDescr["nativeFunctions"].length) {
+			throw "internal: vm nat fun count mismatch";
+		}
+		for (var i = 0; i < vTh.localEvents.length; i++) {
+			if (vTh.nativeFunctions[i].name !== A3a.thymioDescr["nativeFunctions"][i]["name"]) {
+				throw "internal: vm nat fun mismatch";
+			}
+		}
+	}
+
 	var uiDoc = vplGetQueryOption("ui") || "ui.json";
 	var isInScripts = document.getElementById(uiDoc) != null;
 	var uiRoot = window["vplUIRoot"] ? window["vplUIRoot"] : isInScripts ? "." : uiDoc.indexOf("/") >= 0 ? uiDoc.replace(/\/[^/]*$/, "") : ".";

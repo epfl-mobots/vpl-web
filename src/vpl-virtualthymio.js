@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -53,7 +53,7 @@ A3a.vpl.VirtualThymio = function () {
 	/** @type {?A3a.vpl.VirtualThymio.OnMoveFunction} */
 	this.onMove = null;
 	this.clientState = {};
-	/** @type {Array.<{next:number,period:number}>} */
+	/** @type {Array.<{name:string,next:number,period:number}>} */
 	this.timers = [];	// trigger times and periods (or -1 if single-shot)
 	this.eventListeners = {};
 
@@ -278,8 +278,9 @@ A3a.vpl.VirtualThymio.prototype["sendEvent"] = function (name, val) {
 /**
 	@inheritDoc
 */
-A3a.vpl.VirtualThymio.prototype["setTimer"] = function (id, period, isPeriodic) {
+A3a.vpl.VirtualThymio.prototype["setTimer"] = function (id, name, period, isPeriodic) {
 	this.timers[id] = {
+		name: name,
 		next: this.t - this.t0 + period,
 		period: isPeriodic ? period : -1
 	};
@@ -389,13 +390,11 @@ A3a.vpl.VirtualThymio.prototype["run"] = function (tStop, traceFun) {
 		}
 		// advance time
 		this.t += dt;
-		// call prox event
-		this["sendEvent"]("prox", null);
 		// call elapsed timer events
 		for (var i = 0; i < this.timers.length; i++) {
 			if (this.timers[i] && this.timers[i].next > 0 && this.t >= this.t0 + this.timers[i].next + this.noise(0.01)) {
 				this.timers[i].next = this.timers[i].period >= 0 ? this.timers[i].next + this.timers[i].period : -1;
-				this["sendEvent"]("timer" + i.toString(10), null);
+				this["sendEvent"](this.timers[i].name, null);
 			}
 		}
 	}

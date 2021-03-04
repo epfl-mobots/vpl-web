@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -27,7 +27,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.views.length > 1 && app.views.indexOf("vpl") >= 0;
-		}
+		},
+		keyShortcut: "w"
 	});
 	this.commands.add("vpl:about", {
 		action: function (app, modifier) {
@@ -36,7 +37,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.aboutBox != null;
-		}
+		},
+		keyShortcut: "i"
 	});
 	this.commands.add("vpl:help", {
 		action: function (app, modifier) {
@@ -45,7 +47,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.helpBox != null;
-		}
+		},
+		keyShortcut: "?"
 	});
 	this.commands.add("vpl:readonly", {
 		isEnabled: function (app) {
@@ -80,10 +83,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:new", {
 		action: function (app, modifier) {
-			app.program.new();
+			app.newVPL();
 			if (app.jsonForNew) {
 				app.loadProgramJSON(app.jsonForNew);
 			}
+			app.renderProgramToCanvas();
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.readOnly && !app.program.isEmpty();
@@ -91,7 +95,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return !app.program.readOnly;
-		}
+		},
+		keyShortcut: "n"
 	});
 	this.commands.add("vpl:save", {
 		action: function (app, modifier) {
@@ -111,7 +116,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return !app.program.readOnly;
-		}
+		},
+		keyShortcut: "s"
 	});
 	this.commands.add("vpl:load", {
 		action: function (app, modifier) {
@@ -127,7 +133,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return !app.program.readOnly;
-		}
+		},
+		keyShortcut: "o"
 	});
 	this.commands.add("vpl:upload", {
 		action: function (app, modifier) {
@@ -173,7 +180,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		isEnabled: function (app) {
 			return !app.program.noVPL && !app.program.isEmpty();
 		},
-		object: this
+		object: this,
+		keyShortcut: "h"
 	});
 	this.commands.add("vpl:text", {
 		action: function (app, modifier) {
@@ -260,7 +268,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return !app.program.readOnly;
-		}
+		},
+		keyShortcut: "z"
 	});
 	this.commands.add("vpl:redo", {
 		action: function (app, modifier) {
@@ -268,6 +277,23 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && app.program.undoState.canRedo();
+		},
+		object: this,
+		isAvailable: function (app) {
+			return !app.program.readOnly;
+		},
+		keyShortcut: "y"
+	});
+	this.commands.add("vpl:add-comment", {
+		action: function (app, modifier) {
+			app.program.saveStateBeforeChange();
+			var position = app.kbdControl.targetType === A3a.vpl.KbdControl.ObjectType.rule ? app.kbdControl.targetIndex1 : null;
+			position = app.program.addComment("", position, true);
+			app.editComment(position);
+			app.renderProgramToCanvas();
+		},
+		isEnabled: function (app) {
+			return !app.program.noVPL;
 		},
 		object: this,
 		isAvailable: function (app) {
@@ -345,7 +371,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			{state: "error"},
 			{state: "canLoad"},
 			{state: "canReload"}
-		]
+		],
+		keyShortcut: "r"
 	});
 	this.commands.add("vpl:stop", {
 		action: function (app, modifier) {
@@ -358,7 +385,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		object: this,
 		isAvailable: function (app) {
 			return app.currentRobotIndex >= 0;
-		}
+		},
+		keyShortcut: "."
 	});
 	this.commands.add("vpl:stop-abnormally", {
 		action: function (app, modifier) {
@@ -372,6 +400,26 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		isAvailable: function (app) {
 			return app.currentRobotIndex >= 0;
 		}
+	});
+	this.commands.add("vpl:slowdown", {
+		action: function (app, modifier) {
+			/** @const */
+			var s = [0.1, 0.2, 0.5, 1];
+			app.program.setSlowdownFactor(s[(s.indexOf(app.program.slowdownFactor) + 1) % s.length]);
+		},
+		isSelected: function (app) {
+			return app.program.slowdownFactor !== 1;
+		},
+		getState: function (app) {
+			return app.program.slowdownFactor;
+		},
+		object: this,
+		possibleStates: [
+			{selected: true, state: 0.1},
+			{selected: true, state: 0.2},
+			{selected: true, state: 0.5},
+			{selected: false, state: 1}
+		]
 	});
 	this.commands.add("vpl:debug", {
 		// not implemented yet

@@ -1,16 +1,15 @@
-We intend to release VPL 3 as open source when VPL 3 is officially released.
-More specifically:
+VPL 3 is released as open source. More specifically:
 
-- the graphical assets will be released under CC-BY-NC-ND-4;
-- the source code, configuration files, build files etc. will be released
-  under BSD-3;
-- the trademarks and logos will remain the exclusive property of their
-  respective owners.
+- the source code, configuration files, build files etc. are released
+  under BSD-3 (Revised BSD License);
+- the graphical assets (SVG files) are released under CC-BY-NC-ND-4
+  (Creative Commons Attribution-NonCommercial-NoDerivatives 4.0
+  International Public License);
+- the trademarks and logos remain the exclusive property of their
+  respective owners and are outside the scope of this license.
 
-The content of this file will be changed when VPL 3 is officially released.
-
-Until then, all the VPL 3 files are under embargo.
+Please see the files LICENSE-BSD-3.txt and LICENSE-CC-BY-NC-ND-4.txt
+for details.
 
 The authors @ EPFL
-June 2019
-
+December 2020

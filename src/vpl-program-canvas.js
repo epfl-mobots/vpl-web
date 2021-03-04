@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -67,6 +67,23 @@ A3a.vpl.Application.prototype.createVPLControlBarDoOverFun = function () {
 	};
 };
 
+/** @const */
+A3a.vpl.Application.blockTypeCSSSelectors = {
+	"e": "event",
+	"s": "state",
+	"a": "action",
+	"c": "comment"
+};
+
+/** @typedef {{
+		type: A3a.vpl.KbdControl.ObjectType,
+		index1: number,
+		index2: number,
+		click: (function():void | null | undefined)
+	}}
+*/
+A3a.vpl.Application.ItemActivityOptions;
+
 /** Add a block to a canvas
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.Block} block
@@ -81,7 +98,8 @@ A3a.vpl.Application.prototype.createVPLControlBarDoOverFun = function () {
 		notDraggable:(boolean|undefined),
 		scale:(number|undefined),
 		disabled: (boolean|undefined),
-		crossedOut: (boolean|undefined)
+		crossedOut: (boolean|undefined),
+		accessibility: (A3a.vpl.Application.ItemActivityOptions|null|undefined)
 	}=} opts
 	@return {A3a.vpl.CanvasItem}
 */
@@ -98,6 +116,10 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, c
 	var program = app.program;
 	var blockSize = Math.min(box.width, box.height);
 	var scale = canvas.dims.blockSize != 0 ? blockSize / canvas.dims.blockSize : 1;
+	var blockTypeCSSSelector = A3a.vpl.Application.blockTypeCSSSelectors[block.blockTemplate.type];
+	if (blockTypeCSSSelector && cssClasses.indexOf(blockTypeCSSSelector) < 0) {
+		cssClasses.push(blockTypeCSSSelector);
+	}
 	var item = new A3a.vpl.CanvasItem(block,
 		box.width, box.height,
 		x, y,
@@ -119,6 +141,20 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, c
 			if (block.disabled || opts.disabled) {
 				canvas.disabledMark(item.x + dx, item.y + dy, blockSize, blockSize,
 					cssClasses, cssClasses, !block.disabled && !opts.crossedOut);
+			}
+			if (block.marks.kbdTarget) {
+				canvas.overlayRect(item.x + dx, item.y + dy, box.width, box.height,
+					cssClasses.concat("kbd-target"));
+			}
+			if (block.marks.kbdSelected) {
+				canvas.overlayRect(item.x + dx, item.y + dy, box.width, box.height,
+					cssClasses.concat("kbd-selected"));
+			}
+			if (block.marks.kbdSelectedParam != null && block.blockTemplate.paramAccessibility !== null) {
+				var c = block.blockTemplate.paramAccessibility.controls[/** @type{number} */(block.marks.kbdSelectedParam)];
+				canvas.overlayRect(item.x + dx + box.width * c.left, item.y + dy + box.height * c.top,
+					box.width * (c.right - c.left), box.height * (c.bottom - c.top),
+					cssClasses.concat("kbd-selected", "param"));
 			}
 			canvas.dims = dims0;
 			ctx.restore();
@@ -176,9 +212,58 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, c
 	item.draggable = !(opts && opts.notDraggable);
 	item.doOver = app.createVPLFixedStringDoOverFun(block.blockTemplate.name);
 	var index = canvas.itemIndex(block);
+	if (this.uiConfig.nodragAccessibility && opts && opts.accessibility) {
+		item.draggable = false;
+		var self = this;
+		item.interactiveCB = opts.accessibility.type !== A3a.vpl.KbdControl.ObjectType.none ? {
+			/** @type {A3a.vpl.CanvasItem.mousedown} */
+			mousedown: function (canvas, data, width, height, left, top, ev) {
+				if (self.kbdControl.targetType !== opts.accessibility.type ||
+					self.kbdControl.targetIndex1 !== opts.accessibility.index1 ||
+					self.kbdControl.targetIndex2 !== opts.accessibility.index2) {
+					self.kbdControl.targetType = opts.accessibility.type;
+					self.kbdControl.targetIndex1 = opts.accessibility.index1;
+					self.kbdControl.targetIndex2 = opts.accessibility.index2;
+				} else {
+					self.kbdControl.clickOnParamControl((ev.x - left) / width, (ev.y - top) / height);
+				}
+				canvas.redraw();
+				return 0;
+			},
+			/** @type {A3a.vpl.CanvasItem.mousedrag} */
+			mousedrag: function (canvas, data, dragIndex, width, height, left, top, ev) {
+				var canvasBndRect = canvas.canvas.getBoundingClientRect();
+				var x = ev.x - canvasBndRect.left;
+				var y = ev.y - canvasBndRect.top;
+				var isInside = x >= item.x && x < item.x + item.width &&
+					y >= item.y && y < item.y + item.height;
+				if (self.kbdControl.targetType !== (isInside ? opts.accessibility.type : A3a.vpl.KbdControl.ObjectType)) {
+					self.kbdControl.targetType = isInside ? opts.accessibility.type : A3a.vpl.KbdControl.ObjectType;
+					canvas.redraw();
+				}
+			}
+		}
+		: {
+			/** @type {A3a.vpl.CanvasItem.mouseup} */
+			mouseup: function (canvas, data, dragIndex) {
+				if (opts.accessibility.click) {
+					opts.accessibility.click();
+				}
+			}
+		};
+	}
 	canvas.setItem(item, index);
 	return item;
 };
+
+/**
+	@typedef {{
+		kbdSelected: boolean,
+		kbdSelectedParam: (number | null),
+		kbdTarget: boolean
+	}}
+*/
+A3a.vpl.BlockTemplate.BlockMarks;
 
 /** Add a block template on a canvas
 	@param {A3a.vpl.Canvas} canvas
@@ -186,13 +271,20 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, c
 	@param {CSSParser.VPL.Box} box
 	@param {number} x horizontal block template position (without box padding)
 	@param {number} y vertical  block template position (without box padding)
+	@param {boolean} kbdSelected
+	@param {?A3a.vpl.Application.ItemActivityOptions} accessibility
 	@return {void}
 */
-A3a.vpl.Application.prototype.addBlockTemplateToCanvas = function (canvas, blockTemplate, box, x, y) {
+A3a.vpl.Application.prototype.addBlockTemplateToCanvas = function (canvas, blockTemplate, box, x, y, kbdSelected, accessibility) {
 	var block = new A3a.vpl.Block(blockTemplate, null, null);
 	if (blockTemplate.typicalParam) {
 		block.param = blockTemplate.typicalParam();
 	}
+	block.marks = /** @type {A3a.vpl.BlockTemplate.BlockMarks} */({
+		kbdSelected: kbdSelected || false,
+		kbdSelectedParam: null,
+		kbdTarget: false
+	});
 	var program = this.program;
 	var crossedOut = (program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 		.indexOf(blockTemplate.name) < 0;
@@ -214,7 +306,9 @@ A3a.vpl.Application.prototype.addBlockTemplateToCanvas = function (canvas, block
 					}
 					return 1;
 				}
-				: null
+				: null,
+			// keep normal behavior during customization
+			accessibility: this.uiConfig.blockCustomizationMode ? null : accessibility
 		});
 	if (blockTemplate.typicalParam) {
 		canvasItem.makeDraggedItem = function (item) {
@@ -331,9 +425,40 @@ A3a.vpl.Program.blockVerticalOffset = function (blockBox, containerBox) {
 	}
 };
 
+/** Start editing a comment
+	@param {number} ruleIndex
+	@return {void}
+*/
+A3a.vpl.Application.prototype.editComment = function (ruleIndex) {
+	var self = this;
+	var canvas = this.vplCanvas;
+	var rule = this.program.program[ruleIndex];
+
+	if (this.textField && this.textField.ref === rule) {
+		// rule already being edited
+		return;
+	}
+
+	this.textField = new A3a.vpl.TextField(this, {
+		initialValue: /** @type {A3a.vpl.RuleComment} */(rule).comment,
+		display: function (str, selBegin, selEnd) {
+			canvas.onUpdate && canvas.onUpdate();
+		},
+		finish: function (str) {
+			if (str !== null) {
+				/** @type {A3a.vpl.RuleComment} */(rule).comment = str;
+			}
+			self.textField = null;
+			canvas.onUpdate && canvas.onUpdate();
+		},
+		ref: rule
+	});
+};
+
 /** Add a rule to a canvas
 	@param {A3a.vpl.Canvas} canvas
 	@param {A3a.vpl.Rule} rule
+	@param {number} ruleIndex
 	@param {boolean} displaySingleEvent
 	@param {number} maxWidthForEventRightAlign
 	@param {number} eventX0
@@ -343,9 +468,11 @@ A3a.vpl.Program.blockVerticalOffset = function (blockBox, containerBox) {
 	@return {void}
 */
 A3a.vpl.Application.prototype.addRuleToCanvas =
-	function (canvas, rule, displaySingleEvent, maxWidthForEventRightAlign,
+	function (canvas, rule, ruleIndex, displaySingleEvent, maxWidthForEventRightAlign,
 		eventX0, actionX0, y,
 		cssBoxes) {
+
+	var isComment = rule instanceof A3a.vpl.RuleComment;
 
 	var canvasSize = canvas.getSize();
 	var x = eventX0;
@@ -354,70 +481,149 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 
 	var self = this;
 	var program = this.program;
+	var ruleBox = isComment
+		? self.textField && self.textField.ref === rule ? cssBoxes.ruleCommentEditedBox : cssBoxes.ruleCommentBox
+		: cssBoxes.ruleBox;
 	var block0Box = rule.events.length > 0 && rule.events[0].blockTemplate.type === A3a.vpl.blockType.event
 		? cssBoxes.blockEventMainBox
 		: cssBoxes.blockEventAuxBox;
 	var item = new A3a.vpl.CanvasItem(rule,
-		cssBoxes.ruleBox.paddedWidth(),
-		cssBoxes.ruleBox.paddedHeight(),
-		x - cssBoxes.ruleBox.paddingLeft - cssBoxes.blockContainerBox.offsetLeft() - block0Box.offsetLeft(),
-		y - cssBoxes.ruleBox.paddingTop - cssBoxes.blockContainerBox.offsetTop() - block0Box.offsetTop(),
+		ruleBox.paddedWidth(),
+		ruleBox.paddedHeight(),
+		x - ruleBox.paddingLeft - cssBoxes.blockContainerBox.offsetLeft() - block0Box.offsetLeft(),
+		y - ruleBox.paddingTop - cssBoxes.blockContainerBox.offsetTop() - block0Box.offsetTop(),
 		// draw
 		function (canvas, item, dx, dy) {
 			var ctx = canvas.ctx;
 			// strip
-			cssBoxes.ruleBox.drawAt(ctx, item.x + dx, item.y + dy, true);
-			// event/action separator
-			var separatorWidth = cssBoxes.ruleSeparatorBox.totalWidth();
-			cssBoxes.ruleSeparatorBox.drawAt(ctx,
-				actionX0 - cssBoxes.ruleSeparatorBox.width - cssBoxes.ruleSeparatorBox.marginRight - cssBoxes.ruleSeparatorBox.paddingRight -
-					cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockActionBox.offsetLeft() + dx,
-				item.y + (cssBoxes.ruleBox.paddedHeight() - cssBoxes.ruleSeparatorBox.height) / 2 + dy);
-			canvas.drawWidget("vpl:then",
-				actionX0 - cssBoxes.ruleSeparatorBox.totalWidth() / 2 - cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockActionBox.offsetLeft() + dx,
-				item.y + cssBoxes.ruleBox.paddedHeight() / 2 + dy,
-				cssBoxes.ruleSeparatorBox);
-			if (rule.locked) {
-				canvas.lockedMark(item.x, item.y, item.width, item.height,
-					false, rule.disabled ? "#ddd" : "");
+			ruleBox.drawAt(ctx, item.x + dx, item.y + dy, true);
+			if (isComment) {
+				ctx.save();
+				ctx.fillStyle = ruleBox.color;
+				ctx.font = ruleBox.cssFontString();
+				ctx.textAlign = "left";
+				ctx.textBaseline = "middle";
+				if (self.textField && self.textField.ref === rule) {
+					// being edited
+					var strLeftSize = ctx.measureText(self.textField.str.slice(0, self.textField.selBegin));
+					var ascent = strLeftSize["fontBoundingBoxAscent"] || 0;
+					var descent = strLeftSize["fontBoundingBoxDescent"] || 0;
+					if (ascent === 0 || descent === 0) {
+						// vertical metrics missing in TextMetrics: use css
+						ascent = ruleBox.fontSize / 2;
+						descent = ascent;
+					}
+					var textFieldFrame = {
+						top: item.y + dy + ruleBox.paddingTop + ruleBox.height / 2 - ascent,
+						bottom: item.y + dy + ruleBox.paddingTop + ruleBox.height / 2 + descent,
+						left: item.x + dx + ruleBox.paddingLeft,
+						right: item.x + dx + ruleBox.paddingLeft + ctx.measureText(self.textField.str).width
+					};
+					var rightPos = self.textField.str.split("").map(function (c, i) {
+						return ctx.measureText(self.textField.str.slice(0, i + 1)).width;
+					});
+					self.textField.setRenderingPos(textFieldFrame, rightPos);
+					if (self.textField.selEnd === self.textField.selBegin) {
+						// plain cursor
+						ctx.strokeStyle = "black";
+						ctx.beginPath();
+						ctx.moveTo(textFieldFrame.left + strLeftSize.width, textFieldFrame.top);
+						ctx.lineTo(textFieldFrame.left + strLeftSize.width, textFieldFrame.bottom);
+						ctx.stroke();
+					} else {
+						// selection
+						var strSelSize = ctx.measureText(self.textField.str.slice(self.textField.selBegin, self.textField.selEnd));
+						ctx.save();
+						ctx.fillStyle = "silver";
+						ctx.fillRect(textFieldFrame.left + strLeftSize.width - 1, textFieldFrame.top,
+							strSelSize.width, ascent + descent);
+						ctx.restore();
+					}
+					ctx.fillText(self.textField.str, textFieldFrame.left, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2);
+				} else {
+					ctx.fillText(/** @type {A3a.vpl.RuleComment} */(rule).comment, item.x + dx + ruleBox.paddingLeft, item.y + dy + ruleBox.paddingTop + ruleBox.height / 2);
+				}
+				ctx.restore();
+				if (self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.rule &&
+					self.kbdControl.selectionIndex1 === ruleIndex) {
+					canvas.overlayRect(item.x + dx, item.y + dy, item.width, item.height,
+						["rule", "comment", "kbd-selected"]);
+				}
+				if (self.kbdControl.targetType === A3a.vpl.KbdControl.ObjectType.rule &&
+					self.kbdControl.targetIndex1 === ruleIndex) {
+					canvas.overlayRect(item.x + dx, item.y + dy, item.width, item.height,
+						["rule", "comment", "kbd-target"]);
+				}
+			} else {
+				// event/action separator
+				var separatorWidth = cssBoxes.ruleSeparatorBox.totalWidth();
+				cssBoxes.ruleSeparatorBox.drawAt(ctx,
+					actionX0 - cssBoxes.ruleSeparatorBox.width - cssBoxes.ruleSeparatorBox.marginRight - cssBoxes.ruleSeparatorBox.paddingRight -
+						cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockActionBox.offsetLeft() + dx,
+					item.y + (ruleBox.paddedHeight() - cssBoxes.ruleSeparatorBox.height) / 2 + dy);
+				canvas.drawWidget("vpl:then",
+					actionX0 - cssBoxes.ruleSeparatorBox.totalWidth() / 2 - cssBoxes.blockContainerBox.offsetLeft() - cssBoxes.blockActionBox.offsetLeft() + dx,
+					item.y + ruleBox.paddedHeight() / 2 + dy,
+					cssBoxes.ruleSeparatorBox);
+				if (rule.locked) {
+					canvas.lockedMark(item.x, item.y, item.width, item.height,
+						false, rule.disabled ? "#ddd" : "");
+				}
+				if (self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.rule &&
+					self.kbdControl.selectionIndex1 === ruleIndex) {
+					canvas.overlayRect(item.x + dx, item.y + dy, item.width, item.height,
+						["rule", "kbd-selected"]);
+				}
+				if (self.kbdControl.targetType === A3a.vpl.KbdControl.ObjectType.rule &&
+					self.kbdControl.targetIndex1 === ruleIndex) {
+					canvas.overlayRect(item.x + dx, item.y + dy, item.width, item.height,
+						["rule", "kbd-target"]);
+				}
+				// block container boxes
+				var x = item.x + dx + ruleBox.paddingLeft;
+				if (maxWidthForEventRightAlign > 0) {
+					x += maxWidthForEventRightAlign - widths.totalEvents;
+				}
+				events.forEach(function (event, j) {
+					var box = rule.error && rule.error.eventError &&
+						(rule.error.eventErrorIndices.length === 0 || rule.error.eventErrorIndices.indexOf(j) >= 0)
+						? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
+						: cssBoxes.blockContainerBox;
+					box.width = event == null
+						? (events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox).totalWidth()
+						: A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes).totalWidth();
+					box.drawAt(ctx,
+						x + box.marginLeft,
+						item.y + dy + ruleBox.paddingTop + cssBoxes.blockContainerBox.marginTop,
+						true);
+					x += box.totalWidth();
+				});
+				x = item.x + dx + ruleBox.paddingLeft + actionX0 - eventX0;
+				actions.forEach(function (action, j) {
+					var box = rule.error && !rule.error.eventError &&
+						(rule.error.actionErrorIndices.length === 0 || rule.error.actionErrorIndices.indexOf(j) >= 0)
+						? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
+						: cssBoxes.blockContainerBox;
+					box.width = action == null
+						? (actions.length === 1 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox).totalWidth()
+						: A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes).totalWidth();
+					box.drawAt(ctx,
+						x + box.marginLeft,
+						item.y + dy + ruleBox.paddingTop + cssBoxes.blockContainerBox.marginTop,
+						true);
+					x += box.totalWidth();
+				});
 			}
-			// block container boxes
-			var x = item.x + dx + cssBoxes.ruleBox.paddingLeft;
-			if (maxWidthForEventRightAlign > 0) {
-				x += maxWidthForEventRightAlign - widths.totalEvents;
-			}
-			events.forEach(function (event, j) {
-				var box = rule.error && rule.error.eventError &&
-					(rule.error.eventErrorIndices.length === 0 || rule.error.eventErrorIndices.indexOf(j) >= 0)
-					? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
-					: cssBoxes.blockContainerBox;
-				box.width = event == null
-					? (events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox).totalWidth()
-					: A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes).totalWidth();
-				box.drawAt(ctx,
-					x + box.marginLeft,
-					item.y + dy + cssBoxes.ruleBox.paddingTop + cssBoxes.blockContainerBox.marginTop,
-					true);
-				x += box.totalWidth();
-			});
-			x = item.x + dx + cssBoxes.ruleBox.paddingLeft + actionX0 - eventX0;
-			actions.forEach(function (action, j) {
-				var box = rule.error && !rule.error.eventError &&
-					(rule.error.actionErrorIndices.length === 0 || rule.error.actionErrorIndices.indexOf(j) >= 0)
-					? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
-					: cssBoxes.blockContainerBox;
-				box.width = action == null
-					? (actions.length === 1 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox).totalWidth()
-					: A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes).totalWidth();
-				box.drawAt(ctx,
-					x + box.marginLeft,
-					item.y + dy + cssBoxes.ruleBox.paddingTop + cssBoxes.blockContainerBox.marginTop,
-					true);
-				x += box.totalWidth();
-			});
 		},
 		// interactiveCB
-		null,
+		isComment
+			? {
+				/** @type {A3a.vpl.CanvasItem.mouseup} */
+				mouseup: function (canvas, data, dragIndex, width, height, left, top, ev) {
+					self.editComment(ruleIndex);
+				}
+			}
+			: null,
 		// doDrop: reorder event handler or add dropped block
 		function (targetItem, droppedItem) {
 			if (droppedItem.data instanceof A3a.vpl.Rule) {
@@ -444,8 +650,10 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
             return droppedItem.data instanceof A3a.vpl.Rule
                 // event handler: ok to another one
                 ? droppedItem.data !== targetItem.data
-                // block: not in parent event handler
-                : droppedItem.data.ruleContainer !== targetItem.data &&
+                // block: not in comment
+                : !isComment &&
+                	// ...and not in parent event handler
+					droppedItem.data.ruleContainer !== targetItem.data &&
                     // ...and not a new event in basic mode
                     (program.mode === A3a.vpl.mode.advanced ||
                         targetItem.data.events.length === 0 ||
@@ -461,105 +669,197 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 	if (this.program.noVPL || this.program.readOnly) {
 		item.draggable = false;
 	}
+	if (this.uiConfig.nodragAccessibility) {
+		item.draggable = false;
+		item.interactiveCB = {
+			/** @type {A3a.vpl.CanvasItem.mousedown} */
+			mousedown: function (canvas, data, width, height, left, top, ev) {
+				self.kbdControl.targetType = A3a.vpl.KbdControl.ObjectType.rule;
+				self.kbdControl.targetIndex1 = ruleIndex;
+				canvas.redraw();
+				return 0;
+			},
+			/** @type {A3a.vpl.CanvasItem.mousedrag} */
+			mousedrag: function (canvas, data, dragIndex, width, height, left, top, ev) {
+				var canvasBndRect = canvas.canvas.getBoundingClientRect();
+				var x = ev.x - canvasBndRect.left;
+				var y = ev.y - canvasBndRect.top;
+				var isInside = x >= item.x && x < item.x + item.width &&
+					y >= item.y && y < item.y + item.height;
+				if (self.kbdControl.targetType !== (isInside ? A3a.vpl.KbdControl.ObjectType.rule : A3a.vpl.KbdControl.ObjectType)) {
+					self.kbdControl.targetType = isInside ? A3a.vpl.KbdControl.ObjectType.rule : A3a.vpl.KbdControl.ObjectType;
+					canvas.redraw();
+				}
+			}
+		};
+	}
 	canvas.setItem(item);
 
-	/** @type {A3a.vpl.CanvasItem} */
-	var childItem;
+	if (!isComment) {
+		/** @type {A3a.vpl.CanvasItem} */
+		var childItem;
 
-	var events = rule.events;
-	if (events.length === 0 || (!displaySingleEvent && events[events.length - 1] !== null)) {
-		events = events.concat(null);
-	}
-	x = eventX0;
-	if (maxWidthForEventRightAlign > 0) {
-		x += maxWidthForEventRightAlign - widths.totalEvents;
-	}
-	events.forEach(function (event, j) {
-		var blockBox = event
-			? A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes)
-			: events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox;
-		var containerBox = rule.error && rule.error.eventError &&
-			(rule.error.eventErrorIndices.length === 0 || rule.error.eventErrorIndices.indexOf(j) >= 0)
-			? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
-			: cssBoxes.blockContainerBox;
-		var vertOffset = A3a.vpl.Program.blockVerticalOffset(blockBox, containerBox);
-		if (event) {
-			containerBox.width = blockBox.totalWidth();
-			childItem = this.addBlockToCanvas(canvas, event, blockBox, ["block"],
-				x, y + vertOffset,
-				{
-					notInteractive: rule.disabled || this.program.noVPL || this.program.readOnly,
-					notClickable: rule.disabled || this.program.noVPL || this.program.readOnly,
-					notDraggable: this.program.noVPL || this.program.readOnly
-				});
-		} else {
-			containerBox.width = blockBox.totalWidth();
-			childItem = this.addBlockToCanvas(canvas,
-				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.event, rule,
-					{eventSide: true, index: j}),
-				blockBox, ["block"],
-				x, y + vertOffset,
-				{
-					notDropTarget: rule.disabled || this.readOnly,
-					notClickable: true,
-					notDraggable: true
-				});
+		var events = rule.events;
+		if (events.length === 0 || (!displaySingleEvent && events[events.length - 1] !== null)) {
+			events = events.concat(null);
 		}
-		item.attachItem(childItem);
-		x += containerBox.totalWidth();
-	}, this);
-	var actions = rule.actions;
-	if (actions.length === 0 || actions[actions.length - 1] !== null) {
-		actions = actions.concat(null);
-	}
-	x = actionX0;
-	actions.forEach(function (action, j) {
-		var blockBox = action
-			? A3a.vpl.Program.boxForBlockType(action, j == 0, cssBoxes)
-			: actions.length === 1 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox;
-		var containerBox = rule.error && !rule.error.eventError &&
-			(rule.error.actionErrorIndices.length === 0 || rule.error.actionErrorIndices.indexOf(j) >= 0)
-			? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
-			: cssBoxes.blockContainerBox;
-		var vertOffset = A3a.vpl.Program.blockVerticalOffset(blockBox, containerBox);
-		if (action) {
-			containerBox.width = blockBox.totalWidth();
-			childItem = this.addBlockToCanvas(canvas, action,
-				A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes), ["block"],
-				x, y + vertOffset,
-				{
-					notInteractive: rule.disabled || this.program.noVPL || this.program.readOnly,
-					notClickable: rule.disabled || this.program.noVPL || this.program.readOnly,
-					notDraggable: this.program.noVPL || this.program.readOnly
-				});
-		} else {
-			containerBox.width = blockBox.totalWidth();
-			childItem = this.addBlockToCanvas(canvas,
-				new A3a.vpl.EmptyBlock(A3a.vpl.blockType.action, rule,
-					{eventSide: false, index: j}),
-				blockBox, ["block"],
-				x, y,
-				{
-					notDropTarget: program.readOnly,
-					notClickable: true,
-					notDraggable: true
-				});
+		x = eventX0;
+		if (maxWidthForEventRightAlign > 0) {
+			x += maxWidthForEventRightAlign - widths.totalEvents;
 		}
-		item.attachItem(childItem);
-		x += containerBox.totalWidth();
-	}, this);
+		events.forEach(function (event, j) {
+			var blockBox = event
+				? A3a.vpl.Program.boxForBlockType(event, j === 0, cssBoxes)
+				: events.length === 1 ? cssBoxes.blockEmptyEventOnlyChildBox : cssBoxes.blockEmptyEventAuxBox;
+			var containerBox = rule.error && rule.error.eventError &&
+				(rule.error.eventErrorIndices.length === 0 || rule.error.eventErrorIndices.indexOf(j) >= 0)
+				? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
+				: cssBoxes.blockContainerBox;
+			var vertOffset = A3a.vpl.Program.blockVerticalOffset(blockBox, containerBox);
+			if (event) {
+				event.marks = /** @type {A3a.vpl.BlockTemplate.BlockMarks} */({
+					kbdSelected: this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.blockLeft &&
+						this.kbdControl.selectionIndex1 === ruleIndex &&
+						this.kbdControl.selectionIndex2 === j,
+					kbdSelectedParam: this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.blockLeftParam &&
+						this.kbdControl.selectionIndex1 === ruleIndex &&
+						this.kbdControl.selectionIndex2 === j
+							? this.kbdControl.selectionParamIndex
+							: null,
+					kbdTarget: this.kbdControl.targetType === A3a.vpl.KbdControl.ObjectType.blockLeft &&
+						this.kbdControl.targetIndex1 === ruleIndex &&
+						this.kbdControl.targetIndex2 === j
+				});
+				containerBox.width = blockBox.totalWidth();
+				childItem = this.addBlockToCanvas(canvas, event, blockBox, ["block"],
+					x, y + vertOffset,
+					{
+						notInteractive: rule.disabled || this.program.noVPL || this.program.readOnly,
+						notClickable: rule.disabled || this.program.noVPL || this.program.readOnly,
+						notDraggable: this.program.noVPL || this.program.readOnly,
+						accessibility: {
+							type: A3a.vpl.KbdControl.ObjectType.blockLeft,
+							index1: ruleIndex,
+							index2: j
+						}
+					});
+			} else {
+				event = new A3a.vpl.EmptyBlock(A3a.vpl.blockType.event, rule,
+					{eventSide: true, index: j});
+				event.marks = /** @type {A3a.vpl.BlockTemplate.BlockMarks} */({
+					kbdSelected: this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.blockLeft &&
+						this.kbdControl.selectionIndex1 === ruleIndex &&
+						this.kbdControl.selectionIndex2 === j,
+					kbdSelectedParam: null,
+					kbdTarget: this.kbdControl.targetType === A3a.vpl.KbdControl.ObjectType.blockLeft &&
+						this.kbdControl.targetIndex1 === ruleIndex &&
+						this.kbdControl.targetIndex2 === j
+				});
+				containerBox.width = blockBox.totalWidth();
+				childItem = this.addBlockToCanvas(canvas,
+					event,
+					blockBox, ["block"],
+					x, y + vertOffset,
+					{
+						notDropTarget: rule.disabled || this.readOnly,
+						notClickable: true,
+						notDraggable: true,
+						accessibility: {
+							type: A3a.vpl.KbdControl.ObjectType.blockLeft,
+							index1: ruleIndex,
+							index2: j
+						}
+					});
+			}
+			item.attachItem(childItem);
+			x += containerBox.totalWidth();
+		}, this);
+		var actions = rule.actions;
+		if (actions.length === 0 || actions[actions.length - 1] !== null) {
+			actions = actions.concat(null);
+		}
+		x = actionX0;
+		actions.forEach(function (action, j) {
+			var blockBox = action
+				? A3a.vpl.Program.boxForBlockType(action, j == 0, cssBoxes)
+				: actions.length === 1 ? cssBoxes.blockEmptyActionOnlyChildBox : cssBoxes.blockEmptyActionBox;
+			var containerBox = rule.error && !rule.error.eventError &&
+				(rule.error.actionErrorIndices.length === 0 || rule.error.actionErrorIndices.indexOf(j) >= 0)
+				? rule.error.isWarning ? cssBoxes.blockContainerWarningBox : cssBoxes.blockContainerErrorBox
+				: cssBoxes.blockContainerBox;
+			var vertOffset = A3a.vpl.Program.blockVerticalOffset(blockBox, containerBox);
+			if (action) {
+				action.marks = /** @type {A3a.vpl.BlockTemplate.BlockMarks} */({
+					kbdSelected: this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.blockRight &&
+						this.kbdControl.selectionIndex1 === ruleIndex &&
+						this.kbdControl.selectionIndex2 === j,
+					kbdSelectedParam: this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.blockRightParam &&
+						this.kbdControl.selectionIndex1 === ruleIndex &&
+						this.kbdControl.selectionIndex2 === j
+							? this.kbdControl.selectionParamIndex
+							: null,
+					kbdTarget: this.kbdControl.targetType === A3a.vpl.KbdControl.ObjectType.blockRight &&
+						this.kbdControl.targetIndex1 === ruleIndex &&
+						this.kbdControl.targetIndex2 === j
+				});
+				containerBox.width = blockBox.totalWidth();
+				childItem = this.addBlockToCanvas(canvas, action,
+					A3a.vpl.Program.boxForBlockType(action, j === 0, cssBoxes), ["block"],
+					x, y + vertOffset,
+					{
+						notInteractive: rule.disabled || this.program.noVPL || this.program.readOnly,
+						notClickable: rule.disabled || this.program.noVPL || this.program.readOnly,
+						notDraggable: this.program.noVPL || this.program.readOnly,
+						accessibility: {
+							type: A3a.vpl.KbdControl.ObjectType.blockRight,
+							index1: ruleIndex,
+							index2: j
+						}
+					});
+			} else {
+				action = new A3a.vpl.EmptyBlock(A3a.vpl.blockType.action, rule,
+					{eventSide: false, index: j});
+				action.marks = /** @type {A3a.vpl.BlockTemplate.BlockMarks} */({
+					kbdSelected: this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.blockRight &&
+						this.kbdControl.selectionIndex1 === ruleIndex &&
+						this.kbdControl.selectionIndex2 === j,
+					kbdSelectedParam: null,
+					kbdTarget: this.kbdControl.targetType === A3a.vpl.KbdControl.ObjectType.blockRight &&
+						this.kbdControl.targetIndex1 === ruleIndex &&
+						this.kbdControl.targetIndex2 === j
+				});
+				containerBox.width = blockBox.totalWidth();
+				childItem = this.addBlockToCanvas(canvas,
+					action,
+					blockBox, ["block"],
+					x, y,
+					{
+						notDropTarget: program.readOnly,
+						notClickable: true,
+						notDraggable: true,
+						accessibility: {
+							type: A3a.vpl.KbdControl.ObjectType.blockRight,
+							index1: ruleIndex,
+							index2: j
+						}
+					});
+			}
+			item.attachItem(childItem);
+			x += containerBox.totalWidth();
+		}, this);
 
-	// error widgets
-	canvas.addDecoration(function (ctx) {
-		if (rule.error !== null) {
-			var box = rule.error.isWarning ? cssBoxes.warningWidgetBox : cssBoxes.errorWidgetBox;
-			canvas.drawWidget(rule.error.isWarning ? "vpl:warning" : "vpl:error",
-				eventX0 - cssBoxes.ruleBox.paddingLeft - cssBoxes.ruleBox.marginLeft - cssBoxes.blockContainerBox.offsetLeft() - block0Box.offsetLeft() -
-					box.width / 2 - box.marginRight - box.paddingRight,
-				y + block0Box.height * 0.5,
-				box);
-		}
-	});
+		// error widgets
+		canvas.addDecoration(function (ctx) {
+			if (rule.error !== null) {
+				var box = rule.error.isWarning ? cssBoxes.warningWidgetBox : cssBoxes.errorWidgetBox;
+				canvas.drawWidget(rule.error.isWarning ? "vpl:warning" : "vpl:error",
+					eventX0 - ruleBox.paddingLeft - ruleBox.marginLeft - cssBoxes.blockContainerBox.offsetLeft() - block0Box.offsetLeft() -
+						box.width / 2 - box.marginRight - box.paddingRight,
+					y + block0Box.height * 0.5,
+					box);
+			}
+		});
+	}
 };
 
 /** Add to a canvas a link between error marks for conflicting events
@@ -630,6 +930,8 @@ A3a.vpl.Application.prototype.getCSSBoxes = function (css) {
 	cssBoxes.blockContainerWarningBox = css.getBox({tag: "block-container", clas: ["warning"]});
 	cssBoxes.ruleBox = css.getBox({tag: "rule", pseudoClass: zoomBlocks ? ["small"] : []});
 	cssBoxes.ruleSeparatorBox = css.getBox({tag: "widget", id: "widget-then", pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.ruleCommentBox = css.getBox({tag: "rule", clas: ["comment"], pseudoClass: zoomBlocks ? ["small"] : []});
+	cssBoxes.ruleCommentEditedBox = css.getBox({tag: "rule", clas: ["comment"], pseudoClass: zoomBlocks ? ["small", "edited"] : ["edited"]});
 	cssBoxes.blockEventLibItemBox = css.getBox({tag: "block", clas: ["library", "event"]});
 	cssBoxes.blockActionLibItemBox = css.getBox({tag: "block", clas: ["library", "action"]});
 	cssBoxes.blockStateLibItemBox = css.getBox({tag: "block", clas: ["library", "state"]});
@@ -649,7 +951,7 @@ A3a.vpl.Application.prototype.updateErrorInfo = function () {
 	var program = this.program;
 
 	// make sure code is up-to-date to have error info
-	program.getCode(program.currentLanguage);
+	var code = program.getCode(program.currentLanguage);
 
 	// find first error, or first warning if there is no error
 	this.vplMessage = "";
@@ -669,9 +971,35 @@ A3a.vpl.Application.prototype.updateErrorInfo = function () {
 		}
 	}
 
-	return this.vplMessage !== "" && !this.vplMessageIsWarning;
+	var isError = this.vplMessage !== "" && !this.vplMessageIsWarning;
+	if (!isError) {
+		try {
+			var app = this;
+			var checkErrMsg = this.robots[this.currentRobotIndex].runGlue.check(code, app.program.currentLanguage,
+				function (errorMsg) {
+					// ignore errorMsg, rendering will pick cached version
+					app.renderProgramToCanvas();
+				});
+			if (checkErrMsg) {
+				this.vplMessage = checkErrMsg;
+				isError = true;
+			}
+		} catch (e) {
+			// ignore, likely robot not connected yet
+		}
+	}
+
+	return isError;
 };
 
+/**
+	@param {Array.<string>} toolbarConfig button id, "!space" for space, "!stretch" for stretch
+	@param {Array.<string>} cssClasses
+	@param {CSSParser.VPL.Box} toolbarBox
+	@param {CSSParser.VPL.Box} toolbarSeparatorBox
+	@param {Object.<string,CSSParser.VPL.Box>} toolbarItemBoxes
+	@return {A3a.vpl.ControlBar}
+*/
 A3a.vpl.Application.prototype.createVPLToolbar = function (toolbarConfig, cssClasses,
 	toolbarBox, toolbarSeparatorBox, toolbarItemBoxes) {
 	// top or bottom controls
@@ -683,6 +1011,29 @@ A3a.vpl.Application.prototype.createVPLToolbar = function (toolbarConfig, cssCla
 		this.program.toolbarGetButtonBounds || A3a.vpl.Commands.getButtonBoundsJS);
 	controlBar.calcLayout(toolbarBox, toolbarItemBoxes, toolbarSeparatorBox);
 	return controlBar;
+};
+
+/** Get the block template specified by index among those displayed on the left (events and states)
+	or the right (actions and comments)
+	@param {boolean} isAction true for actions or comments, false for events or states
+	@param {number} index
+	@return {A3a.vpl.BlockTemplate}
+*/
+A3a.vpl.Application.prototype.getEnabledBlockTemplateByIndex = function (isAction, index) {
+	for (var i = 0; i < A3a.vpl.BlockTemplate.lib.length; i++) {
+		var blockTemplate = A3a.vpl.BlockTemplate.lib[i];
+		if ((isAction
+			? blockTemplate.type === A3a.vpl.blockType.action || blockTemplate.type === A3a.vpl.blockType.comment
+			: blockTemplate.type === A3a.vpl.blockType.event || blockTemplate.type === A3a.vpl.blockType.state) &&
+			(this.program.mode === A3a.vpl.mode.basic ? this.program.enabledBlocksBasic : this.program.enabledBlocksAdvanced)
+				.indexOf(blockTemplate.name) >= 0) {
+			if (index === 0) {
+				return blockTemplate;
+			}
+			index--;
+		}
+	}
+	return null;
 };
 
 /** Render the program to a single canvas
@@ -716,7 +1067,14 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var nMaxEventHandlerALength = 0;
 	var maxEventsWidth = 0;
 	var maxActionsWidth = 0;
+	var nNormalRules = 0;
+	var nCommentRules = 0;
 	program.program.forEach(function (rule) {
+		if (rule instanceof A3a.vpl.RuleComment) {
+			nCommentRules++;
+		} else {
+			nNormalRules++;
+		}
 		var blocks = rule.events;
 		nMaxEventHandlerELength = Math.max(nMaxEventHandlerELength,
 			blocks.length
@@ -753,6 +1111,8 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			}
 		}
 	}, this);
+	this.kbdControl.libLeftNum = nEvTemplates;
+	this.kbdControl.libRightNum = nAcTemplates;
 
 	// default drop handler to delete blocks and rules dragged outside hor span of rules
 	canvas.addDefaultDoDrop("delete", function (dropTargetItem, draggedItem, x, y) {
@@ -816,6 +1176,19 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var actionX0 = eventX0 + maxEventsWidth + ruleSeparatorWidth;
 	cssBoxes.ruleBox.width = ruleWidth;
 	cssBoxes.ruleBox.height = cssBoxes.blockContainerBox.totalHeight();
+	cssBoxes.ruleCommentBox.width = ruleWidth;
+	cssBoxes.ruleCommentBox.height = cssBoxes.ruleCommentBox.fontSize;
+	cssBoxes.ruleCommentEditedBox.width = ruleWidth;
+	cssBoxes.ruleCommentEditedBox.height = cssBoxes.ruleCommentBox.fontSize;
+
+	// find rule vertial offsets (for next one: [0]=2nd, [last]=total vert size)
+	var ruleVerticalOffset = [];
+	program.program.forEach(function (rule, i) {
+		var height = rule instanceof A3a.vpl.RuleComment
+			? cssBoxes.ruleCommentBox.totalHeight()
+			: cssBoxes.ruleBox.totalHeight();
+		ruleVerticalOffset.push(i === 0 ? height : ruleVerticalOffset[i - 1] + height);
+	});
 
 	/** Get box for the specified block template
 		@param {Object} cssBoxes
@@ -850,13 +1223,47 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		cssBoxes.toolbarBox, cssBoxes.toolbarSeparatorBox, toolbarItemBoxes);
 	controlBar.addToCanvas(cssBoxes.toolbarBox, toolbarItemBoxes,
 		self.createVPLControlBarDoOverFun());
+	if (this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.toolbarTop &&
+		!this.uiConfig.blockCustomizationMode) {
+		// find control via its id, because this.kbdControl.selectionIndex1 skips passive controls
+		var selectedTBCmd = this.kbdControl.getSelectedCmd();
+		var selectedTBControl = null;
+		for (var i = 0; i < controlBar.controls.length; i++) {
+			if (controlBar.controls[i].id === selectedTBCmd.name) {
+				selectedTBControl = controlBar.controls[i];
+				break;
+			}
+		}
+		var selectedTBControlBox = toolbarItemBoxes[selectedTBControl.id];
+		canvas.addDecoration(function (ctx) {
+			canvas.overlayRect(selectedTBControl.x, selectedTBControl.y, selectedTBControlBox.width, selectedTBControlBox.height,
+				["button", "top", "kbd-selected"]);
+		});
+	}
 
 	// 2nd toolbar at bottom between templates
 	if (toolbar2HasAvButtons > 0) {
 		var controlBar2 = this.createVPLToolbar(this.vplToolbar2Config, ["vpl", "bottom"],
 			cssBoxes.toolbar2Box, cssBoxes.toolbarSeparator2Box, toolbar2ItemBoxes);
 		controlBar2.addToCanvas(cssBoxes.toolbar2Box, toolbar2ItemBoxes,
-		self.createVPLControlBarDoOverFun());
+			self.createVPLControlBarDoOverFun());
+		if (this.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.toolbarBottom &&
+			!this.uiConfig.blockCustomizationMode) {
+			// find control via its id, because this.kbdControl.selectionIndex1 skips passive controls
+			var selectedTBCmd = this.kbdControl.getSelectedCmd();
+			var selectedTBControl = null;
+			for (var i = 0; i < controlBar2.controls.length; i++) {
+				if (controlBar2.controls[i].id === selectedTBCmd.name) {
+					selectedTBControl = controlBar2.controls[i];
+					break;
+				}
+			}
+			var selectedTBControlBox = toolbar2ItemBoxes[selectedTBControl.id];
+			canvas.addDecoration(function (ctx) {
+				canvas.overlayRect(selectedTBControl.x, selectedTBControl.y, selectedTBControlBox.width, selectedTBControlBox.height,
+					["button", "bottom", "kbd-selected"]);
+			});
+		}
 	}
 
 	// templates
@@ -865,6 +1272,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	var eventLibWidth = 0;
 	var actionLibWidth = 0;
 	if (cssBoxes.blockEventLibBox.scroll) {
+		this.kbdControl.libLeftColLen = 1;
 		eventLibWidth = cssBoxes.blockEventLibItemBox.totalWidth();
 		renderingState.eventScroll.setTotalHeight(nEvTemplates * stepEvent);
 		cssBoxes.blockEventLibBox.width = eventLibWidth;
@@ -885,9 +1293,19 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 					(program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced)
 						.indexOf(blockTemplate.name) >= 0)) {
 				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
-				this.addBlockTemplateToCanvas(canvas, blockTemplate, box,
-					cssBoxes.blockEventLibBox.x + box.offsetLeft(),
-					cssBoxes.blockEventLibBox.y + box.offsetTop() + row * stepEvent);
+				var x = cssBoxes.blockEventLibBox.x + box.offsetLeft();
+				var y = cssBoxes.blockEventLibBox.y + box.offsetTop() + row * stepEvent;
+				this.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y,
+					self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.libLeft &&
+						self.kbdControl.selectionIndex1 === row,
+					{
+						type: A3a.vpl.KbdControl.ObjectType.none,
+						index1: 0,
+						index2: 0,
+						click: function () {
+							self.kbdControl.activateTemplate(blockTemplate);
+						}
+					});
 				row++;
 			}
 		}, this);
@@ -918,6 +1336,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		});
 		eventLibWidth = evCol * stepEvent + cssBoxes.blockEventLibBox.nonContentWidth();
 		var colLen = Math.ceil(nEvTemplates / evCol);
+		this.kbdControl.libLeftColLen = colLen;
 		var row = 0;
 		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
 			if ((blockTemplate.type === A3a.vpl.blockType.event ||
@@ -928,12 +1347,24 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
 				var x = cssBoxes.blockEventLibBox.x + box.offsetLeft() + Math.floor(row / colLen) * stepEvent;
 				var y = cssBoxes.blockEventLibBox.y + box.offsetTop() + stepEvent * (row % colLen);
-				self.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y);
+				self.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y,
+					self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.libLeft &&
+						self.kbdControl.selectionIndex1 === row % colLen &&
+						self.kbdControl.selectionIndex2 === Math.floor(row / colLen),
+					{
+						type: A3a.vpl.KbdControl.ObjectType.none,
+						index1: 0,
+						index2: 0,
+						click: function () {
+							self.kbdControl.activateTemplate(blockTemplate);
+						}
+					});
 				row++;
 			}
 		}, this);
 	}
 	if (cssBoxes.blockActionLibBox.scroll) {
+		this.kbdControl.libRightColLen = 1;
 		actionLibWidth = cssBoxes.blockActionLibItemBox.totalWidth();
 		renderingState.actionScroll.setTotalHeight(nAcTemplates * stepAction);
 		cssBoxes.blockActionLibBox.width = actionLibWidth;
@@ -956,7 +1387,17 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				var box = boxForBlockTemplate(cssBoxes, blockTemplate);
 				this.addBlockTemplateToCanvas(canvas, blockTemplate, box,
 					cssBoxes.blockActionLibBox.x + cssBoxes.blockActionLibItemBox.offsetLeft(),
-					cssBoxes.blockActionLibBox.y + cssBoxes.blockActionLibItemBox.offsetTop() + row * stepAction);
+					cssBoxes.blockActionLibBox.y + cssBoxes.blockActionLibItemBox.offsetTop() + row * stepAction,
+					self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.libRight &&
+						self.kbdControl.selectionIndex1 === row,
+					{
+						type: A3a.vpl.KbdControl.ObjectType.none,
+						index1: 0,
+						index2: 0,
+						click: function () {
+							self.kbdControl.activateTemplate(blockTemplate);
+						}
+					});
 				row++;
 			}
 		}, this);
@@ -987,6 +1428,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		});
 		actionLibWidth = acCol * stepAction + cssBoxes.blockActionLibBox.nonContentWidth();
 		colLen = Math.ceil(nAcTemplates / acCol);
+		this.kbdControl.libRightColLen = colLen;
 		row = 0;
 		A3a.vpl.BlockTemplate.lib.forEach(function (blockTemplate, i) {
 			if ((blockTemplate.type === A3a.vpl.blockType.action ||
@@ -998,7 +1440,18 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 				var x = cssBoxes.blockActionLibBox.x + box.offsetLeft() + cssBoxes.blockActionLibBox.width -
 					(acCol - Math.floor(row / colLen)) * stepAction;
 				var y = cssBoxes.blockActionLibBox.y + box.offsetTop() + stepAction * (row % colLen);
-				self.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y);
+				self.addBlockTemplateToCanvas(canvas, blockTemplate, box, x, y,
+					self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.libRight &&
+						self.kbdControl.selectionIndex1 === row % colLen &&
+						self.kbdControl.selectionIndex2 === Math.floor(row / colLen),
+					{
+						type: A3a.vpl.KbdControl.ObjectType.none,
+						index1: 0,
+						index2: 0,
+						click: function () {
+							self.kbdControl.activateTemplate(blockTemplate);
+						}
+					});
 				row++;
 			}
 		}, this);
@@ -1156,7 +1609,19 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		// program scroll region
 		var vplWidth = cssBoxes.ruleBox.totalWidth() + cssBoxes.vplBox.paddingLeft + cssBoxes.vplBox.paddingRight + cssBoxes.errorWidgetBox.totalWidth();
 		renderingState.programScroll.setTotalWidth(vplWidth);
-		renderingState.programScroll.setTotalHeight(program.program.length * cssBoxes.ruleBox.totalHeight());
+		renderingState.programScroll.setTotalHeight(ruleVerticalOffset[ruleVerticalOffset.length - 1]);
+
+		// ensure keyboard selection is visible
+		switch (self.kbdControl.selectionType) {
+		case A3a.vpl.KbdControl.ObjectType.rule:
+		case A3a.vpl.KbdControl.ObjectType.blockLeft:
+		case A3a.vpl.KbdControl.ObjectType.blockRight:
+		case A3a.vpl.KbdControl.ObjectType.blockLeftParam:
+		case A3a.vpl.KbdControl.ObjectType.blockRightParam:
+			renderingState.programScroll.scrollToShowVertSpan(self.kbdControl.selectionIndex1 > 0 ? ruleVerticalOffset[self.kbdControl.selectionIndex1 - 1] : 0,
+				ruleVerticalOffset[self.kbdControl.selectionIndex1]);
+			break;
+		}
 
 		// program
 		renderingState.programScroll.resize(cssBoxes.vplBox.x, cssBoxes.vplBox.y,
@@ -1174,12 +1639,15 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		var errorMsg = "";
 		var isWarning = false;
 		program.program.forEach(function (rule, i) {
-			this.addRuleToCanvas(canvas, rule,
-				displaySingleEvent,
-				canvas.dims.eventRightAlign ? maxEventsWidth : 0,
-				eventX0, actionX0,
-				cssBoxes.vplBox.y + cssBoxes.ruleBox.totalHeight() * i + cssBoxes.ruleBox.offsetTop() + cssBoxes.blockContainerBox.offsetTop(),
-				cssBoxes);
+			if ((i > 0 ? ruleVerticalOffset[i - 1] : 0) < cssBoxes.vplBox.height + renderingState.programScroll.vertScroll &&
+				ruleVerticalOffset[i] > renderingState.programScroll.vertScroll) {
+				this.addRuleToCanvas(canvas, rule, i,
+					displaySingleEvent,
+					canvas.dims.eventRightAlign ? maxEventsWidth : 0,
+					eventX0, actionX0,
+					cssBoxes.vplBox.y + (i > 0 ? ruleVerticalOffset[i - 1] : 0) + cssBoxes.ruleBox.offsetTop() + cssBoxes.blockContainerBox.offsetTop(),
+					cssBoxes);
+			}
 			if (rule.error !== null && errorMsg === "") {
 				errorMsg = rule.error.msg;
 				isWarning = rule.error.isWarning;
@@ -1200,6 +1668,58 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		}, this);
 		renderingState.programScroll.end();
 
+		// more high and low hints
+		if (!renderingState.programScroll.isTop()) {
+			// more to see above
+			var moreHighBox = canvas.css.getBox({tag: "widget", id: "widget-moreHigh"});
+			var item = new A3a.vpl.CanvasItem(null,
+				moreHighBox.totalWidth(),
+				moreHighBox.totalHeight(),
+				cssBoxes.vplBox.x + cssBoxes.vplBox.width - moreHighBox.totalWidth(),
+				cssBoxes.vplBox.y + moreHighBox.totalHeight() - moreHighBox.totalHeight(),
+				/** @type {A3a.vpl.CanvasItem.draw} */
+				(function (canvas, item, dx, dy) {
+					canvas.drawWidget("vpl:moreHigh",
+						cssBoxes.vplBox.x + cssBoxes.vplBox.width - moreHighBox.totalWidth() / 2,
+						cssBoxes.vplBox.y + moreHighBox.totalHeight() / 2,
+						moreHighBox);
+				}),
+				{
+					mouseup: function () {
+						renderingState.programScroll.scrollCanvas(0, -cssBoxes.ruleBox.totalHeight());
+						canvas.redraw();
+					}
+				},
+				null, null,
+				"scrollUp");
+			canvas.setItem(item);
+		}
+		if (!renderingState.programScroll.isBottom()) {
+			// more to see below
+			var moreLowBox = canvas.css.getBox({tag: "widget", id: "widget-moreLow"});
+			var item = new A3a.vpl.CanvasItem(null,
+				moreLowBox.totalWidth(),
+				moreLowBox.totalHeight(),
+				cssBoxes.vplBox.x + cssBoxes.vplBox.width - moreLowBox.totalWidth(),
+				cssBoxes.vplBox.y + cssBoxes.vplBox.height - moreLowBox.totalHeight(),
+				/** @type {A3a.vpl.CanvasItem.draw} */
+				(function (canvas, item, dx, dy) {
+					canvas.drawWidget("vpl:moreLow",
+						cssBoxes.vplBox.x + cssBoxes.vplBox.width - moreLowBox.totalWidth() / 2,
+						cssBoxes.vplBox.y + cssBoxes.vplBox.height - moreLowBox.totalHeight() / 2,
+						moreLowBox);
+				}),
+				{
+					mouseup: function () {
+						renderingState.programScroll.scrollCanvas(0, cssBoxes.ruleBox.totalHeight());
+						canvas.redraw();
+					}
+				},
+				null, null,
+				"scrollDown");
+			canvas.setItem(item);
+		}
+
 		if (program.noVPL) {
 			canvas.addDecoration(function (ctx) {
 				canvas.disabledMark(cssBoxes.vplBox.x, cssBoxes.vplBox.y,
@@ -1218,6 +1738,13 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 			ctx.textAlign = "start";
 			ctx.textBaseline = "middle";
 			var msg = self.i18n.translate(/** @type {string} */(self.vplHint));
+			if (self.uiConfig.nodragAccessibility) {
+				var msgNoDrag = self.i18n.translate(/** @type {string} */(self.vplHint + ";nodrag"));
+				if (msgNoDrag.slice(-7) !== ";nodrag") {
+					// specific message for nodragAccessibility
+					msg = msgNoDrag;
+				}
+			}
 
 			box.width = ctx.measureText(msg).width;
 			box.height = box.fontSize * 1.2;

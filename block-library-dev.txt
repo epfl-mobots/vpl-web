@@ -335,6 +335,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:text": switch to the text programming language editor (Aseba, L2 or JavaScript)
 - "vpl:text-toggle": toggle visibility of text editor (replaces "vpl:text" and "src:close")
 - "vpl:advanced": toggle between basic and advanced VPL mode
+- "vpl:add-comment": add a comment to the VPL program
 - "vpl:undo": undo last change
 - "vpl:redo": redo last undone change
 - "vpl:run": run the VPL program with the Thymio or the simulator (state is "empty", "running", "error", "canLoad", or "canReload" depending on the VPL program and whether it's been run and modified)
@@ -464,6 +465,7 @@ Box properties:
 - border-radius
 - border-top-left-cut, border-top-right-cut, border-bottom-right-cut, border-bottom-left-cut (same as *-radius, but straight cut instead of rounded)
 - border-cut (same as *-radius, but straight cut instead of rounded)
+- border-corner-length (length of border visible from each corner)
 - margin-left, margin-right, margin-top, margin-bottom
 - margin
 - backdrop-color (square box, typically to complement rounded or cut corners)
@@ -509,13 +511,13 @@ Box elements:
 - vpl
 - block (classes: event, event-main, event-aux, action, state, comment (class of block), empty, library (as displayed in block-library elements); pseudo-class: small (when they must be zoomed for interaction), only-child (for class "empty" only))
 - block-container (classes: error, warning; used only in rules, not in block-library)
-- rule (pseudo-class: small)
+- rule (class: comment; pseudo-classes: small, edited)
 - block-library (classes: event (for event and state blocks), action (for action and comment blocks))
 - button-small (small buttons in simulator)
 - sim-controller (area where robot control buttons and indicators are displayed)
 - sim-playground-area (box which fills the area where the playground is displayed)
 - sim-playground (box which fits tightly the area where maps are displayed and the robot can be located)
-- overlay-rectangle (box displayed over other element; classes: disabled, button, vpl, rule, block, drop-target)
+- overlay-rectangle (box displayed over other element; classes: disabled, button, vpl, rule, block, drop-target, kbd-selected, kbd-target)
 - hint (box at bottom left where block and toolbar button hints are displayed)
 
 Line elements:
@@ -597,6 +599,8 @@ The following options are supported:
 - "ui": filename of the main json file (default "ui.json")
 - "uilanguage": 2-letter language code used to translate messages (default: "en"; otherwise, as defined in dictionary "i18n" of the user interface json file)
 - "user": username displayed in the "vpl:filename" indicator (overrides window["vplUsername"])
+- "shortcuts": true or false to override the default setting (default: true)
+- "accessibility": list of accessibility features, separated by '+'. Default: none. Supported: "kbd" to edit vpl with keyboard.
 
 Global variables
 ----------------

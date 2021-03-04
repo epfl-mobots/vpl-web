@@ -547,6 +547,109 @@
 			]
 		},
 		{
+			"name": "vpl:slowdown",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#SpeedUp_4",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:slowdown",
+			"state": ["=1", "pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#_1speed_default"
+				},
+				{
+					"js": "ctx.font = 'bold 250px sans-serif'; ctx.fillStyle = '#6200ea'; ctx.textAlign = 'center'; ctx.fillText('\u00d71', 460, 770);"
+				}
+			],
+			"styles": [
+				{
+					"id": "_1speed_default",
+					"st": "visibility:hidden"
+				},
+				{
+					"id": "SpeedUp_4",
+					"st": "visibility:visible"
+				}
+			]
+		},
+		{
+			"name": "vpl:slowdown",
+			"state": ["=1"],
+			"draw": [
+				{
+					"uri": "Icons.svg#_1speed_default"
+				},
+				{
+					"js": "ctx.font = 'bold 250px sans-serif'; ctx.fillStyle = '#6200ea'; ctx.textAlign = 'center'; ctx.fillText('\u00d71', 460, 770);"
+				}
+			],
+			"styles": [
+				{
+					"id": "_1speed_default",
+					"st": "visibility:hidden"
+				},
+				{
+					"id": "SpeedUp_4",
+					"st": "visibility:visible"
+				}
+			]
+		},
+		{
+			"name": "vpl:slowdown",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#_1speed_default"
+				},
+				{
+					"js": "ctx.font = 'bold 250px sans-serif'; ctx.fillStyle = '#6200ea'; ctx.textAlign = 'center'; ctx.fillText('\u00f7' + (1 / $.state), 460, 770);"
+				}
+			],
+			"styles": [
+				{
+					"id": "_1speed_default",
+					"st": "visibility:hidden"
+				},
+				{
+					"id": "SpeedUp_4",
+					"st": "visibility:visible"
+				}
+			]
+		},
+		{
+			"name": "vpl:slowdown",
+			"draw": [
+				{
+					"uri": "Icons.svg#_1speed_default"
+				},
+				{
+					"js": "ctx.font = 'bold 250px sans-serif'; ctx.fillStyle = '#6200ea'; ctx.textAlign = 'center'; ctx.fillText('\u00f7' + (1 / $.state), 460, 770);"
+				}
+			],
+			"styles": [
+				{
+					"id": "_1speed_default",
+					"st": "visibility:hidden"
+				},
+				{
+					"id": "SpeedUp_4",
+					"st": "visibility:visible"
+				}
+			]
+		},
+		{
 			"name": "vpl:undo",
 			"state": ["disabled"],
 			"draw": [

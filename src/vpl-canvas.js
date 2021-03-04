@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -184,7 +184,7 @@ A3a.vpl.CanvasItem.mousedown;
 A3a.vpl.CanvasItem.mousedrag;
 
 /**
-	@typedef {function(A3a.vpl.Canvas,*,number):void}
+	@typedef {function(A3a.vpl.Canvas,*,number,number,number,number,number,A3a.vpl.CanvasItem.mouseEvent):void}
 */
 A3a.vpl.CanvasItem.mouseup;
 
@@ -251,6 +251,8 @@ A3a.vpl.Canvas = function (canvas, options) {
 	this.width = this.canvasWidth * (this.relativeArea.xmax - this.relativeArea.xmin);
 	this.height = this.canvasHeight * (this.relativeArea.ymax - this.relativeArea.ymin);
 	this.visible = true;
+	/** @type {Array.<function(Event,A3a.vpl.CanvasItem.mouseEvent):boolean>} */
+	this.preMousedown = [];
 	this.clickNoDragTolerance = 10;
 	/** @type {?Array.<number>} */
 	this.transform0 = null;
@@ -305,14 +307,26 @@ A3a.vpl.Canvas = function (canvas, options) {
 
 		var mouseEvent = self.makeMouseEvent(downEvent, backingScale);
 
+		for (var i = 0; i < self.preMousedown.length; i++) {
+			if (!self.preMousedown[i](downEvent, mouseEvent)) {
+				return;
+			}
+		}
+
+		/**
+			@param {A3a.vpl.CanvasItem} item
+			@return {boolean} true to intercept drag and prevent item drag-and-drop
+		*/
 		function startInteraction(item) {
 			var canvasBndRect = self.canvas.getBoundingClientRect();
 			var d = item.getTranslation();
-			item.dragging = item.interactiveCB.mousedown(self, item.data,
-				item.width, item.height,
-				canvasBndRect.left + item.x + d.dx,
-				canvasBndRect.top + item.y + d.dy,
-				mouseEvent);
+			item.dragging = item.interactiveCB.mousedown
+				? item.interactiveCB.mousedown(self, item.data,
+					item.width, item.height,
+					canvasBndRect.left + item.x + d.dx,
+					canvasBndRect.top + item.y + d.dy,
+					mouseEvent)
+				: 0;
 			if (item.dragging !== null) {
 				// call immediately
 				item.interactiveCB.mousedrag
@@ -325,28 +339,37 @@ A3a.vpl.Canvas = function (canvas, options) {
 				self.onUpdate && self.onUpdate();
 				self.onDraw ? self.onDraw() : self.redraw();
 				// continue with window-level handler
-				A3a.vpl.dragFun = item.interactiveCB.mousedrag
+				A3a.vpl.dragFun = item.interactiveCB.mousedrag || item.interactiveCB.mouseup
 					? function (e, isUp, isTouch) {
 						if (!isUp) {
-							item.interactiveCB.mousedrag(self, item.data,
-								/** @type {number} */(item.dragging),
-								item.width, item.height,
-								canvasBndRect.left + item.x + d.dx,
-								canvasBndRect.top + item.y + d.dy,
-								self.makeMouseEvent(e, backingScale));
-							self.onUpdate && self.onUpdate();
-							self.onDraw ? self.onDraw() : self.redraw();
+							if (item.interactiveCB.mousedrag) {
+								item.interactiveCB.mousedrag(self, item.data,
+									/** @type {number} */(item.dragging),
+									item.width, item.height,
+									canvasBndRect.left + item.x + d.dx,
+									canvasBndRect.top + item.y + d.dy,
+									self.makeMouseEvent(e, backingScale));
+								self.onUpdate && self.onUpdate();
+								self.onDraw ? self.onDraw() : self.redraw();
+							}
 						} else if (item.interactiveCB.mouseup) {
-							item.interactiveCB.mouseup(self, item.data,
-								/** @type {number} */(item.dragging));
-							self.onUpdate && self.onUpdate();
-							self.onDraw ? self.onDraw() : self.redraw();
+							if (item.interactiveCB.mouseup) {
+								item.interactiveCB.mouseup(self, item.data,
+									/** @type {number} */(item.dragging),
+									item.width, item.height,
+									canvasBndRect.left + item.x + d.dx,
+									canvasBndRect.top + item.y + d.dy,
+									self.makeMouseEvent(e, backingScale));
+								self.onUpdate && self.onUpdate();
+								self.onDraw ? self.onDraw() : self.redraw();
+							}
 						}
 					}
 					: null;
 				self.onUpdate && self.onUpdate();
 				self.onDraw ? self.onDraw() : self.redraw();
-				return true;
+				// allow item drag-and-drop if item is draggable and its content is only clickable
+				return !item.draggable || item.interactiveCB != null && item.interactiveCB.mousedrag != null;
 			}
 			return false;
 		}
@@ -391,6 +414,7 @@ A3a.vpl.Canvas = function (canvas, options) {
 				var d = draggedItem.getTranslation();
 				var x0 = mouseEvent.x - d.dx;
 				var y0 = mouseEvent.y - d.dy;
+				var dragFunForNoItemDrag = A3a.vpl.dragFun;
 				A3a.vpl.dragFun = function (dragEvent, isUp, isTouch) {
 					var mouseEvent = self.makeMouseEvent(dragEvent, backingScale);
 					if (self.prepareDrag) {
@@ -398,9 +422,16 @@ A3a.vpl.Canvas = function (canvas, options) {
 					}
 					if (isUp) {
 						if ((isTouch ? item.zoomOnLongTouchPress : item.zoomOnLongPress) &&
-							Math.abs(mouseEvent.x - x0) + Math.abs(mouseEvent.y - y0) < self.clickNoDragTolerance) {
+							Math.abs(mouseEvent.x - d.dx - x0) + Math.abs(mouseEvent.y - d.dy - y0) < self.clickNoDragTolerance) {
+							// zoom
 							self.zoomedItemIndex = indices[0];
 							self.zoomedItemProxy = (isTouch ? item.zoomOnLongTouchPress : item.zoomOnLongPress)(item, isTouch);
+						} else if (item.interactiveCB && item.interactiveCB.mouseup &&
+							Math.abs(mouseEvent.x - d.dx - x0) + Math.abs(mouseEvent.y - d.dy - y0) < self.clickNoDragTolerance) {
+							// click
+							dragFunForNoItemDrag(dragEvent, isUp, isTouch);
+							return;
+
 						} else if (dropTargetItem && dropTargetItem.doDrop
 							&& (!dropTargetItem.canDrop || dropTargetItem.canDrop(dropTargetItem, draggedItem))) {
 							dropTargetItem.doDrop(dropTargetItem, draggedItem);
@@ -544,6 +575,15 @@ A3a.vpl.Canvas = function (canvas, options) {
 	this.onUpdate = null;
 	/** @type {?function():void} */
 	this.onDraw = null;
+};
+
+/** Add preMousedown function, called first upon visible canvas
+	and which can cancel further action by returning false
+	@param {function(Event,A3a.vpl.CanvasItem.mouseEvent):boolean} preMousedown
+	@return {void}
+*/
+A3a.vpl.Canvas.prototype.addPreMousedown = function (preMousedown) {
+	this.preMousedown.push(preMousedown);
 };
 
 /** @typedef
@@ -804,7 +844,7 @@ A3a.vpl.Canvas.prototype.recalcSize = function (pixelRatio) {
 */
 A3a.vpl.Canvas.prototype.resize = function (width, height, pixelRatio) {
 	var backingScale = pixelRatio || ("devicePixelRatio" in window ? window["devicePixelRatio"] : 1);
-	this.canvas.width  = width * backingScale;
+	this.canvas.width = width * backingScale;
 	this.canvas.height = height * backingScale;
 	this.canvas.style.width = width + "px";
 	this.canvas.style.height = height + "px";
@@ -1025,24 +1065,34 @@ A3a.vpl.Canvas.prototype.addDecoration = function (fun) {
 */
 A3a.vpl.Canvas.controlDraw;
 
-/** Function implementung the control button action
+/** Function implementing the control button action
 	@typedef {function(A3a.vpl.CanvasItem.mouseEvent):void}
 */
 A3a.vpl.Canvas.controlAction;
+
+/** Functions implementing the control button behavior (action executed upon mouseup
+	as a standard click, doMouseDown/doMouseUp for more control)
+	@typedef {{
+		action: (A3a.vpl.Canvas.controlAction | null | undefined),
+		doMouseDown: (A3a.vpl.Canvas.controlCallbacks | null | undefined),
+		doMouseUp: (A3a.vpl.Canvas.controlCallbacks | null | undefined),
+		doDrop: (A3a.vpl.CanvasItem.doDrop | null | undefined),
+		canDrop: (A3a.vpl.CanvasItem.canDrop | null | undefined),
+		doOver: (A3a.vpl.CanvasItem.doOver | null | undefined)
+	}}
+*/
+A3a.vpl.Canvas.controlCallbacks;
 
 /** Add active control
 	@param {number} x
 	@param {number} y
 	@param {CSSParser.VPL.Box} box
 	@param {A3a.vpl.Canvas.controlDraw} draw
-	@param {?A3a.vpl.Canvas.controlAction=} action
-	@param {?A3a.vpl.CanvasItem.doDrop=} doDrop
-	@param {?A3a.vpl.CanvasItem.canDrop=} canDrop
-	@param {?A3a.vpl.CanvasItem.doOver=} doOver
+	@param {A3a.vpl.Canvas.controlCallbacks=} cb
 	@param {string=} id
 	@return {A3a.vpl.CanvasItem}
 */
-A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop, canDrop, doOver, id) {
+A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, cb, id) {
 	/** @type {A3a.vpl.CanvasItem.mouseEvent} */
 	var downEvent;
 	var self = this;
@@ -1059,7 +1109,7 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 					item.dropTarget);
 			ctx.restore();
 		}),
-		action ? {
+		cb && (cb.action || cb.doMouseDown || cb.doMouseUp) ? {
 			/** @type {A3a.vpl.CanvasItem.mousedown} */
 			mousedown: function (canvas, data, width, height, left, top, ev) {
 				self.downControl = {
@@ -1073,6 +1123,9 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 					isInside: true
 				};
 				downEvent = ev;
+				if (cb.doMouseDown) {
+					cb.doMouseDown(downEvent);
+				}
 				self.redraw();
 				return 0;
 			},
@@ -1089,17 +1142,21 @@ A3a.vpl.Canvas.prototype.addControl = function (x, y, box, draw, action, doDrop,
 			},
 			/** @type {A3a.vpl.CanvasItem.mouseup} */
 			mouseup: function (canvas, data, dragIndex) {
-				if (self.downControl.isInside) {
-					action(downEvent);
+				if (cb.action) {
+					if (self.downControl.isInside) {
+						cb.action(downEvent);
+					}
+				} else if (cb.doMouseUp) {
+					cb.doMouseUp(downEvent);
 				}
 				self.downControl = {};
 				self.redraw();
 			}
 		} : null,
-		doDrop,
-		canDrop,
+		cb && cb.doDrop,
+		cb && cb.canDrop,
 		id);
-	item.doOver = doOver || null;
+	item.doOver = cb && cb.doOver || null;
 	item.draggable = false;
 	item.noDropHint = true;	// drawn with isPressed=true for better control on appearance
 	this.setItem(item);

@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -64,6 +64,8 @@ A3a.vpl.Application = function (canvasEl) {
 		"!stretch",
 		"vpl:readonly",
 		"!stretch",
+		"vpl:add-comment",
+		"!stretch",
 		"vpl:undo",
 		"vpl:redo",
 		"!stretch",
@@ -71,6 +73,8 @@ A3a.vpl.Application = function (canvasEl) {
 		"!stretch",
 		"vpl:run",
 		"vpl:stop",
+		"!space",
+		"vpl:slowdown",
 		"vpl:debug",
 		"vpl:robot",
 		"!space",
@@ -235,6 +239,30 @@ A3a.vpl.Application = function (canvasEl) {
 	this.logDataPrevious = null;
 	/** @type {?boolean} */
 	this.supervisorConnected = null;
+
+	// keyboard
+	this.keyboard = new A3a.vpl.Keyboard();
+	this.keyboard.attach();
+	/** @type {?A3a.vpl.TextField} */
+	this.textField = null;
+	this.kbdControl = new A3a.vpl.KbdControl(this);
+	this.vplCanvas.addPreMousedown(function (rawMouseEvent, mouseEvent) {
+		if (!self.uiConfig.nodragAccessibility) {
+			self.kbdControl.exit();
+		}
+		if (self.textField !== null) {
+			var cursorIndex = self.textField.findCursorByPos(mouseEvent.x, mouseEvent.y);
+			if (cursorIndex == null) {
+				// click outside text field: update value and stop editing
+				self.textField.finish(true);
+				self.textField = null;
+			} else {
+				// click inside text field: set cursor position
+				self.textField.selBegin = self.textField.selEnd = /** @type {number} */(cursorIndex);
+			}
+		}
+		return true;
+	});
 };
 
 /** @typedef {function(Object=):void}
@@ -251,6 +279,43 @@ A3a.vpl.Application.prototype.setUILanguage = function (language) {
 	return this.i18n.setLanguage(language);
 };
 
+/** Push to the keyboard handler stack the shortcuts for VPL
+	@return {void}
+*/
+A3a.vpl.Application.prototype.pushVPLKeyShortcuts = function () {
+	var self = this;
+	this.keyboard.pushHandler(function (event) {
+		if (!self.uiConfig.keyboardShortcutsEnabled ||
+			self.views.indexOf("src") >= 0 ||
+			(event.altKey || event.ctrlKey || event.metaKey)) {
+			return false;
+		}
+		if (self.views.indexOf("vpl") >= 0) {
+			var cmd = self.commands.findByKeyShortcut(event.key,
+				self.vplToolbarConfig.concat(self.vplToolbar2Config));
+			if (cmd) {
+				cmd.execute(event.altKey);
+				return true;
+			}
+		}
+		return false;
+	});
+	if (this.uiConfig.keyboardAccessibility) {
+		this.kbdControl.addHandlers();
+	}
+};
+
+/** Start editing text field
+	@param {A3a.vpl.TextField.Options} options
+	@return {void}
+*/
+A3a.vpl.Application.prototype.startTextField = function (options) {
+	if (this.textField !== null) {
+		this.textField.finish(true);
+	}
+	this.textField = new A3a.vpl.TextField(this, options);
+};
+
 /** Translate message using the current language
 	@param {string} messageKey
 	@param {string=} language target language to override the current language
@@ -260,12 +325,40 @@ A3a.vpl.Application.prototype.translate = function (messageKey, language) {
 	return this.i18n.translate(messageKey, language);
 };
 
+/** Replace current VPL program with a new (empty) one
+	@param {boolean=} resetUndoStack
+	@return {void}
+*/
+A3a.vpl.Application.prototype.newVPL = function (resetUndoStack) {
+	this.program.new(resetUndoStack);
+	this.kbdControl.reset();
+	if (this.uiConfig.nodragAccessibility) {
+		this.kbdControl.targetType = A3a.vpl.KbdControl.ObjectType.rule;
+		this.kbdControl.targetIndex1 = 0;
+	}
+};
+
 /** Set or clear html content of About box
 	@param {?string} html
 	@return {void}
 */
 A3a.vpl.Application.prototype.setAboutBoxContent = function (html) {
-	this.aboutBox = html ? new A3a.vpl.HTMLPanel(html) : null;
+	var self = this;
+	this.aboutBox = html
+		? new A3a.vpl.HTMLPanel(html,
+			this.uiConfig.keyboardShortcutsEnabled
+				? {
+					onShow: function () {
+						self.keyboard.pushKeyHandler("Escape", function () {
+							self.aboutBox.hide();
+						});
+					},
+					onHide: function () {
+						self.keyboard.popHandler();
+					}
+				}
+				: null)
+		: null;
 };
 
 /** Set or clear html content of Help
@@ -286,17 +379,33 @@ A3a.vpl.Application.prototype.setHelpContent = function (html) {
 
 	var saveEl = '<img src="' + saveDataURL.url +
 		'" width=' + saveDataURL.width + ' height=' + saveDataURL.height + '>';
+	var self = this;
 	this.helpBox = html
-		? new A3a.vpl.HTMLPanel(html, false, [
-			{
-				title: "\u21d3",
-				htmlElement: saveEl,
-				fun: function () {
-					A3a.vpl.Program.downloadText(/** @type {string} */(html),
-						"doc.html", "text/html");
+		? new A3a.vpl.HTMLPanel(html, {
+			otherWidgets: [
+				{
+					title: "\u21d3",
+					htmlElement: saveEl,
+					fun: function () {
+						A3a.vpl.Program.downloadText(/** @type {string} */(html),
+							"doc.html", "text/html");
+					}
 				}
-			}
-		], true)
+			],
+			scroll: true,
+			onShow: this.uiConfig.keyboardShortcutsEnabled
+				? function () {
+					self.keyboard.pushKeyHandler("Escape", function () {
+						self.helpBox.hide();
+					});
+				}
+				: null,
+			onHide: this.uiConfig.keyboardShortcutsEnabled
+				? function () {
+					self.keyboard.popHandler();
+				}
+				: null
+		})
 		: null;
 };
 
@@ -353,13 +462,13 @@ A3a.vpl.Application.prototype.setHelpForCurrentAppState = function () {
 			cssBoxes.toolbar2Box, cssBoxes.toolbarSeparator2Box, toolbar2ItemBoxes);
 		var scale = 50 / toolbarItemBoxes["vpl:new"].width;
 		this.vplToolbarConfig.forEach(function (id) {
-			var url = controlBar.toolbarButtonToDataURL(id, [id], dims, scale);
+			var url = controlBar.toolbarButtonToDataURL(id, toolbarItemBoxes[id], dims, scale);
 			if (url) {
 				this.dynamicHelp.addImageMapping("vpl:cmd:" + id.replace(/:/g, "-"), url.url);
 			}
 		}, this);
 		this.vplToolbar2Config.forEach(function (id) {
-			var url = controlBar2.toolbarButtonToDataURL(id, [id], dims, scale);
+			var url = controlBar2.toolbarButtonToDataURL(id, toolbar2ItemBoxes[id], dims, scale);
 			if (url) {
 				this.dynamicHelp.addImageMapping("vpl:cmd:" + id.replace(/:/g, "-"), url.url);
 			}
@@ -509,7 +618,7 @@ A3a.vpl.Application.prototype.setSuspendBoxContent = function (html) {
 	if (suspended && this.suspendBox) {
 		this.suspendBox.hide();
 	}
-	this.suspendBox = html ? new A3a.vpl.HTMLPanel(html, true) : null;
+	this.suspendBox = html ? new A3a.vpl.HTMLPanel(html, {noCloseWidget: true}) : null;
 	if (html && suspended) {
 		this.suspendBox.show();
 	}

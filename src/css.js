@@ -169,12 +169,15 @@ CSSParser.prototype.parse = function (filename, src) {
 	*/
 	function parseValue() {
 		var j = 0;
-		while (i + j < src.length && src[i + j] !== ";" && src[i + j] !== "}") {
+		var quoted = false;
+		while (i + j < src.length && (quoted || (src[i + j] !== ";" && src[i + j] !== "}"))) {
 			if (src[i] === "\n") {
 				line++;
 				col = 1;
 			} else if (src[i] !== "\r") {
 				col++;
+			} else if (src[i] === '"') {
+				quoted = !quoted;
 			}
 			j++;
 		}
@@ -223,7 +226,7 @@ CSSParser.prototype.parse = function (filename, src) {
 				i++;
 				col++;
 				break;
-			} else if (!/[a-z_]/i.test(src[i])) {
+			} else if (!/[-a-z_]/i.test(src[i])) {
 				throw "Syntax error " + location();
 			}
 
@@ -621,6 +624,15 @@ CSSParser.Selector = function (opt) {
 	}}
 */
 CSSParser.Selector.Options;
+
+/** Calculate selector specificity (higher specificity is picked when merging properties)
+	@return {number}
+*/
+CSSParser.Selector.prototype.specificity = function () {
+	return (this.id != null ? 100 : 0) +
+		10 * (this.clas.length + this.pseudoClass.length) +
+		(this.tag != null ? 1 : 0);
+};
 
 /** Convert selector description to a string which can be used as a key in a cache
 	@param {CSSParser.Selector.Options} opt

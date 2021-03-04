@@ -209,7 +209,7 @@ A3a.Assembler.instr = {
 		numArgs: 1,
 		toCode: function (pc, args, label, defs, pass, line) {
 			var arg = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
-			if (arg >= 0x1000 || -arg > 0x1000) {
+			if (arg >= 0x800 || -arg > 0x800) {
 				throw "Small integer overflow (line " + line.toString(10) + ")";
 			}
 			return [0x1000 | arg & 0xfff];
@@ -219,6 +219,9 @@ A3a.Assembler.instr = {
 		numArgs: 1,
 		toCode: function (pc, args, label, defs, pass, line) {
 			var arg = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
+			if (arg >= 0x8000 || -arg > 0x8000) {
+				throw "Integer overflow (line " + line.toString(10) + ")";
+			}
 			return [0x2000, arg & 0xffff];
 		}
 	},
@@ -250,6 +253,9 @@ A3a.Assembler.instr = {
 				throw "Data address out of range (line " + line.toString(10) + ")";
 			}
 			var sizeArg = A3a.Assembler.resolveSymbol(args[1], defs, pass === 1, line);
+			if (sizeArg < 0 || sizeArg >= 0x10000) {
+				throw "Array size overflow (line " + line.toString(10) + ")";
+			}
 			return [0x5000 | arg & 0xfff, sizeArg & 0xffff];
 		}
 	},
@@ -261,6 +267,9 @@ A3a.Assembler.instr = {
 				throw "Data address out of range (line " + line.toString(10) + ")";
 			}
 			var sizeArg = A3a.Assembler.resolveSymbol(args[1], defs, pass === 1, line);
+			if (sizeArg < 0 || sizeArg >= 0x10000) {
+				throw "Array size overflow (line " + line.toString(10) + ")";
+			}
 			return [0x6000 | arg & 0xfff, sizeArg & 0xffff];
 		}
 	},
@@ -336,6 +345,9 @@ A3a.Assembler.instr = {
 		numArgs: 1,
 		toCode: function (pc, args, label, defs, pass, line) {
 			var arg = A3a.Assembler.resolveSymbol(args[0], defs, pass === 1, line);
+			if (arg - pc >= 0x800 || pc - arg > 0x800) {
+				throw "Jump too far (line " + line.toString(10) + ")";
+			}
 			return [0x9000 | (arg - pc) & 0x0fff];
 		}
 	},
@@ -348,6 +360,9 @@ A3a.Assembler.instr = {
 				throw "Unknown op \"" + args[0] + "\" for jump.if.not (line " + line.toString(10) + ")";
 			}
 			var arg = A3a.Assembler.resolveSymbol(args[1], defs, pass === 1, line);
+			if (arg - pc >= 0x8000 || pc - arg > 0x8000) {
+				throw "Jump too far (line " + line.toString(10) + ")";
+			}
 			return [0xa000 | (testInstr.code[0] & 0x00ff), (arg - pc) & 0xffff];
 		}
 	},
@@ -360,6 +375,9 @@ A3a.Assembler.instr = {
 				throw "Unknown op \"" + args[0] + "\" for do.jump.when.not (line " + line.toString(10) + ")";
 			}
 			var arg = A3a.Assembler.resolveSymbol(args[1], defs, pass === 1, line);
+			if (arg - pc >= 0x8000 || pc - arg > 0x8000) {
+				throw "Jump too far (line " + line.toString(10) + ")";
+			}
 			return [0xa100 | (testInstr.code[0] & 0x00ff), (arg - pc) & 0xffff];
 		}
 	},
@@ -372,6 +390,9 @@ A3a.Assembler.instr = {
 				throw "Unknown op \"" + args[0] + "\" for do.jump.always (line " + line.toString(10) + ")";
 			}
 			var arg = A3a.Assembler.resolveSymbol(args[1], defs, pass === 1, line);
+			if (arg - pc >= 0x8000 || pc - arg > 0x8000) {
+				throw "Jump too far (line " + line.toString(10) + ")";
+			}
 			return [0xa300 | (testInstr.code[0] & 0x00ff), (arg - pc) & 0xffff];
 		}
 	},
@@ -383,7 +404,13 @@ A3a.Assembler.instr = {
 				throw "Event id out of range (line " + line.toString(10) + ")";
 			}
 			var addr = A3a.Assembler.resolveSymbol(args[1], defs, pass === 1, line);
+			if (addr < 0 || addr >= 0x10000) {
+				throw "Address out of range (line " + line.toString(10) + ")";
+			}
 			var size = A3a.Assembler.resolveSymbol(args[2], defs, pass === 1, line);
+			if (size < 0 || size >= 0x10000) {
+				throw "Size out of range (line " + line.toString(10) + ")";
+			}
 			return [0xb000 | id & 0xfff, addr & 0xffff, size & 0xffff];
 		}
 	},

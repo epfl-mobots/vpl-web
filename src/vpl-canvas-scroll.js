@@ -1,5 +1,5 @@
 /*
-	Copyright 2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2019-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -209,6 +209,34 @@ A3a.vpl.ScrollArea.prototype.end = function () {
 A3a.vpl.ScrollArea.prototype.scrollCanvas = function (dx, dy) {
 	this.horScroll += dx;
 	this.vertScroll += dy;
+};
+
+/** Minimum scroll to show entirely a rectangle, or at least top left corner
+	@param {number} left
+	@param {number} right
+	@return {void}
+*/
+A3a.vpl.ScrollArea.prototype.scrollToShowHorSpan = function (left, right) {
+	if (right - this.horScroll > this.wView) {
+		this.horScroll = right - this.wView;
+	}
+	if (left < this.horScroll) {
+		this.horScroll = left;
+	}
+};
+
+/** Minimum scroll to show entirely a rectangle, or at least top left corner
+	@param {number} top
+	@param {number} bottom
+	@return {void}
+*/
+A3a.vpl.ScrollArea.prototype.scrollToShowVertSpan = function (top, bottom) {
+	if (bottom - this.vertScroll > this.hView) {
+		this.vertScroll = bottom - this.hView;
+	}
+	if (top < this.vertScroll) {
+		this.vertScroll = top;
+	}
 };
 
 /** Check if scroll is commpletely left

@@ -18,7 +18,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 This is a Derivative Work.
-Changes by Mobots, EPFL, 2019-2020
+Changes by Mobots, EPFL, 2019-2021
 
 Build:
 1. git clone https://github.com/Mobsya/thymio-js-api-demo.git
@@ -35,9 +35,10 @@ Build:
 // options.change: function(connected) called upon connection change, or node change if !options.uuid
 // options.variables: function(v) called upon variable change, or "auto" to only enable this.getVariable
 // default for success (function called once code sent success): null (none)
+// default for failure (function called upon failure): null (write error with console.error)
 var tdm = new TDM(websocketURL, options);
 var b = tdm.canRun();
-tdm.run(asebaSourceCode, success);
+tdm.run(asebaSourceCode, success, failure);
 
 */
 
@@ -181,8 +182,12 @@ window.TDM.prototype.canRun = function () {
     return this.selectedNode != null && this.selectedNode.status == NodeStatus.ready;
 };
 
-window.TDM.prototype.run = async function (program, success) {
+window.TDM.prototype.run = async function (program, success, failure) {
     try {
+        if (this.selectedNode == null) {
+            // throw string for failure function
+            throw "Robot not connected";
+        }
         if (this.selectedNode.status == NodeStatus.ready) {
             await this.selectedNode.sendAsebaProgram(program);
             await this.selectedNode.setScratchPad(program, ProgrammingLanguage.Aseba);
@@ -190,11 +195,34 @@ window.TDM.prototype.run = async function (program, success) {
             success && success();
         }
     } catch(e) {
-        console.log(e);
+        if (failure) {
+            failure(e);
+        } else {
+            console.error(e);
+        }
     }
 };
 
-window.TDM.prototype.flash = async function (program, success) {
+window.TDM.prototype.check = async function (program, success, failure) {
+    if (this.selectedNode == null) {
+        // cannot check
+        return;
+    }
+    try {
+        if (this.selectedNode.status == NodeStatus.ready) {
+            await this.selectedNode.sendAsebaProgram(program, true);
+            success && success();
+        }
+    } catch(e) {
+        if (failure) {
+            failure(e);
+        } else {
+            console.error(e);
+        }
+    }
+};
+
+window.TDM.prototype.flash = async function (program, success, failure) {
     try {
         if (this.selectedNode.status == NodeStatus.ready) {
             await this.selectedNode.sendAsebaProgram(program);
@@ -202,11 +230,15 @@ window.TDM.prototype.flash = async function (program, success) {
             success && success();
         }
     } catch(e) {
-        console.log(e);
+        if (failure) {
+            failure(e);
+        } else {
+            console.error(e);
+        }
     }
 };
 
-window.TDM.runOnNode = async function (node, program, success) {
+window.TDM.runOnNode = async function (node, program, success, failure) {
     try {
         await node.lock();
         await node.sendAsebaProgram(program);
@@ -214,6 +246,10 @@ window.TDM.runOnNode = async function (node, program, success) {
         await node.unlock();
         success && success();
     } catch(e) {
-        console.log(e);
+        if (failure) {
+            failure(e);
+        } else {
+            console.error(e);
+        }
     }
 };

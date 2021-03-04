@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -29,6 +29,8 @@ A3a.vpl.Block = function (blockTemplate, ruleContainer, positionInContainer) {
 	this.positionInContainer = positionInContainer;
 	this.disabled = false;
 	this.locked = false;
+	/** @type {Object.<?,?>} */
+	this.marks = {};
 	/** @type {A3a.vpl.BlockTemplate.param} */
 	this.param = blockTemplate.defaultParam ? blockTemplate.defaultParam() : null;
 	/** @type {?function():void} */
@@ -97,12 +99,13 @@ A3a.vpl.compiledCode;
 
 /** Generate code
 	@param {string} language
+	@param {A3a.vpl.Program} program
 	@return {A3a.vpl.compiledCode}
 */
-A3a.vpl.Block.prototype.generateCode = function (language) {
+A3a.vpl.Block.prototype.generateCode = function (language, program) {
 	return this.disabled
 		? {}
 		: this.blockTemplate.genCode[language]
-			? this.blockTemplate.genCode[language](this)
-			: A3a.vpl.Program.codeGenerator[language].generateMissingCodeForBlock(this);
+			? this.blockTemplate.genCode[language](this, program)
+			: A3a.vpl.Program.codeGenerator[language].generateMissingCodeForBlock(this, program);
 };

@@ -309,8 +309,8 @@
 				],
 				"statement":
 					[
-						"motor.left.target = `Math.round(500 * $[0])`\n",
-						"motor.right.target = `Math.round(500 * $[1])`\n"
+						"motor.left.target = `Math.round(500 * $[0] * slowdown)`\n",
+						"motor.right.target = `Math.round(500 * $[1] * slowdown)`\n"
 					]
 			}
 		},
@@ -327,8 +327,8 @@
 				],
 				"statement":
 					[
-						"motor.left.target = `[0,200,250,100,-150,-200,-250,-100,150][$[0]]`\n",
-						"motor.right.target = `[0,200,150,-100,-250,-200,-150,100,250][$[0]]`\n"
+						"motor.left.target = `Math.round([0,200,250,100,-150,-200,-250,-100,150][$[0]] * slowdown)`\n",
+						"motor.right.target = `Math.round([0,200,150,-100,-250,-200,-150,100,250][$[0]] * slowdown)`\n"
 					]
 			}
 		},
@@ -485,7 +485,7 @@
 					"timerElapsed = 0\n"
 				],
 				"statement": [
-					"timer.period[0] = `Math.round(1000 * $[0])`\n",
+					"timer.period[0] = `Math.round(1000 * $[0] / slowdown)`\n",
 					"timerElapsed = 0\n"
 				]
 			}

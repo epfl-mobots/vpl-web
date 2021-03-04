@@ -156,10 +156,10 @@
 				"initCodeExec": [
 					[
 						"// stop timer 0\n",
-						"this.setTimer(0, -1);\n"
+						"this.setTimer(0, 'timer0', -1);\n"
 					]
 				],
-				"sectionBegin": "this.addEventListener(\"timer0\", function (name, param) {\n",
+				"sectionBegin": "this.addEventListener('timer0', function (name, param) {\n",
 				"sectionEnd": "});\n"
 			}
 		},
@@ -169,11 +169,11 @@
 				"initCodeExec": [
 					[
 						"// start clocks\n",
-						"this.setClock(0, 10);\n",
-						"this.setClock(1, 20);\n"
+						"this.setTimer(10, 'clock10', 1 / 10, true);\n",
+						"this.setTimer(11, 'clock20', 1 / 20, true);\n"
 					]
 				],
-				"sectionBegin": "this.addEventListener(\"`$[0] === 10 ? 'clock0' : 'clock1'`\", function (name, param) {\n",
+				"sectionBegin": "this.addEventListener(\"`$[0] === 10 ? 'timer10' : 'timer11'`\", function (name, param) {\n",
 				"sectionEnd": "});\n"
 			}
 		},
@@ -244,8 +244,8 @@
 			"name": "motor state",
 			"js": {
 				"clause": [
-					"`$[0] == 0 ? 'Math.abs(' : ''`this.get(\"motor.left\")`$[0] > 0 ? ' > ' : $[0] < 0 ? ' < -' : ') < '`0.1 ",
-					"&& `$[1] == 0 ? 'Math.abs(' : ''`this.get(\"motor.right\")`$[1] > 0 ? ' > ' : $[1] < 0 ? ' < -' : ') < '`0.1"
+					"`$[0] == 0 ? 'Math.abs(' : ''`this.get(\"motor.left\")`$[0] > 0 ? ' > ' : $[0] < 0 ? ' < -' : ') < '``0.1 * slowdown` ",
+					"&& `$[1] == 0 ? 'Math.abs(' : ''`this.get(\"motor.right\")`$[1] > 0 ? ' > ' : $[1] < 0 ? ' < -' : ') < '``0.1 * slowdown`"
 				]
 			}
 		},
@@ -256,8 +256,8 @@
 					"this.set(\"leds.top\", [0, 0, 0]);\n"
 				],
 				"statement": [
-					"this.set(\"motor.left\", `toFixed($[0])`);\n",
-					"this.set(\"motor.right\", `toFixed($[1])`);\n"
+					"this.set(\"motor.left\", `toFixed($[0] * slowdown)`);\n",
+					"this.set(\"motor.right\", `toFixed($[1] * slowdown)`);\n"
 				]
 			}
 		},
@@ -268,8 +268,8 @@
 					"this.set(\"leds.top\", [0, 0, 0]);\n"
 				],
 				"statement": [
-					"this.set(\"motor.left\", `toFixed([0, 0.2, -0.2, 0.2-0.05, 0.2+0.05, -0.2, 0.2][$[0]])`);\n",
-					"this.set(\"motor.right\", `toFixed([0, 0.2, -0.2, 0.2+0.05, 0.2-0.05, 0.2, -0.2][$[0]])`);\n"
+					"this.set(\"motor.left\", `toFixed([0, 0.2, -0.2, 0.2-0.05, 0.2+0.05, -0.2, 0.2][$[0]] * slowdown)`);\n",
+					"this.set(\"motor.right\", `toFixed([0, 0.2, -0.2, 0.2+0.05, 0.2-0.05, 0.2, -0.2][$[0]] * slowdown)`);\n"
 				]
 			}
 		},
@@ -495,10 +495,10 @@
 				"initCodeExec": [
 					[
 						"// stop timer 0\n",
-						"this.setTimer(0, -1);\n"
+						"this.setTimer(0, 'timer0', -1);\n"
 					]
 				],
-				"statement": "this.setTimer(0, `$[0].toFixed(3)`);\n"
+				"statement": "this.setTimer(0, 'timer0', `($[0] / slowdown).toFixed(3)`);\n"
 			}
 		},
 		{
@@ -507,10 +507,10 @@
 				"initCodeExec": [
 					[
 						"// stop timer 0\n",
-						"this.setTimer(0, -1);\n"
+						"this.setTimer(0, 'timer0', -1);\n"
 					]
 				],
-				"statement": "this.setTimer(0, `$[0].toFixed(3)`);\n"
+				"statement": "this.setTimer(0, 'timer0', `($[0] / slowdown).toFixed(3)`);\n"
 			}
 		},
 		{

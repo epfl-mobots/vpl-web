@@ -33,7 +33,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 	// generate code fragments for all rules
 	this.reset();
 	var c = program.program.map(function (rule) {
-		return this.generateCodeForEventHandler(rule);
+		return this.generateCodeForEventHandler(rule, program);
 	}, this);
 
 	// get all sections
@@ -127,7 +127,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 		runBlocks.forEach(function (block) {
 			rule.setBlock(block, null, null);
 		});
-		var runBlocksCode = this.generateCodeForEventHandler(rule);
+		var runBlocksCode = this.generateCodeForEventHandler(rule, program);
 		// check if initVarDecl and initCodeDecl are defined in the main program
 		var runBlockPrerequisite = true;
 		runBlocksCode.initVarDecl.forEach(function (fr) {
@@ -306,7 +306,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 /**
 	@inheritDoc
 */
-A3a.vpl.CodeGeneratorA3a.prototype.generateMissingCodeForBlock = function (block) {
+A3a.vpl.CodeGeneratorA3a.prototype.generateMissingCodeForBlock = function (block, program) {
 	var code = "# missing Aseba implementation for block " + block.blockTemplate.name + "\n";
 	switch (block.blockTemplate.type) {
 	case A3a.vpl.blockType.event:
