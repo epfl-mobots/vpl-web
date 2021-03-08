@@ -12,6 +12,14 @@
 
 <!-- default activation of the user interface and blocks -->
 <script>
+window["vplConfig"] = {
+    "ignoredCommands": [
+        "vpl:slowdown"
+    ]
+};
+
+</script>
+<script>
 window["vplStorageGetFunction"] = function (filename, load) {
     program = JSON.stringify({
     	"basicBlocks": [
