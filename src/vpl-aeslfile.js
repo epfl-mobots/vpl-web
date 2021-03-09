@@ -197,8 +197,8 @@ A3a.vpl.Program.downloadText = (function () {
 			// blob URL
 			var blob = new window.Blob([text], {"type": mimetype});
 
-			// Special use on Ipad Android
-			if (/ipad|Android/i.test(navigator.userAgent)) {
+			// Special use on Ipad
+			if (/ipad/i.test(navigator.userAgent)) {
 				var reader = new FileReader();
 				reader.readAsDataURL(blob);
 				reader.onloadend = function () {
@@ -213,7 +213,7 @@ A3a.vpl.Program.downloadText = (function () {
 			url = "data:" + mimetype + ";base64," + window["btoa"](text);
 		}
 		
-		if ( /ipad|Android/i.test(navigator.userAgent) ) {
+		if ( /ipad/i.test(navigator.userAgent) ) {
 			anchor.href = url;
     		anchor.download = filename;
 		} else {
