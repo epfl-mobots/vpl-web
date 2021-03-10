@@ -186,7 +186,8 @@ A3a.vpl.Program.downloadText = (function () {
 		}
 
 		mimetype = mimetype || "application/xml";
-
+		
+		/*this change was commented because not working on ios14*/
 		/*if (/ipad/i.test(navigator.userAgent) && ( mimetype == "application/x-vpl3" )){
 			mimetype = "application/json";
 		}*/
