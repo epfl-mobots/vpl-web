@@ -187,9 +187,9 @@ A3a.vpl.Program.downloadText = (function () {
 
 		mimetype = mimetype || "application/xml";
 
-		if (/ipad/i.test(navigator.userAgent) && ( mimetype == "application/x-vpl3" )){
+		/*if (/ipad/i.test(navigator.userAgent) && ( mimetype == "application/x-vpl3" )){
 			mimetype = "application/json";
-		}
+		}*/
 
 		/** @type {string} */
 		var url;
