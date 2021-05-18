@@ -1,0 +1,26 @@
+{
+	"i18n": {
+		"zh-cn": {
+			"sim:close": "关闭面板",
+			"sim:restart": "重启模拟",
+			"sim:pause": "暂停模拟",
+			"sim:speedup": "设置模拟加速因素",
+			"sim:pen": "打开或关闭笔",
+			"sim:clear": "擦除笔留下的痕迹",
+			"sim:map-ground": "打开或关闭场景地图",
+			"sim:map-height": "打开或关闭高度图",
+			"sim:map-obstacles": "打开或关闭障碍地图",
+			"sim:vpl": "VPL面板",
+			"sim:text": "文本源代码面板",
+			"sim:teacher": "打开或关闭自定义模式",
+			"sim:teacher-reset": "重置自定义",
+			"sim:btn-button.forward": "模拟触摸前进按钮",
+			"sim:btn-button.left": "模拟触摸左键",
+			"sim:btn-button.center": "模拟触摸中央按钮",
+			"sim:btn-button.right": "模拟触摸右键",
+			"sim:btn-button.backward": "模拟触摸后退按钮",
+			"sim:btn-tap": "模拟碰撞检测",
+			"sim:btn-clap": "模拟声音检测"
+		}
+	}
+}

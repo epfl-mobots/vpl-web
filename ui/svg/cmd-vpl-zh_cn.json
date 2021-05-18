@@ -1,0 +1,42 @@
+{
+	"i18n": {
+		"zh-cn": {
+			"vpl:close": "关闭面板",
+			"vpl:about": "显示应用程序信息",
+			"vpl:help": "显示文档",
+			"vpl:readonly": "只读程序",
+			"vpl:new": "新程序",
+			"vpl:save": "保存程序",
+			"vpl:load": "加载程序",
+			"vpl:upload": "上传程序",
+			"vpl:exportToHTML": "将程序视图导出为HTML",
+			"vpl:text": "文本源代码面板",
+			"vpl:text-toggle": "显示或隐藏文本源代码面板",
+			"vpl:advanced": "打开或关闭高级模式",
+			"vpl:undo": "撤消上次程序更改",
+			"vpl:redo": "重做上次撤消的程序更改",
+			"vpl:run": "运行程序",
+			"vpl:stop": "停止程序",
+			"vpl:flash": "将程序写入机器人的闪存",
+			"vpl:connected": "连接状态",
+			"vpl:robot": "更改机器人",
+			"vpl:sim": "模拟器面板",
+			"vpl:duplicate": "重复规则（规则丢弃目标）",
+			"vpl:disable": "禁用块或规则（丢弃目标）",
+			"vpl:lock": "锁定块或规则（丢弃目标）",
+			"vpl:trashcan": "删除块或规则（丢弃目标）",
+			"vpl:duplicate;nodrag": "重复规则",
+			"vpl:disable;nodrag": "禁用块或规则",
+			"vpl:lock;nodrag": "锁定块或规则",
+			"vpl:trashcan;nodrag": "删除块或规则",
+			"vpl:message-error": "错误消息",
+			"vpl:message-warning": "警告消息",
+			"vpl:message-empty": "  ",
+			"vpl:filename": "文件名",
+			"vpl:teacher": "打开或关闭自定义模式",
+			"vpl:teacher-reset": "重置自定义",
+			"vpl:teacher-save": "保存自定义",
+			"vpl:teacher-setasnew": "为新程序设置自定义"
+		}
+	}
+}

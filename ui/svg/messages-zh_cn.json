@@ -1,0 +1,20 @@
+{
+	"i18n":  {
+		"zh-cn": {
+			"Same block used multiple times":  "多次使用同一块",
+			"Rules with same events":  "相同事件规则",
+			"Missing action block":  "缺少行为块",
+			"Missing event block":  "缺少事件块",
+			"No button specified":  "未指定按钮",
+			"No ground sensor specified":  "未指定地面传感器",
+			"No proximity sensor specified":  "未指定接近传感器",
+			"No sensor specified":  "未指定传感器",
+			"Open program file":  "打开程序文件",
+			"OK":  "确定",
+			"Cancel":  "取消",
+			"Open ground image file":  "打开地图像文件",
+			"Open height image file":  "打开高度图像文件",
+			"Open obstacle SVG file":  "打开障碍SVG文件"
+			} 
+	}
+}
