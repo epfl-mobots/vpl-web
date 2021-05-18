@@ -42,6 +42,9 @@
 		},
 		"it": {
 			"doctemplate.html": "doctemplate-it.html"
+		},
+		"zh": {
+			"doctemplate.html": "doctemplate-zh_cn.html"
 		}
 	},
 
@@ -2145,6 +2148,12 @@
 		"cmd-vpl-it.json",
 		"cmd-sim-it.json",
 		"help-blocks-it.json",
-		"messages-it.json"
+		"messages-it.json",
+		
+		"block-zh_cn.json",
+		"cmd-vpl-zh_cn.json",
+		"cmd-sim-zh_cn.json",
+		"help-blocks-zh_cn.json",
+		"messages-zh_cn.json"
 	]
 }
