@@ -123,25 +123,38 @@ function vplLoadResourcesWithXHR(rootFilename, rootDir, getAuxiliaryFilenames, o
 	@return {void}
 */
 function vplLoadResourcesInScripts(rootFilename, rootDir, getAuxiliaryFilenames, onLoad, onError) {
+
+	/** Get script element content
+		@param {string} id
+		@return {string}
+	*/
+	function getRsrsc(id) {
+		var el = document.getElementById(id);
+		if (el == null) {
+			throw "Missing script element " + id;
+		}
+		return el.textContent;
+	}
+
 	try {
-		var txt = document.getElementById(rootFilename).textContent;
+		var txt = getRsrsc(rootFilename);
 		var gui = /** @type {Object} */(JSON.parse(txt));
 		var rsrc = {};
 		if (gui["svgFilenames"]) {
 			gui["svgFilenames"].forEach(function (filename) {
-				txt = document.getElementById(filename).textContent;
+				txt = getRsrsc(filename);
 				rsrc[filename] = txt;
 			});
 		}
 		if (gui["overlays"]) {
 			gui["overlays"].forEach(function (filename) {
-				txt = document.getElementById(filename).textContent;
+				txt = getRsrsc(filename);
 				rsrc[filename] = txt;
 			});
 		}
 		if (gui["css"]) {
 			gui["css"].forEach(function (filename) {
-				txt = document.getElementById(filename).textContent.trim();
+				txt = getRsrsc(filename).trim();
 				rsrc[filename] = txt;
 			});
 		}
@@ -150,7 +163,7 @@ function vplLoadResourcesInScripts(rootFilename, rootDir, getAuxiliaryFilenames,
 				if (gui["doc"].hasOwnProperty(key)) {
 					for (var key2 in gui["doc"][key]) {
 						if (gui["doc"][key].hasOwnProperty(key2)) {
-							txt = document.getElementById(gui["doc"][key][key2]).textContent.trim();
+							txt = getRsrsc(gui["doc"][key][key2]).trim();
 							rsrc[gui["doc"][key][key2]] = txt;
 						}
 					}
