@@ -330,39 +330,50 @@ A3a.vpl.Application.prototype.uiToHTMLDocument = function (css) {
 	this.srcToolbarConfig.forEach(function (id) {
 		toolbarItemBoxes[id] = css.getBox({tag: "button", id: id.replace(/:/g, "-"), clas: ["src", "top"]});
 	}, this);
-	var controlBarSourceEditor = this.createSourceEditorToolbar(this.srcToolbarConfig,
+	var controlBarSourceEditor = null;
+	if (this.editor != null) {
+		controlBarSourceEditor = this.createSourceEditorToolbar(this.srcToolbarConfig,
 			css.getBox({tag: "toolbar", clas: ["src", "top"]}),
 			css.getBox({tag: "separator", clas: ["src", "top"]}),
 			toolbarItemBoxes);
+	}
 	this.simToolbarConfig.forEach(function (id) {
 		toolbarItemBoxes[id] = css.getBox({tag: "button", id: id.replace(/:/g, "-"), clas: ["sim", "top"]});
 	}, this);
-	var controlBarSimulator = this.createSim2dToolbar(this.simToolbarConfig,
-			css.getBox({tag: "toolbar", clas: ["sim", "top"]}),
-			css.getBox({tag: "separator", clas: ["sim", "top"]}),
-			toolbarItemBoxes);
-	var eventButtons = [
-		"sim-event:forward",
-		"sim-event:backward",
-		"sim-event:left",
-		"sim-event:right",
-		"sim-event:center",
-		"sim-event:clap",
-		"sim-event:tap"
-	];
+
+	// simulator
 	var sim2d = this.sim2d;
-	var eventButtonBox = css.getBox({tag: "button", clas: ["sim", "event"]});
-	var eventButtonsSimulator = eventButtons.map(function (id) {
-		var draw = function (ctx, box, isPressed) {
-			(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)(id,
-				ctx, dims, css, ["sim", "event"], null,
-				true, false, isPressed);
-		};
-		var dataURL = A3a.vpl.Canvas.controlToDataURL(draw,
-			eventButtonBox.width, eventButtonBox.height, eventButtonBox,
-			dims, scale);
-		return dataURL;
-	});
+	var controlBarSimulator = null;
+	var eventButtons = [];
+	var eventButtonsSimulator = null;
+	if (sim2d != null) {
+		controlBarSimulator = this.createSim2dToolbar(this.simToolbarConfig,
+				css.getBox({tag: "toolbar", clas: ["sim", "top"]}),
+				css.getBox({tag: "separator", clas: ["sim", "top"]}),
+				toolbarItemBoxes);
+		eventButtons = [
+			"sim-event:forward",
+			"sim-event:backward",
+			"sim-event:left",
+			"sim-event:right",
+			"sim-event:center",
+			"sim-event:clap",
+			"sim-event:tap"
+		];
+		var eventButtonBox = css.getBox({tag: "button", clas: ["sim", "event"]});
+		eventButtonsSimulator = eventButtons.map(function (id) {
+			var draw = function (ctx, box, isPressed) {
+				(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)(id,
+					ctx, dims, css, ["sim", "event"], null,
+					true, false, isPressed);
+			};
+			var dataURL = A3a.vpl.Canvas.controlToDataURL(draw,
+				eventButtonBox.width, eventButtonBox.height, eventButtonBox,
+				dims, scale);
+			return dataURL;
+		});
+	}
+
 	var html = "<!DOCTYPE html>\n" +
 		"<html>\n" +
 		(this.cssForHTMLDocument
@@ -415,11 +426,13 @@ A3a.vpl.Application.prototype.uiToHTMLDocument = function (css) {
 		"<table>\n" +
 		toolbarButtonsToHTML(this, controlBar) +
 		toolbarButtonsToHTML(this, controlBar2) +
-		toolbarButtonsToHTML(this, controlBarSourceEditor) +
-		toolbarButtonsToHTML(this, controlBarSimulator) +
-		eventButtonsSimulator.map(function (data, i) {
-			return controlToHTML(eventButtons[i], data);
- 		}) +
+		(this.editor != null ? toolbarButtonsToHTML(this, controlBarSourceEditor) : "") +
+		(sim2d != null
+			? toolbarButtonsToHTML(this, controlBarSimulator) +
+				eventButtonsSimulator.map(function (data, i) {
+					return controlToHTML(eventButtons[i], data);
+		 		})
+			: "") +
 		"</table>\n" +
 		"</body>\n" +
 		"</html>\n";
