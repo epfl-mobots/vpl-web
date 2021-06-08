@@ -182,8 +182,13 @@ function vplLoadResourcesInScripts(rootFilename, rootDir, getAuxiliaryFilenames,
 	@return {string}
 */
 function vplGetQueryOption(key) {
-	var r = /^[^?]*\?([^#]*)/.exec(document.location.href);
-	var query = r && r[1];
+	var query = "";
+	if (window["vplQueryOptions"]) {
+		query = window["vplQueryOptions"];
+	} else {
+		var r = /^[^?]*\?([^#]*)/.exec(document.location.href);
+		query = r && r[1];
+	}
 	if (query) {
 		var pairs = query
 			.split("&").map(function (p) {
@@ -918,6 +923,22 @@ window["vplGetProgramAsJSON"] = function (libAndUIOnly) {
 */
 window["vplGetUIAsJSON"] = function () {
 	return window["vplApp"].program.exportToJSON({lib: true, prog: false});
+};
+
+/** Convert .vpl3 or .vpl3ui to html
+	@param {string} json
+	@param {boolean} isVPL3UI
+	@return {string}
+*/
+window["vplConvertToHTML"] = function (json, isVPL3UI) {
+	var app = window["vplApp"];
+	var obj = JSON.parse(json);
+	app.program.importFromObject(/** @type {Object} */(obj));
+	var html = isVPL3UI
+	 	? app.uiToHTMLDocument(app.css, true)
+		: app.toHTMLDocument(app.css);
+	app.program.undo();
+	return html;
 };
 
 // remember state across reload

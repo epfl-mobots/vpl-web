@@ -619,3 +619,4 @@ VPL is started by code in a "load" event listener defined in vpl-main.js. Some c
 - window["vplUIRoot"]: url (relative to document) used to override location of ui.json to define UIROOT in about.html and help.html
 - window["vplSimMaps"]: "merged" for distinct maps (buttons "sim:map-kind" and "sim:map"), or comma-separated map names for merged maps (buttons "sim:map-height", "sim:map-ground", and/or "sim:map-obstacles"); default is "ground,height,obstacles"
 - window["vplConfig"]: can be set to configuration options: "ignoredCommands"=array of command ids to make non-available
+- window["vplConvertToHTML"]: function(json, isVPL3UI) to convert the content of a .vpl3 (if isVPL3UI is false) or a .vpl3ui file (if isVPL3UI is true) to a static HTML file
