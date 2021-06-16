@@ -17,6 +17,11 @@
 					"![show documentation](vpl:cmd:vpl-help)",
 					"Show VPL documentation."
 				],
+				"vpl:statement": [
+					"# Show exercise statement",
+					"![show statement](vpl:cmd:vpl-statement)",
+					"Show the statement of the problem you're asked to solve."
+				],
 				"vpl:new": [
 					"# New program",
 					"![new program](vpl:cmd:vpl-new)",

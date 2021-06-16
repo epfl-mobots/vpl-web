@@ -327,6 +327,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:close": close the VPL view
 - "vpl:about": display an about box (modal box with HTML defined in property "about.html" of property "fragments" of ui.json)
 - "vpl:help": display a help box (modal box with HTML defined in property "help.html" of property "fragments" of ui.json)
+- "vpl:statement": display a statement box (modal box with HTML which can be sent by teacher from a connected dashboard)
 - "vpl:readonly": read-only indicator when the program cannot be modified (new, load, advanced, undo, redo, duplicate, disabled, lock, trashcan, teacher commands are disabled)
 - "vpl:new": reset VPL program to start a new program
 - "vpl:save": download the VPL program

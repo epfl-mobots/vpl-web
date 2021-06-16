@@ -52,6 +52,7 @@ A3a.vpl.Application = function (canvasEl) {
 		"!space",
 		"vpl:about",
 		"vpl:help",
+		"vpl:statement",
 		"!space",
 		"vpl:new",
 		"vpl:save",
@@ -164,6 +165,8 @@ A3a.vpl.Application = function (canvasEl) {
 	this.loadBox = null;
 	/** @type {A3a.vpl.HTMLPanel} */
 	this.helpBox = null;
+	/** @type {A3a.vpl.HTMLPanel} */
+	this.statementBox = null;
 	/** @type {A3a.vpl.HTMLPanel} */
 	this.suspendBox = null;
 	this.suspended = false;
@@ -363,9 +366,10 @@ A3a.vpl.Application.prototype.setAboutBoxContent = function (html) {
 
 /** Set or clear html content of Help
 	@param {?string} html
+	@param {boolean=} isStatement true for statement box, false for help box (default)
 	@return {void}
 */
-A3a.vpl.Application.prototype.setHelpContent = function (html) {
+A3a.vpl.Application.prototype.setHelpContent = function (html, isStatement) {
 	var app = this;
 	var saveBox = new CSSParser.VPL.Box();
 	saveBox.width = saveBox.height = 64;
@@ -377,7 +381,7 @@ A3a.vpl.Application.prototype.setHelpContent = function (html) {
 	var saveEl = '<img src="' + saveDataURL.url +
 		'" width=' + saveDataURL.width + ' height=' + saveDataURL.height + '>';
 	var self = this;
-	this.helpBox = html
+	var panel = html
 		? new A3a.vpl.HTMLPanel(html, {
 			otherWidgets: [
 				{
@@ -404,6 +408,11 @@ A3a.vpl.Application.prototype.setHelpContent = function (html) {
 				: null
 		})
 		: null;
+	if (isStatement) {
+		this.statementBox = panel;
+	} else {
+		this.helpBox = panel;
+	}
 };
 
 /** Set the help content based on dynamicHelp and the current language and ui settings

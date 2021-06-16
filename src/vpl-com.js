@@ -183,6 +183,9 @@ A3a.vpl.Com.prototype.connect = function () {
 				case "help":
 					self.app.setHelpContent(toHTML(content, isBase64, suffix));
 					break;
+				case "statement":
+					self.app.setHelpContent(toHTML(content, isBase64, suffix), true);
+					break;
 				case "suspend":
 					self.app.setSuspendBoxContent(toHTML(content, isBase64, suffix));
 					break;

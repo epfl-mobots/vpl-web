@@ -50,6 +50,15 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		keyShortcut: "?"
 	});
+	this.commands.add("vpl:statement", {
+		action: function (app, modifier) {
+			app.statementBox.show();
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.statementBox != null;
+		}
+	});
 	this.commands.add("vpl:readonly", {
 		isEnabled: function (app) {
 			return false;
