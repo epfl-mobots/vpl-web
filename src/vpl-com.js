@@ -185,6 +185,7 @@ A3a.vpl.Com.prototype.connect = function () {
 					break;
 				case "statement":
 					self.app.setHelpContent(toHTML(content, isBase64, suffix), true);
+					self.app.vplCanvas.update();	// update toolbar
 					break;
 				case "suspend":
 					self.app.setSuspendBoxContent(toHTML(content, isBase64, suffix));

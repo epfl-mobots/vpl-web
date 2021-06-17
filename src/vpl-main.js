@@ -801,8 +801,6 @@ function vplSetup(gui, rootDir) {
 		window["vplCommandServer"] = new A3a.vpl.Com(app, commandServer, commandSession);
 		window["vplCommandServer"].connect();
 	}
-
-	app.setHelpContent("hello", true);
 }
 
 window.addEventListener("load", function () {
