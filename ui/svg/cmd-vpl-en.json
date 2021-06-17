@@ -4,6 +4,7 @@
 			"vpl:close": "Close panel",
 			"vpl:about": "Show application information",
 			"vpl:help": "Show documentation",
+			"vpl:statement": "Show exercise statement",
 			"vpl:readonly": "Read-only program",
 			"vpl:new": "New program",
 			"vpl:save": "Save program",

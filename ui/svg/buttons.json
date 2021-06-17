@@ -89,6 +89,36 @@
 			]
 		},
 		{
+			"name": "vpl:statement",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#statement_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:statement",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#statement_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:statement",
+			"draw": [
+				{
+					"uri": "Icons.svg#statement_default"
+				}
+			]
+		},
+		{
 			"name": "vpl:new",
 			"state": ["pressed"],
 			"draw": [

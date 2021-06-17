@@ -4,6 +4,7 @@
 			"vpl:close": "Fermer le panneau",
 			"vpl:about": "Montrer les informations de l'application",
 			"vpl:help": "Montrer la documentation",
+			"vpl:statement": "Montrer la donnée de l'exercice",
 			"vpl:readonly": "Programme en lecture seule",
 			"vpl:new": "Nouveau programme",
 			"vpl:save": "Sauvegarder le programme",
