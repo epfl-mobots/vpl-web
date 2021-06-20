@@ -941,6 +941,15 @@ window["vplConvertToHTML"] = function (json, isVPL3UI) {
 	return html;
 };
 
+/** Convert .vpl3 or .vpl3ui to html
+	@param {string} md
+	@return {string}
+*/
+window["vplConvertMDToHtml"] = function (md) {
+	var dynamicHelp = new A3a.vpl.DynamicHelp();
+	return dynamicHelp.convertToHTML(md.split("\n"));
+};
+
 // remember state across reload
 window.addEventListener("unload", function () {
 	var json = window["vplApp"].program.exportToJSON();

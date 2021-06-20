@@ -126,6 +126,15 @@ A3a.vpl.Com.prototype.connect = function () {
 					 	.replace(/</g, "&lt;") +
 					"</pre>";
 				break;
+			case "md":
+				if (isBase64) {
+					content = atob(content);
+				}
+				var dynamicHelp = new A3a.vpl.DynamicHelp();
+				return "<div style='width: 100%; height: 100%; padding: 3em;'>" +
+					dynamicHelp.convertToHTML(content.split("\n")) +
+					"</div>";
+				break;
 			case "gif":
 				return centeredImage("image/gif");
 			case "jpg":
