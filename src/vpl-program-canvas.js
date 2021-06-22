@@ -182,7 +182,11 @@ A3a.vpl.Application.prototype.addBlockToCanvas = function (canvas, block, box, c
 					targetBlockItem.data.positionInContainer,
 					function () {
 						program.saveStateBeforeChange();
+					},
+					function () {
+						program.saveStateAfterChange();
 					});
+				program.saveStateAfterChange();
 			}
 			canvas.onUpdate && canvas.onUpdate();
 		},
@@ -633,6 +637,7 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 					program.saveStateBeforeChange();
 					program.program.splice(droppedIndex, 1);
 					program.program.splice(targetIndex, 0, droppedItem.data);
+					program.saveStateAfterChange();
 				}
 			} else if (droppedItem.data instanceof A3a.vpl.Block) {
 				program.saveStateBeforeChange();
@@ -640,7 +645,11 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 					null,
 					function () {
 						program.saveStateBeforeChange();
+					},
+					function () {
+						program.saveStateAfterChange();
 					});
+				program.saveStateAfterChange();
 			}
 			canvas.onUpdate && canvas.onUpdate();
 		},

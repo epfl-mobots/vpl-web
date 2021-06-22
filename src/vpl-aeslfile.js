@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -63,6 +63,9 @@ A3a.vpl.Program.prototype.importFromAESLFile = function (xml) {
 			advanced,
 			function () {
 				self.saveStateBeforeChange();
+			},
+			function () {
+				self.saveStateAfterChange();
 			});
 		this.program.push(rule);
 	}
@@ -72,15 +75,16 @@ A3a.vpl.Program.prototype.importFromAESLFile = function (xml) {
 	@param {Element} setElement
 	@param {boolean} advanced
 	@param {?function():void} onPrepareChange
+	@param {?function():void} onChanged
 	@return {A3a.vpl.Rule}
 */
-A3a.vpl.Rule.parseFromAESLSetElement = function (setElement, advanced, onPrepareChange) {
+A3a.vpl.Rule.parseFromAESLSetElement = function (setElement, advanced, onPrepareChange, onChanged) {
 	var blocks = setElement.getElementsByTagName("block");
 	var rule = new A3a.vpl.Rule();
 	for (var i = 0; i < blocks.length; i++) {
 		var block = A3a.vpl.Block.parseFromAESLBlockElement(blocks[i], advanced);
 		if (block) {
-			rule.setBlock(block, null, onPrepareChange, true);
+			rule.setBlock(block, null, onPrepareChange, onChanged, true);
 		}
 	}
 	return rule;
@@ -204,4 +208,3 @@ A3a.vpl.Program.downloadText = (function () {
 		}
 	};
 })();
-

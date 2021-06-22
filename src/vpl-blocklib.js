@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -259,8 +259,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[0] = i;
+					block.endChange();
 				}
 				return i;
 			}
@@ -297,8 +298,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[i] = !block.param[i];
+					block.endChange();
 				}
 				return i;
 			},
@@ -346,8 +348,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[i] = (block.param[i] + 2) % 3 - 1;
+					block.endChange();
 				}
 				return i;
 			},
@@ -438,17 +441,18 @@ A3a.vpl.BlockTemplate.lib =	[
 				// sensor click
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[i] = (block.param[i] + 1) % 4;
+					block.endChange();
 					return i;
 				}
 				// slider drag
 				if (canvas.sliderCheck(0.02, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 8;
 				}
 				if (canvas.sliderCheck(-0.2, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 7;
 				}
 				return null;
@@ -458,6 +462,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				if (dragIndex >= 7) {
 					var val = canvas.sliderDrag(false, width, height, left, top, ev);
 					block.param[dragIndex] = Math.max(0, Math.min(1, val));
+					block.endChange();
 				}
 			},
 			/** @type {A3a.vpl.BlockTemplate.validateFun} */
@@ -538,13 +543,14 @@ A3a.vpl.BlockTemplate.lib =	[
 				// sensor click
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[i] = (block.param[i] + 2) % 3 - 1;
+					block.endChange();
 					return i;
 				}
 				// slider drag
 				if (canvas.sliderCheck(-0.1, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 7;
 				}
 				return null;
@@ -554,6 +560,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				if (dragIndex >= 7) {
 					var val = canvas.sliderDrag(false, width, height, left, top, ev);
 					block.param[dragIndex] = Math.max(0.25, Math.min(0.75, Math.round(val * 4) / 4));
+					block.endChange();
 				}
 			},
 			/** @type {A3a.vpl.BlockTemplate.validateFun} */
@@ -611,8 +618,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[i] = (block.param[i] + 2) % 3 - 1;
+					block.endChange();
 				}
 				return i;
 			},
@@ -696,17 +704,18 @@ A3a.vpl.BlockTemplate.lib =	[
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				// sensor click
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[i] = (block.param[i] + 1) % 4;
+					block.endChange();
 					return i;
 				}
 				// slider drag
 				if (canvas.sliderCheck(0.02, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 3;
 				}
 				if (canvas.sliderCheck(-0.2, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 2;
 				}
 				return null;
@@ -716,6 +725,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				if (dragIndex >= 2) {
 					var val = canvas.sliderDrag(false, width, height, left, top, ev);
 					block.param[dragIndex] = Math.max(0, Math.min(1, val));
+					block.endChange();
 				}
 			},
 			/** @type {A3a.vpl.BlockTemplate.validateFun} */
@@ -789,13 +799,14 @@ A3a.vpl.BlockTemplate.lib =	[
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				// sensor click
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[i] = (block.param[i] + 2) % 3 - 1;
+					block.endChange();
 					return i;
 				}
 				// slider drag
 				if (canvas.sliderCheck(0, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 2;
 				}
 				return null;
@@ -805,6 +816,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				if (dragIndex >= 2) {
 					var val = canvas.sliderDrag(false, width, height, left, top, ev);
 					block.param[dragIndex] = Math.max(0.25, Math.min(0.75, Math.round(4 * val) / 4));
+					block.endChange();
 				}
 			},
 			/** @type {A3a.vpl.BlockTemplate.validateFun} */
@@ -915,13 +927,14 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				if (block.param[0] !== 0 && canvas.accelerometerCheck(width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 1;
 				}
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[0] = i;
+					block.endChange();
 					return 2;
 				}
 				return null;
@@ -931,6 +944,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				if (dragIndex === 1) {
 					var angle = canvas.accelerometerDrag(width, height, left, top, ev);
 					block.param[1] = block.param[0] === 2 ? -angle : angle;
+					block.endChange();
 				}
 			},
 			/** @type {A3a.vpl.BlockTemplate.changeModeFun} */
@@ -979,7 +993,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			if (canvas.accelerometerCheck(width, height, left, top, ev, true)) {
-				block.prepareChange();
+				block.beginChange();
 				return 1;
 			}
 			return null;
@@ -988,6 +1002,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 			var angle = canvas.accelerometerDrag(width, height, left, top, ev, true);
 			block.param[0] = angle;
+			block.endChange();
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -1021,7 +1036,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			if (canvas.accelerometerCheck(width, height, left, top, ev, true)) {
-				block.prepareChange();
+				block.beginChange();
 				return 1;
 			}
 			return null;
@@ -1030,6 +1045,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 			var angle = canvas.accelerometerDrag(width, height, left, top, ev, true);
 			block.param[0] = angle;
+			block.endChange();
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -1063,7 +1079,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			if (canvas.accelerometerCheck(width, height, left, top, ev, true)) {
-				block.prepareChange();
+				block.beginChange();
 				return 1;
 			}
 			return null;
@@ -1072,6 +1088,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 			var angle = canvas.accelerometerDrag(width, height, left, top, ev, true);
 			block.param[0] = angle;
+			block.endChange();
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -1145,8 +1162,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[0] = i === 0 ? 10 : 20;
+					block.endChange();
 				}
 				return i;
 			}
@@ -1182,8 +1200,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[0] = i;
+					block.endChange();
 				}
 				return i;
 			}
@@ -1208,8 +1227,9 @@ A3a.vpl.BlockTemplate.lib =	[
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			var i = canvas.stateClick(width, height, left, top, ev);
 			if (i !== null) {
-				block.prepareChange();
+				block.beginChange();
 				block.param[i] = (block.param[i] + 2) % 3 - 1;
+				block.endChange();
 			}
 			return i;
 		},
@@ -1243,8 +1263,9 @@ A3a.vpl.BlockTemplate.lib =	[
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			var i = canvas.state8Click(width, height, left, top, ev);
 			if (i !== null) {
-				block.prepareChange();
+				block.beginChange();
 				block.param[0] = i;
+				block.endChange();
 			}
 			return i;
 		}
@@ -1300,7 +1321,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					switch (i) {
 					case 0:
 						block.param[0] = Math.min(1, block.param[0] + 1);
@@ -1318,6 +1339,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						block.param[1] = 0;
 						break;
 					}
+					block.endChange();
 				}
 				return i;
 			}
@@ -1350,15 +1372,15 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
-				block.prepareChange();
+				block.beginChange();
 				return 0;
 			}
 			if (canvas.sliderCheck(0, false, width, height, left, top, ev)) {
-				block.prepareChange();
+				block.beginChange();
 				return 1;
 			}
 			if (canvas.sliderCheck(-0.3, false, width, height, left, top, ev)) {
-				block.prepareChange();
+				block.beginChange();
 				return 2;
 			}
 			return null;
@@ -1367,6 +1389,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 			var val = canvas.sliderDrag(false, width, height, left, top, ev);
 			block.param[dragIndex] = Math.max(0, Math.min(1, Math.round(val)));
+			block.endChange();
 		}
 	}),
 	new A3a.vpl.BlockTemplate((function () {
@@ -1401,8 +1424,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param = [i];
+					block.endChange();
 				}
 				return i;
 			}
@@ -1453,17 +1477,17 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			if (canvas.sliderCheck(-0.4, true, width, height, left, top, ev)) {
-				block.prepareChange();
+				block.beginChange();
 				return 0;
 			}
 			if (canvas.sliderCheck(0.4, true, width, height, left, top, ev)) {
-				block.prepareChange();
+				block.beginChange();
 				return 1;
 			}
 			if (canvas.robotTopCheck(width, height, left, top,
 					0.5 * block.param[0], 0.5 * block.param[1], 0.21,
 					ev)) {
-				block.prepareChange();
+				block.beginChange();
 				return 2;
 			}
 			return null;
@@ -1482,6 +1506,7 @@ A3a.vpl.BlockTemplate.lib =	[
 				block.param[0] = val;
 				block.param[1] = val;
 			}
+			block.endChange();
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -1530,17 +1555,17 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			if (canvas.sliderCheck(-0.4, true, width, height, left, top, ev)) {
-				block.prepareChange();
+				block.beginChange();
 				return 0;
 			}
 			if (canvas.sliderCheck(0.4, true, width, height, left, top, ev)) {
-				block.prepareChange();
+				block.beginChange();
 				return 1;
 			}
 			if (canvas.robotTopCheck(width, height, left, top,
 					0.5 * block.param[0], 0.5 * block.param[1], 0.21,
 					ev)) {
-				block.prepareChange();
+				block.beginChange();
 				return 2;
 			}
 			return null;
@@ -1578,6 +1603,7 @@ A3a.vpl.BlockTemplate.lib =	[
 					block.param[1] = val;
 				}
 			}
+			block.endChange();
 		}
 	}),
 	new A3a.vpl.BlockTemplate((function () {
@@ -1622,8 +1648,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[0] = i;
+					block.endChange();
 				}
 				return i;
 			}
@@ -1723,19 +1750,19 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				if (canvas.sliderCheck(0.35, false, width / 2, height, left + width / 2, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 0;
 				}
 				if (canvas.sliderCheck(0.12, false, width / 2, height, left + width / 2, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 1;
 				}
 				if (canvas.sliderCheck(-0.12, false, width / 2, height, left + width / 2, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 2;
 				}
 				if (canvas.sliderCheck(-0.35, false, width / 2, height, left + width / 2, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 3;
 				}
 				return null;
@@ -1744,6 +1771,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				var val = canvas.sliderDrag(false, width / 2, height, left + width / 2, top, ev);
 				block.param[dragIndex] = Math.max(0, Math.min(1, Math.round(20 * val) / 20));
+				block.endChange();
 			}
 		};
 	})()),
@@ -1775,15 +1803,15 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 0;
 				}
 				if (canvas.sliderCheck(0, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 1;
 				}
 				if (canvas.sliderCheck(-0.3, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 2;
 				}
 				return null;
@@ -1792,6 +1820,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				var val = canvas.sliderDrag(false, width, height, left, top, ev);
 				block.param[dragIndex] = Math.max(0, Math.min(1, val));
+				block.endChange();
 			}
 		};
 	})()),
@@ -1827,8 +1856,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param = [i];
+					block.endChange();
 				}
 				return i;
 			}
@@ -1862,15 +1892,15 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 0;
 				}
 				if (canvas.sliderCheck(0, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 1;
 				}
 				if (canvas.sliderCheck(-0.3, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 2;
 				}
 				return null;
@@ -1879,6 +1909,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				var val = canvas.sliderDrag(false, width, height, left, top, ev);
 				block.param[dragIndex] = Math.max(0, Math.min(1, val));
+				block.endChange();
 			}
 		};
 	})()),
@@ -1910,15 +1941,15 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 0;
 				}
 				if (canvas.sliderCheck(0, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 1;
 				}
 				if (canvas.sliderCheck(-0.3, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 2;
 				}
 				return null;
@@ -1927,6 +1958,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				var val = canvas.sliderDrag(false, width, height, left, top, ev);
 				block.param[dragIndex] = Math.max(0, Math.min(1, val));
+				block.endChange();
 			}
 		};
 	})()),
@@ -1958,15 +1990,15 @@ A3a.vpl.BlockTemplate.lib =	[
 			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				if (canvas.sliderCheck(0.3, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 0;
 				}
 				if (canvas.sliderCheck(0, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 1;
 				}
 				if (canvas.sliderCheck(-0.3, false, width, height, left, top, ev)) {
-					block.prepareChange();
+					block.beginChange();
 					return 2;
 				}
 				return null;
@@ -1975,6 +2007,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 				var val = canvas.sliderDrag(false, width, height, left, top, ev);
 				block.param[dragIndex] = Math.max(0, Math.min(1, val));
+				block.endChange();
 			}
 		};
 	})()),
@@ -2010,8 +2043,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param = [i];
+					block.endChange();
 				}
 				return i;
 			}
@@ -2049,8 +2083,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param = [i];
+					block.endChange();
 				}
 				return i;
 			}
@@ -2088,8 +2123,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param = [i];
+					block.endChange();
 				}
 				return i;
 			}
@@ -2110,13 +2146,14 @@ A3a.vpl.BlockTemplate.lib =	[
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			var note = canvas.noteClick(width, height, left, top, ev);
 			if (note) {
-				block.prepareChange();
+				block.beginChange();
 				if (block.param[2 * note.index] === note.tone) {
 					block.param[2 * note.index + 1] = (block.param[2 * note.index + 1] + 1) % 3;
 				} else {
 					block.param[2 * note.index] = note.tone;
 					block.param[2 * note.index + 1] = 1;
 				}
+				block.endChange();
 				return 0;
 			}
 			return null;
@@ -2152,7 +2189,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					switch (i) {
 					case 0:	// up
 						block.param[0] = (block.param[0] + 1) % 100;
@@ -2161,6 +2198,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						block.param[0] = (block.param[0] + 99) % 100;
 						break;
 					}
+					block.endChange();
 				}
 				return i;
 			}
@@ -2194,8 +2232,9 @@ A3a.vpl.BlockTemplate.lib =	[
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			var i = canvas.stateClick(width, height, left, top, ev);
 			if (i !== null) {
-				block.prepareChange();
+				block.beginChange();
 				block.param[i] = (block.param[i] + 2) % 3 - 1;
+				block.endChange();
 			}
 			return i;
 		}
@@ -2235,8 +2274,9 @@ A3a.vpl.BlockTemplate.lib =	[
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			var i = canvas.stateClick(width, height, left, top, ev);
 			if (i !== null) {
-				block.prepareChange();
+				block.beginChange();
 				block.param[i] = !block.param[i];
+				block.endChange();
 			}
 			return i;
 		}
@@ -2258,8 +2298,9 @@ A3a.vpl.BlockTemplate.lib =	[
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			var i = canvas.state8Click(width, height, left, top, ev);
 			if (i !== null) {
-				block.prepareChange();
+				block.beginChange();
 				block.param[0] = i;
+				block.endChange();
 			}
 			return i;
 		}
@@ -2313,8 +2354,9 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					block.param[0] = i === 0 ? -1 : 1;
+					block.endChange();
 				}
 				return i;
 			}
@@ -2353,7 +2395,7 @@ A3a.vpl.BlockTemplate.lib =	[
 			mousedown: function (canvas, block, width, height, left, top, ev) {
 				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
 				if (i !== null) {
-					block.prepareChange();
+					block.beginChange();
 					switch (i) {
 					case 0:
 						block.param[0] = Math.min(1, block.param[0] + 1);
@@ -2362,6 +2404,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						block.param[0] = Math.max(-1, block.param[0] - 1);
 						break;
 					}
+					block.endChange();
 				}
 				return i;
 			}
@@ -2386,7 +2429,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			if (canvas.timerCheck(width, height, left, top, ev)) {
-				block.prepareChange();
+				block.beginChange();
 				return 1;
 			}
 			return null;
@@ -2395,6 +2438,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 			var t = canvas.timerDrag(width, height, left, top, false, ev);
 			block.param[0] = t;
+			block.endChange();
 		}
 	}),
 	new A3a.vpl.BlockTemplate({
@@ -2416,7 +2460,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
 		mousedown: function (canvas, block, width, height, left, top, ev) {
 			if (canvas.timerCheck(width, height, left, top, ev)) {
-				block.prepareChange();
+				block.beginChange();
 				return 1;
 			}
 			return null;
@@ -2425,6 +2469,7 @@ A3a.vpl.BlockTemplate.lib =	[
 		mousedrag: function (canvas, block, dragIndex, width, height, left, top, ev) {
 			var t = canvas.timerDrag(width, height, left, top, true, ev);
 			block.param[0] = t;
+			block.endChange();
 		}
 	}),
 	new A3a.vpl.BlockTemplate((function () {
@@ -2500,7 +2545,7 @@ A3a.vpl.BlockTemplate.lib =	[
 						}
 					} else {
 						// start preview
-						block.prepareChange();
+						block.beginChange();
 						navigator.mediaDevices
 							.getUserMedia({"audio": false, "video": {"width": 320, "height": 240}})
 							.then(function (stream) {
@@ -2536,6 +2581,7 @@ A3a.vpl.BlockTemplate.lib =	[
 							});
 					}
 					block.param[0] = !block.param[0];
+					block.endChange();
 				}
 				return i;
 			}

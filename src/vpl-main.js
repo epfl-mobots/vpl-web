@@ -348,6 +348,14 @@ function vplSetup(gui, rootDir) {
 			: null
 	);
 
+	// save
+	if (window["vplStorageSetFunction"]) {
+		app.program.saveChanges = function () {
+			var json = window["vplApp"].program.exportToJSON();
+			window["vplStorageSetFunction"](A3a.vpl.Program.defaultFilename, json);
+		};
+	}
+
 	// general settings
 	var isClassic = gui == undefined || gui["hardcoded-gui"] || vplGetQueryOption("appearance") === "classic";
 	app.useLocalStorage = vplGetQueryOption("storage") === "local";

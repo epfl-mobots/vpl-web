@@ -1,5 +1,5 @@
 /*
-	Copyright 2019-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2019-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -131,9 +131,9 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 	if (runBlocks) {
 		var rule = new A3a.vpl.Rule();
 		var initBlock = new A3a.vpl.Block(A3a.vpl.BlockTemplate.findByName("init"), null, null);
-		rule.setBlock(initBlock, null, null);
+		rule.setBlock(initBlock, null, null, null);
 		runBlocks.forEach(function (block) {
-			rule.setBlock(block, null, null);
+			rule.setBlock(block, null, null, null);
 		});
 		var runBlocksCode = this.generateCodeForEventHandler(rule, program);
 		// check if initVarDecl and initCodeDecl are defined in the main program
