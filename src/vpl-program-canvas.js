@@ -296,11 +296,11 @@ A3a.vpl.Application.prototype.addBlockTemplateToCanvas = function (canvas, block
 		{
 			notInteractive: true,
 			notDropTarget: true,
-			notDraggable: this.noVPL || this.readOnly,
-			disabled: crossedOut || this.readOnly,
+			notDraggable: program.noVPL || program.readOnly,
+			disabled: crossedOut || program.readOnly,
 			crossedOut: crossedOut,
 			/** @type {?A3a.vpl.CanvasItem.mousedown} */
-			mousedown: this.uiConfig.blockCustomizationMode && !this.noVPL && !program.readOnly
+			mousedown: this.uiConfig.blockCustomizationMode && !program.noVPL && !program.readOnly
 				? function (canvas, data, width, height, x, y, downEvent) {
 					var a = program.mode === A3a.vpl.mode.basic ? program.enabledBlocksBasic : program.enabledBlocksAdvanced;
 					if (a.indexOf(blockTemplate.name) >= 0) {
@@ -770,7 +770,7 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 					blockBox, ["block"],
 					x, y + vertOffset,
 					{
-						notDropTarget: rule.disabled || this.readOnly,
+						notDropTarget: rule.disabled || this.program.readOnly,
 						notClickable: true,
 						notDraggable: true,
 						accessibility: {
