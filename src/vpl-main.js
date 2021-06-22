@@ -662,6 +662,7 @@ function vplSetup(gui, rootDir) {
                             app.setHelpForCurrentAppState();
 							app.renderProgramToCanvas();
 						});
+						app.restored = true;
 					}
 				} catch (e) {}
 			});

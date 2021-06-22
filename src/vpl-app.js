@@ -184,6 +184,10 @@ A3a.vpl.Application = function (canvasEl) {
 		self.log(data);
 	});
 
+	// true if restored from backup after some envisonment failure, to avoid
+	// initializing program to empty or a default template
+	this.restored = false;
+
 	this.programNotUploadedToServerYet = true;	// program has never been uploaded to the server since last this.new()
 
 	this.vplMessage = "";

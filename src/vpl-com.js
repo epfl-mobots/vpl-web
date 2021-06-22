@@ -155,6 +155,12 @@ A3a.vpl.Com.prototype.connect = function () {
 
 		try {
 			var msg = JSON.parse(event.data);
+
+			// accept "defaultfile" only if not app.restored
+			if (msg["type"] === "defaultfile" && !self.app.restored) {
+				msg["type"] = "file";
+			}
+
 			switch (msg["type"]) {
 			case "cmd":
 				var cmd = msg["data"]["cmd"];
