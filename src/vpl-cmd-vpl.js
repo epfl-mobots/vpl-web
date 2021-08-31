@@ -509,6 +509,32 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return app.robots.length > 1;
 		}
 	});
+	this.commands.add("vpl:volume", {
+		action: function (app) {
+			// switch to next volume value (unset, muted, min, ..., max)
+			var values = [null, 8, 7, 6, 5, 4, 3, 2, 1, 0];
+			app.program.volume = values[(values.indexOf(app.program.volume) + 1) % values.length];
+		},
+		isSelected: function (app) {
+			return app.program.volume !== null;
+		},
+		getState: function (app) {
+			return app.program.volume === null ? "" : app.program.volume.toString(10);
+		},
+		object: this,
+		possibleStates: [
+			{selected: false, state: ""},
+			{selected: true, state: "8"},
+			{selected: true, state: "7"},
+			{selected: true, state: "6"},
+			{selected: true, state: "5"},
+			{selected: true, state: "4"},
+			{selected: true, state: "3"},
+			{selected: true, state: "2"},
+			{selected: true, state: "1"},
+			{selected: true, state: "0"}
+		]
+	});
 	this.commands.add("vpl:sim", {
 		action: function (app, modifier) {
 			if (app.multipleViews) {
