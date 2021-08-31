@@ -35,6 +35,15 @@
 			}
 		},
 		{
+			"name": "!volume",
+			"aseba": {
+				"statement": [
+					"# set volume\n",
+					"call _system.settings.write(0, `$[0] > 8 ? 0 : 8 - $[0]`)\n"
+				]
+			}
+		},
+		{
 			"name": "button 1",
 			"aseba": {
 				"sectionBegin": "onevent buttons\n",

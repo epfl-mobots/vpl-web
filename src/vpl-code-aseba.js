@@ -219,6 +219,8 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 				(sections[sectionList[i]].sectionEnd || "");
 		}
 	}
+	// volume
+	str += this.generateCodeForVolume(program);
 	// init fragments defining sub and onevent
 	if (initCodeDecl.length > 0) {
 		str += "\n" + initCodeDecl.join("\n");

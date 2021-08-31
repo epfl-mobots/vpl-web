@@ -243,6 +243,8 @@ Special blocks contain definitions for specific purposes. They cannot be manipul
 
 "!stop": contains the code to stop the robot, executed when the Stop button is clicked.
 
+"!volume": contains the code to set the robot volume, from 0 (muted) to 10 (max). The volume is specified in the single parameter.
+
 Example:
 {
   ...

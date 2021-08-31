@@ -31,6 +31,8 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.noVPL = false;	// true for source code editor without vpl counterpart
 	this.teacherRole = A3a.vpl.Program.teacherRoleType.student;
 	this.experimentalFeatures = false;
+	/** @type {?number} */
+	this.volume = null;	// null for unchanged, 0=muted, 10=max
 	/** @type {Array.<A3a.vpl.Rule>} */
 	this.program = [];
 	this.slowdownFactor = 1;
