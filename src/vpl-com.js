@@ -198,6 +198,15 @@ A3a.vpl.Com.prototype.connect = function () {
 				case "help":
 					self.app.setHelpContent(toHTML(content, isBase64, suffix));
 					break;
+				case "settings":
+					if (isBase64) {
+						content = btoa(content);
+					}
+					var props = JSON.parse(content);
+					if (props.hasOwnProperty("volume")) {
+						self.app.program.volume = props["volume"];
+					}
+					break;
 				case "statement":
 					self.app.setHelpContent(toHTML(content, isBase64, suffix), true);
 					self.app.vplCanvas.update();	// update toolbar

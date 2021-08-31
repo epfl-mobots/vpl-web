@@ -55,6 +55,10 @@
 			"type": "hidden"
 		},
 		{
+			"name": "!volume",
+			"type": "hidden"
+		},
+		{
 			"name": "init",
 			"type": "event",
 			"modes": ["basic", "advanced"],
