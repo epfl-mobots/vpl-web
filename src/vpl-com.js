@@ -192,6 +192,14 @@ A3a.vpl.Com.prototype.connect = function () {
 					}
 					self.app.vplCanvas.update();
 					break;
+				case "aseba":
+					// run program
+					if (isBase64) {
+						content = btoa(content);
+					}
+					self.app.robots[self.app.currentRobotIndex].runGlue.run(content, "aseba");
+					self.app.program.uploaded = false;
+					break;
 				case "about":
 					self.app.setAboutBoxContent(toHTML(content, isBase64, suffix));
 					break;
