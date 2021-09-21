@@ -193,6 +193,38 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i
 			ctx.fillStyle = isEnabled ? col.fg : col.fgDis;
 			ctx.fillText("?", dims.controlSize * 0.5, dims.controlSize * 0.5);
 		},
+		"vpl:statement": function () {
+			ctx.fillStyle = isPressed && isEnabled
+				? col.bgPr
+				: col.bg;
+			ctx.fillRect(0, 0,
+				dims.controlSize, dims.controlSize);
+			ctx.strokeStyle = isEnabled ? col.fg : col.fgDis;
+			ctx.fillStyle = isEnabled ? col.fg : col.fgDis;
+			ctx.lineWidth = dims.controlLineWidth;
+			ctx.strokeRect(dims.controlSize * 0.25,
+				dims.controlSize * 0.2,
+				dims.controlSize * 0.5,
+				dims.controlSize * 0.6);
+			ctx.beginPath();
+			ctx.arc(dims.controlSize * 0.33,
+				dims.controlSize * 0.4,
+				dims.controlSize * 0.03,
+				0, 2 * Math.PI);
+			ctx.arc(dims.controlSize * 0.33,
+				dims.controlSize * 0.6,
+				dims.controlSize * 0.03,
+				0, 2 * Math.PI);
+			ctx.fill();
+			for (var i = 0; i < 5; i++) {
+				ctx.beginPath();
+				ctx.moveTo(dims.controlSize * 0.4, dims.controlSize * (0.32 + 0.1 * i));
+				ctx.lineTo(dims.controlSize * 0.7, dims.controlSize * (0.32 + 0.1 * i));
+				ctx.stroke();
+				ctx.lineWidth = dims.controlSize * 0.01;
+				ctx.setLineDash([dims.controlSize * 0.02, dims.controlSize * 0.02]);
+			}
+		},
 		"vpl:readonly": function () {
 			var s = dims.controlSize;
 			var th = 0.1;

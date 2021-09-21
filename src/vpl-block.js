@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -35,6 +35,8 @@ A3a.vpl.Block = function (blockTemplate, ruleContainer, positionInContainer) {
 	this.param = blockTemplate.defaultParam ? blockTemplate.defaultParam() : null;
 	/** @type {?function():void} */
 	this.onPrepareChange = null;
+	/** @type {?function():void} */
+	this.onChanged = null;
 	/** @type {?number} */
 	this.dragging = null;	// dragged data during a mouse drag inside the block
 };
@@ -51,13 +53,15 @@ A3a.vpl.positionInContainer;
 	@param {A3a.vpl.Rule} ruleContainer
 	@param {?A3a.vpl.positionInContainer} positionInContainer
 	@param {?function():void} onPrepareChange
+	@param {?function():void} onChanged
 	@return {A3a.vpl.Block}
 */
-A3a.vpl.Block.prototype.copy = function (ruleContainer, positionInContainer, onPrepareChange) {
+A3a.vpl.Block.prototype.copy = function (ruleContainer, positionInContainer, onPrepareChange, onChanged) {
 	var newBlock = new A3a.vpl.Block(this.blockTemplate,
 		ruleContainer, positionInContainer);
 	newBlock.disabled = this.disabled;
 	newBlock.onPrepareChange = onPrepareChange;
+	newBlock.onChanged = onChanged;
 	if (this.param) {
 		var newParam = /*this.blockTemplate.exportParam
 			? this.blockTemplate.exportParam(this)
@@ -70,8 +74,16 @@ A3a.vpl.Block.prototype.copy = function (ruleContainer, positionInContainer, onP
 /** Call onPrepareChange callback if it exists
 	@return {void}
 */
-A3a.vpl.Block.prototype.prepareChange = function () {
+A3a.vpl.Block.prototype.beginChange = function () {
 	this.onPrepareChange && this.onPrepareChange();
+};
+
+/** Call onChanged callback if it exists
+	(no need to match beginChange)
+	@return {void}
+*/
+A3a.vpl.Block.prototype.endChange = function () {
+	this.onChanged && this.onChanged();
 };
 
 /** Compiled code fragments

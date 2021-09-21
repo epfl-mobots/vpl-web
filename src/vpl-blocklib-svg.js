@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -95,8 +95,9 @@ A3a.vpl.Canvas.prototype.mousedownSVGButtons = function (block, width, height, l
 		if (svg.isInside(id, pt.x, pt.y)) {
 			var ix = buttons[i]["val"].indexOf(block.param[i]);
 			if (ix >= 0) {
-				block.prepareChange();
+				block.beginChange();
 				block.param[i] = buttons[i]["val"][(ix + 1) % buttons[i]["val"].length];
+				block.endChange();
 			}
 			return i;
 		}
@@ -110,8 +111,9 @@ A3a.vpl.Canvas.prototype.mousedownSVGRadioButtons = function (block, width, heig
 	for (var i = 0; i < buttons.length; i++) {
 		var id = buttons[i]["id"];
 		if (svg.isInside(id, pt.x, pt.y)) {
-			block.prepareChange();
+			block.beginChange();
 			block.param[nButtons] = buttons[i]["val"];
+			block.endChange();
 			return 0;
 		}
 	}
@@ -124,12 +126,13 @@ A3a.vpl.Canvas.prototype.mousedownSVGPushbuttons = function (block, width, heigh
 	for (var i = 0; i < pushbuttons.length; i++) {
 		var id = pushbuttons[i]["id"];
 		if (svg.isInside(id, pt.x, pt.y)) {
-			block.prepareChange();
+			block.beginChange();
 			var p = pushbuttons[i]["newParameters"];
 			if (typeof p === "string" && /^`.+`$/.test(p)) {
 				p = /** @type {Array} */(A3a.vpl.BlockTemplate.substInline(p, block.param, undefined, true));
 			}
 			block.param = p;
+			block.endChange();
 			return true;
 		}
 	}
@@ -312,7 +315,7 @@ A3a.vpl.Canvas.prototype.mousedownSVGSliders = function (block, width, height, l
 			this.clientData.vert,
 			this.clientData.vert ? thumbBnds.xmax - thumbBnds.xmin : thumbBnds.ymax - thumbBnds.ymin,
 			pt)) {
-			block.prepareChange();
+			block.beginChange();
 			return i;
 		}
 	}
@@ -359,6 +362,7 @@ A3a.vpl.Canvas.prototype.mousedragSVGSlider = function (block, dragIndex, aux, w
 	var ix0 = (aux["buttons"] ? aux["buttons"].length : 0) +
 		(aux["radiobuttons"] ? 1 : 0);
 	block.param[ix0 + dragIndex] = Math.max(Math.min(min, max), Math.min(Math.max(min, max), val));
+	block.endChange();
 };
 
 /** Handle mousedown event in A3a.vpl.BlockTemplate.mousedownFun for a block with rotating elements
@@ -392,7 +396,7 @@ A3a.vpl.Canvas.prototype.mousedownSVGRotating = function (block, width, height, 
 			this.clientData.rotatingAux = rotating[i];
 			this.clientData.c = c;
 			this.clientData.phi0 = Math.atan2(pt0.y - c.y, pt0.x - c.x);
-			block.prepareChange();
+			block.beginChange();
 			return i;
 		}
 	}
@@ -419,6 +423,7 @@ A3a.vpl.Canvas.prototype.mousedragSVGRotating = function (block, dragIndex, aux,
 		(aux["radiobuttons"] ? 1 : 0) +
 		(aux["sliders"] ? aux["sliders"].length : 0);
 	block.param[ix0 + dragIndex] = Math.round(val / f);
+	block.endChange();
 };
 
 /** Handle mousedown event in A3a.vpl.BlockTemplate.mousedownFun for a block with a score
@@ -445,13 +450,14 @@ A3a.vpl.Canvas.prototype.mousedownSVGNotes = function (block, width, height, lef
 		numNotes, numHeights,
 		width, height, left, top, ev);
 	if (note) {
-		block.prepareChange();
+		block.beginChange();
 		if (block.param[ixNotes + 2 * note.index] === note.tone) {
 			block.param[ixNotes + 2 * note.index + 1] = (block.param[ixNotes + 2 * note.index + 1] + 1) % 3;
 		} else {
 			block.param[ixNotes + 2 * note.index] = note.tone;
 			block.param[ixNotes + 2 * note.index + 1] = 1;
 		}
+		block.endChange();
 		return 0;
 	}
 	return null;
@@ -804,8 +810,9 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 						function (block) {
 							var ix = button["val"].indexOf(block.param[i]);
 							if (ix >= 0) {
-								block.prepareChange();
+								block.beginChange();
 								block.param[i] = button["val"][(ix + 1) % button["val"].length];
+								block.endChange();
 							}
 						},
 						null, null
@@ -828,8 +835,9 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 						(bounds.ymax - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
 						(bounds.xmax - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
 						function (block) {
-							block.prepareChange();
+							block.beginChange();
 							block.param[nButtons] = radiobutton["val"];
+							block.endChange();
 						},
 						null, null
 					);
@@ -851,12 +859,13 @@ A3a.vpl.loadBlockOverlay = function (uiConfig, blocks, lib) {
 						(bounds.ymax - svg.viewBox[1]) / (svg.viewBox[3] - svg.viewBox[1]),
 						(bounds.xmax - svg.viewBox[0]) / (svg.viewBox[2] - svg.viewBox[0]),
 						function (block) {
-							block.prepareChange();
+							block.beginChange();
 							var p = pushbutton["newParameters"];
 							if (typeof p === "string" && /^`.+`$/.test(p)) {
 								p = /** @type {Array} */(A3a.vpl.BlockTemplate.substInline(p, block.param, undefined, true));
 							}
 							block.param = p;
+							block.endChange();
 						},
 						null, null
 					);

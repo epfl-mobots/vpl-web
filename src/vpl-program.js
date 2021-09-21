@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -31,6 +31,8 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.noVPL = false;	// true for source code editor without vpl counterpart
 	this.teacherRole = A3a.vpl.Program.teacherRoleType.student;
 	this.experimentalFeatures = false;
+	/** @type {?number} */
+	this.volume = null;	// null for unchanged, 0=muted, 10=max
 	/** @type {Array.<A3a.vpl.Rule>} */
 	this.program = [];
 	this.slowdownFactor = 1;
@@ -40,6 +42,8 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.flashed = false;	// program matches what's flashed
 	/** @type {?function():void} */
 	this.onUpdate = null;
+	/** @type {?function():void} */
+	this.saveChanges = null;
 
 	/** @type {?function():?string} */
 	this.getEditedSourceCodeFun = null;
@@ -227,6 +231,15 @@ A3a.vpl.Program.prototype.saveStateBeforeChange = function () {
 	this.uploaded = false;
 	this.uploadedToServer = false;
 	this.flashed = false;
+};
+
+/** Save current state after modifying it
+	@return {void}
+*/
+A3a.vpl.Program.prototype.saveStateAfterChange = function () {
+	if (this.saveChanges) {
+		this.saveChanges();
+	}
 };
 
 /** Undo last change, saving current state and retrieving previous one
@@ -550,6 +563,9 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun, options) 
 									eh.setBlock(b, null,
 										function () {
 											self.saveStateBeforeChange();
+										},
+										function () {
+											self.saveStateAfterChange();
 										},
 										true);
 								}

@@ -23,6 +23,7 @@ Changes by Mobots, EPFL, 2019-2021
 Build:
 1. git clone https://github.com/Mobsya/thymio-js-api-demo.git
 2. cd thymio-js-api-demo
+   check in package.json the line containing "thymio-api"; the version must be "^0.11.0" or more recent
 3. npm i
 4. replace src/index.js with this file
 5. npm run browser
@@ -30,6 +31,7 @@ Build:
 
 // default for websocketURL: "ws://localhost:8597" (local tdm)
 // options: dict of options (default: none)
+// options.password: tdm password (default: none)
 // options.uuid: node uuid to connect to, or "auto" to connect automatically to the first node
 // (default: don't connect)
 // options.change: function(connected) called upon connection change, or node change if !options.uuid
@@ -42,7 +44,7 @@ tdm.run(asebaSourceCode, success, failure);
 
 */
 
-import {createClient, Node, NodeStatus, ProgrammingLanguage, Request, setup, mobsya} from '@mobsya/thymio-api'
+import {createClient, Node, NodeStatus, ProgrammingLanguage, Request, setup, mobsya} from '@mobsya-association/thymio-api'
 
 window.TDM = function (url, options) {
     options = options || {};
@@ -55,7 +57,7 @@ window.TDM = function (url, options) {
 
     // Connect to the switch
     // We will need some way to get that url, via the launcher
-    let client = createClient(url || "ws://localhost:8597");
+    let client = createClient(url || "ws://localhost:8597", options.password || "");
 
     // Start monitotring for node event
     // A node will have the state

@@ -50,6 +50,15 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		},
 		keyShortcut: "?"
 	});
+	this.commands.add("vpl:statement", {
+		action: function (app, modifier) {
+			app.statementBox.show();
+		},
+		object: this,
+		isAvailable: function (app) {
+			return app.statementBox != null;
+		}
+	});
 	this.commands.add("vpl:readonly", {
 		isEnabled: function (app) {
 			return false;
@@ -87,6 +96,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			if (app.jsonForNew) {
 				app.loadProgramJSON(app.jsonForNew);
 			}
+			app.program.saveStateAfterChange();
 			app.renderProgramToCanvas();
 		},
 		isEnabled: function (app) {
@@ -125,6 +135,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				".aesl,.json,." + A3a.vpl.Program.suffix + ",." + A3a.vpl.Program.suffixUI,
 				function (file) {
 					app.loadProgramFile(file);
+					app.program.saveStateAfterChange();
 				});
 		},
 		isEnabled: function (app) {
@@ -260,7 +271,10 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:undo", {
 		action: function (app, modifier) {
-			app.program.undo(function () { app.renderProgramToCanvas(); });
+			app.program.undo(function () {
+				app.renderProgramToCanvas();
+				app.program.saveStateAfterChange();
+			});
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && app.program.undoState.canUndo();
@@ -273,7 +287,10 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	});
 	this.commands.add("vpl:redo", {
 		action: function (app, modifier) {
-			app.program.redo(function () { app.renderProgramToCanvas(); });
+			app.program.redo(function () {
+				app.renderProgramToCanvas();
+				app.program.saveStateAfterChange();
+			});
 		},
 		isEnabled: function (app) {
 			return !app.program.noVPL && app.program.undoState.canRedo();
@@ -289,6 +306,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			app.program.saveStateBeforeChange();
 			var position = app.kbdControl.targetType === A3a.vpl.KbdControl.ObjectType.rule ? app.kbdControl.targetIndex1 : null;
 			position = app.program.addComment("", position, true);
+			app.program.saveStateAfterChange();
 			app.editComment(position);
 			app.renderProgramToCanvas();
 		},
@@ -491,6 +509,32 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return app.robots.length > 1;
 		}
 	});
+	this.commands.add("vpl:volume", {
+		action: function (app) {
+			// switch to next volume value (unset, muted, min, ..., max)
+			var values = [null, 8, 7, 6, 5, 4, 3, 2, 1, 0];
+			app.program.volume = values[(values.indexOf(app.program.volume) + 1) % values.length];
+		},
+		isSelected: function (app) {
+			return app.program.volume !== null;
+		},
+		getState: function (app) {
+			return app.program.volume === null ? "" : app.program.volume.toString(10);
+		},
+		object: this,
+		possibleStates: [
+			{selected: false, state: ""},
+			{selected: true, state: "8"},
+			{selected: true, state: "7"},
+			{selected: true, state: "6"},
+			{selected: true, state: "5"},
+			{selected: true, state: "4"},
+			{selected: true, state: "3"},
+			{selected: true, state: "2"},
+			{selected: true, state: "1"},
+			{selected: true, state: "0"}
+		]
+	});
 	this.commands.add("vpl:sim", {
 		action: function (app, modifier) {
 			if (app.multipleViews) {
@@ -518,6 +562,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			if (i >= 0) {
 				app.program.saveStateBeforeChange();
 				app.program.program.splice(i + 1, 0, draggedItem.data.copy());
+				app.program.saveStateAfterChange();
 				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 				app.log();
 			}
@@ -540,6 +585,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			if (draggedItem.data instanceof A3a.vpl.Block) {
 				app.program.saveStateBeforeChange();
 				draggedItem.data.disabled = !draggedItem.data.disabled;
+				app.program.saveStateAfterChange();
 				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 				app.log();
 			} else if (draggedItem.data instanceof A3a.vpl.Rule) {
@@ -570,6 +616,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			if (draggedItem.data instanceof A3a.vpl.Block) {
 				app.program.saveStateBeforeChange();
 				draggedItem.data.locked = !draggedItem.data.locked;
+				app.program.saveStateAfterChange();
 				app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 				app.log();
 			} else if (draggedItem.data instanceof A3a.vpl.Rule) {
@@ -604,6 +651,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 					app.program.saveStateBeforeChange();
 					draggedItem.data.ruleContainer.removeBlock(
 						/** @type {A3a.vpl.positionInContainer} */(draggedItem.data.positionInContainer));
+					app.program.saveStateAfterChange();
 					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 					app.log();
 				}
@@ -612,6 +660,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				if (i >= 0) {
 					app.program.saveStateBeforeChange();
 					app.program.program.splice(i, 1);
+					app.program.saveStateAfterChange();
 					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 					app.log();
 				}

@@ -243,6 +243,8 @@ Special blocks contain definitions for specific purposes. They cannot be manipul
 
 "!stop": contains the code to stop the robot, executed when the Stop button is clicked.
 
+"!volume": contains the code to set the robot volume, from 0 (muted) to 10 (max). The volume is specified in the single parameter.
+
 Example:
 {
   ...
@@ -327,6 +329,7 @@ Here is the list of button ids for the VPL view (toolbars "vpl" or "vpl2"):
 - "vpl:close": close the VPL view
 - "vpl:about": display an about box (modal box with HTML defined in property "about.html" of property "fragments" of ui.json)
 - "vpl:help": display a help box (modal box with HTML defined in property "help.html" of property "fragments" of ui.json)
+- "vpl:statement": display a statement box (modal box with HTML which can be sent by teacher from a connected dashboard)
 - "vpl:readonly": read-only indicator when the program cannot be modified (new, load, advanced, undo, redo, duplicate, disabled, lock, trashcan, teacher commands are disabled)
 - "vpl:new": reset VPL program to start a new program
 - "vpl:save": download the VPL program
@@ -594,7 +597,7 @@ The following options are supported:
 - "blur": radius of blur filter applied to canvas in 0.1px units (default 0), to simulate vision deficiency.
 - "grayscale": percentage of grayscale filter applied to canvas (default 0), to simulate grayscale printing, low-quality displays such as beamers where color shifts are common, or vision deficiency.
 - "view": list of initial views (default "vpl"). Views ("vpl", "src" or "sim") are separated by '+'.
-- "robot": device(s) code is sent to for execution. "thymio" for a Thymio via asebahttp (supported language: "aseba"), "thymio-tdm" for a Thymio via the Thymio Device Manager (supported language: "aseba"), "sim" for the simulator (supported languages: "aseba", "l2", and "js"), or undefined for no execution. Multiple devices can be specified, separated with (unquoted) '+'; e.g. "robot=thymio-tdm+sim". In that case, button "vpl:robot" toggles between devices. Connection parameters can be passed as hash parameters (same as query parameters but after the hash character '#' instead of question mark '?'). For "thymio", "asebahttp=..." specifies the url of asebahttp or Thymio Web Bridge; the default is "asebahttp=http://127.0.0.1:3000" if VPL is served as a local file, or the same http server as the one serving VPL if it's served over http(s). For "thymio-tdm", "w=..." specifies the url of the websocket (typically "w=ws://ip:port"); the default is "w=ws://localhost:8597", i.e. the Thymio Device Manager running locally with its default port.
+- "robot": device(s) code is sent to for execution. "thymio" for a Thymio via asebahttp (supported language: "aseba"), "thymio-tdm" for a Thymio via the Thymio Device Manager (supported language: "aseba"), "sim" for the simulator (supported languages: "aseba", "l2", and "js"), or undefined for no execution. Multiple devices can be specified, separated with (unquoted) '+'; e.g. "robot=thymio-tdm+sim". In that case, button "vpl:robot" toggles between devices. Connection parameters can be passed as hash parameters (same as query parameters but after the hash character '#' instead of question mark '?'). For "thymio", "asebahttp=..." specifies the url of asebahttp or Thymio Web Bridge; the default is "asebahttp=http://127.0.0.1:3000" if VPL is served as a local file, or the same http server as the one serving VPL if it's served over http(s). For "thymio-tdm", "w=..." specifies the url of the websocket (typically "w=ws://ip:port"), and "pass=..." the password (default: empty); the default is "w=ws://localhost:8597", i.e. the Thymio Device Manager running locally with its default port. With a password, it could be "w=ws://10.0.0.200:8597&pass=ABCDEF".
 - "role": "student" (default), "teacher" (options to customize the user interface and vpl blocks), or "teacher1" (options to customize only the vpl blocks).
 - "ui": filename of the main json file (default "ui.json")
 - "uilanguage": 2-letter language code used to translate messages (default: "en"; otherwise, as defined in dictionary "i18n" of the user interface json file)
@@ -619,3 +622,5 @@ VPL is started by code in a "load" event listener defined in vpl-main.js. Some c
 - window["vplUIRoot"]: url (relative to document) used to override location of ui.json to define UIROOT in about.html and help.html
 - window["vplSimMaps"]: "merged" for distinct maps (buttons "sim:map-kind" and "sim:map"), or comma-separated map names for merged maps (buttons "sim:map-height", "sim:map-ground", and/or "sim:map-obstacles"); default is "ground,height,obstacles"
 - window["vplConfig"]: can be set to configuration options: "ignoredCommands"=array of command ids to make non-available
+- window["vplConvertToHTML"]: function(json, isVPL3UI) to convert the content of a .vpl3 (if isVPL3UI is false) or a .vpl3ui file (if isVPL3UI is true) to a static HTML file
+- window["vplConvertMDToHtml"]: function(md) to convert simple markdown to an html fragment (block-level elements such as h1, p, etc.)

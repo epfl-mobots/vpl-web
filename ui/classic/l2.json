@@ -16,6 +16,15 @@
 			}
 		},
 		{
+			"name": "!volume",
+			"l2": {
+				"statement": [
+					"// set volume\n",
+					"_system.settings.write(0, `$[0] > 8 ? 0 : 8 - $[0]`);\n"
+				]
+			}
+		},
+		{
 			"name": "button",
 			"l2": {
 				"sectionBegin": "onevent buttons {\n",

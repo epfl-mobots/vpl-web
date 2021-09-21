@@ -47,6 +47,7 @@ A3a.vpl.Application.prototype.installThymioTDM = function () {
 			try {
 				tdm = new window["TDM"](vplGetHashOption("w"),
 					{
+						"password": vplGetHashOption("pass") || "",
 						"uuid": vplGetHashOption("uuid") || "auto",
 						"change": function (connected) {
 							app.robots[app.currentRobotIndex].runGlue.state = connected ? {} : null;

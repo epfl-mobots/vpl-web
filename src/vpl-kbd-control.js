@@ -205,9 +205,13 @@ A3a.vpl.KbdControl.prototype.activateTemplate = function (blockTemplate) {
 	}
 	if (target instanceof A3a.vpl.Rule && !(target instanceof A3a.vpl.RuleComment)) {
 		var block = new A3a.vpl.Block(blockTemplate, null, null);
-		target.setBlock(block, null, function () {
-			app.program.saveStateBeforeChange();
-		});
+		target.setBlock(block, null,
+			function () {
+				app.program.saveStateBeforeChange();
+			},
+			function () {
+				app.program.saveStateAfterChange();
+			});
 	} else if (target instanceof A3a.vpl.Block) {
 		var block = new A3a.vpl.Block(blockTemplate, null, null);
 		target.ruleContainer.setBlock(block,
@@ -217,6 +221,9 @@ A3a.vpl.KbdControl.prototype.activateTemplate = function (blockTemplate) {
 			},
 			function () {
 				app.program.saveStateBeforeChange();
+			},
+			function () {
+				app.program.saveStateAfterChange();
 			});
 	}
 	app.program.enforceSingleTrailingEmptyEventHandler();

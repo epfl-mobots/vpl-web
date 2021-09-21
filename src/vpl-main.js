@@ -123,25 +123,38 @@ function vplLoadResourcesWithXHR(rootFilename, rootDir, getAuxiliaryFilenames, o
 	@return {void}
 */
 function vplLoadResourcesInScripts(rootFilename, rootDir, getAuxiliaryFilenames, onLoad, onError) {
+
+	/** Get script element content
+		@param {string} id
+		@return {string}
+	*/
+	function getRsrsc(id) {
+		var el = document.getElementById(id);
+		if (el == null) {
+			throw "Missing script element " + id;
+		}
+		return el.textContent;
+	}
+
 	try {
-		var txt = document.getElementById(rootFilename).textContent;
+		var txt = getRsrsc(rootFilename);
 		var gui = /** @type {Object} */(JSON.parse(txt));
 		var rsrc = {};
 		if (gui["svgFilenames"]) {
 			gui["svgFilenames"].forEach(function (filename) {
-				txt = document.getElementById(filename).textContent;
+				txt = getRsrsc(filename);
 				rsrc[filename] = txt;
 			});
 		}
 		if (gui["overlays"]) {
 			gui["overlays"].forEach(function (filename) {
-				txt = document.getElementById(filename).textContent;
+				txt = getRsrsc(filename);
 				rsrc[filename] = txt;
 			});
 		}
 		if (gui["css"]) {
 			gui["css"].forEach(function (filename) {
-				txt = document.getElementById(filename).textContent.trim();
+				txt = getRsrsc(filename).trim();
 				rsrc[filename] = txt;
 			});
 		}
@@ -150,7 +163,7 @@ function vplLoadResourcesInScripts(rootFilename, rootDir, getAuxiliaryFilenames,
 				if (gui["doc"].hasOwnProperty(key)) {
 					for (var key2 in gui["doc"][key]) {
 						if (gui["doc"][key].hasOwnProperty(key2)) {
-							txt = document.getElementById(gui["doc"][key][key2]).textContent.trim();
+							txt = getRsrsc(gui["doc"][key][key2]).trim();
 							rsrc[gui["doc"][key][key2]] = txt;
 						}
 					}
@@ -169,8 +182,13 @@ function vplLoadResourcesInScripts(rootFilename, rootDir, getAuxiliaryFilenames,
 	@return {string}
 */
 function vplGetQueryOption(key) {
-	var r = /^[^?]*\?([^#]*)/.exec(document.location.href);
-	var query = r && r[1];
+	var query = "";
+	if (window["vplQueryOptions"]) {
+		query = window["vplQueryOptions"];
+	} else {
+		var r = /^[^?]*\?([^#]*)/.exec(document.location.href);
+		query = r && r[1];
+	}
 	if (query) {
 		var pairs = query
 			.split("&").map(function (p) {
@@ -329,6 +347,14 @@ function vplSetup(gui, rootDir) {
 			}
 			: null
 	);
+
+	// save
+	if (window["vplStorageSetFunction"]) {
+		app.program.saveChanges = function () {
+			var json = window["vplApp"].program.exportToJSON();
+			window["vplStorageSetFunction"](A3a.vpl.Program.defaultFilename, json);
+		};
+	}
 
 	// general settings
 	var isClassic = gui == undefined || gui["hardcoded-gui"] || vplGetQueryOption("appearance") === "classic";
@@ -636,6 +662,7 @@ function vplSetup(gui, rootDir) {
                             app.setHelpForCurrentAppState();
 							app.renderProgramToCanvas();
 						});
+						app.restored = true;
 					}
 				} catch (e) {}
 			});
@@ -905,6 +932,31 @@ window["vplGetProgramAsJSON"] = function (libAndUIOnly) {
 */
 window["vplGetUIAsJSON"] = function () {
 	return window["vplApp"].program.exportToJSON({lib: true, prog: false});
+};
+
+/** Convert .vpl3 or .vpl3ui to html
+	@param {string} json
+	@param {boolean} isVPL3UI
+	@return {string}
+*/
+window["vplConvertToHTML"] = function (json, isVPL3UI) {
+	var app = window["vplApp"];
+	var obj = JSON.parse(json);
+	app.program.importFromObject(/** @type {Object} */(obj));
+	var html = isVPL3UI
+	 	? app.uiToHTMLDocument(app.css, true)
+		: app.toHTMLDocument(app.css);
+	app.program.undo();
+	return html;
+};
+
+/** Convert .vpl3 or .vpl3ui to html
+	@param {string} md
+	@return {string}
+*/
+window["vplConvertMDToHtml"] = function (md) {
+	var dynamicHelp = new A3a.vpl.DynamicHelp();
+	return dynamicHelp.convertToHTML(md.split("\n"));
 };
 
 // remember state across reload

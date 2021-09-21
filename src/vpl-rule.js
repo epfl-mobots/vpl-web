@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2019 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -41,10 +41,10 @@ A3a.vpl.Rule = function () {
 A3a.vpl.Rule.prototype.copy = function () {
 	var eh = new A3a.vpl.Rule();
 	for (var i = 0; i < this.events.length; i++) {
-		eh.setBlock(this.events[i], null, null);
+		eh.setBlock(this.events[i], null, null, null);
 	}
 	for (var i = 0; i < this.actions.length; i++) {
-		eh.setBlock(this.actions[i], null, null);
+		eh.setBlock(this.actions[i], null, null, null);
 	}
 	return eh;
 };
@@ -101,10 +101,11 @@ A3a.vpl.Rule.prototype.getEventBlockByType = function (name) {
 	@param {A3a.vpl.Block} block
 	@param {?A3a.vpl.positionInContainer} posInRule
 	@param {?function():void} onPrepareChange
+	@param {?function():void} onChanged
 	@param {boolean=} noCopy true to use block itself instead of a copy (default: false)
 	@return {void}
 */
-A3a.vpl.Rule.prototype.setBlock = function (block, posInRule, onPrepareChange, noCopy) {
+A3a.vpl.Rule.prototype.setBlock = function (block, posInRule, onPrepareChange, onChanged, noCopy) {
 	if (block) {
 		// replace
 		switch (block.blockTemplate.type) {
@@ -116,8 +117,9 @@ A3a.vpl.Rule.prototype.setBlock = function (block, posInRule, onPrepareChange, n
 					this.events.splice(block.positionInContainer.index, 1);
 					if (noCopy) {
 						block.onPrepareChange = onPrepareChange;
+						block.onChanged = onChanged;
 					} else {
-						block = block.copy(this, posInRule, onPrepareChange);
+						block = block.copy(this, posInRule, onPrepareChange, onChanged);
 					}
 					this.events.splice(posInRule.index, 0, block);
 				}
@@ -127,15 +129,17 @@ A3a.vpl.Rule.prototype.setBlock = function (block, posInRule, onPrepareChange, n
 				}
 				if (noCopy) {
 					block.onPrepareChange = onPrepareChange;
+					block.onChanged = onChanged;
 				} else {
-					block = block.copy(this, posInRule, onPrepareChange);
+					block = block.copy(this, posInRule, onPrepareChange, onChanged);
 				}
 				this.events[posInRule.index] = block;
 			} else {
 				if (noCopy) {
 					block.onPrepareChange = onPrepareChange;
+					block.onChanged = onChanged;
 				} else {
-					block = block.copy(this, {eventSide: true, index: this.events.length}, onPrepareChange);
+					block = block.copy(this, {eventSide: true, index: this.events.length}, onPrepareChange, onChanged);
 				}
 				this.events.push(block);
 			}
@@ -148,8 +152,9 @@ A3a.vpl.Rule.prototype.setBlock = function (block, posInRule, onPrepareChange, n
 					this.removeBlock(/** @type {A3a.vpl.positionInContainer} */(block.positionInContainer));
 					if (noCopy) {
 						block.onPrepareChange = onPrepareChange;
+						block.onChanged = onChanged;
 					} else {
-						block = block.copy(this, posInRule, onPrepareChange);
+						block = block.copy(this, posInRule, onPrepareChange, onChanged);
 					}
 					(posInRule.eventSide ? this.events : this.actions).splice(posInRule.index, 0, block);
 				}
@@ -159,15 +164,17 @@ A3a.vpl.Rule.prototype.setBlock = function (block, posInRule, onPrepareChange, n
 				}
 				if (noCopy) {
 					block.onPrepareChange = onPrepareChange;
+					block.onChanged = onChanged;
 				} else {
-					block = block.copy(this, posInRule, onPrepareChange);
+					block = block.copy(this, posInRule, onPrepareChange, onChanged);
 				}
 				(posInRule.eventSide ? this.events : this.actions)[posInRule.index] = block;
 			} else {
 				if (noCopy) {
 					block.onPrepareChange = onPrepareChange;
+					block.onChanged = onChanged;
 				} else {
-					block = block.copy(this, {eventSide: false, index: this.actions.length}, onPrepareChange);
+					block = block.copy(this, {eventSide: false, index: this.actions.length}, onPrepareChange, onChanged);
 				}
 				this.actions.push(block);
 			}

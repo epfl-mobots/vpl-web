@@ -126,6 +126,15 @@ A3a.vpl.Com.prototype.connect = function () {
 					 	.replace(/</g, "&lt;") +
 					"</pre>";
 				break;
+			case "md":
+				if (isBase64) {
+					content = atob(content);
+				}
+				var dynamicHelp = new A3a.vpl.DynamicHelp();
+				return "<div style='width: 100%; height: 100%; padding: 3em;'>" +
+					dynamicHelp.convertToHTML(content.split("\n")) +
+					"</div>";
+				break;
 			case "gif":
 				return centeredImage("image/gif");
 			case "jpg":
@@ -146,6 +155,12 @@ A3a.vpl.Com.prototype.connect = function () {
 
 		try {
 			var msg = JSON.parse(event.data);
+
+			// accept "defaultfile" only if not app.restored
+			if (msg["type"] === "defaultfile" && !self.app.restored) {
+				msg["type"] = "file";
+			}
+
 			switch (msg["type"]) {
 			case "cmd":
 				var cmd = msg["data"]["cmd"];
@@ -177,11 +192,32 @@ A3a.vpl.Com.prototype.connect = function () {
 					}
 					self.app.vplCanvas.update();
 					break;
+				case "aseba":
+					// run program
+					if (isBase64) {
+						content = btoa(content);
+					}
+					self.app.robots[self.app.currentRobotIndex].runGlue.run(content, "aseba");
+					self.app.program.uploaded = false;
+					break;
 				case "about":
 					self.app.setAboutBoxContent(toHTML(content, isBase64, suffix));
 					break;
 				case "help":
 					self.app.setHelpContent(toHTML(content, isBase64, suffix));
+					break;
+				case "settings":
+					if (isBase64) {
+						content = btoa(content);
+					}
+					var props = JSON.parse(content);
+					if (props.hasOwnProperty("volume")) {
+						self.app.program.volume = props["volume"];
+					}
+					break;
+				case "statement":
+					self.app.setHelpContent(toHTML(content, isBase64, suffix), true);
+					self.app.vplCanvas.update();	// update toolbar
 					break;
 				case "suspend":
 					self.app.setSuspendBoxContent(toHTML(content, isBase64, suffix));
