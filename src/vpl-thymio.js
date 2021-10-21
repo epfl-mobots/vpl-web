@@ -17,9 +17,12 @@ A3a.vpl.RunGlue object for the Thymio II robot via asebahttp (Aseba 1.6).
 */
 
 /** Install connection with Thymio
+	@param {{
+		asebahttp: (string | null)
+	}=} options asebahttp options (default: use hash part of document url)
 	@return {A3a.vpl.RunGlue}
 */
-A3a.vpl.Application.prototype.installThymio = function () {
+A3a.vpl.Application.prototype.installThymio = function (options) {
 	var app = this;
 	return new A3a.vpl.RunGlue({
 		run: function (language, code) {
@@ -28,7 +31,7 @@ A3a.vpl.Application.prototype.installThymio = function () {
 		init: function (language) {
 			// initialize the list of nodes
 			try {
-				var origin = vplGetHashOption("asebahttp") ||
+				var origin = (options ? options.asebahttp : vplGetHashOption("asebahttp")) ||
 					(document.location.origin.slice(0, 5) !== "http:"
 						? "http://127.0.0.1:3000"
 						: document.location.origin);

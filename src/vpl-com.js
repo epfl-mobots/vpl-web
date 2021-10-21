@@ -1,5 +1,5 @@
 /*
-	Copyright 2019-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2019-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -45,8 +45,8 @@ A3a.vpl.Com = function (app, wsURL, sessionId) {
 
 /** Execute a command
 	@param {string} name
-	@param {boolean | undefined} selected
-	@param {string | undefined} state
+	@param {boolean=} selected
+	@param {string=} state
 	@return {boolean} true if execute, false if non-existing or disabled
 */
 A3a.vpl.Com.prototype.execCommand = function (name, selected, state) {
@@ -163,6 +163,9 @@ A3a.vpl.Com.prototype.connect = function () {
 
 			switch (msg["type"]) {
 			case "cmd":
+				// execute a command
+				// examples: {"type":"cmd","data":{"cmd":"cpl:stop"}}
+				// or {"type":"cmd","data":{"cmd":"vpl:slowdown","state":0.5}}
 				var cmd = msg["data"]["cmd"];
 				var selected = msg["data"]["selected"];
 				var state = msg["data"]["state"];
@@ -170,6 +173,9 @@ A3a.vpl.Com.prototype.connect = function () {
 				self.app.vplCanvas.update();
 				break;
 			case "file":
+				// upload a file
+				// examples: {"type":"file","data":{"kind":"vpl","content":"{...}"}}
+				// or {"type":"file","data":{"kind":"statement","name":"st.jpg","base64":true,"content":"..."}}
 				var kind = msg["data"]["kind"];
 				var content = msg["data"]["content"];
 				var isBase64 = msg["data"]["base64"] || false;
@@ -223,6 +229,46 @@ A3a.vpl.Com.prototype.connect = function () {
 					self.app.setSuspendBoxContent(toHTML(content, isBase64, suffix));
 					break;
 				}
+				break;
+			case "robot":
+				// change robot
+				// example: {"type":"robot","data":{"robot":"thymio-tdm",...}}
+				var robot = msg["data"]["robot"];
+				// thymio
+				var asebahttp = msg["data"]["url"] || null;
+				// thymio-tdm
+				var wsUrl = msg["data"]["url"] || null;
+				var uuid = msg["data"]["uuid"] || null;
+				var pass = msg["data"]["pass"] || null;
+				/** @type {A3a.vpl.RunGlue} */
+				var runGlue = null;
+				switch (robot) {
+				case "thymio":
+					if (asebahttp) {
+						runGlue = self.app.installThymio({asebahttp: asebahttp});
+						runGlue.init(runGlue.preferredLanguage);
+					}
+					break;
+				case "thymio-tdm":
+					if (wsUrl) {
+						runGlue = self.app.installThymioTDM({w: wsUrl, uuid: uuid, pass: pass});
+						runGlue.init(runGlue.preferredLanguage);
+					}
+					break;
+				case "sim":
+					runGlue = self.app.installRobotSimulator({});
+					runGlue.init(runGlue.preferredLanguage);
+					break;
+				}
+				if (runGlue) {
+					// stop current robot, if any
+					self.execCommand("vpl:stop");
+					// set specified robot as unique one
+					self.app.robots = [{name: robot, runGlue: runGlue}];
+					self.app.currentRobotIndex = 0;
+					self.app.vplCanvas.update();	// update toolbar
+				}
+				break;
 			}
 		} catch (e) {
 			console.info(e);
