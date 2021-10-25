@@ -41,6 +41,7 @@ Build:
 var tdm = new TDM(websocketURL, options);
 var b = tdm.canRun();
 tdm.run(asebaSourceCode, success, failure);
+tdm.close();
 
 */
 
@@ -237,6 +238,10 @@ window.TDM.prototype.flash = async function (program, success, failure) {
             console.error(e);
         }
     }
+};
+
+window.TDM.prototype.close = async function () {
+    await this.selectedNode.unlock();
 };
 
 window.TDM.runOnNode = async function (node, program, success, failure) {
