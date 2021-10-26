@@ -250,6 +250,10 @@ A3a.vpl.Com.prototype.connect = function () {
 					}
 					break;
 				case "thymio-tdm":
+					if (!wsUrl && self.app.currentRobotIndex >= 0 && self.app.robots[self.app.currentRobotIndex].runGlue.params.w) {
+						// undefined websocket url, keep existing one
+						wsUrl = self.app.robots[self.app.currentRobotIndex].runGlue.params.w;
+					}
 					if (wsUrl) {
 						runGlue = self.app.installThymioTDM({w: wsUrl, uuid: uuid, pass: pass});
 						runGlue.init(runGlue.preferredLanguage);

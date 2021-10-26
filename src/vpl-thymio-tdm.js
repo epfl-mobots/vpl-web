@@ -28,6 +28,13 @@ Manager (Thymio Suite 2.0).
 A3a.vpl.Application.prototype.installThymioTDM = function (options) {
 	var app = this;
 	var tdm = null;
+	if (options == undefined) {
+		options = {
+			w: vplGetHashOption("w"),
+			pass: vplGetHashOption("pass") || "",
+			uuid: vplGetHashOption("uuid") || "auto"
+		};
+	}
 	return new A3a.vpl.RunGlue({
 		run: function (language, code) {
 			tdm["run"](code, null,
@@ -50,10 +57,10 @@ A3a.vpl.Application.prototype.installThymioTDM = function (options) {
 		init: function (language) {
 			// initialize the list of nodes
 			try {
-				tdm = new window["TDM"](options ? options.w : vplGetHashOption("w"),
+				tdm = new window["TDM"](options.w,
 					{
-						"password": (options ? options.pass : vplGetHashOption("pass")) || "",
-						"uuid": (options ? options.uuid : vplGetHashOption("uuid")) || "auto",
+						"password": options.pass || "",
+						"uuid": options.uuid || "auto",
 						"change": function (connected) {
 							app.robots[app.currentRobotIndex].runGlue.state = connected ? {} : null;
 							app.vplCanvas.update();
@@ -84,6 +91,7 @@ A3a.vpl.Application.prototype.installThymioTDM = function (options) {
 		},
 		preferredLanguage: "aseba",
 		languages: ["aseba"],
-		state: null
+		state: null,
+		params: options
 	});
 };
