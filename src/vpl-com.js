@@ -263,6 +263,10 @@ A3a.vpl.Com.prototype.connect = function () {
 				if (runGlue) {
 					// stop current robot, if any
 					self.execCommand("vpl:stop");
+					// disconnect
+					if (this.currentRobotIndex >= 0) {
+						this.robots[this.currentRobotIndex].runGlue.stop();
+					}
 					// set specified robot as unique one
 					self.app.robots = [{name: robot, runGlue: runGlue}];
 					self.app.currentRobotIndex = 0;

@@ -64,6 +64,9 @@ A3a.vpl.Application.prototype.installThymioTDM = function (options) {
 				app.vplCanvas.update();
 			}
 		},
+		close: function () {
+			tdm["close"]();
+		},
 		isConnected: function () {
 			return app.robots[app.currentRobotIndex].runGlue.state != null && tdm["isConnected"]();
 		},
