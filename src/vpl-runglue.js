@@ -64,6 +64,7 @@ A3a.vpl.RunGlue = function (options) {
 	this.preferredLanguage = options && options.preferredLanguage ? options.preferredLanguage : "aseba";
 	this.languages = options && options.languages ? options.languages : [this.preferredLanguage];
 	this.state = options && options.state ? options.state : null;
+	this.params = options && options.params ? options.params : {};
 
 	this.lastCheckedCode = null;
 	this.lastCheckedLanguage = null;
