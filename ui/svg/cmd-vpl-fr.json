@@ -10,6 +10,7 @@
 			"vpl:save": "Sauvegarder le programme",
 			"vpl:load": "Charger le programme",
 			"vpl:upload": "Téléverser le programme",
+			"vpl:nextProgram": "Programme suivant",
 			"vpl:exportToHTML": "Exporter la vue du programme en HTML",
 			"vpl:text": "Panneau de code source textuel",
 			"vpl:text-toggle": "Montrer ou cacher le panneau de code source textuel",

@@ -58,6 +58,7 @@ A3a.vpl.Application = function (canvasEl) {
 		"vpl:save",
 		"vpl:load",
 		"vpl:upload",
+		"vpl:nextProgram",
 		"vpl:filename",
 		"vpl:exportToHTML",
 		"!space",

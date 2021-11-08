@@ -617,7 +617,10 @@ VPL is started by code in a "load" event listener defined in vpl-main.js. Some c
 - window["vplCommandServer"]: can be set to an A3a.vpl.Com object to supervise the application
 - window["vplDisableResize"]: can be set to true to disable full-window mode
 - window["vplUsername"]: can be set to a string to display the username in "vpl:filename" indicator
-- window["vplUpload"]: can be set to a void function(string filename, string json) to implement the "vpl:upload" command
+- window["vplUpload"]: can be set to a function(string filename, string json):void to implement the "vpl:upload" command
+- window["vplNextProgram"]: can be set to a function(string currentFilename, string? currentJsonProgram):nextJsonProgram to implement "vpl:nextProgram" command; if currentJsonProgram is null, just get a json containing a "filename" property for the next program; otherwise should save and return either actual program with "filename" property, or just object with "filename" property if the program is provided asynchronously; or null if nothing is available; when programs are available, should be cyclic
+- window["vplListenToCom"]: can be set to a function(msg):void to listen to messages sent by a supervisor application (teacher dashboard)
+- window["vplSendToCom"]: function(data):void to send a "client" message to a supervisor application (teacher dashboard)
 - window["vplStorageGetFunction"]: can be set to a void function(string filename, function(string jsonProgram, Object= options)) to get a file. Called at launch; if a program can be read (e.g. to restore a program saved to localStorage in a previous session), should call the function passed as 2nd argument with the json program and (optionally) a dictionary with the (optional) following entries: string filename (a filename which overrides the one passed to vplStorageGetFunction), boolean readOnly, boolean customizationMode
 - window["vplUIRoot"]: url (relative to document) used to override location of ui.json to define UIROOT in about.html and help.html
 - window["vplSimMaps"]: "merged" for distinct maps (buttons "sim:map-kind" and "sim:map"), or comma-separated map names for merged maps (buttons "sim:map-height", "sim:map-ground", and/or "sim:map-obstacles"); default is "ground,height,obstacles"

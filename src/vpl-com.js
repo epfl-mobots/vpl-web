@@ -161,6 +161,11 @@ A3a.vpl.Com.prototype.connect = function () {
 				msg["type"] = "file";
 			}
 
+			// give a copy to window["vplListenToCom"] if defined
+			if (window["vplListenToCom"]) {
+				window["vplListenToCom"](msg);
+			}
+
 			switch (msg["type"]) {
 			case "cmd":
 				// execute a command
@@ -276,6 +281,9 @@ A3a.vpl.Com.prototype.connect = function () {
 					self.app.currentRobotIndex = 0;
 					self.app.vplCanvas.update();	// update toolbar
 				}
+				break;
+			default:
+				self.app.vplCanvas.update();
 				break;
 			}
 		} catch (e) {
