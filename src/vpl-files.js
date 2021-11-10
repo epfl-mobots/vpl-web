@@ -38,7 +38,7 @@ A3a.vpl.Application.prototype.loadProgramJSON = function (json, options) {
 				}
 			}
 			this.programNotUploadedToServerYet = true;
-            this.setHelpForCurrentAppState();
+			this.setHelpForCurrentAppState();
 			if (this.views.indexOf("vpl") >= 0) {
 				this.vplCanvas.onUpdate();
 			}
@@ -54,19 +54,19 @@ A3a.vpl.Application.getFileSuffix = function (filename) {
 	return /(\.[^.]*|)$/.exec(filename)[0].slice(1).toLowerCase();
 };
 
-/** Load a program file (aesl or vpl3 (json))
+/** Load a program file (aesl, vpl3 (json) or zip bundle)
 	@param {File} file
 	@return {boolean} true if file suffix was recognized as a program
 */
 A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 	var ext = A3a.vpl.Application.getFileSuffix(file.name);
 	var reader = new window.FileReader();
+	var app = this;
 	switch (ext) {
 	case "aesl":
 	case A3a.vpl.Program.suffix:
 	case A3a.vpl.Program.suffixUI:
 	case "json":
-		var app = this;
 		reader.onload = function (event) {
 			var data = event.target.result;
 			var filename = file.name;
@@ -85,6 +85,58 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 			app.vplCanvas.onUpdate();
 		};
 		reader["readAsText"](file);
+		return true;
+	case "zip":
+		reader.onload = function (event) {
+			var dataURL = event.target.result;
+			var contentBase64 = dataURL.slice(dataURL.indexOf(',') + 1);
+			var content = atob(contentBase64);
+			var zipbundle = new A3a.vpl.ZipBundle();
+			zipbundle.load(content, function () {
+				// set load first ui, vpl3, doc, statement
+				console.info(zipbundle);
+				var uiFiles = zipbundle.manifest.getFilesForType(A3a.vpl.ZipBundle.Manifest.File.Type.ui);
+				var vpl3Files = zipbundle.manifest.getFilesForType(A3a.vpl.ZipBundle.Manifest.File.Type.vpl3);
+				var docFiles = zipbundle.manifest.getFilesForType(A3a.vpl.ZipBundle.Manifest.File.Type.doc);
+				var statementFiles = zipbundle.manifest.getFilesForType(A3a.vpl.ZipBundle.Manifest.File.Type.statement);
+				if (vpl3Files.length > 0) {
+					zipbundle.getFile(vpl3Files[0].filename, false, function (textContent) {
+						if (/^[\s]*{/.test(/** @type {string} */(textContent))) {
+							// json
+							app.loadProgramJSON(/** @type {string} */(textContent));
+						} else {
+							// try xml
+							app.program.importFromAESLFile(/** @type {string} */(textContent));
+							app.vplCanvas.onUpdate();
+						}
+						app.program.filename = vpl3Files[0].filename;
+						app.vplCanvas.update();
+					});
+				} else if (uiFiles.length > 0) {
+					zipbundle.getFile(uiFiles[0].filename, false, function (textContent) {
+						// assume json
+						app.loadProgramJSON(/** @type {string} */(textContent));
+						app.vplCanvas.update();
+					});
+				}
+				if (docFiles.length > 0) {
+					zipbundle.getFile(docFiles[0].filename, true, function (base64Content) {
+						var binaryContent = atob(/** @type {string} */(base64Content));
+						var html = A3a.vpl.toHTML(binaryContent, A3a.vpl.ZipBundle.getSuffix(statementFiles[0].filename));
+						app.setHelpContent(html, false);
+					});
+				}
+				if (statementFiles.length > 0) {
+					zipbundle.getFile(statementFiles[0].filename, true, function (base64Content) {
+						var binaryContent = atob(/** @type {string} */(base64Content));
+						var html = A3a.vpl.toHTML(binaryContent, A3a.vpl.ZipBundle.getSuffix(statementFiles[0].filename));
+						app.setHelpContent(html, true);
+						app.vplCanvas.update();	// update toolbar
+					});
+				}
+			});
+		};
+		reader["readAsDataURL"](file);
 		return true;
 	}
 

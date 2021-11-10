@@ -101,58 +101,6 @@ A3a.vpl.Com.prototype.connect = function () {
 
 	this.ws.addEventListener("message", function (event) {
 
-		function toHTML(content, isBase64, suffix) {
-
-			function centeredImage(mimetype) {
-				var img = "<img src='data:" + mimetype + ";base64," + (isBase64 ? content : btoa(content)) + "' style='max-width:100%;max-height:100%;'>";
-				return "<div style='display: table; height: 100%; width: 100%; overflow: hidden;'>" +
-					"<div style='display: table-cell; vertical-align: middle; text-align: center;'>" +
-					img +
-					"</div>" +
-					"</div>";
-			}
-
-			switch (suffix.toLowerCase()) {
-			case "html":
-			case "htm":
-				return isBase64 ? atob(content) : content;
-			case "txt":
-				if (isBase64) {
-					content = atob(content);
-				}
-				return "<pre style='width: 100%; height: 100%; padding: 3em;'>" +
-					content
-						.replace(/&/g, "&amp;")
-					 	.replace(/</g, "&lt;") +
-					"</pre>";
-				break;
-			case "md":
-				if (isBase64) {
-					content = atob(content);
-				}
-				var dynamicHelp = new A3a.vpl.DynamicHelp();
-				return "<div style='width: 100%; height: 100%; padding: 3em;'>" +
-					dynamicHelp.convertToHTML(content.split("\n")) +
-					"</div>";
-				break;
-			case "gif":
-				return centeredImage("image/gif");
-			case "jpg":
-			case "jpeg":
-				return centeredImage("image/jpeg");
-			case "png":
-				return centeredImage("image/png");
-			case "svg":
-				return centeredImage("image/svg+xml");
-			default:
-				return "";
-			}
-		}
-
-		function toDataURL(mimetype, data) {
-			return "data:" + mimetype + ";base64," + btoa(data);
-		}
-
 		try {
 			var msg = JSON.parse(event.data);
 
@@ -212,10 +160,10 @@ A3a.vpl.Com.prototype.connect = function () {
 					self.app.program.uploaded = false;
 					break;
 				case "about":
-					self.app.setAboutBoxContent(toHTML(content, isBase64, suffix));
+					self.app.setAboutBoxContent(A3a.vpl.toHTML(isBase64 ? atob(content) : content, suffix));
 					break;
 				case "help":
-					self.app.setHelpContent(toHTML(content, isBase64, suffix));
+					self.app.setHelpContent(A3a.vpl.toHTML(isBase64 ? atob(content) : content, suffix));
 					break;
 				case "settings":
 					if (isBase64) {
@@ -227,11 +175,11 @@ A3a.vpl.Com.prototype.connect = function () {
 					}
 					break;
 				case "statement":
-					self.app.setHelpContent(toHTML(content, isBase64, suffix), true);
+					self.app.setHelpContent(A3a.vpl.toHTML(isBase64 ? atob(content) : content, suffix), true);
 					self.app.vplCanvas.update();	// update toolbar
 					break;
 				case "suspend":
-					self.app.setSuspendBoxContent(toHTML(content, isBase64, suffix));
+					self.app.setSuspendBoxContent(A3a.vpl.toHTML(isBase64 ? atob(content) : content, suffix));
 					break;
 				}
 				break;
