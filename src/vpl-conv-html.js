@@ -31,7 +31,8 @@ A3a.vpl.toHTML = function (content, suffix) {
 			"</div>";
 	}
 
-	switch (suffix.toLowerCase()) {
+	suffix = suffix.toLowerCase();
+	switch (suffix) {
 	case "html":
 	case "htm":
 		return content;
@@ -49,18 +50,30 @@ A3a.vpl.toHTML = function (content, suffix) {
 			"</div>";
 		break;
 	case "gif":
-		return centeredImage("image/gif");
 	case "jpg":
 	case "jpeg":
-		return centeredImage("image/jpeg");
 	case "png":
-		return centeredImage("image/png");
 	case "svg":
-		return centeredImage("image/svg+xml");
+		return centeredImage(A3a.vpl.suffixToMimetype[suffix]);
 	default:
 		return "";
 	}
 }
+
+/**
+	@const
+*/
+A3a.vpl.suffixToMimetype = {
+	"gif": "image/gif",
+	"htm": "text/html",
+	"html": "text/html",
+	"jpeg": "image/jpeg",
+	"jpg": "image/jpeg",
+	"md": "text/markdown",
+	"png": "image/png",
+	"svg": "image/svg+xml",
+	"txt": "text/plain"
+};
 
 /** Convert data to a "data:" url
 	@param {string} mimetype
