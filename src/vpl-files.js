@@ -93,7 +93,15 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 			var content = atob(contentBase64);
 			var zipbundle = new A3a.vpl.ZipBundle();
 			zipbundle.load(content, function () {
-				// set load first ui, vpl3, doc, statement
+				// reset vpl3, doc, statement
+				app.newVPL(true);
+				if (app.jsonForNew) {
+					app.loadProgramJSON(app.jsonForNew);
+				}
+				app.program.filename = null;
+				app.setHelpForCurrentAppState();
+				app.statementBox = null;
+				// load first vpl3 or ui, doc, statement
 				console.info(zipbundle);
 				var uiFiles = zipbundle.manifest.getFilesForType(A3a.vpl.ZipBundle.Manifest.File.Type.ui);
 				var vpl3Files = zipbundle.manifest.getFilesForType(A3a.vpl.ZipBundle.Manifest.File.Type.vpl3);
@@ -134,6 +142,7 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 						app.vplCanvas.update();	// update toolbar
 					});
 				}
+				app.renderProgramToCanvas();
 			});
 		};
 		reader["readAsDataURL"](file);

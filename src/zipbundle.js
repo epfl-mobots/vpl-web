@@ -25,6 +25,7 @@ A3a.vpl.JSZip = class extends JSZip {
 			if (path.slice(0, this.root.length) === this.root) {
 				var filename = path.slice(this.root.length);
 				if (/^[^\/]+\/?$/.test(filename)) {
+                    // filename = not empty, no inner slash, possibly trailing slash
 					cb(filename, this.files[path]);
 				}
 			}
