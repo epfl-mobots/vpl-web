@@ -16,6 +16,7 @@
 // fixes for some jszip 3.6.0 issues
 
 A3a.vpl.JSZip = class extends JSZip {
+
 	/**
 		@inheritDoc
 		@see https://github.com/Stuk/jszip/blob/master/lib/object.js
@@ -25,7 +26,7 @@ A3a.vpl.JSZip = class extends JSZip {
 			if (path.slice(0, this.root.length) === this.root) {
 				var filename = path.slice(this.root.length);
 				if (/^[^\/]+\/?$/.test(filename)) {
-                    // filename = not empty, no inner slash, possibly trailing slash
+	  	  	  	  	  // filename = not empty, no inner slash, possibly trailing slash
 					cb(filename, this.files[path]);
 				}
 			}
@@ -65,6 +66,8 @@ A3a.vpl.ZipBundle = class {
 		this.toc = [];
 		this.pathPrefix = "";
 		this.manifest = new A3a.vpl.ZipBundle.Manifest();
+		this.textFileCache = {};
+		this.base64FileCache = {};
 	}
 
 	load(zipContent, cb) {
@@ -107,8 +110,8 @@ A3a.vpl.ZipBundle = class {
 	getType(filename) {
 		// use manifest file if it exists
 		if (this.manifest.explicitFile) {
-			   var manifestFile = this.manifest.getEntry(filename);
-			   return manifestFile ? manifestFile.type : A3a.vpl.ZipBundle.Manifest.File.Type.unknown;
+			var manifestFile = this.manifest.getEntry(filename);
+			return manifestFile ? manifestFile.type : A3a.vpl.ZipBundle.Manifest.File.Type.unknown;
 		}
 
 		return A3a.vpl.ZipBundle.mapSuffixToType(filename);
@@ -117,10 +120,16 @@ A3a.vpl.ZipBundle = class {
 	/**
 		@param {string} filename
 		@param {boolean} asBase64 true for base64, false for text
-		@param {function(*):void} cb
-		@return A3a.vpl.ZipBundle.Manifest.File.Type
+		@param {function(string):void} cb
+		@return {void}
 	*/
 	getFile(filename, asBase64, cb) {
+		if ((asBase64 ? this.base64FileCache : this.textFileCache)[filename] != undefined) {
+			if (cb) {
+				cb((asBase64 ? this.base64FileCache : this.textFileCache)[filename]);
+			}
+			return;
+		}
 		this.zip.file(this.pathPrefix + filename).async(asBase64 ? "uint8array" : "string").then((data) => {
 			if (asBase64) {
 				var dataAsString = "";
@@ -129,13 +138,33 @@ A3a.vpl.ZipBundle = class {
 				}
 				data = btoa(dataAsString);
 			}
+			(asBase64 ? this.base64FileCache : this.textFileCache)[filename] = data;
 			cb(data);
 		});
 	}
 
+	/** Get file synchronously, failing with null if not in cache yet (should be retried later).
+		@param {string} filename
+		@param {boolean} asBase64 true for base64, false for text
+		@param {function(string):void=} cb
+		@return {string|null}
+	*/
+	getFileSync(filename, asBase64, cb) {
+		if ((asBase64 ? this.base64FileCache : this.textFileCache)[filename] == undefined) {
+			this.getFile(filename, asBase64,
+				function (content) {
+					if (cb) {
+						cb(content);
+					}
+				});
+			return null;
+		}
+		return (asBase64 ? this.base64FileCache : this.textFileCache)[filename];
+	}
+
 	addFile(filename, content) {
 		if (this.zip == null) {
-			   this.zip = new A3a.vpl.JSZip();
+			this.zip = new A3a.vpl.JSZip();
 		}
 		this.zip.file(this.pathPrefix + filename, content);
 		if (this.toc.indexOf(filename) < 0) {
@@ -211,7 +240,7 @@ A3a.vpl.ZipBundle.Manifest = class {
 					break;
 				}
 				if (type !== A3a.vpl.ZipBundle.Manifest.File.Type.unknown) {
-					var re = /([-_\/.\p{Letter}0-9]+)(\s+\([^)]*\))?$/u;   // filename, accents allowed
+					var re = /([-_\/.\p{Letter}0-9]+)(\s+\([^)]*\))?$/u;	// filename, accents allowed
 					for (; i + 1 < lines.length; i++) {
 						var line = lines[i + 1];
 						if (line != "") {
