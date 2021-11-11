@@ -36,6 +36,21 @@ A3a.vpl.toHTML = function (content, suffix, processImageURL) {
 	switch (suffix) {
 	case "html":
 	case "htm":
+		if (processImageURL) {
+			// match img element with src attribute which doesn't begin with method
+			var reImg = /<img\s[^>]*src=['"](?!\w+:)([^'"]+)['"]/;
+			for (var pos = 0; pos < content.length; ) {
+				var r = reImg.exec(content.slice(pos));
+				if (r == null) {
+					break;
+				}
+				var imgSrc = r[1];
+				var groupIndex = pos + r.index + r[0].indexOf(imgSrc);
+				var newImgSrc = processImageURL(imgSrc);
+				content = content.slice(0, groupIndex) + newImgSrc + content.slice(groupIndex + imgSrc.length);
+				pos = groupIndex + newImgSrc.length;
+			}
+		}
 		return content;
 	case "txt":
 		return "<pre style='width: 100%; height: 100%; padding: 3em;'>" +

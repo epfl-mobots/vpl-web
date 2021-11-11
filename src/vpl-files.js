@@ -94,14 +94,14 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 			var zipbundle = new A3a.vpl.ZipBundle();
 			zipbundle.load(content, function () {
 
-				var getProcessImageURL = function (binaryContent, isStatement) {
+				var getProcessImageURL = function (filename, binaryContent, isStatement) {
 					return function (url0) {
 						// convert relative url to file url if found in zipbundle
 						var suffix = A3a.vpl.ZipBundle.getSuffix(url0);
 						var imageBase64 = zipbundle.getFileSync(url0, true, function (base64Content) {
 							// one more image has been decoded; reprocess file again
-							var html = A3a.vpl.toHTML(binaryContent, A3a.vpl.ZipBundle.getSuffix(statementFiles[0].filename),
-								getProcessImageURL(binaryContent, isStatement));
+							var html = A3a.vpl.toHTML(binaryContent, A3a.vpl.ZipBundle.getSuffix(filename),
+								getProcessImageURL(filename, binaryContent, isStatement));
 							app.setHelpContent(html, isStatement);
 						});
 						if (imageBase64) {
@@ -120,8 +120,8 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 				app.program.filename = null;
 				app.setHelpForCurrentAppState();
 				app.statementBox = null;
+				
 				// load first vpl3 or ui, doc, statement
-				console.info(zipbundle);
 				var uiFiles = zipbundle.manifest.getFilesForType(A3a.vpl.ZipBundle.Manifest.File.Type.ui);
 				var vpl3Files = zipbundle.manifest.getFilesForType(A3a.vpl.ZipBundle.Manifest.File.Type.vpl3);
 				var docFiles = zipbundle.manifest.getFilesForType(A3a.vpl.ZipBundle.Manifest.File.Type.doc);
@@ -149,8 +149,8 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 				if (docFiles.length > 0) {
 					zipbundle.getFile(docFiles[0].filename, true, function (base64Content) {
 						var binaryContent = atob(/** @type {string} */(base64Content));
-						var html = A3a.vpl.toHTML(binaryContent, A3a.vpl.ZipBundle.getSuffix(statementFiles[0].filename),
-							getProcessImageURL(binaryContent, false));
+						var html = A3a.vpl.toHTML(binaryContent, A3a.vpl.ZipBundle.getSuffix(docFiles[0].filename),
+							getProcessImageURL(docFiles[0].filename, binaryContent, false));
 						app.setHelpContent(html, false);
 					});
 				}
@@ -158,7 +158,7 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 					zipbundle.getFile(statementFiles[0].filename, true, function (base64Content) {
 						var binaryContent = atob(/** @type {string} */(base64Content));
 						var html = A3a.vpl.toHTML(binaryContent, A3a.vpl.ZipBundle.getSuffix(statementFiles[0].filename),
-							getProcessImageURL(binaryContent, true));
+							getProcessImageURL(statementFiles[0].filename, binaryContent, true));
 						app.setHelpContent(html, true);
 						app.vplCanvas.update();	// update toolbar
 					});
