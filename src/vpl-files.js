@@ -93,6 +93,25 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 			var content = atob(contentBase64);
 			var zipbundle = new A3a.vpl.ZipBundle();
 			zipbundle.load(content, function () {
+
+				var getProcessImageURL = function (binaryContent, isStatement) {
+					return function (url0) {
+						// convert relative url to file url if found in zipbundle
+						var suffix = A3a.vpl.ZipBundle.getSuffix(url0);
+						var imageBase64 = zipbundle.getFileSync(url0, true, function (base64Content) {
+							// one more image has been decoded; reprocess file again
+							var html = A3a.vpl.toHTML(binaryContent, A3a.vpl.ZipBundle.getSuffix(statementFiles[0].filename),
+								getProcessImageURL(binaryContent, isStatement));
+							app.setHelpContent(html, isStatement);
+						});
+						if (imageBase64) {
+							// convert base64 to data url
+							return "data:" + A3a.vpl.suffixToMimetype[suffix.toLowerCase()] + ";base64," + imageBase64;
+						}
+						return url0;
+					};
+				};
+
 				// reset vpl3, doc, statement
 				app.newVPL(true);
 				if (app.jsonForNew) {
@@ -130,14 +149,16 @@ A3a.vpl.Application.prototype.loadProgramFile = function (file) {
 				if (docFiles.length > 0) {
 					zipbundle.getFile(docFiles[0].filename, true, function (base64Content) {
 						var binaryContent = atob(/** @type {string} */(base64Content));
-						var html = A3a.vpl.toHTML(binaryContent, A3a.vpl.ZipBundle.getSuffix(statementFiles[0].filename));
+						var html = A3a.vpl.toHTML(binaryContent, A3a.vpl.ZipBundle.getSuffix(statementFiles[0].filename),
+							getProcessImageURL(binaryContent, false));
 						app.setHelpContent(html, false);
 					});
 				}
 				if (statementFiles.length > 0) {
 					zipbundle.getFile(statementFiles[0].filename, true, function (base64Content) {
 						var binaryContent = atob(/** @type {string} */(base64Content));
-						var html = A3a.vpl.toHTML(binaryContent, A3a.vpl.ZipBundle.getSuffix(statementFiles[0].filename));
+						var html = A3a.vpl.toHTML(binaryContent, A3a.vpl.ZipBundle.getSuffix(statementFiles[0].filename),
+							getProcessImageURL(binaryContent, true));
 						app.setHelpContent(html, true);
 						app.vplCanvas.update();	// update toolbar
 					});

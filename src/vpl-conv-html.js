@@ -18,9 +18,10 @@ Utility functions to convert markdown or images to HTML.
 /** Convert file content to HTML
 	@param {string} content content (text or converted with atob)
 	@param {string} suffix file suffix (html, htm, txt, md, gif, jpg, jpeg, png or svg)
+	@param {function(string):string=} processImageURL
 	@return {string} html fragment
 */
-A3a.vpl.toHTML = function (content, suffix) {
+A3a.vpl.toHTML = function (content, suffix, processImageURL) {
 
 	function centeredImage(mimetype) {
 		var img = "<img src='data:" + mimetype + ";base64," + btoa(content) + "' style='max-width:100%;max-height:100%;'>";
@@ -45,6 +46,7 @@ A3a.vpl.toHTML = function (content, suffix) {
 		break;
 	case "md":
 		var dynamicHelp = new A3a.vpl.DynamicHelp();
+		dynamicHelp.setProcessImageURL(processImageURL || null);
 		return "<div style='width: 100%; height: 100%; padding: 3em;'>" +
 			dynamicHelp.convertToHTML(content.split("\n")) +
 			"</div>";
