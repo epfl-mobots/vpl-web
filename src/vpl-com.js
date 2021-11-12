@@ -1,5 +1,5 @@
 /*
-	Copyright 2019-2020 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2019-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -45,8 +45,8 @@ A3a.vpl.Com = function (app, wsURL, sessionId) {
 
 /** Execute a command
 	@param {string} name
-	@param {boolean | undefined} selected
-	@param {string | undefined} state
+	@param {boolean=} selected
+	@param {string=} state
 	@return {boolean} true if execute, false if non-existing or disabled
 */
 A3a.vpl.Com.prototype.execCommand = function (name, selected, state) {
@@ -101,58 +101,6 @@ A3a.vpl.Com.prototype.connect = function () {
 
 	this.ws.addEventListener("message", function (event) {
 
-		function toHTML(content, isBase64, suffix) {
-
-			function centeredImage(mimetype) {
-				var img = "<img src='data:" + mimetype + ";base64," + (isBase64 ? content : btoa(content)) + "' style='max-width:100%;max-height:100%;'>";
-				return "<div style='display: table; height: 100%; width: 100%; overflow: hidden;'>" +
-					"<div style='display: table-cell; vertical-align: middle; text-align: center;'>" +
-					img +
-					"</div>" +
-					"</div>";
-			}
-
-			switch (suffix.toLowerCase()) {
-			case "html":
-			case "htm":
-				return isBase64 ? atob(content) : content;
-			case "txt":
-				if (isBase64) {
-					content = atob(content);
-				}
-				return "<pre style='width: 100%; height: 100%; padding: 3em;'>" +
-					content
-						.replace(/&/g, "&amp;")
-					 	.replace(/</g, "&lt;") +
-					"</pre>";
-				break;
-			case "md":
-				if (isBase64) {
-					content = atob(content);
-				}
-				var dynamicHelp = new A3a.vpl.DynamicHelp();
-				return "<div style='width: 100%; height: 100%; padding: 3em;'>" +
-					dynamicHelp.convertToHTML(content.split("\n")) +
-					"</div>";
-				break;
-			case "gif":
-				return centeredImage("image/gif");
-			case "jpg":
-			case "jpeg":
-				return centeredImage("image/jpeg");
-			case "png":
-				return centeredImage("image/png");
-			case "svg":
-				return centeredImage("image/svg+xml");
-			default:
-				return "";
-			}
-		}
-
-		function toDataURL(mimetype, data) {
-			return "data:" + mimetype + ";base64," + btoa(data);
-		}
-
 		try {
 			var msg = JSON.parse(event.data);
 
@@ -161,8 +109,16 @@ A3a.vpl.Com.prototype.connect = function () {
 				msg["type"] = "file";
 			}
 
+			// give a copy to window["vplListenToCom"] if defined
+			if (window["vplListenToCom"]) {
+				window["vplListenToCom"](msg);
+			}
+
 			switch (msg["type"]) {
 			case "cmd":
+				// execute a command
+				// examples: {"type":"cmd","data":{"cmd":"cpl:stop"}}
+				// or {"type":"cmd","data":{"cmd":"vpl:slowdown","state":0.5}}
 				var cmd = msg["data"]["cmd"];
 				var selected = msg["data"]["selected"];
 				var state = msg["data"]["state"];
@@ -170,6 +126,9 @@ A3a.vpl.Com.prototype.connect = function () {
 				self.app.vplCanvas.update();
 				break;
 			case "file":
+				// upload a file
+				// examples: {"type":"file","data":{"kind":"vpl","content":"{...}"}}
+				// or {"type":"file","data":{"kind":"statement","name":"st.jpg","base64":true,"content":"..."}}
 				var kind = msg["data"]["kind"];
 				var content = msg["data"]["content"];
 				var isBase64 = msg["data"]["base64"] || false;
@@ -201,10 +160,10 @@ A3a.vpl.Com.prototype.connect = function () {
 					self.app.program.uploaded = false;
 					break;
 				case "about":
-					self.app.setAboutBoxContent(toHTML(content, isBase64, suffix));
+					self.app.setAboutBoxContent(A3a.vpl.toHTML(isBase64 ? atob(content) : content, suffix));
 					break;
 				case "help":
-					self.app.setHelpContent(toHTML(content, isBase64, suffix));
+					self.app.setHelpContent(A3a.vpl.toHTML(isBase64 ? atob(content) : content, suffix));
 					break;
 				case "settings":
 					if (isBase64) {
@@ -216,13 +175,64 @@ A3a.vpl.Com.prototype.connect = function () {
 					}
 					break;
 				case "statement":
-					self.app.setHelpContent(toHTML(content, isBase64, suffix), true);
+					self.app.setHelpContent(A3a.vpl.toHTML(isBase64 ? atob(content) : content, suffix), true);
 					self.app.vplCanvas.update();	// update toolbar
 					break;
 				case "suspend":
-					self.app.setSuspendBoxContent(toHTML(content, isBase64, suffix));
+					self.app.setSuspendBoxContent(A3a.vpl.toHTML(isBase64 ? atob(content) : content, suffix));
 					break;
 				}
+				break;
+			case "robot":
+				// change robot
+				// example: {"type":"robot","data":{"robot":"thymio-tdm",...}}
+				var robot = msg["data"]["robot"];
+				// thymio
+				var asebahttp = msg["data"]["url"] || null;
+				// thymio-tdm
+				var wsUrl = msg["data"]["url"] || null;
+				var uuid = msg["data"]["uuid"] || null;
+				var pass = msg["data"]["pass"] || null;
+				/** @type {A3a.vpl.RunGlue} */
+				var runGlue = null;
+				switch (robot) {
+				case "thymio":
+					if (asebahttp) {
+						runGlue = self.app.installThymio({asebahttp: asebahttp});
+						runGlue.init(runGlue.preferredLanguage);
+					}
+					break;
+				case "thymio-tdm":
+					if (!wsUrl && self.app.currentRobotIndex >= 0 && self.app.robots[self.app.currentRobotIndex].runGlue.params.w) {
+						// undefined websocket url, keep existing one
+						wsUrl = self.app.robots[self.app.currentRobotIndex].runGlue.params.w;
+					}
+					if (wsUrl) {
+						runGlue = self.app.installThymioTDM({w: wsUrl, uuid: uuid, pass: pass});
+						runGlue.init(runGlue.preferredLanguage);
+					}
+					break;
+				case "sim":
+					runGlue = self.app.installRobotSimulator({});
+					runGlue.init(runGlue.preferredLanguage);
+					break;
+				}
+				if (runGlue) {
+					// stop current robot, if any
+					self.execCommand("vpl:stop");
+					// disconnect
+					if (this.currentRobotIndex >= 0) {
+						this.robots[this.currentRobotIndex].runGlue.stop();
+					}
+					// set specified robot as unique one
+					self.app.robots = [{name: robot, runGlue: runGlue}];
+					self.app.currentRobotIndex = 0;
+					self.app.vplCanvas.update();	// update toolbar
+				}
+				break;
+			default:
+				self.app.vplCanvas.update();
+				break;
 			}
 		} catch (e) {
 			console.info(e);

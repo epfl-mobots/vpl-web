@@ -47,6 +47,11 @@
 					"![vpl:filename](vpl:cmd:vpl-filename)",
 					"Nom de fichier du programme VPL."
 				],
+				"vpl:nextProgram": [
+					"# Programme suivant",
+					"![vpl:nextProgram](vpl:cmd:vpl-nextProgram)",
+					"Passe au programme suivant."
+				],
 				"vpl:exportToHTML": [
 					"# Exporte le programme en HTML",
 					"![vpl:exportToHTML](vpl:cmd:vpl-exportToHTML)",

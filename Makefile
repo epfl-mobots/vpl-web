@@ -19,7 +19,7 @@ CLOSURECOMPILER ?= closure-compiler-v20190121.jar
 
 CLOSURE = $(shell if which closure-compiler >/dev/null; then echo closure-compiler; else echo java -jar $(CLOSURECOMPILER); fi)
 CLOSUREFLAGS = \
-        --language_in ECMASCRIPT5_STRICT \
+        --language_in ECMASCRIPT6_STRICT \
         --compilation_level ADVANCED_OPTIMIZATIONS \
         --use_types_for_optimization \
         --warning_level VERBOSE \
@@ -82,7 +82,10 @@ JS = \
 	vpl-ui-svg.js \
 	vpl-runglue.js \
 	vpl-htmlpanel.js \
+	vpl-conv-html.js \
 	vpl-files.js \
+	jszip-externs.js \
+	zipbundle.js \
 	vpl-load.js \
 	vpl-com.js \
 	vpl-keyboard.js \

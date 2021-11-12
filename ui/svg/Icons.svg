@@ -468,6 +468,18 @@
           <rect id="frame-32-statement" class="cls-2" width="48" height="48"/>
         </g>
       </g>
+      <g id="ic_NextProgram" data-name="ic Help">
+        <g id="nextprogram_default" data-name="statement default">
+          <g id="statement-2">
+            <rect class="cls-12" x="13" y="11" width="22" height="26" rx="2" ry="2"/>
+            <circle class="cls-7" cx="17" cy="28" r="1.5"/>
+            <circle class="cls-7" cx="17" cy="20" r="1.5"/>
+            <line class="cls-24" x1="21" y1="16" x2="31" y2="16"/>
+            <polyline class="cls-13" points="38 5 43 10 38 15"/>
+          </g>
+          <rect id="frame-32-statement" class="cls-2" width="48" height="48"/>
+        </g>
+      </g>
       <g id="ic_play" data-name="ic play">
         <g id="play_highlight" data-name="play highlight">
           <circle class="cls-18" cx="24.05" cy="24.02" r="20.49"/>

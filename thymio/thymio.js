@@ -39599,6 +39599,7 @@ Build:
 var tdm = new TDM(websocketURL, options);
 var b = tdm.canRun();
 tdm.run(asebaSourceCode, success, failure);
+tdm.close();
 
 */
 
@@ -39995,53 +39996,69 @@ window.TDM.prototype.flash = /*#__PURE__*/function () {
   };
 }();
 
+window.TDM.prototype.close = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
+  return regeneratorRuntime.wrap(function _callee6$(_context6) {
+    while (1) {
+      switch (_context6.prev = _context6.next) {
+        case 0:
+          _context6.next = 2;
+          return this.selectedNode.unlock();
+
+        case 2:
+        case "end":
+          return _context6.stop();
+      }
+    }
+  }, _callee6, this);
+}));
+
 window.TDM.runOnNode = /*#__PURE__*/function () {
-  var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(node, program, success, failure) {
-    return regeneratorRuntime.wrap(function _callee6$(_context6) {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(node, program, success, failure) {
+    return regeneratorRuntime.wrap(function _callee7$(_context7) {
       while (1) {
-        switch (_context6.prev = _context6.next) {
+        switch (_context7.prev = _context7.next) {
           case 0:
-            _context6.prev = 0;
-            _context6.next = 3;
+            _context7.prev = 0;
+            _context7.next = 3;
             return node.lock();
 
           case 3:
-            _context6.next = 5;
+            _context7.next = 5;
             return node.sendAsebaProgram(program);
 
           case 5:
-            _context6.next = 7;
+            _context7.next = 7;
             return node.runProgram();
 
           case 7:
-            _context6.next = 9;
+            _context7.next = 9;
             return node.unlock();
 
           case 9:
             success && success();
-            _context6.next = 15;
+            _context7.next = 15;
             break;
 
           case 12:
-            _context6.prev = 12;
-            _context6.t0 = _context6["catch"](0);
+            _context7.prev = 12;
+            _context7.t0 = _context7["catch"](0);
 
             if (failure) {
-              failure(_context6.t0);
+              failure(_context7.t0);
             } else {
-              console.error(_context6.t0);
+              console.error(_context7.t0);
             }
 
           case 15:
           case "end":
-            return _context6.stop();
+            return _context7.stop();
         }
       }
-    }, _callee6, null, [[0, 12]]);
+    }, _callee7, null, [[0, 12]]);
   }));
 
   return function (_x11, _x12, _x13, _x14) {
-    return _ref6.apply(this, arguments);
+    return _ref7.apply(this, arguments);
   };
 }();
 

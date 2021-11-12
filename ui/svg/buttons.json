@@ -119,6 +119,36 @@
 			]
 		},
 		{
+			"name": "vpl:nextProgram",
+			"state": ["pressed"],
+			"draw": [
+				{
+					"uri": "Icons.svg#Pressed_bg"
+				},
+				{
+					"uri": "Icons.svg#nextprogram_default"
+				}
+			]
+		},
+		{
+			"name": "vpl:nextProgram",
+			"state": ["disabled"],
+			"draw": [
+				{
+					"uri": "Icons.svg#nextprogram_default",
+					"alpha": 0.5
+				}
+			]
+		},
+		{
+			"name": "vpl:nextProgram",
+			"draw": [
+				{
+					"uri": "Icons.svg#nextprogram_default"
+				}
+			]
+		},
+		{
 			"name": "vpl:new",
 			"state": ["pressed"],
 			"draw": [

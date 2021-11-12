@@ -18,11 +18,23 @@ Manager (Thymio Suite 2.0).
 */
 
 /** Install connection with Thymio via Thymio Device Manager
+	@param {{
+		w: string,
+		uuid: (string | null | undefined),
+		pass: (string | null | undefined)
+	}=} options tdm options (default: use hash part of document url)
 	@return {A3a.vpl.RunGlue}
 */
-A3a.vpl.Application.prototype.installThymioTDM = function () {
+A3a.vpl.Application.prototype.installThymioTDM = function (options) {
 	var app = this;
 	var tdm = null;
+	if (options == undefined) {
+		options = {
+			w: vplGetHashOption("w"),
+			pass: vplGetHashOption("pass") || "",
+			uuid: vplGetHashOption("uuid") || "auto"
+		};
+	}
 	return new A3a.vpl.RunGlue({
 		run: function (language, code) {
 			tdm["run"](code, null,
@@ -45,10 +57,10 @@ A3a.vpl.Application.prototype.installThymioTDM = function () {
 		init: function (language) {
 			// initialize the list of nodes
 			try {
-				tdm = new window["TDM"](vplGetHashOption("w"),
+				tdm = new window["TDM"](options.w,
 					{
-						"password": vplGetHashOption("pass") || "",
-						"uuid": vplGetHashOption("uuid") || "auto",
+						"password": options.pass || "",
+						"uuid": options.uuid || "auto",
 						"change": function (connected) {
 							app.robots[app.currentRobotIndex].runGlue.state = connected ? {} : null;
 							app.vplCanvas.update();
@@ -58,6 +70,9 @@ A3a.vpl.Application.prototype.installThymioTDM = function () {
 				console.info(e);
 				app.vplCanvas.update();
 			}
+		},
+		close: function () {
+			tdm["close"]();
 		},
 		isConnected: function () {
 			return app.robots[app.currentRobotIndex].runGlue.state != null && tdm["isConnected"]();
@@ -76,6 +91,7 @@ A3a.vpl.Application.prototype.installThymioTDM = function () {
 		},
 		preferredLanguage: "aseba",
 		languages: ["aseba"],
-		state: null
+		state: null,
+		params: options
 	});
 };

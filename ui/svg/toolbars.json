@@ -11,6 +11,7 @@
 			"vpl:save",
 			"vpl:load",
 			"vpl:upload",
+			"vpl:nextProgram",
 			"vpl:filename",
 			"vpl:exportToHTML",
 			"!space",

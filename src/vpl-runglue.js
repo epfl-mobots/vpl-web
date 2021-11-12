@@ -47,13 +47,15 @@ be determined easily otherwise
 		canFlash: (function(string):boolean | undefined),
 		languages: (Array.<string> | undefined),
 		preferredLanguage: (string | undefined),
-		state: (Object | undefined)
+		state: (Object | undefined),
+		params: (Object | undefined)
 	}} options
 */
 A3a.vpl.RunGlue = function (options) {
 	this.runFun = options && options.run ? options.run : null;
 	this.checkFun = options && options.check ? options.check : null;
 	this.initFun = options && options.init ? options.init : null;
+	this.closeFun = options && options.close ? options.close : null;
 	this.isConnectedFun = options && options.isConnected ? options.isConnected : null;
 	this.isEnabledFun = options && options.isEnabled ? options.isEnabled : null;
 	this.flashFun = options && options.flash ? options.flash : null;
@@ -62,6 +64,7 @@ A3a.vpl.RunGlue = function (options) {
 	this.preferredLanguage = options && options.preferredLanguage ? options.preferredLanguage : "aseba";
 	this.languages = options && options.languages ? options.languages : [this.preferredLanguage];
 	this.state = options && options.state ? options.state : null;
+	this.params = options && options.params ? options.params : {};
 
 	this.lastCheckedCode = null;
 	this.lastCheckedLanguage = null;
@@ -98,6 +101,15 @@ A3a.vpl.RunGlue.prototype.getName = function () {
 A3a.vpl.RunGlue.prototype.init = function (language) {
 	if (this.initFun) {
 		this.initFun(language);
+	}
+};
+
+/** Close robot connection
+	@return {void}
+*/
+A3a.vpl.RunGlue.prototype.close = function () {
+	if (this.closeFun) {
+		this.closeFun();
 	}
 };
 

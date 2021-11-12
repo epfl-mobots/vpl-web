@@ -178,6 +178,22 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return window["vplUpload"] != null && !app.program.readOnly;
 		}
 	});
+	this.commands.add("vpl:nextProgram", {
+		action: function (app, modifier) {
+			var json = app.program.exportToJSON({lib: false, prog: true});
+			var nextJson = window["vplNextProgram"](app.program.filename, json);
+			app.loadProgramJSON(nextJson);
+			var parsedJson = JSON.parse(nextJson);
+			app.program.filename = parsedJson["filename"] || A3a.vpl.Program.defaultFilename;
+		},
+		isEnabled: function (app) {
+			return window["vplNextProgram"](app.program.filename, null) != null;
+		},
+		object: this,
+		isAvailable: function (app) {
+			return window["vplNextProgram"] != null;
+		}
+	});
 	this.commands.add("vpl:exportToHTML", {
 		action: function (app, modifier) {
 			if (modifier) {

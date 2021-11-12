@@ -45,10 +45,15 @@ A3a.vpl.DynamicHelp = function () {
 	// id: "clap", "vpl:new", etc.
 	this.fragments = {};
 
-	// this.imageMap[urlMD] = url
+	// this.images[urlMD] = url
 	// mapping from urlMD, as used in ![text](urlMD),
 	// to url to be used in generated html, such as "data:image/png;base64,..."
 	this.images = {};
+
+	// this.processImageURL(urlMD) = url
+	// mapping from urlMD, as used in ![test](urlMD), if not in this.images[],
+	// to url to be used in generated html, such as "data:image/png;base64,..."
+	this.processImageURL = null;
 };
 
 /** Add fragments, merging with current values
@@ -82,6 +87,7 @@ A3a.vpl.DynamicHelp.prototype.add = function (fragments) {
 */
 A3a.vpl.DynamicHelp.prototype.clearImageMapping = function () {
 	this.images = {};
+	this.processImageURL = null;
 };
 
 /** Add image mapping
@@ -91,6 +97,14 @@ A3a.vpl.DynamicHelp.prototype.clearImageMapping = function () {
 */
 A3a.vpl.DynamicHelp.prototype.addImageMapping = function (urlMD, url) {
 	this.images[urlMD] = url;
+};
+
+/** Set image mapping function
+	@param {?function(string):string} processImageURL
+	@return {void}
+*/
+A3a.vpl.DynamicHelp.prototype.setProcessImageURL = function (processImageURL) {
+	this.processImageURL = processImageURL;
 };
 
 /** Get the array of text fragments corresponding to a language, section and id
@@ -152,7 +166,7 @@ A3a.vpl.DynamicHelp.prototype.convertToHTML = function (md) {
 			if (!re) {
 				break;
 			}
-			var url = this.images[re[2]] || re[2];
+			var url = this.images[re[2]] || (this.processImageURL ? this.processImageURL(re[2]) : re[2]);
 			line = line.slice(0, re.index) +
 				"<img src=\"" + url + "\" alt=\"" + re[1] + "\">" +
 				line.slice(re.index + re[0].length);

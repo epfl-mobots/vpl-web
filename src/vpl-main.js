@@ -809,6 +809,16 @@ function vplSetup(gui, rootDir) {
 	if (commandServer) {
 		window["vplCommandServer"] = new A3a.vpl.Com(app, commandServer, commandSession);
 		window["vplCommandServer"].connect();
+		window["vplSendToCom"] = function (data) {
+			window["vplCommandServer"].ws.send(JSON.stringify({
+				"sender": {
+					"type": "vpl",
+					"sessionid": window["vplCommandServer"].sessionId
+				},
+				"type": "client",
+				"data": data || null
+			}));
+		};
 	}
 }
 
