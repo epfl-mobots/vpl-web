@@ -605,7 +605,7 @@ In documents `"about.html"` and `"help.html"`, `UIROOT` is replaced with the loc
 Options passed in query string
 ------------------------------
 
-The entry point of the web application is defined in `vpl-main.js`, in an event listener function for `"load"`. Options can be specified in query parameters, i.e. in key=value pairs, separated by ampersand following a question mark. Alternatively, if the variable `window["vplQueryOptions"]` is defined (typically in a script element in the html file which contains VPL3), its string value is used instead.
+The entry point of the web application is defined in `vpl-main.js`, in an event listener function for `"load"`. Options can be specified in query parameters, i.e. in key=value pairs, separated by ampersand following a question mark. In addition, if the variable `window["vplQueryOptions"]` is defined (typically in a script element in the html file which contains VPL3), its string value is used for options not specified in the url's query string.
 
 The following options are supported:
 
