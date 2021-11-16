@@ -79,6 +79,27 @@ A3a.vpl.CodeGeneratorJS.prototype.generate = function (program, runBlocks) {
 	/** @type {Array.<string>} */
 	var clauses = [];
 
+	// initialization code
+	var initCodeFragments = this.getInitCode();
+	if (initCodeFragments) {
+		initCodeFragments.initVarDecl && initCodeFragments.initVarDecl.forEach(function (fr) {
+			if (initVarDecl.indexOf(fr) < 0) {
+				initVarDecl.push(fr);
+			}
+		});
+		initCodeFragments.initCodeExec && initCodeFragments.initCodeExec.forEach(function (fr) {
+			if (initCodeExec.indexOf(fr) < 0) {
+				initCodeExec.push(fr);
+			}
+		});
+		initCodeFragments.initCodeDecl && initCodeFragments.initCodeDecl.forEach(function (fr) {
+			if (initCodeDecl.indexOf(fr) < 0) {
+				initCodeDecl.push(fr);
+			}
+		});
+	}
+
+	// code for each rule
 	/** @type {Array.<number>} */
 	var initEventIndices = [];
 	var nextCond = 0;

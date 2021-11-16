@@ -55,6 +55,10 @@
 			"type": "hidden"
 		},
 		{
+			"name": "!init",
+			"type": "hidden"
+		},
+		{
 			"name": "!volume",
 			"type": "hidden"
 		},

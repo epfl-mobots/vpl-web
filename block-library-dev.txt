@@ -241,6 +241,8 @@ Special blocks contain definitions for specific purposes. They cannot be manipul
 
 "!empty action": contains the svg elements displayed as a hint on the right part of the rule to accept another action block.
 
+"!init": contains initialization code, in initVarDecl for variable declarations if any, initCodeDecl for function declarations if any, and initCodeExec for intialization code if any.
+
 "!stop": contains the code to stop the robot, executed when the Stop button is clicked.
 
 "!volume": contains the code to set the robot volume, from 0 (muted) to 10 (max). The volume is specified in the single parameter.

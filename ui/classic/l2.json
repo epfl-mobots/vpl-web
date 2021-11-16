@@ -16,6 +16,14 @@
 			}
 		},
 		{
+			"name": "!init",
+			"l2": {
+				"initCodeExec": [
+					"sound.system(-1);\n"
+				]
+			}
+		},
+		{
 			"name": "!volume",
 			"l2": {
 				"statement": [

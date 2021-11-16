@@ -32,7 +32,8 @@ A3a.vpl.CodeGeneratorA3a.prototype.constructor = A3a.vpl.CodeGeneratorA3a;
 A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 	// generate code fragments for all rules
 	this.reset();
-	var c = program.program.map(function (rule) {
+
+	var c =program.program.map(function (rule) {
 		return this.generateCodeForEventHandler(rule, program);
 	}, this);
 
@@ -78,6 +79,27 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 	/** @type {Array.<string>} */
 	var clauses = [];
 
+	// initialization code
+	var initCodeFragments = this.getInitCode();
+	if (initCodeFragments) {
+		initCodeFragments.initVarDecl && initCodeFragments.initVarDecl.forEach(function (fr) {
+			if (initVarDecl.indexOf(fr) < 0) {
+				initVarDecl.push(fr);
+			}
+		});
+		initCodeFragments.initCodeExec && initCodeFragments.initCodeExec.forEach(function (fr) {
+			if (initCodeExec.indexOf(fr) < 0) {
+				initCodeExec.push(fr);
+			}
+		});
+		initCodeFragments.initCodeDecl && initCodeFragments.initCodeDecl.forEach(function (fr) {
+			if (initCodeDecl.indexOf(fr) < 0) {
+				initCodeDecl.push(fr);
+			}
+		});
+	}
+
+	// code for each rule
 	c.forEach(function (evCode, i) {
 		evCode.initVarDecl && evCode.initVarDecl.forEach(function (fr) {
 			if (initVarDecl.indexOf(fr) < 0) {

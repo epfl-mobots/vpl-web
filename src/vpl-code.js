@@ -357,6 +357,17 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule, pr
 	}
 };
 
+/** Get initialization code
+	@return {A3a.vpl.compiledCode}
+*/
+A3a.vpl.CodeGenerator.prototype.getInitCode = function () {
+	var initBlockTemplate = A3a.vpl.BlockTemplate.findByName("!init");
+	if (initBlockTemplate && initBlockTemplate.genCode[this.language]) {
+		return initBlockTemplate.genCode[this.language](null);
+	}
+	return {};
+};
+
 /** Generate code to set volume
 	@param {A3a.vpl.Program} program
 	@return {string}
