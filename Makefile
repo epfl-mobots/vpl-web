@@ -10,125 +10,10 @@
 .PHONY: main
 main:	all
 
-COPYRIGHT = /* Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE - author Yves Piguet */
-
-# Default closure compiler in current directory, used if closure-compiler isn't found
-# Update here or build with "make CLOSURECOMPILER=path" to match your environment
-# The current version can be found at https://github.com/google/closure-compiler/wiki/Binary-Downloads
-CLOSURECOMPILER ?= closure-compiler-v20190121.jar
-
-CLOSURE = $(shell if which closure-compiler >/dev/null; then echo closure-compiler; else echo java -jar $(CLOSURECOMPILER); fi)
-CLOSUREFLAGS = \
-        --language_in ECMASCRIPT6_STRICT \
-        --compilation_level ADVANCED_OPTIMIZATIONS \
-        --use_types_for_optimization \
-        --warning_level VERBOSE \
-        --summary_detail_level 2
-
-# CLOSUREFLAGS += --compilation_level WHITESPACE_ONLY --formatting=PRETTY_PRINT
-
-# CLOSUREDBG = --debug --formatting=PRETTY_PRINT
-
-JS = \
-	a3a-ns.js \
-	a3a-nodebase.js \
-	a3a-nodeproxy.js \
-	vpl-ns.js \
-	vpl-blocktemplate.js \
-	vpl-blockparam-acc.js \
-	vpl-block.js \
-	vpl-emptyblock.js \
-	vpl-rule.js \
-	vpl-rule-comment.js \
-	vpl-uiconfig.js \
-	vpl-i18n.js \
-	vpl-dynamic-help.js \
-	vpl-program.js \
-	vpl-code.js \
-	vpl-code-aseba.js \
-	vpl-code-l2.js \
-	vpl-code-js.js \
-	vpl-code-python.js \
-	vpl-code-asm.js \
-	vpl-cmd.js \
-	vpl-app.js \
-	vpl-ui-validator.js \
-	vpl-cmd-vpl.js \
-	vpl-controlbar.js \
-	vpl-buttons-js.js \
-	vpl-controlbar-btn.js \
-	vpl-widgets-js.js \
-	vpl-program-canvas.js \
-	css.js \
-	vpl-css.js \
-	vpl-css-draw.js \
-	vpl-canvas.js \
-	vpl-canvas-scroll.js \
-	vpl-draw.js \
-	vpl-blocklibutil.js \
-	vpl-blocklib.js \
-	vpl-jsoncode.js \
-	svg.js \
-	svg-preparsed.js \
-	svg-transform.js \
-	vpl-blocklib-svg.js \
-	vpl-error.js \
-	vpl-undo.js \
-	vpl-html.js \
-	vpl-aeslfile.js \
-	vpl-texteditor.js \
-	vpl-sourceedit.js \
-	vpl-cmd-src.js \
-	vpl-ui-svg.js \
-	vpl-runglue.js \
-	vpl-htmlpanel.js \
-	vpl-conv-html.js \
-	vpl-files.js \
-	jszip-externs.js \
-	zipbundle.js \
-	vpl-load.js \
-	vpl-com.js \
-	vpl-keyboard.js \
-	vpl-textfield.js \
-	vpl-kbd-control.js \
-	vpl-main.js \
-	vpl-robot.js \
-	vpl-virtualthymio.js \
-	compiler-ns.js \
-	compiler-vm.js \
-	compiler-dis.js \
-	compiler-dis-mixed.js \
-	compiler.js \
-	compiler-macros.js \
-	compiler-l2.js \
-	compiler-macros-l2.js \
-	compiler-thymio.js \
-	compiler-asm.js \
-	inputbuffer.js \
-	a3a-idmapping.js \
-	a3a-com.js \
-	a3a-device.js \
-	a3a-virtual-thymio.js \
-	vpl-virtualthymio-a3a.js \
-	vpl-sim.js \
-	vpl-obstacles.js \
-	vpl-sim2d.js \
-	vpl-cmd-sim.js \
-	vpl-thymio.js \
-	vpl-thymio-tdm.js \
-	json-ws-bridge-api.js \
-	vpl-thymio-jws.js
-
-vpath %.js src
+include Makefile-jsmin
 
 .PHONY: all
 all: vpl-min.js index-svg.html index-svg-min.html index-classic.html index-classic-min.html
-
-vpl-min.js: $(JS)
-	echo "$(COPYRIGHT)" >$@
-	echo '(function(){' >>$@
-	$(CLOSURE) $(CLOSUREFLAGS) $^ >>$@ || (rm -f $@; false)
-	echo '}).call(this);' >>$@
 
 # dependencies
 index-classic.html: $(shell python3 inlinersrctool.py --input=index-classic-min-template.html --dep)
@@ -138,10 +23,6 @@ index-svg-min.html: $(shell python3 inlinersrctool.py --input=index-svg-min-temp
 
 %.html: %-template.html
 	python3 inlinersrctool.py --input=$< >$@
-
-.PHONY: clean
-clean:
-	rm -Rf vpl-min.js
 
 .PHONY: doc
 doc: $(JS)
