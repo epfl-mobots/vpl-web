@@ -662,6 +662,9 @@ function vplSetup(gui, rootDir) {
                             app.setHelpForCurrentAppState();
 							app.renderProgramToCanvas();
 						});
+						if (options != undefined && options["setAsNew"] == true) {
+							app.commands.execute("vpl:teacher-setasnew");
+						}
 						app.restored = true;
 					}
 				} catch (e) {}
