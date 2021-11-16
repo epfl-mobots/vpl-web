@@ -372,7 +372,7 @@ Here is the list of button ids for the VPL view (toolbars `"vpl"` or `"vpl2"`):
 - `"vpl:teacher"`: toggle between the normal and the customization states
 - `"vpl:teacher-reset"`: reset the available toolbar buttons and VPL blocks to the standard sets
 - `"vpl:teacher-save"`: download customized state (like `"vpl:save"`, but without the VPL program)
-- `"vpl:teacher-setasnew"`: toggle between setting current program and customized state as initial program after `"vpl:new"`, or default empty program with customized state
+- `"vpl:teacher-setasnew"`: toggle between setting current program and customized state as initial program after `"vpl:new"`, or default empty program with customized state (automatic if `"vpl:teacher-setasnew"` isn't used in top or bottom vpl toolbar)
 
 The following ids are for passive text strings:
 
@@ -618,13 +618,13 @@ The following options are supported:
 - `blur`: radius of blur filter applied to canvas in 0.1px units (default 0), to simulate vision deficiency.
 - `grayscale`: percentage of grayscale filter applied to canvas (default 0), to simulate grayscale printing, low-quality displays such as beamers where color shifts are common, or vision deficiency.
 - `view`: list of initial views (default `vpl`). Views (`vpl`, `src` or `sim`) are separated by `+`.
-- `robot`: device(s) code is sent to for execution. `thymio` for a Thymio via asebahttp (supported language: `aseba`), `thymio-tdm` for a Thymio via the Thymio Device Manager (supported language: `aseba`), `sim` for the simulator (supported languages: `aseba`, `l2`, and `js`), or undefined for no execution. Multiple devices can be specified, separated with (unquoted) '+'; e.g. `robot=thymio-tdm+sim`. In that case, button `"vpl:robot"` toggles between devices. Connection parameters can be passed as hash parameters (same as query parameters but after the hash character '#' instead of question mark '?'). For `thymio`, `asebahttp=...` specifies the url of asebahttp or Thymio Web Bridge; the default is `asebahttp=http://127.0.0.1:3000` if VPL is served as a local file, or the same http server as the one serving VPL if it's served over http(s). For `thymio-tdm`, `w=...` specifies the url of the websocket (typically `w=ws://ip:port`), and `pass=...` the password (default: empty); the default is `w=ws://localhost:8597`, i.e. the Thymio Device Manager running locally with its default port. With a password, it could be `w=ws://10.0.0.200:8597&pass=ABCDEF`.
+- `robot`: device(s) code is sent to for execution. `thymio` for a Thymio via asebahttp (supported language: `aseba`), `thymio-tdm` for a Thymio via the Thymio Device Manager (supported language: `aseba`), `sim` for the simulator (supported languages: `aseba`, `l2`, and `js`), or undefined for no execution. Multiple devices can be specified, separated with `+`; e.g. `robot=thymio-tdm+sim`. In that case, button `"vpl:robot"` toggles between devices. Connection parameters can be passed as hash parameters (same as query parameters but after the hash character '#' instead of question mark '?'). For `thymio`, `asebahttp=...` specifies the url of asebahttp or Thymio Web Bridge; the default is `asebahttp=http://127.0.0.1:3000` if VPL is served as a local file, or the same http server as the one serving VPL if it's served over http(s). For `thymio-tdm`, `w=...` specifies the url of the websocket (typically `w=ws://ip:port`), and `pass=...` the password (default: empty); the default is `w=ws://localhost:8597`, i.e. the Thymio Device Manager running locally with its default port. With a password, it could be `w=ws://10.0.0.200:8597&pass=ABCDEF`.
 - `role`: `student` (default), `teacher` (options to customize the user interface and vpl blocks), or `teacher1` (options to customize only the vpl blocks).
 - `ui`: filename of the main json file (default `ui.json`)
 - `uilanguage`: 2-letter language code used to translate messages (default: `en`; otherwise, as defined in dictionary `"i18n"` of the user interface json file)
 - `user`: username displayed in the `"vpl:filename"` indicator (overrides `window["vplUsername"]`)
 - `shortcuts`: true or false to override the default setting (default: `true`)
-- `accessibility`: list of accessibility features, separated by '+'. Default: none. Supported: `"kbd"` to edit vpl with keyboard.
+- `accessibility`: list of accessibility features, separated by `+`. Default: none. Supported: `"kbd"` to edit vpl with keyboard.
 
 Global variables
 ----------------

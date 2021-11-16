@@ -751,6 +751,12 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			}
 			if (!app.program.uiConfig.blockCustomizationMode) {
 				app.setHelpForCurrentAppState();
+				if (app.vplToolbarConfig.indexOf("vpl:teacher-setasnew") < 0 &&
+					app.vplToolbar2Config.indexOf("vpl:setasnew") < 0) {
+					// no "vpl:setasnew" button in any vpl toolbar:
+					// do it automatically when quitting configuration mode
+					app.commands.execute("vpl:teacher-setasnew");
+				}
 			}
 		},
 		isEnabled: function (app) {
