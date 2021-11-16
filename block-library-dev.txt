@@ -586,7 +586,7 @@ In documents "about.html" and "help.html", UIROOT is replaced with the location 
 Options passed in query string
 ------------------------------
 
-The entry point of the web application is defined in vpl-main.js, in an event listener function for "load". Options can be specified in query parameters, i.e. in key=value pairs, separated by ampersand following a question mark.
+The entry point of the web application is defined in vpl-main.js, in an event listener function for "load". Options can be specified in query parameters, i.e. in key=value pairs, separated by ampersand following a question mark. Alternatively, if the variable window["vplQueryOptions"] is defined (typically in a script element in the html file which contains VPL3), its string value is used instead.
 
 The following options are supported:
 
@@ -616,6 +616,7 @@ VPL is started by code in a "load" event listener defined in vpl-main.js. Some c
 - window["vplIsProgramChanged"]: function() to check if the vpl program has been changed since it has been loaded
 - window["vplGetProgramAsJSON"]: function(libAndUIOnly) to get vpl program as json, or block lib and UI configuration if libAndUIOnly is true
 - window["vplGetUIAsJSON"]: function() to get UI and block selection as json
+- window["vplQueryOptions"]: can be set to override the query string (what follows the question mark in the url); see section above for options.
 - window["vplCommandServer"]: can be set to an A3a.vpl.Com object to supervise the application
 - window["vplDisableResize"]: can be set to true to disable full-window mode
 - window["vplUsername"]: can be set to a string to display the username in "vpl:filename" indicator
