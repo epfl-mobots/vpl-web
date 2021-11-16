@@ -231,6 +231,10 @@ A3a.vpl.BlockTemplate.lib =	[
 		type: A3a.vpl.blockType.hidden,
 	}),
 	new A3a.vpl.BlockTemplate({
+		name: "!init",
+		type: A3a.vpl.blockType.hidden,
+	}),
+	new A3a.vpl.BlockTemplate({
 		name: "!volume",
 		type: A3a.vpl.blockType.hidden,
 	}),

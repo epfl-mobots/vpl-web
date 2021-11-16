@@ -41,10 +41,10 @@ A3a.vpl.Rule = function () {
 A3a.vpl.Rule.prototype.copy = function () {
 	var eh = new A3a.vpl.Rule();
 	for (var i = 0; i < this.events.length; i++) {
-		eh.setBlock(this.events[i], null, null, null);
+		eh.setBlock(this.events[i]);
 	}
 	for (var i = 0; i < this.actions.length; i++) {
-		eh.setBlock(this.actions[i], null, null, null);
+		eh.setBlock(this.actions[i]);
 	}
 	return eh;
 };
@@ -99,9 +99,9 @@ A3a.vpl.Rule.prototype.getEventBlockByType = function (name) {
 
 /** Set block (event or action depending on its type)
 	@param {A3a.vpl.Block} block
-	@param {?A3a.vpl.positionInContainer} posInRule
-	@param {?function():void} onPrepareChange
-	@param {?function():void} onChanged
+	@param {?A3a.vpl.positionInContainer=} posInRule
+	@param {?function():void=} onPrepareChange
+	@param {?function():void=} onChanged
 	@param {boolean=} noCopy true to use block itself instead of a copy (default: false)
 	@return {void}
 */
@@ -116,10 +116,10 @@ A3a.vpl.Rule.prototype.setBlock = function (block, posInRule, onPrepareChange, o
 				if (posInRule) {
 					this.events.splice(block.positionInContainer.index, 1);
 					if (noCopy) {
-						block.onPrepareChange = onPrepareChange;
-						block.onChanged = onChanged;
+						block.onPrepareChange = onPrepareChange || null;
+						block.onChanged = onChanged || null;
 					} else {
-						block = block.copy(this, posInRule, onPrepareChange, onChanged);
+						block = block.copy(this, posInRule, onPrepareChange || null, onChanged || null);
 					}
 					this.events.splice(posInRule.index, 0, block);
 				}
@@ -128,18 +128,19 @@ A3a.vpl.Rule.prototype.setBlock = function (block, posInRule, onPrepareChange, o
 					return;	// copy onto itself: ignore, keep parameters
 				}
 				if (noCopy) {
-					block.onPrepareChange = onPrepareChange;
-					block.onChanged = onChanged;
+					block.onPrepareChange = onPrepareChange || null;
+					block.onChanged = onChanged || null;
 				} else {
-					block = block.copy(this, posInRule, onPrepareChange, onChanged);
+					block = block.copy(this, posInRule, onPrepareChange || null, onChanged || null);
 				}
 				this.events[posInRule.index] = block;
 			} else {
 				if (noCopy) {
-					block.onPrepareChange = onPrepareChange;
-					block.onChanged = onChanged;
+					block.onPrepareChange = onPrepareChange || null;
+					block.onChanged = onChanged || null;
 				} else {
-					block = block.copy(this, {eventSide: true, index: this.events.length}, onPrepareChange, onChanged);
+					block = block.copy(this, {eventSide: true, index: this.events.length},
+						onPrepareChange || null, onChanged || null);
 				}
 				this.events.push(block);
 			}
@@ -151,10 +152,10 @@ A3a.vpl.Rule.prototype.setBlock = function (block, posInRule, onPrepareChange, o
 				if (posInRule) {
 					this.removeBlock(/** @type {A3a.vpl.positionInContainer} */(block.positionInContainer));
 					if (noCopy) {
-						block.onPrepareChange = onPrepareChange;
-						block.onChanged = onChanged;
+						block.onPrepareChange = onPrepareChange || null;
+						block.onChanged = onChanged || null;
 					} else {
-						block = block.copy(this, posInRule, onPrepareChange, onChanged);
+						block = block.copy(this, posInRule, onPrepareChange || null, onChanged || null);
 					}
 					(posInRule.eventSide ? this.events : this.actions).splice(posInRule.index, 0, block);
 				}
@@ -163,18 +164,19 @@ A3a.vpl.Rule.prototype.setBlock = function (block, posInRule, onPrepareChange, o
 					return;	// copy onto itself: ignore, keep parameters
 				}
 				if (noCopy) {
-					block.onPrepareChange = onPrepareChange;
-					block.onChanged = onChanged;
+					block.onPrepareChange = onPrepareChange || null;
+					block.onChanged = onChanged || null;
 				} else {
-					block = block.copy(this, posInRule, onPrepareChange, onChanged);
+					block = block.copy(this, posInRule, onPrepareChange || null, onChanged || null);
 				}
 				(posInRule.eventSide ? this.events : this.actions)[posInRule.index] = block;
 			} else {
 				if (noCopy) {
-					block.onPrepareChange = onPrepareChange;
-					block.onChanged = onChanged;
+					block.onPrepareChange = onPrepareChange || null;
+					block.onChanged = onChanged || null;
 				} else {
-					block = block.copy(this, {eventSide: false, index: this.actions.length}, onPrepareChange, onChanged);
+					block = block.copy(this, {eventSide: false, index: this.actions.length},
+						onPrepareChange || null, onChanged || null);
 				}
 				this.actions.push(block);
 			}

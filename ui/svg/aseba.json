@@ -35,6 +35,14 @@
 			}
 		},
 		{
+			"name": "!init",
+			"aseba": {
+				"initCodeExec": [
+					"call sound.system(-1)\n"
+				]
+			}
+		},
+		{
 			"name": "!volume",
 			"aseba": {
 				"statement": [

@@ -79,6 +79,27 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 	var clauses = [];
 	var nextCond = 0;
 
+	// initialization code
+	var initCodeFragments = this.getInitCode();
+	if (initCodeFragments) {
+		initCodeFragments.initVarDecl && initCodeFragments.initVarDecl.forEach(function (fr) {
+			if (initVarDecl.indexOf(fr) < 0) {
+				initVarDecl.push(fr);
+			}
+		});
+		initCodeFragments.initCodeExec && initCodeFragments.initCodeExec.forEach(function (fr) {
+			if (initCodeExec.indexOf(fr) < 0) {
+				initCodeExec.push(fr);
+			}
+		});
+		initCodeFragments.initCodeDecl && initCodeFragments.initCodeDecl.forEach(function (fr) {
+			if (initCodeDecl.indexOf(fr) < 0) {
+				initCodeDecl.push(fr);
+			}
+		});
+	}
+
+	// code for each rule
 	c.forEach(function (evCode, i) {
 		evCode.initVarDecl && evCode.initVarDecl.forEach(function (fr) {
 			if (initVarDecl.indexOf(fr) < 0) {
