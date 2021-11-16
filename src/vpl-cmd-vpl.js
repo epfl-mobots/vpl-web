@@ -453,7 +453,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			{selected: true, state: 0.2},
 			{selected: true, state: 0.5},
 			{selected: false, state: 1}
-		]
+		],
+		isAvailable: function (app) {
+			// same as vpl:run
+			return app.currentRobotIndex >= 0;
+		}
 	});
 	this.commands.add("vpl:debug", {
 		// not implemented yet
