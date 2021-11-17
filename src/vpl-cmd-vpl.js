@@ -453,7 +453,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			{selected: true, state: 0.2},
 			{selected: true, state: 0.5},
 			{selected: false, state: 1}
-		]
+		],
+		isAvailable: function (app) {
+			// same as vpl:run
+			return app.currentRobotIndex >= 0;
+		}
 	});
 	this.commands.add("vpl:debug", {
 		// not implemented yet
@@ -751,6 +755,12 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			}
 			if (!app.program.uiConfig.blockCustomizationMode) {
 				app.setHelpForCurrentAppState();
+				if (app.vplToolbarConfig.indexOf("vpl:teacher-setasnew") < 0 &&
+					app.vplToolbar2Config.indexOf("vpl:setasnew") < 0) {
+					// no "vpl:setasnew" button in any vpl toolbar:
+					// do it automatically when quitting configuration mode
+					app.commands.execute("vpl:teacher-setasnew");
+				}
 			}
 		},
 		isEnabled: function (app) {

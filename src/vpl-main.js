@@ -182,12 +182,10 @@ function vplLoadResourcesInScripts(rootFilename, rootDir, getAuxiliaryFilenames,
 	@return {string}
 */
 function vplGetQueryOption(key) {
-	var query = "";
-	if (window["vplQueryOptions"]) {
-		query = window["vplQueryOptions"];
-	} else {
-		var r = /^[^?]*\?([^#]*)/.exec(document.location.href);
-		query = r && r[1];
+	var query = window["vplQueryOptions"] || "";
+	var r = /^[^?]*\?([^#]*)/.exec(document.location.href);
+	if (r) {
+		query = query ? query + "&" + r[1] : r[1];
 	}
 	if (query) {
 		var pairs = query
@@ -662,6 +660,9 @@ function vplSetup(gui, rootDir) {
                             app.setHelpForCurrentAppState();
 							app.renderProgramToCanvas();
 						});
+						if (options != undefined && options["setAsNew"] == true) {
+							app.commands.execute("vpl:teacher-setasnew");
+						}
 						app.restored = true;
 					}
 				} catch (e) {}
