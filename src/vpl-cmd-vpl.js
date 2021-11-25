@@ -749,6 +749,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		action: function (app, modifier) {
 			app.startTextField({
 				initialValue: app.program.filename || A3a.vpl.Program.defaultFilename,
+				suffix: "." + A3a.vpl.Program.suffix,
 				display: function (str, selBegin, selEnd) {
 					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 				},
