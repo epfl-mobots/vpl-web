@@ -745,6 +745,35 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return app.program.filename || app.username ? true : false;
 		}
 	})
+	this.commands.add("vpl:editable-filename", {
+		action: function (app, modifier) {
+			app.startTextField({
+				initialValue: app.program.filename,
+				display: function (str, selBegin, selEnd) {
+					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
+				},
+				finish: function (str) {
+					console.info("will finish editing filename");
+					if (str !== null) {
+						app.program.filename = str;
+					}
+					app.textField = null;
+					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
+				},
+				ref: app.program
+			});
+		},
+		isEnabled: function (app) {
+			return true;
+		},
+		getState: function (app) {
+			return app.program.filename || "";
+		},
+		object: this,
+		isAvailable: function (app) {
+			return true;
+		}
+	})
 	this.commands.add("vpl:teacher", {
 		action: function (app, modifier) {
 			app.program.uiConfig.blockCustomizationMode = !app.program.uiConfig.blockCustomizationMode;

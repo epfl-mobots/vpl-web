@@ -32,6 +32,7 @@
 			"vpl:message-warning": "Warnmeldung",
 			"vpl:message-empty": " ",
 			"vpl:filename": "Dateiname",
+			"vpl:editable-filename": "Dateiname",
 			"vpl:teacher": "Anpassungsmodus ein- oder ausschalten",
 			"vpl:teacher-reset": "Anpassung zurückgängig machen",
 			"vpl:teacher-save": "Anpassung speichern",

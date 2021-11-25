@@ -24,10 +24,11 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 	var defaultToJS = [
 		"vpl:message-error",
 		"vpl:message-warning",
-		"vpl:filename"
+		"vpl:filename",
+		"vpl:editable-filename"
 	];
 
-	return /** @type {A3a.vpl.ControlBar.drawButton} */(function (id, ctx, dims, css, cssClasses, box, i18n, isEnabled, isSelected, isPressed, state) {
+	return /** @type {A3a.vpl.ControlBar.drawButton} */(function (app, id, ctx, dims, css, cssClasses, box, i18n, isEnabled, isSelected, isPressed, state) {
 		/** Check if the requested state match the state in the definition
 			@param {Array.<string>} prop
 			@return {boolean}
@@ -134,7 +135,7 @@ A3a.vpl.drawButtonSVGFunction = function (gui) {
 		// default: js version for those enumerated in defaultToJS, else brown square
 		if (defaultToJS.indexOf(id) >= 0) {
 			// error message etc.
-			A3a.vpl.Commands.drawButtonJS(id, ctx, dims, css, cssClasses, box, i18n, isEnabled, isSelected, isPressed, state);
+			A3a.vpl.Commands.drawButtonJS(app, id, ctx, dims, css, cssClasses, box, i18n, isEnabled, isSelected, isPressed, state);
 		} else {
 			// default: brown square
 			ctx.fillStyle = "brown";

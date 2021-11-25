@@ -54,7 +54,7 @@ button.vpl:possible-drop-target {
 	width: 20vw;
 }
 
-#vpl-filename {
+#vpl-filename, #vpl-editable-filename {
 	width: 9ww;
 	font: max(1vw, 12px) sans-serif;
 }

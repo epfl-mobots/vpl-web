@@ -59,7 +59,7 @@ A3a.vpl.Application = function (canvasEl) {
 		"vpl:load",
 		"vpl:upload",
 		"vpl:nextProgram",
-		"vpl:filename",
+		"vpl:editable-filename",
 		"vpl:exportToHTML",
 		"!space",
 		"vpl:advanced",
@@ -319,6 +319,10 @@ A3a.vpl.Application.prototype.pushVPLKeyShortcuts = function () {
 */
 A3a.vpl.Application.prototype.startTextField = function (options) {
 	if (this.textField !== null) {
+		if (options.ref != undefined && options.ref === this.textField.ref) {
+			// same ref, nothing to do
+			return;
+		}
 		this.textField.finish(true);
 	}
 	this.textField = new A3a.vpl.TextField(this, options);
@@ -380,7 +384,7 @@ A3a.vpl.Application.prototype.setHelpContent = function (html, isStatement) {
 	saveBox.width = saveBox.height = 64;
 	var dims = A3a.vpl.Canvas.calcDims(16, 16);
 	var saveDataURL = A3a.vpl.Canvas.controlToDataURL(function (ctx, box, isPressed) {
-		(app.program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)("vpl:save", ctx, dims, app.css, ["vpl", "top", "detached"], saveBox, app.i18n, true, false, false, null);
+		(app.program.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)(app, "vpl:save", ctx, dims, app.css, ["vpl", "top", "detached"], saveBox, app.i18n, true, false, false, null);
 	}, saveBox.width, saveBox.height, saveBox, dims, 1);
 
 	var saveEl = '<img src="' + saveDataURL.url +

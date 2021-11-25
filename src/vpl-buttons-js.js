@@ -16,6 +16,7 @@ Drawing of buttons defined in JavaScript.
 */
 
 /** Draw a button
+	@param {A3a.vpl.Application} app
 	@param {string} id
 	@param {CanvasRenderingContext2D} ctx canvas 2d context
 	@param {A3a.vpl.Canvas.dims} dims
@@ -29,7 +30,7 @@ Drawing of buttons defined in JavaScript.
 	@param {*=} state state for multi-value buttons
 	@return {boolean}
 */
-A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i18n, isEnabled, isSelected, isPressed, state) {
+A3a.vpl.Commands.drawButtonJS = function (app, id, ctx, dims, css, cssClasses, box, i18n, isEnabled, isSelected, isPressed, state) {
 
 	// 2018 colors (white on navy)
 	var col = {
@@ -840,7 +841,7 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i
 		},
 		"vpl:message-empty": function () {
 		},
-		"vpl:message-error": function (app) {
+		"vpl:message-error": function () {
 			if (state) {
 				ctx.fillStyle = box.color;
 				ctx.font = box.cssFontString();
@@ -882,6 +883,65 @@ A3a.vpl.Commands.drawButtonJS = function (id, ctx, dims, css, cssClasses, box, i
 				} else {
 					ctx.fillText(strArray[0], box.width / 2, box.height / 2);
 				}
+			}
+		},
+		"vpl:editable-filename": function () {
+			ctx.beginPath();
+			var w = 3 * dims.controlSize;
+			var str = /** @type {string} */(state);
+			ctx.rect(0, 0, box.width, box.height);
+			ctx.clip();
+			ctx.fillStyle = box.color;
+			ctx.font = box.cssFontString();
+			ctx.textBaseline = "middle";
+
+			if (app.textField != null && app.textField.ref === app.program) {
+				console.info("display as edited", app.textField.str);
+
+				// being edited
+				var strLeftSize = ctx.measureText(app.textField.str.slice(0, app.textField.selBegin));
+				var ascent = strLeftSize["fontBoundingBoxAscent"] || 0;
+				var descent = strLeftSize["fontBoundingBoxDescent"] || 0;
+				if (ascent === 0 || descent === 0) {
+					// vertical metrics missing in TextMetrics: use css
+					ascent = box.fontSize / 2;
+					descent = ascent;
+				}
+				var textFieldFrame = {
+					top: box.height / 2 - ascent,
+					bottom: box.height / 2 + descent,
+					left: 0,
+					right: ctx.measureText(app.textField.str).width
+				};
+				var rightPos = app.textField.str.split("").map(function (c, i) {
+					return ctx.measureText(app.textField.str.slice(0, i + 1)).width;
+				});
+				app.textField.setRenderingPos(textFieldFrame, rightPos);
+				var chWidth = ctx.measureText("0").width;
+				var xShift = Math.min(0, box.width - chWidth / 4 - textFieldFrame.right);	// text shift to display end of string
+				if (app.textField.selEnd === app.textField.selBegin) {
+					// plain cursor
+					ctx.strokeStyle = "black";
+					ctx.beginPath();
+					ctx.moveTo(xShift + textFieldFrame.left + strLeftSize.width, textFieldFrame.top);
+					ctx.lineTo(xShift + textFieldFrame.left + strLeftSize.width, textFieldFrame.bottom);
+					ctx.stroke();
+				} else {
+					// selection
+					xShift = 0;
+					var strSelSize = ctx.measureText(app.textField.str.slice(app.textField.selBegin, app.textField.selEnd));
+					ctx.save();
+					ctx.fillStyle = "silver";
+					ctx.fillRect(textFieldFrame.left + strLeftSize.width - 1, textFieldFrame.top,
+						strSelSize.width, ascent + descent);
+					ctx.restore();
+				}
+
+				ctx.textAlign = "left";
+				ctx.fillText(app.textField.str, xShift, box.height / 2);
+			} else {
+				ctx.textAlign = "center";
+				ctx.fillText(str, box.width / 2, box.height / 2);
 			}
 		},
 		"vpl:duplicate": function () {
@@ -1659,6 +1719,7 @@ A3a.vpl.Commands.getButtonBoundsJS = function (id, dims) {
 			ymax: dims.controlSize
 		};
 	case "vpl:filename":
+	case "vpl:editable-filename":
 		return {
 			xmin: 0,
 			xmax: 3 * dims.controlSize,

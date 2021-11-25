@@ -438,12 +438,7 @@ A3a.vpl.Application.prototype.editComment = function (ruleIndex) {
 	var canvas = this.vplCanvas;
 	var rule = this.program.program[ruleIndex];
 
-	if (this.textField && this.textField.ref === rule) {
-		// rule already being edited
-		return;
-	}
-
-	this.textField = new A3a.vpl.TextField(this, {
+	this.startTextField({
 		initialValue: /** @type {A3a.vpl.RuleComment} */(rule).comment,
 		display: function (str, selBegin, selEnd) {
 			canvas.onUpdate && canvas.onUpdate();

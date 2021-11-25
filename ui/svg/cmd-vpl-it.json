@@ -32,6 +32,7 @@
 			"vpl:message-warning": "Messaggio d'avviso",
 			"vpl:message-empty": " ",
 			"vpl:filename": "Nome del file",
+			"vpl:editable-filename": "Nome del file",
 			"vpl:teacher": "Attiva o disattiva la modalità di personalizzazione",
 			"vpl:teacher-reset": "Ripristina personalizzazione",
 			"vpl:teacher-save": "Salva personalizzazione",

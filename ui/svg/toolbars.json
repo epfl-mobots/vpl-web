@@ -12,7 +12,7 @@
 			"vpl:load",
 			"vpl:upload",
 			"vpl:nextProgram",
-			"vpl:filename",
+			"vpl:editable-filename",
 			"vpl:exportToHTML",
 			"!space",
 			"vpl:advanced",

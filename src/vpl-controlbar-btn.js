@@ -17,6 +17,7 @@ Definition of methods for A3a.vpl.ControlBar which add support for buttons.
 
 /**
 	@typedef {function (
+		A3a.vpl.Application,
 		string,
 		CanvasRenderingContext2D,
 		A3a.vpl.Canvas.dims,
@@ -72,7 +73,7 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 		this.addControl(
 			function (ctx, box, isPressed) {
 				if (app.forcedCommandState) {
-					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses, box,
+					drawButton(app, id, ctx, canvas.dims, canvas.css, cssClasses, box,
 						app.i18n,
 						app.forcedCommandState.isEnabled && (keepAvailable || !app.uiConfig.toolbarCustomizationDisabled),
 						app.forcedCommandState.isSelected,
@@ -85,7 +86,7 @@ A3a.vpl.ControlBar.prototype.addButton = function (app, id, cssClasses, drawButt
 						var targetObject = app.kbdControl.getTargetObject();
 						isEnabled = app.commands.canDrop(id, {data: targetObject});
 					}
-					drawButton(id, ctx, canvas.dims, canvas.css, cssClasses, box,
+					drawButton(app, id, ctx, canvas.dims, canvas.css, cssClasses, box,
 						app.i18n,
 						isEnabled,
 						app.commands.isSelected(id),

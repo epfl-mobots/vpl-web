@@ -60,7 +60,7 @@ button.vpl:possible-drop-target {
 #vpl-message-warning {
 	border-color: #fbca00;
 }
-#vpl-filename {
+#vpl-filename, #vpl-editable-filename {
 	width: 9ww;
 	font-size: max(1vw, 12px);
 }
