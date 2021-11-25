@@ -748,12 +748,11 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	this.commands.add("vpl:editable-filename", {
 		action: function (app, modifier) {
 			app.startTextField({
-				initialValue: app.program.filename,
+				initialValue: app.program.filename || A3a.vpl.Program.defaultFilename,
 				display: function (str, selBegin, selEnd) {
 					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
 				},
 				finish: function (str) {
-					console.info("will finish editing filename");
 					if (str !== null) {
 						app.program.filename = str;
 					}
@@ -767,7 +766,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			return true;
 		},
 		getState: function (app) {
-			return app.program.filename || "";
+			return app.program.filename || A3a.vpl.Program.defaultFilename;
 		},
 		object: this,
 		isAvailable: function (app) {
