@@ -24,9 +24,14 @@ with the keyboard.
 A3a.vpl.TextField = function (app, options) {
 	this.app = app;
 	this.str = options.initialValue || "";
+	this.suffix = options.suffix || "";	// displayed but cannot be edited
+	if (this.suffix && this.suffix !== this.str.slice(-this.suffix.length)) {
+		// suffix doesn't match end of initial value: ignore it
+		this.suffix = "";
+	}
 	this.ref = options.ref;
 	this.selBegin = 0;
-	this.selEnd = this.str.length;
+	this.selEnd = this.str.length - this.suffix.length;
 	/** @type {?{top:number,left:number,bottom:number,right:number}} */
 	this.frame = null;
 	/** @type {Array.<number>} */
@@ -63,7 +68,7 @@ A3a.vpl.TextField = function (app, options) {
 			if (self.selEnd > self.selBegin) {
 				self.selBegin = self.selEnd;
 				self.display();
-			} else if (self.selBegin < self.str.length) {
+			} else if (self.selBegin < self.str.length - self.suffix.length) {
 				self.selBegin++;
 				self.selEnd = self.selBegin;
 				self.display();
@@ -86,7 +91,7 @@ A3a.vpl.TextField = function (app, options) {
 				self.str = self.str.slice(0, self.selBegin) + self.str.slice(self.selEnd);
 				self.selEnd = self.selBegin;
 				self.display();
-			} else if (self.selBegin < self.str.length) {
+			} else if (self.selBegin < self.str.length - self.suffix.length) {
 				self.str = self.str.slice(0, self.selBegin) + self.str.slice(self.selBegin + 1);
 				self.display();
 			}
@@ -115,6 +120,7 @@ A3a.vpl.TextField.FinishCB;
 
 /** @typedef {{
 	initialValue: (string | undefined),
+	suffix: (string | undefined),
 	ref: (* | undefined),
 	display: (A3a.vpl.TextField.DisplayCB | undefined),
 	finish: (A3a.vpl.TextField.FinishCB | undefined)
