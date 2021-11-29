@@ -56,7 +56,13 @@ button.vpl:possible-drop-target {
 
 #vpl-filename, #vpl-editable-filename {
 	width: 9ww;
+	border-width: 1px;
+	border-color: transparent;
 	font: max(1vw, 12px) sans-serif;
+}
+#vpl-editable-filename:edited {
+	border-color: #333;
+	background-color: #eee;
 }
 
 separator {

@@ -527,7 +527,7 @@ Box elements:
 
 - `view` (classes: `vpl`, `sim`, `src`)
 - `widget` (id: `widget-error`, `widget-warning`, `widget-then`, `widget-moreLow`, `widget-moreHigh`; pseudo-class: `small`)
-- `button` (classes: `vpl`, `sim`, `src`, `top`, `bottom`)
+- `button` (classes: `vpl`, `sim`, `src`, `top`, `bottom`; pseudo-class for `#vpl-editable-filename`: `edited`)
 - `separator` (classes: `vpl`, `sim`, `src`, `top`, `bottom`)
 - `toolbar` (classes: `vpl`, `sim`, `src`, `top`, `bottom`)
 - `vpl`

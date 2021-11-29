@@ -1133,7 +1133,18 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 	});
 
 	// box sizes
-	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, this.vplToolbarConfig, ["vpl", "top"]);
+	var toolbarItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, this.vplToolbarConfig, ["vpl", "top"],
+		null,
+		function (id) {
+			switch (id) {
+			case "vpl:editable-filename":
+				if (self.textField != null && self.textField.ref === self.program) {
+					return ["edited"];
+				}
+				break;
+			}
+			return [];
+		});
 	var toolbarItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbarItemBoxes);
 	var toolbar2ItemBoxes = A3a.vpl.ControlBar.buttonBoxes(this, this.vplToolbar2Config, ["vpl", "bottom"]);
 	var toolbar2ItemHeight = A3a.vpl.ControlBar.maxBoxHeight(toolbar2ItemBoxes);

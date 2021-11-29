@@ -896,8 +896,6 @@ A3a.vpl.Commands.drawButtonJS = function (app, id, ctx, dims, css, cssClasses, b
 			ctx.textBaseline = "middle";
 
 			if (app.textField != null && app.textField.ref === app.program) {
-				console.info("display as edited", app.textField.str);
-
 				// being edited
 				var strLeftSize = ctx.measureText(app.textField.str.slice(0, app.textField.selBegin));
 				var ascent = strLeftSize["fontBoundingBoxAscent"] || 0;
@@ -910,8 +908,8 @@ A3a.vpl.Commands.drawButtonJS = function (app, id, ctx, dims, css, cssClasses, b
 				var textFieldFrame = {
 					top: box.height / 2 - ascent,
 					bottom: box.height / 2 + descent,
-					left: 0,
-					right: ctx.measureText(app.textField.str).width
+					left: 2,
+					right: 2 + ctx.measureText(app.textField.str).width
 				};
 				var rightPos = app.textField.str.split("").map(function (c, i) {
 					return ctx.measureText(app.textField.str.slice(0, i + 1)).width;

@@ -178,20 +178,23 @@ A3a.vpl.ControlBar.hasAvailableButtons = function (app, buttons) {
 	@param {A3a.vpl.Application} app
 	@param {Array.<string>} buttons button id, "!space" for space, "!stretch" for stretch
 	@param {Array.<string>} cssClasses
+	@param {?function(string):Array.<string>=} addClasses
+	@param {?function(string):Array.<string>=} addPseudoClasses
 	@return {Object.<string,CSSParser.VPL.Box>}
 */
-A3a.vpl.ControlBar.buttonBoxes = function (app, buttons, cssClasses) {
+A3a.vpl.ControlBar.buttonBoxes = function (app, buttons, cssClasses, addClasses, addPseudoClasses) {
 	/** @type {Object.<string,CSSParser.VPL.Box>} */
 	var boxes = {};
 	for (var i = 0; i < buttons.length; i++) {
 		if (buttons[i][0] !== "!") {
+			var cssPseudoClasses = app.draggedItem && app.commands.canDrop(buttons[i], app.draggedItem)
+				? ["possible-drop-target"]
+				: [];
 			var buttonBox = app.css.getBox({
 				tag: "button",
 				id: buttons[i].replace(/:/g, "-"),
-				clas: cssClasses,
-				pseudoClass: app.draggedItem && app.commands.canDrop(buttons[i], app.draggedItem)
-					? ["possible-drop-target"]
-					: null
+				clas: addClasses ? cssClasses.concat(addClasses(buttons[i])) : cssClasses,
+				pseudoClass: addPseudoClasses ? cssPseudoClasses.concat(addPseudoClasses(buttons[i])) : cssPseudoClasses
 			});
 			boxes[buttons[i]] = buttonBox;
 		}
