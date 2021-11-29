@@ -20,6 +20,18 @@ commands with commands related to the VPL programming view.
 	@return {void}
 */
 A3a.vpl.Application.prototype.addVPLCommands = function () {
+
+	/** Get program filename without suffix
+		@param {A3a.vpl.Application} app
+		@return {string}
+	*/
+	function baseFilename(app) {
+		var filename = app.program.filename || A3a.vpl.Program.defaultFilename;
+		return filename.slice(-A3a.vpl.Program.suffix.length - 1) === "." + A3a.vpl.Program.suffix
+			? filename.slice(0, -A3a.vpl.Program.suffix.length - 1)
+			: filename;
+	}
+
 	this.commands.add("vpl:close", {
 		action: function (app, modifier) {
 			app.setView(["vpl"], {closeView: true});
@@ -112,7 +124,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		action: function (app, modifier) {
 			if (modifier) {
 				var html = app.toHTMLDocument(app.css);
-				A3a.vpl.Program.downloadText(html, "vpl-program.html", "text/html");
+				A3a.vpl.Program.downloadText(html, baseFilename(app) + ".html", "text/html");
 			} else {
 				var json = app.program.exportToJSON({lib: true, prog: true});
 				A3a.vpl.Program.downloadText(json,
@@ -201,7 +213,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 				A3a.vpl.Program.downloadText(html, "vpl-ui.html", "text/html");
 			} else {
 				var html = app.toHTMLDocument(app.css);
-				A3a.vpl.Program.downloadText(html, "vpl-program.html", "text/html");
+				var filename = baseFilename(app) + ".html";
+				A3a.vpl.Program.downloadText(html, filename, "text/html");
 			}
 		},
 		isEnabled: function (app) {
