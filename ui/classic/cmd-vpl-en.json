@@ -35,7 +35,6 @@
 			"vpl:message-warning": "Warning message",
 			"vpl:message-empty": " ",
 			"vpl:filename": "Filename",
-			"vpl:editable-filename": "Filename",
 			"vpl:teacher": "Switch customization mode on or off",
 			"vpl:teacher-reset": "Reset customization",
 			"vpl:teacher-save": "Save customization",

@@ -1137,7 +1137,7 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 		null,
 		function (id) {
 			switch (id) {
-			case "vpl:editable-filename":
+			case "vpl:filename":
 				if (self.textField != null && self.textField.ref === self.program) {
 					return ["edited"];
 				}

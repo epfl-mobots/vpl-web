@@ -26,6 +26,7 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	/** @type {?string} */
 	this.filename = null;
 	this.readOnly = false;
+	this.fixedFilename = false;
 	/** @type {A3a.vpl.mode} */
 	this.mode = mode || A3a.vpl.mode.basic;
 	this.noVPL = false;	// true for source code editor without vpl counterpart

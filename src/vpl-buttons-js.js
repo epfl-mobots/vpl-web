@@ -852,94 +852,95 @@ A3a.vpl.Commands.drawButtonJS = function (app, id, ctx, dims, css, cssClasses, b
 			}
 		},
 		// "vpl:message-warning": "vpl:message-error"
-		"vpl:filename": function (app) {
-			if (state) {
+		"vpl:filename": function () {
+			if (app.program.fixedFilename) {
+				if (state) {
+					ctx.beginPath();
+					var w = 3 * dims.controlSize;
+					ctx.rect(0, 0, w, dims.controlSize);
+					ctx.clip();
+					ctx.fillStyle = box.color;
+					ctx.font = box.cssFontString();
+					ctx.textAlign = "center";
+					ctx.textBaseline = "middle";
+					var str = /** @type {string} */(state).trim();
+					// up to two lines, trimmed to fit
+					var strArray = str
+						.split("\n")
+						.slice(0, 2)
+						.map(function (s) {
+							s = s.slice(0, 80);
+							if (s.length > 1 && ctx.measureText(s).width > w) {
+								while (s.length > 1 && ctx.measureText(s + "\u2026").width > w) {
+									s = s.slice(0, -1);
+								}
+								s += "\u2026";
+							}
+							return s;
+						});
+					if (strArray.length > 1) {
+						ctx.fillText(strArray[0], box.width / 2, box.height * 0.25);
+						ctx.fillText(strArray[1], box.width / 2, box.height * 0.75);
+					} else {
+						ctx.fillText(strArray[0], box.width / 2, box.height / 2);
+					}
+				}
+			} else {
 				ctx.beginPath();
 				var w = 3 * dims.controlSize;
-				ctx.rect(0, 0, w, dims.controlSize);
+				var str = /** @type {string} */(state);
+				ctx.rect(0, 0, box.width, box.height);
 				ctx.clip();
 				ctx.fillStyle = box.color;
 				ctx.font = box.cssFontString();
-				ctx.textAlign = "center";
 				ctx.textBaseline = "middle";
-				var str = /** @type {string} */(state).trim();
-				// up to two lines, trimmed to fit
-				var strArray = str
-					.split("\n")
-					.slice(0, 2)
-					.map(function (s) {
-						s = s.slice(0, 80);
-						if (s.length > 1 && ctx.measureText(s).width > w) {
-							while (s.length > 1 && ctx.measureText(s + "\u2026").width > w) {
-								s = s.slice(0, -1);
-							}
-							s += "\u2026";
-						}
-						return s;
+
+				if (app.textField != null && app.textField.ref === app.program) {
+					// being edited
+					var strLeftSize = ctx.measureText(app.textField.str.slice(0, app.textField.selBegin));
+					var ascent = strLeftSize["fontBoundingBoxAscent"] || 0;
+					var descent = strLeftSize["fontBoundingBoxDescent"] || 0;
+					if (ascent === 0 || descent === 0) {
+						// vertical metrics missing in TextMetrics: use css
+						ascent = box.fontSize / 2;
+						descent = ascent;
+					}
+					var textFieldFrame = {
+						top: box.height / 2 - ascent,
+						bottom: box.height / 2 + descent,
+						left: 2,
+						right: 2 + ctx.measureText(app.textField.str).width
+					};
+					var rightPos = app.textField.str.split("").map(function (c, i) {
+						return ctx.measureText(app.textField.str.slice(0, i + 1)).width;
 					});
-				if (strArray.length > 1) {
-					ctx.fillText(strArray[0], box.width / 2, box.height * 0.25);
-					ctx.fillText(strArray[1], box.width / 2, box.height * 0.75);
-				} else {
-					ctx.fillText(strArray[0], box.width / 2, box.height / 2);
-				}
-			}
-		},
-		"vpl:editable-filename": function () {
-			ctx.beginPath();
-			var w = 3 * dims.controlSize;
-			var str = /** @type {string} */(state);
-			ctx.rect(0, 0, box.width, box.height);
-			ctx.clip();
-			ctx.fillStyle = box.color;
-			ctx.font = box.cssFontString();
-			ctx.textBaseline = "middle";
+					app.textField.setRenderingPos(textFieldFrame, rightPos);
+					var chWidth = ctx.measureText("0").width;
+					var xShift = Math.min(0, box.width - chWidth / 4 - textFieldFrame.right);	// text shift to display end of string
+					if (app.textField.selEnd === app.textField.selBegin) {
+						// plain cursor
+						ctx.strokeStyle = "black";
+						ctx.beginPath();
+						ctx.moveTo(xShift + textFieldFrame.left + strLeftSize.width, textFieldFrame.top);
+						ctx.lineTo(xShift + textFieldFrame.left + strLeftSize.width, textFieldFrame.bottom);
+						ctx.stroke();
+					} else {
+						// selection
+						xShift = 0;
+						var strSelSize = ctx.measureText(app.textField.str.slice(app.textField.selBegin, app.textField.selEnd));
+						ctx.save();
+						ctx.fillStyle = "silver";
+						ctx.fillRect(textFieldFrame.left + strLeftSize.width - 1, textFieldFrame.top,
+							strSelSize.width, ascent + descent);
+						ctx.restore();
+					}
 
-			if (app.textField != null && app.textField.ref === app.program) {
-				// being edited
-				var strLeftSize = ctx.measureText(app.textField.str.slice(0, app.textField.selBegin));
-				var ascent = strLeftSize["fontBoundingBoxAscent"] || 0;
-				var descent = strLeftSize["fontBoundingBoxDescent"] || 0;
-				if (ascent === 0 || descent === 0) {
-					// vertical metrics missing in TextMetrics: use css
-					ascent = box.fontSize / 2;
-					descent = ascent;
-				}
-				var textFieldFrame = {
-					top: box.height / 2 - ascent,
-					bottom: box.height / 2 + descent,
-					left: 2,
-					right: 2 + ctx.measureText(app.textField.str).width
-				};
-				var rightPos = app.textField.str.split("").map(function (c, i) {
-					return ctx.measureText(app.textField.str.slice(0, i + 1)).width;
-				});
-				app.textField.setRenderingPos(textFieldFrame, rightPos);
-				var chWidth = ctx.measureText("0").width;
-				var xShift = Math.min(0, box.width - chWidth / 4 - textFieldFrame.right);	// text shift to display end of string
-				if (app.textField.selEnd === app.textField.selBegin) {
-					// plain cursor
-					ctx.strokeStyle = "black";
-					ctx.beginPath();
-					ctx.moveTo(xShift + textFieldFrame.left + strLeftSize.width, textFieldFrame.top);
-					ctx.lineTo(xShift + textFieldFrame.left + strLeftSize.width, textFieldFrame.bottom);
-					ctx.stroke();
+					ctx.textAlign = "left";
+					ctx.fillText(app.textField.str, xShift, box.height / 2);
 				} else {
-					// selection
-					xShift = 0;
-					var strSelSize = ctx.measureText(app.textField.str.slice(app.textField.selBegin, app.textField.selEnd));
-					ctx.save();
-					ctx.fillStyle = "silver";
-					ctx.fillRect(textFieldFrame.left + strLeftSize.width - 1, textFieldFrame.top,
-						strSelSize.width, ascent + descent);
-					ctx.restore();
+					ctx.textAlign = "center";
+					ctx.fillText(str, box.width / 2, box.height / 2);
 				}
-
-				ctx.textAlign = "left";
-				ctx.fillText(app.textField.str, xShift, box.height / 2);
-			} else {
-				ctx.textAlign = "center";
-				ctx.fillText(str, box.width / 2, box.height / 2);
 			}
 		},
 		"vpl:duplicate": function () {
@@ -1717,7 +1718,6 @@ A3a.vpl.Commands.getButtonBoundsJS = function (id, dims) {
 			ymax: dims.controlSize
 		};
 	case "vpl:filename":
-	case "vpl:editable-filename":
 		return {
 			xmin: 0,
 			xmax: 3 * dims.controlSize,

@@ -59,7 +59,7 @@ A3a.vpl.Application = function (canvasEl) {
 		"vpl:load",
 		"vpl:upload",
 		"vpl:nextProgram",
-		"vpl:editable-filename",
+		"vpl:filename",
 		"vpl:exportToHTML",
 		"!space",
 		"vpl:advanced",

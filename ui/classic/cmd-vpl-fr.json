@@ -35,7 +35,6 @@
 			"vpl:message-warning": "Message d'avertissement",
 			"vpl:message-empty": " ",
 			"vpl:filename": "Nom de fichier",
-			"vpl:editable-filename": "Nom de fichier",
 			"vpl:teacher": "Commuter entre les modes de programmation et de configuration",
 			"vpl:teacher-reset": "Remettre la configuration à l'état d'origine",
 			"vpl:teacher-save": "Enregistrer la configuration",

@@ -59,13 +59,13 @@ button.vpl:possible-drop-target {
 #vpl-message-warning {
 	border-color: #fbca00;
 }
-#vpl-filename, #vpl-editable-filename {
+#vpl-filename {
 	width: 9ww;
 	border-width: 1px;
 	border-color: transparent;
 	font-size: max(1vw, 12px);
 }
-#vpl-editable-filename:edited {
+#vpl-filename:edited {
 	border-color: #333;
 	background-color: white;
 }

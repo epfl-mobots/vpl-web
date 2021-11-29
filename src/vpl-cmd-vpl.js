@@ -747,46 +747,38 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 		}
 	});
 	this.commands.add("vpl:filename", {
-		isEnabled: function (app) {
-			return false;
-		},
-		getState: function (app) {
-			return (app.program.filename || "") + (app.username ? "\n" + app.username : "");
-		},
-		object: this,
-		isAvailable: function (app) {
-			return app.program.filename || app.username ? true : false;
-		}
-	})
-	this.commands.add("vpl:editable-filename", {
 		action: function (app, modifier) {
-			app.startTextField({
-				initialValue: app.program.filename || A3a.vpl.Program.defaultFilename,
-				suffix: "." + A3a.vpl.Program.suffix,
-				display: function (str, selBegin, selEnd) {
-					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
-				},
-				finish: function (str) {
-					if (str !== null) {
-						app.program.filename = str;
-					}
-					app.textField = null;
-					app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
-				},
-				ref: app.program
-			});
+			if (!app.program.fixedFilename) {
+				app.startTextField({
+					initialValue: app.program.filename || A3a.vpl.Program.defaultFilename,
+					suffix: "." + A3a.vpl.Program.suffix,
+					display: function (str, selBegin, selEnd) {
+						app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
+					},
+					finish: function (str) {
+						if (str !== null) {
+							app.program.filename = str;
+						}
+						app.textField = null;
+						app.vplCanvas.onUpdate && app.vplCanvas.onUpdate();
+					},
+					ref: app.program
+				});
+			}
 		},
 		isEnabled: function (app) {
-			return true;
+			return !app.program.fixedFilename;
 		},
 		getState: function (app) {
-			return app.program.filename || A3a.vpl.Program.defaultFilename;
+			return app.program.fixedFilename
+			 	? (app.program.filename || A3a.vpl.Program.defaultFilename) + (app.username ? "\n" + app.username : "")
+				: app.program.filename || A3a.vpl.Program.defaultFilename;
 		},
 		object: this,
 		isAvailable: function (app) {
-			return true;
+			return app.program.filename || app.username || !app.program.fixedFilename ? true : false;
 		}
-	})
+	});
 	this.commands.add("vpl:teacher", {
 		action: function (app, modifier) {
 			app.program.uiConfig.blockCustomizationMode = !app.program.uiConfig.blockCustomizationMode;
