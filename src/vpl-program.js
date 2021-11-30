@@ -402,14 +402,7 @@ A3a.vpl.Program.prototype.enforceSingleTrailingEmptyEventHandler = function () {
 };
 
 /** Export program to a plain object which can be serialized
-	@param {{
-		lib: boolean,
-		prog: boolean,
-		filename: boolean
-	}=} opt .lib=true to export the block lib & ui settings,
-	.prog=true to export the program,
-	.filename=true to export the filename
-	(default: {lib:true,prog:true,filename=false})
+	@param {A3a.vpl.Program.ExportOptions=} opt
 	@return {Object}
 */
 A3a.vpl.Program.prototype.exportToObject = function (opt) {
@@ -480,6 +473,19 @@ A3a.vpl.Program.prototype.exportToObject = function (opt) {
 	obj["code"] = src;
 	return obj;
 };
+
+/**
+	@typedef {{
+		lib: (boolean | undefined),
+		prog: (boolean | undefined),
+		filename: (boolean | undefined)
+	}}
+	export options: .lib=true to export the block lib & ui settings,
+	.prog=true to export the program,
+	.filename=true to export the filename
+	(default: {lib:true,prog:true,filename=false})
+*/
+A3a.vpl.Program.ExportOptions;
 
 /** Export program to JSON
 	@param {{lib:boolean,prog:boolean}=} opt .lib=true to export the block lib & ui settings,
