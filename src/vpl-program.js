@@ -222,7 +222,7 @@ A3a.vpl.Program.prototype.invalidateCode = function () {
 	@return {void}
 */
 A3a.vpl.Program.prototype.saveStateBeforeChange = function () {
-	this.undoState.saveStateBeforeChange(this.exportToObject(),
+	this.undoState.saveStateBeforeChange(this.exportToObject({filename: true}),
 		{
 			uploaded: this.uploaded,
 			uploadedToServer: this.uploadedToServer,
@@ -250,7 +250,7 @@ A3a.vpl.Program.prototype.saveStateAfterChange = function () {
 */
 A3a.vpl.Program.prototype.undo = function (updateFun) {
 	if (this.undoState.canUndo()) {
-		var markedState = this.undoState.undo(this.exportToObject(),
+		var markedState = this.undoState.undo(this.exportToObject({filename: true}),
 			{
 				uploaded: this.uploaded,
 				uploadedToServer: this.uploadedToServer,
@@ -271,7 +271,7 @@ A3a.vpl.Program.prototype.undo = function (updateFun) {
 */
 A3a.vpl.Program.prototype.redo = function (updateFun) {
 	if (this.undoState.canRedo()) {
-		var markedState = this.undoState.redo(this.exportToObject(),
+		var markedState = this.undoState.redo(this.exportToObject({filename: true}),
 			{
 				uploaded: this.uploaded,
 				uploadedToServer: this.uploadedToServer,
@@ -401,8 +401,14 @@ A3a.vpl.Program.prototype.enforceSingleTrailingEmptyEventHandler = function () {
 };
 
 /** Export program to a plain object which can be serialized
-	@param {{lib:boolean,prog:boolean}=} opt .lib=true to export the block lib & ui settings,
-	.prog=true to export the program (default: {lib:true,prog:true})
+	@param {{
+		lib: boolean,
+		prog: boolean,
+		filename: boolean
+	}=} opt .lib=true to export the block lib & ui settings,
+	.prog=true to export the program,
+	.filename=true to export the filename
+	(default: {lib:true,prog:true,filename=false})
 	@return {Object}
 */
 A3a.vpl.Program.prototype.exportToObject = function (opt) {
@@ -416,6 +422,9 @@ A3a.vpl.Program.prototype.exportToObject = function (opt) {
 			obj["advancedMultiEvent"] = this.multiEventAdvanced;
 		}
 		obj["disabledUI"] = this.uiConfig.disabledUI;
+	}
+	if (opt && opt.filename) {
+		obj["filename"] = this.filename;
 	}
 	if (opt && opt.prog === false) {
 		return obj;
@@ -484,7 +493,8 @@ A3a.vpl.Program.prototype.exportToJSON = function (opt) {
 	@typedef {{
 			dontChangeProgram: (boolean | undefined),
 			dontChangeBlocks: (boolean | undefined),
-			dontChangeUI: (boolean | undefined)
+			dontChangeUI: (boolean | undefined),
+			dontChangeFilename: (boolean | undefined)
 	}}
 */
 A3a.vpl.Program.ImportOptions;
@@ -585,6 +595,11 @@ A3a.vpl.Program.prototype.importFromObject = function (obj, updateFun, options) 
 					if (code != null) {
 						view = "src";
 					}
+				}
+			}
+			if (!options || !options.dontChangeFilename) {
+				if (obj.hasOwnProperty("filename")) {
+					this.filename = obj["filename"];
 				}
 			}
 		}

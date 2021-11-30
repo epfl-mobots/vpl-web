@@ -757,6 +757,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 					},
 					finish: function (str) {
 						if (str !== null) {
+							app.program.saveStateBeforeChange();
 							app.program.filename = str;
 						}
 						app.textField = null;
