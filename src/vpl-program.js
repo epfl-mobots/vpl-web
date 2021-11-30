@@ -155,6 +155,7 @@ A3a.vpl.Program.prototype.new = function (resetUndoStack) {
 	this.multiEventBasic = A3a.vpl.Program.basicMultiEvent;
 	this.enabledBlocksAdvanced = A3a.vpl.Program.advancedBlocks;
 	this.multiEventAdvanced = A3a.vpl.Program.advancedMultiEvent;
+	this.filename = null;
 	this.program = [];
 	this.code = {};
 	this.notUploadedYet = true;

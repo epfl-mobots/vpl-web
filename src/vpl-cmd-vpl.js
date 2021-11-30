@@ -112,7 +112,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			app.renderProgramToCanvas();
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL && !app.program.readOnly && !app.program.isEmpty();
+			return !app.program.noVPL && !app.program.readOnly &&
+				(app.program.filename != null || !app.program.isEmpty());
 		},
 		object: this,
 		isAvailable: function (app) {
