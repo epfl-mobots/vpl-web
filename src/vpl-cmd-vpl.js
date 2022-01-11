@@ -112,7 +112,8 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 			app.renderProgramToCanvas();
 		},
 		isEnabled: function (app) {
-			return !app.program.noVPL && !app.program.readOnly && !app.program.isEmpty();
+			return !app.program.noVPL && !app.program.readOnly &&
+				(app.program.filename != null || !app.program.isEmpty());
 		},
 		object: this,
 		isAvailable: function (app) {
@@ -757,6 +758,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 					},
 					finish: function (str) {
 						if (str !== null) {
+							app.program.saveStateBeforeChange();
 							app.program.filename = str;
 						}
 						app.textField = null;
