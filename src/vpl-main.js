@@ -652,12 +652,15 @@ function vplSetup(gui, rootDir) {
 					if (data) {
 						app.program.filename = options && options["filename"] || A3a.vpl.Program.defaultFilename;
 						app.program.readOnly = options != undefined && options["readOnly"] == true;
+						app.program.fixedFilename = options != undefined && options["fixedFilename"] != undefined
+							? options["fixedFilename"] == true
+							: options["readOnly"] == true;
 						if (options != undefined && options["customizationMode"] == true) {
 							app.uiConfig.blockCustomizationMode = true;
 							app.uiConfig.toolbarCustomizationMode = role === "teacher";
 						}
 						app.program.importFromJSON(data, function () {
-                            app.setHelpForCurrentAppState();
+							app.setHelpForCurrentAppState();
 							app.renderProgramToCanvas();
 						});
 						if (options != undefined && options["setAsNew"] == true) {
@@ -672,7 +675,7 @@ function vplSetup(gui, rootDir) {
 			var vplJson = window.localStorage.getItem(A3a.vpl.Program.defaultFilename);
 			if (vplJson) {
 				app.program.importFromJSON(vplJson, function () {
-                    app.setHelpForCurrentAppState();
+					app.setHelpForCurrentAppState();
 					app.renderProgramToCanvas();
 				});
 			}
