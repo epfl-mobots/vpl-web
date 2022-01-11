@@ -107,7 +107,7 @@ A3a.vpl.TextField = function (app, options) {
 			break;
 		}
 		return true;
-	});
+	}, true);
 };
 
 /** @typedef {function(string,number,number):void}
