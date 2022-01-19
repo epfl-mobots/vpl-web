@@ -325,7 +325,9 @@ A3a.vpl.Application.prototype.startTextField = function (options) {
 		}
 		this.textField.finish(true);
 	}
-	this.textField = new A3a.vpl.TextField(this, options);
+	this.textField = window["vplTextFieldInputEvents"]
+		? new A3a.vpl.TextFieldInput(this, options)
+		: new A3a.vpl.TextField(this, options);
 };
 
 /** Translate message using the current language

@@ -227,6 +227,13 @@ function vplGetHashOption(key) {
 	@return {void}
 */
 function vplSetup(gui, rootDir) {
+
+	// platform-specific options
+	if (window["vplTextFieldInputEvents"] === undefined) {
+		// true on Android, false elsewhere
+		window["vplTextFieldInputEvents"] = navigator.userAgent.indexOf("Android") >= 0;
+	}
+
 	// handle overlays in gui
 	/** @type {Array.<Object>} */
 	var helpFragments = [];
