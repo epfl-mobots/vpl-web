@@ -132,10 +132,9 @@
 						"mic.threshold = 250;\n"
 					]
 				],
-				"sectionBegin": "onevent mic {\n",
+				"sectionBegin": "onevent buttons {\n",
 				"sectionEnd": "}\n",
-				"clause": "mic.intensity > mic.threshold",
-				"clauseOptional": true
+				"clause": "mic.intensity > mic.threshold"
 			}
 		},
 		{
