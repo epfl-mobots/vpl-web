@@ -145,7 +145,7 @@ A3a.vpl.Application.prototype.addVPLCommands = function () {
 	this.commands.add("vpl:load", {
 		action: function (app, modifier) {
 			app.loadBox.show("Open program file",
-				".aesl,.json,." + A3a.vpl.Program.suffix + ",." + A3a.vpl.Program.suffixUI,
+				".aesl,.json,." + A3a.vpl.Program.suffix + ",." + A3a.vpl.Program.suffixUI + ",.zip",
 				function (file) {
 					app.loadProgramFile(file);
 					app.program.saveStateAfterChange();
