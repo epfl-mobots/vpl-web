@@ -536,6 +536,12 @@ function vplSetup(gui, rootDir) {
 			runGlue = app.installRobotSimulator({canvasFilter: filter, canvasTransform: transform});
 			runGlue.init(language);
 			break;
+		default:
+			if (window["vplConnections"] && window["vplConnections"].hasOwnProperty(robotName)) {
+				runGlue = window["vplConnections"][robotName]();
+				runGlue.init(language);
+			}
+			break;
 		}
 		if (runGlue) {
 			app.robots.push({name: robotName, runGlue: runGlue});

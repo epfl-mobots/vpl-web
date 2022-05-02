@@ -650,3 +650,4 @@ VPL is started by code in a "load" event listener defined in vpl-main.js. Some c
 - `window["vplConvertToHTML"]`: `function(json, isVPL3UI)` to convert the content of a .vpl3 (if `isVPL3UI` is false) or a .vpl3ui file (if `isVPL3UI` is true) to a static HTML file
 - `window["vplConvertMDToHtml"]`: `function(md)` to convert simple markdown to an html fragment (block-level elements such as h1, p, etc.)
 - `window["vplTextFieldInputEvents"]`: `true` to use `input` events of an invisible `<input>` element for text field input; `false` to use `keydown` events; default is `true` for Android, `false` for other platforms
+- `window["vplConnections"]`: dictionary of additional robot connection methods; keys are what's specified with query option `robot` and values are functions without argument which return an instance of a subclass of `A3a.vpl.RunGlue`
