@@ -1,10 +1,90 @@
 {
 	"blocks": [
 		{
-			"name": "button 1"
+			"name": "!stop",
+			"python": {
+				"statement": [
+					"motor_left_target = 0\n",
+					"motor_right_target = 0\n",
+					"nf_sound_system(-1)\n",
+					"leds_circle = 8 * [32]\n",
+					"timer_period[0] = 100\n",
+					"@onevent\n",
+					"def timer0():\n",
+					"  leds_circle = 8 * [0]\n"
+				]
+			}
 		},
 		{
-			"name": "init"
+			"name": "!stop and blink",
+			"python": {
+				"statement": [
+					"i = 16\n",
+					"s = 17\n",
+					"motor_left_target = 0\n",
+					"motor_right_target = 0\n",
+					"nf_sound_system(-1)\n",
+					"timer_period[0] = 125\n",
+					"@onevent\n",
+					"def timer0():\n",
+					"  leds_circle = [(s&1)<<5,(s&2)<<4,(s&4)<<3,(s&8)<<2,(s&16)<<1,s&32,(s&64)>>1,(s&128)>>2]\n",
+					"  s = (s << 1) & 0xff | (s >> 7) & 1\n",
+					"  i -= 1\n",
+					"  if i < 0:\n",
+					"    timer_period[0] = 0\n"
+				]
+			}
+		},
+		{
+			"name": "!init",
+			"python": {
+				"initCodeExec": [
+					"nf_sound_system(-1)\n"
+				]
+			}
+		},
+		{
+			"name": "!volume",
+			"python": {
+				"statement": [
+					"# set volume\n",
+					"nf__system_settings_write(0, `$[0] > 8 ? 0 : 8 - $[0]`)\n"
+				]
+			}
+		},
+		{
+			"name": "button 1",
+			"python": {
+				"sectionBegin": "@onevent\ndef buttons():\n",
+				"sectionEnd": "<\n",
+				"clause": "button_`['center', 'forward', 'backward', 'right', 'left'][$[0]]`"
+			}
+		},
+		{
+			"name": "init",
+			"python": {
+				"sectionBegin": "# initialization\n"
+			}
+		},
+		{
+			"name": "state 256",
+			"python": {
+				"initCodeExec": [
+					"state = [0]\n"
+				],
+				"clause":
+					"state[0] == `$.reduce(function (a, b, i) { return b ? a | (1 << i) : a; }, 0)`"
+			}
+		},
+		{
+			"name": "state 256 with mask",
+			"aseba": {
+				"initCodeExec": [
+					"state = [0]\n"
+				],
+				"clause":
+					"(state[0] & `$.reduce(function (a, b, i) { return b !== 0 ? a | (1 << i) : a; }, 0)`) == `$.reduce(function (a, b, i) { return b === 1 ? a | (1 << i) : a; }, 0)`"
+			}
 		},
 		{
 			"name": "roll"
@@ -61,9 +141,6 @@
 			"name": "counter comparison"
 		},
 		{
-			"name": "state 256"
-		},
-		{
 			"name": "state 256 with mask"
 		},
 		{
@@ -79,19 +156,100 @@
 			"name": "move"
 		},
 		{
-			"name": "top color 8"
+			"name": "top color 8",
+			"python": {
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n",
+					[
+						"leds_top = [0, 0, 0]\n",
+						"leds_bottom_left = [0, 0, 0]\n",
+						"leds_bottom_right = [0, 0, 0]\n",
+						"leds_circle = 8 * [0]\n"
+					]
+				],
+				"statement": [
+					"topColor = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n"
+					"leds_top = topColor\n",
+				]
+			}
 		},
 		{
-			"name": "bottom color 8"
+			"name": "bottom color 8",
+			"python": {
+				"initCodeExec": [
+					"bottomColor = [0, 0, 0]\n",
+					[
+						"leds_top = [0, 0, 0]\n",
+						"leds_bottom_left = [0, 0, 0]\n",
+						"leds_bottom_right = [0, 0, 0]\n",
+						"leds_circle = 8 * [0]\n"
+					]
+				],
+				"statement": [
+					"bottomColor = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n"
+					"leds_bottom_left = bottomColor\n",
+					"leds_bottom_right = bottomColor\n",
+				]
+			}
 		},
 		{
-			"name": "top color"
+			"name": "top color",
+			"python": {
+				"initCodeExec": [
+					"topColor = [0, 0, 0]\n",
+					[
+						"leds_top = [0, 0, 0]\n",
+						"leds_bottom_left = [0, 0, 0]\n",
+						"leds_bottom_right = [0, 0, 0]\n",
+						"leds_circle = 8 * [0]\n"
+					]
+				],
+				"statement": [
+					"topColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
+					"leds_top = topColor\n",
+				],
+				"statementWithoutInit":
+					"leds_top = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
+			}
 		},
 		{
-			"name": "bottom color"
+			"name": "bottom color",
+			"python": {
+				"initCodeExec": [
+					"bottomColor = [0, 0, 0]\n",
+					[
+						"leds_top = [0, 0, 0]\n",
+						"leds_bottom_left = [0, 0, 0]\n",
+						"leds_bottom_right = [0, 0, 0]\n",
+						"leds_circle = 8 * [0]\n"
+					]
+				],
+				"statement": [
+					"bottomColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
+					"leds_bottom_left = bottomColor\n",
+					"leds_bottom_right = bottomColor\n",
+				],
+				"statementWithoutInit": [
+					"leds_bottom_left = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
+					"leds_bottom_right = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
+				]
+			}
 		},
 		{
-			"name": "set timer"
+			"name": "set timer",
+			"python": {
+				"initCodeExec": [
+					[
+						"# stop timer 0\n",
+						"timer_period[0] = 0\n"
+					],
+					"timerElapsed = 0\n"
+				],
+				"statement": [
+					"timer_period[0] = `Math.round(1000 * $[0] / slowdown)`\n",
+					"timerElapsed = 0\n"
+				]
+			}
 		},
 		{
 			"name": "notes"

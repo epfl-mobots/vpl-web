@@ -178,7 +178,7 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 	}
 
 	if (nextCond > 0) {
-		initCodeExec.unshift("cond0 = [False for i in range(" + nextCond + ")]\n");
+		initCodeExec.unshift("cond0 = " + nextCond + " * [False]\n");
 	}
 
 	// collect action code
@@ -220,14 +220,10 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 	// init fragments (var declarations first, then code)
 	var str = initVarDecl.length > 0 ? initVarDecl.join("\n") : "";
 	if (clauses.length > 0) {
-		str += "eventCache = [" + clauses.map(function () { return "0"; }).join(", ") + "]\n"
+		str += "eventCache = " + clauses.length + " * [False]\n"
 	}
 	if (actionTestCount > 0) {
-		str += "todo = [";
-		for (var i = 0; i < actionTestCount; i++) {
-			str += i > 0 ? ", 0" : "0";
-		}
-		str += "]\n";
+		str += "todo = " + actionTestCount + " * [False]\n";
 	}
 	if (runBlocks) {
 		str += "\n" + runBlocksCode;
@@ -237,7 +233,7 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 		}
 		// timer1 for actions
 		if (actionsTestCode) {
-			str += (str.length > 0 ? "\n" : "") + "thymio.timer.period[1] = 50\n";
+			str += (str.length > 0 ? "\n" : "") + "timer_period[1] = 50\n";
 		}
 	}
 	// init event (not onevent, hence placed before initCodeDecl)
@@ -276,8 +272,8 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 	}
 	// add onevent timer1
 	if (actionsTestCode) {
-		str += "\n@thymio.onevent(thymio.TIMER1)\n" +
-			"def onevent_timer1():\n" +
+		str += "\n@onevent\n" +
+			"def timer1():\n" +
 			auxClausesInit.join("") +
 			actionsTestCode +
 			actionsExecCode;
@@ -292,10 +288,6 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 	// remove initial lf
 	if (str[0] === "\n") {
 		str = str.slice(1);
-	}
-	// prepend import
-	if (str) {
-		str = "import thymio\n\n" + str;
 	}
 
 	// pretty-print (fix indenting)
@@ -344,7 +336,7 @@ A3a.vpl.CodeGeneratorPython.prototype.generate = function (program, runBlocks) {
 	@inheritDoc
 */
 A3a.vpl.CodeGeneratorPython.prototype.generateMissingCodeForBlock = function (block, program) {
-	var code = "# missing Python implementation for block " + block.blockTemplate.name + "\n";
+	var code = "# missing Python implementation for block " + block.blockTemplate.name + "\npass\n";
 	switch (block.blockTemplate.type) {
 	case A3a.vpl.blockType.event:
 	case A3a.vpl.blockType.state:
