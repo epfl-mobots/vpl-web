@@ -443,8 +443,10 @@
 					"call leds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n",
 					"bottomColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
 				],
-				"statementWithoutInit":
-					"call leds.top(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
+				"statementWithoutInit": [
+					"call leds.bottom.left(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n",
+					"call leds.bottom.right(`$.map(function (x) { return Math.round(32 * x); }).join(', ')`)\n"
+				]
 			}
 		},
 		{
