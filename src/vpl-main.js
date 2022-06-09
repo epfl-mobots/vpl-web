@@ -185,7 +185,7 @@ function vplGetQueryOption(key) {
 	var query = window["vplQueryOptions"] || "";
 	var r = /^[^?]*\?([^#]*)/.exec(document.location.href);
 	if (r) {
-		query = query ? query + "&" + r[1] : r[1];
+		query = query ? r[1] + "&" + query : r[1];
 	}
 	if (query) {
 		var pairs = query
