@@ -168,8 +168,8 @@
 					]
 				],
 				"statement": [
-					"topColor = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n"
-					"leds_top = topColor\n",
+					"topColor = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n",
+					"leds_top = topColor\n"
 				]
 			}
 		},
@@ -186,9 +186,9 @@
 					]
 				],
 				"statement": [
-					"bottomColor = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n"
+					"bottomColor = [`['0,0,0','32,0,0','0,32,0','32,32,0','0,0,32','32,0,32','0,32,32','32,32,32'][$[0]]`]\n",
 					"leds_bottom_left = bottomColor\n",
-					"leds_bottom_right = bottomColor\n",
+					"leds_bottom_right = bottomColor\n"
 				]
 			}
 		},
@@ -205,8 +205,8 @@
 					]
 				],
 				"statement": [
-					"topColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
-					"leds_top = topColor\n",
+					"topColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
+					"leds_top = topColor\n"
 				],
 				"statementWithoutInit":
 					"leds_top = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
@@ -225,13 +225,13 @@
 					]
 				],
 				"statement": [
-					"bottomColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
+					"bottomColor = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
 					"leds_bottom_left = bottomColor\n",
-					"leds_bottom_right = bottomColor\n",
+					"leds_bottom_right = bottomColor\n"
 				],
 				"statementWithoutInit": [
 					"leds_bottom_left = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
-					"leds_bottom_right = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n",
+					"leds_bottom_right = [`$.map(function (x) { return Math.round(32 * x); }).join(', ')`]\n"
 				]
 			}
 		},
