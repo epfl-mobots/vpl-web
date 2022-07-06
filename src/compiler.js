@@ -1328,11 +1328,11 @@ A3a.Compiler.NodeStatementSequence.prototype.optimize = function (compiler) {
 */
 A3a.Compiler.NodeStatementIf = function (head, expr) {
 	A3a.Compiler.NodeStatement.call(this, head, A3a.Compiler.NodeStatement.type.begin);
-	this.conditions = [expr];
+	this.conditions = [expr];	// expressions for if and all elseif (empty if optimized out)
 	/** @type {Array.<Array.<A3a.Compiler.NodeStatement>>} */
 	this.conditionalCode = [];	// code following corresponding element in this.conditions
 	/** @type {Array.<A3a.Compiler.NodeStatement>} */
-	this.linkedStatements = [];
+	this.linkedStatements = [];	// elseif* else? end
 };
 A3a.Compiler.NodeStatementIf.prototype = Object.create(A3a.Compiler.NodeStatement.prototype);
 A3a.Compiler.NodeStatementIf.prototype.constructor = A3a.Compiler.NodeStatementIf;
@@ -1394,6 +1394,7 @@ A3a.Compiler.NodeStatementIf.prototype.removeUnusedBlocks = function () {
 				// false: remove
 				this.conditions.splice(i, 1);
 				this.conditionalCode.splice(i, 1);
+				this.linkedStatements.splice(i, 1);
 			} else {
 				// true: transform into final else part
 				this.conditions.splice(i);
@@ -3179,7 +3180,10 @@ A3a.Compiler.NodeStatementIf.prototype.generateA3aBC = function (compiler, isTop
 	compiler.bcAddr = bcAddr0 + bc.length;
 	if (this.conditionalCode.length > this.conditions.length) {
 		// else part
-		compiler.addSourceToBCMapping(this.linkedStatements[this.conditions.length - 1], compiler.bcAddr + bc.length);
+		compiler.addSourceToBCMapping(this.conditions.length > 0
+			? this.linkedStatements[this.conditions.length - 1]	// if or elseif before else
+			: this,	// else alone (all if/elseif have been optimized out): if
+			compiler.bcAddr + bc.length);
 		compiler.setContext(this.contexts[this.conditions.length]);
 		this.conditionalCode[this.conditions.length].forEach(function (st) {
 			bc = bc.concat(st.generateA3aBC(compiler));
