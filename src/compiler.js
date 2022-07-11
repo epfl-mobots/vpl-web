@@ -170,9 +170,43 @@ A3a.Compiler = function (asebaNode, src) {
 	this.inSubDefinition = false;
 	// address of current bytecode fragment, used for goto and sourceToBCMapping
 	this.bcAddr = 0;
+	/** @type {Array.<{name:string,id:number,size:number>} */
+	this.userEvents = [];
+	this.userEventCount = 0;
 
 	/** @type {Array.<A3a.Compiler.SourceToBCMapping>} */
 	this.sourceToBCMapping = [];
+
+// tests
+this.addUserEvent("foo");
+this.addUserEvent("bar", 2);
+};
+
+/** Define a user event and its data size
+	@param {string} eventName
+	@param {number=} eventSize
+	@return {void}
+*/
+A3a.Compiler.prototype.addUserEvent = function (eventName, eventSize) {
+	this.userEvents.push({
+		name: eventName,
+		eventId: this.userEventCount,
+		size: eventSize || 0
+	});
+	this.userEventCount++;
+};
+
+/**
+	@param {string} eventName
+	@return {?{name:string,id:number,size:number}}
+*/
+A3a.Compiler.prototype.findUserEvent = function (eventName) {
+	for (var i = 0; i < this.userEvents.length; i++) {
+		if (this.userEvents[i].name === eventName) {
+			return this.userEvents[i];
+		}
+	}
+	return null;
 };
 
 /** Variable description
@@ -1611,6 +1645,41 @@ A3a.Compiler.NodeStatementCallSub = function (funToken, name) {
 A3a.Compiler.NodeStatementCallSub.prototype = Object.create(A3a.Compiler.NodeStatement.prototype);
 A3a.Compiler.NodeStatementCallSub.prototype.constructor = A3a.Compiler.NodeStatementCallSub;
 
+/** "emit" Statement node
+	@constructor
+	@extends {A3a.Compiler.NodeStatement}
+	@param {A3a.Compiler.TokenBase} head
+	@param {string} eventName
+	@param {A3a.Compiler.Node=} data
+*/
+A3a.Compiler.NodeStatementEmit = function (head, eventName, data) {
+	A3a.Compiler.NodeStatement.call(this, head);
+	this.eventName = eventName;
+	if (data) {
+		this.children.push(data);
+	}
+};
+A3a.Compiler.NodeStatementEmit.prototype = Object.create(A3a.Compiler.NodeStatement.prototype);
+A3a.Compiler.NodeStatementEmit.prototype.constructor = A3a.Compiler.NodeStatementEmit;
+
+/** @inheritDoc
+*/
+A3a.Compiler.NodeStatementEmit.prototype.resolveArraySize = function (compiler) {
+	if (this.children[0]) {
+		A3a.Compiler.Node.prototype.resolveArraySize.call(this, compiler);
+
+		// check size
+		var expr = this.children[0];
+		var userEvent = compiler.findUserEvent(this.eventName);
+		var eventDataLength = expr instanceof A3a.Compiler.NodeVar
+			? compiler.getVariable(expr).size
+			: expr.children.length;
+		if (eventDataLength !== userEvent.size) {
+			throw "Incompatible data size in \"emit\" " + this.head.posString();
+		}
+	}
+};
+
 /** "end" Statement node
 	@constructor
 	@extends {A3a.Compiler.NodeStatement}
@@ -2475,6 +2544,22 @@ A3a.Compiler.prototype.parseNextStatement = function () {
 		case "else":
 			this.tokenIndex++;
 			return [new A3a.Compiler.NodeStatementElse(head)];
+		case "emit":
+			if (!this.checkTokenType(1, A3a.Compiler.TokenName)) {
+				throw "\"emit\" syntax error " + head.posString();
+			}
+			name = /** @type {A3a.Compiler.TokenName} */(this.tokens[this.tokenIndex + 1]);
+			this.tokenIndex += 2;
+			var userEvent = this.findUserEvent(name.name);
+			if (userEvent == null) {
+				throw "Unknown user event " + name.name + " " + head.posString();
+			}
+			if (userEvent.size > 0) {
+				var expr = this.parseExpression();
+				return [new A3a.Compiler.NodeStatementEmit(head, name.name, expr)];
+			} else {
+				return [new A3a.Compiler.NodeStatementEmit(head, name.name)];
+			}
 		case "onevent":
 			if (!this.checkTokenType(1, A3a.Compiler.TokenName)) {
 				throw "unexpected token after \"onevent\" " + head.posString();
@@ -3382,6 +3467,36 @@ A3a.Compiler.CodePlaceholderCallSub.prototype.generateA3aBC = function (addr) {
 A3a.Compiler.NodeStatementCallSub.prototype.generateA3aBC = function (compiler, isTopLevel) {
 	this.prepareGenerateA3aBC(compiler);
 	return [new A3a.Compiler.CodePlaceholderCallSub(compiler, this)];
+};
+
+/**
+	@inheritDoc
+*/
+A3a.Compiler.NodeStatementEmit.prototype.generateA3aBC = function (compiler, isTopLevel) {
+	this.prepareGenerateA3aBC(compiler);
+	var userEvent = compiler.findUserEvent(this.eventName);
+	if (userEvent.size === 0) {
+		return [(A3a.vm.bc.emit << 12) | userEvent.userId, 0, 0];
+	} else {
+		var argNode = this.children[0];
+		var varAddress = 0;
+		var bc = [];
+		if (argNode instanceof A3a.Compiler.NodeVar) {
+			// variable: direct reference
+			varAddress = compiler.getVariable(argNode).offset;
+		} else {
+			// value: use a temporary variable
+			varAddress = compiler.allocTempVariable(argNode.valueSize);
+			for (var j = 0; j < argNode.valueSize; j++) {
+				bc = bc.concat((argNode instanceof A3a.Compiler.NodeArray
+					? argNode.children[j]
+					: argNode).generateA3aBC(compiler));
+				bc = bc.concat((A3a.vm.bc.store << 12) | varAddress + j);
+			}
+		}
+		bc = bc.concat((A3a.vm.bc.emit << 12) | userEvent.userId, varAddress, argNode.valueSize);
+		return bc;
+	}
 };
 
 /** Generate table of event vectors at the beginning of byte code
