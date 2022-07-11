@@ -467,7 +467,11 @@ A3a.Device.prototype.step = function () {
 		}
 		break;
 	case A3a.VM.op.emit:
-		this.onEmit(opl);
+		var addr = this.bytecode[this.pc + 1];
+		var size = this.bytecode[this.pc + 2];
+		var eventData = this.varData.slice(addr, addr + size);
+		this.pc += 2;
+		this.onEmit(opl, eventData);
 		break;
 	case A3a.VM.op.nativeCall:
 		if (opl < 0 || opl >= this.nativeFunctions.length) {
