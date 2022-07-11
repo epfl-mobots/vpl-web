@@ -176,10 +176,6 @@ A3a.Compiler = function (asebaNode, src) {
 
 	/** @type {Array.<A3a.Compiler.SourceToBCMapping>} */
 	this.sourceToBCMapping = [];
-
-// tests
-this.addUserEvent("foo");
-this.addUserEvent("bar", 2);
 };
 
 /** Define a user event and its data size
@@ -1673,7 +1669,7 @@ A3a.Compiler.NodeStatementEmit.prototype.resolveArraySize = function (compiler) 
 		var userEvent = compiler.findUserEvent(this.eventName);
 		var eventDataLength = expr instanceof A3a.Compiler.NodeVar
 			? compiler.getVariable(expr).size
-			: expr.children.length;
+			: expr.valueSize;
 		if (eventDataLength !== userEvent.size) {
 			throw "Incompatible data size in \"emit\" " + this.head.posString();
 		}
