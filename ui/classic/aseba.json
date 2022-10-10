@@ -223,14 +223,16 @@
 			"name": "user event",
 			"aseba": {
 				"sectionBegin": "onevent user\n",
-				"clause": "event.args[0] == `$[0]`"
+				"clause": "event.args[0] == `$[0]`",
+				"clauseAlwaysEval": true
 			}
 		},
 		{
 			"name": "remote control arrows",
 			"aseba": {
 				"sectionBegin": "onevent rc5\n",
-				"clause": "`[[85, 17], [80, 32], [81, 33], [86, 16, 78], [87, 13]][$[0]].map(function (c) { return 'rc5.command == ' + c; }).join(' or ')`"
+				"clause": "`[[85, 17], [80, 32], [81, 33], [86, 16, 78], [87, 13]][$[0]].map(function (c) { return 'rc5.command == ' + c; }).join(' or ')`",
+				"clauseAlwaysEval": true
 			}
 		},
 		{

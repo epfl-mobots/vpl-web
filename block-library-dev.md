@@ -132,6 +132,7 @@ In json, block contain the following properties:
 	- `"clauseInit"` (string, optional, event block): code fragments for clause initialization. Identical fragments in the same section (after backtick-expressions evaluation) are output only once after `"sectionBegin"`. Used to initialize temporary values used in clauses.
 	- `"clause"` (string, optional, event block): clause expression (condition) used in `"when"` Aseba statement for the whole block.
 	- `"clauseAnd"` (string, optional, event block): clause subsexpression. `"clause"` and `"clauseAnd"` cannot be used in the same block. `"clauseAnd"` expressions are produced for each parameter; the whole clause is obtained by joining `"clauseAnd"` expressions with the `"and"` operator.
+	- `"clauseAlwaysEval"` (boolean, optional, default _not_): if true, clause or clauseAnd are in an `if` statement instead of `when`.
     - `"clauseAsCondition"` (string, optional, event block): used in lieu of "clause" when the block is added as a condition next to an event.
 	- `"statement"` (string, required, action block): code fragment for action.
     - `"statement1"` (string, optional, action or event block): code subfragment for event cache or action. `"statement"` and `"statement1"` cannot be used in the same block. "statement1" statements are produced for each parameter; the whole statement is obtained by concatenating "statement1" statements.

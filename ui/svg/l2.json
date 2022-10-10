@@ -241,7 +241,8 @@
 			"l2": {
 				"sectionBegin": "onevent rc5 {\n",
 				"sectionEnd": "}\n",
-				"clause": "`[[85, 17], [80, 32], [81, 33], [86, 16, 78], [87, 13]][$[0]].map(function (c) { return 'rc5.command == ' + c; }).join(' or ')`"
+				"clause": "`[[85, 17], [80, 32], [81, 33], [86, 16, 78], [87, 13]][$[0]].map(function (c) { return 'rc5.command == ' + c; }).join(' or ')`",
+				"clauseAlwaysEval": true
 			}
 		},
 		{
@@ -249,7 +250,8 @@
 			"l2": {
 				"sectionBegin": "onevent rc5 {\n",
 				"sectionEnd": "}\n",
-				"clause": "rc5.command == `$[0]`"
+				"clause": "rc5.command == `$[0]`",
+				"clauseAlwaysEval": true
 			}
 		},
 		{

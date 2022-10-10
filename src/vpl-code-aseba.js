@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2022 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -129,7 +129,7 @@ A3a.vpl.CodeGeneratorA3a.prototype.generate = function (program, runBlocks) {
 					section.clauseInit += evCode.clauseInit;
 				}
 				section.clauseAssignment += evCode.clause
-					? "when " + evCode.clause + " do\n" +
+					? (evCode.clauseAlwaysEval ? "if " + evCode.clause + " then\n" : "when " + evCode.clause + " do\n") +
 						"eventCache[" + evCode.clauseIndex + "] = 1\n" +
 						"end\n"
 					: "eventCache[" + evCode.clauseIndex + "] = 1\n";
