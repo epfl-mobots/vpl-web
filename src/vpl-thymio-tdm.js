@@ -37,6 +37,9 @@ A3a.vpl.Application.prototype.installThymioTDM = function (options) {
 	}
 	return new A3a.vpl.RunGlue({
 		run: function (language, code) {
+			tdm["declareCustomEvents"]([
+				{"name": "user", "fixed_size": 1}
+			]);
 			tdm["run"](code, null,
 				function (e) {
 					console.info("Run error");

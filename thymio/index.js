@@ -18,7 +18,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 This is a Derivative Work.
-Changes by Mobots, EPFL, 2019-2021
+Changes by Mobots, EPFL, 2019-2022
 
 Build:
 1. git clone https://github.com/Mobsya/thymio-js-api-demo.git
@@ -43,6 +43,10 @@ var b = tdm.canRun();
 tdm.run(asebaSourceCode, success, failure);
 tdm.close();
 
+// if asebaSourceCode uses custom events in onevent or emit, they should be
+// declared with tdm.declareCustomEvents([{name: "...", fixed_size: ...}, ...])
+// before calling tdm.run()
+
 */
 
 import {createClient, Node, NodeStatus, ProgrammingLanguage, Request, setup, mobsya} from '@mobsya-association/thymio-api'
@@ -53,6 +57,7 @@ window.TDM = function (url, options) {
     this.nodes = [];
     this.selectedNode = null;
     this.variables = {};
+	this.customEvents = null;	// or [{name: "...", fixed_size: ...}, ...]
 
     var self = this;
 
@@ -184,6 +189,10 @@ window.TDM.prototype.canRun = function () {
     return this.selectedNode != null && this.selectedNode.status == NodeStatus.ready;
 };
 
+window.TDM.prototype.declareCustomEvents = function (eventsDescr) {
+	this.customEvents = eventsDescr;
+};
+
 window.TDM.prototype.run = async function (program, success, failure) {
     try {
         if (this.selectedNode == null) {
@@ -191,7 +200,10 @@ window.TDM.prototype.run = async function (program, success, failure) {
             throw "Robot not connected";
         }
         if (this.selectedNode.status == NodeStatus.ready) {
-            await this.selectedNode.sendAsebaProgram(program);
+			if (this.customEvents) {
+				await this.selectedNode.setEventsDescriptions(this.customEvents);
+            }
+			await this.selectedNode.sendAsebaProgram(program);
             await this.selectedNode.setScratchPad(program, ProgrammingLanguage.Aseba);
             await this.selectedNode.runProgram();
             success && success();
