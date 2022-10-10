@@ -24,6 +24,7 @@
 		"counter comparison",
 		"timer",
 		"clock",
+		"user event",
 		"move",
 		"motor",
 		"nn obstacles",
@@ -44,6 +45,7 @@
 		"play",
 		"play stop",
 		"set timer",
-		"set timer log"
+		"set timer log",
+		"send user event"
 	]
 }

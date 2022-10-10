@@ -18,6 +18,7 @@
 			"init": "Initialisation",
 			"timer": "Minuterie",
 			"clock": "Horloge à 10 ou 20 Hz",
+			"user event": "Événement utilisateur",
 			"remote control arrows": "Touches de direction de la télécommande",
 			"state": "État (4 bits)",
 			"state 8": "État (8 valeurs)",
@@ -46,6 +47,7 @@
 			"set counter": "Change le compteur",
 			"set timer": "Démarre la minuterie (0-4 s)",
 			"set timer log": "Démarre la minuterie (0.1-10 s)",
+			"send user event": "Envoyer un événement utilisateur",
 			"picture comment": "Commentaire (image)"
 		}
 	}

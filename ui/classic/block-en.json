@@ -18,6 +18,7 @@
 			"init": "Initialization",
 			"timer": "Timer elapsed",
 			"clock": "Clock at 10 or 20 Hz",
+			"user event": "User event",
 			"remote control arrows": "Remote control arrow keys",
 			"state": "State (4 bits)",
 			"state 8": "State (8 values)",
@@ -46,6 +47,7 @@
 			"set counter": "Set counter",
 			"set timer": "Start timer (0-4 sec)",
 			"set timer log": "Set timer (0.1-10 sec)",
+			"send user event": "Sent user event",
 			"picture comment": "Picture comment"
 		}
 	}

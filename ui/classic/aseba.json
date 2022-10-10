@@ -220,6 +220,13 @@
 			}
 		},
 		{
+			"name": "user event",
+			"aseba": {
+				"sectionBegin": "onevent user\n",
+				"clause": "event.args[0] == `$[0]`"
+			}
+		},
+		{
 			"name": "remote control arrows",
 			"aseba": {
 				"sectionBegin": "onevent rc5\n",
@@ -726,6 +733,12 @@
 					"timer.period[0] = `Math.round(1000 * $[0] / slowdown)`\n",
 					"timerElapsed = 0\n"
 				]
+			}
+		},
+		{
+			"name": "send user event",
+			"aseba": {
+				"statement": "emit user `$[0]`\n"
 			}
 		},
 		{

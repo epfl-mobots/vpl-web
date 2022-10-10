@@ -208,6 +208,14 @@
 			}
 		},
 		{
+			"name": "user event",
+			"l2": {
+				"sectionBegin": "onevent user {\n",
+				"sectionEnd": "}\n",
+				"clause": "event.args[0] == `$[0]`"
+			}
+		},
+		{
 			"name": "remote control arrows",
 			"l2": {
 				"sectionBegin": "onevent rc5 {\n",
@@ -731,6 +739,12 @@
 					"timerElapsed = false;\n"
 				],
 				"statement": "timer.period[0] = `Math.round(1000 * $[0] / slowdown)`;\n"
+			}
+		},
+		{
+			"name": "send user event",
+			"l2": {
+				"statement": "emit(\"user\", `$[0]`);\n"
 			}
 		},
 		{

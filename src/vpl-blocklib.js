@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2022 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -1210,6 +1210,72 @@ A3a.vpl.BlockTemplate.lib =	[
 				if (i !== null) {
 					block.beginChange();
 					block.param[0] = i;
+					block.endChange();
+				}
+				return i;
+			}
+		};
+	})()),
+	new A3a.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "t", x: -0.3, y: 0.3, r: 0},
+			{sh: "t", x: -0.3, y: -0.3, r: Math.PI}
+		];
+		return {
+			name: "user event",
+			modes: [A3a.vpl.mode.advanced],
+			type: A3a.vpl.blockType.event,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0]; },
+			paramAccessibility: new A3a.vpl.BlockParamAccessibility([
+				new A3a.vpl.BlockParamAccessibility.Control(0, 0, 1, 0.4,
+					null,
+					function (block) { block.param[0] = Math.min(9, block.param[0] + 1); },
+					function (block) { block.param[0] = Math.max(0, block.param[0] - 1); })
+			]),
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.text(block.param[0].toString(10),
+					{x: -0.3 * canvas.dims.blockSize, fillStyle: "black"});
+				canvas.buttons(buttons, [
+					block.param[0] < 9 ? -2 : 0,
+					block.param[0] > 0 ? -2 : 0
+				]);
+				canvas.robotTop({
+					scale: 0.45,
+					translation: [
+						-0.15 * canvas.dims.blockSize,
+						-0.1 * canvas.dims.blockSize
+					]
+				});
+				A3a.vpl.Canvas.drawArcArrow(canvas.ctx,
+					canvas.dims.blockSize * 0.75, canvas.dims.blockSize * 0.05,
+					canvas.dims.blockSize * 0.375,
+					2.2, 2.8,
+					{
+						arrowAtStart: true,
+						style: "black",
+						lineWidth: canvas.dims.blockLineWidth,
+						arrowSize: 5 * canvas.dims.blockLineWidth
+					});
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.beginChange();
+					switch (i) {
+					case 0:
+						block.param[0] = Math.min(9, block.param[0] + 1);
+						break;
+					case 1:
+						block.param[0] = Math.max(0, block.param[0] - 1);
+						break;
+					}
 					block.endChange();
 				}
 				return i;
@@ -2589,6 +2655,72 @@ A3a.vpl.BlockTemplate.lib =	[
 							});
 					}
 					block.param[0] = !block.param[0];
+					block.endChange();
+				}
+				return i;
+			}
+		};
+	})()),
+	new A3a.vpl.BlockTemplate((function () {
+		/**
+			@const
+			@type {Array.<A3a.vpl.Canvas.buttonShape>}
+		*/
+		var buttons = [
+			{sh: "t", x: -0.3, y: 0.3, r: 0},
+			{sh: "t", x: -0.3, y: -0.3, r: Math.PI}
+		];
+		return {
+			name: "send user event",
+			modes: [A3a.vpl.mode.advanced],
+			type: A3a.vpl.blockType.action,
+			/** @type {A3a.vpl.BlockTemplate.defaultParam} */
+			defaultParam: function () { return [0]; },
+			paramAccessibility: new A3a.vpl.BlockParamAccessibility([
+				new A3a.vpl.BlockParamAccessibility.Control(0, 0, 1, 0.4,
+					null,
+					function (block) { block.param[0] = Math.min(9, block.param[0] + 1); },
+					function (block) { block.param[0] = Math.max(0, block.param[0] - 1); })
+			]),
+			/** @type {A3a.vpl.BlockTemplate.drawFun} */
+			draw: function (canvas, block) {
+				canvas.text(block.param[0].toString(10),
+					{x: -0.3 * canvas.dims.blockSize, fillStyle: "black"});
+				canvas.buttons(buttons, [
+					block.param[0] < 9 ? -2 : 0,
+					block.param[0] > 0 ? -2 : 0
+				]);
+				canvas.robotTop({
+					scale: 0.45,
+					translation: [
+						-0.15 * canvas.dims.blockSize,
+						-0.1 * canvas.dims.blockSize
+					]
+				});
+				A3a.vpl.Canvas.drawArcArrow(canvas.ctx,
+					canvas.dims.blockSize * 0.65, canvas.dims.blockSize * 0.05,
+					canvas.dims.blockSize * 0.375,
+					0.5, 1.1,
+					{
+						arrowAtStart: true,
+						style: "black",
+						lineWidth: canvas.dims.blockLineWidth,
+						arrowSize: 5 * canvas.dims.blockLineWidth
+					});
+			},
+			/** @type {A3a.vpl.BlockTemplate.mousedownFun} */
+			mousedown: function (canvas, block, width, height, left, top, ev) {
+				var i = canvas.buttonClick(buttons, width, height, left, top, ev);
+				if (i !== null) {
+					block.beginChange();
+					switch (i) {
+					case 0:
+						block.param[0] = Math.min(9, block.param[0] + 1);
+						break;
+					case 1:
+						block.param[0] = Math.max(0, block.param[0] - 1);
+						break;
+					}
 					block.endChange();
 				}
 				return i;
