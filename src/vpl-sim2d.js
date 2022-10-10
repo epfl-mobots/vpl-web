@@ -514,7 +514,7 @@ A3a.vpl.Application.prototype.createSim2dToolbar = function (toolbarConfig,
 	@return {void}
 */
 A3a.vpl.Application.prototype.renderSim2dViewer = function () {
-	var self = this;
+	var app = this;
 	var sim2d = this.sim2d;
 	var robot = sim2d.robot;
 	var simCanvas = this.simCanvas;
@@ -591,9 +591,9 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 	*/
 	function createDoOverFun(id) {
 		return function () {
-			if (self.simHint !== id) {
-				self.simHint = id;
-				self.requestRendering();
+			if (app.simHint !== id) {
+				app.simHint = id;
+				app.requestRendering();
 			}
 		};
 	}
@@ -605,7 +605,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 		ctx.save();
 		ctx.translate(-bnds.xmin, -bnds.ymin);
 		ctx.scale(sc, sc);
-		(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)(id,
+		(sim2d.toolbarDrawButton || A3a.vpl.Commands.drawButtonJS)(app, id,
 			ctx, simCanvas.dims, simCanvas.css, ["sim", "event"], null,
 			true, false, isPressed);
 		ctx.restore();
@@ -1186,7 +1186,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 				playgroundAreaBox.draw(ctx);
 				playgroundBox.draw(ctx);
 
-				if (self.simMaps === null) {
+				if (app.simMaps === null) {
 					// display currentMap
 					switch (sim2d.currentMap) {
 					case A3a.vpl.VPLSim2DViewer.playgroundMap.ground:
@@ -1348,7 +1348,7 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 			ctx.font = box.cssFontString();
 			ctx.textAlign = "start";
 			ctx.textBaseline = "middle";
-			var msg = self.i18n.translate(/** @type {string} */(self.simHint));
+			var msg = app.i18n.translate(/** @type {string} */(app.simHint));
 
 			box.width = ctx.measureText(msg).width;
 			box.height = box.fontSize * 1.2;
@@ -1373,10 +1373,10 @@ A3a.vpl.Application.prototype.renderSim2dViewer = function () {
 A3a.vpl.Application.prototype.requestRendering = function () {
 	if (!this.sim2d.renderingPending) {
 		this.sim2d.renderingPending = true;
-		var self = this;
+		var app = this;
 		window.requestAnimationFrame(function () {
-			self.sim2d.renderingPending = false;
-			self.renderSim2dViewer();
+			app.sim2d.renderingPending = false;
+			app.renderSim2dViewer();
 		});
 	}
 };
