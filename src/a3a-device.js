@@ -48,7 +48,7 @@ A3a.Device = function (opt) {
 	this.stack = [];
 	/** @type {Array.<boolean>} */
 	this.breakpoints = [];
-	/** @type {?function(number):void} */
+	/** @type {?function(number,Array.<number>):void} */
 	this.onEmit = null;
 	/**
 		@type {?function(string,number,number,number,Array.<number>):void}
