@@ -325,8 +325,8 @@
 					]
 				],
 				"statement": [
-					"motor.left.target = `Math.round([0,200,250,100,-250,-200,-150,-100,150][$[0]] * slowdown)`;\n",
-					"motor.right.target = `Math.round([0,200,150,-100,-150,-200,-250,100,250][$[0]] * slowdown)`;\n"
+					"motor.left.target = `Math.round([0,200,200,100,-200,-200,-50,-100,50][$[0]] * slowdown)`;\n",
+					"motor.right.target = `Math.round([0,200,50,-100,-50,-200,-200,100,200][$[0]] * slowdown)`;\n"
 				]
 			}
 		},
