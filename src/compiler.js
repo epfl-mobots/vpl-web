@@ -170,7 +170,7 @@ A3a.Compiler = function (asebaNode, src) {
 	this.inSubDefinition = false;
 	// address of current bytecode fragment, used for goto and sourceToBCMapping
 	this.bcAddr = 0;
-	/** @type {Array.<{name:string,id:number,size:number>} */
+	/** @type {Array.<{name:string,id:number,size:number}>} */
 	this.userEvents = [];
 	this.userEventCount = 0;
 
@@ -186,7 +186,7 @@ A3a.Compiler = function (asebaNode, src) {
 A3a.Compiler.prototype.addUserEvent = function (eventName, eventSize) {
 	this.userEvents.push({
 		name: eventName,
-		eventId: this.userEventCount,
+		id: this.userEventCount,
 		size: eventSize || 0
 	});
 	this.userEventCount++;
@@ -2551,7 +2551,7 @@ A3a.Compiler.prototype.parseNextStatement = function () {
 				throw "Unknown user event " + name.name + " " + head.posString();
 			}
 			if (userEvent.size > 0) {
-				var expr = this.parseExpression();
+				expr = this.parseExpression();
 				return [new A3a.Compiler.NodeStatementEmit(head, name.name, expr)];
 			} else {
 				return [new A3a.Compiler.NodeStatementEmit(head, name.name)];
@@ -3472,7 +3472,7 @@ A3a.Compiler.NodeStatementEmit.prototype.generateA3aBC = function (compiler, isT
 	this.prepareGenerateA3aBC(compiler);
 	var userEvent = compiler.findUserEvent(this.eventName);
 	if (userEvent.size === 0) {
-		return [(A3a.vm.bc.emit << 12) | userEvent.userId, 0, 0];
+		return [(A3a.vm.bc.emit << 12) | userEvent.id, 0, 0];
 	} else {
 		var argNode = this.children[0];
 		var varAddress = 0;
@@ -3490,7 +3490,7 @@ A3a.Compiler.NodeStatementEmit.prototype.generateA3aBC = function (compiler, isT
 				bc = bc.concat((A3a.vm.bc.store << 12) | varAddress + j);
 			}
 		}
-		bc = bc.concat((A3a.vm.bc.emit << 12) | userEvent.userId, varAddress, argNode.valueSize);
+		bc = bc.concat((A3a.vm.bc.emit << 12) | userEvent.id, varAddress, argNode.valueSize);
 		return bc;
 	}
 };
