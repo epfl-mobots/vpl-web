@@ -662,13 +662,14 @@ function vplSetup(gui, rootDir) {
 		window["vplStorageGetFunction"](A3a.vpl.Program.defaultFilename,
 			function (data, options) {
 				try {
+					options = options || {};
 					if (data) {
-						app.program.filename = options && options["filename"] || A3a.vpl.Program.defaultFilename;
-						app.program.readOnly = options != undefined && options["readOnly"] == true;
-						app.program.fixedFilename = options != undefined && options["fixedFilename"] != undefined
+						app.program.filename = options["filename"] || A3a.vpl.Program.defaultFilename;
+						app.program.readOnly = options["readOnly"] == true;
+						app.program.fixedFilename = options["fixedFilename"] != undefined
 							? options["fixedFilename"] == true
 							: options["readOnly"] == true;
-						if (options != undefined && options["customizationMode"] == true) {
+						if (options["customizationMode"] == true) {
 							app.uiConfig.blockCustomizationMode = true;
 							app.uiConfig.toolbarCustomizationMode = role === "teacher";
 						}
@@ -676,7 +677,7 @@ function vplSetup(gui, rootDir) {
 							app.setHelpForCurrentAppState();
 							app.renderProgramToCanvas();
 						});
-						if (options != undefined && options["setAsNew"] == true) {
+						if (options["setAsNew"] == true) {
 							app.commands.execute("vpl:teacher-setasnew");
 						}
 						app.restored = true;
