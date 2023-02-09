@@ -171,7 +171,7 @@ window.TDM.prototype.isConnected = function () {
     return this.selectedNode != null;
 };
 
-window.TDM.prototype.setVariables = function (v) {
+window.TDM.prototype.setVariables = async function (v) {
     // convert variables from object to map
     var map = new Map();
     for (var v1 in v) {
@@ -180,7 +180,7 @@ window.TDM.prototype.setVariables = function (v) {
         }
     }
 
-    this.selectedNode.setVariables(map);
+    await this.selectedNode.setVariables(map);
 };
 
 window.TDM.prototype.getVariable = function (name) {
