@@ -26,6 +26,8 @@ Build:
    check in package.json the line containing "thymio-api"; the version must be "^0.11.0" or more recent
 3. npm i
 4. replace src/index.js with this file
+5. to produce a release version about three times smaller, edit webpack.config.js and
+   replace 'mode: "development"' with 'mode: "production"'
 5. npm run browser
 6. use the resulting dist/thymio.js in your web app:
 
