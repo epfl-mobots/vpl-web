@@ -187,6 +187,12 @@ window.TDM.prototype.getVariable = function (name) {
     return this.variables[name];
 };
 
+window.TDM.prototype.emitEvent = async function (name, value) {
+    var map = new Map();
+    map.set(name, value == undefined ? null : value);
+    await this.selectedNode.emitEvents(map);
+};
+
 window.TDM.prototype.canRun = function () {
     return this.selectedNode != null && this.selectedNode.status == NodeStatus.ready;
 };
