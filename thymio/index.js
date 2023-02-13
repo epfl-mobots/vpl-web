@@ -121,9 +121,9 @@ window.TDM = function (url, options) {
                     if (options.variables) {
                         if (options.variables === "auto") {
                             self.selectedNode.onVariablesChanged = (vars) => {
-                                // store variables from map to object self.variables
+                                // store variables from map to object self.variables as Array<number>
                                 vars.forEach((val, key) => {
-                                    self.variables[key] = val;
+                                    self.variables[key] = val instanceof Number ? [val.valueOf()] : val;
                                 });
                             }
                         } else {
@@ -131,6 +131,9 @@ window.TDM = function (url, options) {
                                 // convert variables from map to object
                                 var vObj = {};
                                 vars.forEach((val, key) => {
+                                    if (val instanceof Number) {
+                                        val = [val.valueOf()];
+                                    }
                                     self.variables[key] = val;
                                     vObj[key] = val;
                                 });
