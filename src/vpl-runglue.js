@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2023 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -47,6 +47,7 @@ be determined easily otherwise
 		canFlash: (function(string):boolean | undefined),
 		languages: (Array.<string> | undefined),
 		preferredLanguage: (string | undefined),
+		supportTracing: (boolean | undefined),
 		state: (Object | undefined),
 		params: (Object | undefined)
 	}} options
@@ -65,6 +66,7 @@ A3a.vpl.RunGlue = function (options) {
 	this.languages = options && options.languages ? options.languages : [this.preferredLanguage];
 	this.state = options && options.state ? options.state : null;
 	this.params = options && options.params ? options.params : {};
+	this.supportTracing = options && options.supportTracing ? true : false;
 
 	this.lastCheckedCode = null;
 	this.lastCheckedLanguage = null;
