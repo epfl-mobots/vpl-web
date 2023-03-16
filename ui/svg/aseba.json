@@ -52,6 +52,14 @@
 			}
 		},
 		{
+			"name": "!trace",
+			"aseba": {
+				"statement": [
+					"emit trace `$[0]`\n"
+				]
+			}
+		},
+		{
 			"name": "button 1",
 			"aseba": {
 				"sectionBegin": "onevent buttons\n",

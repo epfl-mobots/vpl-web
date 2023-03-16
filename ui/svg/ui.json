@@ -63,6 +63,10 @@
 			"type": "hidden"
 		},
 		{
+			"name": "!trace",
+			"type": "hidden"
+		},
+		{
 			"name": "init",
 			"type": "event",
 			"modes": ["basic", "advanced"],

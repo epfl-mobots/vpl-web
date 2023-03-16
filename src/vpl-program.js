@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2021 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2023 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -29,6 +29,7 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.fixedFilename = false;
 	/** @type {A3a.vpl.mode} */
 	this.mode = mode || A3a.vpl.mode.basic;
+	this.supportTracing = false;	// true to generate tracing code for each rule
 	this.noVPL = false;	// true for source code editor without vpl counterpart
 	this.teacherRole = A3a.vpl.Program.teacherRoleType.student;
 	this.experimentalFeatures = false;

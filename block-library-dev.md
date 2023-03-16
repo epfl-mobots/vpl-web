@@ -262,6 +262,8 @@ Special blocks contain definitions for specific purposes. They cannot be manipul
 
 `"!volume"`: contains the code to set the robot volume, from 0 (muted) to 10 (max). The volume is specified in the single parameter.
 
+`"!trace"`: contains the code to notify the GUI that a rule is being executed. The rule index is specified in the single parameter.
+
 Example:
 
 ```

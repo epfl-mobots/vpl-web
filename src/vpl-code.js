@@ -1,5 +1,5 @@
 /*
-	Copyright 2018-2022 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
+	Copyright 2018-2023 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE,
 	Miniature Mobile Robots group, Switzerland
 	Author: Yves Piguet
 
@@ -306,9 +306,10 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForEventHandler = function (rule, pr
 		}
 	}, this);
 
-	for (var i = 0; i < rule.actions.length; i++) {
-		var code = rule.actions[i].generateCode(this.language, program);
-		str += code.statement ? this.bracket(code.statement, rule.actions[i]) : "";
+	for (var i = program.supportTracing ? -1 : 0; i < rule.actions.length; i++) {
+		var block = i < 0 ? this.generateBlockForTracing(rule, program) : rule.actions[i];
+		var code = block.generateCode(this.language, program);
+		str += code.statement ? this.bracket(code.statement, block) : "";
 		if (code.initVarDecl) {
 			code.initVarDecl.forEach(function (frag) {
 				if (initVarDecl.indexOf(frag) < 0) {
@@ -390,6 +391,19 @@ A3a.vpl.CodeGenerator.prototype.generateCodeForVolume = function (program) {
 		}
 	}
 	return "";
+};
+
+/** Create block to trace rule execution
+	@param {A3a.vpl.Rule} rule
+	@param {A3a.vpl.Program} program
+	@return {A3a.vpl.Block}
+*/
+A3a.vpl.CodeGenerator.prototype.generateBlockForTracing = function (rule, program) {
+	var traceTemplate = A3a.vpl.BlockTemplate.findByName("!trace");
+	var block = new A3a.vpl.Block(traceTemplate, null, null);
+	var index = program.program.indexOf(rule);
+	block.param = [index];
+	return block;
 };
 
 /** Reset code generation
