@@ -217,6 +217,12 @@ overlay-rectangle.button.kbd-selected {
 	border-corner-length: 0.8vw;
 }
 
+overlay-rectangle.executing {
+	border: 0.2vw rgba(0, 200, 30, 0.8);
+	border-radius: 0.9vw;
+	padding: 0.3vw;
+}
+
 crossout-line {
 	line-width: 0.75vw;
  	color: rgba(120,120,120,0.5);

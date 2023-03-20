@@ -48,6 +48,10 @@ A3a.vpl.Application.prototype.installThymioTDM = function (options) {
 				});
 		},
 		check: function (language, code, checkFun) {
+			tdm["declareCustomEvents"]([
+				{"name": "trace", "fixed_size": 1},
+				{"name": "user", "fixed_size": 1}
+			]);
 			tdm["check"](code,
 				function () {
 					checkFun(null);
@@ -68,6 +72,11 @@ A3a.vpl.Application.prototype.installThymioTDM = function (options) {
 						"change": function (connected) {
 							app.robots[app.currentRobotIndex].runGlue.state = connected ? {} : null;
 							app.vplCanvas.update();
+						},
+						"events": function (name, value) {
+							if (name === "trace") {
+								app.notifyTraceEvent(value[0]);
+							}
 						}
 					});
 			} catch (e) {

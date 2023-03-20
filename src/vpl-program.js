@@ -37,6 +37,7 @@ A3a.vpl.Program = function (mode, uiConfig) {
 	this.volume = null;	// null for unchanged, 0=muted, 10=max
 	/** @type {Array.<A3a.vpl.Rule>} */
 	this.program = [];
+	this.executedRuleIndex = -1;	// index of rule being executed (tracing)
 	this.slowdownFactor = 1;
 	this.uploaded = false;	// program matches what's running
 	this.notUploadedYet = true;	// program has never been loaded since last this.new()

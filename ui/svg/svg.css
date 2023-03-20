@@ -200,6 +200,12 @@ overlay-rectangle.button.kbd-selected {
 	border-corner-length: 0.8vw;
 }
 
+overlay-rectangle.executing {
+	border: 0.2vw rgba(0, 200, 30, 0.8);
+	border-radius: 0.4vw;
+	padding: 0.3vw;
+}
+
 /*Other*/
 widget {
 	width: 36px;

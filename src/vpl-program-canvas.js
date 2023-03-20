@@ -568,7 +568,10 @@ A3a.vpl.Application.prototype.addRuleToCanvas =
 					canvas.lockedMark(item.x, item.y, item.width, item.height,
 						false, rule.disabled ? "#ddd" : "");
 				}
-				if (self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.rule &&
+				if (self.executedRuleIndex === ruleIndex) {
+					canvas.overlayRect(item.x + dx, item.y + dy, item.width, item.height,
+						["rule", "executing"]);
+				} else if (self.kbdControl.selectionType === A3a.vpl.KbdControl.ObjectType.rule &&
 					self.kbdControl.selectionIndex1 === ruleIndex) {
 					canvas.overlayRect(item.x + dx, item.y + dy, item.width, item.height,
 						["rule", "kbd-selected"]);
@@ -1773,4 +1776,21 @@ A3a.vpl.Application.prototype.renderProgramToCanvas = function () {
 
 	program.onUpdate && program.onUpdate();
 	canvas.redraw();
+};
+
+/** Render the program to a single canvas
+	@param {number} ruleIndex
+	@return {void}
+*/
+A3a.vpl.Application.prototype.highlightRuleExecution = function (ruleIndex) {
+	this.executedRuleIndex = ruleIndex;
+	this.renderProgramToCanvas();
+	var app = this;
+	window["setTimeout"](function () {
+		// remove highlight after executionHightlightDuration if since ruleIndex
+		if (app.executedRuleIndex === ruleIndex) {
+			app.executedRuleIndex = -1;
+			app.renderProgramToCanvas();
+		}
+	}, 1000 * this.executionHightlightDuration);
 };

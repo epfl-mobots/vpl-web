@@ -542,7 +542,7 @@ Box elements:
 - `sim-controller` (area where robot control buttons and indicators are displayed)
 - `sim-playground-area` (box which fills the area where the playground is displayed)
 - `sim-playground` (box which fits tightly the area where maps are displayed and the robot can be located)
-- `overlay-rectangle` (box displayed over other element; classes: `disabled`, `button`, `vpl`, `rule`, `block`, `drop-target`, `kbd-selected`, `kbd-target`)
+- `overlay-rectangle` (box displayed over other element; classes: `disabled`, `button`, `vpl`, `rule`, `block`, `drop-target`, `kbd-selected`, `kbd-target`, `executing`)
 - `hint` (box at bottom left where block and toolbar button hints are displayed)
 
 Line elements:
