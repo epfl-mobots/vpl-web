@@ -14,10 +14,15 @@ COPYRIGHT = /* Copyright 2018-2022 ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE - au
 # The current version can be found at https://github.com/google/closure-compiler/wiki/Binary-Downloads
 CLOSURECOMPILER ?= closure-compiler-v20190121.jar
 
+# Default closure --compilation_level value
+# Can be set when calling make with "make CLOSURE_COMPILATION_LEVEL=SIMPLE_OPTIMIZATIONS" to
+# preserve global names and allow advanced custiomization
+CLOSURE_COMPILATION_LEVEL ?= ADVANCED_OPTIMIZATIONS
+
 CLOSURE = $(shell if which closure-compiler >/dev/null; then echo closure-compiler; else echo java -jar $(CLOSURECOMPILER); fi)
 CLOSUREFLAGS = \
         --language_in ECMASCRIPT6_STRICT \
-        --compilation_level ADVANCED_OPTIMIZATIONS \
+        --compilation_level $(CLOSURE_COMPILATION_LEVEL) \
         --use_types_for_optimization \
         --warning_level VERBOSE \
         --summary_detail_level 2
