@@ -1,0 +1,3 @@
+[submodule "submodules/tdm-js"]
+	path = submodules/tdm-js
+	url = https://github.com/epfl-mobots/tdm-js.git

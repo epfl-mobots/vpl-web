@@ -13,7 +13,9 @@ main:	all
 include Makefile-jsmin
 
 .PHONY: all
-all: vpl-min.js index-svg.html index-svg-min.html index-classic.html index-classic-min.html
+all: \
+	vpl-min.js thymio/thymio.js \
+	index-svg.html index-svg-min.html index-classic.html index-classic-min.html
 
 # dependencies
 index-classic.html: $(shell python3 inlinersrctool.py --input=index-classic-min-template.html --dep)
@@ -23,6 +25,10 @@ index-svg-min.html: $(shell python3 inlinersrctool.py --input=index-svg-min-temp
 
 %.html: %-template.html
 	python3 inlinersrctool.py --input=$< >$@
+
+thymio/thymio.js: submodules/tdm-js/thymio/thymio.js
+	mkdir -p thymio
+	cp $< $@
 
 .PHONY: doc
 doc: $(JS)
